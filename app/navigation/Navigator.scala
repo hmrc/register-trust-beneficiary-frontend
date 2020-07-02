@@ -17,22 +17,27 @@
 package navigation
 
 import javax.inject.{Inject, Singleton}
-import play.api.mvc.Call
-import controllers.routes
-import pages._
 import models.{UserAnswers, _}
+import pages._
+import play.api.mvc.Call
+import uk.gov.hmrc.auth.core.AffinityGroup
 
 @Singleton
 class Navigator @Inject()() {
 
-  private val normalRoutes: Page => UserAnswers => Call = {
-    case _ => _ => routes.IndexController.onPageLoad()
+  private def defaultRoute: PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
+    case _ => _ => _ => controllers.routes.IndexController.onPageLoad()
   }
 
-  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {
+  protected def route(draftId: String): PartialFunction[Page, AffinityGroup => UserAnswers => Call] =
+//      BeneficiaryRoutes.route(draftId) orElse
+      defaultRoute
+
+  def nextPage(page: Page, mode: Mode, draftId: String, af :AffinityGroup = AffinityGroup.Organisation): UserAnswers => Call = mode match {
     case NormalMode =>
-      normalRoutes(page)(userAnswers)
+      route(draftId)(page)(af)
     case CheckMode =>
-      normalRoutes(page)(userAnswers)
+      route(draftId)(page)(af)
   }
+
 }
