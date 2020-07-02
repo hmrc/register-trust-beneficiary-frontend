@@ -14,25 +14,18 @@
  * limitations under the License.
  */
 
-package navigation
+package pages.beneficiaries
 
-import javax.inject.{Inject, Singleton}
-import play.api.mvc.Call
-import controllers.routes
-import pages._
-import models.{UserAnswers, _}
+import pages.behaviours.PageBehaviours
 
-@Singleton
-class Navigator @Inject()() {
+class ClassBeneficiaryDescriptionPageSpec extends PageBehaviours {
 
-  private val normalRoutes: Page => UserAnswers => Call = {
-    case _ => _ => routes.IndexController.onPageLoad()
-  }
+  "ClassBeneficiaryDescriptionPage" must {
 
-  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {
-    case NormalMode =>
-      normalRoutes(page)(userAnswers)
-    case CheckMode =>
-      normalRoutes(page)(userAnswers)
+    beRetrievable[String](ClassBeneficiaryDescriptionPage(0))
+
+    beSettable[String](ClassBeneficiaryDescriptionPage(0))
+
+    beRemovable[String](ClassBeneficiaryDescriptionPage(0))
   }
 }

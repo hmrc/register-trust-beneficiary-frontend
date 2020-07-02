@@ -14,25 +14,14 @@
  * limitations under the License.
  */
 
-package navigation
+package models.registration.pages
 
-import javax.inject.{Inject, Singleton}
-import play.api.mvc.Call
-import controllers.routes
-import pages._
-import models.{UserAnswers, _}
+import java.time.LocalDate
 
-@Singleton
-class Navigator @Inject()() {
+import play.api.libs.json.{Json, OFormat}
 
-  private val normalRoutes: Page => UserAnswers => Call = {
-    case _ => _ => routes.IndexController.onPageLoad()
-  }
+case class PassportOrIdCardDetails(country: String, cardNumber: String, expiryDate:LocalDate)
 
-  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {
-    case NormalMode =>
-      normalRoutes(page)(userAnswers)
-    case CheckMode =>
-      normalRoutes(page)(userAnswers)
-  }
+object PassportOrIdCardDetails {
+  implicit val format: OFormat[PassportOrIdCardDetails] = Json.format[PassportOrIdCardDetails]
 }

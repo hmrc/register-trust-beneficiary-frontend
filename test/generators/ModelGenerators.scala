@@ -17,8 +17,43 @@
 package generators
 
 import models._
+import models.core.pages.{FullName, UKAddress}
+import models.registration.pages.{AddABeneficiary, WhatTypeOfBeneficiary}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
+  implicit lazy val arbitraryWhatTypeOfBeneficiary: Arbitrary[WhatTypeOfBeneficiary] =
+    Arbitrary {
+      Gen.oneOf(WhatTypeOfBeneficiary.values.toSeq)
+    }
+
+  implicit lazy val arbitraryAddABeneficiary: Arbitrary[AddABeneficiary] =
+    Arbitrary {
+      Gen.oneOf(AddABeneficiary.values.toSeq)
+    }
+
+  implicit lazy val arbitraryUkAddress: Arbitrary[UKAddress] =
+    Arbitrary {
+      for {
+        line1 <- arbitrary[String]
+        line2 <- arbitrary[String]
+        line3 <- arbitrary[String]
+        line4 <- arbitrary[String]
+        postcode <- arbitrary[String]
+      } yield UKAddress(line1, line2, Some(line3), Some(line4), postcode)
+    }
+
+  implicit lazy val arbitraryFullName : Arbitrary[FullName] = {
+    Arbitrary {
+      for {
+        str <- arbitrary[String]
+      } yield {
+        FullName(str, Some(str), str)
+      }
+    }
+  }
+
+
+
 }

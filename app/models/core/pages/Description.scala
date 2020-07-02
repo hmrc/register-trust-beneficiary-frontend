@@ -14,25 +14,19 @@
  * limitations under the License.
  */
 
-package navigation
+package models.core.pages
 
-import javax.inject.{Inject, Singleton}
-import play.api.mvc.Call
-import controllers.routes
-import pages._
-import models.{UserAnswers, _}
+import play.api.libs.json.{Json, OFormat}
 
-@Singleton
-class Navigator @Inject()() {
+case class Description(description: String,
+                       description1: Option[String],
+                       description2: Option[String],
+                       description3: Option[String],
+                       description4: Option[String]
+                      )
 
-  private val normalRoutes: Page => UserAnswers => Call = {
-    case _ => _ => routes.IndexController.onPageLoad()
-  }
+object Description {
 
-  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {
-    case NormalMode =>
-      normalRoutes(page)(userAnswers)
-    case CheckMode =>
-      normalRoutes(page)(userAnswers)
-  }
+  implicit lazy val formats: OFormat[Description] = Json.format[Description]
+
 }

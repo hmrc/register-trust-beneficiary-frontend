@@ -14,25 +14,16 @@
  * limitations under the License.
  */
 
-package navigation
+package pages.beneficiaries.company
 
-import javax.inject.{Inject, Singleton}
-import play.api.mvc.Call
-import controllers.routes
-import pages._
-import models.{UserAnswers, _}
+import models.core.pages.Address
+import pages.QuestionPage
+import play.api.libs.json.JsPath
+import sections.beneficiaries.{Beneficiaries, CompanyBeneficiaries}
 
-@Singleton
-class Navigator @Inject()() {
+case class CompanyBeneficiaryAddressPage(index: Int) extends QuestionPage[Address] {
 
-  private val normalRoutes: Page => UserAnswers => Call = {
-    case _ => _ => routes.IndexController.onPageLoad()
-  }
+  override def path: JsPath = JsPath \ Beneficiaries \ CompanyBeneficiaries \ index \ toString
 
-  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {
-    case NormalMode =>
-      normalRoutes(page)(userAnswers)
-    case CheckMode =>
-      normalRoutes(page)(userAnswers)
-  }
+  override def toString: String = "address"
 }

@@ -14,25 +14,15 @@
  * limitations under the License.
  */
 
-package navigation
+package pages.beneficiaries.other
 
-import javax.inject.{Inject, Singleton}
-import play.api.mvc.Call
-import controllers.routes
-import pages._
-import models.{UserAnswers, _}
+import pages.QuestionPage
+import play.api.libs.json.JsPath
+import sections.beneficiaries.{Beneficiaries, OtherBeneficiaries}
 
-@Singleton
-class Navigator @Inject()() {
+final case class OtherBeneficiaryDiscretionYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
-  private val normalRoutes: Page => UserAnswers => Call = {
-    case _ => _ => routes.IndexController.onPageLoad()
-  }
+  override def path: JsPath = JsPath \ Beneficiaries \ OtherBeneficiaries \ index \ toString
 
-  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {
-    case NormalMode =>
-      normalRoutes(page)(userAnswers)
-    case CheckMode =>
-      normalRoutes(page)(userAnswers)
-  }
+  override def toString: String = "discretionYesNo"
 }

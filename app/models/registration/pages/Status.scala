@@ -14,25 +14,22 @@
  * limitations under the License.
  */
 
-package navigation
+package models.registration.pages
 
-import javax.inject.{Inject, Singleton}
-import play.api.mvc.Call
-import controllers.routes
-import pages._
-import models.{UserAnswers, _}
+import models.{Enumerable, WithName}
 
-@Singleton
-class Navigator @Inject()() {
+sealed trait Status
 
-  private val normalRoutes: Page => UserAnswers => Call = {
-    case _ => _ => routes.IndexController.onPageLoad()
-  }
+object Status extends Enumerable.Implicits {
 
-  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {
-    case NormalMode =>
-      normalRoutes(page)(userAnswers)
-    case CheckMode =>
-      normalRoutes(page)(userAnswers)
-  }
+  case object Completed extends WithName("completed") with Status
+
+  case object InProgress extends WithName("progress") with Status
+
+  val values: Set[Status] = Set(
+    Completed, InProgress
+  )
+
+  implicit val enumerable: Enumerable[Status] =
+    Enumerable(values.toSeq.map(v => v.toString -> v): _*)
 }

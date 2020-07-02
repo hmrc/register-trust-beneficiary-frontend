@@ -14,25 +14,13 @@
  * limitations under the License.
  */
 
-package navigation
+package pages
 
-import javax.inject.{Inject, Singleton}
-import play.api.mvc.Call
-import controllers.routes
-import pages._
-import models.{UserAnswers, _}
+import play.api.libs.json.{Format, Json}
 
-@Singleton
-class Navigator @Inject()() {
+case class MetaData(lineNo: String, bpMatchStatus: Option[String], entityStart: String)
 
-  private val normalRoutes: Page => UserAnswers => Call = {
-    case _ => _ => routes.IndexController.onPageLoad()
-  }
+object MetaData {
 
-  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {
-    case NormalMode =>
-      normalRoutes(page)(userAnswers)
-    case CheckMode =>
-      normalRoutes(page)(userAnswers)
-  }
+  implicit val format: Format[MetaData] = Json.format[MetaData]
 }
