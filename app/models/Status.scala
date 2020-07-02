@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-package config
+package models
 
-import com.google.inject.AbstractModule
-import controllers.actions._
-import repositories.{DefaultRegistrationsRepository, RegistrationsRepository}
+sealed trait Status
 
-class Module extends AbstractModule {
+object Status extends Enumerable.Implicits {
 
-  override def configure(): Unit = {
+  case object Completed extends WithName("completed") with Status
 
-    // For session based storage instead of cred based, change to SessionIdentifierAction
-    bind(classOf[IdentifierAction]).to(classOf[AuthenticatedIdentifierAction]).asEagerSingleton()
+  case object InProgress extends WithName("progress") with Status
 
-    bind(classOf[RegistrationsRepository]).to(classOf[DefaultRegistrationsRepository]).asEagerSingleton()
-  }
+  val values: Set[Status] = Set(
+    Completed, InProgress
+  )
+
+  implicit val enumerable: Enumerable[Status] =
+    Enumerable(values.toSeq.map(v => v.toString -> v): _*)
 }

@@ -19,18 +19,19 @@ package controllers.actions
 import base.SpecBase
 import models.UserAnswers
 import models.requests.{IdentifierRequest, OptionalDataRequest}
-import org.mockito.Mockito._
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Json
-import repositories.SessionRepository
+import repositories.RegistrationsRepository
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class DataRetrievalActionSpec extends SpecBase with MockitoSugar with ScalaFutures {
 
-  class Harness(sessionRepository: SessionRepository) extends DataRetrievalActionImpl(sessionRepository) {
+  class Harness(registrationsRepository: RegistrationsRepository) extends DataRetrievalActionImpl(registrationsRepository) {
     def callTransform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] = transform(request)
   }
 
@@ -40,8 +41,8 @@ class DataRetrievalActionSpec extends SpecBase with MockitoSugar with ScalaFutur
 
       "set userAnswers to 'None' in the request" in {
 
-        val sessionRepository = mock[SessionRepository]
-        when(sessionRepository.get("id")) thenReturn Future(None)
+        val sessionRepository = mock[RegistrationsRepository]
+        when(sessionRepository.get(any())(any())) thenReturn Future(None)
         val action = new Harness(sessionRepository)
 
         val futureResult = action.callTransform(new IdentifierRequest(fakeRequest, "id"))
@@ -56,8 +57,8 @@ class DataRetrievalActionSpec extends SpecBase with MockitoSugar with ScalaFutur
 
       "build a userAnswers object and add it to the request" in {
 
-        val sessionRepository = mock[SessionRepository]
-        when(sessionRepository.get("id")) thenReturn Future(Some(new UserAnswers("id")))
+        val sessionRepository = mock[RegistrationsRepository]
+        when(sessionRepository.get(any())(any())) thenReturn Future(Some(new UserAnswers("id", Json.obj(), "internalAuthId")))
         val action = new Harness(sessionRepository)
 
         val futureResult = action.callTransform(new IdentifierRequest(fakeRequest, "id"))

@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package config
+package base
 
-import com.google.inject.AbstractModule
-import controllers.actions._
-import repositories.{DefaultRegistrationsRepository, RegistrationsRepository}
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
+import org.scalatestplus.mockito.MockitoSugar
+//import repositories.RegistrationsRepository
 
-class Module extends AbstractModule {
+import scala.concurrent.Future
 
-  override def configure(): Unit = {
+trait Mocked extends MockitoSugar {
 
-    // For session based storage instead of cred based, change to SessionIdentifierAction
-    bind(classOf[IdentifierAction]).to(classOf[AuthenticatedIdentifierAction]).asEagerSingleton()
-
-    bind(classOf[RegistrationsRepository]).to(classOf[DefaultRegistrationsRepository]).asEagerSingleton()
-  }
+//  val registrationsRepository : RegistrationsRepository = mock[RegistrationsRepository]
+//
+//  when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(None))
+//  when(registrationsRepository.set(any())(any())).thenReturn(Future.successful(true))
 }
