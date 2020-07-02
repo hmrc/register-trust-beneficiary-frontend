@@ -43,6 +43,12 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   lazy val trustsUrl: String = configuration.get[Service]("microservice.services.trusts").baseUrl
 
+  lazy val registrationProgressUrlTemplate: String = configuration.get[String]("urls.registrationProgress")
+  def registrationProgressUrl(draftId: String): String = registrationProgressUrlTemplate.replace(":draftId", draftId)
+
+  lazy val maintainATrustFrontendUrl : String = configuration.get[String]("urls.maintainATrust")
+  lazy val createAgentServicesAccountUrl : String = configuration.get[String]("urls.createAgentServicesAccount")
+
   lazy val languageTranslationEnabled: Boolean =
     configuration.get[Boolean]("microservice.services.features.welsh-translation")
 
