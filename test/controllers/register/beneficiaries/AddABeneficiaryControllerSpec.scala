@@ -19,9 +19,9 @@ package controllers.register.beneficiaries
 import base.SpecBase
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import models.NormalMode
+import models.Status.Completed
 import models.core.pages.FullName
 import models.registration.pages.AddABeneficiary
-import models.registration.pages.Status.Completed
 import pages.entitystatus.{ClassBeneficiaryStatus, IndividualBeneficiaryStatus}
 import pages.register.beneficiaries.individual.IndividualBeneficiaryNamePage
 import pages.register.beneficiaries.{AddABeneficiaryPage, ClassBeneficiaryDescriptionPage}
@@ -33,31 +33,31 @@ import views.html.register.beneficiaries.{AddABeneficiaryView, AddABeneficiaryYe
 
 class AddABeneficiaryControllerSpec extends SpecBase {
 
-  def onwardRoute: Call = Call("GET", "/foo")
+  private def onwardRoute: Call = Call("GET", "/foo")
 
-  def removeIndividualRoute(index : Int): String =
+  private def removeIndividualRoute(index : Int): String =
     routes.RemoveIndividualBeneficiaryController.onPageLoad(index, fakeDraftId).url
 
-  def removeClassRoute(index : Int): String =
+  private def removeClassRoute(index : Int): String =
     routes.RemoveClassOfBeneficiaryController.onPageLoad(index, fakeDraftId).url
 
-  lazy val addABeneficiaryRoute = routes.AddABeneficiaryController.onPageLoad(fakeDraftId).url
+  private lazy val addABeneficiaryRoute = routes.AddABeneficiaryController.onPageLoad(fakeDraftId).url
 
-  lazy val addOnePostRoute = routes.AddABeneficiaryController.submitOne(fakeDraftId).url
+  private lazy val addOnePostRoute = routes.AddABeneficiaryController.submitOne(fakeDraftId).url
 
-  lazy val addAnotherPostRoute = routes.AddABeneficiaryController.submitAnother(fakeDraftId).url
+  private lazy val addAnotherPostRoute = routes.AddABeneficiaryController.submitAnother(fakeDraftId).url
 
-  val formProvider = new AddABeneficiaryFormProvider()
-  val form = formProvider()
+  private val formProvider = new AddABeneficiaryFormProvider()
+  private val form = formProvider()
 
-  val yesNoForm = new YesNoFormProvider().withPrefix("addABeneficiaryYesNo")
+  private val yesNoForm = new YesNoFormProvider().withPrefix("addABeneficiaryYesNo")
 
-  lazy val beneficiariesComplete = List(
-    AddRow("First Last", typeLabel = "Individual Beneficiary", "/trusts-registration/feature-not-available", removeIndividualRoute(0)),
-    AddRow("description", typeLabel = "Class of beneficiaries", "/trusts-registration/feature-not-available", removeClassRoute(0))
+  private lazy val beneficiariesComplete = List(
+    AddRow("First Last", typeLabel = "Individual Beneficiary", "/trusts-registration/beneficiaries/feature-not-available", removeIndividualRoute(0)),
+    AddRow("description", typeLabel = "Class of beneficiaries", "/trusts-registration/beneficiaries/feature-not-available", removeClassRoute(0))
   )
 
-  val userAnswersWithBeneficiariesComplete = emptyUserAnswers
+  private val userAnswersWithBeneficiariesComplete = emptyUserAnswers
     .set(IndividualBeneficiaryNamePage(0), FullName("First", None, "Last")).success.value
     .set(IndividualBeneficiaryStatus(0), Completed).success.value
     .set(ClassBeneficiaryDescriptionPage(0), "description").success.value

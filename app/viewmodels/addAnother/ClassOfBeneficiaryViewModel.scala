@@ -16,14 +16,13 @@
 
 package viewmodels.addAnother
 
-import models.registration.pages.Status
-import models.registration.pages.Status.{Completed, InProgress}
+import models.Status
 import play.api.libs.json.{Reads, __}
 
 
 case class ClassOfBeneficiaryViewModel(description: Option[String], status : Status) {
 
-  def isComplete : Boolean = description.nonEmpty && (status == Completed)
+  def isComplete : Boolean = description.nonEmpty && (status == Status.Completed)
 
 }
 
@@ -33,6 +32,6 @@ object ClassOfBeneficiaryViewModel {
 
   implicit val reads: Reads[ClassOfBeneficiaryViewModel] = (
     (__ \ "description").readNullable[String] and
-      (__ \ "status").readWithDefault[Status](InProgress)
+      (__ \ "status").readWithDefault[Status](Status.InProgress)
     )(ClassOfBeneficiaryViewModel.apply _)
 }

@@ -20,7 +20,7 @@ import controllers.actions.register.{DraftIdRetrievalActionProvider, Registratio
 import forms.ClassBeneficiaryDescriptionFormProvider
 import javax.inject.Inject
 import models.Mode
-import models.registration.pages.Status.Completed
+import models.Status.Completed
 import navigation.Navigator
 import pages.entitystatus.ClassBeneficiaryStatus
 import pages.register.beneficiaries.ClassBeneficiaryDescriptionPage

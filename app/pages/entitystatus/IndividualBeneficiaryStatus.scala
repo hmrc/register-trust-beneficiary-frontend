@@ -16,7 +16,7 @@
 
 package pages.entitystatus
 
-import models.registration.pages.Status
+import models.Status
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.beneficiaries.{Beneficiaries, IndividualBeneficiaries}

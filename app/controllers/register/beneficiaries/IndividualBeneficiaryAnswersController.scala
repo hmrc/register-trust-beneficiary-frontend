@@ -21,7 +21,7 @@ import controllers.actions.register.{DraftIdRetrievalActionProvider, Registratio
 import controllers.filters.IndexActionFilterProvider
 import javax.inject.Inject
 import models.NormalMode
-import models.registration.pages.Status.Completed
+import models.Status.Completed
 import navigation.Navigator
 import pages.entitystatus.IndividualBeneficiaryStatus
 import pages.register.beneficiaries.individual.{IndividualBeneficiaryAnswersPage, IndividualBeneficiaryNamePage}
