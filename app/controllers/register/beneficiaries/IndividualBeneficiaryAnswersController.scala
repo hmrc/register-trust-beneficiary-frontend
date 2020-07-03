@@ -29,6 +29,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.CheckYourAnswersHelper
 import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
 import views.html.register.beneficiaries.IndividualBenficiaryAnswersView
@@ -61,23 +62,23 @@ class IndividualBeneficiaryAnswersController @Inject()(
   def onPageLoad(index : Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-//      val answers = new CheckYourAnswersHelper(countryOptions)(request.userAnswers, draftId, canEdit = true)
+      val answers = new CheckYourAnswersHelper(countryOptions)(request.userAnswers, draftId, canEdit = true)
 
       val sections = Seq(
         AnswerSection(
           None,
           Seq(
-//            answers.individualBeneficiaryName(index),
-//            answers.individualBeneficiaryDateOfBirthYesNo(index),
-//            answers.individualBeneficiaryDateOfBirth(index),
-//            answers.individualBeneficiaryIncomeYesNo(index),
-//            answers.individualBeneficiaryIncome(index),
-//            answers.individualBeneficiaryNationalInsuranceYesNo(index),
-//            answers.individualBeneficiaryNationalInsuranceNumber(index),
-//            answers.individualBeneficiaryAddressYesNo(index),
-//            answers.individualBeneficiaryAddressUKYesNo(index),
-//            answers.individualBeneficiaryAddressUK(index),
-//            answers.individualBeneficiaryVulnerableYesNo(index)
+            answers.individualBeneficiaryName(index),
+            answers.individualBeneficiaryDateOfBirthYesNo(index),
+            answers.individualBeneficiaryDateOfBirth(index),
+            answers.individualBeneficiaryIncomeYesNo(index),
+            answers.individualBeneficiaryIncome(index),
+            answers.individualBeneficiaryNationalInsuranceYesNo(index),
+            answers.individualBeneficiaryNationalInsuranceNumber(index),
+            answers.individualBeneficiaryAddressYesNo(index),
+            answers.individualBeneficiaryAddressUKYesNo(index),
+            answers.individualBeneficiaryAddressUK(index),
+            answers.individualBeneficiaryVulnerableYesNo(index)
           ).flatten
         )
       )

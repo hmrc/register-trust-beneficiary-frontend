@@ -52,23 +52,23 @@ class IndividualBeneficiaryAnswersControllerSpec extends SpecBase {
 
 
       val countryOptions = injector.instanceOf[CountryOptions]
-//      val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions)(userAnswers, fakeDraftId, canEdit = true)
+      val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions)(userAnswers, fakeDraftId, canEdit = true)
 
       val expectedSections = Seq(
         AnswerSection(
           None,
           Seq(
-//            checkYourAnswersHelper.individualBeneficiaryName(index).value,
-//            checkYourAnswersHelper.individualBeneficiaryDateOfBirthYesNo(index).value,
-//            checkYourAnswersHelper.individualBeneficiaryDateOfBirth(index).value,
-//            checkYourAnswersHelper.individualBeneficiaryIncomeYesNo(index).value,
-//            checkYourAnswersHelper.individualBeneficiaryIncome(index).value,
-//            checkYourAnswersHelper.individualBeneficiaryNationalInsuranceYesNo(index).value,
-//            checkYourAnswersHelper.individualBeneficiaryNationalInsuranceNumber(index).value,
-//            checkYourAnswersHelper.individualBeneficiaryAddressYesNo(index).value,
-//            checkYourAnswersHelper.individualBeneficiaryAddressUKYesNo(index).value,
-//            checkYourAnswersHelper.individualBeneficiaryAddressUK(index).value,
-//            checkYourAnswersHelper.individualBeneficiaryVulnerableYesNo(index).value
+            checkYourAnswersHelper.individualBeneficiaryName(index).value,
+            checkYourAnswersHelper.individualBeneficiaryDateOfBirthYesNo(index).value,
+            checkYourAnswersHelper.individualBeneficiaryDateOfBirth(index).value,
+            checkYourAnswersHelper.individualBeneficiaryIncomeYesNo(index).value,
+            checkYourAnswersHelper.individualBeneficiaryIncome(index).value,
+            checkYourAnswersHelper.individualBeneficiaryNationalInsuranceYesNo(index).value,
+            checkYourAnswersHelper.individualBeneficiaryNationalInsuranceNumber(index).value,
+            checkYourAnswersHelper.individualBeneficiaryAddressYesNo(index).value,
+            checkYourAnswersHelper.individualBeneficiaryAddressUKYesNo(index).value,
+            checkYourAnswersHelper.individualBeneficiaryAddressUK(index).value,
+            checkYourAnswersHelper.individualBeneficiaryVulnerableYesNo(index).value
           )
         )
       )
