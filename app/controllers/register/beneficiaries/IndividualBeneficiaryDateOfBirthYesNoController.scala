@@ -50,9 +50,8 @@ class IndividualBeneficiaryDateOfBirthYesNoController @Inject()(
   private def actions(index: Int, draftId: String) =
     identify andThen
       getData(draftId) andThen
-      requireData
-//  andThen
-//      requiredAnswer(RequiredAnswer(IndividualBeneficiaryNamePage(index), routes.IndividualBeneficiaryNameController.onPageLoad(NormalMode,index, draftId)))
+      requireData andThen
+      requiredAnswer(RequiredAnswer(IndividualBeneficiaryNamePage(index), routes.IndividualBeneficiaryNameController.onPageLoad(NormalMode,index, draftId)))
 
   def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
@@ -67,7 +66,7 @@ class IndividualBeneficiaryDateOfBirthYesNoController @Inject()(
       Ok(view(preparedForm, mode, draftId, name, index))
   }
 
-  def onSubmit(mode: Mode, index: Int, draftId: String) = actions(index, draftId).async {
+  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
       val name = request.userAnswers.get(IndividualBeneficiaryNamePage(index)).get
