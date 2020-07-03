@@ -30,7 +30,7 @@ class SubmissionSetFactory @Inject()(registrationProgress: RegistrationProgress)
 
     SubmissionDraftSetData(
       Json.toJson(userAnswers),
-      Some(SubmissionDraftStatus("assets", status)),
+      Some(SubmissionDraftStatus("beneficiaries", status)),
       registrationPieces
     )
   }
