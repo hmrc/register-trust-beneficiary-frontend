@@ -32,13 +32,299 @@ session_expired.guidance = The details you have given have been deleted because 
 site.back = Back
 site.delete = Remove
 site.edit = Change
-site.hidden-delete = Delete {0}
+site.hidden-delete = Remove {0}
 site.hidden-edit = Change {0}
 site.no = No
 site.yes = Yes
-site.continue = Continue
-site.service_name = register-trust-beneficiary-frontend
+site.save.continue = Save and continue
+site.service_name = Register and Maintain a Trust
 site.textarea.char_limit = (Limit is {0} characters)
+site.inprogress = In Progress
+site.complete = Completed
+site.onlyContinue = Continue
+site.date.hint = For example, 31 3 1980
+site.warning = Warning
+site.error = Error:
+site.address = Address
+site.sign_out = Sign out
+
+footer.links.accessibility.text = Accessibility
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
+
+featureNotAvailable.title = This part of the online service is not available yet
+featureNotAvailable.heading = This part of the online service is not available yet
+featureNotAvailable.p1 = If you need to make any changes to the trust you can
+featureNotAvailable.link = contact our trusts helpline (opens in a new window or tab)
+featureNotAvailable.p2 = You will be able to update these details online in the future.
+
+site.address.uk.title = What is the address?
+site.address.uk.heading = What is {0}’s address?
+site.address.uk.line1 = Address line 1
+site.address.uk.line2 = Address line 2
+site.address.uk.line3 = Address line 3 (optional)
+site.address.uk.line4 = Address line 4 (optional)
+site.address.uk.postcode = Postcode
+site.address.uk.postcode.hint = For example AB1 1AB
+site.address.uk.checkYourAnswersLabel = What is {0}’s address?
+
+ukAddress.error.line1.required = Enter address line 1
+ukAddress.error.line2.required = Enter address line 2
+ukAddress.error.postcode.required = Enter a postcode
+ukAddress.error.line1.length = Address line 1 must be 35 characters or less
+ukAddress.error.line2.length = Address line 2 must be 35 characters or less
+ukAddress.error.line3.length = Address line 3 must be 35 characters or less
+ukAddress.error.line4.length = Address line 4 must be 35 characters or less
+ukAddress.error.line1.invalidCharacters = Address line 1 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+ukAddress.error.line2.invalidCharacters = Address line 2 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+ukAddress.error.line3.invalidCharacters = Address line 3 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+ukAddress.error.line4.invalidCharacters = Address line 4 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+ukAddress.error.postcode.invalidCharacters = Enter a real postcode
+
+site.address.international.title = What is the address?
+site.address.international.heading = What is {0}’s address?
+site.address.international.checkYourAnswersLabel = What is {0}’s address?
+site.address.international.line1 = Address line 1
+site.address.international.line2 = Address line 2
+site.address.international.line3 = Address line 3 (optional)
+site.address.international.country = Country
+
+internationalAddress.error.line1.required = Enter address line 1
+internationalAddress.error.line2.required = Enter address line 2
+internationalAddress.error.country.required = Select a country
+internationalAddress.error.line1.length = Address line 1 must be 35 characters or less
+internationalAddress.error.line2.length = Address line 2 must be 35 characters or less
+internationalAddress.error.line3.length = Address line 3 must be 35 characters or less
+internationalAddress.error.line1.invalidCharacters = Address line 1 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+internationalAddress.error.line2.invalidCharacters = Address line 2 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+internationalAddress.error.line3.invalidCharacters = Address line 3 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+
+individualOrBusiness.individual = Individual
+individualOrBusiness.business = Business
+
+entity.beneficiary = Beneficiaries
+
+entities.no.name.added = No name added
+entities.no.value.added = No value added
+entities.no.address.added = No address added
+entities.no.description.added = No description added
+
+entities.beneficiary.individual = Individual Beneficiary
+entities.beneficiary.class = Class of beneficiaries
+
+emailAddress.checkYourAnswersLabel = What is {0}’s email address?
+
+charityBeneficiaryName.checkYourAnswersLabel = What is the name of the charity?
+charityBeneficiaryShareOfIncomeYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
+charityBeneficiaryShareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
+charityBeneficiaryAddressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
+charityBeneficiaryAddressUKYesNo.checkYourAnswersLabel = Is {0}’s address in the UK?
+charityBeneficiaryAddress.checkYourAnswersLabel = What is {0}’s address?
+charityBeneficiaryUtr.checkYourAnswersLabel = What is {0}’s Unique Taxpayer Reference (UTR) number?
+
+companyBeneficiaryName.checkYourAnswersLabel = What is the name of the company?
+companyBeneficiaryShareOfIncomeYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
+companyBeneficiaryShareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
+companyBeneficiaryAddressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
+companyBeneficiaryAddressUKYesNo.checkYourAnswersLabel = Is {0}’s address in the UK?
+companyBeneficiaryAddress.checkYourAnswersLabel = What is {0}’s address?
+companyBeneficiaryUtr.checkYourAnswersLabel = What is {0}’s Unique Taxpayer Reference (UTR) number?
+
+largeBeneficiaryName.checkYourAnswersLabel = What is the business’s name?
+largeBeneficiaryShareOfIncomeYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
+largeBeneficiaryShareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
+largeBeneficiaryAddressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
+largeBeneficiaryAddressUKYesNo.checkYourAnswersLabel = Is {0}’s address in the UK?
+largeBeneficiaryAddress.checkYourAnswersLabel = What is {0}’s address?
+largeBeneficiaryUtr.checkYourAnswersLabel = What is {0}’s Unique Taxpayer Reference (UTR) number?
+largeBeneficiaryDescription.checkYourAnswersLabel = What is the description of the beneficiary?
+largeBeneficiaryNumberOfBeneficiaries.checkYourAnswersLabel = How many people are in this employment related beneficiary?
+
+individualBeneficiaryName.title = What is the name of the individual?
+individualBeneficiaryName.heading = What is the name of the individual?
+individualBeneficiaryName.checkYourAnswersLabel = What is the name of the individual?
+individualBeneficiaryName.firstName = First name
+individualBeneficiaryName.middleName = Middle names (optional)
+individualBeneficiaryName.lastName = Last name
+individualBeneficiaryName.error.firstname.required = Enter the individual beneficiary’s first name
+individualBeneficiaryName.error.lastname.required = Enter the individual beneficiary’s last name
+individualBeneficiaryName.error.firstname.length = The individual beneficiary’s first name must be 35 characters or less
+individualBeneficiaryName.error.middlename.length = The individual beneficiary’s middle names must be 35 characters or less
+individualBeneficiaryName.error.lastname.length = The individual beneficiary’s last name must be 35 characters or less
+individualBeneficiaryName.error.firstname.invalid = The individual beneficiary’s first name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+individualBeneficiaryName.error.middlename.invalid = The individual beneficiary’s middle names must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+individualBeneficiaryName.error.lastname.invalid = The individual beneficiary’s last name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+
+individualBeneficiaryDateOfBirthYesNo.title = Do you know the individual beneficiary’s date of birth?
+individualBeneficiaryDateOfBirthYesNo.heading = Do you know {0}’s date of birth?
+individualBeneficiaryDateOfBirthYesNo.checkYourAnswersLabel = Do you know {0}’s date of birth?
+individualBeneficiaryDateOfBirthYesNo.error.required = Select yes if you know the individual beneficiary’s date of birth
+
+individualBeneficiaryDateOfBirth.title = What is the individual beneficiary’s date of birth?
+individualBeneficiaryDateOfBirth.heading = What is {0}’s date of birth?
+individualBeneficiaryDateOfBirth.checkYourAnswersLabel = What is {0}’s date of birth?
+individualBeneficiaryDateOfBirth.hint = For example, 31 3 1980
+individualBeneficiaryDateOfBirth.error.required.all = Enter a date of birth
+individualBeneficiaryDateOfBirth.error.required.two = The date of birth must include {0} and {1}
+individualBeneficiaryDateOfBirth.error.required = The date of birth must include {0}
+individualBeneficiaryDateOfBirth.error.invalid = Enter a real date of birth
+individualBeneficiaryDateOfBirth.error.future = Date of birth must be today or in the past
+individualBeneficiaryDateOfBirth.error.past = Date of birth must be after 31 December 1499
+
+individualBeneficiaryIncomeYesNo.title = Do the trustees have discretion over how much income the individual beneficiary may get?
+individualBeneficiaryIncomeYesNo.heading = Do the trustees have discretion over how much income {0} may get?
+individualBeneficiaryIncomeYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
+individualBeneficiaryIncomeYesNo.hint = See the trust deed for details
+individualBeneficiaryIncomeYesNo.error.required = Select yes if the trustees have discretion over how much income the individual beneficiary may get
+
+individualBeneficiaryIncome.title = What percentage of the trust’s assets is the individual beneficiary entitled to?
+individualBeneficiaryIncome.heading = What percentage of the trust’s assets is {0} entitled to?
+individualBeneficiaryIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
+individualBeneficiaryIncome.hint = Round this down to a whole number.
+individualBeneficiaryIncome.error.required = Enter what percentage of the trust’s assets the beneficiary is entitled to
+individualBeneficiaryIncome.error.length = The percentage of the trust’s assets the beneficiary is entitled to must be 100 or less
+individualBeneficiaryIncome.error.invalid = The percentage of the trust’s assets the beneficiary is entitled to must be a whole number
+
+individualBeneficiaryNationalInsuranceYesNo.title = Do you know the individual beneficiary’s National Insurance number?
+individualBeneficiaryNationalInsuranceYesNo.heading = Do you know {0}’s National Insurance number?
+individualBeneficiaryNationalInsuranceYesNo.checkYourAnswersLabel = Do you know {0}’s National Insurance number?
+individualBeneficiaryNationalInsuranceYesNo.error.required = Select yes if you know the individual beneficiary’s National Insurance number
+
+individualBeneficiaryNationalInsuranceNumber.title = What is the individual beneficiary’s National Insurance number?
+individualBeneficiaryNationalInsuranceNumber.heading = What is {0}’s National Insurance number?
+individualBeneficiaryNationalInsuranceNumber.hint = It is on their National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’.
+individualBeneficiaryNationalInsuranceNumber.hint.reader = It is on their National Insurance card, benefit letter, payslip or P60. For example, Q Q 1 2 3 4 5 6 C.
+individualBeneficiaryNationalInsuranceNumber.checkYourAnswersLabel = What is {0}’s National Insurance number?
+individualBeneficiaryNationalInsuranceNumber.error.required = Enter the individual beneficiary’s National Insurance number
+individualBeneficiaryNationalInsuranceNumber.error.length = Individual beneficiary’s National Insurance number must be 9 characters or less
+individualBeneficiaryNationalInsuranceNumber.error.invalid = Enter the individual beneficiary’s National Insurance number in the correct format
+
+individualBeneficiaryAddressYesNo.title = Do you know the individual beneficiary’s address?
+individualBeneficiaryAddressYesNo.heading = Do you know {0}’s address?
+individualBeneficiaryAddressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
+individualBeneficiaryAddressYesNo.error.required = Select yes if you know the individual beneficiary’s address
+
+individualBeneficiaryAddressUK.title = What is the individual beneficiary’s address?
+individualBeneficiaryAddressUK.heading = What is {0}’s address?
+individualBeneficiaryAddressUK.checkYourAnswersLabel = What is {0}’s address?
+
+individualBeneficiaryRoleInCompany.checkYourAnswersLabel = What is {0}’s role in the company that the trust was created for?
+individualBeneficiaryPassportIDCardYesNo.checkYourAnswersLabel = Do you know {0}’s passport or ID card details?
+individualBeneficiaryPassportIDCard.checkYourAnswersLabel = What are {0}’s passport or ID card details?
+
+individualBeneficiaryVulnerableYesNo.title = Has a vulnerable person election form (VPE1) been submitted to HMRC for the individual beneficiary?
+individualBeneficiaryVulnerableYesNo.heading = Has a vulnerable person election form (VPE1) been submitted to HMRC for {0}?
+individualBeneficiaryVulnerableYesNo.checkYourAnswersLabel = Has a vulnerable person election form (VPE1) been submitted to HMRC for {0}?
+individualBeneficiaryVulnerableYesNo.error.required = Select yes if a vulnerable person election form (VPE1) has been submitted to HMRC for the individual beneficiary
+
+individualBeneficiaryPassportYeNo.checkYourAnswersLabel = Do you know {0}’s passport details
+individualBeneficiaryPassport.checkYourAnswersLabel = What are {0}’s passport details?
+individualBeneficiaryIDCardDetailsYesNo.checkYourAnswersLabel = Do you know {0}’s ID card details?
+individualBeneficiaryIDCardDetails.checkYourAnswersLabel = What are {0}’s ID card details?
+
+individualBeneficiaryInfo.title = Beneficiary: information you’ll need to provide
+individualBeneficiaryInfo.heading = Beneficiary: information you’ll need to provide
+individualBeneficiaryInfo.caption = Beneficiaries
+individualBeneficiaryInfo.subheading1 = Individual beneficiaries
+individualBeneficiaryInfo.paragraph1 = For individuals named in the trust deed, tell us their name. If you know more details, tell us their:
+individualBeneficiaryInfo.bulletpoint1 = date of birth
+individualBeneficiaryInfo.bulletpoint2 = National Insurance number
+individualBeneficiaryInfo.bulletpoint3 = address
+individualBeneficiaryInfo.bulletpoint4 = passport details and address
+individualBeneficiaryInfo.bulletpoint5 = ID card details and address
+individualBeneficiaryInfo.paragraph2 = If the trust is for the employees of a company, tell us if they are a director, employee or neither of the company the trust was created for.
+individualBeneficiaryInfo.paragraph3 = Tell us whether the trustees can decide how much the individual beneficiary can get and if they have been elected as a vulnerable beneficiary.
+individualBeneficiaryInfo.subheading2 = Class of beneficiaries
+individualBeneficiaryInfo.paragraph4 = You need to give a short description for beneficiaries that cannot be identified. For example, children not born yet, future grandchildren and great grandchildren.
+individualBeneficiaryInfo.subheading3 = Named company, charity or trust
+individualBeneficiaryInfo.paragraph5 = Tell us the beneficiary’s name. Tell us the address if you know it.
+individualBeneficiaryInfo.subheading4 = Group of beneficiaries from a company or employment-related trust
+individualBeneficiaryInfo.paragraph6 = Tell us:
+individualBeneficiaryInfo.bulletpoint6 = the name of the company or employment-related trust
+individualBeneficiaryInfo.bulletpoint7 = how many beneficiaries there are
+individualBeneficiaryInfo.bulletpoint8 = a short description of the beneficiaries: for example, employees and their children, spouses or widows
+individualBeneficiaryInfo.paragraph7 = Do not include named or specific employees such as directors. They must be listed as individual beneficiaries.
+individualBeneficiaryInfo.subheading5 = Other beneficiaries
+individualBeneficiaryInfo.paragraph8 = You need to give a short description for beneficiaries that do not fall into the other beneficiary types. For example, pets.
+
+trustBeneficiaryName.checkYourAnswersLabel = What is the name of the trust?
+trustBeneficiaryShareOfIncomeYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
+trustBeneficiaryShareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
+trustBeneficiaryAddressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
+trustBeneficiaryAddressUKYesNo.checkYourAnswersLabel = Is {0}’s address in the UK?
+trustBeneficiaryAddress.checkYourAnswersLabel = What is {0}’s address?
+trustBeneficiaryUtr.checkYourAnswersLabel = What is {0}’s Unique Taxpayer Reference (UTR) number?
+
+otherBeneficiaryDescription.checkYourAnswersLabel = What is the description of the beneficiary?
+otherBeneficiaryShareOfIncomeYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
+otherBeneficiaryShareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
+otherBeneficiaryAddressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
+otherBeneficiaryAddressUKYesNo.checkYourAnswersLabel = Is {0}’s address in the UK?
+otherBeneficiaryAddress.checkYourAnswersLabel = What is {0}’s address?
+
+addABeneficiary.title = Add a beneficiary
+addABeneficiary.heading = Add a beneficiary
+addABeneficiary.additional-content = Do you want to add another beneficiary?
+addABeneficiary.add-them-now = Yes, I want to add them now
+addABeneficiary.add-them-later = Yes, I want to add them later
+addABeneficiary.no-complete = No, I have added all beneficiaries
+addABeneficiary.individualBeneficiary = Individual beneficiary
+addABeneficiary.error.required = Select yes if you want to add another beneficiary
+addABeneficiary.singular.heading = Add a beneficiary
+addABeneficiary.singular.title = Add a beneficiary
+addABeneficiary.count.heading = You have added {0} beneficiaries
+addABeneficiary.count.title = You have added {0} beneficiaries
+
+addABeneficiaryYesNo.title = Do you want to add a beneficiary?
+addABeneficiaryYesNo.heading = Do you want to add a beneficiary?
+addABeneficiaryYesNo.error.required = Select yes if you want to add a beneficiary
+
+individualBenficiaryAnswers.title = Check beneficiary details
+individualBenficiaryAnswers.heading = Check beneficiary details
+
+individualBeneficiaryAddressUKYesNo.title = Does the individual beneficiary live in the UK?
+individualBeneficiaryAddressUKYesNo.heading = Does {0} live in the UK?
+individualBeneficiaryAddressUKYesNo.checkYourAnswersLabel = Does {0} live in the UK?
+individualBeneficiaryAddressUKYesNo.error.required = Select yes if the individual beneficiary lives in the UK
+
+classBeneficiaryDescription.title = What is the description for the class of beneficiaries?
+classBeneficiaryDescription.heading = What is the description for the class of beneficiaries?
+classBeneficiaryDescription.checkYourAnswersLabel = What is the description for the class of beneficiaries?
+classBeneficiaryDescription.error.required = Enter the description for the class of beneficiaries
+classBeneficiaryDescription.error.length = The description of the class in the trust deed must be 56 characters or less
+classBeneficiaryDescription.error.invalid = The description of the class in the trust deed must only include letters a to z, numbers, ampersands (&), backward slashes or spaces
+classBeneficiaryDescription.hint = This must be 56 characters or less. For example, future grandchildren and future great-grandchildren.
+
+classBeneficiaryShareOfIncomeYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
+classBeneficiaryShareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
+
+removeClassOfBeneficiary.title = Are you sure you want to remove the class of beneficiaries?
+removeClassOfBeneficiary.heading = Are you sure you want to remove {0}?
+removeClassOfBeneficiary.default = the class of beneficiaries
+removeClassOfBeneficiary.error.required = Select yes if you want to remove the class of beneficiaries
+
+whatTypeOfBeneficiary.first.title = What kind of beneficiary do you need to add first?
+whatTypeOfBeneficiary.next.title = What kind of beneficiary do you need to add next?
+whatTypeOfBeneficiary.first.heading = What kind of beneficiary do you need to add first?
+whatTypeOfBeneficiary.next.heading = What kind of beneficiary do you need to add next?
+
+whatTypeOfBeneficiary.Individual = Individual
+whatTypeOfBeneficiary.ClassOfBeneficiary = Class of beneficiaries
+whatTypeOfBeneficiary.CharityOrTrust = Charity or trust
+whatTypeOfBeneficiary.CompanyOrEmployment = Company or employment related
+whatTypeOfBeneficiary.Other = Other beneficiary
+whatTypeOfBeneficiary.error.required = Select the type of beneficiary you need to add
+whatTypeOfBeneficiary.hint = You can enter a maximum of 25 entries for each beneficiary type
+
+removeIndividualBeneficiary.title = Are you sure you want to remove the individual beneficiary?
+removeIndividualBeneficiary.heading = Are you sure you want to remove {0}?
+removeIndividualBeneficiary.default = the individual beneficiary
+removeIndividualBeneficiary.error.required = Select yes if you want to remove the individual beneficiary
+
+dateOfBirth.error.required.all = Enter a date of birth
+dateOfBirth.error.required.two = The date of birth must include {0} and {1}
+dateOfBirth.error.required = The date of birth must include {0}
+dateOfBirth.error.invalid = Enter a real date of birth
+dateOfBirth.error.future = Date of birth must be today or in the past
+dateOfBirth.error.past = Date of birth must be after 31 December 1499

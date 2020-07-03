@@ -34,6 +34,7 @@ trait ViewBehaviours extends ViewSpecBase {
           val doc = asDocument(view)
           val nav = doc.getElementById("proposition-menu")
           val span = nav.children.first
+          span.text mustBe messages("site.service_name")
         }
 
         "display the correct browser title" in {
@@ -57,8 +58,93 @@ trait ViewBehaviours extends ViewSpecBase {
         "display language toggles" in {
 
           val doc = asDocument(view)
-          assertRenderedById(doc, "cymraeg-switch")
+          assertNotRenderedById(doc, "cymraeg-switch")
         }
+
+      }
+    }
+  }
+
+  def dynamicTitlePage(view: HtmlFormat.Appendable,
+                       messageKeyPrefix: String,
+                       messageKeyParam: String,
+                       expectedGuidanceKeys: String*): Unit = {
+
+    "behave like a dynamic title page" when {
+
+      "rendered" must {
+
+        "have the correct banner title" in {
+
+          val doc = asDocument(view)
+          val nav = doc.getElementById("proposition-menu")
+          val span = nav.children.first
+          span.text mustBe messages("site.service_name")
+        }
+
+        "display the correct browser title" in {
+
+          val doc = asDocument(view)
+          assertEqualsMessage(doc, "title", s"$messageKeyPrefix.title", messageKeyParam)
+        }
+
+        "display the correct page title" in {
+
+          val doc = asDocument(view)
+          assertPageTitleEqualsMessage(doc, s"$messageKeyPrefix.heading", messageKeyParam)
+        }
+
+        "display the correct guidance" in {
+
+          val doc = asDocument(view)
+          for (key <- expectedGuidanceKeys) assertContainsText(doc, messages(s"$messageKeyPrefix.$key"))
+        }
+
+        "display language toggles" in {
+
+          val doc = asDocument(view)
+          assertNotRenderedById(doc, "cymraeg-switch")
+        }
+
+      }
+    }
+  }
+
+  def confirmationPage(view: HtmlFormat.Appendable,
+                       messageKeyPrefix: String,
+                       messageKeyParam: String,
+                       accessibleKeyParam: String): Unit = {
+
+    "behave like a confirmation page" when {
+
+      "rendered" must {
+
+        "have the correct banner title" in {
+
+          val doc = asDocument(view)
+          val nav = doc.getElementById("proposition-menu")
+          val span = nav.children.first
+          span.text mustBe messages("site.service_name")
+        }
+
+        "display the correct browser title" in {
+
+          val doc = asDocument(view)
+          assertEqualsMessage(doc, "title", s"$messageKeyPrefix.title", accessibleKeyParam)
+        }
+
+        "display the correct page title" in {
+
+          val doc = asDocument(view)
+          assertPageTitleEqualsMessage(doc, s"$messageKeyPrefix.heading", messageKeyParam + " " + accessibleKeyParam)
+        }
+
+        "display language toggles" in {
+
+          val doc = asDocument(view)
+          assertNotRenderedById(doc, "cymraeg-switch")
+        }
+
       }
     }
   }
@@ -74,4 +160,46 @@ trait ViewBehaviours extends ViewSpecBase {
       }
     }
   }
+
+  def pageWithLink(view: HtmlFormat.Appendable, id: String, url : String): Unit = {
+
+    "behave like a page with a link" must {
+
+      "have a link" in {
+
+        val doc = asDocument(view)
+        val element = doc.getElementById(id)
+
+        assertRenderedById(doc, id)
+        assertAttributeValueForElement(element, "href", url)
+      }
+    }
+  }
+
+  def pageWithASubmitButton(view: HtmlFormat.Appendable): Unit = {
+
+    "behave like a page with a submit button" must {
+      "have a submit button" in {
+        val doc = asDocument(view)
+        assertRenderedById(doc, "submit")
+      }
+    }
+  }
+
+  def pageWithContinueButton(view: HtmlFormat.Appendable, url : String): Unit = {
+
+    "behave like a page with a Continue button" must {
+      "have a continue button" in {
+        val doc = asDocument(view)
+        assertContainsTextForId(doc,"button", "Continue")
+        assertAttributeValueForElement(
+          doc.getElementById("button"),
+          "href",
+          url
+        )
+      }
+    }
+  }
 }
+
+

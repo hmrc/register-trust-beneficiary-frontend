@@ -1,0 +1,65 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import controllers.register.beneficiaries.routes._
+@import models.Mode
+@import models.registration.pages.WhatTypeOfBeneficiary
+
+@this(
+    main_template: MainTemplate,
+    formHelper: FormWithCSRF
+)
+
+@(form: Form[_], mode: Mode, draftId: String, beneficiaryAdded : Boolean )(implicit request: Request[_], messages: Messages)
+
+@title = {
+    @if(beneficiaryAdded==true) {
+        @messages("whatTypeOfBeneficiary.next.title")
+    } else {
+        @messages("whatTypeOfBeneficiary.first.title")
+    }
+}
+
+@heading = {
+    @if(beneficiaryAdded) {
+        @messages("whatTypeOfBeneficiary.next.heading")
+    } else {
+        @messages("whatTypeOfBeneficiary.first.heading")
+    }
+}
+
+@main_template(
+    title = s"${errorPrefix(form)} $title"
+    ) {
+
+    @formHelper(action = WhatTypeOfBeneficiaryController.onSubmit(draftId), 'autoComplete -> "off") {
+
+        @components.back_link()
+
+        @components.error_summary(form.errors)
+
+        @components.input_radio(
+            field = form("value"),
+            legend = heading.toString,
+            legendClass = Some("heading-large"),
+            inputs = WhatTypeOfBeneficiary.options,
+            hint = Some(messages(s"whatTypeOfBeneficiary.hint")),
+            legendAsHeading = true
+        )
+
+        @components.submit_button()
+    }
+}

@@ -16,28 +16,30 @@
 
 package navigation
 
+import config.FrontendAppConfig
 import javax.inject.{Inject, Singleton}
-
-import play.api.mvc.Call
-import controllers.routes
+import models.{UserAnswers, _}
+import navigation.routes.BeneficiaryRoutes
 import pages._
-import models._
+import play.api.mvc.Call
+import uk.gov.hmrc.auth.core.AffinityGroup
 
 @Singleton
-class Navigator @Inject()() {
+class Navigator @Inject()(config: FrontendAppConfig) {
 
-  private val normalRoutes: Page => UserAnswers => Call = {
-    case _ => _ => routes.IndexController.onPageLoad()
+  private def defaultRoute(draftId: String): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
+    case _ => _ => _ => controllers.routes.IndexController.onPageLoad(draftId)
   }
 
-  private val checkRouteMap: Page => UserAnswers => Call = {
-    case _ => _ => routes.CheckYourAnswersController.onPageLoad()
-  }
+  protected def route(draftId: String): PartialFunction[Page, AffinityGroup => UserAnswers => Call] =
+      BeneficiaryRoutes.route(draftId, config) orElse
+      defaultRoute(draftId)
 
-  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {
+  def nextPage(page: Page, mode: Mode, draftId: String, af :AffinityGroup = AffinityGroup.Organisation): UserAnswers => Call = mode match {
     case NormalMode =>
-      normalRoutes(page)(userAnswers)
+      route(draftId)(page)(af)
     case CheckMode =>
-      checkRouteMap(page)(userAnswers)
+      route(draftId)(page)(af)
   }
+
 }

@@ -30,7 +30,9 @@
             <span class="form-hint">@hint</span>
         }
         @field.errors.map { error =>
-            <span class="error-message" id="error-message-@{field.id}-input">@messages(error.message, error.args: _*)</span>
+            <span class="error-message" id="error-message-@{field.id}-input">
+                <span class="visually-hidden">@messages("site.error")</span> @messages(error.message, error.args: _*)
+            </span>
         }
     </label>
     <div class="form-control-wrapper char-counter" data-char-counter>
@@ -39,7 +41,10 @@
             id="@{field.id}"
             name="@{field.id}"
             @if(field.hasErrors) { aria-describedby="error-message-@{field.id}-input" }
-            rows="5"
-        >@{field.value}</textarea>
+            rows="5">
+
+            @{field.value}
+        </textarea>
     </div>
 </div>
+

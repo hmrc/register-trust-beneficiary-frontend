@@ -16,27 +16,216 @@
 
 package utils
 
-import java.time.format.DateTimeFormatter
-
-import controllers.routes
-import models.{CheckMode, UserAnswers}
-import pages._
+import javax.inject.Inject
+import models.{NormalMode, UserAnswers}
+import pages.register.beneficiaries.individual._
+import pages.register.beneficiaries.{AddABeneficiaryPage, ClassBeneficiaryDescriptionPage}
 import play.api.i18n.Messages
-import play.twirl.api.{Html, HtmlFormat}
-import viewmodels.AnswerRow
-import CheckYourAnswersHelper._
+import play.twirl.api.HtmlFormat
+import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries}
+import utils.countryOptions.CountryOptions
+import viewmodels.{AnswerRow, AnswerSection}
+import CheckAnswersFormatters._
 
-class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
+class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
+                                      (userAnswers: UserAnswers,
+                                       draftId: String,
+                                       canEdit: Boolean)
+                                      (implicit messages: Messages) {
 
-  private def yesOrNo(answer: Boolean)(implicit messages: Messages): Html =
-    if (answer) {
-      HtmlFormat.escape(messages("site.yes"))
-    } else {
-      HtmlFormat.escape(messages("site.no"))
+
+  def individualBeneficiaries: Option[Seq[AnswerSection]] = {
+    for {
+      beneficiaries <- userAnswers.get(IndividualBeneficiaries)
+      indexed = beneficiaries.zipWithIndex
+    } yield indexed.map {
+      case (_, index) =>
+
+        val questions = Seq(
+          individualBeneficiaryName(index),
+          individualBeneficiaryDateOfBirthYesNo(index),
+          individualBeneficiaryDateOfBirth(index),
+          individualBeneficiaryIncomeYesNo(index),
+          individualBeneficiaryIncome(index),
+          individualBeneficiaryNationalInsuranceYesNo(index),
+          individualBeneficiaryNationalInsuranceNumber(index),
+          individualBeneficiaryAddressYesNo(index),
+          individualBeneficiaryAddressUKYesNo(index),
+          individualBeneficiaryAddressUK(index),
+          individualBeneficiaryVulnerableYesNo(index)
+        ).flatten
+
+        AnswerSection(Some(Messages("answerPage.section.individualBeneficiary.subheading") + " " + (index + 1)),
+          questions, if (index == 0) {
+            Some(Messages("answerPage.section.beneficiaries.heading"))
+          } else {
+            None
+          })
     }
-}
+  }
 
-object CheckYourAnswersHelper {
+  def classOfBeneficiaries(individualBeneficiariesExist: Boolean): Option[Seq[AnswerSection]] = {
+    for {
+      beneficiaries <- userAnswers.get(ClassOfBeneficiaries)
+      indexed = beneficiaries.zipWithIndex
+    } yield indexed.map {
+      case (_, index) =>
 
-  private val dateFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
+        val questions = Seq(
+          classBeneficiaryDescription(index)
+        ).flatten
+
+        val sectionKey = if (index == 0 && !individualBeneficiariesExist) {
+          Some(Messages("answerPage.section.beneficiaries.heading"))
+        } else {
+          None
+        }
+
+        AnswerSection(Some(Messages("answerPage.section.classOfBeneficiary.subheading") + " " + (index + 1)),
+          questions, sectionKey)
+    }
+  }
+
+  def classBeneficiaryDescription(index: Int): Option[AnswerRow] = userAnswers.get(ClassBeneficiaryDescriptionPage(index)) map {
+    x =>
+      AnswerRow(
+        "classBeneficiaryDescription.checkYourAnswersLabel",
+        HtmlFormat.escape(x),
+        Some(controllers.register.beneficiaries.routes.ClassBeneficiaryDescriptionController.onPageLoad(NormalMode, index, draftId).url),
+        canEdit = canEdit
+      )
+  }
+
+
+  def individualBeneficiaryAddressUKYesNo(index: Int): Option[AnswerRow] = userAnswers.get(IndividualBeneficiaryAddressUKYesNoPage(index)) map {
+    x =>
+      AnswerRow(
+        "individualBeneficiaryAddressUKYesNo.checkYourAnswersLabel",
+        yesOrNo(x),
+        Some(controllers.register.beneficiaries.routes.IndividualBeneficiaryAddressUKYesNoController.onPageLoad(NormalMode, index, draftId).url),
+        indBeneficiaryName(index, userAnswers),
+        canEdit = canEdit
+      )
+  }
+
+  def addABeneficiary(): Option[AnswerRow] = userAnswers.get(AddABeneficiaryPage) map {
+    x =>
+      AnswerRow(
+        "addABeneficiary.checkYourAnswersLabel",
+        HtmlFormat.escape(messages(s"addABeneficiary.$x")),
+        Some(controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId).url),
+        canEdit = canEdit
+      )
+  }
+
+  def individualBeneficiaryVulnerableYesNo(index: Int): Option[AnswerRow] = userAnswers.get(IndividualBeneficiaryVulnerableYesNoPage(index)) map {
+    x =>
+      AnswerRow(
+        "individualBeneficiaryVulnerableYesNo.checkYourAnswersLabel",
+        yesOrNo(x),
+        Some(controllers.register.beneficiaries.routes.IndividualBeneficiaryVulnerableYesNoController.onPageLoad(NormalMode, index, draftId).url),
+        indBeneficiaryName(index, userAnswers),
+        canEdit = canEdit
+      )
+  }
+
+  def individualBeneficiaryAddressUK(index: Int): Option[AnswerRow] = userAnswers.get(IndividualBeneficiaryAddressUKPage(index)) map {
+    x =>
+      AnswerRow(
+        "individualBeneficiaryAddressUK.checkYourAnswersLabel",
+        ukAddress(x),
+        Some(controllers.register.beneficiaries.routes.IndividualBeneficiaryAddressUKController.onPageLoad(NormalMode, index, draftId).url),
+        indBeneficiaryName(index, userAnswers),
+        canEdit = canEdit
+      )
+  }
+
+  def individualBeneficiaryAddressYesNo(index: Int): Option[AnswerRow] = userAnswers.get(IndividualBeneficiaryAddressYesNoPage(index)) map {
+    x =>
+      AnswerRow(
+        "individualBeneficiaryAddressYesNo.checkYourAnswersLabel",
+        yesOrNo(x),
+        Some(controllers.register.beneficiaries.routes.IndividualBeneficiaryAddressYesNoController.onPageLoad(NormalMode, index, draftId).url),
+        indBeneficiaryName(index, userAnswers),
+        canEdit = canEdit
+      )
+  }
+
+  def individualBeneficiaryNationalInsuranceNumber(index: Int): Option[AnswerRow] =
+    userAnswers.get(IndividualBeneficiaryNationalInsuranceNumberPage(index)) map {
+    x =>
+      AnswerRow(
+        "individualBeneficiaryNationalInsuranceNumber.checkYourAnswersLabel",
+        HtmlFormat.escape(formatNino(x)),
+        Some(controllers.register.beneficiaries.routes.IndividualBeneficiaryNationalInsuranceNumberController.onPageLoad(NormalMode, index, draftId).url),
+        indBeneficiaryName(index, userAnswers),
+        canEdit = canEdit
+      )
+  }
+
+  def individualBeneficiaryNationalInsuranceYesNo(index: Int): Option[AnswerRow] = userAnswers.get(IndividualBeneficiaryNationalInsuranceYesNoPage(index)) map {
+    x =>
+      AnswerRow(
+        "individualBeneficiaryNationalInsuranceYesNo.checkYourAnswersLabel",
+        yesOrNo(x),
+        Some(controllers.register.beneficiaries.routes.IndividualBeneficiaryNationalInsuranceYesNoController.onPageLoad(NormalMode, index, draftId).url),
+        indBeneficiaryName(index, userAnswers),
+        canEdit = canEdit
+      )
+  }
+
+  def individualBeneficiaryIncome(index: Int): Option[AnswerRow] = userAnswers.get(IndividualBeneficiaryIncomePage(index)) map {
+    x =>
+      AnswerRow(
+        "individualBeneficiaryIncome.checkYourAnswersLabel",
+        HtmlFormat.escape(x),
+        Some(controllers.register.beneficiaries.routes.IndividualBeneficiaryIncomeController.onPageLoad(NormalMode, index, draftId).url),
+        indBeneficiaryName(index, userAnswers),
+        canEdit = canEdit
+      )
+  }
+
+  def individualBeneficiaryIncomeYesNo(index: Int): Option[AnswerRow] = userAnswers.get(IndividualBeneficiaryIncomeYesNoPage(index)) map {
+    x =>
+      AnswerRow(
+        "individualBeneficiaryIncomeYesNo.checkYourAnswersLabel",
+        yesOrNo(x),
+        Some(controllers.register.beneficiaries.routes.IndividualBeneficiaryIncomeYesNoController.onPageLoad(NormalMode, index, draftId).url),
+        indBeneficiaryName(index, userAnswers),
+        canEdit = canEdit
+      )
+  }
+
+  def individualBeneficiaryDateOfBirth(index: Int): Option[AnswerRow] = userAnswers.get(IndividualBeneficiaryDateOfBirthPage(index)) map {
+    x =>
+      AnswerRow(
+        "individualBeneficiaryDateOfBirth.checkYourAnswersLabel",
+        HtmlFormat.escape(x.format(dateFormatter)),
+        Some(controllers.register.beneficiaries.routes.IndividualBeneficiaryDateOfBirthController.onPageLoad(NormalMode, index, draftId).url),
+        indBeneficiaryName(index, userAnswers),
+        canEdit = canEdit
+      )
+  }
+
+  def individualBeneficiaryDateOfBirthYesNo(index: Int): Option[AnswerRow] = userAnswers.get(IndividualBeneficiaryDateOfBirthYesNoPage(index)) map {
+    x =>
+      AnswerRow(
+        "individualBeneficiaryDateOfBirthYesNo.checkYourAnswersLabel",
+        yesOrNo(x),
+        Some(controllers.register.beneficiaries.routes.IndividualBeneficiaryDateOfBirthYesNoController.onPageLoad(NormalMode, index, draftId).url),
+        indBeneficiaryName(index, userAnswers),
+        canEdit = canEdit
+      )
+  }
+
+  def individualBeneficiaryName(index: Int): Option[AnswerRow] = userAnswers.get(IndividualBeneficiaryNamePage(index)) map {
+    x =>
+      AnswerRow(
+        "individualBeneficiaryName.checkYourAnswersLabel",
+        HtmlFormat.escape(s"${x.firstName} ${x.middleName.getOrElse("")} ${x.lastName}"),
+        Some(controllers.register.beneficiaries.routes.IndividualBeneficiaryNameController.onPageLoad(NormalMode, index, draftId).url),
+        canEdit = canEdit
+      )
+  }
+
 }

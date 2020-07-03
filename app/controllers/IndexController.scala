@@ -16,18 +16,53 @@
 
 package controllers
 
+import controllers.actions.register.RegistrationIdentifierAction
 import javax.inject.Inject
+import models.UserAnswers
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.libs.json.Json
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
+import repositories.RegistrationsRepository
+import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.IndexView
+
+import scala.concurrent.{ExecutionContext, Future}
 
 class IndexController @Inject()(
                                  val controllerComponents: MessagesControllerComponents,
-                                 view: IndexView
+                                 repository: RegistrationsRepository,
+                                 identify: RegistrationIdentifierAction
                                ) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = Action { implicit request =>
-    Ok(view())
+  implicit val executionContext: ExecutionContext =
+    scala.concurrent.ExecutionContext.Implicits.global
+
+  def onPageLoad(draftId: String): Action[AnyContent] = identify.async { implicit request =>
+
+    repository.get(draftId) flatMap {
+      case Some(userAnswers) =>
+        Future.successful(redirect(userAnswers, draftId))
+      case _ =>
+        val userAnswers = UserAnswers(draftId, Json.obj(), request.identifier)
+        repository.set(userAnswers) map {
+          _ => redirect(userAnswers, draftId)
+        }
+    }
+  }
+
+  private def redirect(userAnswers: UserAnswers, draftId: String) = {
+    if (isAnyBeneficiaryAdded(userAnswers)) {
+      Redirect(controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId))
+    } else {
+      Redirect(controllers.register.beneficiaries.routes.IndividualBeneficiaryInfoController.onPageLoad(draftId))
+    }
+  }
+
+  private def isAnyBeneficiaryAdded(answers: UserAnswers) = {
+
+    val individuals = answers.get(IndividualBeneficiaries).getOrElse(Nil)
+    val classes = answers.get(ClassOfBeneficiaries).getOrElse(Nil)
+
+    individuals.nonEmpty || classes.nonEmpty
   }
 }
