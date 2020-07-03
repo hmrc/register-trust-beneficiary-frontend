@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,10 +12,24 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@()(implicit messages: Messages)
+package views.register.beneficiaries
 
-<button id="print" class="button--secondary print-hidden" onClick="window.print()">
-    @messages("site.print-or-save")
-</button>
+import views.behaviours.ViewBehaviours
+import views.html.register.beneficiaries.IndividualBenficiaryAnswersView
+
+class IndividualBenficiaryAnswersViewSpec extends ViewBehaviours {
+  val index = 0
+
+  "IndividualBenficiaryAnswers view" must {
+
+    val view = viewFor[IndividualBenficiaryAnswersView](Some(emptyUserAnswers))
+
+    val applyView = view.apply(index, fakeDraftId, Nil)(fakeRequest, messages)
+
+    behave like normalPage(applyView, "individualBenficiaryAnswers")
+
+    behave like pageWithBackLink(applyView)
+  }
+}

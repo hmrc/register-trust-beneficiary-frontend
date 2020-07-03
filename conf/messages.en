@@ -32,13 +32,23 @@ session_expired.guidance = The details you have given have been deleted because 
 site.back = Back
 site.delete = Remove
 site.edit = Change
-site.hidden-delete = Delete {0}
+site.hidden-delete = Remove {0}
 site.hidden-edit = Change {0}
 site.no = No
 site.yes = Yes
-site.continue = Continue
-site.service_name = register-trust-beneficiary-frontend
+site.save.continue = Save and continue
+site.service_name = Register and Maintain a Trust
 site.textarea.char_limit = (Limit is {0} characters)
+site.inprogress = In Progress
+site.complete = Completed
+site.onlyContinue = Continue
+site.date.hint = For example, 31 3 1980
+site.warning = Warning
+site.error = Error:
+site.address = Address
+site.sign_out = Sign out
+
+footer.links.accessibility.text = Accessibility
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account

@@ -26,6 +26,7 @@
     main_content_header: MainContentHeader,
     footer_links: FooterLinks,
     main_content: MainContent,
+    betaBanner: BetaBanner,
     reportAProblemLink: ReportAProblemLink,
     hmrcGovUkTemplate: GovUkTemplate
 )
@@ -45,18 +46,31 @@
     @head(
       linkElem = None,
       headScripts = None)
+    <script src='@routes.Assets.versioned("javascripts/gtm.js")'></script>
     <meta name="format-detection" content="telephone=no" />
-    <link rel="stylesheet" href='@routes.Assets.versioned("stylesheets/registertrustbeneficiaryfrontend-app.css")' />
+    <link rel="stylesheet" type="text/css" href='@routes.Assets.versioned("stylesheets/trustsfrontend-app.css")' />
 }
 
-@headerNavLinks = {}
+@headerNavLinks = {
+    <li>
+        <a id="logOut" href="@controllers.register.routes.LogoutController.logout" data-target="link - click:@title:@Messages("site.sign_out")">
+        @Messages("site.sign_out")
+        </a>
+    </li>
+}
 
 @insideHeader = {
+
+    <!-- Google Tag Manager (noscript) -->
+    <noscript aria-hidden="true"><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NDJKHWK" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
     @header_nav(
       navTitle = Some(messages("site.service_name")),
       navTitleLink = None,
       showBetaLink = false,
-      navLinks = Some(headerNavLinks))
+      navLinks = Some(headerNavLinks)
+    )
 }
 
 @afterHeader = {}
@@ -68,15 +82,40 @@
       ssoUrl = None,
       scriptElem = scriptElem,
       gaCalls = None)
-      <script src='@routes.Assets.versioned("javascripts/registertrustbeneficiaryfrontend-app.min.js")'> </script>
+      <script src='@routes.Assets.versioned("javascripts/trustsfrontend-app.min.js")'> </script>
 }
 
 @footerTop = {}
-@footerLinks = {}
+
+@additionalLinksHtml = {
+<li>
+    <a href="@appConfig.accessibilityLinkUrl"
+    data-sso="false"
+    data-journey-click="footer:Click:Accessibility">
+        @Messages("footer.links.accessibility.text")
+    </a>
+</li>
+}
+
+@footerLinks = {
+    @footer_links(
+        additionalLinks = Some(additionalLinksHtml),
+        euExitLinks = None
+    )
+}
+
+@banner = {
+    @betaBanner(
+        userLoggedIn = true,
+        betaFeedbackUrl = appConfig.betaFeedbackUrl,
+        betaFeedbackUnauthenticatedUrl = appConfig.betaFeedbackUnauthenticatedUrl,
+        showFeedbackLinkInBetaBanner = true
+    )
+}
 
 @serviceInfoBlock = {
     @serviceInfo(
-      betaBanner = HtmlFormat.empty,
+      betaBanner = banner,
       includeHMRCBranding = false,
       includeGridWrapper = false,
       serviceInfoContent = Some(serviceInfoContent))
@@ -109,4 +148,4 @@
       sidebar = sidebar)
 }
 
-@hmrcGovUkTemplate(Some(title), bodyClasses)(headContent, bodyEnd, insideHeader, afterHeader, footerTop, Some(footer_links()), true)(content)
+@hmrcGovUkTemplate(Some(title), bodyClasses)(headContent, bodyEnd, insideHeader, afterHeader, footerTop, Some(footerLinks), true)(content)

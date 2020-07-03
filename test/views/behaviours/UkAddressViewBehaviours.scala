@@ -16,25 +16,33 @@
 
 package views.behaviours
 
+import models.core.pages.UKAddress
 import play.api.data.{Form, FormError}
 import play.twirl.api.HtmlFormat
 
-trait QuestionViewBehaviours[A] extends ViewBehaviours {
+
+trait UkAddressViewBehaviours extends ViewBehaviours {
+
 
   val errorKey = "value"
-  val errorPrefix = "site.error"
   val errorMessage = "error.number"
   val error = FormError(errorKey, errorMessage)
 
-  val form: Form[A]
+  val form: Form[UKAddress]
 
-  def pageWithTextFields(form: Form[A],
-                         createView: Form[A] => HtmlFormat.Appendable,
-                         messageKeyPrefix: String,
-                         fields: Seq[(String, Option[String])],
-                         args: String*) = {
+  def ukAddressPage(createView: Form[UKAddress] => HtmlFormat.Appendable,
+                    messageKeyPrefix: Option[String],
+                         args : String*) = {
 
-    "behave like a question page" when {
+    val prefix = messageKeyPrefix.getOrElse("site.address.uk")
+
+    val fields =  Seq(("line1",None),
+                              ("line2",None),
+                              ("line3", None),
+                              ("line4", None),
+                              ("postcode", Some("site.address.uk.postcode.hint")))
+
+    "behave like a ukAddressPage" when {
 
       "rendered" must {
 
@@ -58,7 +66,7 @@ trait QuestionViewBehaviours[A] extends ViewBehaviours {
         "show an error prefix in the browser title" in {
 
           val doc = asDocument(createView(form.withError(error)))
-          assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${messages(s"$messageKeyPrefix.title", args: _*)}""")
+          assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${messages(s"$prefix.title", args: _*)}""")
         }
       }
 
@@ -86,64 +94,10 @@ trait QuestionViewBehaviours[A] extends ViewBehaviours {
           val doc = asDocument(createView(form))
           val fieldName = field._1
           val fieldHint = field._2 map (k => messages(k))
-          assertContainsLabel(doc, fieldName, messages(s"$messageKeyPrefix.$fieldName"), fieldHint)
-        }
-      }
-
-
-    }
-  }
-
-  def pageWithDateFields(form: Form[A],
-                         createView: Form[A] => HtmlFormat.Appendable,
-                         messageKeyPrefix: String,
-                         key: String,
-                         args: String*) = {
-
-    val fields = Seq(s"${key}_day", s"${key}_month", s"${key}_year")
-
-    "behave like a question page" when {
-
-      "rendered" must {
-
-        for (field <- fields) {
-
-          s"contain an input for $field" in {
-            val doc = asDocument(createView(form))
-            assertRenderedById(doc, field)
-          }
-        }
-
-        "not render an error summary" in {
-
-          val doc = asDocument(createView(form))
-          assertNotRenderedById(doc, "error-summary-heading")
-        }
-      }
-
-      "rendered with any error" must {
-
-        "show an error prefix in the browser title" in {
-
-          val doc = asDocument(createView(form.withError(error)))
-          assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${messages(s"$messageKeyPrefix.title", args: _*)}""")
-        }
-      }
-
-      s"rendered with an error" must {
-
-        "show an error summary" in {
-
-          val doc = asDocument(createView(form.withError(FormError(key, "error"))))
-          assertRenderedById(doc, "error-summary-heading")
-        }
-
-        s"show an error in the legend" in {
-
-          val doc = asDocument(createView(form.withError(FormError(key, "error"))))
-          assertRenderedById(doc, s"error-message-$key-input")
+          assertContainsLabel(doc, fieldName, messages(s"site.address.uk.$fieldName"), fieldHint)
         }
       }
     }
   }
+
 }

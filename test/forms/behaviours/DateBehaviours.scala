@@ -19,10 +19,11 @@ package forms.behaviours
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
+import models.registration.pages.PassportOrIdCardDetails
 import org.scalacheck.Gen
 import play.api.data.{Form, FormError}
 
-class DateBehaviours extends FieldBehaviours {
+trait DateBehaviours extends FieldBehaviours {
 
   def dateField(form: Form[_], key: String, validData: Gen[LocalDate]): Unit = {
 
@@ -44,6 +45,29 @@ class DateBehaviours extends FieldBehaviours {
     }
   }
 
+  def dateFieldForPassportOrIdForm(form: Form[PassportOrIdCardDetails],
+                                   key: String, validData: Gen[LocalDate],
+                                   requiredBindings: Map[String,String] = Map.empty): Unit = {
+
+    "bind valid data" in {
+
+      forAll(validData -> "valid date") {
+        date =>
+
+          val data = requiredBindings ++ Map(
+            s"$key.day"   -> date.getDayOfMonth.toString,
+            s"$key.month" -> date.getMonthValue.toString,
+            s"$key.year"  -> date.getYear.toString
+          )
+
+          val result = form.bind(data)
+
+          result.value.value.expiryDate shouldEqual date
+      }
+    }
+  }
+
+
   def dateFieldWithMax(form: Form[_], key: String, max: LocalDate, formError: FormError): Unit = {
 
     s"fail to bind a date greater than ${max.format(DateTimeFormatter.ISO_LOCAL_DATE)}" in {
@@ -59,16 +83,16 @@ class DateBehaviours extends FieldBehaviours {
             s"$key.year"  -> date.getYear.toString
           )
 
-          val result = form.bind(data)
+          val result = form.bind(data).apply(key)
 
-          result.errors should contain only formError
+          result.errors shouldEqual Seq(formError)
       }
     }
   }
 
   def dateFieldWithMin(form: Form[_], key: String, min: LocalDate, formError: FormError): Unit = {
 
-    s"fail to bind a date earlier than ${min.format(DateTimeFormatter.ISO_LOCAL_DATE)}" in {
+    s"fail to bind a date greater than ${min.format(DateTimeFormatter.ISO_LOCAL_DATE)}" in {
 
       val generator = datesBetween(min.minusYears(10), min.minusDays(1))
 
@@ -81,20 +105,21 @@ class DateBehaviours extends FieldBehaviours {
             s"$key.year"  -> date.getYear.toString
           )
 
-          val result = form.bind(data)
+          val result = form.bind(data).apply(key)
 
-          result.errors should contain only formError
+          result.errors shouldEqual Seq(formError)
       }
     }
   }
 
-  def mandatoryDateField(form: Form[_], key: String, requiredAllKey: String, errorArgs: Seq[String] = Seq.empty): Unit = {
+
+  def mandatoryDateField(form: Form[_], key: String, requiredAllKey: String): Unit = {
 
     "fail to bind an empty date" in {
 
-      val result = form.bind(Map.empty[String, String])
+      val result = form.bind(Map.empty[String, String]).apply(key)
 
-      result.errors should contain only FormError(key, requiredAllKey, errorArgs)
+      result.errors should contain only FormError(key, requiredAllKey, List("day", "month", "year"))
     }
   }
 }

@@ -8,6 +8,8 @@ GET        /language/:lang                              controllers.LanguageSwit
 
 GET        /this-service-has-been-reset                 controllers.SessionExpiredController.onPageLoad
 
+GET        /logout                                      controllers.register.LogoutController.logout()
+
 GET        /unauthorised                                controllers.UnauthorisedController.onPageLoad
 
 GET        /:draftId/beneficiaries/individual/:index/name                                           controllers.register.beneficiaries.IndividualBeneficiaryNameController.onPageLoad(mode: Mode = NormalMode,index: Int, draftId: String)
