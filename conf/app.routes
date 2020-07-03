@@ -10,7 +10,82 @@ GET        /this-service-has-been-reset                 controllers.SessionExpir
 
 GET        /unauthorised                                controllers.UnauthorisedController.onPageLoad
 
+GET        /:draftId/beneficiaries/individual/:index/name                                           controllers.register.beneficiaries.IndividualBeneficiaryNameController.onPageLoad(mode: Mode = NormalMode,index: Int, draftId: String)
+POST       /:draftId/beneficiaries/individual/:index/name                                           controllers.register.beneficiaries.IndividualBeneficiaryNameController.onSubmit(mode: Mode = NormalMode,index: Int, draftId: String)
+GET        /:draftId/beneficiaries/individual/:index/change-name                                    controllers.register.beneficiaries.IndividualBeneficiaryNameController.onPageLoad(mode: Mode = CheckMode,index: Int, draftId: String)
+POST       /:draftId/beneficiaries/individual/:index/change-name                                    controllers.register.beneficiaries.IndividualBeneficiaryNameController.onSubmit(mode: Mode = CheckMode,index: Int, draftId: String)
+
 GET        /:draftId/beneficiaries/individual/:index/do-you-know-date-of-birth                      controllers.register.beneficiaries.IndividualBeneficiaryDateOfBirthYesNoController.onPageLoad(mode: Mode = NormalMode,index: Int, draftId: String)
 POST       /:draftId/beneficiaries/individual/:index/do-you-know-date-of-birth                      controllers.register.beneficiaries.IndividualBeneficiaryDateOfBirthYesNoController.onSubmit(mode: Mode = NormalMode,index: Int, draftId: String)
 GET        /:draftId/beneficiaries/individual/:index/change-do-you-know-date-of-birth               controllers.register.beneficiaries.IndividualBeneficiaryDateOfBirthYesNoController.onPageLoad(mode: Mode = CheckMode,index: Int, draftId: String)
 POST       /:draftId/beneficiaries/individual/:index/change-do-you-know-date-of-birth               controllers.register.beneficiaries.IndividualBeneficiaryDateOfBirthYesNoController.onSubmit(mode: Mode = CheckMode,index: Int, draftId: String)
+
+GET        /:draftId/beneficiaries/individual/:index/date-of-birth                                  controllers.register.beneficiaries.IndividualBeneficiaryDateOfBirthController.onPageLoad(mode: Mode = NormalMode,index: Int, draftId: String)
+POST       /:draftId/beneficiaries/individual/:index/date-of-birth                                  controllers.register.beneficiaries.IndividualBeneficiaryDateOfBirthController.onSubmit(mode: Mode = NormalMode,index: Int, draftId: String)
+GET        /:draftId/beneficiaries/individual/:index/change-date-of-birth                           controllers.register.beneficiaries.IndividualBeneficiaryDateOfBirthController.onPageLoad(mode: Mode = CheckMode,index: Int, draftId: String)
+POST       /:draftId/beneficiaries/individual/:index/change-date-of-birth                           controllers.register.beneficiaries.IndividualBeneficiaryDateOfBirthController.onSubmit(mode: Mode = CheckMode,index: Int, draftId: String)
+
+GET        /:draftId/beneficiaries/individual/:index/do-you-know-income                             controllers.register.beneficiaries.IndividualBeneficiaryIncomeYesNoController.onPageLoad(mode: Mode = NormalMode,index: Int, draftId: String)
+POST       /:draftId/beneficiaries/individual/:index/do-you-know-income                             controllers.register.beneficiaries.IndividualBeneficiaryIncomeYesNoController.onSubmit(mode: Mode = NormalMode,index: Int, draftId: String)
+GET        /:draftId/beneficiaries/individual/:index/change-do-you-know-income                      controllers.register.beneficiaries.IndividualBeneficiaryIncomeYesNoController.onPageLoad(mode: Mode = CheckMode,index: Int, draftId: String)
+POST       /:draftId/beneficiaries/individual/:index/change-do-you-know-income                      controllers.register.beneficiaries.IndividualBeneficiaryIncomeYesNoController.onSubmit(mode: Mode = CheckMode,index: Int, draftId: String)
+
+GET        /:draftId/beneficiaries/individual/:index/income                                         controllers.register.beneficiaries.IndividualBeneficiaryIncomeController.onPageLoad(mode: Mode = NormalMode,index: Int, draftId: String)
+POST       /:draftId/beneficiaries/individual/:index/income                                         controllers.register.beneficiaries.IndividualBeneficiaryIncomeController.onSubmit(mode: Mode = NormalMode,index: Int, draftId: String)
+GET        /:draftId/beneficiaries/individual/:index/change-income                                  controllers.register.beneficiaries.IndividualBeneficiaryIncomeController.onPageLoad(mode: Mode = CheckMode,index: Int, draftId: String)
+POST       /:draftId/beneficiaries/individual/:index/change-income                                  controllers.register.beneficiaries.IndividualBeneficiaryIncomeController.onSubmit(mode: Mode = CheckMode,index: Int, draftId: String)
+
+GET        /:draftId/beneficiaries/individual/:index/do-you-know-national-insurance-number          controllers.register.beneficiaries.IndividualBeneficiaryNationalInsuranceYesNoController.onPageLoad(mode: Mode = NormalMode,index: Int, draftId: String)
+POST       /:draftId/beneficiaries/individual/:index/do-you-know-national-insurance-number          controllers.register.beneficiaries.IndividualBeneficiaryNationalInsuranceYesNoController.onSubmit(mode: Mode = NormalMode,index: Int, draftId: String)
+GET        /:draftId/beneficiaries/individual/:index/change-do-you-know-national-insurance-number   controllers.register.beneficiaries.IndividualBeneficiaryNationalInsuranceYesNoController.onPageLoad(mode: Mode = CheckMode,index: Int, draftId: String)
+POST       /:draftId/beneficiaries/individual/:index/change-do-you-know-national-insurance-number   controllers.register.beneficiaries.IndividualBeneficiaryNationalInsuranceYesNoController.onSubmit(mode: Mode = CheckMode,index: Int, draftId: String)
+
+GET        /:draftId/beneficiaries/individual/:index/national-insurance-number                      controllers.register.beneficiaries.IndividualBeneficiaryNationalInsuranceNumberController.onPageLoad(mode: Mode = NormalMode,index: Int, draftId: String)
+POST       /:draftId/beneficiaries/individual/:index/national-insurance-number                      controllers.register.beneficiaries.IndividualBeneficiaryNationalInsuranceNumberController.onSubmit(mode: Mode = NormalMode,index: Int, draftId: String)
+GET        /:draftId/beneficiaries/individual/:index/change-national-insurance-number               controllers.register.beneficiaries.IndividualBeneficiaryNationalInsuranceNumberController.onPageLoad(mode: Mode = CheckMode,index: Int, draftId: String)
+POST       /:draftId/beneficiaries/individual/:index/change-national-insurance-number               controllers.register.beneficiaries.IndividualBeneficiaryNationalInsuranceNumberController.onSubmit(mode: Mode = CheckMode,index: Int, draftId: String)
+
+GET        /:draftId/beneficiaries/individual/:index/do-you-know-address                            controllers.register.beneficiaries.IndividualBeneficiaryAddressYesNoController.onPageLoad(mode: Mode = NormalMode,index: Int, draftId: String)
+POST       /:draftId/beneficiaries/individual/:index/do-you-know-address                            controllers.register.beneficiaries.IndividualBeneficiaryAddressYesNoController.onSubmit(mode: Mode = NormalMode,index: Int, draftId: String)
+GET        /:draftId/beneficiaries/individual/:index/change-do-you-know-address                     controllers.register.beneficiaries.IndividualBeneficiaryAddressYesNoController.onPageLoad(mode: Mode = CheckMode,index: Int, draftId: String)
+POST       /:draftId/beneficiaries/individual/:index/change-do-you-know-address                     controllers.register.beneficiaries.IndividualBeneficiaryAddressYesNoController.onSubmit(mode: Mode = CheckMode,index: Int, draftId: String)
+
+GET        /:draftId/beneficiaries/individual/:index/uk-address                                     controllers.register.beneficiaries.IndividualBeneficiaryAddressUKController.onPageLoad(mode: Mode = NormalMode,index: Int, draftId: String)
+POST       /:draftId/beneficiaries/individual/:index/uk-address                                     controllers.register.beneficiaries.IndividualBeneficiaryAddressUKController.onSubmit(mode: Mode = NormalMode,index: Int, draftId: String)
+GET        /:draftId/beneficiaries/individual/:index/change-uk-address                              controllers.register.beneficiaries.IndividualBeneficiaryAddressUKController.onPageLoad(mode: Mode = CheckMode,index: Int, draftId: String)
+POST       /:draftId/beneficiaries/individual/:index/change-uk-address                              controllers.register.beneficiaries.IndividualBeneficiaryAddressUKController.onSubmit(mode: Mode = CheckMode,index: Int, draftId: String)
+
+GET        /:draftId/beneficiaries/individual/:index/is-elected-vulnerable                          controllers.register.beneficiaries.IndividualBeneficiaryVulnerableYesNoController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
+POST       /:draftId/beneficiaries/individual/:index/is-elected-vulnerable                          controllers.register.beneficiaries.IndividualBeneficiaryVulnerableYesNoController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
+GET        /:draftId/beneficiaries/individual/:index/change-is-elected-vulnerable                   controllers.register.beneficiaries.IndividualBeneficiaryVulnerableYesNoController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
+POST       /:draftId/beneficiaries/individual/:index/change-is-elected-vulnerable                   controllers.register.beneficiaries.IndividualBeneficiaryVulnerableYesNoController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
+
+GET        /:draftId/beneficiaries/information-you-need                                             controllers.register.beneficiaries.IndividualBeneficiaryInfoController.onPageLoad(draftId: String)
+
+GET        /:draftId/beneficiaries/add                                                              controllers.register.beneficiaries.AddABeneficiaryController.onPageLoad(mode: Mode = NormalMode, draftId: String)
+POST       /:draftId/beneficiaries/add                                                              controllers.register.beneficiaries.AddABeneficiaryController.submitOne(mode: Mode = NormalMode, draftId: String)
+POST       /:draftId/beneficiaries/add-another                                                      controllers.register.beneficiaries.AddABeneficiaryController.submitAnother(mode: Mode = NormalMode, draftId: String)
+
+GET        /:draftId/beneficiaries/individual/:index/check-answers                                  controllers.register.beneficiaries.IndividualBeneficiaryAnswersController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/beneficiaries/individual/:index/check-answers                                  controllers.register.beneficiaries.IndividualBeneficiaryAnswersController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/beneficiaries/individual/:index/is-address-in-uk                               controllers.register.beneficiaries.IndividualBeneficiaryAddressUKYesNoController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
+POST       /:draftId/beneficiaries/individual/:index/is-address-in-uk                               controllers.register.beneficiaries.IndividualBeneficiaryAddressUKYesNoController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
+GET        /:draftId/beneficiaries/individual/:index/change-is-address-in-uk                        controllers.register.beneficiaries.IndividualBeneficiaryAddressUKYesNoController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
+POST       /:draftId/beneficiaries/individual/:index/change-is-address-in-uk                        controllers.register.beneficiaries.IndividualBeneficiaryAddressUKYesNoController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
+
+GET        /:draftId/beneficiaries/individual/:index/remove                                         controllers.register.beneficiaries.RemoveIndividualBeneficiaryController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/beneficiaries/individual/:index/remove                                         controllers.register.beneficiaries.RemoveIndividualBeneficiaryController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/beneficiaries/class/:index/description                                         controllers.register.beneficiaries.ClassBeneficiaryDescriptionController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
+POST       /:draftId/beneficiaries/class/:index/description                                         controllers.register.beneficiaries.ClassBeneficiaryDescriptionController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
+GET        /:draftId/beneficiaries/class/:index/change-description                                  controllers.register.beneficiaries.ClassBeneficiaryDescriptionController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
+POST       /:draftId/beneficiaries/class/:index/change-description                                  controllers.register.beneficiaries.ClassBeneficiaryDescriptionController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
+
+GET        /:draftId/beneficiaries/class/:index/remove                                              controllers.register.beneficiaries.RemoveClassOfBeneficiaryController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/beneficiaries/class/:index/remove                                              controllers.register.beneficiaries.RemoveClassOfBeneficiaryController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/beneficiaries/what-type                                                        controllers.register.beneficiaries.WhatTypeOfBeneficiaryController.onPageLoad(mode: Mode = NormalMode, draftId: String)
+POST       /:draftId/beneficiaries/what-type                                                        controllers.register.beneficiaries.WhatTypeOfBeneficiaryController.onSubmit(mode: Mode = NormalMode, draftId: String)
+
+GET        /feature-not-available                                                                   controllers.FeatureNotAvailableController.onPageLoad()
