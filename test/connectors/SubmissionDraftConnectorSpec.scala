@@ -21,7 +21,7 @@ import java.time.LocalDateTime
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock._
 import models.Status.InProgress
-import models.{RegistrationSubmission, SubmissionDraftData, SubmissionDraftResponse, SubmissionDraftSetData, SubmissionDraftStatus}
+import models.{RegistrationSubmission, SubmissionDraftData, SubmissionDraftResponse}
 import org.scalatest.{MustMatchers, OptionValues}
 import play.api.Application
 import play.api.http.Status
