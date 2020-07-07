@@ -49,6 +49,15 @@ site.error = Error:
 site.address = Address
 site.sign_out = Sign out
 
+answerPage.section.beneficiaries.heading = Beneficiaries
+answerPage.section.charityBeneficiary.subheading = Charity beneficiary {0}
+answerPage.section.companyBeneficiary.subheading = Company beneficiary {0}
+answerPage.section.individualBeneficiary.subheading = Individual beneficiary
+answerPage.section.classOfBeneficiary.subheading = Class of beneficiary
+answerPage.section.trustBeneficiary.heading = Trust beneficiary {0}
+answerPage.section.otherBeneficiary.heading = Other beneficiary {0}
+answerPage.section.largeBeneficiary.subheading = Employment related beneficiary {0}
+
 footer.links.accessibility.text = Accessibility
 
 unauthorised.title = You can’t access this service with this account
