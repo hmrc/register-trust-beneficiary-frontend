@@ -21,7 +21,7 @@ import java.time.LocalDateTime
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock._
 import models.Status.InProgress
-import models.{SubmissionDraftData, SubmissionDraftResponse, SubmissionDraftSetData, SubmissionDraftStatus}
+import models.{RegistrationSubmission, SubmissionDraftData, SubmissionDraftResponse, SubmissionDraftSetData, SubmissionDraftStatus}
 import org.scalatest.{MustMatchers, OptionValues}
 import play.api.Application
 import play.api.http.Status
@@ -151,9 +151,12 @@ class SubmissionDraftConnectorSpec extends SpecBase with MustMatchers with Optio
             |}
             |""".stripMargin)
 
-        val draftStatus = SubmissionDraftStatus("asset", Some(InProgress))
-
-        val submissionDraftSetData = SubmissionDraftSetData(sectionData, Some(draftStatus), List.empty)
+        val submissionDraftSetData = RegistrationSubmission.DataSet(
+          sectionData,
+          "asset",
+          Some(InProgress),
+          List.empty,
+          List.empty)
 
         server.stubFor(
           post(urlEqualTo(setSubmissionUrl))

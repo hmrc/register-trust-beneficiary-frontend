@@ -18,31 +18,67 @@ package repositories
 
 import javax.inject.Inject
 import mapping.registration.BeneficiariesMapper
-import models.Status.Completed
-import models.{Status, SubmissionDraftRegistrationPiece, SubmissionDraftSetData, SubmissionDraftStatus, UserAnswers}
+import models._
 import pages.register.RegistrationProgress
+import play.api.i18n.Messages
 import play.api.libs.json.Json
+import utils.CheckYourAnswersHelper
+import utils.countryOptions.CountryOptions
+import viewmodels.{AnswerRow, AnswerSection}
 
-class SubmissionSetFactory @Inject()(registrationProgress: RegistrationProgress, beneficiariesMapper: BeneficiariesMapper) {
+class SubmissionSetFactory @Inject()(
+                                      registrationProgress: RegistrationProgress,
+                                      beneficiariesMapper: BeneficiariesMapper,
+                                      countryOptions: CountryOptions) {
 
-  def createFrom(userAnswers: UserAnswers): SubmissionDraftSetData = {
+  def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet = {
     val status = registrationProgress.beneficiariesStatus(userAnswers)
+    answerSectionsIfCompleted(userAnswers, status)
 
-    SubmissionDraftSetData(
+    RegistrationSubmission.DataSet(
       Json.toJson(userAnswers),
-      Some(SubmissionDraftStatus("beneficiaries", status)),
-      mappedDataIfCompleted(userAnswers, status)
+      "beneficiaries",
+      status,
+      mappedDataIfCompleted(userAnswers, status),
+      answerSectionsIfCompleted(userAnswers, status)
     )
   }
 
   private def mappedDataIfCompleted(userAnswers: UserAnswers, status: Option[Status]) = {
-    if (status.contains(Completed)) {
+    if (status.contains(Status.Completed)) {
       beneficiariesMapper.build(userAnswers) match {
-        case Some(assets) => List(SubmissionDraftRegistrationPiece("trust/entities/beneficiary", Json.toJson(assets)))
+        case Some(assets) => List(RegistrationSubmission.MappedPiece("trust/entities/beneficiary", Json.toJson(assets)))
         case _ => List.empty
       }
     } else {
       List.empty
     }
+  }
+
+  private def answerSectionsIfCompleted(userAnswers: UserAnswers, status: Option[Status])
+                            (implicit messages: Messages): List[RegistrationSubmission.AnswerSection] = {
+
+    if (status.contains(Status.Completed)) {
+
+      val helper = new CheckYourAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, false)
+
+      val entitySections = List(
+        helper.individualBeneficiaries,
+        helper.classOfBeneficiaries(helper.individualBeneficiaries.exists(_.nonEmpty))
+      ).flatten.flatten
+
+      entitySections.map(convertForSubmission)
+
+    } else {
+      List.empty
+    }
+  }
+
+  private def convertForSubmission(row: AnswerRow): RegistrationSubmission.AnswerRow = {
+    RegistrationSubmission.AnswerRow(row.label, row.answer.toString, row.labelArg)
+  }
+
+  private def convertForSubmission(section: AnswerSection): RegistrationSubmission.AnswerSection = {
+    RegistrationSubmission.AnswerSection(section.headingKey, section.rows.map(convertForSubmission), section.sectionKey)
   }
 }

@@ -41,19 +41,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
     } yield indexed.map {
       case (_, index) =>
 
-        val questions = Seq(
-          individualBeneficiaryName(index),
-          individualBeneficiaryDateOfBirthYesNo(index),
-          individualBeneficiaryDateOfBirth(index),
-          individualBeneficiaryIncomeYesNo(index),
-          individualBeneficiaryIncome(index),
-          individualBeneficiaryNationalInsuranceYesNo(index),
-          individualBeneficiaryNationalInsuranceNumber(index),
-          individualBeneficiaryAddressYesNo(index),
-          individualBeneficiaryAddressUKYesNo(index),
-          individualBeneficiaryAddressUK(index),
-          individualBeneficiaryVulnerableYesNo(index)
-        ).flatten
+        val questions = individualBeneficiaryRows(index)
 
         AnswerSection(Some(Messages("answerPage.section.individualBeneficiary.subheading") + " " + (index + 1)),
           questions, if (index == 0) {
@@ -62,6 +50,22 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
             None
           })
     }
+  }
+
+  def individualBeneficiaryRows(index: Int): Seq[AnswerRow] = {
+    Seq(
+      individualBeneficiaryName(index),
+      individualBeneficiaryDateOfBirthYesNo(index),
+      individualBeneficiaryDateOfBirth(index),
+      individualBeneficiaryIncomeYesNo(index),
+      individualBeneficiaryIncome(index),
+      individualBeneficiaryNationalInsuranceYesNo(index),
+      individualBeneficiaryNationalInsuranceNumber(index),
+      individualBeneficiaryAddressYesNo(index),
+      individualBeneficiaryAddressUKYesNo(index),
+      individualBeneficiaryAddressUK(index),
+      individualBeneficiaryVulnerableYesNo(index)
+    ).flatten
   }
 
   def classOfBeneficiaries(individualBeneficiariesExist: Boolean): Option[Seq[AnswerSection]] = {

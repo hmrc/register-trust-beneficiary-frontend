@@ -35,7 +35,7 @@ class SubmissionDraftConnector @Inject()(http: HttpClient, config : FrontendAppC
     http.POST[JsValue, HttpResponse](s"$submissionsBaseUrl/$draftId/MAIN", Json.toJson(submissionDraftData))
   }
 
-  def setDraftSectionSet(draftId: String, section: String, data: SubmissionDraftSetData)
+  def setDraftSectionSet(draftId: String, section: String, data: RegistrationSubmission.DataSet)
                         (implicit hc: HeaderCarrier, ec : ExecutionContext): Future[HttpResponse] = {
     http.POST[JsValue, HttpResponse](s"$submissionsBaseUrl/$draftId/set/$section", Json.toJson(data))
   }
