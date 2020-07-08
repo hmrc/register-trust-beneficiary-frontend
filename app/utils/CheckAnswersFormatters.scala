@@ -48,8 +48,6 @@ object CheckAnswersFormatters {
   def country(code: String, countryOptions: CountryOptions): String =
     countryOptions.options.find(_.value.equals(code)).map(_.label).getOrElse("")
 
-  def currency(value: String): Html = escape(s"£$value")
-
   def percentage(value: String): Html = escape(s"$value%")
 
   def answer[T](key: String, answer: T)(implicit messages: Messages): Html =

@@ -34,19 +34,9 @@ trait Mappings extends Formatters with Constraints {
                          invalidKey : String = "error.postcodeInvalid") : FieldMapping[String] =
     of(postcodeFormatter(requiredKey, invalidKey))
 
-  protected def currency(requiredKey : String = "assetMoneyValue.error.required",
-                         invalidKey : String = "assetMoneyValue.error.invalidFormat") : FieldMapping[String] =
-    of(currencyFormatter(requiredKey, invalidKey))
-
-  protected def int(requiredKey: String = "error.required",
-                    wholeNumberKey: String = "error.wholeNumber",
-                    nonNumericKey: String = "error.nonNumeric"): FieldMapping[Int] =
-    of(intFormatter(requiredKey, wholeNumberKey, nonNumericKey))
-
   protected def boolean(requiredKey: String = "error.required",
                         invalidKey: String = "error.boolean"): FieldMapping[Boolean] =
     of(booleanFormatter(requiredKey, invalidKey))
-
 
   protected def enumerable[A](requiredKey: String = "error.required",
                               invalidKey: String = "error.invalid")(implicit ev: Enumerable[A]): FieldMapping[A] =
@@ -58,5 +48,4 @@ trait Mappings extends Formatters with Constraints {
                            twoRequiredKey: String,
                            requiredKey: String): FieldMapping[LocalDate] =
     of(new LocalDateFormatter(invalidKey, allRequiredKey, twoRequiredKey, requiredKey))
-
 }
