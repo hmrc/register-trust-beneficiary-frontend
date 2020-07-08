@@ -20,6 +20,7 @@ error.non_numeric = Give a value using only numbers
 error.number = Please enter a valid number
 error.required = Please enter a value
 error.summary.title = There is a problem
+error.postcodeInvalid = Enter a real postcode
 
 index.title = register-trust-beneficiary-frontend
 index.heading = register-trust-beneficiary-frontend
@@ -47,6 +48,15 @@ site.warning = Warning
 site.error = Error:
 site.address = Address
 site.sign_out = Sign out
+
+answerPage.section.beneficiaries.heading = Beneficiaries
+answerPage.section.charityBeneficiary.subheading = Charity beneficiary {0}
+answerPage.section.companyBeneficiary.subheading = Company beneficiary {0}
+answerPage.section.individualBeneficiary.subheading = Individual beneficiary
+answerPage.section.classOfBeneficiary.subheading = Class of beneficiary
+answerPage.section.trustBeneficiary.heading = Trust beneficiary {0}
+answerPage.section.otherBeneficiary.heading = Other beneficiary {0}
+answerPage.section.largeBeneficiary.subheading = Employment related beneficiary {0}
 
 footer.links.accessibility.text = Accessibility
 
