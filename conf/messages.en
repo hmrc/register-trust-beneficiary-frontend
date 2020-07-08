@@ -5,6 +5,7 @@ checkYourAnswers.guidance = Guidance for check your answers
 date.day = Day
 date.month = Month
 date.year = Year
+date.hidden =  in numbers
 
 error.browser.title.prefix = Error:
 error.boolean = Please give an answer
@@ -21,10 +22,6 @@ error.number = Please enter a valid number
 error.required = Please enter a value
 error.summary.title = There is a problem
 error.postcodeInvalid = Enter a real postcode
-
-index.title = register-trust-beneficiary-frontend
-index.heading = register-trust-beneficiary-frontend
-index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.
 
 session_expired.title = For your security, this service has been reset
 session_expired.heading = For your security, this service has been reset
