@@ -153,7 +153,6 @@ class SubmissionDraftConnectorSpec extends SpecBase with MustMatchers with Optio
 
         val submissionDraftSetData = RegistrationSubmission.DataSet(
           sectionData,
-          "asset",
           Some(InProgress),
           List.empty,
           List.empty)

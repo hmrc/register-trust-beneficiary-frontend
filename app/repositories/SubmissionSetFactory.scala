@@ -37,7 +37,6 @@ class SubmissionSetFactory @Inject()(
 
     RegistrationSubmission.DataSet(
       Json.toJson(userAnswers),
-      "beneficiaries",
       status,
       mappedDataIfCompleted(userAnswers, status),
       answerSectionsIfCompleted(userAnswers, status)

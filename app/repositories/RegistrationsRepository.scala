@@ -35,7 +35,7 @@ class DefaultRegistrationsRepository @Inject()(submissionDraftConnector: Submiss
                                                submissionSetFactory: SubmissionSetFactory
                                         )(implicit ec: ExecutionContext) extends RegistrationsRepository {
 
-  private val userAnswersSection = config.appName
+  private val userAnswersSection = config.repositoryKey
 
   override def set(userAnswers: UserAnswers)(implicit hc: HeaderCarrier, messages: Messages): Future[Boolean] = {
 
