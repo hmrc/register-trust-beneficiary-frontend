@@ -25,7 +25,8 @@
     symbol: Option[String] = None,
     optionalHtmlContent: Option[Html] = None,
     symbolText: Option[String] = None,
-    inputMode: Option[String] = None
+    inputMode: Option[String] = None,
+    autocomplete: Option[String] = None
 )(implicit messages: Messages)
 
 <div class="form-group @if(field.hasErrors){form-group-error}">
@@ -52,6 +53,7 @@
         id="@{field.id}"
         name="@{field.name}"
         value="@{field.value}"
+        autocomplete="@autocomplete"
         @if(inputMode.nonEmpty) {
             inputmode="@inputMode"
         }
