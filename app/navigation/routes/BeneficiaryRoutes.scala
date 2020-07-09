@@ -18,18 +18,21 @@ package navigation.routes
 
 import config.FrontendAppConfig
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRoutes}
+import models.registration.pages.KindOfTrust.Employees
 import models.{NormalMode, UserAnswers}
-import models.registration.pages.{AddABeneficiary, WhatTypeOfBeneficiary}
+import models.registration.pages.{AddABeneficiary, KindOfTrust, WhatTypeOfBeneficiary}
 import pages.Page
 import pages.register.beneficiaries.individual._
 import pages.register.beneficiaries.{AddABeneficiaryPage, AddABeneficiaryYesNoPage, ClassBeneficiaryDescriptionPage, WhatTypeOfBeneficiaryPage}
+import pages.register.settlors.living_settlor.trust_type.KindOfTrustPage
 import play.api.mvc.Call
 import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries}
 import uk.gov.hmrc.auth.core.AffinityGroup
 
 object BeneficiaryRoutes {
   def route(draftId: String, config: FrontendAppConfig): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
-    case NamePage(index) => _ => _ => individualRoutes.DateOfBirthYesNoController.onPageLoad(NormalMode, index, draftId)
+    case NamePage(index) => _ => namePage(draftId, index)
+    case RoleInCompanyPage(index) => _ => _ => individualRoutes.DateOfBirthYesNoController.onPageLoad(NormalMode, index, draftId)
     case DateOfBirthYesNoPage(index) => _ => ua => individualBeneficiaryDateOfBirthRoute(ua, index, draftId)
     case DateOfBirthPage(index) => _ => _ => individualRoutes.IncomeYesNoController.onPageLoad(NormalMode, index, draftId)
     case IncomeYesNoPage(index) => _ => ua => individualBeneficiaryIncomeRoute(ua, index, draftId)
@@ -45,11 +48,16 @@ object BeneficiaryRoutes {
     case AddABeneficiaryPage => _ => addABeneficiaryRoute(draftId, config)
     case AddABeneficiaryYesNoPage => _ => addABeneficiaryYesNoRoute(draftId, config)
     case WhatTypeOfBeneficiaryPage => _ => whatTypeOfBeneficiaryRoute(draftId)
-    case ClassBeneficiaryDescriptionPage(index) => _ => _ => controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
+    case ClassBeneficiaryDescriptionPage(_) => _ => _ => controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
   }
 
   private def assetsCompletedRoute(draftId: String, config: FrontendAppConfig) : Call = {
     Call("GET", config.registrationProgressUrl(draftId))
+  }
+
+  private def namePage(draftId: String, index: Int)(userAnswers: UserAnswers) : Call = userAnswers.get(KindOfTrustPage) match {
+    case Some(Employees) => individualRoutes.RoleInCompanyController.onPageLoad(NormalMode, index, draftId)
+    case _ => individualRoutes.DateOfBirthYesNoController.onPageLoad(NormalMode, index, draftId)
   }
 
   private def whatTypeOfBeneficiaryRoute(draftId: String)(userAnswers: UserAnswers) : Call = {

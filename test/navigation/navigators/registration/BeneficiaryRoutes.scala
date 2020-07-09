@@ -23,34 +23,47 @@ import controllers.register.beneficiaries.individualBeneficiary.{routes => indiv
 import generators.Generators
 import models.{NormalMode, UserAnswers}
 import models.core.pages.FullName
+import models.registration.pages.KindOfTrust.Employees
 import models.registration.pages.{AddABeneficiary, WhatTypeOfBeneficiary}
 import navigation.Navigator
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.beneficiaries.individual._
 import pages.register.beneficiaries._
+import pages.register.settlors.living_settlor.trust_type.KindOfTrustPage
 import play.api.mvc.Call
 import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries}
 
 trait BeneficiaryRoutes {
   self: ScalaCheckPropertyChecks with Generators with SpecBase =>
 
-  private def assetsCompletedRoute(draftId: String, config: FrontendAppConfig) : Call = {
+  private def assetsCompletedRoute(draftId: String, config: FrontendAppConfig): Call = {
     Call("GET", config.registrationProgressUrl(draftId))
   }
 
   def beneficiaryRoutes()(implicit navigator: Navigator): Unit = {
 
-      "go to WhatTypeOfBeneficiaryPage from AddABeneficiaryYesNoPage when selected yes" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
+    "go to WhatTypeOfBeneficiaryPage from AddABeneficiaryYesNoPage when selected yes" in {
+      forAll(arbitrary[UserAnswers]) {
+        userAnswers =>
 
-            val answers = userAnswers.set(AddABeneficiaryYesNoPage, true).success.value
+          val answers = userAnswers.set(AddABeneficiaryYesNoPage, true).success.value
 
-            navigator.nextPage(AddABeneficiaryYesNoPage, NormalMode, fakeDraftId)(answers)
-              .mustBe(routes.WhatTypeOfBeneficiaryController.onPageLoad(fakeDraftId))
-        }
+          navigator.nextPage(AddABeneficiaryYesNoPage, NormalMode, fakeDraftId)(answers)
+            .mustBe(routes.WhatTypeOfBeneficiaryController.onPageLoad(fakeDraftId))
       }
+    }
+
+    "go to WhatTypeOfBeneficiaryPage from AddABeneficiaryPage when selected add them now" in {
+      forAll(arbitrary[UserAnswers]) {
+        userAnswers =>
+
+          val answers = userAnswers.set(AddABeneficiaryPage, AddABeneficiary.YesNow).success.value
+
+          navigator.nextPage(AddABeneficiaryPage, NormalMode, fakeDraftId)(answers)
+            .mustBe(routes.WhatTypeOfBeneficiaryController.onPageLoad(fakeDraftId))
+      }
+    }
 
     "go to RegistrationProgress from AddABeneficiaryYesNoPage when selected no" in {
       forAll(arbitrary[UserAnswers]) {
@@ -63,44 +76,54 @@ trait BeneficiaryRoutes {
       }
     }
 
-      "go WhatTypeOfBeneficiaryPage from AddABeneficiaryPage when selected add them now" in {
+    "go to RegistrationProgress from AddABeneficiaryPage" when {
+      "selecting add them later" in {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
 
-            val answers = userAnswers.set(AddABeneficiaryPage, AddABeneficiary.YesNow).success.value
+            val answers = userAnswers
+              .set(NamePage(0), FullName("First", None, "Last")).success.value
+              .set(AddABeneficiaryPage, AddABeneficiary.YesLater).success.value
 
             navigator.nextPage(AddABeneficiaryPage, NormalMode, fakeDraftId)(answers)
-              .mustBe(routes.WhatTypeOfBeneficiaryController.onPageLoad(fakeDraftId))
+              .mustBe(assetsCompletedRoute(fakeDraftId, frontendAppConfig))
         }
       }
 
-    "go to RegistrationProgress from AddABeneficiaryPage when selecting add them later" in {
-      forAll(arbitrary[UserAnswers]) {
-        userAnswers =>
+      "selecting added them all" in {
+        forAll(arbitrary[UserAnswers]) {
+          userAnswers =>
 
-          val answers = userAnswers
-            .set(NamePage(0), FullName("First", None, "Last")).success.value
-            .set(AddABeneficiaryPage, AddABeneficiary.YesLater).success.value
+            val answers = userAnswers
+              .set(NamePage(0), FullName("First", None, "Last")).success.value
+              .set(AddABeneficiaryPage, AddABeneficiary.NoComplete).success.value
 
-          navigator.nextPage(AddABeneficiaryPage, NormalMode, fakeDraftId)(answers)
-            .mustBe(assetsCompletedRoute(fakeDraftId, frontendAppConfig))
+            navigator.nextPage(AddABeneficiaryPage, NormalMode, fakeDraftId)(answers)
+              .mustBe(assetsCompletedRoute(fakeDraftId, frontendAppConfig))
+        }
       }
     }
-
-    "go to RegistrationProgress from AddABeneficiaryPage when selecting added them all" in {
-      forAll(arbitrary[UserAnswers]) {
-        userAnswers =>
-
-          val answers = userAnswers
-            .set(NamePage(0), FullName("First", None, "Last")).success.value
-            .set(AddABeneficiaryPage, AddABeneficiary.NoComplete).success.value
-
-          navigator.nextPage(AddABeneficiaryPage, NormalMode, fakeDraftId)(answers)
-            .mustBe(assetsCompletedRoute(fakeDraftId, frontendAppConfig))
-      }
-    }
-
+    
     val indexForBeneficiary = 0
+
+    "go to IndividualBeneficiaryRoleInCompany from IndividualBeneficiaryNamePage" in {
+      forAll(arbitrary[UserAnswers]) {
+        userAnswers =>
+
+          val answers = userAnswers.set(KindOfTrustPage, Employees).success.value
+
+          navigator.nextPage(NamePage(indexForBeneficiary), NormalMode, fakeDraftId)(answers)
+            .mustBe(individualRoutes.RoleInCompanyController.onPageLoad(NormalMode, indexForBeneficiary, fakeDraftId))
+      }
+    }
+
+    "go to IndividualBeneficiaryDateOfBirthYesNoPage from IndividualBeneficiaryRoleInCompany" in {
+      forAll(arbitrary[UserAnswers]) {
+        userAnswers =>
+          navigator.nextPage(RoleInCompanyPage(indexForBeneficiary), NormalMode, fakeDraftId)(userAnswers)
+            .mustBe(individualRoutes.DateOfBirthYesNoController.onPageLoad(NormalMode, indexForBeneficiary, fakeDraftId))
+      }
+    }
 
     "go to IndividualBeneficiaryDateOfBirthYesNoPage from IndividualBeneficiaryNamePage" in {
       forAll(arbitrary[UserAnswers]) {
@@ -295,8 +318,6 @@ trait BeneficiaryRoutes {
         }
       }
     }
-
-
 
     "there is atleast one Class of beneficiary" must {
       "go to the next ClassBeneficiaryDescriptionPage from WhatTypeOfBeneficiaryPage when ClassOfBeneficiary option selected" in {
