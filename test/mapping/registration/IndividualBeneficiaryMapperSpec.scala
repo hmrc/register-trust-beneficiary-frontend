@@ -50,14 +50,14 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
 
         val userAnswers =
           emptyUserAnswers
-            .set(IndividualBeneficiaryNamePage(index), FullName("first name", None, "last name")).success.value
-            .set(IndividualBeneficiaryDateOfBirthYesNoPage(index), true).success.value
-            .set(IndividualBeneficiaryDateOfBirthPage(index), dateOfBirth).success.value
-            .set(IndividualBeneficiaryIncomeYesNoPage(index), false).success.value
-            .set(IndividualBeneficiaryIncomePage(index), "100").success.value
-            .set(IndividualBeneficiaryNationalInsuranceYesNoPage(index), true).success.value
-            .set(IndividualBeneficiaryNationalInsuranceNumberPage(index), "AB123456C").success.value
-            .set(IndividualBeneficiaryVulnerableYesNoPage(index), true).success.value
+            .set(NamePage(index), FullName("first name", None, "last name")).success.value
+            .set(DateOfBirthYesNoPage(index), true).success.value
+            .set(DateOfBirthPage(index), dateOfBirth).success.value
+            .set(IncomeYesNoPage(index), false).success.value
+            .set(IncomePage(index), "100").success.value
+            .set(NationalInsuranceYesNoPage(index), true).success.value
+            .set(NationalInsuranceNumberPage(index), "AB123456C").success.value
+            .set(VulnerableYesNoPage(index), true).success.value
 
         individualBeneficiariesMapper.build(userAnswers) mustBe defined
         individualBeneficiariesMapper.build(userAnswers).value.head mustBe IndividualDetailsType(
@@ -77,15 +77,15 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
 
         val userAnswers =
           emptyUserAnswers
-            .set(IndividualBeneficiaryNamePage(index), FullName("first name", None, "last name")).success.value
-            .set(IndividualBeneficiaryDateOfBirthYesNoPage(index), true).success.value
-            .set(IndividualBeneficiaryDateOfBirthPage(index), dateOfBirth).success.value
-            .set(IndividualBeneficiaryIncomeYesNoPage(index), true).success.value
-            .set(IndividualBeneficiaryNationalInsuranceYesNoPage(index), false).success.value
-            .set(IndividualBeneficiaryVulnerableYesNoPage(index), false).success.value
-            .set(IndividualBeneficiaryAddressYesNoPage(index), true).success.value
-            .set(IndividualBeneficiaryAddressUKYesNoPage(index), true).success.value
-            .set(IndividualBeneficiaryAddressUKPage(index),
+            .set(NamePage(index), FullName("first name", None, "last name")).success.value
+            .set(DateOfBirthYesNoPage(index), true).success.value
+            .set(DateOfBirthPage(index), dateOfBirth).success.value
+            .set(IncomeYesNoPage(index), true).success.value
+            .set(NationalInsuranceYesNoPage(index), false).success.value
+            .set(VulnerableYesNoPage(index), false).success.value
+            .set(AddressYesNoPage(index), true).success.value
+            .set(AddressUKYesNoPage(index), true).success.value
+            .set(AddressUKPage(index),
               UKAddress("Line1", "Line2", None, Some("Newcastle"), "NE62RT")).success.value
 
 
@@ -111,12 +111,12 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
         val index = 0
         val userAnswers =
           emptyUserAnswers
-            .set(IndividualBeneficiaryNamePage(index), FullName("first name", None, "last name")).success.value
-            .set(IndividualBeneficiaryDateOfBirthYesNoPage(index), false).success.value
-            .set(IndividualBeneficiaryIncomeYesNoPage(index), true).success.value
-            .set(IndividualBeneficiaryNationalInsuranceYesNoPage(index), false).success.value
-            .set(IndividualBeneficiaryAddressYesNoPage(index), false).success.value
-            .set(IndividualBeneficiaryVulnerableYesNoPage(index), false).success.value
+            .set(NamePage(index), FullName("first name", None, "last name")).success.value
+            .set(DateOfBirthYesNoPage(index), false).success.value
+            .set(IncomeYesNoPage(index), true).success.value
+            .set(NationalInsuranceYesNoPage(index), false).success.value
+            .set(AddressYesNoPage(index), false).success.value
+            .set(VulnerableYesNoPage(index), false).success.value
 
         individualBeneficiariesMapper.build(userAnswers) mustBe defined
         individualBeneficiariesMapper.build(userAnswers).value.head mustBe IndividualDetailsType(
@@ -137,25 +137,25 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
 
         val userAnswers =
           emptyUserAnswers
-            .set(IndividualBeneficiaryNamePage(index0), FullName("first name", None, "last name")).success.value
-            .set(IndividualBeneficiaryDateOfBirthYesNoPage(index0), true).success.value
-            .set(IndividualBeneficiaryDateOfBirthPage(index0), dateOfBirth).success.value
-            .set(IndividualBeneficiaryIncomeYesNoPage(index0), false).success.value
-            .set(IndividualBeneficiaryIncomePage(index0), "100").success.value
-            .set(IndividualBeneficiaryNationalInsuranceYesNoPage(index0), true).success.value
-            .set(IndividualBeneficiaryNationalInsuranceNumberPage(index0), "AB123456C").success.value
-            .set(IndividualBeneficiaryVulnerableYesNoPage(index0), true).success.value
+            .set(NamePage(index0), FullName("first name", None, "last name")).success.value
+            .set(DateOfBirthYesNoPage(index0), true).success.value
+            .set(DateOfBirthPage(index0), dateOfBirth).success.value
+            .set(IncomeYesNoPage(index0), false).success.value
+            .set(IncomePage(index0), "100").success.value
+            .set(NationalInsuranceYesNoPage(index0), true).success.value
+            .set(NationalInsuranceNumberPage(index0), "AB123456C").success.value
+            .set(VulnerableYesNoPage(index0), true).success.value
 
-            .set(IndividualBeneficiaryNamePage(index1), FullName("first name", None, "last name")).success.value
-            .set(IndividualBeneficiaryDateOfBirthYesNoPage(index1), true).success.value
-            .set(IndividualBeneficiaryDateOfBirthPage(index1), dateOfBirth).success.value
-            .set(IndividualBeneficiaryIncomeYesNoPage(index1), false).success.value
-            .set(IndividualBeneficiaryIncomePage(index1), "100").success.value
-            .set(IndividualBeneficiaryNationalInsuranceYesNoPage(index1), false).success.value
-            .set(IndividualBeneficiaryVulnerableYesNoPage(index1), false).success.value
-            .set(IndividualBeneficiaryAddressYesNoPage(index1), true).success.value
-            .set(IndividualBeneficiaryAddressUKYesNoPage(index1), true).success.value
-            .set(IndividualBeneficiaryAddressUKPage(index1),
+            .set(NamePage(index1), FullName("first name", None, "last name")).success.value
+            .set(DateOfBirthYesNoPage(index1), true).success.value
+            .set(DateOfBirthPage(index1), dateOfBirth).success.value
+            .set(IncomeYesNoPage(index1), false).success.value
+            .set(IncomePage(index1), "100").success.value
+            .set(NationalInsuranceYesNoPage(index1), false).success.value
+            .set(VulnerableYesNoPage(index1), false).success.value
+            .set(AddressYesNoPage(index1), true).success.value
+            .set(AddressUKYesNoPage(index1), true).success.value
+            .set(AddressUKPage(index1),
               UKAddress("line1", "line2", None, None, "NE62RT")).success.value
 
         individualBeneficiariesMapper.build(userAnswers) mustBe defined
@@ -197,11 +197,11 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
         val index = 0
         val userAnswers =
           emptyUserAnswers
-            .set(IndividualBeneficiaryNamePage(index), FullName("first name", None, "last name")).success.value
-            .set(IndividualBeneficiaryDateOfBirthYesNoPage(index), false).success.value
-            .set(IndividualBeneficiaryIncomeYesNoPage(index), true).success.value
-            .set(IndividualBeneficiaryNationalInsuranceYesNoPage(index), false).success.value
-            .set(IndividualBeneficiaryAddressYesNoPage(index), false).success.value
+            .set(NamePage(index), FullName("first name", None, "last name")).success.value
+            .set(DateOfBirthYesNoPage(index), false).success.value
+            .set(IncomeYesNoPage(index), true).success.value
+            .set(NationalInsuranceYesNoPage(index), false).success.value
+            .set(AddressYesNoPage(index), false).success.value
 
         individualBeneficiariesMapper.build(userAnswers) mustNot be(defined)
       }

@@ -24,7 +24,7 @@ import javax.inject.Inject
 import models.core.pages.FullName
 import models.requests.RegistrationDataRequest
 import pages.QuestionPage
-import pages.register.beneficiaries.individual.IndividualBeneficiaryNamePage
+import pages.register.beneficiaries.individual.NamePage
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.mvc.{AnyContent, Call, MessagesControllerComponents}
 import queries.{RemoveIndividualBeneficiaryQuery, Settable}
@@ -47,7 +47,7 @@ class RemoveIndividualBeneficiaryController @Inject()(
 
   override val messagesPrefix : String = "removeIndividualBeneficiary"
 
-  override def page(index: Int): QuestionPage[FullName] = IndividualBeneficiaryNamePage(index)
+  override def page(index: Int): QuestionPage[FullName] = NamePage(index)
 
   override def actions(draftId : String, index: Int) =
     identify andThen getData(draftId) andThen requireData

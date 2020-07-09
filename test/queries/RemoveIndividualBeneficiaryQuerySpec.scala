@@ -20,7 +20,7 @@ import models.UserAnswers
 import models.core.pages.{FullName, UKAddress}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-import pages.register.beneficiaries.individual.{IndividualBeneficiaryAddressUKPage, IndividualBeneficiaryAddressUKYesNoPage, IndividualBeneficiaryAddressYesNoPage, IndividualBeneficiaryNamePage}
+import pages.register.beneficiaries.individual.{AddressUKPage, AddressUKYesNoPage, AddressYesNoPage, NamePage}
 
 class RemoveIndividualBeneficiaryQuerySpec extends PageBehaviours {
 
@@ -33,20 +33,20 @@ class RemoveIndividualBeneficiaryQuerySpec extends PageBehaviours {
         initial =>
 
           val answers: UserAnswers = initial
-            .set(IndividualBeneficiaryNamePage(0), FullName("First", None, "Last")).success.value
-            .set(IndividualBeneficiaryAddressYesNoPage(0), true).success.value
-            .set(IndividualBeneficiaryAddressUKYesNoPage(0), true).success.value
-            .set(IndividualBeneficiaryAddressUKPage(0), UKAddress("1", "2", Some("3"), Some("4"), "5")).success.value
-            .set(IndividualBeneficiaryNamePage(1), FullName("Second", None, "Last")).success.value
+            .set(NamePage(0), FullName("First", None, "Last")).success.value
+            .set(AddressYesNoPage(0), true).success.value
+            .set(AddressUKYesNoPage(0), true).success.value
+            .set(AddressUKPage(0), UKAddress("1", "2", Some("3"), Some("4"), "5")).success.value
+            .set(NamePage(1), FullName("Second", None, "Last")).success.value
 
           val result = answers.remove(RemoveIndividualBeneficiaryQuery(index)).success.value
 
-          result.get(IndividualBeneficiaryNamePage(0)).value mustBe FullName("Second", None, "Last")
-          result.get(IndividualBeneficiaryAddressYesNoPage(0)) mustNot be(defined)
-          result.get(IndividualBeneficiaryAddressUKYesNoPage(0)) mustNot be(defined)
-          result.get(IndividualBeneficiaryAddressUKPage(0)) mustNot be(defined)
+          result.get(NamePage(0)).value mustBe FullName("Second", None, "Last")
+          result.get(AddressYesNoPage(0)) mustNot be(defined)
+          result.get(AddressUKYesNoPage(0)) mustNot be(defined)
+          result.get(AddressUKPage(0)) mustNot be(defined)
 
-          result.get(IndividualBeneficiaryNamePage(1)) mustNot be(defined)
+          result.get(NamePage(1)) mustNot be(defined)
       }
     }
 

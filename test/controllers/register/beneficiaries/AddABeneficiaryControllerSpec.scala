@@ -23,7 +23,7 @@ import models.Status.Completed
 import models.core.pages.FullName
 import models.registration.pages.AddABeneficiary
 import pages.entitystatus.{ClassBeneficiaryStatus, IndividualBeneficiaryStatus}
-import pages.register.beneficiaries.individual.IndividualBeneficiaryNamePage
+import pages.register.beneficiaries.individual.NamePage
 import pages.register.beneficiaries.{AddABeneficiaryPage, ClassBeneficiaryDescriptionPage}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -58,7 +58,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
   )
 
   private val userAnswersWithBeneficiariesComplete = emptyUserAnswers
-    .set(IndividualBeneficiaryNamePage(0), FullName("First", None, "Last")).success.value
+    .set(NamePage(0), FullName("First", None, "Last")).success.value
     .set(IndividualBeneficiaryStatus(0), Completed).success.value
     .set(ClassBeneficiaryDescriptionPage(0), "description").success.value
     .set(ClassBeneficiaryStatus(0), Completed).success.value
