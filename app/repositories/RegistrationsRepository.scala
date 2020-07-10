@@ -19,14 +19,11 @@ package repositories
 import config.FrontendAppConfig
 import connectors.SubmissionDraftConnector
 import javax.inject.Inject
-import models.UserAnswers
+import models.{ReadOnlyUserAnswers, UserAnswers}
 import play.api.http
 import play.api.i18n.Messages
 import play.api.libs.json._
 import uk.gov.hmrc.http.HeaderCarrier
-import utils.CheckYourAnswersHelper
-import utils.countryOptions.CountryOptions
-import viewmodels.AnswerSection
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -36,6 +33,7 @@ class DefaultRegistrationsRepository @Inject()(submissionDraftConnector: Submiss
                                         )(implicit ec: ExecutionContext) extends RegistrationsRepository {
 
   private val userAnswersSection = config.repositoryKey
+  private val mainAnswersSection = "main"
 
   override def set(userAnswers: UserAnswers)(implicit hc: HeaderCarrier, messages: Messages): Future[Boolean] = {
 
@@ -57,6 +55,16 @@ class DefaultRegistrationsRepository @Inject()(submissionDraftConnector: Submiss
         }
     }
   }
+
+  override def getMainAnswers(draftId: String)(implicit hc: HeaderCarrier): Future[Option[ReadOnlyUserAnswers]] = {
+    submissionDraftConnector.getDraftSection(draftId, mainAnswersSection).map {
+      response =>
+        response.data.validate[ReadOnlyUserAnswers] match {
+          case JsSuccess(userAnswers, _) => Some(userAnswers)
+          case _ => None
+        }
+    }
+  }
 }
 
 trait RegistrationsRepository {
@@ -64,4 +72,6 @@ trait RegistrationsRepository {
   def set(userAnswers: UserAnswers)(implicit hc: HeaderCarrier, messages: Messages): Future[Boolean]
 
   def get(draftId: String)(implicit hc: HeaderCarrier): Future[Option[UserAnswers]]
+
+  def getMainAnswers(draftId: String)(implicit hc: HeaderCarrier): Future[Option[ReadOnlyUserAnswers]]
 }
