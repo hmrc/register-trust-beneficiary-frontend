@@ -37,7 +37,7 @@ class IndividualBeneficiaryMapper @Inject()(nameMapper: NameMapper,
               name = nameMapper.build(indBen.name),
               dateOfBirth = indBen.dateOfBirth,
               vulnerableBeneficiary = indBen.vulnerableYesNo,
-              beneficiaryType = None,
+              beneficiaryType = indBen.roleInCompany.map(_.toString),
               beneficiaryDiscretion = indBen.incomeYesNo,
               beneficiaryShareOfIncome = indBen.income,
               identification = identificationMap(indBen)

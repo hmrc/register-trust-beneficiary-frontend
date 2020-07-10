@@ -22,6 +22,7 @@ import base.SpecBase
 import generators.Generators
 import mapping._
 import models.core.pages.{FullName, UKAddress}
+import models.registration.pages.RoleInCompany.Director
 import org.scalatest.{FreeSpec, MustMatchers, OptionValues}
 import pages.register.beneficiaries.individual._
 
@@ -44,90 +45,119 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
 
     "when user answers is not empty" must {
 
-      "must be able to create IndividualDetailsType with Nino information." in {
-        val index = 0
-        val dateOfBirth = LocalDate.of(2010, 10, 10)
+      "must be able to create IndividualDetailsType" when {
+        "Nino is set" in {
+          val index = 0
+          val dateOfBirth = LocalDate.of(2010, 10, 10)
 
-        val userAnswers =
-          emptyUserAnswers
-            .set(NamePage(index), FullName("first name", None, "last name")).success.value
-            .set(DateOfBirthYesNoPage(index), true).success.value
-            .set(DateOfBirthPage(index), dateOfBirth).success.value
-            .set(IncomeYesNoPage(index), false).success.value
-            .set(IncomePage(index), "100").success.value
-            .set(NationalInsuranceYesNoPage(index), true).success.value
-            .set(NationalInsuranceNumberPage(index), "AB123456C").success.value
-            .set(VulnerableYesNoPage(index), true).success.value
+          val userAnswers =
+            emptyUserAnswers
+              .set(NamePage(index), FullName("first name", None, "last name")).success.value
+              .set(DateOfBirthYesNoPage(index), true).success.value
+              .set(DateOfBirthPage(index), dateOfBirth).success.value
+              .set(IncomeYesNoPage(index), false).success.value
+              .set(IncomePage(index), "100").success.value
+              .set(NationalInsuranceYesNoPage(index), true).success.value
+              .set(NationalInsuranceNumberPage(index), "AB123456C").success.value
+              .set(VulnerableYesNoPage(index), true).success.value
 
-        individualBeneficiariesMapper.build(userAnswers) mustBe defined
-        individualBeneficiariesMapper.build(userAnswers).value.head mustBe IndividualDetailsType(
-          name = NameType("first name", None, "last name"),
-          dateOfBirth = Some(dateOfBirth),
-          vulnerableBeneficiary = true,
-          beneficiaryType = None,
-          beneficiaryDiscretion = false,
-          beneficiaryShareOfIncome = Some("100"),
-          identification = Some(IdentificationType(nino = Some("AB123456C"), None, None))
-        )
-      }
+          individualBeneficiariesMapper.build(userAnswers) mustBe defined
+          individualBeneficiariesMapper.build(userAnswers).value.head mustBe IndividualDetailsType(
+            name = NameType("first name", None, "last name"),
+            dateOfBirth = Some(dateOfBirth),
+            vulnerableBeneficiary = true,
+            beneficiaryType = None,
+            beneficiaryDiscretion = false,
+            beneficiaryShareOfIncome = Some("100"),
+            identification = Some(IdentificationType(nino = Some("AB123456C"), None, None))
+          )
+        }
 
-      "must be able to create IndividualDetailsType with UK Address" in {
-        val index = 0
-        val dateOfBirth = LocalDate.of(2010, 10, 10)
+        "Role In Company is set" in {
+          val index = 0
+          val dateOfBirth = LocalDate.of(2010, 10, 10)
 
-        val userAnswers =
-          emptyUserAnswers
-            .set(NamePage(index), FullName("first name", None, "last name")).success.value
-            .set(DateOfBirthYesNoPage(index), true).success.value
-            .set(DateOfBirthPage(index), dateOfBirth).success.value
-            .set(IncomeYesNoPage(index), true).success.value
-            .set(NationalInsuranceYesNoPage(index), false).success.value
-            .set(VulnerableYesNoPage(index), false).success.value
-            .set(AddressYesNoPage(index), true).success.value
-            .set(AddressUKYesNoPage(index), true).success.value
-            .set(AddressUKPage(index),
-              UKAddress("Line1", "Line2", None, Some("Newcastle"), "NE62RT")).success.value
+          val userAnswers =
+            emptyUserAnswers
+              .set(NamePage(index), FullName("first name", None, "last name")).success.value
+              .set(DateOfBirthYesNoPage(index), true).success.value
+              .set(DateOfBirthPage(index), dateOfBirth).success.value
+              .set(IncomeYesNoPage(index), false).success.value
+              .set(IncomePage(index), "100").success.value
+              .set(RoleInCompanyPage(index), Director).success.value
+              .set(VulnerableYesNoPage(index), true).success.value
+
+          individualBeneficiariesMapper.build(userAnswers) mustBe defined
+          individualBeneficiariesMapper.build(userAnswers).value.head mustBe IndividualDetailsType(
+            name = NameType("first name", None, "last name"),
+            dateOfBirth = Some(dateOfBirth),
+            vulnerableBeneficiary = true,
+            beneficiaryType = Some(Director.toString),
+            beneficiaryDiscretion = false,
+            beneficiaryShareOfIncome = Some("100"),
+            identification = None
+          )
+        }
+
+        "UK Address is set" in {
+          val index = 0
+          val dateOfBirth = LocalDate.of(2010, 10, 10)
+
+          val userAnswers =
+            emptyUserAnswers
+              .set(NamePage(index), FullName("first name", None, "last name")).success.value
+              .set(DateOfBirthYesNoPage(index), true).success.value
+              .set(DateOfBirthPage(index), dateOfBirth).success.value
+              .set(IncomeYesNoPage(index), true).success.value
+              .set(NationalInsuranceYesNoPage(index), false).success.value
+              .set(VulnerableYesNoPage(index), false).success.value
+              .set(AddressYesNoPage(index), true).success.value
+              .set(AddressUKYesNoPage(index), true).success.value
+              .set(AddressUKPage(index),
+                UKAddress("Line1", "Line2", None, Some("Newcastle"), "NE62RT")).success.value
 
 
-        individualBeneficiariesMapper.build(userAnswers) mustBe defined
-        individualBeneficiariesMapper.build(userAnswers).value.head mustBe IndividualDetailsType(
-          name = NameType("first name", None, "last name"),
-          dateOfBirth = Some(dateOfBirth),
-          vulnerableBeneficiary = false,
-          beneficiaryType = None,
-          beneficiaryDiscretion = true,
-          beneficiaryShareOfIncome = None,
-          identification = Some(IdentificationType(
-            nino = None,
-            None,
-            address = Some(
-              AddressType("Line1", "Line2", None, Some("Newcastle"), Some("NE62RT"), "GB")
-            )
-          ))
-        )
-      }
+          individualBeneficiariesMapper.build(userAnswers) mustBe defined
+          individualBeneficiariesMapper.build(userAnswers).value.head mustBe IndividualDetailsType(
+            name = NameType("first name", None, "last name"),
+            dateOfBirth = Some(dateOfBirth),
+            vulnerableBeneficiary = false,
+            beneficiaryType = None,
+            beneficiaryDiscretion = true,
+            beneficiaryShareOfIncome = None,
+            identification = Some(IdentificationType(
+              nino = None,
+              None,
+              address = Some(
+                AddressType("Line1", "Line2", None, Some("Newcastle"), Some("NE62RT"), "GB")
+              )
+            ))
+          )
+        }
 
-      "must be able to create IndividualDetailsType without Nino And Address" in {
-        val index = 0
-        val userAnswers =
-          emptyUserAnswers
-            .set(NamePage(index), FullName("first name", None, "last name")).success.value
-            .set(DateOfBirthYesNoPage(index), false).success.value
-            .set(IncomeYesNoPage(index), true).success.value
-            .set(NationalInsuranceYesNoPage(index), false).success.value
-            .set(AddressYesNoPage(index), false).success.value
-            .set(VulnerableYesNoPage(index), false).success.value
+        "Nino And Address are not set" in {
+          val index = 0
+          val userAnswers =
+            emptyUserAnswers
+              .set(NamePage(index), FullName("first name", None, "last name")).success.value
+              .set(DateOfBirthYesNoPage(index), false).success.value
+              .set(IncomeYesNoPage(index), true).success.value
+              .set(NationalInsuranceYesNoPage(index), false).success.value
+              .set(AddressYesNoPage(index), false).success.value
+              .set(VulnerableYesNoPage(index), false).success.value
 
-        individualBeneficiariesMapper.build(userAnswers) mustBe defined
-        individualBeneficiariesMapper.build(userAnswers).value.head mustBe IndividualDetailsType(
-          name = NameType("first name", None, "last name"),
-          dateOfBirth = None,
-          vulnerableBeneficiary = false,
-          beneficiaryType = None,
-          beneficiaryDiscretion = true,
-          beneficiaryShareOfIncome = None,
-          identification = None
-        )
+          individualBeneficiariesMapper.build(userAnswers) mustBe defined
+          individualBeneficiariesMapper.build(userAnswers).value.head mustBe IndividualDetailsType(
+            name = NameType("first name", None, "last name"),
+            dateOfBirth = None,
+            vulnerableBeneficiary = false,
+            beneficiaryType = None,
+            beneficiaryDiscretion = true,
+            beneficiaryShareOfIncome = None,
+            identification = None
+          )
+        }
+
       }
 
       "must be able to create multiple IndividualDetailsType, first with Nino and second with UKAddress" in {

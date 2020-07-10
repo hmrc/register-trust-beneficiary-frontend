@@ -19,10 +19,12 @@ package mapping.reads
 import java.time.LocalDate
 
 import models.core.pages.{Address, FullName}
+import models.registration.pages.RoleInCompany
 import play.api.libs.json.{Format, Json}
 
 
 final case class IndividualBeneficiary(name: FullName,
+                                       roleInCompany: Option[RoleInCompany],
                                        dateOfBirth: Option[LocalDate],
                                        nationalInsuranceNumber: Option[String],
                                        address : Option[Address],
