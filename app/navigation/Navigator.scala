@@ -27,15 +27,15 @@ import uk.gov.hmrc.auth.core.AffinityGroup
 @Singleton
 class Navigator @Inject()(config: FrontendAppConfig) {
 
-  private def defaultRoute(draftId: String): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
+  private def defaultRoute(draftId: String): PartialFunction[Page, AffinityGroup => ReadableUserAnswers => Call] = {
     case _ => _ => _ => controllers.routes.IndexController.onPageLoad(draftId)
   }
 
-  protected def route(draftId: String): PartialFunction[Page, AffinityGroup => UserAnswers => Call] =
+  protected def route(draftId: String): PartialFunction[Page, AffinityGroup => ReadableUserAnswers => Call] =
       BeneficiaryRoutes.route(draftId, config) orElse
       defaultRoute(draftId)
 
-  def nextPage(page: Page, mode: Mode, draftId: String, af :AffinityGroup = AffinityGroup.Organisation): UserAnswers => Call = mode match {
+  def nextPage(page: Page, mode: Mode, draftId: String, af :AffinityGroup = AffinityGroup.Organisation): ReadableUserAnswers => Call = mode match {
     case NormalMode =>
       route(draftId)(page)(af)
     case CheckMode =>
