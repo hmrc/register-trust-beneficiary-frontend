@@ -101,12 +101,12 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
   }
 
 
-  def individualBeneficiaryAddressUKYesNo(index: Int): Option[AnswerRow] = userAnswers.get(IndividualBeneficiaryAddressUKYesNoPage(index)) map {
+  def individualBeneficiaryAddressUKYesNo(index: Int): Option[AnswerRow] = userAnswers.get(AddressUKYesNoPage(index)) map {
     x =>
       AnswerRow(
         "individualBeneficiaryAddressUKYesNo.checkYourAnswersLabel",
         yesOrNo(x),
-        Some(controllers.register.beneficiaries.routes.IndividualBeneficiaryAddressUKYesNoController.onPageLoad(NormalMode, index, draftId).url),
+        Some(controllers.register.beneficiaries.individualBeneficiary.routes.AddressUKYesNoController.onPageLoad(NormalMode, index, draftId).url),
         indBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
@@ -122,112 +122,112 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       )
   }
 
-  def individualBeneficiaryVulnerableYesNo(index: Int): Option[AnswerRow] = userAnswers.get(IndividualBeneficiaryVulnerableYesNoPage(index)) map {
+  def individualBeneficiaryVulnerableYesNo(index: Int): Option[AnswerRow] = userAnswers.get(VulnerableYesNoPage(index)) map {
     x =>
       AnswerRow(
         "individualBeneficiaryVulnerableYesNo.checkYourAnswersLabel",
         yesOrNo(x),
-        Some(controllers.register.beneficiaries.routes.IndividualBeneficiaryVulnerableYesNoController.onPageLoad(NormalMode, index, draftId).url),
+        Some(controllers.register.beneficiaries.individualBeneficiary.routes.VulnerableYesNoController.onPageLoad(NormalMode, index, draftId).url),
         indBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
   }
 
-  def individualBeneficiaryAddressUK(index: Int): Option[AnswerRow] = userAnswers.get(IndividualBeneficiaryAddressUKPage(index)) map {
+  def individualBeneficiaryAddressUK(index: Int): Option[AnswerRow] = userAnswers.get(AddressUKPage(index)) map {
     x =>
       AnswerRow(
         "individualBeneficiaryAddressUK.checkYourAnswersLabel",
         ukAddress(x),
-        Some(controllers.register.beneficiaries.routes.IndividualBeneficiaryAddressUKController.onPageLoad(NormalMode, index, draftId).url),
+        Some(controllers.register.beneficiaries.individualBeneficiary.routes.AddressUKController.onPageLoad(NormalMode, index, draftId).url),
         indBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
   }
 
-  def individualBeneficiaryAddressYesNo(index: Int): Option[AnswerRow] = userAnswers.get(IndividualBeneficiaryAddressYesNoPage(index)) map {
+  def individualBeneficiaryAddressYesNo(index: Int): Option[AnswerRow] = userAnswers.get(AddressYesNoPage(index)) map {
     x =>
       AnswerRow(
         "individualBeneficiaryAddressYesNo.checkYourAnswersLabel",
         yesOrNo(x),
-        Some(controllers.register.beneficiaries.routes.IndividualBeneficiaryAddressYesNoController.onPageLoad(NormalMode, index, draftId).url),
+        Some(controllers.register.beneficiaries.individualBeneficiary.routes.AddressYesNoController.onPageLoad(NormalMode, index, draftId).url),
         indBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
   }
 
   def individualBeneficiaryNationalInsuranceNumber(index: Int): Option[AnswerRow] =
-    userAnswers.get(IndividualBeneficiaryNationalInsuranceNumberPage(index)) map {
+    userAnswers.get(NationalInsuranceNumberPage(index)) map {
     x =>
       AnswerRow(
         "individualBeneficiaryNationalInsuranceNumber.checkYourAnswersLabel",
         HtmlFormat.escape(formatNino(x)),
-        Some(controllers.register.beneficiaries.routes.IndividualBeneficiaryNationalInsuranceNumberController.onPageLoad(NormalMode, index, draftId).url),
+        Some(controllers.register.beneficiaries.individualBeneficiary.routes.NationalInsuranceNumberController.onPageLoad(NormalMode, index, draftId).url),
         indBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
   }
 
-  def individualBeneficiaryNationalInsuranceYesNo(index: Int): Option[AnswerRow] = userAnswers.get(IndividualBeneficiaryNationalInsuranceYesNoPage(index)) map {
+  def individualBeneficiaryNationalInsuranceYesNo(index: Int): Option[AnswerRow] = userAnswers.get(NationalInsuranceYesNoPage(index)) map {
     x =>
       AnswerRow(
         "individualBeneficiaryNationalInsuranceYesNo.checkYourAnswersLabel",
         yesOrNo(x),
-        Some(controllers.register.beneficiaries.routes.IndividualBeneficiaryNationalInsuranceYesNoController.onPageLoad(NormalMode, index, draftId).url),
+        Some(controllers.register.beneficiaries.individualBeneficiary.routes.NationalInsuranceYesNoController.onPageLoad(NormalMode, index, draftId).url),
         indBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
   }
 
-  def individualBeneficiaryIncome(index: Int): Option[AnswerRow] = userAnswers.get(IndividualBeneficiaryIncomePage(index)) map {
+  def individualBeneficiaryIncome(index: Int): Option[AnswerRow] = userAnswers.get(IncomePage(index)) map {
     x =>
       AnswerRow(
         "individualBeneficiaryIncome.checkYourAnswersLabel",
         HtmlFormat.escape(x),
-        Some(controllers.register.beneficiaries.routes.IndividualBeneficiaryIncomeController.onPageLoad(NormalMode, index, draftId).url),
+        Some(controllers.register.beneficiaries.individualBeneficiary.routes.IncomeController.onPageLoad(NormalMode, index, draftId).url),
         indBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
   }
 
-  def individualBeneficiaryIncomeYesNo(index: Int): Option[AnswerRow] = userAnswers.get(IndividualBeneficiaryIncomeYesNoPage(index)) map {
+  def individualBeneficiaryIncomeYesNo(index: Int): Option[AnswerRow] = userAnswers.get(IncomeYesNoPage(index)) map {
     x =>
       AnswerRow(
         "individualBeneficiaryIncomeYesNo.checkYourAnswersLabel",
         yesOrNo(x),
-        Some(controllers.register.beneficiaries.routes.IndividualBeneficiaryIncomeYesNoController.onPageLoad(NormalMode, index, draftId).url),
+        Some(controllers.register.beneficiaries.individualBeneficiary.routes.IncomeYesNoController.onPageLoad(NormalMode, index, draftId).url),
         indBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
   }
 
-  def individualBeneficiaryDateOfBirth(index: Int): Option[AnswerRow] = userAnswers.get(IndividualBeneficiaryDateOfBirthPage(index)) map {
+  def individualBeneficiaryDateOfBirth(index: Int): Option[AnswerRow] = userAnswers.get(DateOfBirthPage(index)) map {
     x =>
       AnswerRow(
         "individualBeneficiaryDateOfBirth.checkYourAnswersLabel",
         HtmlFormat.escape(x.format(dateFormatter)),
-        Some(controllers.register.beneficiaries.routes.IndividualBeneficiaryDateOfBirthController.onPageLoad(NormalMode, index, draftId).url),
+        Some(controllers.register.beneficiaries.individualBeneficiary.routes.DateOfBirthController.onPageLoad(NormalMode, index, draftId).url),
         indBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
   }
 
-  def individualBeneficiaryDateOfBirthYesNo(index: Int): Option[AnswerRow] = userAnswers.get(IndividualBeneficiaryDateOfBirthYesNoPage(index)) map {
+  def individualBeneficiaryDateOfBirthYesNo(index: Int): Option[AnswerRow] = userAnswers.get(DateOfBirthYesNoPage(index)) map {
     x =>
       AnswerRow(
         "individualBeneficiaryDateOfBirthYesNo.checkYourAnswersLabel",
         yesOrNo(x),
-        Some(controllers.register.beneficiaries.routes.IndividualBeneficiaryDateOfBirthYesNoController.onPageLoad(NormalMode, index, draftId).url),
+        Some(controllers.register.beneficiaries.individualBeneficiary.routes.DateOfBirthYesNoController.onPageLoad(NormalMode, index, draftId).url),
         indBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
   }
 
-  def individualBeneficiaryName(index: Int): Option[AnswerRow] = userAnswers.get(IndividualBeneficiaryNamePage(index)) map {
+  def individualBeneficiaryName(index: Int): Option[AnswerRow] = userAnswers.get(NamePage(index)) map {
     x =>
       AnswerRow(
         "individualBeneficiaryName.checkYourAnswersLabel",
         HtmlFormat.escape(s"${x.firstName} ${x.middleName.getOrElse("")} ${x.lastName}"),
-        Some(controllers.register.beneficiaries.routes.IndividualBeneficiaryNameController.onPageLoad(NormalMode, index, draftId).url),
+        Some(controllers.register.beneficiaries.individualBeneficiary.routes.NameController.onPageLoad(NormalMode, index, draftId).url),
         canEdit = canEdit
       )
   }

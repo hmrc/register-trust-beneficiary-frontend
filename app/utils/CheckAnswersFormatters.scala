@@ -21,7 +21,7 @@ import java.time.format.DateTimeFormatter
 import models.UserAnswers
 import models.core.pages.{Address, FullName, InternationalAddress, UKAddress}
 import models.registration.pages.PassportOrIdCardDetails
-import pages.register.beneficiaries.individual.IndividualBeneficiaryNamePage
+import pages.register.beneficiaries.individual.NamePage
 import play.api.i18n.Messages
 import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.domain.Nino
@@ -56,7 +56,7 @@ object CheckAnswersFormatters {
   def escape(x: String): Html = HtmlFormat.escape(x)
 
   def indBeneficiaryName(index: Int, userAnswers: UserAnswers): String = {
-    userAnswers.get(IndividualBeneficiaryNamePage(index)).map(_.toString).getOrElse("")
+    userAnswers.get(NamePage(index)).map(_.toString).getOrElse("")
   }
 
   def ukAddress(address: UKAddress): Html = {

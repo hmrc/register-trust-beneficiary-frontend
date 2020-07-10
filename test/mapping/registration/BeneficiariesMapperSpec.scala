@@ -50,11 +50,11 @@ class BeneficiariesMapperSpec extends SpecBase with MustMatchers
         val dateOfBirth = LocalDate.of(2010, 10, 10)
 
         val userAnswers = emptyUserAnswers
-          .set(IndividualBeneficiaryNamePage(index), FullName("first name", None, "last name")).success.value
-          .set(IndividualBeneficiaryDateOfBirthYesNoPage(index), true).success.value
-          .set(IndividualBeneficiaryDateOfBirthPage(index), dateOfBirth).success.value
-          .set(IndividualBeneficiaryIncomeYesNoPage(index), false).success.value
-          .set(IndividualBeneficiaryIncomePage(index), "100").success.value
+          .set(NamePage(index), FullName("first name", None, "last name")).success.value
+          .set(DateOfBirthYesNoPage(index), true).success.value
+          .set(DateOfBirthPage(index), dateOfBirth).success.value
+          .set(IncomeYesNoPage(index), false).success.value
+          .set(IncomePage(index), "100").success.value
 
         beneficiariesMapper.build(userAnswers) mustNot be(defined)
       }
@@ -65,14 +65,14 @@ class BeneficiariesMapperSpec extends SpecBase with MustMatchers
         val dateOfBirth = LocalDate.of(2010, 10, 10)
 
         val userAnswers = emptyUserAnswers
-          .set(IndividualBeneficiaryNamePage(index), FullName("first name", None, "last name")).success.value
-          .set(IndividualBeneficiaryDateOfBirthYesNoPage(index), true).success.value
-          .set(IndividualBeneficiaryDateOfBirthPage(index), dateOfBirth).success.value
-          .set(IndividualBeneficiaryIncomeYesNoPage(index), false).success.value
-          .set(IndividualBeneficiaryIncomePage(index), "100").success.value
-          .set(IndividualBeneficiaryNationalInsuranceYesNoPage(index), true).success.value
-          .set(IndividualBeneficiaryNationalInsuranceNumberPage(index), "AB123456C").success.value
-          .set(IndividualBeneficiaryVulnerableYesNoPage(index), true).success.value
+          .set(NamePage(index), FullName("first name", None, "last name")).success.value
+          .set(DateOfBirthYesNoPage(index), true).success.value
+          .set(DateOfBirthPage(index), dateOfBirth).success.value
+          .set(IncomeYesNoPage(index), false).success.value
+          .set(IncomePage(index), "100").success.value
+          .set(NationalInsuranceYesNoPage(index), true).success.value
+          .set(NationalInsuranceNumberPage(index), "AB123456C").success.value
+          .set(VulnerableYesNoPage(index), true).success.value
 
         val result = beneficiariesMapper.build(userAnswers).value
 
@@ -92,14 +92,14 @@ class BeneficiariesMapperSpec extends SpecBase with MustMatchers
         val dateOfBirth = LocalDate.of(2010, 10, 10)
 
         val userAnswers = emptyUserAnswers
-          .set(IndividualBeneficiaryNamePage(index), FullName("first name", None, "last name")).success.value
-          .set(IndividualBeneficiaryDateOfBirthYesNoPage(index), true).success.value
-          .set(IndividualBeneficiaryDateOfBirthPage(index), dateOfBirth).success.value
-          .set(IndividualBeneficiaryIncomeYesNoPage(index), false).success.value
-          .set(IndividualBeneficiaryIncomePage(index), "100").success.value
-          .set(IndividualBeneficiaryNationalInsuranceYesNoPage(index), true).success.value
-          .set(IndividualBeneficiaryNationalInsuranceNumberPage(index), "AB123456C").success.value
-          .set(IndividualBeneficiaryVulnerableYesNoPage(index), true).success.value
+          .set(NamePage(index), FullName("first name", None, "last name")).success.value
+          .set(DateOfBirthYesNoPage(index), true).success.value
+          .set(DateOfBirthPage(index), dateOfBirth).success.value
+          .set(IncomeYesNoPage(index), false).success.value
+          .set(IncomePage(index), "100").success.value
+          .set(NationalInsuranceYesNoPage(index), true).success.value
+          .set(NationalInsuranceNumberPage(index), "AB123456C").success.value
+          .set(VulnerableYesNoPage(index), true).success.value
           .set(ClassBeneficiaryDescriptionPage(classOfBeneficiaryIndex), "class of ben 1").success.value
 
         val result = beneficiariesMapper.build(userAnswers).value

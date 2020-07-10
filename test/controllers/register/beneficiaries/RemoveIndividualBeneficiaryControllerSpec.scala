@@ -21,7 +21,7 @@ import forms.RemoveIndexFormProvider
 import models.core.pages.FullName
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.register.beneficiaries.individual.IndividualBeneficiaryNamePage
+import pages.register.beneficiaries.individual.NamePage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.RemoveIndexView
@@ -64,7 +64,7 @@ class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with ScalaCheck
     "name is provided" must {
       "return OK and the correct view for a GET" in {
 
-        val userAnswers = emptyUserAnswers.set(IndividualBeneficiaryNamePage(0),
+        val userAnswers = emptyUserAnswers.set(NamePage(0),
           FullName("First", None, "Last")).success.value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -87,7 +87,7 @@ class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with ScalaCheck
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(IndividualBeneficiaryNamePage(0),
+      val userAnswers = emptyUserAnswers.set(NamePage(0),
         FullName("First", None, "Last")).success.value
 
       forAll(arbitrary[Boolean]) {
@@ -113,7 +113,7 @@ class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with ScalaCheck
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(IndividualBeneficiaryNamePage(0),
+      val userAnswers = emptyUserAnswers.set(NamePage(0),
         FullName("First", None, "Last")).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
