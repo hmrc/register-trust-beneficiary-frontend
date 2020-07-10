@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pages.register
+package utils
 
 import javax.inject.Inject
 import models.registration.pages._
@@ -40,7 +40,7 @@ class RegistrationProgress @Inject()() {
       if (individuals.isEmpty) {
         false
       } else {
-        !individuals.exists(_.status == Status.InProgress)
+        !individuals.exists(_.status == Status.Completed)
       }
     }
 
