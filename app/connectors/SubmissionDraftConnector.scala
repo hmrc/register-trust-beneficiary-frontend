@@ -29,25 +29,9 @@ class SubmissionDraftConnector @Inject()(http: HttpClient, config : FrontendAppC
 
   val submissionsBaseUrl = s"${config.trustsUrl}/trusts/register/submission-drafts"
 
-  def setDraftMain(draftId : String, draftData: JsValue, inProgress: Boolean, reference: Option[String])
-                     (implicit hc: HeaderCarrier, ec : ExecutionContext): Future[HttpResponse] = {
-    val submissionDraftData = SubmissionDraftData(draftData, reference, Some(inProgress))
-    http.POST[JsValue, HttpResponse](s"$submissionsBaseUrl/$draftId/MAIN", Json.toJson(submissionDraftData))
-  }
-
   def setDraftSectionSet(draftId: String, section: String, data: RegistrationSubmission.DataSet)
                         (implicit hc: HeaderCarrier, ec : ExecutionContext): Future[HttpResponse] = {
     http.POST[JsValue, HttpResponse](s"$submissionsBaseUrl/$draftId/set/$section", Json.toJson(data))
-  }
-
-  def setDraftSection(draftId : String, section: String, draftData: JsValue)
-                     (implicit hc: HeaderCarrier, ec : ExecutionContext): Future[HttpResponse] = {
-    val submissionDraftData = SubmissionDraftData(draftData, None, None)
-    http.POST[JsValue, HttpResponse](s"$submissionsBaseUrl/$draftId/$section", Json.toJson(submissionDraftData))
-  }
-
-  def getDraftMain(draftId: String)(implicit hc: HeaderCarrier, ec : ExecutionContext): Future[SubmissionDraftResponse] = {
-    http.GET[SubmissionDraftResponse](s"$submissionsBaseUrl/$draftId/MAIN")
   }
 
   def getDraftSection(draftId: String, section: String)(implicit hc: HeaderCarrier, ec : ExecutionContext): Future[SubmissionDraftResponse] = {
