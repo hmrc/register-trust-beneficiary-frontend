@@ -36,12 +36,11 @@ class DefaultRegistrationsRepository @Inject()(submissionDraftConnector: Submiss
   private val mainAnswersSection = "main"
 
   override def set(userAnswers: UserAnswers)(implicit hc: HeaderCarrier, messages: Messages): Future[Boolean] = {
-
     submissionDraftConnector.setDraftSectionSet(
       userAnswers.draftId,
       userAnswersSection,
       submissionSetFactory.createFrom(userAnswers)
-    ).map {
+    ) map {
       response => response.status == http.Status.OK
     }
   }

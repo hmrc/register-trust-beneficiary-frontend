@@ -19,8 +19,8 @@ package navigation.routes
 import config.FrontendAppConfig
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRoutes}
 import models.registration.pages.KindOfTrust.Employees
-import models.{NormalMode, UserAnswers}
-import models.registration.pages.{AddABeneficiary, KindOfTrust, WhatTypeOfBeneficiary}
+import models.{NormalMode, ReadableUserAnswers}
+import models.registration.pages.{AddABeneficiary, WhatTypeOfBeneficiary}
 import pages.Page
 import pages.register.beneficiaries.individual._
 import pages.register.beneficiaries.{AddABeneficiaryPage, AddABeneficiaryYesNoPage, ClassBeneficiaryDescriptionPage, WhatTypeOfBeneficiaryPage}
@@ -30,7 +30,7 @@ import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries}
 import uk.gov.hmrc.auth.core.AffinityGroup
 
 object BeneficiaryRoutes {
-  def route(draftId: String, config: FrontendAppConfig): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
+  def route(draftId: String, config: FrontendAppConfig): PartialFunction[Page, AffinityGroup => ReadableUserAnswers => Call] = {
     case NamePage(index) => _ => namePage(draftId, index)
     case RoleInCompanyPage(index) => _ => _ => individualRoutes.DateOfBirthYesNoController.onPageLoad(NormalMode, index, draftId)
     case DateOfBirthYesNoPage(index) => _ => ua => individualBeneficiaryDateOfBirthRoute(ua, index, draftId)
@@ -55,12 +55,12 @@ object BeneficiaryRoutes {
     Call("GET", config.registrationProgressUrl(draftId))
   }
 
-  private def namePage(draftId: String, index: Int)(userAnswers: UserAnswers) : Call = userAnswers.get(KindOfTrustPage) match {
+  private def namePage(draftId: String, index: Int)(userAnswers: ReadableUserAnswers) : Call = userAnswers.get(KindOfTrustPage) match {
     case Some(Employees) => individualRoutes.RoleInCompanyController.onPageLoad(NormalMode, index, draftId)
     case _ => individualRoutes.DateOfBirthYesNoController.onPageLoad(NormalMode, index, draftId)
   }
 
-  private def whatTypeOfBeneficiaryRoute(draftId: String)(userAnswers: UserAnswers) : Call = {
+  private def whatTypeOfBeneficiaryRoute(draftId: String)(userAnswers: ReadableUserAnswers) : Call = {
     val whatBeneficiaryToAdd = userAnswers.get(WhatTypeOfBeneficiaryPage)
     whatBeneficiaryToAdd match {
       case Some(WhatTypeOfBeneficiary.Individual) =>
@@ -72,7 +72,7 @@ object BeneficiaryRoutes {
     }
   }
 
-  private def routeToIndividualBeneficiaryIndex(userAnswers: UserAnswers, draftId: String) = {
+  private def routeToIndividualBeneficiaryIndex(userAnswers: ReadableUserAnswers, draftId: String) = {
     val indBeneficiaries = userAnswers.get(IndividualBeneficiaries).getOrElse(List.empty)
     indBeneficiaries match {
       case Nil =>
@@ -82,7 +82,7 @@ object BeneficiaryRoutes {
     }
   }
 
-  private def routeToClassOfBeneficiaryIndex(userAnswers: UserAnswers, draftId: String) = {
+  private def routeToClassOfBeneficiaryIndex(userAnswers: ReadableUserAnswers, draftId: String) = {
     val classOfBeneficiaries = userAnswers.get(ClassOfBeneficiaries).getOrElse(List.empty)
     classOfBeneficiaries match {
       case Nil =>
@@ -92,42 +92,42 @@ object BeneficiaryRoutes {
     }
   }
 
-  private def individualBeneficiaryAddressRoute(userAnswers: UserAnswers, index: Int, draftId: String) : Call =
+  private def individualBeneficiaryAddressRoute(userAnswers: ReadableUserAnswers, index: Int, draftId: String) : Call =
     userAnswers.get(AddressYesNoPage(index)) match {
       case Some(false) => individualRoutes.VulnerableYesNoController.onPageLoad(NormalMode, index, draftId)
       case Some(true) => individualRoutes.AddressUKYesNoController.onPageLoad(NormalMode, index, draftId)
       case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
 
-  private def individualBeneficiaryAddressUKYesNoRoute(userAnswers: UserAnswers, index: Int, draftId: String) : Call =
+  private def individualBeneficiaryAddressUKYesNoRoute(userAnswers: ReadableUserAnswers, index: Int, draftId: String) : Call =
     userAnswers.get(AddressUKYesNoPage(index)) match {
       case Some(false) => individualRoutes.AddressUKYesNoController.onPageLoad(NormalMode, index, draftId)
       case Some(true) => individualRoutes.AddressUKController.onPageLoad(NormalMode, index, draftId)
       case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
 
-  private def individualBeneficiaryNationalInsuranceYesNoRoute(userAnswers: UserAnswers, index: Int, draftId: String) : Call =
+  private def individualBeneficiaryNationalInsuranceYesNoRoute(userAnswers: ReadableUserAnswers, index: Int, draftId: String) : Call =
     userAnswers.get(NationalInsuranceYesNoPage(index)) match {
       case Some(false) => individualRoutes.AddressYesNoController.onPageLoad(NormalMode, index, draftId)
       case Some(true) => individualRoutes.NationalInsuranceNumberController.onPageLoad(NormalMode, index, draftId)
       case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
 
-  private def individualBeneficiaryIncomeRoute(userAnswers: UserAnswers, index: Int, draftId: String) : Call =
+  private def individualBeneficiaryIncomeRoute(userAnswers: ReadableUserAnswers, index: Int, draftId: String) : Call =
     userAnswers.get(IncomeYesNoPage(index)) match {
       case Some(false) => individualRoutes.IncomeController.onPageLoad(NormalMode, index, draftId)
       case Some(true) => individualRoutes.NationalInsuranceYesNoController.onPageLoad(NormalMode, index, draftId)
       case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
 
-  private def individualBeneficiaryDateOfBirthRoute(userAnswers: UserAnswers, index: Int, draftId: String) : Call =
+  private def individualBeneficiaryDateOfBirthRoute(userAnswers: ReadableUserAnswers, index: Int, draftId: String) : Call =
     userAnswers.get(DateOfBirthYesNoPage(index)) match {
       case Some(false) => individualRoutes.IncomeYesNoController.onPageLoad(NormalMode, index, draftId)
       case Some(true) => individualRoutes.DateOfBirthController.onPageLoad(NormalMode, index, draftId)
       case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
 
-  private def addABeneficiaryYesNoRoute(draftId: String, config: FrontendAppConfig)(answers: UserAnswers) = {
+  private def addABeneficiaryYesNoRoute(draftId: String, config: FrontendAppConfig)(answers: ReadableUserAnswers) = {
     val add = answers.get(AddABeneficiaryYesNoPage)
 
     add match {
@@ -138,7 +138,7 @@ object BeneficiaryRoutes {
     }
   }
 
-  private def addABeneficiaryRoute(draftId: String, config: FrontendAppConfig)(answers: UserAnswers) = {
+  private def addABeneficiaryRoute(draftId: String, config: FrontendAppConfig)(answers: ReadableUserAnswers) = {
     val addAnother = answers.get(AddABeneficiaryPage)
     addAnother match {
       case Some(AddABeneficiary.YesNow) =>

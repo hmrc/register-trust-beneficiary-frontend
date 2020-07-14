@@ -18,12 +18,17 @@ package controllers.register.beneficiaries.individualBeneficiary
 
 import base.SpecBase
 import forms.IndividualBeneficiaryNameFormProvider
-import models.NormalMode
+import models.{NormalMode, ReadOnlyUserAnswers}
 import models.core.pages.FullName
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
 import pages.register.beneficiaries.individual.NamePage
+import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.individualBeneficiary.NameView
+
+import scala.concurrent.Future
 
 class NameControllerSpec extends SpecBase {
 
@@ -76,21 +81,45 @@ class NameControllerSpec extends SpecBase {
       application.stop()
     }
 
-    "redirect to the next page when valid data is submitted" in {
+    "redirect to the next page when valid data is submitted" when {
+      "using main answers" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+        when(registrationsRepository.getMainAnswers(any())(any()))
+          .thenReturn(Future.successful(Some(ReadOnlyUserAnswers(Json.obj()))))
 
-      val request =
-        FakeRequest(POST, individualBeneficiaryNameRoute)
-          .withFormUrlEncodedBody(("firstName", "first"), ("middleName", "middle"), ("lastName", "last"))
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val result = route(application, request).value
+        val request =
+          FakeRequest(POST, individualBeneficiaryNameRoute)
+            .withFormUrlEncodedBody(("firstName", "first"), ("middleName", "middle"), ("lastName", "last"))
 
-      status(result) mustEqual SEE_OTHER
+        val result = route(application, request).value
 
-      redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+        status(result) mustEqual SEE_OTHER
 
-      application.stop()
+        redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+        application.stop()
+      }
+      "using section answers" in {
+
+        when(registrationsRepository.getMainAnswers(any())(any()))
+          .thenReturn(Future.successful(None))
+
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+        val request =
+          FakeRequest(POST, individualBeneficiaryNameRoute)
+            .withFormUrlEncodedBody(("firstName", "first"), ("middleName", "middle"), ("lastName", "last"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+        application.stop()
+      }
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {

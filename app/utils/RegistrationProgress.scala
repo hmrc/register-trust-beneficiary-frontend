@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pages.register
+package utils
 
 import javax.inject.Inject
 import models.registration.pages._
@@ -60,11 +60,11 @@ class RegistrationProgress @Inject()() {
 
     (individuals, classes) match {
       case (Nil, Nil) => None
-      case (ind, Nil) =>
+      case (_, Nil) =>
         determineStatus(individualBeneficiariesComplete && noMoreToAdd)
-      case (Nil, c) =>
+      case (Nil, _) =>
         determineStatus(classComplete && noMoreToAdd)
-      case (ind, c) =>
+      case (_, _) =>
         determineStatus(individualBeneficiariesComplete && classComplete && noMoreToAdd)
     }
   }

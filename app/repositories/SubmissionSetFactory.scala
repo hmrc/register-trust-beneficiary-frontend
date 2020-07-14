@@ -19,10 +19,9 @@ package repositories
 import javax.inject.Inject
 import mapping.registration.BeneficiariesMapper
 import models._
-import pages.register.RegistrationProgress
 import play.api.i18n.Messages
 import play.api.libs.json.Json
-import utils.CheckYourAnswersHelper
+import utils.{CheckYourAnswersHelper, RegistrationProgress}
 import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
 

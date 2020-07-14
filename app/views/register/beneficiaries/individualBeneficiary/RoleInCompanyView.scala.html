@@ -26,7 +26,7 @@
 @(form: Form[_], mode: Mode, draftId: String, name: FullName, index: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("individualBeneficiaryRole.title")}"
+    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.roleInCompany.title")}"
     ) {
 
     @formHelper(action = RoleInCompanyController.onSubmit(mode, index, draftId), 'autoComplete -> "off") {
@@ -37,7 +37,7 @@
 
         @components.input_radio(
             field = form("value"),
-            legend = messages("individualBeneficiaryRole.heading", name.toString),
+            legend = messages("individualBeneficiary.roleInCompany.heading", name.toString),
             legendClass = Some("heading-large"),
             legendAsHeading = true,
             inputs = RoleInCompany.options
