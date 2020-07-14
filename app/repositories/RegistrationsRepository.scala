@@ -37,6 +37,8 @@ class DefaultRegistrationsRepository @Inject()(submissionDraftConnector: Submiss
 
   override def set(userAnswers: UserAnswers)(implicit hc: HeaderCarrier, messages: Messages): Future[Boolean] = {
 
+    println(">>>>>>>>>>" + userAnswers)
+
     submissionDraftConnector.setDraftSectionSet(
       userAnswers.draftId,
       userAnswersSection,

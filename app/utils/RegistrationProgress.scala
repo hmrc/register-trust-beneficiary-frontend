@@ -40,7 +40,7 @@ class RegistrationProgress @Inject()() {
       if (individuals.isEmpty) {
         false
       } else {
-        !individuals.exists(_.status == Status.Completed)
+        !individuals.exists(_.status == Status.InProgress)
       }
     }
 

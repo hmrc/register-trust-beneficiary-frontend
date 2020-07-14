@@ -55,6 +55,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
   def individualBeneficiaryRows(index: Int): Seq[AnswerRow] = {
     Seq(
       individualBeneficiaryName(index),
+      individualBeneficiaryRoleInCompany(index),
       individualBeneficiaryDateOfBirthYesNo(index),
       individualBeneficiaryDateOfBirth(index),
       individualBeneficiaryIncomeYesNo(index),
@@ -228,6 +229,17 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
         "individualBeneficiaryName.checkYourAnswersLabel",
         HtmlFormat.escape(s"${x.firstName} ${x.middleName.getOrElse("")} ${x.lastName}"),
         Some(controllers.register.beneficiaries.individualBeneficiary.routes.NameController.onPageLoad(NormalMode, index, draftId).url),
+        canEdit = canEdit
+      )
+  }
+
+  def individualBeneficiaryRoleInCompany(index: Int): Option[AnswerRow] = userAnswers.get(RoleInCompanyPage(index)) map {
+    x =>
+      AnswerRow(
+        "individualBeneficiaryRoleInCompany.checkYourAnswersLabel",
+        HtmlFormat.escape(x.toString),
+        Some(controllers.register.beneficiaries.individualBeneficiary.routes.RoleInCompanyController.onPageLoad(NormalMode, index, draftId).url),
+        indBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
   }
