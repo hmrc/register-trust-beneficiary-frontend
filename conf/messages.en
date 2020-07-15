@@ -225,6 +225,10 @@ individualBeneficiaryAddressUK.title = What is the individual beneficiary’s ad
 individualBeneficiaryAddressUK.heading = What is {0}’s address?
 individualBeneficiaryAddressUK.checkYourAnswersLabel = What is {0}’s address?
 
+individualBeneficiaryAddressInternational.title = What is the individual beneficiary’s address?
+individualBeneficiaryAddressInternational.heading = What is {0}’s address?
+individualBeneficiaryAddressInternational.checkYourAnswersLabel = What is {0}’s address?
+
 individualBeneficiaryRoleInCompany.checkYourAnswersLabel = What is {0}’s role in the company that the trust was created for?
 individualBeneficiaryPassportIDCardYesNo.checkYourAnswersLabel = Do you know {0}’s passport or ID card details?
 individualBeneficiaryPassportIDCard.checkYourAnswersLabel = What are {0}’s passport or ID card details?

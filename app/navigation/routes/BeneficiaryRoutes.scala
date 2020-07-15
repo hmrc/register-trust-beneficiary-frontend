@@ -101,7 +101,7 @@ object BeneficiaryRoutes {
 
   private def individualBeneficiaryAddressUKYesNoRoute(userAnswers: ReadableUserAnswers, index: Int, draftId: String) : Call =
     userAnswers.get(AddressUKYesNoPage(index)) match {
-      case Some(false) => individualRoutes.AddressUKYesNoController.onPageLoad(NormalMode, index, draftId)
+      case Some(false) => individualRoutes.AddressInternationalController.onPageLoad(NormalMode, index, draftId)
       case Some(true) => individualRoutes.AddressUKController.onPageLoad(NormalMode, index, draftId)
       case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }

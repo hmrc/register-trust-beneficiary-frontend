@@ -62,6 +62,11 @@ POST       /:draftId/individual/:index/uk-address                               
 GET        /:draftId/individual/:index/change-uk-address                              controllers.register.beneficiaries.individualBeneficiary.AddressUKController.onPageLoad(mode: Mode = CheckMode,index: Int, draftId: String)
 POST       /:draftId/individual/:index/change-uk-address                              controllers.register.beneficiaries.individualBeneficiary.AddressUKController.onSubmit(mode: Mode = CheckMode,index: Int, draftId: String)
 
+GET        /:draftId/individual/:index/international-address                          controllers.register.beneficiaries.individualBeneficiary.AddressInternationalController.onPageLoad(mode: Mode = NormalMode,index: Int, draftId: String)
+POST       /:draftId/individual/:index/international-address                          controllers.register.beneficiaries.individualBeneficiary.AddressInternationalController.onSubmit(mode: Mode = NormalMode,index: Int, draftId: String)
+GET        /:draftId/individual/:index/change-international-address                   controllers.register.beneficiaries.individualBeneficiary.AddressInternationalController.onPageLoad(mode: Mode = CheckMode,index: Int, draftId: String)
+POST       /:draftId/individual/:index/change-international-address                   controllers.register.beneficiaries.individualBeneficiary.AddressInternationalController.onSubmit(mode: Mode = CheckMode,index: Int, draftId: String)
+
 GET        /:draftId/individual/:index/is-elected-vulnerable                          controllers.register.beneficiaries.individualBeneficiary.VulnerableYesNoController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
 POST       /:draftId/individual/:index/is-elected-vulnerable                          controllers.register.beneficiaries.individualBeneficiary.VulnerableYesNoController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
 GET        /:draftId/individual/:index/change-is-elected-vulnerable                   controllers.register.beneficiaries.individualBeneficiary.VulnerableYesNoController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)

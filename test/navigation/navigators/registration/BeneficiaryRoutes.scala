@@ -238,12 +238,12 @@ trait BeneficiaryRoutes {
       }
     }
 
-    "go to IndividualBeneficiaryAddressUKYesNoPage from IndividualBeneficiaryAddressUKPage when user answers no" in {
+    "go to IndividualBeneficiaryAddressInternationalPage from IndividualBeneficiaryAddressUKPage when user answers no" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val answers = userAnswers.set(AddressUKYesNoPage(indexForBeneficiary), value = false).success.value
           navigator.nextPage(AddressUKYesNoPage(indexForBeneficiary), NormalMode, fakeDraftId)(answers)
-            .mustBe(individualRoutes.AddressUKYesNoController.onPageLoad(NormalMode, indexForBeneficiary, fakeDraftId))
+            .mustBe(individualRoutes.AddressInternationalController.onPageLoad(NormalMode, indexForBeneficiary, fakeDraftId))
       }
     }
 
