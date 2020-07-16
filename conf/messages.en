@@ -164,8 +164,8 @@ individualBeneficiaryName.error.middlename.invalid = The individual beneficiary�
 individualBeneficiaryName.error.lastname.invalid = The individual beneficiary’s last name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
 
 individualBeneficiary.roleInCompany.title = What is the individual beneficiary’s role in the company that the trust was created for?
-individualBeneficiary.roleInCompany.heading = What is {0}’s role in the company the trust was created for?
-individualBeneficiary.roleInCompany.checkYourAnswersLabel = What is {0}’s role in the company the trust was created for?
+individualBeneficiary.roleInCompany.heading = What is {0}’s role in the company that the trust was created for?
+individualBeneficiary.roleInCompany.checkYourAnswersLabel = What is {0}’s role in the company that the trust was created for?
 individualBeneficiary.roleInCompany.Director = Director
 individualBeneficiary.roleInCompany.Employee = Employee
 individualBeneficiary.roleInCompany.NA = None of these
