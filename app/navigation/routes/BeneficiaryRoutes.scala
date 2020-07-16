@@ -42,7 +42,12 @@ object BeneficiaryRoutes {
       individualRoutes.VulnerableYesNoController.onPageLoad(NormalMode, index, draftId)
     case AddressYesNoPage(index) => _ => ua => individualBeneficiaryAddressRoute(ua, index, draftId)
     case AddressUKYesNoPage(index) => _ => ua => individualBeneficiaryAddressUKYesNoRoute(ua, index, draftId)
-    case AddressUKPage(index) => _ => _ => individualRoutes.VulnerableYesNoController.onPageLoad(NormalMode, index, draftId)
+    case AddressUKPage(index) => _ => _ => individualRoutes.PassportDetailsYesNoController.onPageLoad(NormalMode, index, draftId)
+    case AddressInternationalPage(index) => _ => _ => individualRoutes.PassportDetailsYesNoController.onPageLoad(NormalMode, index, draftId)
+    case PassportDetailsYesNoPage(index) => _ => ua => individualBeneficiaryPassportDetailsYesNoRoute(ua, index, draftId)
+    case PassportDetailsPage(index) => _ => _ => individualRoutes.VulnerableYesNoController.onPageLoad(NormalMode, index, draftId)
+    case IdCardDetailsYesNoPage(index) => _ => ua => individualBeneficiaryIdCardDetailsYesNoRoute(ua, index, draftId)
+    case IdCardDetailsPage(index) => _ => _ => individualRoutes.VulnerableYesNoController.onPageLoad(NormalMode, index, draftId)
     case VulnerableYesNoPage(index) => _ => _ => individualRoutes.AnswersController.onPageLoad(index, draftId)
     case AnswersPage => _ => _ => controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
     case AddABeneficiaryPage => _ => addABeneficiaryRoute(draftId, config)
@@ -103,6 +108,20 @@ object BeneficiaryRoutes {
     userAnswers.get(AddressUKYesNoPage(index)) match {
       case Some(false) => individualRoutes.AddressInternationalController.onPageLoad(NormalMode, index, draftId)
       case Some(true) => individualRoutes.AddressUKController.onPageLoad(NormalMode, index, draftId)
+      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+    }
+
+  private def individualBeneficiaryPassportDetailsYesNoRoute(userAnswers: ReadableUserAnswers, index: Int, draftId: String) : Call =
+    userAnswers.get(PassportDetailsYesNoPage(index)) match {
+      case Some(false) => individualRoutes.IDCardDetailsYesNoController.onPageLoad(NormalMode, index, draftId)
+      case Some(true) => individualRoutes.PassportDetailsController.onPageLoad(NormalMode, index, draftId)
+      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+    }
+
+  private def individualBeneficiaryIdCardDetailsYesNoRoute(userAnswers: ReadableUserAnswers, index: Int, draftId: String) : Call =
+    userAnswers.get(IdCardDetailsYesNoPage(index)) match {
+      case Some(false) => individualRoutes.VulnerableYesNoController.onPageLoad(NormalMode, index, draftId)
+      case Some(true) => individualRoutes.IDCardDetailsController.onPageLoad(NormalMode, index, draftId)
       case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
 
