@@ -46,8 +46,8 @@ object BeneficiaryRoutes {
     case AddressInternationalPage(index) => _ => _ => individualRoutes.PassportDetailsYesNoController.onPageLoad(NormalMode, index, draftId)
     case PassportDetailsYesNoPage(index) => _ => ua => individualBeneficiaryPassportDetailsYesNoRoute(ua, index, draftId)
     case PassportDetailsPage(index) => _ => _ => individualRoutes.VulnerableYesNoController.onPageLoad(NormalMode, index, draftId)
-    case IdCardDetailsYesNoPage(index) => _ => ua => individualBeneficiaryIdCardDetailsYesNoRoute(ua, index, draftId)
-    case IdCardDetailsPage(index) => _ => _ => individualRoutes.VulnerableYesNoController.onPageLoad(NormalMode, index, draftId)
+    case IDCardDetailsYesNoPage(index) => _ => ua => individualBeneficiaryIdCardDetailsYesNoRoute(ua, index, draftId)
+    case IDCardDetailsPage(index) => _ => _ => individualRoutes.VulnerableYesNoController.onPageLoad(NormalMode, index, draftId)
     case VulnerableYesNoPage(index) => _ => _ => individualRoutes.AnswersController.onPageLoad(index, draftId)
     case AnswersPage => _ => _ => controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
     case AddABeneficiaryPage => _ => addABeneficiaryRoute(draftId, config)
@@ -119,7 +119,7 @@ object BeneficiaryRoutes {
     }
 
   private def individualBeneficiaryIdCardDetailsYesNoRoute(userAnswers: ReadableUserAnswers, index: Int, draftId: String) : Call =
-    userAnswers.get(IdCardDetailsYesNoPage(index)) match {
+    userAnswers.get(IDCardDetailsYesNoPage(index)) match {
       case Some(false) => individualRoutes.VulnerableYesNoController.onPageLoad(NormalMode, index, draftId)
       case Some(true) => individualRoutes.IDCardDetailsController.onPageLoad(NormalMode, index, draftId)
       case _ => controllers.routes.SessionExpiredController.onPageLoad()

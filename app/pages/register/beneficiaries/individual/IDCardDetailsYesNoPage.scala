@@ -23,17 +23,9 @@ import sections.beneficiaries.{Beneficiaries, IndividualBeneficiaries}
 
 import scala.util.Try
 
-final case class PassportDetailsYesNoPage(index : Int) extends QuestionPage[Boolean] {
+final case class IDCardDetailsYesNoPage(index : Int) extends QuestionPage[Boolean] {
 
   override def path: JsPath = JsPath \  Beneficiaries \ IndividualBeneficiaries \ index \ toString
 
-  override def toString: String = "passportDetailsYesNo"
-
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
-      case Some(true) => userAnswers.remove(IDCardDetailsYesNoPage(index))
-        .flatMap(_.remove(IDCardDetailsPage(index)))
-      case Some(false) => userAnswers.remove(PassportDetailsPage(index))
-      case None => super.cleanup(value, userAnswers)
-    }
+  override def toString: String = "idCardDetailsYesNo"
 }

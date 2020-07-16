@@ -23,7 +23,7 @@ import forms.YesNoFormProvider
 import javax.inject.Inject
 import models.{Mode, NormalMode}
 import navigation.Navigator
-import pages.register.beneficiaries.individual.{IdCardDetailsYesNoPage, NamePage}
+import pages.register.beneficiaries.individual.{IDCardDetailsYesNoPage, NamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -63,7 +63,7 @@ class IDCardDetailsYesNoController @Inject()(
 
       val name = request.userAnswers.get(NamePage(index)).get
 
-      val preparedForm = request.userAnswers.get(IdCardDetailsYesNoPage(index)) match {
+      val preparedForm = request.userAnswers.get(IDCardDetailsYesNoPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -82,9 +82,9 @@ class IDCardDetailsYesNoController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(IdCardDetailsYesNoPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(IDCardDetailsYesNoPage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(IdCardDetailsYesNoPage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(IDCardDetailsYesNoPage(index), mode, draftId)(updatedAnswers))
         }
       )
   }

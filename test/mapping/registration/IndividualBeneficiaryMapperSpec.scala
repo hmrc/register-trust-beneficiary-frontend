@@ -199,8 +199,8 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
               .set(AddressYesNoPage(index0), false).success.value
               .set(VulnerableYesNoPage(index0), false).success.value
               .set(PassportDetailsYesNoPage(index0), false).success.value
-              .set(IdCardDetailsYesNoPage(index0), true).success.value
-              .set(IdCardDetailsPage(index0), PassportOrIdCardDetails("GB", "012345678", LocalDate.of(2024, 5, 13))).success.value
+              .set(IDCardDetailsYesNoPage(index0), true).success.value
+              .set(IDCardDetailsPage(index0), PassportOrIdCardDetails("GB", "012345678", LocalDate.of(2024, 5, 13))).success.value
 
           val individuals = individualBeneficiariesMapper.build(userAnswers)
 

@@ -16,14 +16,16 @@
 
 package pages.register.beneficiaries.individual
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.beneficiaries.{Beneficiaries, IndividualBeneficiaries}
+import pages.behaviours.PageBehaviours
 
-final case class IdCardDetailsYesNoPage(index : Int) extends QuestionPage[Boolean] {
+class IDCardDetailsYesNoPageSpec extends PageBehaviours {
 
-  override def path: JsPath = JsPath \  Beneficiaries \ IndividualBeneficiaries \ index \ toString
+  "IDCardDetailsYesNoPage" must {
 
-  override def toString: String = "idCardDetailsYesNo"
+    beRetrievable[Boolean](IDCardDetailsYesNoPage(0))
 
+    beSettable[Boolean](IDCardDetailsYesNoPage(0))
+
+    beRemovable[Boolean](IDCardDetailsYesNoPage(0))
+  }
 }

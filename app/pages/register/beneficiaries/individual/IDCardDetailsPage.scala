@@ -16,24 +16,14 @@
 
 package pages.register.beneficiaries.individual
 
-import models.UserAnswers
+import models.registration.pages.PassportOrIdCardDetails
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.beneficiaries.{Beneficiaries, IndividualBeneficiaries}
 
-import scala.util.Try
-
-final case class PassportDetailsYesNoPage(index : Int) extends QuestionPage[Boolean] {
+final case class IDCardDetailsPage(index : Int) extends QuestionPage[PassportOrIdCardDetails] {
 
   override def path: JsPath = JsPath \  Beneficiaries \ IndividualBeneficiaries \ index \ toString
 
-  override def toString: String = "passportDetailsYesNo"
-
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
-      case Some(true) => userAnswers.remove(IDCardDetailsYesNoPage(index))
-        .flatMap(_.remove(IDCardDetailsPage(index)))
-      case Some(false) => userAnswers.remove(PassportDetailsPage(index))
-      case None => super.cleanup(value, userAnswers)
-    }
+  override def toString: String = "idCardDetails"
 }

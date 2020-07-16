@@ -16,6 +16,8 @@
 
 package pages.behaviours
 
+import java.time.LocalDate
+
 import generators.Generators
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary

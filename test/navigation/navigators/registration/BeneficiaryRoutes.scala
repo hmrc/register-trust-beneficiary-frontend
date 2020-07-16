@@ -292,8 +292,8 @@ trait BeneficiaryRoutes {
     "go to IdCardDetailsPage from IdCardDetailsYesNoPage when user answers yes" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
-          val answers = userAnswers.set(IdCardDetailsYesNoPage(indexForBeneficiary), value = true).success.value
-          navigator.nextPage(IdCardDetailsYesNoPage(indexForBeneficiary), NormalMode, fakeDraftId)(answers)
+          val answers = userAnswers.set(IDCardDetailsYesNoPage(indexForBeneficiary), value = true).success.value
+          navigator.nextPage(IDCardDetailsYesNoPage(indexForBeneficiary), NormalMode, fakeDraftId)(answers)
             .mustBe(individualRoutes.IDCardDetailsController.onPageLoad(NormalMode, indexForBeneficiary, fakeDraftId))
       }
     }
@@ -301,8 +301,8 @@ trait BeneficiaryRoutes {
     "go to VulnerableYesNoPage from IdCardDetailsYesNoPage when user answers no" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
-          val answers = userAnswers.set(IdCardDetailsYesNoPage(indexForBeneficiary), value = false).success.value
-          navigator.nextPage(IdCardDetailsYesNoPage(indexForBeneficiary), NormalMode, fakeDraftId)(answers)
+          val answers = userAnswers.set(IDCardDetailsYesNoPage(indexForBeneficiary), value = false).success.value
+          navigator.nextPage(IDCardDetailsYesNoPage(indexForBeneficiary), NormalMode, fakeDraftId)(answers)
             .mustBe(individualRoutes.VulnerableYesNoController.onPageLoad(NormalMode, indexForBeneficiary, fakeDraftId))
       }
     }
@@ -310,7 +310,7 @@ trait BeneficiaryRoutes {
     "go to VulnerableYesNoPage from IdCardDetailsPage" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
-          navigator.nextPage(IdCardDetailsPage(indexForBeneficiary), NormalMode, fakeDraftId)(userAnswers)
+          navigator.nextPage(IDCardDetailsPage(indexForBeneficiary), NormalMode, fakeDraftId)(userAnswers)
             .mustBe(individualRoutes.VulnerableYesNoController.onPageLoad(NormalMode, indexForBeneficiary, fakeDraftId))
       }
     }

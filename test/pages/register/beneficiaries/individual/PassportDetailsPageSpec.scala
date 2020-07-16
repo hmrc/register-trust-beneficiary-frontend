@@ -16,19 +16,17 @@
 
 package pages.register.beneficiaries.individual
 
-import java.time.LocalDate
-
-import org.scalacheck.Arbitrary
+import models.registration.pages.PassportOrIdCardDetails
 import pages.behaviours.PageBehaviours
 
-class DateOfBirthPageSpec extends PageBehaviours {
+class PassportDetailsPageSpec extends PageBehaviours {
 
-  "IndividualBeneficiaryDateOfBirthPage" must {
+  "PassportDetailsPage" must {
 
-    beRetrievable[LocalDate](DateOfBirthPage(0))
+    beRetrievable[PassportOrIdCardDetails](PassportDetailsPage(0))
 
-    beSettable[LocalDate](DateOfBirthPage(0))
+    beSettable[PassportOrIdCardDetails](PassportDetailsPage(0))
 
-    beRemovable[LocalDate](DateOfBirthPage(0))
+    beRemovable[PassportOrIdCardDetails](PassportDetailsPage(0))
   }
 }
