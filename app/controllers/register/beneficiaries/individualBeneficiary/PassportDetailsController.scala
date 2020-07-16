@@ -16,41 +16,41 @@
 
 package controllers.register.beneficiaries.individualBeneficiary
 
+import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
 import controllers.filters.IndexActionFilterProvider
-import forms.InternationalAddressFormProvider
+import forms.PassportOrIdCardFormProvider
 import javax.inject.Inject
 import models.{Mode, NormalMode}
 import navigation.Navigator
-import pages.register.beneficiaries.individual.{AddressInternationalPage, NamePage}
+import pages.register.beneficiaries.individual.{NamePage, PassportDetailsPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import sections.beneficiaries.IndividualBeneficiaries
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import utils.countryOptions.CountryOptionsNonUK
-import views.html.register.beneficiaries.individualBeneficiary.AddressInternationalView
+import utils.countryOptions.CountryOptions
+import views.html.register.beneficiaries.individualBeneficiary.PassportDetailsView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddressInternationalController @Inject()(
-                                                               override val messagesApi: MessagesApi,
-                                                               registrationsRepository: RegistrationsRepository,
-                                                               navigator: Navigator,
-                                                               identify: RegistrationIdentifierAction,
-                                                               getData: DraftIdRetrievalActionProvider,
-                                                               validateIndex: IndexActionFilterProvider,
-                                                               requireData: RegistrationDataRequiredAction,
-                                                               requiredAnswer: RequiredAnswerActionProvider,
-                                                               formProvider: InternationalAddressFormProvider,
-                                                               val controllerComponents: MessagesControllerComponents,
-                                                               view: AddressInternationalView,
-                                                               val countryOptions: CountryOptionsNonUK
+class PassportDetailsController @Inject()(
+                                                     override val messagesApi: MessagesApi,
+                                                     registrationsRepository: RegistrationsRepository,
+                                                     navigator: Navigator,
+                                                     identify: RegistrationIdentifierAction,
+                                                     getData: DraftIdRetrievalActionProvider,
+                                                     validateIndex: IndexActionFilterProvider,
+                                                     requireData: RegistrationDataRequiredAction,
+                                                     requiredAnswer: RequiredAnswerActionProvider,
+                                                     formProvider: PassportOrIdCardFormProvider,
+                                                     val controllerComponents: MessagesControllerComponents,
+                                                     view: PassportDetailsView,
+                                                     val countryOptions: CountryOptions
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form = formProvider()
+  private val form = formProvider("individualBeneficiaryPassportDetails")
 
   private def actions(index: Int, draftId: String) =
     identify andThen
@@ -59,17 +59,18 @@ class AddressInternationalController @Inject()(
       validateIndex(index, IndividualBeneficiaries) andThen
       requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(NormalMode, index, draftId)))
 
+
   def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
       val name = request.userAnswers.get(NamePage(index)).get
 
-      val preparedForm = request.userAnswers.get(AddressInternationalPage(index)) match {
+      val preparedForm = request.userAnswers.get(PassportDetailsPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, countryOptions.options, mode, index, draftId, name.toString))
+      Ok(view(preparedForm, countryOptions.options, mode, draftId, index, name))
   }
 
   def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
@@ -79,13 +80,13 @@ class AddressInternationalController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, mode, index, draftId, name.toString))),
+          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, mode, draftId, index, name))),
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressInternationalPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PassportDetailsPage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddressInternationalPage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(PassportDetailsPage(index), mode, draftId)(updatedAnswers))
         }
       )
   }
