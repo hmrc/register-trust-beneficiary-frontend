@@ -16,6 +16,11 @@
 
 package pages.register.beneficiaries.individual
 
+import java.time.LocalDate
+
+import models.UserAnswers
+import models.registration.pages.PassportOrIdCardDetails
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
 class IDCardDetailsYesNoPageSpec extends PageBehaviours {
@@ -27,5 +32,18 @@ class IDCardDetailsYesNoPageSpec extends PageBehaviours {
     beSettable[Boolean](IDCardDetailsYesNoPage(0))
 
     beRemovable[Boolean](IDCardDetailsYesNoPage(0))
+
+    "remove IDCardDetailsPage when IDCardDetailsYesNoPage is set to false" in {
+      val index = 0
+      forAll(arbitrary[UserAnswers]) {
+        initial =>
+          val answers: UserAnswers =
+          initial.set(IDCardDetailsPage(index), PassportOrIdCardDetails("c", "d", LocalDate.now)).success.value
+
+          val result = answers.set(IDCardDetailsYesNoPage(index), false).success.value
+
+          result.get(IDCardDetailsPage(index)) mustNot be(defined)
+      }
+    }
   }
 }

@@ -16,13 +16,17 @@
 
 package pages.register.beneficiaries.individual
 
+import java.time.LocalDate
+
 import models.UserAnswers
+import models.core.pages.{InternationalAddress, UKAddress}
+import models.registration.pages.PassportOrIdCardDetails
 import pages.behaviours.PageBehaviours
 import org.scalacheck.Arbitrary.arbitrary
 
 class AddressYesNoPageSpec extends PageBehaviours {
 
-  "IndividualBeneficiaryAddressYesNoPage" must {
+  "AddressYesNoPage" must {
 
     beRetrievable[Boolean](AddressYesNoPage(0))
 
@@ -31,15 +35,27 @@ class AddressYesNoPageSpec extends PageBehaviours {
     beRemovable[Boolean](AddressYesNoPage(0))
   }
 
-  "remove relevant Data when IndividualBeneficiaryAddressYesNoPage is set to false" in {
+  "remove relevant Data when AddressYesNoPage is set to false" in {
     val index = 0
     forAll(arbitrary[UserAnswers], arbitrary[String]) {
       (initial, str) =>
-        val answers: UserAnswers = initial.set(AddressYesNoPage(index), false).success.value
+        val answers: UserAnswers = initial.set(AddressUKYesNoPage(index), true).success.value
+          .set(AddressUKPage(index), UKAddress(str, str, Some(str), Some(str), str)).success.value
+          .set(AddressInternationalPage(index), InternationalAddress(str, str, Some(str), str)).success.value
+          .set(PassportDetailsYesNoPage(index), true).success.value
+          .set(IDCardDetailsYesNoPage(index), true).success.value
+          .set(PassportDetailsPage(index), PassportOrIdCardDetails("a", "b", LocalDate.now)).success.value
+          .set(IDCardDetailsPage(index), PassportOrIdCardDetails("c", "d", LocalDate.now)).success.value
+
         val result = answers.set(AddressYesNoPage(index), false).success.value
 
         result.get(AddressUKYesNoPage(index)) mustNot be(defined)
         result.get(AddressUKPage(index)) mustNot be(defined)
+        result.get(AddressInternationalPage(index)) mustNot be(defined)
+        result.get(PassportDetailsYesNoPage(index)) mustNot be(defined)
+        result.get(IDCardDetailsYesNoPage(index)) mustNot be(defined)
+        result.get(PassportDetailsPage(index)) mustNot be(defined)
+        result.get(IDCardDetailsPage(index)) mustNot be(defined)
     }
   }
 

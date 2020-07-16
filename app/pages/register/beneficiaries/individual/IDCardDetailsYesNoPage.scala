@@ -28,4 +28,10 @@ final case class IDCardDetailsYesNoPage(index : Int) extends QuestionPage[Boolea
   override def path: JsPath = JsPath \  Beneficiaries \ IndividualBeneficiaries \ index \ toString
 
   override def toString: String = "idCardDetailsYesNo"
+
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
+    value match {
+      case Some(false) => userAnswers.remove(IDCardDetailsPage(index))
+      case _ => super.cleanup(value, userAnswers)
+    }
 }

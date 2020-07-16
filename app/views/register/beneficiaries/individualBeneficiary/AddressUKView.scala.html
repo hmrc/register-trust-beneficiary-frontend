@@ -26,10 +26,10 @@
 @(form: Form[_], mode: Mode, draftId: String, name: FullName, index: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("individualBeneficiaryAddressInternational.title")}"
+    title = s"${errorPrefix(form)} ${messages("individualBeneficiaryAddressUK.title")}"
     ) {
 
-    @formHelper(action = AddressInternationalController.onSubmit(mode, index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = AddressUKController.onSubmit(mode, index, draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 
@@ -38,7 +38,7 @@
         <fieldset>
 
             <legend>
-                @components.heading("individualBeneficiaryAddressInternational.heading", Some(name.toString))
+                @components.heading("individualBeneficiaryAddressUK.heading", Some(name.toString))
             </legend>
 
             @components.uk_address(form)

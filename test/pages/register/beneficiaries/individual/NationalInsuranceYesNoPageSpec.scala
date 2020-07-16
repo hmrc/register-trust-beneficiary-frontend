@@ -16,14 +16,17 @@
 
 package pages.register.beneficiaries.individual
 
+import java.time.LocalDate
+
 import models.UserAnswers
-import models.core.pages.UKAddress
+import models.core.pages.{InternationalAddress, UKAddress}
+import models.registration.pages.PassportOrIdCardDetails
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
 class NationalInsuranceYesNoPageSpec extends PageBehaviours {
 
-  "IndividualBeneficiaryNationalInsuranceYesNoPage" must {
+  "NationalInsuranceYesNoPage" must {
 
     beRetrievable[Boolean](NationalInsuranceYesNoPage(0))
 
@@ -33,7 +36,7 @@ class NationalInsuranceYesNoPageSpec extends PageBehaviours {
   }
 
 
-  "remove IndividualBeneficiaryNationalInsuranceNumberPage when IndividualBeneficiaryNationalInsuranceYesNoPage is set to false" in {
+  "remove NationalInsuranceNumberPage when NationalInsuranceYesNoPage is set to false" in {
     val index = 0
     forAll(arbitrary[UserAnswers], arbitrary[String]) {
       (initial, str) =>
@@ -44,19 +47,29 @@ class NationalInsuranceYesNoPageSpec extends PageBehaviours {
     }
   }
 
-  "remove relevant Data when IndividualBeneficiaryNationalInsuranceYesNoPage is set to true" in {
+  "remove relevant Data when NationalInsuranceYesNoPage is set to true" in {
     val index = 0
     forAll(arbitrary[UserAnswers], arbitrary[String]) {
       (initial, str) =>
         val answers: UserAnswers = initial.set(AddressYesNoPage(index), true).success.value
           .set(AddressUKYesNoPage(index), true).success.value
           .set(AddressUKPage(index), UKAddress(str, str, Some(str), Some(str), str)).success.value
+          .set(AddressInternationalPage(index), InternationalAddress(str, str, Some(str), str)).success.value
+          .set(PassportDetailsYesNoPage(index), true).success.value
+          .set(IDCardDetailsYesNoPage(index), true).success.value
+          .set(PassportDetailsPage(index), PassportOrIdCardDetails("a", "b", LocalDate.now)).success.value
+          .set(IDCardDetailsPage(index), PassportOrIdCardDetails("c", "d", LocalDate.now)).success.value
 
         val result = answers.set(NationalInsuranceYesNoPage(index), true).success.value
 
         result.get(AddressYesNoPage(index)) mustNot be(defined)
         result.get(AddressUKYesNoPage(index)) mustNot be(defined)
         result.get(AddressUKPage(index)) mustNot be(defined)
+        result.get(AddressInternationalPage(index)) mustNot be(defined)
+        result.get(PassportDetailsYesNoPage(index)) mustNot be(defined)
+        result.get(IDCardDetailsYesNoPage(index)) mustNot be(defined)
+        result.get(PassportDetailsPage(index)) mustNot be(defined)
+        result.get(IDCardDetailsPage(index)) mustNot be(defined)
     }
   }
 
