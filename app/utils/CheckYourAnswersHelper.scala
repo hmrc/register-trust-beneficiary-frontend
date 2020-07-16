@@ -65,6 +65,11 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       individualBeneficiaryAddressYesNo(index),
       individualBeneficiaryAddressUKYesNo(index),
       individualBeneficiaryAddressUK(index),
+      individualBeneficiaryAddressInternational(index),
+      individualBeneficiaryPassportDetailsYesNo(index),
+      individualBeneficiaryPassportDetails(index),
+      individualBeneficiaryIDCardDetailsYesNo(index),
+      individualBeneficiaryIDCardDetails(index),
       individualBeneficiaryVulnerableYesNo(index)
     ).flatten
   }
@@ -101,7 +106,6 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       )
   }
 
-
   def individualBeneficiaryAddressUKYesNo(index: Int): Option[AnswerRow] = userAnswers.get(AddressUKYesNoPage(index)) map {
     x =>
       AnswerRow(
@@ -134,12 +138,68 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       )
   }
 
+  def individualBeneficiaryPassportDetailsYesNo(index: Int): Option[AnswerRow] = userAnswers.get(PassportDetailsYesNoPage(index)) map {
+    x =>
+      AnswerRow(
+        "individualBeneficiaryPassportDetailsYesNo.checkYourAnswersLabel",
+        yesOrNo(x),
+        Some(controllers.register.beneficiaries.individualBeneficiary.routes.PassportDetailsYesNoController.onPageLoad(NormalMode, index, draftId).url),
+        indBeneficiaryName(index, userAnswers),
+        canEdit = canEdit
+      )
+  }
+
+  def individualBeneficiaryPassportDetails(index: Int): Option[AnswerRow] = userAnswers.get(PassportDetailsPage(index)) map {
+    x =>
+      AnswerRow(
+        "individualBeneficiaryPassportDetails.checkYourAnswersLabel",
+        passportOrIDCard(x, countryOptions),
+        Some(controllers.register.beneficiaries.individualBeneficiary.routes.PassportDetailsController.onPageLoad(NormalMode, index, draftId).url),
+        indBeneficiaryName(index, userAnswers),
+        canEdit = canEdit
+      )
+  }
+
+  def individualBeneficiaryIDCardDetailsYesNo(index: Int): Option[AnswerRow] = userAnswers.get(IDCardDetailsYesNoPage(index)) map {
+    x =>
+      AnswerRow(
+        "individualBeneficiaryIDCardDetailsYesNo.checkYourAnswersLabel",
+        yesOrNo(x),
+        Some(controllers.register.beneficiaries.individualBeneficiary.routes.IDCardDetailsYesNoController.onPageLoad(NormalMode, index, draftId).url),
+        indBeneficiaryName(index, userAnswers),
+        canEdit = canEdit
+      )
+  }
+
+  def individualBeneficiaryIDCardDetails(index: Int): Option[AnswerRow] = userAnswers.get(IDCardDetailsPage(index)) map {
+    x =>
+      AnswerRow(
+        "individualBeneficiaryIDCardDetails.checkYourAnswersLabel",
+        passportOrIDCard(x, countryOptions),
+        Some(controllers.register.beneficiaries.individualBeneficiary.routes.IDCardDetailsController.onPageLoad(NormalMode, index, draftId).url),
+        indBeneficiaryName(index, userAnswers),
+        canEdit = canEdit
+      )
+  }
+
   def individualBeneficiaryAddressUK(index: Int): Option[AnswerRow] = userAnswers.get(AddressUKPage(index)) map {
     x =>
       AnswerRow(
         "individualBeneficiaryAddressUK.checkYourAnswersLabel",
         ukAddress(x),
         Some(controllers.register.beneficiaries.individualBeneficiary.routes.AddressUKController.onPageLoad(NormalMode, index, draftId).url),
+        indBeneficiaryName(index, userAnswers),
+        canEdit = canEdit
+      )
+  }
+
+
+  def individualBeneficiaryAddressInternational(index: Int): Option[AnswerRow] = userAnswers.get(AddressInternationalPage(index)) map {
+    x =>
+      AnswerRow(
+        "individualBeneficiaryAddressInternational.checkYourAnswersLabel",
+        internationalAddress(x, countryOptions),
+        Some(controllers.register.beneficiaries.individualBeneficiary.routes.AddressInternationalController.onPageLoad(NormalMode, index, draftId).url),
         indBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
