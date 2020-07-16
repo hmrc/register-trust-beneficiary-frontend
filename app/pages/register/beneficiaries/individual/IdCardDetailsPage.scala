@@ -16,14 +16,14 @@
 
 package pages.register.beneficiaries.individual
 
+import models.registration.pages.PassportOrIdCardDetails
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.beneficiaries.{Beneficiaries, IndividualBeneficiaries}
 
-final case class PassportIDCardYesNoPage(index : Int) extends QuestionPage[Boolean] {
+final case class IdCardDetailsPage(index : Int) extends QuestionPage[PassportOrIdCardDetails] {
 
   override def path: JsPath = JsPath \  Beneficiaries \ IndividualBeneficiaries \ index \ toString
 
-  override def toString: String = "passportIdCardYesNo"
-
+  override def toString: String = "idCardDetails"
 }

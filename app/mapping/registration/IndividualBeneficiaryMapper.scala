@@ -20,7 +20,7 @@ import javax.inject.Inject
 import mapping.Mapping
 import mapping.reads.IndividualBeneficiary
 import models.UserAnswers
-import models.core.pages.Address
+import models.registration.pages.PassportOrIdCardDetails
 
 class IndividualBeneficiaryMapper @Inject()(nameMapper: NameMapper,
                                             addressMapper: AddressMapper) extends Mapping[List[IndividualDetailsType]] {
@@ -48,17 +48,29 @@ class IndividualBeneficiaryMapper @Inject()(nameMapper: NameMapper,
   }
 
   private def identificationMap(indBen: IndividualBeneficiary): Option[IdentificationType] = {
-    val nino: Option[String] = indBen.nationalInsuranceNumber
-    val address: Option[Address] = indBen.address
-     (nino, address) match {
-       case (None, None) => None
-       case (_,_) =>
+    val nino = indBen.nationalInsuranceNumber
+    val address = indBen.address
+    val passport = indBen.passportDetails
+    val idCard = indBen.idCardDetails
+     (nino, address, passport, idCard) match {
+       case (None, None, None, None) => None
+       case (Some(_), _, _, _) => Some(IdentificationType(nino, None, None))
+       case (_, _, _, _) =>
          Some(IdentificationType(
-           nino = indBen.nationalInsuranceNumber,
-           None,
-           addressMapper.build(indBen.address))
+           nino = None,
+           passport = buildPassportOrIdCard(indBen.passportDetails, indBen.idCardDetails),
+           address = addressMapper.build(indBen.address))
        )
      }
-
   }
+
+  private def buildPassportOrIdCard(passport: Option[PassportOrIdCardDetails], idCardDetails: Option[PassportOrIdCardDetails]) =
+    (passport, idCardDetails) match {
+      case (Some(passport), _) => buildPassport(passport)
+      case (_, Some(idCard)) => buildPassport(idCard)
+      case (None, None) => None
+    }
+
+  private def buildPassport(details: PassportOrIdCardDetails) =
+      Some(PassportType(details.cardNumber, details.expiryDate, details.country))
 }
