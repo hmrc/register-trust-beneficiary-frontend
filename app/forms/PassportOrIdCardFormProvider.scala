@@ -71,7 +71,7 @@ class PassportOrIdCardFormProvider @Inject()(appConfig: FrontendAppConfig) exten
         requiredKey    = s"$prefix.expiryDate.error.required"
       ).verifying(firstError(
         maxDate(
-          appConfig.maxPasswordDate,
+          appConfig.maxPassportDate,
           s"$prefix.expiryDate.error.future", "day", "month", "year"
         ),
         minDate(

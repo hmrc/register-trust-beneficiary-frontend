@@ -65,7 +65,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
     )
 
   lazy val minDate: LocalDate = getDate("minimum")
-  lazy val maxPasswordDate: LocalDate = getDate("maximumPassword")
+  lazy val maxPassportDate: LocalDate = getDate("maximumPassport")
 
   lazy val locationCanonicalList: String = configuration.get[String]("location.canonical.list.all")
   lazy val locationCanonicalListNonUK: String = configuration.get[String]("location.canonical.list.nonUK")
