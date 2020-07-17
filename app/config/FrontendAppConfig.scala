@@ -56,10 +56,16 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val languageTranslationEnabled: Boolean =
     configuration.get[Boolean]("microservice.services.features.welsh-translation")
 
-  private val day: Int = configuration.get[Int]("minimumDate.day")
-  private val month: Int = configuration.get[Int]("minimumDate.month")
-  private val year: Int = configuration.get[Int]("minimumDate.year")
-  lazy val minDate: LocalDate = LocalDate.of(year, month, day)
+  private def getInt(path: String): Int = configuration.get[Int](path)
+  private def getDate(entry: String): LocalDate =
+    LocalDate.of(
+      getInt(s"dates.$entry.year"),
+      getInt(s"dates.$entry.month"),
+      getInt(s"dates.$entry.day")
+    )
+
+  lazy val minDate: LocalDate = getDate("minimum")
+  lazy val maxPassportDate: LocalDate = getDate("maximumPassport")
 
   lazy val locationCanonicalList: String = configuration.get[String]("location.canonical.list.all")
   lazy val locationCanonicalListNonUK: String = configuration.get[String]("location.canonical.list.nonUK")
