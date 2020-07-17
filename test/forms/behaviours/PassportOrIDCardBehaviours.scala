@@ -27,12 +27,11 @@ import play.api.data.{Form, FormError}
 trait PassportOrIDCardBehaviours extends FormSpec
   with ScalaCheckPropertyChecks with Generators with FieldBehaviours with OptionalFieldBehaviours {
 
-
   def passportOrIDCardDateField(form: Form[PassportOrIdCardDetails], key: String): Unit = {
 
     "bind a valid date" in {
 
-      val generator = datesBetween(LocalDate.now.minusYears(90), LocalDate.now.plusYears(90))
+      val generator = datesBetween(LocalDate.of(1500, 1, 1), LocalDate.of(2099, 12, 31))
 
       forAll(generator -> "valid dates") {
         date =>
@@ -50,27 +49,11 @@ trait PassportOrIDCardBehaviours extends FormSpec
     }
   }
 
-  def passportNumberField(form: Form[_],
+  def passportOrIdCardNumberField(form: Form[_],
                           fieldName: String,
                           invalidError: FormError): Unit = {
 
-    s"not bind strings which do not match valid passport number format " in {
-      val generator = stringsWithMaxLength(30)
-      forAll(generator) {
-        string =>
-          whenever(!string.matches(Validation.passportOrIdCardNumberRegEx)) {
-            val result = form.bind(Map(fieldName -> string)).apply(fieldName)
-            result.errors shouldEqual Seq(invalidError)
-          }
-      }
-    }
-  }
-
-  def cardNumberField(form: Form[_],
-                      fieldName: String,
-                      invalidError: FormError): Unit = {
-
-    s"not bind strings which do not match valid ID card number format " in {
+    s"not bind strings which do not match valid passport or id card number format " in {
       val generator = stringsWithMaxLength(30)
       forAll(generator) {
         string =>
@@ -95,7 +78,7 @@ trait PassportOrIDCardBehaviours extends FormSpec
 
   def passportOrIDCardInvalidDateField(form: Form[PassportOrIdCardDetails], key: String, requiredAllKey: String): Unit = {
 
-    "not bind a invalid date" in {
+    "not bind an invalid date" in {
 
       val data = Map(
         s"$key.day"   -> "4wafq5",

@@ -106,7 +106,7 @@ trait BeneficiaryRoutes {
     
     val indexForBeneficiary = 0
 
-    "go to IndividualBeneficiaryRoleInCompany from IndividualBeneficiaryNamePage" in {
+    "go to RoleInCompany from NamePage when kind of trust is Employees" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
 
@@ -117,7 +117,7 @@ trait BeneficiaryRoutes {
       }
     }
 
-    "go to IndividualBeneficiaryDateOfBirthYesNoPage from IndividualBeneficiaryRoleInCompany" in {
+    "go to DateOfBirthYesNoPage from yRoleInCompany" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           navigator.nextPage(RoleInCompanyPage(indexForBeneficiary), NormalMode, fakeDraftId)(userAnswers)
@@ -125,7 +125,7 @@ trait BeneficiaryRoutes {
       }
     }
 
-    "go to IndividualBeneficiaryDateOfBirthYesNoPage from IndividualBeneficiaryNamePage" in {
+    "go to DateOfBirthYesNoPage from NamePage when kind of trust is missing" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           navigator.nextPage(NamePage(indexForBeneficiary), NormalMode, fakeDraftId)(userAnswers)
@@ -133,7 +133,7 @@ trait BeneficiaryRoutes {
       }
     }
 
-    "go to IndividualBeneficiaryDateOfBirthPage from IndividualBeneficiaryDateOfBirthYesNoPage when user answers yes" in {
+    "go to DateOfBirthPage from DateOfBirthYesNoPage when user answers yes" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val answers = userAnswers.set(DateOfBirthYesNoPage(indexForBeneficiary), value = true).success.value
@@ -142,7 +142,7 @@ trait BeneficiaryRoutes {
       }
     }
 
-    "go to IndividualBeneficiaryIncomeYesNoPage from IndividualBeneficiaryDateOfBirthYesNoPage when user answers no" in {
+    "go to IncomeYesNoPage from DateOfBirthYesNoPage when user answers no" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val answers = userAnswers.set(DateOfBirthYesNoPage(indexForBeneficiary), value = false).success.value
@@ -151,7 +151,7 @@ trait BeneficiaryRoutes {
       }
     }
 
-    "go to IndividualBeneficiaryIncomeYesNoPage from IndividualBeneficiaryDateOfBirthPage" in {
+    "go to IncomeYesNoPage from DateOfBirthPage" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           navigator.nextPage(DateOfBirthPage(indexForBeneficiary), NormalMode, fakeDraftId)(userAnswers)
@@ -159,7 +159,7 @@ trait BeneficiaryRoutes {
       }
     }
 
-    "go to IndividualBeneficiaryIncomePage from IndividualBeneficiaryIncomeYesNoPage when user answers no" in {
+    "go to IncomePage from IncomeYesNoPage when user answers no" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val answers = userAnswers.set(IncomeYesNoPage(indexForBeneficiary), value = false).success.value
@@ -168,7 +168,7 @@ trait BeneficiaryRoutes {
       }
     }
 
-    "go to IndividualBeneficiaryNationalInsuranceYesNoPage from IndividualBeneficiaryIncomeYesNoPage when user answers yes" in {
+    "go to NationalInsuranceYesNoPage from IncomeYesNoPage when user answers yes" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val answers = userAnswers.set(IncomeYesNoPage(indexForBeneficiary), value = true).success.value
@@ -177,7 +177,7 @@ trait BeneficiaryRoutes {
       }
     }
 
-    "go to IndividualBeneficiaryNationalInsuranceYesNoPage from IndividualBeneficiaryIncomePage" in {
+    "go to NationalInsuranceYesNoPage from IncomePage" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           navigator.nextPage(IncomePage(indexForBeneficiary), NormalMode, fakeDraftId)(userAnswers)
@@ -185,7 +185,7 @@ trait BeneficiaryRoutes {
       }
     }
 
-    "go to IndividualBeneficiaryAddressYesNoPage from IndividualBeneficiaryNationalInsuranceYesNoPage when user answers no" in {
+    "go to AddressYesNoPage from NationalInsuranceYesNoPage when user answers no" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val answers = userAnswers.set(NationalInsuranceYesNoPage(indexForBeneficiary), value = false).success.value
@@ -194,7 +194,7 @@ trait BeneficiaryRoutes {
       }
     }
 
-    "go to IndividualBeneficiaryNationalInsuranceNumberPage from IndividualBeneficiaryNationalInsuranceYesNoPage when user answers yes" in {
+    "go to NationalInsuranceNumberPage from NationalInsuranceYesNoPage when user answers yes" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val answers = userAnswers.set(NationalInsuranceYesNoPage(indexForBeneficiary), value = true).success.value
@@ -203,7 +203,7 @@ trait BeneficiaryRoutes {
       }
     }
 
-    "go to IndividualBeneficiaryVulnerableYesNoPage from IndividualBeneficiaryNationalInsuranceNumberPage" in {
+    "go to VulnerableYesNoPage from NationalInsuranceNumberPage" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           navigator.nextPage(NationalInsuranceNumberPage(indexForBeneficiary), NormalMode, fakeDraftId)(userAnswers)
@@ -211,7 +211,7 @@ trait BeneficiaryRoutes {
       }
     }
 
-    "go to IndividualBeneficiaryAddressUKYesNoPage from IndividualBeneficiaryAddressYesNoPage when user answers yes" in {
+    "go to AddressUKYesNoPage from AddressYesNoPage when user answers yes" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val answers = userAnswers.set(AddressYesNoPage(indexForBeneficiary), value = true).success.value
@@ -220,7 +220,7 @@ trait BeneficiaryRoutes {
       }
     }
 
-    "go to IndividualBeneficiaryVulnerableYesNoPage from IndividualBeneficiaryAddressYesNoPage when user answers no" in {
+    "go to VulnerableYesNoPage from AddressYesNoPage when user answers no" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val answers = userAnswers.set(AddressYesNoPage(indexForBeneficiary), value = false).success.value
@@ -229,7 +229,7 @@ trait BeneficiaryRoutes {
       }
     }
 
-    "go to IndividualBeneficiaryAddressUKPage from IndividualBeneficiaryAddressUKYesNoPage when user answers yes" in {
+    "go to AddressUKPage from AddressUKYesNoPage when user answers yes" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val answers = userAnswers.set(AddressUKYesNoPage(indexForBeneficiary), value = true).success.value
@@ -238,24 +238,84 @@ trait BeneficiaryRoutes {
       }
     }
 
-    "go to IndividualBeneficiaryAddressUKYesNoPage from IndividualBeneficiaryAddressUKPage when user answers no" in {
+    "go to AddressInternationalPage from AddressUKPage when user answers no" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val answers = userAnswers.set(AddressUKYesNoPage(indexForBeneficiary), value = false).success.value
           navigator.nextPage(AddressUKYesNoPage(indexForBeneficiary), NormalMode, fakeDraftId)(answers)
-            .mustBe(individualRoutes.AddressUKYesNoController.onPageLoad(NormalMode, indexForBeneficiary, fakeDraftId))
+            .mustBe(individualRoutes.AddressInternationalController.onPageLoad(NormalMode, indexForBeneficiary, fakeDraftId))
       }
     }
 
-    "go to IndividualBeneficiaryVulnerableYesNoPage from IndividualBeneficiaryAddressUKPage" in {
+    "go to PassportDetailsYesNoPage from AddressUKPage" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           navigator.nextPage(AddressUKPage(indexForBeneficiary), NormalMode, fakeDraftId)(userAnswers)
+            .mustBe(individualRoutes.PassportDetailsYesNoController.onPageLoad(NormalMode, indexForBeneficiary, fakeDraftId))
+      }
+    }
+
+    "go to PassportDetailsYesNoPage from AddressInternationalPage" in {
+      forAll(arbitrary[UserAnswers]) {
+        userAnswers =>
+          navigator.nextPage(AddressInternationalPage(indexForBeneficiary), NormalMode, fakeDraftId)(userAnswers)
+            .mustBe(individualRoutes.PassportDetailsYesNoController.onPageLoad(NormalMode, indexForBeneficiary, fakeDraftId))
+      }
+    }
+
+    "go to PassportDetailsPage from PassportDetailsYesNoPage when user answers yes" in {
+      forAll(arbitrary[UserAnswers]) {
+        userAnswers =>
+          val answers = userAnswers.set(PassportDetailsYesNoPage(indexForBeneficiary), value = true).success.value
+          navigator.nextPage(PassportDetailsYesNoPage(indexForBeneficiary), NormalMode, fakeDraftId)(answers)
+            .mustBe(individualRoutes.PassportDetailsController.onPageLoad(NormalMode, indexForBeneficiary, fakeDraftId))
+      }
+    }
+
+    "go to VulnerableYesNoPage from PassportDetailsPage" in {
+      forAll(arbitrary[UserAnswers]) {
+        userAnswers =>
+          navigator.nextPage(PassportDetailsPage(indexForBeneficiary), NormalMode, fakeDraftId)(userAnswers)
             .mustBe(individualRoutes.VulnerableYesNoController.onPageLoad(NormalMode, indexForBeneficiary, fakeDraftId))
       }
     }
 
-    "go to IndividualBeneficiaryAnswersPage from IndividualBeneficiaryVulnerableYesNoPage" in {
+    "go to IdCardDetailsYesNoPage from PassportDetailsYesNoPage when user answers no" in {
+      forAll(arbitrary[UserAnswers]) {
+        userAnswers =>
+          val answers = userAnswers.set(PassportDetailsYesNoPage(indexForBeneficiary), value = false).success.value
+          navigator.nextPage(PassportDetailsYesNoPage(indexForBeneficiary), NormalMode, fakeDraftId)(answers)
+            .mustBe(individualRoutes.IDCardDetailsYesNoController.onPageLoad(NormalMode, indexForBeneficiary, fakeDraftId))
+      }
+    }
+
+    "go to IdCardDetailsPage from IdCardDetailsYesNoPage when user answers yes" in {
+      forAll(arbitrary[UserAnswers]) {
+        userAnswers =>
+          val answers = userAnswers.set(IDCardDetailsYesNoPage(indexForBeneficiary), value = true).success.value
+          navigator.nextPage(IDCardDetailsYesNoPage(indexForBeneficiary), NormalMode, fakeDraftId)(answers)
+            .mustBe(individualRoutes.IDCardDetailsController.onPageLoad(NormalMode, indexForBeneficiary, fakeDraftId))
+      }
+    }
+
+    "go to VulnerableYesNoPage from IdCardDetailsYesNoPage when user answers no" in {
+      forAll(arbitrary[UserAnswers]) {
+        userAnswers =>
+          val answers = userAnswers.set(IDCardDetailsYesNoPage(indexForBeneficiary), value = false).success.value
+          navigator.nextPage(IDCardDetailsYesNoPage(indexForBeneficiary), NormalMode, fakeDraftId)(answers)
+            .mustBe(individualRoutes.VulnerableYesNoController.onPageLoad(NormalMode, indexForBeneficiary, fakeDraftId))
+      }
+    }
+
+    "go to VulnerableYesNoPage from IdCardDetailsPage" in {
+      forAll(arbitrary[UserAnswers]) {
+        userAnswers =>
+          navigator.nextPage(IDCardDetailsPage(indexForBeneficiary), NormalMode, fakeDraftId)(userAnswers)
+            .mustBe(individualRoutes.VulnerableYesNoController.onPageLoad(NormalMode, indexForBeneficiary, fakeDraftId))
+      }
+    }
+
+    "go to AnswersPage from VulnerableYesNoPage" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           navigator.nextPage(VulnerableYesNoPage(indexForBeneficiary), NormalMode, fakeDraftId)(userAnswers)
@@ -263,7 +323,7 @@ trait BeneficiaryRoutes {
       }
     }
 
-    "go to AddABeneficiaryPage from IndividualBeneficiaryAnswersPage" in {
+    "go to AddABeneficiaryPage from AnswersPage" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           navigator.nextPage(AnswersPage, NormalMode, fakeDraftId)(userAnswers)

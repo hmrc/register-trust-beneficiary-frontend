@@ -62,10 +62,35 @@ POST       /:draftId/individual/:index/uk-address                               
 GET        /:draftId/individual/:index/change-uk-address                              controllers.register.beneficiaries.individualBeneficiary.AddressUKController.onPageLoad(mode: Mode = CheckMode,index: Int, draftId: String)
 POST       /:draftId/individual/:index/change-uk-address                              controllers.register.beneficiaries.individualBeneficiary.AddressUKController.onSubmit(mode: Mode = CheckMode,index: Int, draftId: String)
 
+GET        /:draftId/individual/:index/international-address                          controllers.register.beneficiaries.individualBeneficiary.AddressInternationalController.onPageLoad(mode: Mode = NormalMode,index: Int, draftId: String)
+POST       /:draftId/individual/:index/international-address                          controllers.register.beneficiaries.individualBeneficiary.AddressInternationalController.onSubmit(mode: Mode = NormalMode,index: Int, draftId: String)
+GET        /:draftId/individual/:index/change-international-address                   controllers.register.beneficiaries.individualBeneficiary.AddressInternationalController.onPageLoad(mode: Mode = CheckMode,index: Int, draftId: String)
+POST       /:draftId/individual/:index/change-international-address                   controllers.register.beneficiaries.individualBeneficiary.AddressInternationalController.onSubmit(mode: Mode = CheckMode,index: Int, draftId: String)
+
 GET        /:draftId/individual/:index/is-elected-vulnerable                          controllers.register.beneficiaries.individualBeneficiary.VulnerableYesNoController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
 POST       /:draftId/individual/:index/is-elected-vulnerable                          controllers.register.beneficiaries.individualBeneficiary.VulnerableYesNoController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
 GET        /:draftId/individual/:index/change-is-elected-vulnerable                   controllers.register.beneficiaries.individualBeneficiary.VulnerableYesNoController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
 POST       /:draftId/individual/:index/change-is-elected-vulnerable                   controllers.register.beneficiaries.individualBeneficiary.VulnerableYesNoController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
+
+GET        /:draftId/individual/:index/id-card                                        controllers.register.beneficiaries.individualBeneficiary.IDCardDetailsController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
+POST       /:draftId/individual/:index/id-card                                        controllers.register.beneficiaries.individualBeneficiary.IDCardDetailsController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
+GET        /:draftId/individual/:index/change-id-card                                 controllers.register.beneficiaries.individualBeneficiary.IDCardDetailsController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
+POST       /:draftId/individual/:index/change-id-card                                 controllers.register.beneficiaries.individualBeneficiary.IDCardDetailsController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
+
+GET        /:draftId/individual/:index/id-card-yes-no                                 controllers.register.beneficiaries.individualBeneficiary.IDCardDetailsYesNoController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
+POST       /:draftId/individual/:index/id-card-yes-no                                 controllers.register.beneficiaries.individualBeneficiary.IDCardDetailsYesNoController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
+GET        /:draftId/individual/:index/change-id-card-yes-no                          controllers.register.beneficiaries.individualBeneficiary.IDCardDetailsYesNoController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
+POST       /:draftId/individual/:index/change-id-card-yes-no                          controllers.register.beneficiaries.individualBeneficiary.IDCardDetailsYesNoController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
+
+GET        /:draftId/individual/:index/passport                                       controllers.register.beneficiaries.individualBeneficiary.PassportDetailsController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
+POST       /:draftId/individual/:index/passport                                       controllers.register.beneficiaries.individualBeneficiary.PassportDetailsController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
+GET        /:draftId/individual/:index/change-passport                                controllers.register.beneficiaries.individualBeneficiary.PassportDetailsController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
+POST       /:draftId/individual/:index/change-passport                                controllers.register.beneficiaries.individualBeneficiary.PassportDetailsController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
+
+GET        /:draftId/individual/:index/passport-yes-no                                controllers.register.beneficiaries.individualBeneficiary.PassportDetailsYesNoController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
+POST       /:draftId/individual/:index/passport-yes-no                                controllers.register.beneficiaries.individualBeneficiary.PassportDetailsYesNoController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
+GET        /:draftId/individual/:index/change-passport-yes-no                         controllers.register.beneficiaries.individualBeneficiary.PassportDetailsYesNoController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
+POST       /:draftId/individual/:index/change-passport-yes-no                         controllers.register.beneficiaries.individualBeneficiary.PassportDetailsYesNoController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
 
 GET        /:draftId/information-you-need                                             controllers.register.beneficiaries.individualBeneficiary.InfoController.onPageLoad(draftId: String)
 

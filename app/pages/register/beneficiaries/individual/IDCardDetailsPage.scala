@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package models.registration.pages
+package pages.register.beneficiaries.individual
 
-import java.time.LocalDate
+import models.registration.pages.PassportOrIdCardDetails
+import pages.QuestionPage
+import play.api.libs.json.JsPath
+import sections.beneficiaries.{Beneficiaries, IndividualBeneficiaries}
 
-import play.api.libs.json.{Json, OFormat}
+final case class IDCardDetailsPage(index : Int) extends QuestionPage[PassportOrIdCardDetails] {
 
-case class PassportOrIdCardDetails(country: String, cardNumber: String, expiryDate: LocalDate)
+  override def path: JsPath = JsPath \  Beneficiaries \ IndividualBeneficiaries \ index \ toString
 
-object PassportOrIdCardDetails {
-  implicit val format: OFormat[PassportOrIdCardDetails] = Json.format[PassportOrIdCardDetails]
+  override def toString: String = "idCardDetails"
 }

@@ -17,13 +17,16 @@
 package pages.register.beneficiaries.individual
 
 import models.registration.pages.PassportOrIdCardDetails
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.beneficiaries.{Beneficiaries, IndividualBeneficiaries}
+import pages.behaviours.PageBehaviours
 
-final case class PassportIDCardPage(index : Int) extends QuestionPage[PassportOrIdCardDetails] {
+class IDCardDetailsPageSpec extends PageBehaviours {
 
-  override def path: JsPath = JsPath \  Beneficiaries \ IndividualBeneficiaries \ index \ toString
+  "IDCardDetailsPage" must {
 
-  override def toString: String = "passportIdCard"
+    beRetrievable[PassportOrIdCardDetails](IDCardDetailsPage(0))
+
+    beSettable[PassportOrIdCardDetails](IDCardDetailsPage(0))
+
+    beRemovable[PassportOrIdCardDetails](IDCardDetailsPage(0))
+  }
 }
