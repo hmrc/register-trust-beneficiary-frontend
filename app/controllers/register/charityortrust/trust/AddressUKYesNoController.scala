@@ -14,36 +14,38 @@
  * limitations under the License.
  */
 
-package controllers.register.beneficiaries.trustBeneficiary
+package controllers.register.charityortrust.trust
 
-import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
+import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.YesNoFormProvider
 import javax.inject.Inject
 import models.{Mode, NormalMode}
 import navigation.Navigator
-import pages.register.beneficiaries.trust.{AddressYesNoPage, NamePage}
+import pages.register.beneficiaries.trust.{AddressUKYesNoPage, NamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.register.beneficiaries.trustBeneficiary.AddressYesNoView
+import views.html.register.beneficiaries.charityortrust.trust.AddressUKYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddressYesNoController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        registrationsRepository: RegistrationsRepository,
-                                        override val controllerComponents: MessagesControllerComponents,
-                                        navigator: Navigator,
-                                        identify: RegistrationIdentifierAction,
-                                        getData: DraftIdRetrievalActionProvider,
-                                        requireData: RegistrationDataRequiredAction,
-                                        requiredAnswer: RequiredAnswerActionProvider,
-                                        formProvider: YesNoFormProvider,
-                                        view: AddressYesNoView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class AddressUKYesNoController @Inject()(
+                                          override val messagesApi: MessagesApi,
+                                          registrationsRepository: RegistrationsRepository,
+                                          navigator: Navigator,
+                                          identify: RegistrationIdentifierAction,
+                                          getData: DraftIdRetrievalActionProvider,
+                                          requireData: RegistrationDataRequiredAction,
+                                          requiredAnswer: RequiredAnswerActionProvider,
+                                          YesNoFormProvider: YesNoFormProvider,
+                                          val controllerComponents: MessagesControllerComponents,
+                                          view: AddressUKYesNoView
+                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+
+  val form: Form[Boolean] = YesNoFormProvider.withPrefix("trustBeneficiaryAddressUKYesNo")
 
   private def actions(index: Int, draftId: String) =
     identify andThen
@@ -51,14 +53,12 @@ class AddressYesNoController @Inject()(
       requireData andThen
       requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(NormalMode, index, draftId)))
 
-  val form: Form[Boolean] = formProvider.withPrefix("trustBeneficiary.addressYesNo")
-
   def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
       val name = request.userAnswers.get(NamePage(index)).get
 
-      val preparedForm = request.userAnswers.get(AddressYesNoPage(index)) match {
+      val preparedForm = request.userAnswers.get(AddressUKYesNoPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -69,18 +69,18 @@ class AddressYesNoController @Inject()(
   def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
+      val name = request.userAnswers.get(NamePage(index)).get
+
       form.bindFromRequest().fold(
-        formWithErrors => {
+        (formWithErrors: Form[_]) =>
+          Future.successful(BadRequest(view(formWithErrors, mode, draftId, name, index))),
 
-            val name = request.userAnswers.get(NamePage(index)).get
-
-            Future.successful(BadRequest(view(formWithErrors, mode, draftId, name, index)))
-          },
-        value =>
+        value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressYesNoPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressUKYesNoPage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddressYesNoPage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(AddressUKYesNoPage(index), mode, draftId)(updatedAnswers))
+        }
       )
   }
 }

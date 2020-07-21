@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.register.beneficiaries.trustBeneficiary
+package controllers.register.charityortrust.trust
 
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
@@ -31,7 +31,7 @@ import repositories.RegistrationsRepository
 import sections.beneficiaries.IndividualBeneficiaries
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.countryOptions.CountryOptionsNonUK
-import views.html.register.beneficiaries.trustBeneficiary.AddressInternationalView
+import views.html.register.beneficiaries.charityortrust.trust.AddressInternationalView
 
 import scala.concurrent.{ExecutionContext, Future}
 

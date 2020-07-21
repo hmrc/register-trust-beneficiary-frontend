@@ -14,33 +14,37 @@
  * limitations under the License.
  *@
 
-@import controllers.register.beneficiaries.trustBeneficiary.routes._
+@import controllers.register.charityortrust.trust.routes._
 @import models.Mode
+@import utils.InputOption
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode, draftId: String, index: Int)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], countryOptions:Seq[InputOption], mode: Mode, index:Int, draftId: String, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("trustBeneficiary.name.title")}"
+    title = s"${errorPrefix(form)} ${messages("trustBeneficiaryAddressInternational.title")}"
     ) {
 
-    @formHelper(action = NameController.onSubmit(mode, index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = AddressInternationalController.onSubmit(mode, index, draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.input_text(
-            field = form("value"),
-            label = messages("trustBeneficiary.name.heading"),
-            labelClass = Some("heading-large"),
-            inputClass = Some("form-control-3-4")
-        )
+        <fieldset>
 
-        @components.submit_button()
+            <legend>
+                @components.heading("trustBeneficiaryAddressInternational.heading", Some(name))
+            </legend>
+
+            @components.international_address(form, countryOptions)
+
+        </fieldset>
+
+        @components.submit_button(submitClass = Some("countryLookupHelper"))
     }
 }

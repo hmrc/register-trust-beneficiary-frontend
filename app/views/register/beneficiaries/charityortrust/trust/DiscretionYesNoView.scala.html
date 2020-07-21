@@ -14,9 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.register.beneficiaries.trustBeneficiary.routes._
-@import models.Mode
-@import models.core.pages.FullName
+@import controllers.register.charityortrust.trust.routes._
 
 @this(
     main_template: MainTemplate,
@@ -26,10 +24,10 @@
 @(form: Form[_], mode: Mode, draftId: String, name: String, index: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("trustBeneficiaryAddressUKYesNo.title")}"
-    ) {
+    title = s"${errorPrefix(form)} ${messages("trustBeneficiary.discretionYesNo.title")}"
+) {
 
-    @formHelper(action = AddressUKYesNoController.onSubmit(mode, index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = DiscretionYesNoController.onSubmit(mode, index, draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 
@@ -37,9 +35,9 @@
 
         @components.input_yes_no(
             field = form("value"),
-            label = messages("trustBeneficiaryAddressUKYesNo.heading", name),
-            legendClass = Some("heading-large"),
-            legendAsHeading = true
+            label = messages("trustBeneficiary.discretionYesNo.heading", name),
+            legendAsHeading = true,
+            hint = Some(messages("trustBeneficiary.discretionYesNo.hint"))
         )
 
         @components.submit_button()

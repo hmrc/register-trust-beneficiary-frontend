@@ -14,36 +14,32 @@
  * limitations under the License.
  *@
 
-@import controllers.register.beneficiaries.trustBeneficiary.routes._
+@import controllers.register.charityortrust.trust.routes._
 @import models.Mode
-@import models.core.pages.FullName
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode, draftId: String, name: String, index: Int)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, draftId: String, index: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("trustBeneficiaryAddressUK.title")}"
+    title = s"${errorPrefix(form)} ${messages("trustBeneficiary.name.title")}"
     ) {
 
-    @formHelper(action = AddressUKController.onSubmit(mode, index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = NameController.onSubmit(mode, index, draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        <fieldset>
-
-            <legend>
-                @components.heading("trustBeneficiaryAddressUK.heading", Some(name))
-            </legend>
-
-            @components.uk_address(form)
-
-        </fieldset>
+        @components.input_text(
+            field = form("value"),
+            label = messages("trustBeneficiary.name.heading"),
+            labelClass = Some("heading-large"),
+            inputClass = Some("form-control-3-4")
+        )
 
         @components.submit_button()
     }

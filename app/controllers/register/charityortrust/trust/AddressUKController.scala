@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.register.beneficiaries.trustBeneficiary
+package controllers.register.charityortrust.trust
 
 import controllers.actions._
 import controllers.actions.register._
@@ -28,7 +28,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.register.beneficiaries.trustBeneficiary.AddressUKView
+import views.html.register.beneficiaries.charityortrust.trust.AddressUKView
 
 import scala.concurrent.{ExecutionContext, Future}
 
