@@ -74,7 +74,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       AnswerRow(
         "charityInternationalAddress.checkYourAnswersLabel",
         internationalAddress(x, countryOptions),
-        Some(controllers.register.charityOrTrust.routes.CharityInternationalAddressController.onPageLoad(NormalMode, index, draftId).url),
+        Some(controllers.register.beneficiaries.charityortrust.charity.routes.CharityInternationalAddressController.onPageLoad(NormalMode, index, draftId).url),
         charityBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
@@ -85,7 +85,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       AnswerRow(
         "charityAddressUK.checkYourAnswersLabel",
         ukAddress(x),
-        Some(controllers.register.charityOrTrust.routes.CharityAddressUKController.onPageLoad(NormalMode, index, draftId).url),
+        Some(controllers.register.beneficiaries.charityortrust.charity.routes.CharityAddressUKController.onPageLoad(NormalMode, index, draftId).url),
         charityBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
@@ -96,7 +96,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       AnswerRow(
         "addressInTheUkYesNo.checkYourAnswersLabel",
         yesOrNo(x),
-        Some(controllers.register.charityOrTrust.routes.AddressInTheUkYesNoController.onPageLoad(NormalMode, index, draftId).url),
+        Some(controllers.register.beneficiaries.charityortrust.charity.routes.AddressInTheUkYesNoController.onPageLoad(NormalMode, index, draftId).url),
         charityBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
@@ -107,7 +107,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       AnswerRow(
         "addressYesNo.checkYourAnswersLabel",
         yesOrNo(x),
-        Some(controllers.register.charityOrTrust.routes.AddressYesNoController.onPageLoad(NormalMode, index, draftId).url),
+        Some(controllers.register.beneficiaries.charityortrust.charity.routes.AddressYesNoController.onPageLoad(NormalMode, index, draftId).url),
         charityBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
@@ -118,7 +118,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       AnswerRow(
         "howMuchIncome.checkYourAnswersLabel",
         currency(x),
-        Some(controllers.register.charityOrTrust.routes.HowMuchIncomeController.onPageLoad(NormalMode, index, draftId).url),
+        Some(controllers.register.beneficiaries.charityortrust.charity.routes.HowMuchIncomeController.onPageLoad(NormalMode, index, draftId).url),
         canEdit = canEdit
       )
   }
@@ -128,7 +128,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       AnswerRow(
         "amountDiscretionYesNo.checkYourAnswersLabel",
         yesOrNo(x),
-        Some(controllers.register.charityOrTrust.routes.AmountDiscretionYesNoController.onPageLoad(NormalMode, index, draftId).url),
+        Some(controllers.register.beneficiaries.charityortrust.charity.routes.AmountDiscretionYesNoController.onPageLoad(NormalMode, index, draftId).url),
         charityBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
@@ -139,7 +139,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       AnswerRow(
         "charityOrTrust.checkYourAnswersLabel",
         formatCharityOrTrust(x),
-        Some(controllers.register.charityOrTrust.routes.CharityOrTrustController.onPageLoad(NormalMode, draftId).url),
+        Some(controllers.register.beneficiaries.charityortrust.routes.CharityOrTrustController.onPageLoad(NormalMode, draftId).url),
         canEdit = canEdit
       )
   }
@@ -149,7 +149,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       AnswerRow(
         "charityName.checkYourAnswersLabel",
         HtmlFormat.escape(x),
-        Some(controllers.register.charityOrTrust.routes.CharityNameController.onPageLoad(NormalMode, index, draftId).url),
+        Some(controllers.register.beneficiaries.charityortrust.charity.routes.CharityNameController.onPageLoad(NormalMode, index, draftId).url),
         canEdit = canEdit
         )
   }
