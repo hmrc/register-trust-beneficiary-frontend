@@ -16,13 +16,14 @@
 
 package pages.register.beneficiaries.trust
 
+import models.core.pages.UKAddress
 import pages.QuestionPage
 import play.api.libs.json.JsPath
-import sections.beneficiaries.{Beneficiaries, TrustBeneficiaries}
+import sections.beneficiaries.{Beneficiaries, IndividualBeneficiaries, TrustBeneficiaries}
 
-final case class TrustBeneficiaryAddressUKYesNoPage(index: Int) extends QuestionPage[Boolean] {
+final case class AddressUKPage(index: Int) extends QuestionPage[UKAddress] {
 
-  override def path: JsPath = JsPath \ Beneficiaries \ TrustBeneficiaries \ index \ toString
+  override def path: JsPath = JsPath \  Beneficiaries \ TrustBeneficiaries \ index \ toString
 
-  override def toString: String = "addressUKYesNo"
+  override def toString: String = "address"
 }
