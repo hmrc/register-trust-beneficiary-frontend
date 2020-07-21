@@ -12,6 +12,10 @@ GET        /logout                                      controllers.register.Log
 
 GET        /unauthorised                                controllers.UnauthorisedController.onPageLoad
 
+GET        /:draftId/add                                                              controllers.register.beneficiaries.AddABeneficiaryController.onPageLoad(mode: Mode = NormalMode, draftId: String)
+POST       /:draftId/add                                                              controllers.register.beneficiaries.AddABeneficiaryController.submitOne(mode: Mode = NormalMode, draftId: String)
+POST       /:draftId/add-another                                                      controllers.register.beneficiaries.AddABeneficiaryController.submitAnother(mode: Mode = NormalMode, draftId: String)
+
 GET        /:draftId/individual/:index/name                                           controllers.register.beneficiaries.individualBeneficiary.NameController.onPageLoad(mode: Mode = NormalMode,index: Int, draftId: String)
 POST       /:draftId/individual/:index/name                                           controllers.register.beneficiaries.individualBeneficiary.NameController.onSubmit(mode: Mode = NormalMode,index: Int, draftId: String)
 GET        /:draftId/individual/:index/change-name                                    controllers.register.beneficiaries.individualBeneficiary.NameController.onPageLoad(mode: Mode = CheckMode,index: Int, draftId: String)
@@ -94,10 +98,6 @@ POST       /:draftId/individual/:index/change-passport-yes-no                   
 
 GET        /:draftId/information-you-need                                             controllers.register.beneficiaries.individualBeneficiary.InfoController.onPageLoad(draftId: String)
 
-GET        /:draftId/add                                                              controllers.register.beneficiaries.AddABeneficiaryController.onPageLoad(mode: Mode = NormalMode, draftId: String)
-POST       /:draftId/add                                                              controllers.register.beneficiaries.AddABeneficiaryController.submitOne(mode: Mode = NormalMode, draftId: String)
-POST       /:draftId/add-another                                                      controllers.register.beneficiaries.AddABeneficiaryController.submitAnother(mode: Mode = NormalMode, draftId: String)
-
 GET        /:draftId/individual/:index/check-answers                                  controllers.register.beneficiaries.individualBeneficiary.AnswersController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/individual/:index/check-answers                                  controllers.register.beneficiaries.individualBeneficiary.AnswersController.onSubmit(index: Int, draftId: String)
 
@@ -108,6 +108,20 @@ POST       /:draftId/individual/:index/change-is-address-in-uk                  
 
 GET        /:draftId/individual/:index/remove                                         controllers.register.beneficiaries.RemoveIndividualBeneficiaryController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/individual/:index/remove                                         controllers.register.beneficiaries.RemoveIndividualBeneficiaryController.onSubmit(index: Int, draftId: String)
+
+# trust
+
+GET        /:draftId/trust/:index/do-you-know-address                                 controllers.register.beneficiaries.trustBeneficiary.AddressYesNoController.onPageLoad(mode: Mode = NormalMode,index: Int, draftId: String)
+POST       /:draftId/trust/:index/do-you-know-address                                 controllers.register.beneficiaries.trustBeneficiary.AddressYesNoController.onSubmit(mode: Mode = NormalMode,index: Int, draftId: String)
+GET        /:draftId/trust/:index/change-do-you-know-address                          controllers.register.beneficiaries.trustBeneficiary.AddressYesNoController.onPageLoad(mode: Mode = CheckMode,index: Int, draftId: String)
+POST       /:draftId/trust/:index/change-do-you-know-address                          controllers.register.beneficiaries.trustBeneficiary.AddressYesNoController.onSubmit(mode: Mode = CheckMode,index: Int, draftId: String)
+
+GET        /:draftId/trust/:index/name                                                controllers.register.beneficiaries.trustBeneficiary.NameController.onPageLoad(mode: Mode = NormalMode,index: Int, draftId: String)
+POST       /:draftId/trust/:index/name                                                controllers.register.beneficiaries.trustBeneficiary.NameController.onSubmit(mode: Mode = NormalMode,index: Int, draftId: String)
+GET        /:draftId/trust/:index/change-name                                         controllers.register.beneficiaries.trustBeneficiary.NameController.onPageLoad(mode: Mode = CheckMode,index: Int, draftId: String)
+POST       /:draftId/trust/:index/change-name                                         controllers.register.beneficiaries.trustBeneficiary.NameController.onSubmit(mode: Mode = CheckMode,index: Int, draftId: String)
+
+###
 
 GET        /:draftId/class/:index/description                                         controllers.register.beneficiaries.ClassBeneficiaryDescriptionController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
 POST       /:draftId/class/:index/description                                         controllers.register.beneficiaries.ClassBeneficiaryDescriptionController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
