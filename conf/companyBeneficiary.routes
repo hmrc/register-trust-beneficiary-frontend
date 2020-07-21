@@ -3,10 +3,11 @@ POST        /:draftId/:index/name         controllers.register.beneficiaries.com
 GET         /:draftId/:index/change-name  controllers.register.beneficiaries.companyoremploymentrelated.company.NameController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
 POST        /:draftId/:index/change-name  controllers.register.beneficiaries.companyoremploymentrelated.company.NameController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
 
-#GET         /has-discretion             controllers.companyoremploymentrelated.company.DiscretionYesNoController.onPageLoad(mode: Mode = NormalMode)
-#POST        /has-discretion             controllers.companyoremploymentrelated.company.DiscretionYesNoController.onSubmit(mode: Mode = NormalMode)
-#GET         /change-has-discretion             controllers.companyoremploymentrelated.company.DiscretionYesNoController.onPageLoad(mode: Mode = CheckMode)
-#POST        /change-has-discretion             controllers.companyoremploymentrelated.company.DiscretionYesNoController.onSubmit(mode: Mode = CheckMode)
+GET         /:draftId/:index/has-discretion             controllers.register.beneficiaries.companyoremploymentrelated.company.DiscretionYesNoController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
+POST        /:draftId/:index/has-discretion             controllers.register.beneficiaries.companyoremploymentrelated.company.DiscretionYesNoController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
+GET         /:draftId/:index/change-has-discretion      controllers.register.beneficiaries.companyoremploymentrelated.company.DiscretionYesNoController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
+POST        /:draftId/:index/change-has-discretion      controllers.register.beneficiaries.companyoremploymentrelated.company.DiscretionYesNoController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
+
 #
 #GET         /share-of-income            controllers.companyoremploymentrelated.company.ShareOfIncomeController.onPageLoad(mode: Mode = NormalMode)
 #POST        /share-of-income            controllers.companyoremploymentrelated.company.ShareOfIncomeController.onSubmit(mode: Mode = NormalMode)

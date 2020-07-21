@@ -398,3 +398,9 @@ companyBeneficiary.name.checkYourAnswersLabel = What is the company’s name?
 companyBeneficiary.name.error.required = Enter the company’s name
 companyBeneficiary.name.error.invalidFormat = Company’s name must only include letters a to z, numbers, ampersands (&), apostrophes, forward slashes, full stops, hyphens, round brackets and spaces
 companyBeneficiary.name.error.length = Company’s name cannot be more than 105 characters
+
+companyBeneficiary.discretionYesNo.title = Do the trustees have discretion over how much income the company beneficiary may get?
+companyBeneficiary.discretionYesNo.heading = Do the trustees have discretion over how much income {0} may get?
+companyBeneficiary.discretionYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
+companyBeneficiary.discretionYesNo.hint = See the trust deed for details
+companyBeneficiary.discretionYesNo.error.required = Select yes if the trustees have discretion over how much income the company beneficiary may get
