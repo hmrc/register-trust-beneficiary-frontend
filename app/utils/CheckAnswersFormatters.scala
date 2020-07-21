@@ -20,7 +20,9 @@ import java.time.format.DateTimeFormatter
 
 import models.UserAnswers
 import models.core.pages.{Address, FullName, InternationalAddress, UKAddress}
-import models.registration.pages.PassportOrIdCardDetails
+import models.registration.pages.CharityOrTrust.{Charity, Trust}
+import models.registration.pages.{CharityOrTrust, PassportOrIdCardDetails}
+import pages.register.beneficiaries.charityOrTrust.CharityNamePage
 import pages.register.beneficiaries.individual.NamePage
 import play.api.i18n.Messages
 import play.twirl.api.{Html, HtmlFormat}
@@ -43,10 +45,19 @@ object CheckAnswersFormatters {
     }
   }
 
+  def formatCharityOrTrust(answer: CharityOrTrust)(implicit messages: Messages): Html = {
+    answer match {
+      case Charity => HtmlFormat.escape(messages("charity"))
+      case Trust => HtmlFormat.escape(messages("trust"))
+    }
+  }
+
   def formatNino(nino: String): String = Nino(nino).formatted
 
   def country(code: String, countryOptions: CountryOptions): String =
     countryOptions.options.find(_.value.equals(code)).map(_.label).getOrElse("")
+
+  def currency(value: String): Html = escape(s"£$value")
 
   def percentage(value: String): Html = escape(s"$value%")
 
@@ -57,6 +68,10 @@ object CheckAnswersFormatters {
 
   def indBeneficiaryName(index: Int, userAnswers: UserAnswers): String = {
     userAnswers.get(NamePage(index)).map(_.toString).getOrElse("")
+  }
+
+  def charityBeneficiaryName(index: Int, userAnswers: UserAnswers): String = {
+    userAnswers.get(CharityNamePage(index)).getOrElse("")
   }
 
   def ukAddress(address: UKAddress): Html = {

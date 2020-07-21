@@ -344,3 +344,56 @@ dateOfBirth.error.required = The date of birth must include {0}
 dateOfBirth.error.invalid = Enter a real date of birth
 dateOfBirth.error.future = Date of birth must be today or in the past
 dateOfBirth.error.past = Date of birth must be after 31 December 1499
+
+#Charity or Trust
+
+charityOrTrust.title = Is the beneficiary a charity or trust?
+charityOrTrust.heading = Is the beneficiary a charity or trust?
+charityOrTrust.checkYourAnswersLabel = Is the beneficiary a charity or trust?
+charityOrTrust.error.required = Select the type of beneficiary you need to add
+charityOrTrust.hint = As named in the trust deed
+
+charityName.title = What is the charity’s name?
+charityName.heading = What is the charity’s name?
+charityName.checkYourAnswersLabel = What is the charity’s name?
+charityName.error.required = Enter the charity’s name
+charityName.error.length = Charity’s name must be 56 characters or less
+charityName.error.invalid = Charity’s name must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+
+amountDiscretionYesNo.title = Do the trustees have discretion over how much income affa may get?
+amountDiscretionYesNo.heading = Do the trustees have discretion over how much income affa may get?
+amountDiscretionYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income affa may get?
+amountDiscretionYesNo.error.required = Select yes if the trustees have discretion over how much income the charity beneficiary may get
+amountDiscretionYesNo.hint = See the trust deed for details
+
+howMuchIncome.title = What percentage of the trust’s assets is the charity beneficiary entitled to?
+howMuchIncome.heading = What percentage of the trust’s assets is the charity beneficiary  entitled to?
+howMuchIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
+howMuchIncome.error.required = Enter what percentage of the trust’s assets the charity beneficiary is entitled to
+howMuchIncome.error.length = The percentage of the trust’s assets the beneficiary is entitled to must be 100 or less
+howMuchIncome.error.invalid = The percentage of the trust’s assets the beneficiary is entitled to must be a whole number
+howMuchIncome.hint = Amount must be rounded down to the nearest whole number, like 33
+howMuchIncome.error.zero = The percentage of the trust’s assets must be 1 or more
+
+addressYesNo.title = Do you know charity beneficiary's address?
+addressYesNo.heading = Do you know {0}'s address?
+addressYesNo.checkYourAnswersLabel = Do you know {0}'s address?
+addressYesNo.error.required = Select yes if you know the charity beneficiary address
+
+addressInTheUkYesNo.title = Is charity beneficiary’s address in the UK?
+addressInTheUkYesNo.heading = Is {0}’s address in the UK?
+addressInTheUkYesNo.checkYourAnswersLabel = Is {0}’s address in the UK?
+addressInTheUkYesNo.error.required = Select yes if the charity beneficiary’s address is in the UK
+
+charityAddressUk.title = What is the charity beneficiary’s address?
+charityAddressUk.heading = What is {0}’s address?
+charityAddressUk.checkYourAnswersLabel = What is {0}’s address?
+
+charityInternationalAddress.title = What is the charity beneficiary’s address?
+charityInternationalAddress.heading = What is {0}’s address?
+charityInternationalAddress.checkYourAnswersLabel = What is {0}’s address?
+charityOrTrust.charity = Charity
+charityOrTrust.trust = Trust
+
+charityAnswers.title = Check charity beneficiary details
+charityAnswers.heading = Check charity beneficiary details

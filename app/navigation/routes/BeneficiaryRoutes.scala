@@ -18,10 +18,12 @@ package navigation.routes
 
 import config.FrontendAppConfig
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRoutes}
+import models.registration.pages.CharityOrTrust.{Charity, Trust}
 import models.registration.pages.KindOfTrust.Employees
 import models.{NormalMode, ReadableUserAnswers}
-import models.registration.pages.{AddABeneficiary, WhatTypeOfBeneficiary}
+import models.registration.pages.{AddABeneficiary, CharityOrTrust, WhatTypeOfBeneficiary}
 import pages.Page
+import pages.register.beneficiaries.charityOrTrust.{AddressInTheUkYesNoPage, AmountDiscretionYesNoPage, CharityAddressUKPage, CharityInternationalAddressPage, CharityNamePage, CharityOrTrustPage, HowMuchIncomePage}
 import pages.register.beneficiaries.individual._
 import pages.register.beneficiaries.{AddABeneficiaryPage, AddABeneficiaryYesNoPage, ClassBeneficiaryDescriptionPage, WhatTypeOfBeneficiaryPage}
 import pages.register.settlors.living_settlor.trust_type.KindOfTrustPage
@@ -38,8 +40,7 @@ object BeneficiaryRoutes {
     case IncomeYesNoPage(index) => _ => ua => individualBeneficiaryIncomeRoute(ua, index, draftId)
     case IncomePage(index) => _ => _ => individualRoutes.NationalInsuranceYesNoController.onPageLoad(NormalMode, index, draftId)
     case NationalInsuranceYesNoPage(index) => _ => ua => individualBeneficiaryNationalInsuranceYesNoRoute(ua, index, draftId)
-    case NationalInsuranceNumberPage(index) => _ =>_ =>
-      individualRoutes.VulnerableYesNoController.onPageLoad(NormalMode, index, draftId)
+    case NationalInsuranceNumberPage(index) => _ =>_ =>individualRoutes.VulnerableYesNoController.onPageLoad(NormalMode, index, draftId)
     case AddressYesNoPage(index) => _ => ua => individualBeneficiaryAddressRoute(ua, index, draftId)
     case AddressUKYesNoPage(index) => _ => ua => individualBeneficiaryAddressUKYesNoRoute(ua, index, draftId)
     case AddressUKPage(index) => _ => _ => individualRoutes.VulnerableYesNoController.onPageLoad(NormalMode, index, draftId)
@@ -49,15 +50,29 @@ object BeneficiaryRoutes {
     case AddABeneficiaryYesNoPage => _ => addABeneficiaryYesNoRoute(draftId, config)
     case WhatTypeOfBeneficiaryPage => _ => whatTypeOfBeneficiaryRoute(draftId)
     case ClassBeneficiaryDescriptionPage(_) => _ => _ => controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
+    case CharityOrTrustPage => _ => charityOrTrust(draftId, 0)
+    case CharityNamePage(index) => _ => _ => controllers.register.charityOrTrust.routes.AmountDiscretionYesNoController.onPageLoad(NormalMode, index,draftId)
+    case AmountDiscretionYesNoPage(index) => _ => amountDiscretionYesNoRoute(draftId, index)
+    case HowMuchIncomePage(index) => _ => _ => controllers.register.charityOrTrust.routes.AddressYesNoController.onPageLoad(NormalMode, index,draftId)
+    case AmountDiscretionYesNoPage(index) => _ => addressYesNoRoute(draftId, index)
+    case AddressInTheUkYesNoPage(index) => _ => addressInTheUKYesNoRoute(draftId, index)
+    case CharityAddressUKPage(index) => _ => _ => controllers.register.charityOrTrust.routes.CharityAnswersController.onPageLoad(index, draftId)
+    case CharityInternationalAddressPage(index) => _ => _ => controllers.register.charityOrTrust.routes.CharityAnswersController.onPageLoad(index, draftId)
   }
 
   private def assetsCompletedRoute(draftId: String, config: FrontendAppConfig) : Call = {
     Call("GET", config.registrationProgressUrl(draftId))
   }
 
-  private def namePage(draftId: String, index: Int)(userAnswers: ReadableUserAnswers) : Call = userAnswers.get(KindOfTrustPage) match {
-    case Some(Employees) => individualRoutes.RoleInCompanyController.onPageLoad(NormalMode, index, draftId)
-    case _ => individualRoutes.DateOfBirthYesNoController.onPageLoad(NormalMode, index, draftId)
+  private def addABeneficiaryRoute(draftId: String, config: FrontendAppConfig)(answers: ReadableUserAnswers) = {
+    val addAnother = answers.get(AddABeneficiaryPage)
+    addAnother match {
+      case Some(AddABeneficiary.YesNow) =>
+        controllers.register.beneficiaries.routes.WhatTypeOfBeneficiaryController.onPageLoad(draftId)
+      case Some(AddABeneficiary.YesLater) => assetsCompletedRoute(draftId, config)
+      case Some(AddABeneficiary.NoComplete) => assetsCompletedRoute(draftId, config)
+      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+    }
   }
 
   private def whatTypeOfBeneficiaryRoute(draftId: String)(userAnswers: ReadableUserAnswers) : Call = {
@@ -67,6 +82,8 @@ object BeneficiaryRoutes {
         routeToIndividualBeneficiaryIndex(userAnswers, draftId)
       case Some(WhatTypeOfBeneficiary.ClassOfBeneficiary) =>
         routeToClassOfBeneficiaryIndex(userAnswers, draftId)
+      case Some(WhatTypeOfBeneficiary.CharityOrTrust) =>
+        routeToCharityOrTrustIndex(userAnswers, draftId)
       case _ =>
         controllers.routes.FeatureNotAvailableController.onPageLoad()
     }
@@ -79,6 +96,16 @@ object BeneficiaryRoutes {
         individualRoutes.NameController.onPageLoad(NormalMode, 0, draftId)
       case t if t.nonEmpty =>
         individualRoutes.NameController.onPageLoad(NormalMode, t.size, draftId)
+    }
+  }
+
+  private def routeToCharityOrTrustIndex(userAnswers: ReadableUserAnswers, draftId: String) = {
+    val charityOrTrust = userAnswers.get(CharityOrTrustPage).getOrElse(List.empty)
+    charityOrTrust match {
+      case Nil =>
+        controllers.register.charityOrTrust.routes.CharityOrTrustController.onPageLoad(NormalMode, draftId)
+      case _ =>
+        controllers.register.charityOrTrust.routes.CharityOrTrustController.onPageLoad(NormalMode, draftId)
     }
   }
 
@@ -138,15 +165,32 @@ object BeneficiaryRoutes {
     }
   }
 
-  private def addABeneficiaryRoute(draftId: String, config: FrontendAppConfig)(answers: ReadableUserAnswers) = {
-    val addAnother = answers.get(AddABeneficiaryPage)
-    addAnother match {
-      case Some(AddABeneficiary.YesNow) =>
-        controllers.register.beneficiaries.routes.WhatTypeOfBeneficiaryController.onPageLoad(draftId)
-      case Some(AddABeneficiary.YesLater) => assetsCompletedRoute(draftId, config)
-      case Some(AddABeneficiary.NoComplete) => assetsCompletedRoute(draftId, config)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
-    }
+  private def namePage(draftId: String, index: Int)(userAnswers: ReadableUserAnswers) : Call = userAnswers.get(KindOfTrustPage) match {
+    case Some(Employees) => individualRoutes.RoleInCompanyController.onPageLoad(NormalMode, index, draftId)
+    case _ => individualRoutes.DateOfBirthYesNoController.onPageLoad(NormalMode, index, draftId)
+  }
+
+  private def charityOrTrust(draftId: String, index: Int)(userAnswers: ReadableUserAnswers) : Call = userAnswers.get(CharityOrTrustPage) match {
+    case Some(Charity) => controllers.register.charityOrTrust.routes.CharityNameController.onPageLoad(NormalMode, index, draftId)
+    case Some(Trust) => controllers.routes.FeatureNotAvailableController.onPageLoad()
+  }
+
+  private def amountDiscretionYesNoRoute(draftId: String, index: Int)(userAnswers: ReadableUserAnswers) : Call = userAnswers.get(AmountDiscretionYesNoPage(index)) match {
+    case Some(true) => controllers.register.charityOrTrust.routes.AddressYesNoController.onPageLoad(NormalMode, index, draftId)
+    case Some(false) => controllers.register.charityOrTrust.routes.HowMuchIncomeController.onPageLoad(NormalMode, index, draftId)
+    case _ => controllers.routes.SessionExpiredController.onPageLoad()
+  }
+
+  private def addressYesNoRoute(draftId: String, index: Int)(userAnswers: ReadableUserAnswers) : Call = userAnswers.get(AmountDiscretionYesNoPage(index)) match {
+    case Some(false) => controllers.register.charityOrTrust.routes.CharityAnswersController.onPageLoad(index, draftId)
+    case Some(true) => controllers.register.charityOrTrust.routes.AddressInTheUkYesNoController.onPageLoad(NormalMode, index, draftId)
+    case _ => controllers.routes.SessionExpiredController.onPageLoad()
+  }
+
+  private def addressInTheUKYesNoRoute(draftId: String, index: Int)(userAnswers: ReadableUserAnswers) : Call = userAnswers.get(AmountDiscretionYesNoPage(index)) match {
+    case Some(false) => controllers.register.charityOrTrust.routes.CharityInternationalAddressController.onPageLoad(NormalMode, index, draftId)
+    case Some(true) => controllers.register.charityOrTrust.routes.CharityAddressUKController.onPageLoad(NormalMode, index, draftId)
+    case _ => controllers.routes.SessionExpiredController.onPageLoad()
   }
 }
 
