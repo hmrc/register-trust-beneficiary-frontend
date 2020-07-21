@@ -14,25 +14,15 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.charityOrTrust
+package pages.register.beneficiaries.charityortrust.charity
 
-import models.UserAnswers
+import models.core.pages.UKAddress
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-import scala.util.Try
-
-final case class AddressYesNoPage(index : Int) extends QuestionPage[Boolean] {
+case class CharityAddressUKPage(index: Int) extends QuestionPage[UKAddress] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "addressYesNo"
-
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
-      case Some(false) => userAnswers.remove(AddressInTheUkYesNoPage(index))
-        .flatMap(_.remove(CharityAddressUKPage(index)))
-        .flatMap(_.remove(CharityInternationalAddressPage(index)))
-      case _ => super.cleanup(value, userAnswers)
-    }
+  override def toString: String = "ukAddress"
 }

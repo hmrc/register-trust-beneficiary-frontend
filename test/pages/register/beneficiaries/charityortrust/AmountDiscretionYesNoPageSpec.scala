@@ -14,31 +14,33 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.charityOrTrust
+package pages.register.beneficiaries.charityortrust
 
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
+import pages.register.beneficiaries.charityortrust.charity.{AmountDiscretionYesNoPage, HowMuchIncomePage}
 
-class AddressYesNoPageSpec extends PageBehaviours {
+class AmountDiscretionYesNoPageSpec extends PageBehaviours {
 
-  "AddressYesNoPage" must {
+  "AmountDiscretionYesNoPage" must {
 
-    beRetrievable[Boolean](AddressYesNoPage(0))
+    beRetrievable[Boolean](AmountDiscretionYesNoPage(0))
 
-    beSettable[Boolean](AddressYesNoPage(0))
+    beSettable[Boolean](AmountDiscretionYesNoPage(0))
 
-    beRemovable[Boolean](AddressYesNoPage(0))
+    beRemovable[Boolean](AmountDiscretionYesNoPage(0))
   }
 
-  "remove pages when AddressYesNoPage is set to false" in {
+  "remove pages when AmountDiscretionYesNoPage is set to true" in {
     forAll(arbitrary[UserAnswers]) {
       initial =>
-        val answers: UserAnswers = initial.set(AddressInTheUkYesNoPage(0), true).success.value
+        val answers: UserAnswers = initial.set(AmountDiscretionYesNoPage(0), true).success.value
+          .set(HowMuchIncomePage(0), "123").success.value
 
-        val result = answers.set(AddressYesNoPage(0), false).success.value
+        val cleaned = answers.set(AmountDiscretionYesNoPage(0), true).success.value
 
-        result.get(AddressInTheUkYesNoPage(0)) mustNot be(defined)
+        cleaned.get(HowMuchIncomePage(0)) mustNot be(defined)
     }
   }
 }

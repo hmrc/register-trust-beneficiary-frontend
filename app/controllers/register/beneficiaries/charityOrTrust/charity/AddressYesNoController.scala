@@ -22,7 +22,7 @@ import forms.YesNoFormProvider
 import javax.inject.Inject
 import models._
 import navigation.Navigator
-import pages.register.beneficiaries.charityOrTrust._
+import pages.register.beneficiaries.charityortrust.charity.{AddressYesNoPage, CharityNamePage}
 import play.api.data.Form
 import play.api.i18n._
 import play.api.mvc._

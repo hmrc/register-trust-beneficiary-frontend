@@ -20,7 +20,7 @@ import base.SpecBase
 import forms.UKAddressFormProvider
 import models.NormalMode
 import models.core.pages.UKAddress
-import pages.register.beneficiaries.charityOrTrust.{CharityAddressUKPage, CharityNamePage}
+import pages.register.beneficiaries.charityortrust.charity.{CharityAddressUKPage, CharityNamePage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.charityortrust.charity.CharityAddressUKView

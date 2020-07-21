@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.charityOrTrust
+package pages.register.beneficiaries.charityortrust
 
-import models.core.pages.InternationalAddress
-import pages.behaviours.PageBehaviours
+import models.registration.pages.CharityOrTrust
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-class CharityInternationalAddressPageSpec extends PageBehaviours {
+ case object CharityOrTrustPage extends QuestionPage[CharityOrTrust] {
 
-  "CharityInternationalAddress" must {
+  override def path: JsPath = JsPath \ toString
 
-    beRetrievable[InternationalAddress](CharityInternationalAddressPage(0))
-
-    beSettable[InternationalAddress](CharityInternationalAddressPage(0))
-
-    beRemovable[InternationalAddress](CharityInternationalAddressPage(0))
-  }
+  override def toString: String = "charityOrTrust"
 }

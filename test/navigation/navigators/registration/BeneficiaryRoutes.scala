@@ -30,7 +30,8 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.KindOfTrustPage
 import pages.register.beneficiaries._
-import pages.register.beneficiaries.charityOrTrust.{AddressInTheUkYesNoPage, AmountDiscretionYesNoPage, CharityAddressUKPage, CharityInternationalAddressPage, CharityNamePage, CharityOrTrustPage}
+import pages.register.beneficiaries.charityortrust.charity._
+import pages.register.beneficiaries.charityortrust.{CharityOrTrustPage, charity}
 import pages.register.beneficiaries.individual._
 import play.api.mvc.Call
 import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries}
@@ -81,16 +82,16 @@ trait BeneficiaryRoutes {
     "go to AddressInTheUkYesNo for index 0 from AddressYesNo when Yes option selected " in {
       val index = 0
       val answers = emptyUserAnswers
-        .set(pages.register.beneficiaries.charityOrTrust.AddressYesNoPage(index), true).success.value
-      navigator.nextPage(pages.register.beneficiaries.charityOrTrust.AddressYesNoPage(index), NormalMode, fakeDraftId)(answers)
+        .set(charity.AddressYesNoPage(index), true).success.value
+      navigator.nextPage(charity.AddressYesNoPage(index), NormalMode, fakeDraftId)(answers)
         .mustBe(controllers.register.beneficiaries.charityortrust.charity.routes.AddressInTheUkYesNoController.onPageLoad(NormalMode, 0, fakeDraftId))
     }
 
     "go to CharityAnswers for index 0 from AddressYesNo when No option selected " in {
       val index = 0
       val answers = emptyUserAnswers
-        .set(pages.register.beneficiaries.charityOrTrust.AddressYesNoPage(index), false).success.value
-      navigator.nextPage(pages.register.beneficiaries.charityOrTrust.AddressYesNoPage(index), NormalMode, fakeDraftId)(answers)
+        .set(charity.AddressYesNoPage(index), false).success.value
+      navigator.nextPage(charity.AddressYesNoPage(index), NormalMode, fakeDraftId)(answers)
         .mustBe(controllers.register.beneficiaries.charityortrust.charity.routes.CharityAnswersController.onPageLoad(index = 0, fakeDraftId))
     }
 
@@ -291,8 +292,8 @@ trait BeneficiaryRoutes {
     "go to IndividualBeneficiaryAddressUKYesNoPage from IndividualBeneficiaryAddressYesNoPage when user answers yes" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
-          val answers = userAnswers.set(AddressYesNoPage(indexForBeneficiary), value = true).success.value
-          navigator.nextPage(AddressYesNoPage(indexForBeneficiary), NormalMode, fakeDraftId)(answers)
+          val answers = userAnswers.set(individual.AddressYesNoPage(indexForBeneficiary), value = true).success.value
+          navigator.nextPage(individual.AddressYesNoPage(indexForBeneficiary), NormalMode, fakeDraftId)(answers)
             .mustBe(individualRoutes.AddressUKYesNoController.onPageLoad(NormalMode, indexForBeneficiary, fakeDraftId))
       }
     }
@@ -300,8 +301,8 @@ trait BeneficiaryRoutes {
     "go to IndividualBeneficiaryVulnerableYesNoPage from IndividualBeneficiaryAddressYesNoPage when user answers no" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
-          val answers = userAnswers.set(AddressYesNoPage(indexForBeneficiary), value = false).success.value
-          navigator.nextPage(AddressYesNoPage(indexForBeneficiary), NormalMode, fakeDraftId)(answers)
+          val answers = userAnswers.set(individual.AddressYesNoPage(indexForBeneficiary), value = false).success.value
+          navigator.nextPage(individual.AddressYesNoPage(indexForBeneficiary), NormalMode, fakeDraftId)(answers)
             .mustBe(individualRoutes.VulnerableYesNoController.onPageLoad(NormalMode, indexForBeneficiary, fakeDraftId))
       }
     }

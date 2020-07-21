@@ -23,7 +23,7 @@ import javax.inject.Inject
 import models.core.pages.InternationalAddress
 import models.{Mode, NormalMode}
 import navigation.Navigator
-import pages.register.beneficiaries.charityOrTrust.{CharityInternationalAddressPage, CharityNamePage}
+import pages.register.beneficiaries.charityortrust.charity.{CharityInternationalAddressPage, CharityNamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

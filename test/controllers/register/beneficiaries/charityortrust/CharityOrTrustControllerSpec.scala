@@ -21,7 +21,7 @@ import forms.CharityOrTrustFormProvider
 import models.NormalMode
 import models.registration.pages.CharityOrTrust
 import org.scalatestplus.mockito.MockitoSugar
-import pages.register.beneficiaries.charityOrTrust.CharityOrTrustPage
+import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._

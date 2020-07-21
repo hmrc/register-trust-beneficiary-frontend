@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.charityOrTrust
+package pages.register.beneficiaries.charityortrust.charity
 
-import pages.behaviours.PageBehaviours
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-class HowMuchIncomePageSpec extends PageBehaviours {
+final case class HowMuchIncomePage(index: Int) extends QuestionPage[String] {
 
-  "CharityOrTrustPage" must {
+  override def path: JsPath = JsPath \ toString
 
-    beRetrievable[String](HowMuchIncomePage(0))
-
-    beSettable[String](HowMuchIncomePage(0))
-
-    beRemovable[String](HowMuchIncomePage(0))
-  }
+  override def toString: String = "howMuchIncome"
 }

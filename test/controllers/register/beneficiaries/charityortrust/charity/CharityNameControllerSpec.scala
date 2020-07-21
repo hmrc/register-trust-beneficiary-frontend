@@ -22,7 +22,7 @@ import models.{NormalMode, ReadOnlyUserAnswers}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.register.beneficiaries.charityOrTrust.CharityNamePage
+import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
 import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest

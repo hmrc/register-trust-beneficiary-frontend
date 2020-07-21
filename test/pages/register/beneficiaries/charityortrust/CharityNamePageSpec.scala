@@ -14,23 +14,20 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.charityOrTrust
+package pages.register.beneficiaries.charityortrust
 
-import models.UserAnswers
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import models.core.pages.FullName
+import pages.behaviours.PageBehaviours
+import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
 
-import scala.util.Try
+class CharityNamePageSpec extends PageBehaviours {
 
-final case class AmountDiscretionYesNoPage(index : Int) extends QuestionPage[Boolean] {
+  "CharityNamePage" must {
 
-  override def path: JsPath = JsPath \ toString
+    beRetrievable[String](CharityNamePage(0))
 
-  override def toString: String = "amountDiscretionYesNo"
+    beSettable[String](CharityNamePage(0))
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
-      case Some(true) => userAnswers.remove(HowMuchIncomePage(index))
-      case _ => super.cleanup(value, userAnswers)
-    }
+    beRemovable[String](CharityNamePage(0))
+  }
 }

@@ -20,7 +20,7 @@ import base.SpecBase
 import forms.ShareOfIncomeFormProvider
 import models.NormalMode
 import org.scalatestplus.mockito.MockitoSugar
-import pages.register.beneficiaries.charityOrTrust.{CharityNamePage, HowMuchIncomePage}
+import pages.register.beneficiaries.charityortrust.charity.{CharityNamePage, HowMuchIncomePage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
 import views.html.register.beneficiaries.charityortrust.charity.HowMuchIncomeView

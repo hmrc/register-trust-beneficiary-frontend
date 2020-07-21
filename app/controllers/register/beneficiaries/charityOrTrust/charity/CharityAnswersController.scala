@@ -22,7 +22,7 @@ import javax.inject.Inject
 import models.NormalMode
 import models.Status.Completed
 import pages.entitystatus.CharityBeneficiaryStatus
-import pages.register.beneficiaries.charityOrTrust.CharityNamePage
+import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository

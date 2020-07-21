@@ -22,7 +22,7 @@ import models.UserAnswers
 import models.core.pages.{Address, FullName, InternationalAddress, UKAddress}
 import models.registration.pages.CharityOrTrust.{Charity, Trust}
 import models.registration.pages.{CharityOrTrust, PassportOrIdCardDetails}
-import pages.register.beneficiaries.charityOrTrust.CharityNamePage
+import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
 import pages.register.beneficiaries.individual.NamePage
 import play.api.i18n.Messages
 import play.twirl.api.{Html, HtmlFormat}

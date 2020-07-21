@@ -20,7 +20,8 @@ import models.core.pages.{FullName, InternationalAddress, UKAddress}
 import models.registration.pages.CharityOrTrust
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
-import pages.register.beneficiaries.charityOrTrust._
+import pages.register.beneficiaries.charityortrust._
+import pages.register.beneficiaries.charityortrust.charity.{AddressInTheUkYesNoPage, AddressYesNoPage, AmountDiscretionYesNoPage, CharityAddressUKPage, CharityInternationalAddressPage, CharityNamePage, HowMuchIncomePage}
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {

@@ -18,7 +18,9 @@ package utils
 
 import javax.inject.Inject
 import models.{NormalMode, UserAnswers}
-import pages.register.beneficiaries.charityOrTrust.{AddressInTheUkYesNoPage, AmountDiscretionYesNoPage, CharityAddressUKPage, CharityInternationalAddressPage, CharityNamePage, CharityOrTrustPage, HowMuchIncomePage}
+import pages.register.beneficiaries._
+import pages.register.beneficiaries.charityortrust.charity._
+import pages.register.beneficiaries.charityortrust.{CharityOrTrustPage, charity}
 import pages.register.beneficiaries.individual._
 import pages.register.beneficiaries.{AddABeneficiaryPage, ClassBeneficiaryDescriptionPage}
 import play.api.i18n.Messages
@@ -116,7 +118,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       )
   }
 
-  def addressYesNo(index: Int): Option[AnswerRow] = userAnswers.get(pages.register.beneficiaries.charityOrTrust.AddressYesNoPage(index)) map {
+  def addressYesNo(index: Int): Option[AnswerRow] = userAnswers.get(charity.AddressYesNoPage(index)) map {
     x =>
       AnswerRow(
         "charity.addressYesNo.checkYourAnswersLabel",
@@ -244,7 +246,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       )
   }
 
-  def individualBeneficiaryAddressYesNo(index: Int): Option[AnswerRow] = userAnswers.get(AddressYesNoPage(index)) map {
+  def individualBeneficiaryAddressYesNo(index: Int): Option[AnswerRow] = userAnswers.get(individual.AddressYesNoPage(index)) map {
     x =>
       AnswerRow(
         "individualBeneficiaryAddressYesNo.checkYourAnswersLabel",
