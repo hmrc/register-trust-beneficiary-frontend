@@ -105,6 +105,7 @@ trait Constraints {
       case _ =>
         Invalid(errorKey, value)
     }
+
   protected def isNinoValid(value: String, errorKey: String): Constraint[String] =
     Constraint {
       case str if Nino.isValid(str)=>
