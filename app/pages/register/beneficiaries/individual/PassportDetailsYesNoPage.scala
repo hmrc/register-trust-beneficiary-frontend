@@ -23,26 +23,17 @@ import sections.beneficiaries.{Beneficiaries, IndividualBeneficiaries}
 
 import scala.util.Try
 
-final case class NationalInsuranceYesNoPage(index : Int) extends QuestionPage[Boolean] {
+final case class PassportDetailsYesNoPage(index : Int) extends QuestionPage[Boolean] {
 
   override def path: JsPath = JsPath \  Beneficiaries \ IndividualBeneficiaries \ index \ toString
 
-  override def toString: String = "nationalInsuranceNumberYesNo"
+  override def toString: String = "passportDetailsYesNo"
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(false) =>
-        userAnswers.remove(NationalInsuranceNumberPage(index))
-      case Some(true) =>
-        userAnswers.remove(AddressYesNoPage(index))
-          .flatMap(_.remove(AddressUKYesNoPage(index)))
-          .flatMap(_.remove(AddressUKPage(index)))
-          .flatMap(_.remove(AddressInternationalPage(index)))
-          .flatMap(_.remove(PassportDetailsYesNoPage(index)))
-          .flatMap(_.remove(PassportDetailsPage(index)))
-          .flatMap(_.remove(IDCardDetailsYesNoPage(index)))
-          .flatMap(_.remove(IDCardDetailsPage(index)))
-      case _ => super.cleanup(value, userAnswers)
+      case Some(true) => userAnswers.remove(IDCardDetailsYesNoPage(index))
+        .flatMap(_.remove(IDCardDetailsPage(index)))
+      case Some(false) => userAnswers.remove(PassportDetailsPage(index))
+      case None => super.cleanup(value, userAnswers)
     }
-  }
 }

@@ -19,7 +19,7 @@ package mapping.reads
 import java.time.LocalDate
 
 import models.core.pages.{Address, FullName}
-import models.registration.pages.RoleInCompany
+import models.registration.pages.{PassportOrIdCardDetails, RoleInCompany}
 import play.api.libs.json.{Format, Json}
 
 
@@ -27,6 +27,8 @@ final case class IndividualBeneficiary(name: FullName,
                                        roleInCompany: Option[RoleInCompany],
                                        dateOfBirth: Option[LocalDate],
                                        nationalInsuranceNumber: Option[String],
+                                       passportDetails: Option[PassportOrIdCardDetails],
+                                       idCardDetails: Option[PassportOrIdCardDetails],
                                        address : Option[Address],
                                        vulnerableYesNo: Boolean,
                                        income: Option[String] ,

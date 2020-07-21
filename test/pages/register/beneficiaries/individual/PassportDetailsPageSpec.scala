@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-package models.registration.pages
+package pages.register.beneficiaries.individual
 
-import java.time.LocalDate
+import models.registration.pages.PassportOrIdCardDetails
+import pages.behaviours.PageBehaviours
 
-import play.api.libs.json.{Json, OFormat}
+class PassportDetailsPageSpec extends PageBehaviours {
 
-case class PassportOrIdCardDetails(country: String, cardNumber: String, expiryDate: LocalDate)
+  "PassportDetailsPage" must {
 
-object PassportOrIdCardDetails {
-  implicit val format: OFormat[PassportOrIdCardDetails] = Json.format[PassportOrIdCardDetails]
+    beRetrievable[PassportOrIdCardDetails](PassportDetailsPage(0))
+
+    beSettable[PassportOrIdCardDetails](PassportDetailsPage(0))
+
+    beRemovable[PassportOrIdCardDetails](PassportDetailsPage(0))
+  }
 }

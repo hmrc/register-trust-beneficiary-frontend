@@ -25,10 +25,6 @@ class DateOfBirthPageSpec extends PageBehaviours {
 
   "IndividualBeneficiaryDateOfBirthPage" must {
 
-    implicit lazy val arbitraryLocalDate: Arbitrary[LocalDate] = Arbitrary {
-      datesBetween(LocalDate.of(1900, 1, 1), LocalDate.of(2100, 1, 1))
-    }
-
     beRetrievable[LocalDate](DateOfBirthPage(0))
 
     beSettable[LocalDate](DateOfBirthPage(0))

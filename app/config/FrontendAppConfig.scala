@@ -28,7 +28,7 @@ import play.api.mvc.Call
 class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   private val contactHost = configuration.get[String]("contact-frontend.host")
-  private val contactFormServiceIdentifier = "play26frontend"
+  private val contactFormServiceIdentifier = "trusts"
 
   val repositoryKey: String = "beneficiaries"
 
@@ -36,8 +36,8 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   val analyticsHost: String = configuration.get[String](s"google-analytics.host")
   val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
-  val betaFeedbackUrl = s"$contactHost/contact/beta-feedback"
-  val betaFeedbackUnauthenticatedUrl = s"$contactHost/contact/beta-feedback-unauthenticated"
+  val betaFeedbackUrl = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier"
+  val betaFeedbackUnauthenticatedUrl = s"$contactHost/contact/beta-feedback-unauthenticated?service=$contactFormServiceIdentifier"
 
   lazy val authUrl: String = configuration.get[Service]("auth").baseUrl
   lazy val loginUrl: String = configuration.get[String]("urls.login")
@@ -56,10 +56,16 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val languageTranslationEnabled: Boolean =
     configuration.get[Boolean]("microservice.services.features.welsh-translation")
 
-  private val day: Int = configuration.get[Int]("minimumDate.day")
-  private val month: Int = configuration.get[Int]("minimumDate.month")
-  private val year: Int = configuration.get[Int]("minimumDate.year")
-  lazy val minDate: LocalDate = LocalDate.of(year, month, day)
+  private def getInt(path: String): Int = configuration.get[Int](path)
+  private def getDate(entry: String): LocalDate =
+    LocalDate.of(
+      getInt(s"dates.$entry.year"),
+      getInt(s"dates.$entry.month"),
+      getInt(s"dates.$entry.day")
+    )
+
+  lazy val minDate: LocalDate = getDate("minimum")
+  lazy val maxPassportDate: LocalDate = getDate("maximumPassport")
 
   lazy val locationCanonicalList: String = configuration.get[String]("location.canonical.list.all")
   lazy val locationCanonicalListNonUK: String = configuration.get[String]("location.canonical.list.nonUK")
