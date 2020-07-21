@@ -30,7 +30,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.KindOfTrustPage
 import pages.register.beneficiaries._
-import pages.register.beneficiaries.charityOrTrust.CharityOrTrustPage
+import pages.register.beneficiaries.charityOrTrust.{AddressInTheUkYesNoPage, AmountDiscretionYesNoPage, CharityAddressUKPage, CharityInternationalAddressPage, CharityNamePage, CharityOrTrustPage}
 import pages.register.beneficiaries.individual._
 import play.api.mvc.Call
 import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries}
@@ -58,56 +58,65 @@ trait BeneficiaryRoutes {
     }
 
     "go to AmountDiscretionYesNo for index 0 from CharityName" in {
-      val answers = emptyUserAnswers.set(CharityOrTrustPage, value = CharityOrTrust.Charity).success.value
-      navigator.nextPage(CharityOrTrustPage, NormalMode, fakeDraftId)(answers)
+      navigator.nextPage(CharityNamePage(0), NormalMode, fakeDraftId)(emptyUserAnswers)
         .mustBe(controllers.register.beneficiaries.charityortrust.charity.routes.AmountDiscretionYesNoController.onPageLoad(NormalMode, 0, fakeDraftId))
     }
 
     "go to HowMuchIncome for index 0 from AmountDiscretionYesNo when No is selected " in {
-      val answers = emptyUserAnswers.set(CharityOrTrustPage, value = CharityOrTrust.Charity).success.value
-      navigator.nextPage(CharityOrTrustPage, NormalMode, fakeDraftId)(answers)
-        .mustBe(controllers.register.beneficiaries.charityortrust.charity.routes.CharityNameController.onPageLoad(NormalMode, 0, fakeDraftId))
+      val index = 0
+      val answers = emptyUserAnswers
+        .set(AmountDiscretionYesNoPage(index), false).success.value
+      navigator.nextPage(AmountDiscretionYesNoPage(index), NormalMode, fakeDraftId)(answers)
+        .mustBe(controllers.register.beneficiaries.charityortrust.charity.routes.HowMuchIncomeController.onPageLoad(NormalMode, 0, fakeDraftId))
     }
 
     "go to AddressYesNo for index 0 from AmountDiscretionYesNo when yes is selected " in {
-      val answers = emptyUserAnswers.set(CharityOrTrustPage, value = CharityOrTrust.Charity).success.value
-      navigator.nextPage(CharityOrTrustPage, NormalMode, fakeDraftId)(answers)
+      val index = 0
+      val answers = emptyUserAnswers
+        .set(AmountDiscretionYesNoPage(index), true).success.value
+      navigator.nextPage(AmountDiscretionYesNoPage(index), NormalMode, fakeDraftId)(answers)
         .mustBe(controllers.register.beneficiaries.charityortrust.charity.routes.AddressYesNoController.onPageLoad(NormalMode, 0, fakeDraftId))
     }
 
     "go to AddressInTheUkYesNo for index 0 from AddressYesNo when Yes option selected " in {
-      val answers = emptyUserAnswers.set(CharityOrTrustPage, value = CharityOrTrust.Charity).success.value
-      navigator.nextPage(CharityOrTrustPage, NormalMode, fakeDraftId)(answers)
+      val index = 0
+      val answers = emptyUserAnswers
+        .set(pages.register.beneficiaries.charityOrTrust.AddressYesNoPage(index), true).success.value
+      navigator.nextPage(pages.register.beneficiaries.charityOrTrust.AddressYesNoPage(index), NormalMode, fakeDraftId)(answers)
         .mustBe(controllers.register.beneficiaries.charityortrust.charity.routes.AddressInTheUkYesNoController.onPageLoad(NormalMode, 0, fakeDraftId))
     }
 
     "go to CharityAnswers for index 0 from AddressYesNo when No option selected " in {
-      val answers = emptyUserAnswers.set(CharityOrTrustPage, value = CharityOrTrust.Charity).success.value
-      navigator.nextPage(CharityOrTrustPage, NormalMode, fakeDraftId)(answers)
+      val index = 0
+      val answers = emptyUserAnswers
+        .set(pages.register.beneficiaries.charityOrTrust.AddressYesNoPage(index), false).success.value
+      navigator.nextPage(pages.register.beneficiaries.charityOrTrust.AddressYesNoPage(index), NormalMode, fakeDraftId)(answers)
         .mustBe(controllers.register.beneficiaries.charityortrust.charity.routes.CharityAnswersController.onPageLoad(index = 0, fakeDraftId))
     }
 
     "go to CharityAddressUK for index 0 from AddressUkYesNo when Yes option selected " in {
-      val answers = emptyUserAnswers.set(CharityOrTrustPage, value = CharityOrTrust.Charity).success.value
-      navigator.nextPage(CharityOrTrustPage, NormalMode, fakeDraftId)(answers)
+      val index = 0
+      val answers = emptyUserAnswers
+        .set(AddressInTheUkYesNoPage(index), true).success.value
+      navigator.nextPage(AddressInTheUkYesNoPage(index), NormalMode, fakeDraftId)(answers)
         .mustBe(controllers.register.beneficiaries.charityortrust.charity.routes.CharityAddressUKController.onPageLoad(NormalMode, 0, fakeDraftId))
     }
 
     "go to CharityAddressInternational for index 0 from AddressUkYesNo when no option selected " in {
-      val answers = emptyUserAnswers.set(CharityOrTrustPage, value = CharityOrTrust.Charity).success.value
-      navigator.nextPage(CharityOrTrustPage, NormalMode, fakeDraftId)(answers)
+      val index = 0
+      val answers = emptyUserAnswers
+        .set(AddressInTheUkYesNoPage(index), false).success.value
+      navigator.nextPage(AddressInTheUkYesNoPage(index), NormalMode, fakeDraftId)(answers)
         .mustBe(controllers.register.beneficiaries.charityortrust.charity.routes.CharityInternationalAddressController.onPageLoad(NormalMode, 0, fakeDraftId))
     }
 
     "go to CharityAnswers for index 0 from CharityAddressUk when option selected " in {
-      val answers = emptyUserAnswers.set(CharityOrTrustPage, value = CharityOrTrust.Charity).success.value
-      navigator.nextPage(CharityOrTrustPage, NormalMode, fakeDraftId)(answers)
+      navigator.nextPage(CharityAddressUKPage(0), NormalMode, fakeDraftId)(emptyUserAnswers)
         .mustBe(controllers.register.beneficiaries.charityortrust.charity.routes.CharityAnswersController.onPageLoad(index = 0, fakeDraftId))
     }
 
     "go to CharityAnswers for index 0 from CharityAddressInternational when option selected " in {
-      val answers = emptyUserAnswers.set(CharityOrTrustPage, value = CharityOrTrust.Charity).success.value
-      navigator.nextPage(CharityOrTrustPage, NormalMode, fakeDraftId)(answers)
+      navigator.nextPage(CharityInternationalAddressPage(0), NormalMode, fakeDraftId)(emptyUserAnswers)
         .mustBe(controllers.register.beneficiaries.charityortrust.charity.routes.CharityAnswersController.onPageLoad(index = 0, fakeDraftId))
     }
 

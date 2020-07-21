@@ -45,7 +45,7 @@ class AddressYesNoController @Inject()(
                                         view: AddressYesNoView
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[Boolean] = formProvider.withPrefix("addressYesNo")
+  private val form: Form[Boolean] = formProvider.withPrefix("charity.addressYesNo")
 
   private def actions(draftId: String, index: Int) =
     identify andThen
@@ -56,7 +56,7 @@ class AddressYesNoController @Inject()(
   def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(draftId, index) {
     implicit request =>
 
-      val charityName = request.userAnswers.get(CharityNamePage(index)).get.toString
+      val charityName = request.userAnswers.get(CharityNamePage(index)).get
 
       val preparedForm = request.userAnswers.get(AddressYesNoPage(index)) match {
         case None => form
@@ -69,7 +69,7 @@ class AddressYesNoController @Inject()(
   def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(draftId, index).async {
     implicit request =>
 
-      val charityName = request.userAnswers.get(CharityNamePage(index)).get.toString
+      val charityName = request.userAnswers.get(CharityNamePage(index)).get
 
       form.bindFromRequest().fold(
         formWithErrors =>

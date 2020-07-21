@@ -16,19 +16,18 @@
 
 package forms
 
-import forms.behaviours.{IntFieldBehaviours, StringFieldBehaviours}
-import org.scalacheck.Gen
+import forms.behaviours.StringFieldBehaviours
 import play.api.data.FormError
-import wolfendale.scalacheck.regexp.RegexpGen
 
-class HowMuchIncomeFormProviderSpec extends StringFieldBehaviours with IntFieldBehaviours {
+class StringFormProviderSpec extends StringFieldBehaviours {
 
-  val requiredKey = "howMuchIncome.error.required"
-  val lengthKey = "howMuchIncome.error.length"
-  val maxLength = 12
-  val zeroNumberkey = "howMuchIncome.error.zero"
+  val prefix: String = "charity.name"
+  val requiredKey = s"$prefix.error.required"
+  val lengthKey = s"$prefix.error.length"
+  val invalidFormatKey = s"$prefix.error.invalid"
+  val maxLength = 105
 
-  val form = new HowMuchIncomeFormProvider()()
+  val form = new StringFormProvider().withConfig(prefix, maxLength)
 
   ".value" must {
 
@@ -37,7 +36,7 @@ class HowMuchIncomeFormProviderSpec extends StringFieldBehaviours with IntFieldB
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      RegexpGen.from(Validation.onlyNumbersRegex)
+      stringsWithMaxLength(maxLength)
     )
 
     behave like fieldWithMaxLength(
@@ -47,19 +46,24 @@ class HowMuchIncomeFormProviderSpec extends StringFieldBehaviours with IntFieldB
       lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
     )
 
-    behave like intFieldWithMinimumWithGenerator(
-      form,
-      fieldName,
-      1,
-      Gen.const(0),
-      FormError(fieldName, zeroNumberkey, Array("1"))
-    )
-
-
     behave like mandatoryField(
       form,
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
+    )
+
+    behave like nonEmptyField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey, Seq(fieldName))
+    )
+
+    behave like fieldWithRegexpWithGenerator(
+      form,
+      fieldName,
+      Validation.nameRegex,
+      generator = stringsWithMaxLength(maxLength),
+      error = FormError(fieldName, invalidFormatKey, Seq(Validation.nameRegex))
     )
   }
 }

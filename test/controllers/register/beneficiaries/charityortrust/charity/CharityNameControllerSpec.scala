@@ -17,7 +17,7 @@
 package controllers.register.beneficiaries.charityortrust.charity
 
 import base.SpecBase
-import forms.CharityNameFormProvider
+import forms.StringFormProvider
 import models.{NormalMode, ReadOnlyUserAnswers}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -35,8 +35,8 @@ class CharityNameControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new CharityNameFormProvider()
-  val form = formProvider()
+  val formProvider = new StringFormProvider()
+  val form = formProvider.withConfig("charity.name", 105)
   val name = "Test"
   val index: Int = 0
 

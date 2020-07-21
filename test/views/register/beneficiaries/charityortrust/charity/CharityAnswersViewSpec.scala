@@ -28,7 +28,7 @@ class CharityAnswersViewSpec extends ViewBehaviours {
 
     val applyView = view.apply(index, fakeDraftId, Nil)(fakeRequest, messages)
 
-    behave like normalPage(applyView, "charityAnswers")
+    behave like normalPage(applyView, "charity.answers")
 
     behave like pageWithBackLink(applyView)
   }

@@ -16,7 +16,7 @@
 
 package views.register.beneficiaries.charityortrust.charity
 
-import forms.HowMuchIncomeFormProvider
+import forms.ShareOfIncomeFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -25,10 +25,10 @@ import views.html.register.beneficiaries.charityortrust.charity.HowMuchIncomeVie
 
 class HowMuchIncomeViewSpec extends StringViewBehaviours {
 
-  val messageKeyPrefix = "howMuchIncome"
+  val prefix = "charity.shareOfIncome"
 
-  val form = new HowMuchIncomeFormProvider()()
-
+  val form: Form[String] = new ShareOfIncomeFormProvider().withPrefix(prefix)
+  val charityName = "Test"
   val index = 0
 
   "HowMuchIncome view" must {
@@ -36,13 +36,13 @@ class HowMuchIncomeViewSpec extends StringViewBehaviours {
     val view = viewFor[HowMuchIncomeView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, fakeDraftId, index)(fakeRequest, messages)
+      view.apply(form, NormalMode, fakeDraftId, index, charityName)(fakeRequest, messages)
 
-    behave like normalPage(applyView(form), messageKeyPrefix)
+    behave like dynamicTitlePage(applyView(form), prefix, charityName)
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like stringPage(form, applyView, messageKeyPrefix, Some(s"$messageKeyPrefix.hint"))
+    behave like stringPageWithDynamicTitle(form, applyView, prefix, charityName, Some(s"$prefix.hint"))
 
     behave like pageWithASubmitButton(applyView(form))
 

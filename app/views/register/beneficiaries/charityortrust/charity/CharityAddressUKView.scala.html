@@ -25,7 +25,7 @@
 @(form: Form[_], mode: Mode, draftId: String, charityName: String, index: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("charityAddressUK.title")}"
+    title = s"${errorPrefix(form)} ${messages("charity.ukAddress.title")}"
 ) {
 
     @formHelper(action = CharityAddressUKController.onSubmit(mode, index, draftId), 'autoComplete -> "off") {
@@ -37,7 +37,7 @@
         <fieldset>
 
             <legend>
-                @components.heading("charityAddressUK.heading", Some(charityName.toString))
+                @components.heading("charity.ukAddress.heading", Some(charityName))
             </legend>
 
             @components.uk_address(form)

@@ -19,11 +19,11 @@ package pages.entitystatus
 import models.Status
 import pages.QuestionPage
 import play.api.libs.json.JsPath
-import sections.beneficiaries.{Beneficiaries, IndividualBeneficiaries}
+import sections.beneficiaries.{Beneficiaries, CharityBeneficiaries}
 
-case object CharityOrTrustStatus extends QuestionPage[Status] {
+final case class CharityBeneficiaryStatus(index : Int) extends QuestionPage[Status] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = JsPath \ Beneficiaries \ CharityBeneficiaries \ index \ toString
 
   override def toString: String = "status"
 }

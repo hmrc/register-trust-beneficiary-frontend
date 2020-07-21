@@ -25,11 +25,11 @@ import views.html.register.beneficiaries.charityortrust.charity.AddressYesNoView
 
 class AddressYesNoViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "addressYesNo"
+  val prefix = "charity.addressYesNo"
   val index = 0
   val charityName = "Test"
 
-  val form = new YesNoFormProvider().withPrefix("addressYesNo")
+  val form = new YesNoFormProvider().withPrefix(prefix)
 
   "addressYesNo view" must {
 
@@ -38,11 +38,11 @@ class AddressYesNoViewSpec extends YesNoViewBehaviours {
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode, fakeDraftId, index, charityName)(fakeRequest, messages)
 
-    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, charityName)
+    behave like dynamicTitlePage(applyView(form), prefix, charityName)
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, None, Seq(charityName))
+    behave like yesNoPage(form, applyView, prefix, None, Seq(charityName))
 
     behave like pageWithASubmitButton(applyView(form))
   }

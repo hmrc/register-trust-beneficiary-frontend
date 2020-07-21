@@ -21,9 +21,8 @@ import controllers.actions.register.{DraftIdRetrievalActionProvider, Registratio
 import javax.inject.Inject
 import models.NormalMode
 import models.Status.Completed
-import navigation.Navigator
-import pages.entitystatus.IndividualBeneficiaryStatus
-import pages.register.beneficiaries.individual.{AnswersPage, NamePage}
+import pages.entitystatus.CharityBeneficiaryStatus
+import pages.register.beneficiaries.charityOrTrust.CharityNamePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
@@ -39,7 +38,6 @@ class CharityAnswersController @Inject()(
                                           override val messagesApi: MessagesApi,
                                           registrationsRepository: RegistrationsRepository,
                                           identify: RegistrationIdentifierAction,
-                                          navigator: Navigator,
                                           getData: DraftIdRetrievalActionProvider,
                                           requireData: RegistrationDataRequiredAction,
                                           val controllerComponents: MessagesControllerComponents,
@@ -48,13 +46,11 @@ class CharityAnswersController @Inject()(
                                           countryOptions: CountryOptions
                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-
   private def actions(index: Int, draftId: String) =
     identify andThen
       getData(draftId) andThen
       requireData andThen
-      requiredAnswer(RequiredAnswer(NamePage(index), routes.CharityNameController.onPageLoad(NormalMode, 0, draftId)))
-
+      requiredAnswer(RequiredAnswer(CharityNamePage(index), routes.CharityNameController.onPageLoad(NormalMode, 0, draftId)))
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
@@ -64,7 +60,7 @@ class CharityAnswersController @Inject()(
       val sections = Seq(
         AnswerSection(
           None,
-          answers.individualBeneficiaryRows(index)
+          answers.charityBeneficiaryRows(index)
         )
       )
 
@@ -74,11 +70,11 @@ class CharityAnswersController @Inject()(
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val answers = request.userAnswers.set(IndividualBeneficiaryStatus(index), Completed)
+      val answers = request.userAnswers.set(CharityBeneficiaryStatus(index), Completed)
 
       for {
         updatedAnswers <- Future.fromTry(answers)
         _ <- registrationsRepository.set(updatedAnswers)
-      } yield Redirect(navigator.nextPage(AnswersPage, NormalMode, draftId)(request.userAnswers))
+      } yield Redirect(controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId))
   }
 }

@@ -18,7 +18,7 @@ package controllers.register.beneficiaries.charityortrust.charity
 
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
-import forms.HowMuchIncomeFormProvider
+import forms.ShareOfIncomeFormProvider
 import javax.inject.Inject
 import models.{Mode, NormalMode}
 import navigation.Navigator
@@ -40,12 +40,12 @@ class HowMuchIncomeController @Inject()(
                                          getData: DraftIdRetrievalActionProvider,
                                          requireData: RegistrationDataRequiredAction,
                                          requiredAnswer: RequiredAnswerActionProvider,
-                                         formProvider: HowMuchIncomeFormProvider,
+                                         formProvider: ShareOfIncomeFormProvider,
                                          val controllerComponents: MessagesControllerComponents,
                                          view: HowMuchIncomeView)
                                        (implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider()
+  private val form: Form[String] = formProvider.withPrefix("charity.shareOfIncome")
 
   private def actions(draftId: String, index: Int) =
     identify andThen
@@ -56,20 +56,24 @@ class HowMuchIncomeController @Inject()(
   def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(draftId, index) {
     implicit request =>
 
+      val charityName = request.userAnswers.get(CharityNamePage(index)).get
+
       val preparedForm = request.userAnswers.get(HowMuchIncomePage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, draftId, index))
+      Ok(view(preparedForm, mode, draftId, index, charityName))
   }
 
   def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(draftId, index).async {
     implicit request =>
 
+      val charityName = request.userAnswers.get(CharityNamePage(index)).get
+
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId, index))),
+          Future.successful(BadRequest(view(formWithErrors, mode, draftId, index, charityName))),
 
         value => {
           for {

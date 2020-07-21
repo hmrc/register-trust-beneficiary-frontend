@@ -31,7 +31,7 @@ class AmountDiscretionYesNoControllerSpec extends SpecBase with MockitoSugar {
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix("amountDiscretionYesNo")
+  val form = formProvider.withPrefix("charity.discretionYesNo")
   val index: Int = 0
   val charityName = "Test"
 

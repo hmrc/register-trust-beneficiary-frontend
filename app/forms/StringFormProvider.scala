@@ -20,16 +20,16 @@ import forms.mappings.Mappings
 import javax.inject.Inject
 import play.api.data.Form
 
-class CharityNameFormProvider @Inject() extends Mappings {
+class StringFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[String] =
+  def withConfig(prefix: String, maximumLength: Int): Form[String] =
     Form(
-      "value" -> text("charityName.error.required")
+      "value" -> text(s"$prefix.error.required")
         .verifying(
           firstError(
-            maxLength(53, "charityName.error.length"),
-            isNotEmpty("value","charityName.error.required"),
-            regexp(Validation.nameRegex, "charityName.error.invalid")
+            maxLength(maximumLength, s"$prefix.error.length"),
+            isNotEmpty("value",s"$prefix.error.required"),
+            regexp(Validation.nameRegex, s"$prefix.error.invalid")
           )
         )
     )

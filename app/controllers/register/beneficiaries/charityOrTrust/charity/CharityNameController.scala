@@ -17,11 +17,12 @@
 package controllers.register.beneficiaries.charityortrust.charity
 
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import forms.CharityNameFormProvider
+import forms.StringFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
 import pages.register.beneficiaries.charityOrTrust.CharityNamePage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
@@ -37,12 +38,12 @@ class CharityNameController @Inject()(
                                        identify: RegistrationIdentifierAction,
                                        getData: DraftIdRetrievalActionProvider,
                                        requireData: RegistrationDataRequiredAction,
-                                       formProvider: CharityNameFormProvider,
+                                       formProvider: StringFormProvider,
                                        val controllerComponents: MessagesControllerComponents,
                                        view: CharityNameView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider()
+  private val form: Form[String] = formProvider.withConfig("charity.name", 105)
 
   private def actions(draftId: String) =
     identify andThen

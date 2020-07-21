@@ -52,11 +52,12 @@ object BeneficiaryRoutes {
     case AddABeneficiaryYesNoPage => _ => addABeneficiaryYesNoRoute(draftId, config)
     case WhatTypeOfBeneficiaryPage => _ => whatTypeOfBeneficiaryRoute(draftId)
     case ClassBeneficiaryDescriptionPage(_) => _ => _ => controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
+
     case CharityOrTrustPage => _ => charityOrTrust(draftId, 0)
     case CharityNamePage(index) => _ => _ => charityRoutes.AmountDiscretionYesNoController.onPageLoad(NormalMode, index,draftId)
     case AmountDiscretionYesNoPage(index) => _ => amountDiscretionYesNoRoute(draftId, index)
     case HowMuchIncomePage(index) => _ => _ => charityRoutes.AddressYesNoController.onPageLoad(NormalMode, index,draftId)
-    case AmountDiscretionYesNoPage(index) => _ => addressYesNoRoute(draftId, index)
+    case pages.register.beneficiaries.charityOrTrust.AddressYesNoPage(index) => _ => addressYesNoRoute(draftId, index)
     case AddressInTheUkYesNoPage(index) => _ => addressInTheUKYesNoRoute(draftId, index)
     case CharityAddressUKPage(index) => _ => _ => charityRoutes.CharityAnswersController.onPageLoad(index, draftId)
     case CharityInternationalAddressPage(index) => _ => _ => charityRoutes.CharityAnswersController.onPageLoad(index, draftId)
@@ -183,13 +184,13 @@ object BeneficiaryRoutes {
     case _ => controllers.routes.SessionExpiredController.onPageLoad()
   }
 
-  private def addressYesNoRoute(draftId: String, index: Int)(userAnswers: ReadableUserAnswers) : Call = userAnswers.get(AmountDiscretionYesNoPage(index)) match {
+  private def addressYesNoRoute(draftId: String, index: Int)(userAnswers: ReadableUserAnswers) : Call = userAnswers.get(pages.register.beneficiaries.charityOrTrust.AddressYesNoPage(index)) match {
     case Some(false) => charityRoutes.CharityAnswersController.onPageLoad(index, draftId)
     case Some(true) => charityRoutes.AddressInTheUkYesNoController.onPageLoad(NormalMode, index, draftId)
     case _ => controllers.routes.SessionExpiredController.onPageLoad()
   }
 
-  private def addressInTheUKYesNoRoute(draftId: String, index: Int)(userAnswers: ReadableUserAnswers) : Call = userAnswers.get(AmountDiscretionYesNoPage(index)) match {
+  private def addressInTheUKYesNoRoute(draftId: String, index: Int)(userAnswers: ReadableUserAnswers) : Call = userAnswers.get(AddressInTheUkYesNoPage(index)) match {
     case Some(false) => charityRoutes.CharityInternationalAddressController.onPageLoad(NormalMode, index, draftId)
     case Some(true) => charityRoutes.CharityAddressUKController.onPageLoad(NormalMode, index, draftId)
     case _ => controllers.routes.SessionExpiredController.onPageLoad()

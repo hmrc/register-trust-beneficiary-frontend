@@ -31,7 +31,7 @@ class AddressYesNoControllerSpec extends SpecBase with MockitoSugar {
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix("addressYesNo")
+  val form = formProvider.withPrefix("charity.addressYesNo")
   val index: Int = 0
   val charityName = "Test"
 

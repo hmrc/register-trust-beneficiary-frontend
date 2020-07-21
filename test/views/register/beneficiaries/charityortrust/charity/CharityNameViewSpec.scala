@@ -16,7 +16,7 @@
 
 package views.register.beneficiaries.charityortrust.charity
 
-import forms.CharityNameFormProvider
+import forms.StringFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -25,22 +25,21 @@ import views.html.register.beneficiaries.charityortrust.charity.CharityNameView
 
 class CharityNameViewSpec extends StringViewBehaviours {
 
-  val messageKeyPrefix = "charityName"
+  val prefix = "charity.name"
   val index = 0
-  override val form = new CharityNameFormProvider()()
+  override val form = new StringFormProvider().withConfig(prefix, 105)
   val view = viewFor[CharityNameView](Some(emptyUserAnswers))
-
 
   "CharityNameView" must {
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode, fakeDraftId, index)(fakeRequest, messages)
 
-    behave like normalPage(applyView(form), messageKeyPrefix)
+    behave like normalPage(applyView(form), prefix)
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like stringPage(form, applyView, messageKeyPrefix)
+    behave like stringPage(form, applyView, prefix)
 
     behave like pageWithASubmitButton(applyView(form))
 

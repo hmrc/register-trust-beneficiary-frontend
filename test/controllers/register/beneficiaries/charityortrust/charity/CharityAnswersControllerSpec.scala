@@ -39,7 +39,7 @@ class CharityAnswersControllerSpec extends SpecBase {
         emptyUserAnswers
           .set(CharityOrTrustPage, Charity).success.value
           .set(CharityNamePage(index),"Test").success.value
-          .set(AmountDiscretionYesNoPage(index), true).success.value
+          .set(AmountDiscretionYesNoPage(index), false).success.value
           .set(HowMuchIncomePage(index),"123").success.value
           .set(AddressYesNoPage(index),true).success.value
           .set(AddressInTheUkYesNoPage(index),true).success.value

@@ -20,6 +20,7 @@ import controllers.actions._
 import controllers.actions.register._
 import forms.InternationalAddressFormProvider
 import javax.inject.Inject
+import models.core.pages.InternationalAddress
 import models.{Mode, NormalMode}
 import navigation.Navigator
 import pages.register.beneficiaries.charityOrTrust.{CharityInternationalAddressPage, CharityNamePage}
@@ -47,7 +48,7 @@ class CharityInternationalAddressController @Inject()(
                                                        val countryOptions: CountryOptionsNonUK
                                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider()
+  private val form: Form[InternationalAddress] = formProvider()
 
   private def actions(draftId: String, index: Int) =
     identify andThen
@@ -58,7 +59,7 @@ class CharityInternationalAddressController @Inject()(
   def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(draftId, index) {
     implicit request =>
 
-      val charityName = request.userAnswers.get(CharityNamePage(index)).get.toString
+      val charityName = request.userAnswers.get(CharityNamePage(index)).get
 
       val preparedForm = request.userAnswers.get(CharityInternationalAddressPage(index)) match {
         case None => form
@@ -71,7 +72,7 @@ class CharityInternationalAddressController @Inject()(
   def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(draftId, index).async {
     implicit request =>
 
-      val charityName = request.userAnswers.get(CharityNamePage(index)).get.toString
+      val charityName = request.userAnswers.get(CharityNamePage(index)).get
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>

@@ -25,7 +25,7 @@
 @(form: Form[_], mode: Mode, draftId: String, index: Int, charityName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("amountDiscretionYesNo.title")}"
+    title = s"${errorPrefix(form)} ${messages("charity.discretionYesNo.title")}"
 ) {
 
     @formHelper(action = AmountDiscretionYesNoController.onSubmit(mode, index, draftId), 'autoComplete -> "off") {
@@ -36,7 +36,7 @@
 
         @components.input_yes_no(
             field = form("value"),
-            label = messages("amountDiscretionYesNo.heading", charityName),
+            label = messages("charity.discretionYesNo.heading", charityName),
             legendClass = Some("heading-large"),
             legendAsHeading = true
         )

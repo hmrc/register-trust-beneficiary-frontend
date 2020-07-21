@@ -22,10 +22,10 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode, draftId: String, index : Int)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, draftId: String, index: Int, charityName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("howMuchIncome.title")}"
+    title = s"${errorPrefix(form)} ${messages("charity.shareOfIncome.title")}"
 ) {
 
     @formHelper(action = HowMuchIncomeController.onSubmit(mode, index, draftId), 'autoComplete -> "off") {
@@ -36,12 +36,12 @@
 
         @components.input_text(
           field = form("value"),
-          label = messages("howMuchIncome.heading"),
+          label = messages("charity.shareOfIncome.heading", charityName),
           symbolText = Some(messages(s"symbolText.asSterling")),
           symbol = Some("currency"),
           labelClass = Some("heading-large"),
           labelAsHeading = true,
-          hint = Some(messages("howMuchIncome.hint"))
+          hint = Some(messages("charity.shareOfIncome.hint"))
         )
 
         @components.submit_button()

@@ -25,11 +25,10 @@ import views.html.register.beneficiaries.charityortrust.charity.AmountDiscretion
 
 class AmountOfDiscretionYesNoViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "amountDiscretionYesNo"
+  val prefix = "charity.discretionYesNo"
   val index = 0
   val charityName = "Test"
-  val form = new YesNoFormProvider().withPrefix("amountDiscretionYesNo")
-
+  val form = new YesNoFormProvider().withPrefix(prefix)
 
   "amountDiscretionYesNo view" must {
 
@@ -38,11 +37,11 @@ class AmountOfDiscretionYesNoViewSpec extends YesNoViewBehaviours {
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode, fakeDraftId, index, charityName)(fakeRequest, messages)
 
-    behave like normalPage(applyView(form), messageKeyPrefix)
+    behave like dynamicTitlePage(applyView(form), prefix, charityName)
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, None)
+    behave like yesNoPage(form, applyView, prefix, None, Seq(charityName))
 
     behave like pageWithASubmitButton(applyView(form))
   }

@@ -28,7 +28,7 @@ import views.html.register.beneficiaries.charityortrust.charity.CharityInternati
 
 class CharityInternationalAddressViewSpec extends InternationalAddressViewBehaviours {
 
-  val messageKeyPrefix = "propertyOrLandInternationalAddress"
+  val prefix = "charity.internationalAddress"
   val charityName = "Test"
 
   val index: Int = 0
@@ -44,13 +44,13 @@ class CharityInternationalAddressViewSpec extends InternationalAddressViewBehavi
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, countryOptions, NormalMode, fakeDraftId, index, charityName)(fakeRequest, messages)
 
-
     behave like pageWithBackLink(applyView(form))
 
     behave like internationalAddress(
       applyView,
-      None,
-      routes.CharityInternationalAddressController.onSubmit(NormalMode, index, fakeDraftId).url
+      Some(prefix),
+      routes.CharityInternationalAddressController.onSubmit(NormalMode, index, fakeDraftId).url,
+      charityName
     )
 
     behave like pageWithASubmitButton(applyView(form))

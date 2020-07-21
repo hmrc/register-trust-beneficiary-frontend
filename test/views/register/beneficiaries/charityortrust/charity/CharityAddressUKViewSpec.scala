@@ -25,9 +25,8 @@ import views.html.register.beneficiaries.charityortrust.charity.CharityAddressUK
 
 class CharityAddressUKViewSpec extends UkAddressViewBehaviours {
 
-  val messageKeyPrefix = "charityAddressUK"
+  val prefix = "charity.ukAddress"
   val index = 0
-  val name = "First Last"
   val charityName = "Test"
 
   override val form = new UKAddressFormProvider()()
@@ -39,14 +38,14 @@ class CharityAddressUKViewSpec extends UkAddressViewBehaviours {
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode, fakeDraftId, charityName, index)(fakeRequest, messages)
 
-    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
+    behave like dynamicTitlePage(applyView(form), prefix, charityName)
 
     behave like pageWithBackLink(applyView(form))
 
     behave like ukAddressPage(
       applyView,
-      Some(messageKeyPrefix),
-      name.toString
+      Some(prefix),
+      charityName
     )
 
     behave like pageWithASubmitButton(applyView(form))

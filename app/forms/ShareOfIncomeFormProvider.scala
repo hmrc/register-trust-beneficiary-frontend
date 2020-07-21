@@ -20,16 +20,18 @@ import forms.mappings.Mappings
 import javax.inject.Inject
 import play.api.data.Form
 
-class HowMuchIncomeFormProvider @Inject() extends Mappings {
+class ShareOfIncomeFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[String] =
+  def withPrefix(prefix: String): Form[String] =
     Form(
-      "value" -> currency("howMuchIncome.error.required")
+      "value" -> currency(s"$prefix.error.required", s"$prefix.error.invalid")
         .verifying(
           firstError(
-            maxLength(12, "howMuchIncome.error.length"),
-            isNotEmpty("value", "howMuchIncome.error.required"),
-            regexp(Validation.onlyNumbersRegex, "howMuchIncome.error.invalid"),
-            minimumValue("1", "howMuchIncome.error.zero")
-          )))
+            maxLength(12, s"$prefix.error.length"),
+            isNotEmpty("value", s"$prefix.error.required"),
+            regexp(Validation.onlyNumbersRegex, s"$prefix.error.invalid"),
+            minimumValue("1", s"$prefix.error.zero")
+          )
+        )
+    )
 }

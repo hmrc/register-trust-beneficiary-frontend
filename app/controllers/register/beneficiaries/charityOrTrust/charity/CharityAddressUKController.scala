@@ -56,7 +56,7 @@ class CharityAddressUKController @Inject()(
   def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val charityName = request.userAnswers.get(CharityNamePage(index)).get.toString
+      val charityName = request.userAnswers.get(CharityNamePage(index)).get
 
       val preparedForm = request.userAnswers.get(CharityAddressUKPage(index)) match {
         case None => form
@@ -69,7 +69,7 @@ class CharityAddressUKController @Inject()(
   def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val charityName = request.userAnswers.get(CharityNamePage(index)).get.toString
+      val charityName = request.userAnswers.get(CharityNamePage(index)).get
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>

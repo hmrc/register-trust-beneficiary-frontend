@@ -20,8 +20,10 @@ import controllers.actions.register.{DraftIdRetrievalActionProvider, Registratio
 import forms.CharityOrTrustFormProvider
 import javax.inject.Inject
 import models.Mode
+import models.registration.pages.CharityOrTrust
 import navigation.Navigator
 import pages.register.beneficiaries.charityOrTrust.CharityOrTrustPage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
@@ -42,7 +44,7 @@ class CharityOrTrustController @Inject()(
                                           view: CharityOrTrustView
                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider()
+  private val form: Form[CharityOrTrust] = formProvider()
 
   private def actions(draftId: String) =
     identify andThen

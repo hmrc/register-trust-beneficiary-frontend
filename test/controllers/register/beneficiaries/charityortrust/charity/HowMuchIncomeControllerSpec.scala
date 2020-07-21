@@ -17,7 +17,7 @@
 package controllers.register.beneficiaries.charityortrust.charity
 
 import base.SpecBase
-import forms.HowMuchIncomeFormProvider
+import forms.ShareOfIncomeFormProvider
 import models.NormalMode
 import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.charityOrTrust.{CharityNamePage, HowMuchIncomePage}
@@ -27,9 +27,10 @@ import views.html.register.beneficiaries.charityortrust.charity.HowMuchIncomeVie
 
 class HowMuchIncomeControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new HowMuchIncomeFormProvider()
-  val form = formProvider()
+  val formProvider = new ShareOfIncomeFormProvider()
+  val form = formProvider.withPrefix("charity.shareOfIncome")
   val index: Int = 0
+  val charityName = "Test"
 
   lazy val howMuchIncomeRoute = routes.HowMuchIncomeController.onPageLoad(NormalMode, index, fakeDraftId).url
 
@@ -51,7 +52,7 @@ class HowMuchIncomeControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, index)(fakeRequest, messages).toString
+        view(form, NormalMode, fakeDraftId, index, charityName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -72,7 +73,7 @@ class HowMuchIncomeControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill("345"), NormalMode, fakeDraftId, index)(fakeRequest, messages).toString
+        view(form.fill("345"), NormalMode, fakeDraftId, index, charityName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -132,7 +133,7 @@ class HowMuchIncomeControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId, index)(fakeRequest, messages).toString
+        view(boundForm, NormalMode, fakeDraftId, index, charityName)(fakeRequest, messages).toString
 
       application.stop()
     }

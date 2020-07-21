@@ -18,7 +18,7 @@ package utils
 
 import javax.inject.Inject
 import models.{NormalMode, UserAnswers}
-import pages.register.beneficiaries.charityOrTrust.{AddressInTheUkYesNoPage, AmountDiscretionYesNoPage, CharityInternationalAddressPage, CharityNamePage, CharityOrTrustPage, HowMuchIncomePage}
+import pages.register.beneficiaries.charityOrTrust.{AddressInTheUkYesNoPage, AmountDiscretionYesNoPage, CharityAddressUKPage, CharityInternationalAddressPage, CharityNamePage, CharityOrTrustPage, HowMuchIncomePage}
 import pages.register.beneficiaries.individual._
 import pages.register.beneficiaries.{AddABeneficiaryPage, ClassBeneficiaryDescriptionPage}
 import play.api.i18n.Messages
@@ -69,10 +69,24 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       individualBeneficiaryVulnerableYesNo(index)
     ).flatten
   }
+
+  def charityBeneficiaryRows(index: Int): Seq[AnswerRow] = {
+    Seq(
+      charityOrTrust,
+      charityName(index),
+      amountDiscretionYesNo(index),
+      howMuchIncome(index),
+      addressYesNo(index),
+      addressInTheUkYesNo(index),
+      charityAddressUK(index),
+      charityInternationalAddress(index)
+    ).flatten
+  }
+
   def charityInternationalAddress(index: Int): Option[AnswerRow] = userAnswers.get(CharityInternationalAddressPage(index)) map {
     x =>
       AnswerRow(
-        "charityInternationalAddress.checkYourAnswersLabel",
+        "charity.internationalAddress.checkYourAnswersLabel",
         internationalAddress(x, countryOptions),
         Some(controllers.register.beneficiaries.charityortrust.charity.routes.CharityInternationalAddressController.onPageLoad(NormalMode, index, draftId).url),
         charityBeneficiaryName(index, userAnswers),
@@ -80,10 +94,10 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       )
   }
 
-  def charityAddressUK(index: Int): Option[AnswerRow] = userAnswers.get(AddressUKPage(index)) map {
+  def charityAddressUK(index: Int): Option[AnswerRow] = userAnswers.get(CharityAddressUKPage(index)) map {
     x =>
       AnswerRow(
-        "charityAddressUK.checkYourAnswersLabel",
+        "charity.ukAddress.checkYourAnswersLabel",
         ukAddress(x),
         Some(controllers.register.beneficiaries.charityortrust.charity.routes.CharityAddressUKController.onPageLoad(NormalMode, index, draftId).url),
         charityBeneficiaryName(index, userAnswers),
@@ -94,7 +108,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
   def addressInTheUkYesNo(index: Int): Option[AnswerRow] = userAnswers.get(AddressInTheUkYesNoPage(index)) map {
     x =>
       AnswerRow(
-        "addressInTheUkYesNo.checkYourAnswersLabel",
+        "charity.addressInTheUkYesNo.checkYourAnswersLabel",
         yesOrNo(x),
         Some(controllers.register.beneficiaries.charityortrust.charity.routes.AddressInTheUkYesNoController.onPageLoad(NormalMode, index, draftId).url),
         charityBeneficiaryName(index, userAnswers),
@@ -102,10 +116,10 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       )
   }
 
-  def addressYesNo(index: Int): Option[AnswerRow] = userAnswers.get(AddressYesNoPage(index)) map {
+  def addressYesNo(index: Int): Option[AnswerRow] = userAnswers.get(pages.register.beneficiaries.charityOrTrust.AddressYesNoPage(index)) map {
     x =>
       AnswerRow(
-        "addressYesNo.checkYourAnswersLabel",
+        "charity.addressYesNo.checkYourAnswersLabel",
         yesOrNo(x),
         Some(controllers.register.beneficiaries.charityortrust.charity.routes.AddressYesNoController.onPageLoad(NormalMode, index, draftId).url),
         charityBeneficiaryName(index, userAnswers),
@@ -116,7 +130,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
   def howMuchIncome(index: Int): Option[AnswerRow] = userAnswers.get(HowMuchIncomePage(index)) map {
     x =>
       AnswerRow(
-        "howMuchIncome.checkYourAnswersLabel",
+        "charity.shareOfIncome.checkYourAnswersLabel",
         currency(x),
         Some(controllers.register.beneficiaries.charityortrust.charity.routes.HowMuchIncomeController.onPageLoad(NormalMode, index, draftId).url),
         canEdit = canEdit
@@ -126,7 +140,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
   def amountDiscretionYesNo(index: Int): Option[AnswerRow] = userAnswers.get(AmountDiscretionYesNoPage(index)) map {
     x =>
       AnswerRow(
-        "amountDiscretionYesNo.checkYourAnswersLabel",
+        "charity.discretionYesNo.checkYourAnswersLabel",
         yesOrNo(x),
         Some(controllers.register.beneficiaries.charityortrust.charity.routes.AmountDiscretionYesNoController.onPageLoad(NormalMode, index, draftId).url),
         charityBeneficiaryName(index, userAnswers),
@@ -147,7 +161,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
   def charityName(index: Int): Option[AnswerRow] = userAnswers.get(CharityNamePage(index)) map {
     x =>
       AnswerRow(
-        "charityName.checkYourAnswersLabel",
+        "charity.name.checkYourAnswersLabel",
         HtmlFormat.escape(x),
         Some(controllers.register.beneficiaries.charityortrust.charity.routes.CharityNameController.onPageLoad(NormalMode, index, draftId).url),
         canEdit = canEdit
