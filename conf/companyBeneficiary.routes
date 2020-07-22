@@ -1,0 +1,24 @@
+GET         /:draftId/:index/name                       controllers.register.beneficiaries.companyoremploymentrelated.company.NameController.onPageLoad(index: Int, draftId: String)
+POST        /:draftId/:index/name                       controllers.register.beneficiaries.companyoremploymentrelated.company.NameController.onSubmit(index: Int, draftId: String)
+
+GET         /:draftId/:index/has-discretion             controllers.register.beneficiaries.companyoremploymentrelated.company.DiscretionYesNoController.onPageLoad(index: Int, draftId: String)
+POST        /:draftId/:index/has-discretion             controllers.register.beneficiaries.companyoremploymentrelated.company.DiscretionYesNoController.onSubmit(index: Int, draftId: String)
+
+GET         /:draftId/:index/share-of-income            controllers.register.beneficiaries.companyoremploymentrelated.company.ShareOfIncomeController.onPageLoad(index: Int, draftId: String)
+POST        /:draftId/:index/share-of-income            controllers.register.beneficiaries.companyoremploymentrelated.company.ShareOfIncomeController.onSubmit(index: Int, draftId: String)
+
+GET         /:draftId/:index/has-address                controllers.register.beneficiaries.companyoremploymentrelated.company.AddressYesNoController.onPageLoad(index: Int, draftId: String)
+POST        /:draftId/:index/has-address                controllers.register.beneficiaries.companyoremploymentrelated.company.AddressYesNoController.onSubmit(index: Int, draftId: String)
+
+GET         /:draftId/:index/has-uk-address             controllers.register.beneficiaries.companyoremploymentrelated.company.AddressUkYesNoController.onPageLoad(index: Int, draftId: String)
+POST        /:draftId/:index/has-uk-address             controllers.register.beneficiaries.companyoremploymentrelated.company.AddressUkYesNoController.onSubmit(index: Int, draftId: String)
+
+GET         /:draftId/:index/uk-address                 controllers.register.beneficiaries.companyoremploymentrelated.company.UkAddressController.onPageLoad(index: Int, draftId: String)
+POST        /:draftId/:index/uk-address                 controllers.register.beneficiaries.companyoremploymentrelated.company.UkAddressController.onSubmit(index: Int, draftId: String)
+
+GET         /:draftId/:index/non-uk-address             controllers.register.beneficiaries.companyoremploymentrelated.company.NonUkAddressController.onPageLoad(index: Int, draftId: String)
+POST        /:draftId/:index/non-uk-address             controllers.register.beneficiaries.companyoremploymentrelated.company.NonUkAddressController.onSubmit(index: Int, draftId: String)
+
+#
+#GET         /check-details              controllers.companyoremploymentrelated.company.CheckDetailsController.onPageLoad()
+#POST        /check-details              controllers.companyoremploymentrelated.company.CheckDetailsController.onSubmit()
