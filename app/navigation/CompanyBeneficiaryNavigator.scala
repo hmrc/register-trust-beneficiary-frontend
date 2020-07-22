@@ -29,8 +29,8 @@ class CompanyBeneficiaryNavigator @Inject()(frontendAppConfig: FrontendAppConfig
   private def simpleNavigation(draftId: String): PartialFunction[Page, Call] = {
     case NamePage(index) => rts.DiscretionYesNoController.onPageLoad(index, draftId)
     case ShareOfIncomePage(index) => rts.AddressYesNoController.onPageLoad(index, draftId)
-    case AddressUKPage(index) => checkDetailsRoute(index, draftId)
-    case AddressInternationalPage(index) => checkDetailsRoute(index, draftId)
+    case AddressUKPage(index) => rts.CheckDetailsController.onPageLoad(index, draftId)
+    case AddressInternationalPage(index) => rts.CheckDetailsController.onPageLoad(index, draftId)
   }
 
   private def yesNoNavigation(draftId: String) : PartialFunction[Page, ReadableUserAnswers => Call] = {
@@ -45,7 +45,7 @@ class CompanyBeneficiaryNavigator @Inject()(frontendAppConfig: FrontendAppConfig
         ua,
         AddressYesNoPage(index),
         rts.AddressUkYesNoController.onPageLoad(index, draftId),
-        checkDetailsRoute(index, draftId))
+        rts.CheckDetailsController.onPageLoad(index, draftId))
     case AddressUKYesNoPage(index) => ua =>
       yesNoNav(
         ua,
@@ -58,10 +58,6 @@ class CompanyBeneficiaryNavigator @Inject()(frontendAppConfig: FrontendAppConfig
     ua.get(fromPage)
       .map(if (_) yesCall else noCall)
       .getOrElse(controllers.routes.SessionExpiredController.onPageLoad())
-  }
-
-  def checkDetailsRoute(index: Int, draftId: String) : Call = {
-      controllers.routes.SessionExpiredController.onPageLoad()
   }
 
   override def route(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {

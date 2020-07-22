@@ -80,14 +80,14 @@ class CompanyBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
       }
     }
 
-//    "go to CheckDetails from AddressYesNo if No" in {
-//      forAll(arbitrary[UserAnswers]) {
-//        baseAnswers =>
-//          val answers = baseAnswers.set(AddressYesNoPage(index), false).success.value
-//          navigator.nextPage(AddressYesNoPage(index), fakeDraftId)(answers)
-//            .mustBe(CompanyRoutes.?????.onPageLoad(index, fakeDraftId))
-//      }
-//    }
+    "go to CheckDetails from AddressYesNo if No" in {
+      forAll(arbitrary[UserAnswers]) {
+        baseAnswers =>
+          val answers = baseAnswers.set(AddressYesNoPage(index), false).success.value
+          navigator.nextPage(AddressYesNoPage(index), fakeDraftId)(answers)
+            .mustBe(CompanyRoutes.CheckDetailsController.onPageLoad(index, fakeDraftId))
+      }
+    }
 
     "go to UkAddress from AddressYesUkNo if Yes" in {
       forAll(arbitrary[UserAnswers]) {
@@ -106,20 +106,20 @@ class CompanyBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
             .mustBe(CompanyRoutes.NonUkAddressController.onPageLoad(index, fakeDraftId))
       }
     }
-//    "go to CheckDetails from UkAddress " in {
-//      forAll(arbitrary[UserAnswers]) {
-//        userAnswers =>
-//          navigator.nextPage(UKAddressPage(index), fakeDraftId)(userAnswers)
-//            .mustBe(CompanyRoutes.?????.onPageLoad(index, fakeDraftId))
-//      }
-//    }
+    "go to CheckDetails from UkAddress " in {
+      forAll(arbitrary[UserAnswers]) {
+        userAnswers =>
+          navigator.nextPage(AddressUKPage(index), fakeDraftId)(userAnswers)
+            .mustBe(CompanyRoutes.CheckDetailsController.onPageLoad(index, fakeDraftId))
+      }
+    }
 
-//    "go to CheckDetails from NonUkAddress " in {
-//      forAll(arbitrary[UserAnswers]) {
-//        userAnswers =>
-//          navigator.nextPage(NonUKAddressPage(index), fakeDraftId)(userAnswers)
-//            .mustBe(CompanyRoutes.?????.onPageLoad(index, fakeDraftId))
-//      }
-//    }
+    "go to CheckDetails from NonUkAddress " in {
+      forAll(arbitrary[UserAnswers]) {
+        userAnswers =>
+          navigator.nextPage(AddressInternationalPage(index), fakeDraftId)(userAnswers)
+            .mustBe(CompanyRoutes.CheckDetailsController.onPageLoad(index, fakeDraftId))
+      }
+    }
   }
 }
