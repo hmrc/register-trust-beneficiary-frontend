@@ -45,6 +45,24 @@ class CompanyBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
       }
     }
 
+    "go to AddressYesNo from DiscretionYesNo if Yes" in {
+      forAll(arbitrary[UserAnswers]) {
+        baseAnswers =>
+          val answers = baseAnswers.set(DiscretionYesNoPage(index), true).success.value
+          navigator.nextPage(DiscretionYesNoPage(index), fakeDraftId)(answers)
+            .mustBe(CompanyRoutes.AddressYesNoController.onPageLoad(index, fakeDraftId))
+      }
+    }
+
+    "go to ShareOfIncomePage from DiscretionYesNo if No" in {
+      forAll(arbitrary[UserAnswers]) {
+        baseAnswers =>
+          val answers = baseAnswers.set(DiscretionYesNoPage(index), false).success.value
+          navigator.nextPage(DiscretionYesNoPage(index), fakeDraftId)(answers)
+            .mustBe(CompanyRoutes.ShareOfIncomeController.onPageLoad(index, fakeDraftId))
+      }
+    }
+
     "go to AddressYesNo from ShareOfIncomePage" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
@@ -53,5 +71,55 @@ class CompanyBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
       }
     }
 
+    "go to AddressUkYesNo from AddressYesNo if Yes" in {
+      forAll(arbitrary[UserAnswers]) {
+        baseAnswers =>
+          val answers = baseAnswers.set(AddressYesNoPage(index), true).success.value
+          navigator.nextPage(AddressYesNoPage(index), fakeDraftId)(answers)
+            .mustBe(CompanyRoutes.AddressUkYesNoController.onPageLoad(index, fakeDraftId))
+      }
+    }
+
+//    "go to CheckDetails from AddressYesNo if No" in {
+//      forAll(arbitrary[UserAnswers]) {
+//        baseAnswers =>
+//          val answers = baseAnswers.set(AddressYesNoPage(index), false).success.value
+//          navigator.nextPage(AddressYesNoPage(index), fakeDraftId)(answers)
+//            .mustBe(CompanyRoutes.?????.onPageLoad(index, fakeDraftId))
+//      }
+//    }
+
+    "go to UkAddress from AddressYesUkNo if Yes" in {
+      forAll(arbitrary[UserAnswers]) {
+        baseAnswers =>
+          val answers = baseAnswers.set(AddressUKYesNoPage(index), true).success.value
+          navigator.nextPage(AddressUKYesNoPage(index), fakeDraftId)(answers)
+            .mustBe(CompanyRoutes.UkAddressController.onPageLoad(index, fakeDraftId))
+      }
+    }
+
+    "go to NonUkAddress from AddressYesUkNo if No" in {
+      forAll(arbitrary[UserAnswers]) {
+        baseAnswers =>
+          val answers = baseAnswers.set(AddressUKYesNoPage(index), false).success.value
+          navigator.nextPage(AddressUKYesNoPage(index), fakeDraftId)(answers)
+            .mustBe(CompanyRoutes.NonUkAddressController.onPageLoad(index, fakeDraftId))
+      }
+    }
+//    "go to CheckDetails from UkAddress " in {
+//      forAll(arbitrary[UserAnswers]) {
+//        userAnswers =>
+//          navigator.nextPage(UKAddressPage(index), fakeDraftId)(userAnswers)
+//            .mustBe(CompanyRoutes.?????.onPageLoad(index, fakeDraftId))
+//      }
+//    }
+
+//    "go to CheckDetails from NonUkAddress " in {
+//      forAll(arbitrary[UserAnswers]) {
+//        userAnswers =>
+//          navigator.nextPage(NonUKAddressPage(index), fakeDraftId)(userAnswers)
+//            .mustBe(CompanyRoutes.?????.onPageLoad(index, fakeDraftId))
+//      }
+//    }
   }
 }
