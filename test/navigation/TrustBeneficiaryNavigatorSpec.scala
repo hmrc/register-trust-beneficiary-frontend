@@ -55,13 +55,6 @@ class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
         .mustBe(AddressYesNoController.onPageLoad(index, draftId))
     }
 
-    "Address yes no page -> No -> Start date page" ignore {
-      val answers = emptyUserAnswers
-        .set(AddressYesNoPage(index), false).success.value
-
-      navigator.nextPage(AddressYesNoPage(index), draftId, answers)
-    }
-
     "Address yes no page -> Yes -> Address in the UK yes no page" in {
       val answers = emptyUserAnswers
         .set(AddressYesNoPage(index), true).success.value
@@ -86,32 +79,29 @@ class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
         .mustBe(AddressInternationalController.onPageLoad(index, draftId))
     }
 
-    "UK address page -> Start date page" ignore {
-      navigator.nextPage(AddressUKPage(index), draftId, emptyUserAnswers)
-    }
-
-    "Non-UK address page -> Start date page" ignore {
-      navigator.nextPage(AddressInternationalPage(index), draftId, emptyUserAnswers)
-    }
-
-    "Address yes no page -> No -> Check your answers page" ignore {
+    "Address yes no page -> No -> Check your answers page" in {
       val answers = emptyUserAnswers
         .set(AddressYesNoPage(index), false).success.value
 
       navigator.nextPage(AddressYesNoPage(index), draftId, answers)
+        .mustBe(AnswersController.onPageLoad(index, draftId))
     }
 
-    "UK address page -> Check your answers page" ignore {
+    "UK address page -> Check your answers page" in {
       val answers = emptyUserAnswers
 
       navigator.nextPage(AddressUKPage(index), draftId, answers)
+        .mustBe(AnswersController.onPageLoad(index, draftId))
+
     }
 
-    "Non-UK address page -> Check your answers page" ignore {
+    "Non-UK address page -> Check your answers page" in {
       val answers = emptyUserAnswers
         .set(AddressYesNoPage(index), false).success.value
 
       navigator.nextPage(AddressInternationalPage(index), draftId, answers)
+        .mustBe(AnswersController.onPageLoad(index, draftId))
+
     }
   }
 }

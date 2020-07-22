@@ -34,24 +34,23 @@ class TrustBeneficiaryNavigator @Inject()() extends Navigator {
   private def simpleNavigation(draftId: String): PartialFunction[Page, Call] = {
     case NamePage(index) => rts.DiscretionYesNoController.onPageLoad(index, draftId)
     case ShareOfIncomePage(index) => rts.AddressYesNoController.onPageLoad(index, draftId)
+    case AddressUKPage(index) => rts.AnswersController.onPageLoad(index, draftId)
+    case AddressInternationalPage(index) => rts.AnswersController.onPageLoad(index, draftId)
   }
 
-  private def yesNoNavigation(draftId: String) : PartialFunction[Page, ReadableUserAnswers => Call] = {
+  private def yesNoNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case DiscretionYesNoPage(index) => ua =>
       yesNoNav(ua, DiscretionYesNoPage(index), rts.AddressYesNoController.onPageLoad(index, draftId), rts.ShareOfIncomeController.onPageLoad(index, draftId))
     case AddressUKYesNoPage(index) => ua =>
       yesNoNav(ua, AddressUKYesNoPage(index), rts.AddressUKController.onPageLoad(index, draftId), rts.AddressInternationalController.onPageLoad(index, draftId))
+    case AddressYesNoPage(index) => ua =>
+      yesNoNav(ua, AddressYesNoPage(index), rts.AddressUKYesNoController.onPageLoad(index, draftId), yesNoNav(
+        ua,
+        AddressYesNoPage(index), rts.AddressUKYesNoController.onPageLoad(index, draftId),
+        rts.AnswersController.onPageLoad(index, draftId)
+      ))
   }
 
-  private def navigationWithCheck(draftId: String) : PartialFunction[Page, ReadableUserAnswers => Call] = {
-        case AddressYesNoPage(index) => ua =>
-          yesNoNav(
-            ua,
-            AddressYesNoPage(index), rts.AddressUKYesNoController.onPageLoad(index, draftId),
-            yesNoNav(
-              ua,
-              AddressYesNoPage(index), rts.AddressUKYesNoController.onPageLoad(index, draftId), ???))
-    }
 
   def yesNoNav(ua: ReadableUserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call = {
     ua.get(fromPage)
@@ -60,8 +59,7 @@ class TrustBeneficiaryNavigator @Inject()() extends Navigator {
   }
 
   def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] =
-    simpleNavigation(draftId) andThen (c => (_:ReadableUserAnswers) => c) orElse
-      yesNoNavigation(draftId) orElse
-      navigationWithCheck(draftId)
+    simpleNavigation(draftId) andThen (c => (_: ReadableUserAnswers) => c) orElse
+      yesNoNavigation(draftId)
 
 }
