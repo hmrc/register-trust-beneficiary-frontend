@@ -21,7 +21,7 @@ import mapping.registration.BeneficiariesMapper
 import models._
 import play.api.i18n.Messages
 import play.api.libs.json.Json
-import utils.{CheckYourAnswersHelper, RegistrationProgress}
+import utils.{CheckYourAnswersHelper, IndividualBeneficiaryAnswersHelper, RegistrationProgress}
 import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
 
@@ -54,15 +54,16 @@ class SubmissionSetFactory @Inject()(
   }
 
   private def answerSectionsIfCompleted(userAnswers: UserAnswers, status: Option[Status])
-                            (implicit messages: Messages): List[RegistrationSubmission.AnswerSection] = {
+                                       (implicit messages: Messages): List[RegistrationSubmission.AnswerSection] = {
 
     if (status.contains(Status.Completed)) {
 
-      val helper = new CheckYourAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, false)
+      val helper = new CheckYourAnswersHelper()(userAnswers, userAnswers.draftId, false)
+      val individualBeneficiariesHelper = new IndividualBeneficiaryAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, false)
 
       val entitySections = List(
-        helper.individualBeneficiaries,
-        helper.classOfBeneficiaries(helper.individualBeneficiaries.exists(_.nonEmpty))
+        individualBeneficiariesHelper.individualBeneficiaries,
+        helper.classOfBeneficiaries(individualBeneficiariesHelper.individualBeneficiaries.exists(_.nonEmpty))
       ).flatten.flatten
 
       entitySections.map(convertForSubmission)
