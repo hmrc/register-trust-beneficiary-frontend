@@ -19,7 +19,6 @@ package controllers.register.beneficiaries.companyoremploymentrelated.company
 import base.SpecBase
 import config.annotations.CompanyBeneficiary
 import forms.IncomePercentageFormProvider
-import models.NormalMode
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.company.{NamePage, ShareOfIncomePage}
@@ -34,7 +33,7 @@ class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
 
   private val index = 0
   private val form: Form[Int] = new IncomePercentageFormProvider().withPrefix("companyBeneficiary.shareOfIncome")
-  private val shareOfIncomeRoute: String = routes.ShareOfIncomeController.onPageLoad(NormalMode, index, draftId).url
+  private val shareOfIncomeRoute: String = routes.ShareOfIncomeController.onPageLoad(index, draftId).url
   private val name: String = "Company"
   private val onwardRoute = Call("GET", "/foo")
   private val answer = 50
@@ -56,7 +55,7 @@ class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, name, index, draftId)(request, messages).toString
+        view(form, name, index, draftId)(request, messages).toString
 
       application.stop()
     }
@@ -76,7 +75,7 @@ class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(answer), NormalMode, name, index, draftId)(fakeRequest, messages).toString
+        view(form.fill(answer), name, index, draftId)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -117,7 +116,7 @@ class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, name, index, draftId)(fakeRequest, messages).toString
+        view(boundForm, name, index, draftId)(fakeRequest, messages).toString
 
        application.stop()
     }

@@ -17,7 +17,6 @@
 package views.register.beneficiaries.companyoremploymentrelated.company
 
 import forms.YesNoFormProvider
-import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
@@ -36,7 +35,7 @@ class DiscretionYesNoViewSpec extends YesNoViewBehaviours {
     val view = viewFor[DiscretionYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, name, index, draftId)(fakeRequest, messages)
+      view.apply(form, name, index, draftId)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
 

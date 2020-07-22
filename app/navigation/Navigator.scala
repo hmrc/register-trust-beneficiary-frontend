@@ -35,11 +35,6 @@ class Navigator @Inject()(config: FrontendAppConfig) {
       BeneficiaryRoutes.route(draftId, config) orElse
       defaultRoute(draftId)
 
-  def nextPage(page: Page, mode: Mode, draftId: String): ReadableUserAnswers => Call = mode match {
-    case NormalMode =>
-      route(draftId)(page)
-    case CheckMode =>
-      route(draftId)(page)
-  }
-
+  def nextPage(page: Page, draftId: String): ReadableUserAnswers => Call = route(draftId)(page)
+  def nextPage(page: Page, mode: Mode, draftId: String): ReadableUserAnswers => Call = nextPage(page, draftId)
 }

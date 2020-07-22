@@ -19,7 +19,6 @@ package controllers.register.beneficiaries.companyoremploymentrelated.company
 import base.SpecBase
 import config.annotations.CompanyBeneficiary
 import forms.InternationalAddressFormProvider
-import models.NormalMode
 import models.core.pages.InternationalAddress
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
@@ -37,7 +36,7 @@ class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
 
   private val index = 0
   private val form: Form[InternationalAddress] = new InternationalAddressFormProvider()()
-  private val nonUkAddressRoute: String = routes.NonUkAddressController.onPageLoad(NormalMode, index, draftId).url
+  private val nonUkAddressRoute: String = routes.NonUkAddressController.onPageLoad(index, draftId).url
   private val name: String = "Company"
   private val onwardRoute = Call("GET", "/foo")
   private val answer = InternationalAddress("Line 1", "Line 2", None, "DE")
@@ -60,7 +59,7 @@ class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, countryOptions, name, index, draftId)(request, messages).toString
+        view(form, countryOptions, name, index, draftId)(request, messages).toString
 
       application.stop()
     }
@@ -80,7 +79,7 @@ class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(answer), NormalMode, countryOptions, name, index, draftId)(fakeRequest, messages).toString
+        view(form.fill(answer), countryOptions, name, index, draftId)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -121,7 +120,7 @@ class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, countryOptions, name, index, draftId)(fakeRequest, messages).toString
+        view(boundForm, countryOptions, name, index, draftId)(fakeRequest, messages).toString
 
        application.stop()
     }

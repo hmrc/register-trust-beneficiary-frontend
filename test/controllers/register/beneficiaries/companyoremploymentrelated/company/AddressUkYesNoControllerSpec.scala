@@ -19,7 +19,6 @@ package controllers.register.beneficiaries.companyoremploymentrelated.company
 import base.SpecBase
 import config.annotations.CompanyBeneficiary
 import forms.YesNoFormProvider
-import models.NormalMode
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.company.{AddressUKYesNoPage, NamePage}
@@ -34,7 +33,7 @@ class AddressUkYesNoControllerSpec extends SpecBase with MockitoSugar {
 
   private val index = 0
   private val form: Form[Boolean] = new YesNoFormProvider().withPrefix("companyBeneficiary.addressUkYesNo")
-  private val addressUkYesNoRoute: String = routes.AddressUkYesNoController.onPageLoad(NormalMode, index, draftId).url
+  private val addressUkYesNoRoute: String = routes.AddressUkYesNoController.onPageLoad(index, draftId).url
   private val name: String = "Company"
   private val onwardRoute = Call("GET", "/foo")
 
@@ -55,7 +54,7 @@ class AddressUkYesNoControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, name, index, draftId)(request, messages).toString
+        view(form, name, index, draftId)(request, messages).toString
 
       application.stop()
     }
@@ -75,7 +74,7 @@ class AddressUkYesNoControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode, name, index, draftId)(fakeRequest, messages).toString
+        view(form.fill(true), name, index, draftId)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -116,7 +115,7 @@ class AddressUkYesNoControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, name, index, draftId)(fakeRequest, messages).toString
+        view(boundForm, name, index, draftId)(fakeRequest, messages).toString
 
        application.stop()
     }

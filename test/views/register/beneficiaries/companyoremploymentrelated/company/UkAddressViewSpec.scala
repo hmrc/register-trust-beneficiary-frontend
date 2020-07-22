@@ -17,7 +17,6 @@
 package views.register.beneficiaries.companyoremploymentrelated.company
 
 import forms.UKAddressFormProvider
-import models.NormalMode
 import models.core.pages.UKAddress
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -37,7 +36,7 @@ class UkAddressViewSpec extends UkAddressViewBehaviours {
     val view = viewFor[UkAddressView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, name, index, draftId)(fakeRequest, messages)
+      view.apply(form, name, index, draftId)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
 

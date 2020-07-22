@@ -21,7 +21,6 @@ import controllers.actions.StandardActionSets
 import controllers.actions.register.company.NameRequiredAction
 import forms.IncomePercentageFormProvider
 import javax.inject.Inject
-import models.Mode
 import navigation.Navigator
 import pages.register.beneficiaries.company.ShareOfIncomePage
 import play.api.data.Form
@@ -45,7 +44,7 @@ class ShareOfIncomeController @Inject()(
 
   val form: Form[Int] = formProvider.withPrefix("companyBeneficiary.shareOfIncome")
 
-  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] =
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
     implicit request =>
 
@@ -54,22 +53,22 @@ class ShareOfIncomeController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, request.beneficiaryName, index, draftId))
+      Ok(view(preparedForm, request.beneficiaryName, index, draftId))
   }
 
-  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] =
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode, request.beneficiaryName, index, draftId))),
+          Future.successful(BadRequest(view(formWithErrors, request.beneficiaryName, index, draftId))),
 
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ShareOfIncomePage(index), value))
             _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ShareOfIncomePage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(ShareOfIncomePage(index), draftId)(updatedAnswers))
       )
   }
 }

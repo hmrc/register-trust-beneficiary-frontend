@@ -18,13 +18,13 @@ package navigation
 
 import base.SpecBase
 import config.FrontendAppConfig
+import controllers.register.beneficiaries.companyoremploymentrelated.company.{routes => CompanyRoutes}
 import generators.Generators
-import models.{NormalMode, UserAnswers}
+import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.beneficiaries.company._
 import play.api.mvc.Call
-import controllers.register.beneficiaries.companyoremploymentrelated.company.{routes => CompanyRoutes}
 
 class CompanyBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -40,16 +40,16 @@ class CompanyBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
     "go to DiscretionYesNo from NamePage" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
-          navigator.nextPage(NamePage(index), NormalMode, fakeDraftId)(userAnswers)
-            .mustBe(CompanyRoutes.DiscretionYesNoController.onPageLoad(NormalMode, index, fakeDraftId))
+          navigator.nextPage(NamePage(index), fakeDraftId)(userAnswers)
+            .mustBe(CompanyRoutes.DiscretionYesNoController.onPageLoad(index, fakeDraftId))
       }
     }
 
     "go to AddressYesNo from ShareOfIncomePage" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
-          navigator.nextPage(ShareOfIncomePage(index), NormalMode, fakeDraftId)(userAnswers)
-            .mustBe(CompanyRoutes.AddressYesNoController.onPageLoad(NormalMode, index, fakeDraftId))
+          navigator.nextPage(ShareOfIncomePage(index), fakeDraftId)(userAnswers)
+            .mustBe(CompanyRoutes.AddressYesNoController.onPageLoad(index, fakeDraftId))
       }
     }
 

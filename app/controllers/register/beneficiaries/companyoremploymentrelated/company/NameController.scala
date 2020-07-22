@@ -20,7 +20,6 @@ import config.annotations.CompanyBeneficiary
 import controllers.actions.StandardActionSets
 import forms.StringFormProvider
 import javax.inject.Inject
-import models.Mode
 import navigation.Navigator
 import pages.register.beneficiaries.company.NamePage
 import play.api.data.Form
@@ -43,7 +42,7 @@ class NameController @Inject()(
 
   val form: Form[String] = formProvider.withPrefix("companyBeneficiary.name", 105)
 
-  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] =
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId) {
     implicit request =>
 
@@ -52,22 +51,22 @@ class NameController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, index, draftId))
+      Ok(view(preparedForm, index, draftId))
 
   }
 
-  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode, index, draftId))),
+          Future.successful(BadRequest(view(formWithErrors, index, draftId))),
 
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(NamePage(index), value))
             _ <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(NamePage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(NamePage(index), draftId)(updatedAnswers))
       )
   }
 }

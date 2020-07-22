@@ -17,7 +17,6 @@
 package views.register.beneficiaries.companyoremploymentrelated.company
 
 import forms.InternationalAddressFormProvider
-import models.NormalMode
 import models.core.pages.InternationalAddress
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -41,7 +40,7 @@ class NonUkAddressViewSpec extends NonUkAddressViewBehaviours {
     val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, countryOptions, name, index, draftId)(fakeRequest, messages)
+      view.apply(form, countryOptions, name, index, draftId)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
 

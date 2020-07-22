@@ -19,7 +19,6 @@ package controllers.register.beneficiaries.companyoremploymentrelated.company
 import base.SpecBase
 import config.annotations.CompanyBeneficiary
 import forms.UKAddressFormProvider
-import models.NormalMode
 import models.core.pages.UKAddress
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
@@ -35,7 +34,7 @@ class UkAddressControllerSpec extends SpecBase with MockitoSugar {
 
   private val index = 0
   private val form: Form[UKAddress] = new UKAddressFormProvider()()
-  private val ukAddressRoute: String = routes.UkAddressController.onPageLoad(NormalMode, index, draftId).url
+  private val ukAddressRoute: String = routes.UkAddressController.onPageLoad(index, draftId).url
   private val name: String = "Company"
   private val onwardRoute = Call("GET", "/foo")
   private val answer = UKAddress("Line 1", "Line 2", None, None, "NE11NE")
@@ -57,7 +56,7 @@ class UkAddressControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, name, index, draftId)(request, messages).toString
+        view(form, name, index, draftId)(request, messages).toString
 
       application.stop()
     }
@@ -77,7 +76,7 @@ class UkAddressControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(answer), NormalMode, name, index, draftId)(fakeRequest, messages).toString
+        view(form.fill(answer), name, index, draftId)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -118,7 +117,7 @@ class UkAddressControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, name, index, draftId)(fakeRequest, messages).toString
+        view(boundForm, name, index, draftId)(fakeRequest, messages).toString
 
        application.stop()
     }

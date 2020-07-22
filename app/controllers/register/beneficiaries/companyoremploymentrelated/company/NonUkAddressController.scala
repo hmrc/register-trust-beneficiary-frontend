@@ -21,7 +21,6 @@ import controllers.actions._
 import controllers.actions.register.company.NameRequiredAction
 import forms.InternationalAddressFormProvider
 import javax.inject.Inject
-import models.Mode
 import navigation.Navigator
 import pages.register.beneficiaries.company.AddressInternationalPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -47,7 +46,7 @@ class NonUkAddressController @Inject()(
 
   private val form = formProvider()
 
-  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] =
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
     implicit request =>
 
@@ -56,10 +55,10 @@ class NonUkAddressController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, countryOptions.options, request.beneficiaryName, index, draftId))
+      Ok(view(preparedForm, countryOptions.options, request.beneficiaryName, index, draftId))
   }
 
-  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] =
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
     implicit request =>
 
@@ -67,7 +66,6 @@ class NonUkAddressController @Inject()(
         formWithErrors =>
           Future.successful(BadRequest(view(
             formWithErrors,
-            mode,
             countryOptions.options,
             request.beneficiaryName,
             index,
@@ -77,7 +75,7 @@ class NonUkAddressController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressInternationalPage(index), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddressInternationalPage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(AddressInternationalPage(index), draftId)(updatedAnswers))
       )
   }
 }

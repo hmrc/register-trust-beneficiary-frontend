@@ -21,7 +21,6 @@ import controllers.actions._
 import controllers.actions.register.company.NameRequiredAction
 import forms.UKAddressFormProvider
 import javax.inject.Inject
-import models.Mode
 import models.core.pages.UKAddress
 import navigation.Navigator
 import pages.register.beneficiaries.company.AddressUKPage
@@ -47,7 +46,7 @@ class UkAddressController @Inject()(
 
   private val form: Form[UKAddress] = formProvider()
 
-  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] =
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
     implicit request =>
 
@@ -56,22 +55,22 @@ class UkAddressController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, request.beneficiaryName, index, draftId))
+      Ok(view(preparedForm, request.beneficiaryName, index, draftId))
   }
 
-  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] =
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode, request.beneficiaryName, index, draftId))),
+          Future.successful(BadRequest(view(formWithErrors, request.beneficiaryName, index, draftId))),
 
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressUKPage(index), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddressUKPage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(AddressUKPage(index), draftId)(updatedAnswers))
       )
   }
 }

@@ -19,7 +19,6 @@ package controllers.register.beneficiaries.companyoremploymentrelated.company
 import base.SpecBase
 import config.annotations.CompanyBeneficiary
 import forms.StringFormProvider
-import models.NormalMode
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.company.NamePage
@@ -34,7 +33,7 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
 
   private val index = 0
   private val form: Form[String] = new StringFormProvider().withPrefix("companyBeneficiary.name", 105)
-  private val nameRoute: String = routes.NameController.onPageLoad(NormalMode, index, draftId).url
+  private val nameRoute: String = routes.NameController.onPageLoad(index, draftId).url
   private val name: String = "Company"
   private val onwardRoute = Call("GET", "/foo")
 
@@ -53,7 +52,7 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, index, draftId)(request, messages).toString
+        view(form, index, draftId)(request, messages).toString
 
       application.stop()
     }
@@ -73,7 +72,7 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(name), NormalMode, index, draftId)(fakeRequest, messages).toString
+        view(form.fill(name), index, draftId)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -114,7 +113,7 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, index, draftId)(fakeRequest, messages).toString
+        view(boundForm, index, draftId)(fakeRequest, messages).toString
 
        application.stop()
     }
