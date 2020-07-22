@@ -18,7 +18,6 @@ package controllers.register.beneficiaries.charityortrust.trust
 
 import base.SpecBase
 import forms.YesNoFormProvider
-import models.NormalMode
 import pages.register.beneficiaries.trust.{DiscretionYesNoPage, NamePage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -32,7 +31,7 @@ class DiscretionYesNoControllerSpec extends SpecBase {
 
   val name = "Name"
 
-  lazy val trustBeneficiaryDiscretionYesNoRoute = routes.DiscretionYesNoController.onPageLoad(NormalMode, index, fakeDraftId).url
+  lazy val trustBeneficiaryDiscretionYesNoRoute = routes.DiscretionYesNoController.onPageLoad(index, fakeDraftId).url
 
   "DiscretionYesNo Controller" must {
 
@@ -52,7 +51,7 @@ class DiscretionYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, name, index)(fakeRequest, messages).toString
+        view(form, fakeDraftId, name, index)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -73,7 +72,7 @@ class DiscretionYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode, fakeDraftId, name, index)(fakeRequest, messages).toString
+        view(form.fill(true), fakeDraftId, name, index)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -119,7 +118,7 @@ class DiscretionYesNoControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId, name, index)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, name, index)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -166,7 +165,7 @@ class DiscretionYesNoControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.NameController.onPageLoad(NormalMode, index, fakeDraftId).url
+      redirectLocation(result).value mustEqual routes.NameController.onPageLoad(index, fakeDraftId).url
 
       application.stop()
     }

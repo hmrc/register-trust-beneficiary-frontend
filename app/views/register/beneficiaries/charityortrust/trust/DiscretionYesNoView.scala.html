@@ -21,13 +21,13 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode, draftId: String, name: String, index: Int)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, name: String, index: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("trustBeneficiaryDiscretionYesNo.title")}"
 ) {
 
-    @formHelper(action = DiscretionYesNoController.onSubmit(mode, index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = DiscretionYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 

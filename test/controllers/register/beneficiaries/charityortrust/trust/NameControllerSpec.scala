@@ -18,7 +18,6 @@ package controllers.register.beneficiaries.charityortrust.trust
 
 import base.SpecBase
 import forms.StringFormProvider
-import models.NormalMode
 import pages.register.beneficiaries.trust.NamePage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -31,7 +30,7 @@ class NameControllerSpec extends SpecBase {
   val name = "Name"
   val index: Int = 0
 
-  lazy val trustBeneficiaryNameRoute = routes.NameController.onPageLoad(NormalMode, index, fakeDraftId).url
+  lazy val trustBeneficiaryNameRoute = routes.NameController.onPageLoad(index, fakeDraftId).url
 
   "TrustBeneficiaryName Controller" must {
 
@@ -48,7 +47,7 @@ class NameControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, index)(request, messages).toString
+        view(form, fakeDraftId, index)(request, messages).toString
 
       application.stop()
     }
@@ -69,7 +68,7 @@ class NameControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(name), NormalMode, fakeDraftId, index)(fakeRequest, messages).toString
+        view(form.fill(name), fakeDraftId, index)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -108,7 +107,7 @@ class NameControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId, index)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index)(fakeRequest, messages).toString
 
       application.stop()
     }

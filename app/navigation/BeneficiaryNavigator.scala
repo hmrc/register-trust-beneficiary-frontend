@@ -36,6 +36,9 @@ class BeneficiaryNavigator @Inject()(
   override def nextPage(page: Page, mode: Mode, draftId: String, userAnswers: ReadableUserAnswers): Call =
     route(draftId, config)(page)(userAnswers)
 
+  override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call =
+    route(draftId, config)(page)(userAnswers)
+
   private def route(draftId: String, config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case NamePage(index) => namePage(draftId, index)
     case RoleInCompanyPage(index) => _ => individualRoutes.DateOfBirthYesNoController.onPageLoad(NormalMode, index, draftId)

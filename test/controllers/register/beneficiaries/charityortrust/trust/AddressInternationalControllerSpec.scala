@@ -19,7 +19,7 @@ package controllers.register.beneficiaries.charityortrust.trust
 import base.SpecBase
 import forms.InternationalAddressFormProvider
 import models.core.pages.InternationalAddress
-import models.{NormalMode, UserAnswers}
+import models.UserAnswers
 import pages.register.beneficiaries.trust.{AddressInternationalPage, NamePage}
 import play.api.Application
 import play.api.data.Form
@@ -41,7 +41,7 @@ class AddressInternationalControllerSpec extends SpecBase {
   val index = 0
   val name = "Name"
 
-  lazy val addressInternationalRoute: String = routes.AddressInternationalController.onPageLoad(NormalMode, index, fakeDraftId).url
+  lazy val addressInternationalRoute: String = routes.AddressInternationalController.onPageLoad(index, fakeDraftId).url
 
 
   "International Address Controller" must {
@@ -63,7 +63,7 @@ class AddressInternationalControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, countryOptions, NormalMode, index, fakeDraftId, name.toString)(request, messages).toString
+        view(form, countryOptions, index, fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -89,10 +89,9 @@ class AddressInternationalControllerSpec extends SpecBase {
         view(
           form.fill(InternationalAddress("line 1", "line 2", Some("line 3"), "country")),
           countryOptions,
-          NormalMode,
           index,
           fakeDraftId,
-          name.toString)(fakeRequest, messages).toString
+          name)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -139,7 +138,7 @@ class AddressInternationalControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, countryOptions, NormalMode, index, fakeDraftId, name.toString)(fakeRequest, messages).toString
+        view(boundForm, countryOptions, index, fakeDraftId, name.toString)(fakeRequest, messages).toString
 
       application.stop()
     }

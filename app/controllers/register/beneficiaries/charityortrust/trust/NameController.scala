@@ -19,7 +19,6 @@ package controllers.register.beneficiaries.charityortrust.trust
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.StringFormProvider
 import javax.inject.Inject
-import models.Mode
 import navigation.Navigator
 import pages.register.beneficiaries.trust.NamePage
 import play.api.data.Form
@@ -49,7 +48,7 @@ class NameController @Inject()(
 
   val form: Form[String] = formProvider.withPrefix("trustBeneficiaryName", length)
 
-  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(draftId) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(draftId) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(NamePage(index)) match {
@@ -57,21 +56,21 @@ class NameController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, draftId, index))
+      Ok(view(preparedForm,  draftId, index))
   }
 
-  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(draftId).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId, index))),
+          Future.successful(BadRequest(view(formWithErrors,  draftId, index))),
 
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(NamePage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(NamePage(index), mode, draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(NamePage(index),  draftId, updatedAnswers))
       )
   }
 }

@@ -18,7 +18,6 @@ package controllers.register.beneficiaries.charityortrust.trust
 
 import base.SpecBase
 import forms.YesNoFormProvider
-import models.NormalMode
 import pages.register.beneficiaries.trust.{AddressYesNoPage, NamePage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -31,7 +30,7 @@ class AddressYesNoControllerSpec extends SpecBase {
   val index: Int = 0
   val name = "Name"
 
-  lazy val trustBeneficiaryAddressYesNoRoute = routes.AddressYesNoController.onPageLoad(NormalMode, index, fakeDraftId).url
+  lazy val trustBeneficiaryAddressYesNoRoute = routes.AddressYesNoController.onPageLoad(index, fakeDraftId).url
 
   "TrustBeneficiaryAddressYesNo Controller" must {
 
@@ -51,7 +50,7 @@ class AddressYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, name, index)(fakeRequest, messages).toString
+        view(form, fakeDraftId, name, index)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -72,7 +71,7 @@ class AddressYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode, fakeDraftId, name, index)(fakeRequest, messages).toString
+        view(form.fill(true), fakeDraftId, name, index)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -118,7 +117,7 @@ class AddressYesNoControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId, name, index)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, name, index)(fakeRequest, messages).toString
 
       application.stop()
     }

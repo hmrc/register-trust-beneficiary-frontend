@@ -20,7 +20,6 @@ import controllers.actions.register.{DraftIdRetrievalActionProvider, Registratio
 import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
 import forms.IncomePercentageFormProvider
 import javax.inject.Inject
-import models.{Mode, NormalMode}
 import navigation.Navigator
 import pages.register.beneficiaries.trust.{NamePage, ShareOfIncomePage}
 import play.api.data.Form
@@ -49,11 +48,11 @@ class ShareOfIncomeController @Inject()(
     identify andThen
       getData(draftId) andThen
       requireData andThen
-      requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(NormalMode, index, draftId)))
+      requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(index, draftId)))
 
   val form: Form[Int] = formProvider.withPrefix("trustBeneficiaryShareOfIncome")
 
-  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
       val name = request.userAnswers.get(NamePage(index)).get
@@ -63,10 +62,10 @@ class ShareOfIncomeController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, draftId, name, index))
+      Ok(view(preparedForm,  draftId, name, index))
   }
 
-  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(
@@ -74,14 +73,14 @@ class ShareOfIncomeController @Inject()(
 
           val name = request.userAnswers.get(NamePage(index)).get
 
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId, name, index)))
+          Future.successful(BadRequest(view(formWithErrors,  draftId, name, index)))
 
         },
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ShareOfIncomePage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ShareOfIncomePage(index), mode, draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(ShareOfIncomePage(index),  draftId, updatedAnswers))
       )
   }
 }

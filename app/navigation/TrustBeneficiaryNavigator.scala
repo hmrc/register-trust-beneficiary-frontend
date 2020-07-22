@@ -26,44 +26,32 @@ import play.api.mvc.Call
 class TrustBeneficiaryNavigator @Inject()() extends Navigator {
 
   override def nextPage(page: Page, mode: Mode, draftId: String, userAnswers: ReadableUserAnswers): Call =
-    routes(mode, draftId)(page)(userAnswers)
+    routes(draftId)(page)(userAnswers)
 
-  private def simpleNavigation(mode: Mode, draftId: String): PartialFunction[Page, Call] = {
-    case NamePage(index) => rts.DiscretionYesNoController.onPageLoad(mode, index, draftId)
-    case ShareOfIncomePage(index) => rts.AddressYesNoController.onPageLoad(mode, index, draftId)
+  override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call =
+    routes(draftId)(page)(userAnswers)
+
+  private def simpleNavigation(draftId: String): PartialFunction[Page, Call] = {
+    case NamePage(index) => rts.DiscretionYesNoController.onPageLoad(index, draftId)
+    case ShareOfIncomePage(index) => rts.AddressYesNoController.onPageLoad(index, draftId)
   }
 
-  private def yesNoNavigation(mode: Mode, draftId: String) : PartialFunction[Page, ReadableUserAnswers => Call] = {
+  private def yesNoNavigation(draftId: String) : PartialFunction[Page, ReadableUserAnswers => Call] = {
     case DiscretionYesNoPage(index) => ua =>
-      yesNoNav(ua, DiscretionYesNoPage(index), rts.AddressYesNoController.onPageLoad(mode, index, draftId), rts.ShareOfIncomeController.onPageLoad(mode, index, draftId))
+      yesNoNav(ua, DiscretionYesNoPage(index), rts.AddressYesNoController.onPageLoad(index, draftId), rts.ShareOfIncomeController.onPageLoad(index, draftId))
     case AddressUKYesNoPage(index) => ua =>
-      yesNoNav(ua, AddressUKYesNoPage(index), rts.AddressUKController.onPageLoad(mode, index, draftId), rts.AddressInternationalController.onPageLoad(mode, index, draftId))
+      yesNoNav(ua, AddressUKYesNoPage(index), rts.AddressUKController.onPageLoad(index, draftId), rts.AddressInternationalController.onPageLoad(index, draftId))
   }
 
-  private def navigationWithCheck(mode: Mode, draftId: String) : PartialFunction[Page, ReadableUserAnswers => Call] = {
-    mode match {
-      case NormalMode => {
+  private def navigationWithCheck(draftId: String) : PartialFunction[Page, ReadableUserAnswers => Call] = {
         case AddressYesNoPage(index) => ua =>
           yesNoNav(
             ua,
-            AddressYesNoPage(index), rts.AddressUKYesNoController.onPageLoad(mode, index, draftId),
+            AddressYesNoPage(index), rts.AddressUKYesNoController.onPageLoad(index, draftId),
             yesNoNav(
               ua,
-              AddressYesNoPage(index), rts.AddressUKYesNoController.onPageLoad(mode, index, draftId), ???))
-      }
-      case CheckMode => {
-        case _:AddressUKPage | _:AddressInternationalPage => ua =>
-          ???
-        case AddressYesNoPage(index) => ua =>
-          yesNoNav(
-            ua,
-            AddressYesNoPage(index),
-            rts.AddressUKYesNoController.onPageLoad(mode, index, draftId),
-            ???
-          )
-        }
+              AddressYesNoPage(index), rts.AddressUKYesNoController.onPageLoad(index, draftId), ???))
     }
-  }
 
   def yesNoNav(ua: ReadableUserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call = {
     ua.get(fromPage)
@@ -71,9 +59,9 @@ class TrustBeneficiaryNavigator @Inject()() extends Navigator {
       .getOrElse(controllers.routes.SessionExpiredController.onPageLoad())
   }
 
-  def routes(mode: Mode, draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] =
-    simpleNavigation(mode, draftId) andThen (c => (_:ReadableUserAnswers) => c) orElse
-      yesNoNavigation(mode, draftId) orElse
-      navigationWithCheck(mode, draftId)
+  def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] =
+    simpleNavigation(draftId) andThen (c => (_:ReadableUserAnswers) => c) orElse
+      yesNoNavigation(draftId) orElse
+      navigationWithCheck(draftId)
 
 }

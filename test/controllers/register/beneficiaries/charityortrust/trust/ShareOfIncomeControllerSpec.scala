@@ -18,7 +18,6 @@ package controllers.register.beneficiaries.charityortrust.trust
 
 import base.SpecBase
 import forms.IncomePercentageFormProvider
-import models.NormalMode
 import pages.register.beneficiaries.trust.{NamePage, ShareOfIncomePage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -33,7 +32,7 @@ class ShareOfIncomeControllerSpec extends SpecBase {
   val userAnswers = emptyUserAnswers
     .set(NamePage(index), name).success.value
 
-  lazy val shareOfIncomeRoute = routes.ShareOfIncomeController.onPageLoad(NormalMode, index, fakeDraftId).url
+  lazy val shareOfIncomeRoute = routes.ShareOfIncomeController.onPageLoad(index, fakeDraftId).url
 
   "ShareOfIncome Controller" must {
 
@@ -50,7 +49,7 @@ class ShareOfIncomeControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, name, index)(request, messages).toString
+        view(form, fakeDraftId, name, index)(request, messages).toString
 
       application.stop()
     }
@@ -71,7 +70,7 @@ class ShareOfIncomeControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(5), NormalMode, fakeDraftId, name, index)(fakeRequest, messages).toString
+        view(form.fill(5), fakeDraftId, name, index)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -110,7 +109,7 @@ class ShareOfIncomeControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId, name, index)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, name, index)(fakeRequest, messages).toString
 
       application.stop()
     }

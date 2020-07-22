@@ -16,16 +16,14 @@
 
 package navigation
 
-import config.FrontendAppConfig
-import javax.inject.{Inject, Singleton}
-import models.{UserAnswers, _}
+import models.{Mode, ReadableUserAnswers}
 import pages._
 import play.api.mvc.Call
-import uk.gov.hmrc.auth.core.AffinityGroup
 
-@Singleton
 trait Navigator {
 
   def nextPage(page: Page, mode: Mode, draftId: String, userAnswers: ReadableUserAnswers): Call
+
+  def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call
 
 }

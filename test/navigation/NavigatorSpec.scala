@@ -26,7 +26,6 @@ import pages._
 class NavigatorSpec extends SpecBase
   with ScalaCheckPropertyChecks
   with Generators
-  with BeneficiaryRoutes
 {
 
   implicit val navigator : Navigator = injector.instanceOf[Navigator]
@@ -40,7 +39,6 @@ class NavigatorSpec extends SpecBase
         navigator.nextPage(UnknownPage, NormalMode, fakeDraftId, emptyUserAnswers) mustBe controllers.routes.IndexController.onPageLoad(fakeDraftId)
       }
 
-      behave like beneficiaryRoutes
     }
   }
 }
