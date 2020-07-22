@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.company
+package config.annotations;
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.beneficiaries.{Beneficiaries, CompanyBeneficiaries}
+import com.google.inject.BindingAnnotation;
 
-case class CompanyBeneficiarySafeIdPage(index: Int) extends QuestionPage[String] {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-  override def path: JsPath = JsPath \ Beneficiaries \ CompanyBeneficiaries \ index \ toString
-
-  override def toString: String = "safeId"
-}
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
+@BindingAnnotation
+public @interface CompanyBeneficiary {}

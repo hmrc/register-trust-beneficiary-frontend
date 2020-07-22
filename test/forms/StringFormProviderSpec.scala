@@ -29,41 +29,57 @@ class StringFormProviderSpec extends StringFieldBehaviours {
 
   val form = new StringFormProvider().withPrefix(prefix, maxLength)
 
-  ".value" must {
+  import play.api.data.{Form, FormError}
+  import wolfendale.scalacheck.regexp.RegexpGen
 
-    val fieldName = "value"
+  class StringFormProviderSpec extends StringFieldBehaviours {
 
-    behave like fieldThatBindsValidData(
-      form,
-      fieldName,
-      stringsWithMaxLength(maxLength)
-    )
+    val prefix = "classOfBeneficiary.description"
 
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
-    )
+    val requiredKey = s"$prefix.error.required"
+    val lengthKey = s"$prefix.error.length"
+    val invalidFormatKey = s"$prefix.error.invalidFormat"
+    val maxLength = 56
 
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
+    val form: Form[String] = new StringFormProvider().withPrefix(prefix, maxLength)
 
-    behave like nonEmptyField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey, Seq(fieldName))
-    )
+    ".value" must {
 
-    behave like fieldWithRegexpWithGenerator(
-      form,
-      fieldName,
-      Validation.nameRegex,
-      generator = stringsWithMaxLength(maxLength),
-      error = FormError(fieldName, invalidFormatKey, Seq(Validation.nameRegex))
-    )
+      val fieldName = "value"
+
+      behave like fieldThatBindsValidData(
+        form,
+        fieldName,
+        RegexpGen.from(Validation.nameRegex)
+      )
+
+      behave like fieldWithMaxLength(
+        form,
+        fieldName,
+        maxLength = maxLength,
+        lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      )
+
+      behave like mandatoryField(
+        form,
+        fieldName,
+        requiredError = FormError(fieldName, requiredKey)
+      )
+
+      behave like nonEmptyField(
+        form,
+        fieldName,
+        requiredError = FormError(fieldName, requiredKey, Seq(fieldName))
+      )
+
+      behave like fieldWithRegexpWithGenerator(
+        form,
+        fieldName,
+        regexp = Validation.nameRegex,
+        generator = stringsWithMaxLength(maxLength),
+        error = FormError(fieldName, invalidFormatKey, Seq(Validation.nameRegex))
+      )
+    }
   }
+
 }

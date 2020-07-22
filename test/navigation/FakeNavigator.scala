@@ -26,6 +26,6 @@ class FakeNavigator(config: FrontendAppConfig,
                     val desiredRoute: Call = Call("GET", "/foo"),
                     mode: Mode = NormalMode
                    ) extends Navigator(config) {
-  override def nextPage(page: Page, mode: Mode, fakeDraftId: String): ReadableUserAnswers => Call = _ => desiredRoute
+  override def nextPage(page: Page, fakeDraftId: String): ReadableUserAnswers => Call = _ => desiredRoute
 }
 
