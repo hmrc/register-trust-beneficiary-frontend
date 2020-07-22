@@ -48,4 +48,12 @@ trait Mappings extends Formatters with Constraints {
                            twoRequiredKey: String,
                            requiredKey: String): FieldMapping[LocalDate] =
     of(new LocalDateFormatter(invalidKey, allRequiredKey, twoRequiredKey, requiredKey))
+
+  protected def incomePercentage(prefix: String): FieldMapping[Int] =
+    of(percentageFormatter(
+      s"$prefix.error.required",
+      s"$prefix.error.integer",
+      s"$prefix.error.non_numeric",
+      s"$prefix.error.less_than_100"
+    ))
 }

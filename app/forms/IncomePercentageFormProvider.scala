@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package navigation
+package forms
 
-import config.FrontendAppConfig
-import models.{Mode, NormalMode, ReadableUserAnswers, UserAnswers}
-import pages._
-import play.api.mvc.Call
-import uk.gov.hmrc.auth.core.AffinityGroup
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-class FakeNavigator(config: FrontendAppConfig,
-                    val desiredRoute: Call = Call("GET", "/foo"),
-                    mode: Mode = NormalMode
-                   ) extends Navigator(config) {
-  override def nextPage(page: Page, mode: Mode, fakeDraftId: String): ReadableUserAnswers => Call = _ => desiredRoute
+class IncomePercentageFormProvider @Inject() extends Mappings {
+
+  def withPrefix(prefix: String): Form[Int] =
+    Form(
+      "value" -> incomePercentage(prefix)
+    )
 }
-

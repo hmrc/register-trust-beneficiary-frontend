@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package navigation
+package pages.register.beneficiaries.trust
 
-import config.FrontendAppConfig
-import models.{Mode, NormalMode, ReadableUserAnswers, UserAnswers}
-import pages._
-import play.api.mvc.Call
-import uk.gov.hmrc.auth.core.AffinityGroup
+import models.core.pages.InternationalAddress
+import pages.QuestionPage
+import play.api.libs.json.JsPath
+import sections.beneficiaries.{Beneficiaries, IndividualBeneficiaries, TrustBeneficiaries}
 
-class FakeNavigator(config: FrontendAppConfig,
-                    val desiredRoute: Call = Call("GET", "/foo"),
-                    mode: Mode = NormalMode
-                   ) extends Navigator(config) {
-  override def nextPage(page: Page, mode: Mode, fakeDraftId: String): ReadableUserAnswers => Call = _ => desiredRoute
+final case class AddressInternationalPage(index: Int) extends QuestionPage[InternationalAddress] {
+
+  override def path: JsPath = JsPath \  Beneficiaries \ TrustBeneficiaries \ index \ toString
+
+  override def toString: String = "address"
 }
-
