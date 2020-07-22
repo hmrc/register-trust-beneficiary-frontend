@@ -22,62 +22,55 @@ import models.{CheckMode, Mode, NormalMode, ReadableUserAnswers, UserAnswers}
 import pages.{Page, QuestionPage}
 import play.api.mvc.Call
 import uk.gov.hmrc.auth.core.AffinityGroup
+import controllers.register.beneficiaries.companyoremploymentrelated.company.{routes => rts}
+import pages.register.beneficiaries.company._
 
 class CompanyBeneficiaryNavigator @Inject()(frontendAppConfig: FrontendAppConfig) extends Navigator(frontendAppConfig) {
 
-//  override def nextPage(page: Page, mode: Mode, draftId: String, af :AffinityGroup = AffinityGroup.Organisation): ReadableUserAnswers => Call = mode match {
-//    case NormalMode =>
-//      route(draftId)(page)(af)
-//    case CheckMode =>
-//      route(draftId)(page)(af)
-//  }
+  override def nextPage(page: Page, mode: Mode, draftId: String, af: AffinityGroup = AffinityGroup.Organisation):
+    ReadableUserAnswers => Call = route(mode, draftId)(page)
 
-//  private def simpleNavigation(mode: Mode): PartialFunction[Page, Call] = {
-//    case NamePage => rts.DiscretionYesNoController.onPageLoad(mode)
-//    case ShareOfIncomePage => rts.AddressYesNoController.onPageLoad(mode)
-//    case StartDatePage => rts.CheckDetailsController.onPageLoad()
-//  }
-//
-//  private def yesNoNavigation(mode: Mode) : PartialFunction[Page, UserAnswers => Call] = {
-//    case DiscretionYesNoPage => ua =>
-//      yesNoNav(ua, DiscretionYesNoPage, rts.AddressYesNoController.onPageLoad(mode), rts.ShareOfIncomeController.onPageLoad(mode))
-//    case AddressUkYesNoPage => ua =>
-//      yesNoNav(ua, AddressUkYesNoPage, rts.UkAddressController.onPageLoad(mode), rts.NonUkAddressController.onPageLoad(mode))
-//  }
-//
-//  private def navigationWithCheck(mode: Mode) : PartialFunction[Page, UserAnswers => Call] = {
-//    mode match {
-//      case NormalMode => {
-//        case UkAddressPage | NonUkAddressPage => _ =>
-//          rts.StartDateController.onPageLoad()
-//        case AddressYesNoPage => ua =>
-//          yesNoNav(ua, AddressYesNoPage, rts.AddressUkYesNoController.onPageLoad(mode), yesNoNav(ua, AddressYesNoPage, rts.AddressUkYesNoController.onPageLoad(mode), rts.StartDateController.onPageLoad()))
-//      }
-//      case CheckMode => {
-//        case UkAddressPage | NonUkAddressPage => ua =>
-//          checkDetailsRoute(ua)
-//        case AddressYesNoPage => ua =>
-//          yesNoNav(ua, AddressYesNoPage, rts.AddressUkYesNoController.onPageLoad(mode), checkDetailsRoute(ua))
-//      }
-//    }
-//  }
-//
-//  def yesNoNav(ua: UserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call = {
-//    ua.get(fromPage)
-//      .map(if (_) yesCall else noCall)
-//      .getOrElse(controllers.routes.SessionExpiredController.onPageLoad())
-//  }
-//
-//  def checkDetailsRoute(answers: UserAnswers) : Call = {
-//    answers.get(IndexPage) match {
-//      case None => controllers.routes.SessionExpiredController.onPageLoad()
-//      case Some(x) =>
-//        controllers.companyoremploymentrelated.company.amend.routes.CheckDetailsController.renderFromUserAnswers(x)
-//    }
-//  }
+  private def simpleNavigation(mode: Mode, draftId: String): PartialFunction[Page, Call] = {
+    case NamePage(index) => rts.DiscretionYesNoController.onPageLoad(mode, index, draftId)
+    case ShareOfIncomePage(index) => rts.AddressYesNoController.onPageLoad(mode, index, draftId)
+    case AddressUKPage(index) => checkDetailsRoute(index, draftId)
+    case AddressInternationalPage(index) => checkDetailsRoute(index, draftId)
+  }
 
-  override def route(draftId: String): PartialFunction[Page, AffinityGroup => ReadableUserAnswers => Call] = {
-    case _ => _ => _ => controllers.routes.IndexController.onPageLoad(draftId)
+  private def yesNoNavigation(mode: Mode, draftId: String) : PartialFunction[Page, ReadableUserAnswers => Call] = {
+    case DiscretionYesNoPage(index) => ua =>
+      yesNoNav(
+        ua,
+        DiscretionYesNoPage(index),
+        rts.AddressYesNoController.onPageLoad(mode, index, draftId),
+        rts.ShareOfIncomeController.onPageLoad(mode, index, draftId))
+    case AddressYesNoPage(index) => ua =>
+      yesNoNav(
+        ua,
+        AddressYesNoPage(index),
+        rts.AddressUkYesNoController.onPageLoad(mode, index, draftId),
+        checkDetailsRoute(index, draftId))
+    case AddressUKYesNoPage(index) => ua =>
+      yesNoNav(
+        ua,
+        AddressUKYesNoPage(index),
+        rts.UkAddressController.onPageLoad(mode, index, draftId),
+        rts.NonUkAddressController.onPageLoad(mode, index, draftId))
+  }
+
+  def yesNoNav(ua: ReadableUserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call = {
+    ua.get(fromPage)
+      .map(if (_) yesCall else noCall)
+      .getOrElse(controllers.routes.SessionExpiredController.onPageLoad())
+  }
+
+  def checkDetailsRoute(index: Int, draftId: String) : Call = {
+      controllers.routes.SessionExpiredController.onPageLoad()
+  }
+
+  def route(mode: Mode, draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
+    simpleNavigation(mode, draftId) andThen (c => (_:ReadableUserAnswers) => c) orElse
+      yesNoNavigation(mode, draftId)
   }
 
 }
