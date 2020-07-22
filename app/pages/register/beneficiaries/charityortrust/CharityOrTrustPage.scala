@@ -19,10 +19,11 @@ package pages.register.beneficiaries.charityortrust
 import models.registration.pages.CharityOrTrust
 import pages.QuestionPage
 import play.api.libs.json.JsPath
+import sections.beneficiaries.Beneficiaries
 
  case object CharityOrTrustPage extends QuestionPage[CharityOrTrust] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = JsPath \ Beneficiaries \ toString
 
   override def toString: String = "charityOrTrust"
 }

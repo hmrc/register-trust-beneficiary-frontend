@@ -19,12 +19,13 @@ package pages.register.beneficiaries.charityortrust.charity
 import models.UserAnswers
 import pages.QuestionPage
 import play.api.libs.json.JsPath
+import sections.beneficiaries.{Beneficiaries, CharityBeneficiaries}
 
 import scala.util.Try
 
 final case class AmountDiscretionYesNoPage(index : Int) extends QuestionPage[Boolean] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = JsPath \ Beneficiaries \ CharityBeneficiaries \ index \ toString
 
   override def toString: String = "amountDiscretionYesNo"
 
