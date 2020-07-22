@@ -14,104 +14,96 @@
  * limitations under the License.
  */
 
-package controllers.register.charityortrust.trust
+package controllers.register.beneficiaries.charityortrust.trust
 
 import base.SpecBase
-import forms.YesNoFormProvider
+import forms.IncomePercentageFormProvider
 import models.NormalMode
-import pages.register.beneficiaries.trust.{AddressYesNoPage, NamePage}
+import pages.register.beneficiaries.trust.{NamePage, ShareOfIncomePage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.register.beneficiaries.charityortrust.trust.AddressYesNoView
+import views.html.register.beneficiaries.charityortrust.trust.ShareOfIncomeView
 
-class AddressYesNoControllerSpec extends SpecBase {
+class ShareOfIncomeControllerSpec extends SpecBase {
 
-  val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix("trustBeneficiary.addressYesNo")
-  val index: Int = 0
+  val formProvider = new IncomePercentageFormProvider()
+  val form = formProvider.withPrefix("trustBeneficiaryShareOfIncome")
   val name = "Name"
+  val index: Int = 0
+  val userAnswers = emptyUserAnswers
+    .set(NamePage(index), name).success.value
 
-  lazy val trustBeneficiaryAddressYesNoRoute = routes.AddressYesNoController.onPageLoad(NormalMode, index, fakeDraftId).url
+  lazy val shareOfIncomeRoute = routes.ShareOfIncomeController.onPageLoad(NormalMode, index, fakeDraftId).url
 
-  "TrustBeneficiaryAddressYesNo Controller" must {
+  "ShareOfIncome Controller" must {
 
     "return OK and the correct view for a GET" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index),
-        name).success.value
-
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trustBeneficiaryAddressYesNoRoute)
+      val request = FakeRequest(GET, shareOfIncomeRoute)
+
+      val view = application.injector.instanceOf[ShareOfIncomeView]
 
       val result = route(application, request).value
-
-      val view = application.injector.instanceOf[AddressYesNoView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, name, index)(fakeRequest, messages).toString
+        view(form, NormalMode, fakeDraftId, name, index)(request, messages).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(AddressYesNoPage(index), true).success.value
-        .set(NamePage(index),name).success.value
+      val answers = userAnswers
+        .set(ShareOfIncomePage(index), 5).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(answers)).build()
 
-      val request = FakeRequest(GET, trustBeneficiaryAddressYesNoRoute)
+      val request = FakeRequest(GET, shareOfIncomeRoute)
 
-      val view = application.injector.instanceOf[AddressYesNoView]
+      val view = application.injector.instanceOf[ShareOfIncomeView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode, fakeDraftId, name, index)(fakeRequest, messages).toString
+        view(form.fill(5), NormalMode, fakeDraftId, name, index)(fakeRequest, messages).toString
 
       application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index),
-        name).success.value
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val request =
+          FakeRequest(POST, shareOfIncomeRoute)
+            .withFormUrlEncodedBody(("value", "5"))
 
-      val request =
-        FakeRequest(POST, trustBeneficiaryAddressYesNoRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+        val result = route(application, request).value
 
-      val result = route(application, request).value
+        status(result) mustEqual SEE_OTHER
 
-      status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
-      redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
-
-      application.stop()
+        application.stop()
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index),
-        name).success.value
-
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, trustBeneficiaryAddressYesNoRoute)
+        FakeRequest(POST, shareOfIncomeRoute)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[AddressYesNoView]
+      val view = application.injector.instanceOf[ShareOfIncomeView]
 
       val result = route(application, request).value
 
@@ -127,12 +119,11 @@ class AddressYesNoControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, trustBeneficiaryAddressYesNoRoute)
+      val request = FakeRequest(GET, shareOfIncomeRoute)
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
-
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
@@ -143,8 +134,8 @@ class AddressYesNoControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, trustBeneficiaryAddressYesNoRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+        FakeRequest(POST, shareOfIncomeRoute)
+          .withFormUrlEncodedBody(("firstName", "first"), ("middleName", "middle"), ("lastName", "last"))
 
       val result = route(application, request).value
 

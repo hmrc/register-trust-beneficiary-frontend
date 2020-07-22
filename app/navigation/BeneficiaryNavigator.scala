@@ -14,23 +14,29 @@
  * limitations under the License.
  */
 
-package navigation.routes
+package navigation
 
 import config.FrontendAppConfig
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRoutes}
+import javax.inject.Inject
 import models.registration.pages.KindOfTrust.Employees
-import models.{NormalMode, ReadableUserAnswers}
 import models.registration.pages.{AddABeneficiary, WhatTypeOfBeneficiary}
+import models.{Mode, NormalMode, ReadableUserAnswers, UserAnswers}
 import pages.Page
 import pages.register.beneficiaries.individual._
 import pages.register.beneficiaries.{AddABeneficiaryPage, AddABeneficiaryYesNoPage, ClassBeneficiaryDescriptionPage, WhatTypeOfBeneficiaryPage}
 import pages.register.settlors.living_settlor.trust_type.KindOfTrustPage
 import play.api.mvc.Call
 import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries}
-import uk.gov.hmrc.auth.core.AffinityGroup
 
-object BeneficiaryRoutes {
-  def route(draftId: String, config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
+class BeneficiaryNavigator @Inject()(
+                                 config: FrontendAppConfig
+                                 ) extends Navigator {
+
+  override def nextPage(page: Page, mode: Mode, draftId: String, userAnswers: ReadableUserAnswers): Call =
+    route(draftId, config)(page)(userAnswers)
+
+  private def route(draftId: String, config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case NamePage(index) => namePage(draftId, index)
     case RoleInCompanyPage(index) => _ => individualRoutes.DateOfBirthYesNoController.onPageLoad(NormalMode, index, draftId)
     case DateOfBirthYesNoPage(index) => ua => individualBeneficiaryDateOfBirthRoute(ua, index, draftId)

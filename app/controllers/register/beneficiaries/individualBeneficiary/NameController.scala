@@ -71,7 +71,7 @@ class NameController @Inject()(
             _ <- registrationsRepository.set(updatedAnswers)
             mainAnswers <- registrationsRepository.getMainAnswers(draftId)
           } yield {
-            Redirect(navigator.nextPage(NamePage(index), mode, draftId)(mainAnswers getOrElse updatedAnswers))
+            Redirect(navigator.nextPage(NamePage(index), mode, draftId, (mainAnswers getOrElse updatedAnswers)))
           }
         }
       )

@@ -14,38 +14,38 @@
  * limitations under the License.
  */
 
-package controllers.register.charityortrust.trust
+package controllers.register.beneficiaries.charityortrust.trust
 
 import controllers.actions._
-import controllers.actions.register._
-import forms.UKAddressFormProvider
+import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
+import forms.YesNoFormProvider
 import javax.inject.Inject
 import models.{Mode, NormalMode}
 import navigation.Navigator
-import pages.register.beneficiaries.trust.{AddressUKPage, NamePage}
+import pages.register.beneficiaries.trust.{AddressUKYesNoPage, NamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.register.beneficiaries.charityortrust.trust.AddressUKView
+import views.html.register.beneficiaries.charityortrust.trust.AddressUKYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddressUKController @Inject()(
-                                     override val messagesApi: MessagesApi,
-                                     registrationsRepository: RegistrationsRepository,
-                                     navigator: Navigator,
-                                     identify: RegistrationIdentifierAction,
-                                     getData: DraftIdRetrievalActionProvider,
-                                     requireData: RegistrationDataRequiredAction,
-                                     requiredAnswer: RequiredAnswerActionProvider,
-                                     formProvider: UKAddressFormProvider,
-                                     val controllerComponents: MessagesControllerComponents,
-                                     view: AddressUKView
-                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class AddressUKYesNoController @Inject()(
+                                          override val messagesApi: MessagesApi,
+                                          registrationsRepository: RegistrationsRepository,
+                                          navigator: Navigator,
+                                          identify: RegistrationIdentifierAction,
+                                          getData: DraftIdRetrievalActionProvider,
+                                          requireData: RegistrationDataRequiredAction,
+                                          requiredAnswer: RequiredAnswerActionProvider,
+                                          YesNoFormProvider: YesNoFormProvider,
+                                          val controllerComponents: MessagesControllerComponents,
+                                          view: AddressUKYesNoView
+                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form = formProvider()
+  val form: Form[Boolean] = YesNoFormProvider.withPrefix("trustBeneficiaryAddressUKYesNo")
 
   private def actions(index: Int, draftId: String) =
     identify andThen
@@ -58,7 +58,7 @@ class AddressUKController @Inject()(
 
       val name = request.userAnswers.get(NamePage(index)).get
 
-      val preparedForm = request.userAnswers.get(AddressUKPage(index)) match {
+      val preparedForm = request.userAnswers.get(AddressUKYesNoPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -77,9 +77,9 @@ class AddressUKController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressUKPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressUKYesNoPage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddressUKPage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(AddressUKYesNoPage(index), mode, draftId, updatedAnswers))
         }
       )
   }

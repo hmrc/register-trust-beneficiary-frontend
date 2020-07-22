@@ -79,7 +79,7 @@ class AddressUKYesNoController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressUKYesNoPage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddressUKYesNoPage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(AddressUKYesNoPage(index), mode, draftId, updatedAnswers))
         }
       )
   }

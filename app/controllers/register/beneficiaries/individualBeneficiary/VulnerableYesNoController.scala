@@ -79,7 +79,7 @@ class VulnerableYesNoController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(VulnerableYesNoPage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(VulnerableYesNoPage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(VulnerableYesNoPage(index), mode, draftId, updatedAnswers))
         }
       )
   }

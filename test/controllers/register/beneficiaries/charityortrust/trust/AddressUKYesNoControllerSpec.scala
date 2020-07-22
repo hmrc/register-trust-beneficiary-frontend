@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-package controllers.register.charityortrust.trust
+package controllers.register.beneficiaries.charityortrust.trust
 
 import base.SpecBase
 import forms.YesNoFormProvider
 import models.NormalMode
-import pages.register.beneficiaries.trust.{DiscretionYesNoPage, NamePage}
+import pages.register.beneficiaries.trust.{AddressUKYesNoPage, NamePage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.register.beneficiaries.charityortrust.trust.DiscretionYesNoView
+import views.html.register.beneficiaries.charityortrust.trust.AddressUKYesNoView
 
-class DiscretionYesNoControllerSpec extends SpecBase {
+class AddressUKYesNoControllerSpec extends SpecBase {
 
   val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix("trustBeneficiary.discretionYesNo")
+  val form = formProvider.withPrefix("trustBeneficiaryAddressUKYesNo")
   val index: Int = 0
 
   val name = "Name"
 
-  lazy val trustBeneficiaryDiscretionYesNoRoute = routes.DiscretionYesNoController.onPageLoad(NormalMode, index, fakeDraftId).url
+  lazy val trustBeneficiaryAddressUKYesNoRoute = routes.AddressUKYesNoController.onPageLoad(NormalMode, index, fakeDraftId).url
 
-  "DiscretionYesNo Controller" must {
+  "TrustBeneficiaryAddressUKYesNo Controller" must {
 
     "return OK and the correct view for a GET" in {
 
@@ -43,11 +43,11 @@ class DiscretionYesNoControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trustBeneficiaryDiscretionYesNoRoute)
+      val request = FakeRequest(GET, trustBeneficiaryAddressUKYesNoRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[DiscretionYesNoView]
+      val view = application.injector.instanceOf[AddressUKYesNoView]
 
       status(result) mustEqual OK
 
@@ -59,14 +59,14 @@ class DiscretionYesNoControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(DiscretionYesNoPage(index), true).success.value
+      val userAnswers = emptyUserAnswers.set(AddressUKYesNoPage(index), true).success.value
         .set(NamePage(index),name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trustBeneficiaryDiscretionYesNoRoute)
+      val request = FakeRequest(GET, trustBeneficiaryAddressUKYesNoRoute)
 
-      val view = application.injector.instanceOf[DiscretionYesNoView]
+      val view = application.injector.instanceOf[AddressUKYesNoView]
 
       val result = route(application, request).value
 
@@ -87,7 +87,7 @@ class DiscretionYesNoControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, trustBeneficiaryDiscretionYesNoRoute)
+        FakeRequest(POST, trustBeneficiaryAddressUKYesNoRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -107,12 +107,12 @@ class DiscretionYesNoControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, trustBeneficiaryDiscretionYesNoRoute)
+        FakeRequest(POST, trustBeneficiaryAddressUKYesNoRoute)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[DiscretionYesNoView]
+      val view = application.injector.instanceOf[AddressUKYesNoView]
 
       val result = route(application, request).value
 
@@ -128,7 +128,7 @@ class DiscretionYesNoControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, trustBeneficiaryDiscretionYesNoRoute)
+      val request = FakeRequest(GET, trustBeneficiaryAddressUKYesNoRoute)
 
       val result = route(application, request).value
 
@@ -144,7 +144,7 @@ class DiscretionYesNoControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, trustBeneficiaryDiscretionYesNoRoute)
+        FakeRequest(POST, trustBeneficiaryAddressUKYesNoRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -160,7 +160,7 @@ class DiscretionYesNoControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, trustBeneficiaryDiscretionYesNoRoute)
+      val request = FakeRequest(GET, trustBeneficiaryAddressUKYesNoRoute)
 
       val result = route(application, request).value
 

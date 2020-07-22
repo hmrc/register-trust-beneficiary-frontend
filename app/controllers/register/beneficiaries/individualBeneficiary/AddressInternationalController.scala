@@ -36,19 +36,19 @@ import views.html.register.beneficiaries.individualBeneficiary.AddressInternatio
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddressInternationalController @Inject()(
-                                                               override val messagesApi: MessagesApi,
-                                                               registrationsRepository: RegistrationsRepository,
-                                                               navigator: Navigator,
-                                                               identify: RegistrationIdentifierAction,
-                                                               getData: DraftIdRetrievalActionProvider,
-                                                               validateIndex: IndexActionFilterProvider,
-                                                               requireData: RegistrationDataRequiredAction,
-                                                               requiredAnswer: RequiredAnswerActionProvider,
-                                                               formProvider: InternationalAddressFormProvider,
-                                                               val controllerComponents: MessagesControllerComponents,
-                                                               view: AddressInternationalView,
-                                                               val countryOptions: CountryOptionsNonUK
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                override val messagesApi: MessagesApi,
+                                                registrationsRepository: RegistrationsRepository,
+                                                navigator: Navigator,
+                                                identify: RegistrationIdentifierAction,
+                                                getData: DraftIdRetrievalActionProvider,
+                                                validateIndex: IndexActionFilterProvider,
+                                                requireData: RegistrationDataRequiredAction,
+                                                requiredAnswer: RequiredAnswerActionProvider,
+                                                formProvider: InternationalAddressFormProvider,
+                                                val controllerComponents: MessagesControllerComponents,
+                                                view: AddressInternationalView,
+                                                val countryOptions: CountryOptionsNonUK
+                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form = formProvider()
 
@@ -84,8 +84,8 @@ class AddressInternationalController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressInternationalPage(index), value))
-            _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddressInternationalPage(index), mode, draftId)(updatedAnswers))
+            _ <- registrationsRepository.set(updatedAnswers)
+          } yield Redirect(navigator.nextPage(AddressInternationalPage(index), mode, draftId, updatedAnswers))
         }
       )
   }

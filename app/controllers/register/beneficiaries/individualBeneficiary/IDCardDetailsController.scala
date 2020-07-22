@@ -86,7 +86,7 @@ class IDCardDetailsController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(IDCardDetailsPage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(IDCardDetailsPage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(IDCardDetailsPage(index), mode, draftId, updatedAnswers))
         }
       )
   }

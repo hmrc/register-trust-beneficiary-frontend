@@ -67,7 +67,7 @@ class WhatTypeOfBeneficiaryController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(WhatTypeOfBeneficiaryPage, value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(WhatTypeOfBeneficiaryPage, mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(WhatTypeOfBeneficiaryPage, mode, draftId, updatedAnswers))
         }
       )
   }

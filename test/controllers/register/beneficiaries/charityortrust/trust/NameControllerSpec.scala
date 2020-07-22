@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.register.charityortrust.trust
+package controllers.register.beneficiaries.charityortrust.trust
 
 import base.SpecBase
 import forms.StringFormProvider

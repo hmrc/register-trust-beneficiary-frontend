@@ -75,7 +75,7 @@ class ClassBeneficiaryDescriptionController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(answers)
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ClassBeneficiaryDescriptionPage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(ClassBeneficiaryDescriptionPage(index), mode, draftId, updatedAnswers))
         }
       )
   }

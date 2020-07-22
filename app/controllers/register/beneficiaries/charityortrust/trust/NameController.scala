@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.register.charityortrust.trust
+package controllers.register.beneficiaries.charityortrust.trust
 
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.StringFormProvider
@@ -71,7 +71,7 @@ class NameController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(NamePage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(NamePage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(NamePage(index), mode, draftId, updatedAnswers))
       )
   }
 }

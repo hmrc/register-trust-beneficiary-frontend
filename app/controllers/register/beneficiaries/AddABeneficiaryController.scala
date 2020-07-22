@@ -86,7 +86,7 @@ class AddABeneficiaryController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddABeneficiaryYesNoPage, value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddABeneficiaryYesNoPage, mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(AddABeneficiaryYesNoPage, mode, draftId, updatedAnswers))
         }
       )
   }
@@ -105,7 +105,7 @@ class AddABeneficiaryController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddABeneficiaryPage, value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddABeneficiaryPage, mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(AddABeneficiaryPage, mode, draftId, updatedAnswers))
         }
       )
   }

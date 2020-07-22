@@ -79,7 +79,7 @@ class IncomeYesNoController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(IncomeYesNoPage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(IncomeYesNoPage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(IncomeYesNoPage(index), mode, draftId, updatedAnswers))
         }
       )
   }

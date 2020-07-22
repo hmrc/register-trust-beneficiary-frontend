@@ -37,7 +37,7 @@ class NavigatorSpec extends SpecBase
 
       "go to Index from a page that doesn't exist in the route map" in {
         case object UnknownPage extends Page
-        navigator.nextPage(UnknownPage, NormalMode, fakeDraftId)(emptyUserAnswers) mustBe controllers.routes.IndexController.onPageLoad(fakeDraftId)
+        navigator.nextPage(UnknownPage, NormalMode, fakeDraftId, emptyUserAnswers) mustBe controllers.routes.IndexController.onPageLoad(fakeDraftId)
       }
 
       behave like beneficiaryRoutes

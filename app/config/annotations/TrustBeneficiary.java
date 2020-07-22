@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package navigation
+package config.annotations;
 
-import config.FrontendAppConfig
-import javax.inject.{Inject, Singleton}
-import models.{UserAnswers, _}
-import pages._
-import play.api.mvc.Call
-import uk.gov.hmrc.auth.core.AffinityGroup
+import com.google.inject.BindingAnnotation;
 
-@Singleton
-trait Navigator {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-  def nextPage(page: Page, mode: Mode, draftId: String, userAnswers: ReadableUserAnswers): Call
-
-}
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
+@BindingAnnotation
+public @interface TrustBeneficiary {}

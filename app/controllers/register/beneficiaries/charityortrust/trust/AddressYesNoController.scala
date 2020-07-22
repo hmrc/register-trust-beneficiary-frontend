@@ -14,36 +14,36 @@
  * limitations under the License.
  */
 
-package controllers.register.charityortrust.trust
+package controllers.register.beneficiaries.charityortrust.trust
 
-import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import forms.{IncomePercentageFormProvider, YesNoFormProvider}
+import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
+import forms.YesNoFormProvider
 import javax.inject.Inject
 import models.{Mode, NormalMode}
 import navigation.Navigator
-import pages.register.beneficiaries.trust.{NamePage, ShareOfIncomePage}
+import pages.register.beneficiaries.trust.{AddressYesNoPage, NamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.register.beneficiaries.charityortrust.trust.ShareOfIncomeView
+import views.html.register.beneficiaries.charityortrust.trust.AddressYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ShareOfIncomeController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         registrationsRepository: RegistrationsRepository,
-                                         override val controllerComponents: MessagesControllerComponents,
-                                         navigator: Navigator,
-                                         identify: RegistrationIdentifierAction,
-                                         getData: DraftIdRetrievalActionProvider,
-                                         requireData: RegistrationDataRequiredAction,
-                                         requiredAnswer: RequiredAnswerActionProvider,
-                                         formProvider: IncomePercentageFormProvider,
-                                         view: ShareOfIncomeView
-                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class AddressYesNoController @Inject()(
+                                        override val messagesApi: MessagesApi,
+                                        registrationsRepository: RegistrationsRepository,
+                                        override val controllerComponents: MessagesControllerComponents,
+                                        navigator: Navigator,
+                                        identify: RegistrationIdentifierAction,
+                                        getData: DraftIdRetrievalActionProvider,
+                                        requireData: RegistrationDataRequiredAction,
+                                        requiredAnswer: RequiredAnswerActionProvider,
+                                        formProvider: YesNoFormProvider,
+                                        view: AddressYesNoView
+                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def actions(index: Int, draftId: String) =
     identify andThen
@@ -51,14 +51,14 @@ class ShareOfIncomeController @Inject()(
       requireData andThen
       requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(NormalMode, index, draftId)))
 
-  val form: Form[Int] = formProvider.withPrefix("trustBeneficiaryShareOfIncome")
+  val form: Form[Boolean] = formProvider.withPrefix("trustBeneficiary.addressYesNo")
 
   def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
       val name = request.userAnswers.get(NamePage(index)).get
 
-      val preparedForm = request.userAnswers.get(ShareOfIncomePage(index)) match {
+      val preparedForm = request.userAnswers.get(AddressYesNoPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -72,16 +72,15 @@ class ShareOfIncomeController @Inject()(
       form.bindFromRequest().fold(
         formWithErrors => {
 
-          val name = request.userAnswers.get(NamePage(index)).get
+            val name = request.userAnswers.get(NamePage(index)).get
 
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId, name, index)))
-
-        },
+            Future.successful(BadRequest(view(formWithErrors, mode, draftId, name, index)))
+          },
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ShareOfIncomePage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressYesNoPage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ShareOfIncomePage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(AddressYesNoPage(index), mode, draftId, updatedAnswers))
       )
   }
 }

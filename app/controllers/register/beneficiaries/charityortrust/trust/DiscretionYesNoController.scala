@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package controllers.register.charityortrust.trust
+package controllers.register.beneficiaries.charityortrust.trust
 
-import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
+import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
 import forms.YesNoFormProvider
 import javax.inject.Inject
 import models.{Mode, NormalMode}
@@ -81,7 +81,7 @@ class DiscretionYesNoController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(DiscretionYesNoPage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(DiscretionYesNoPage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(DiscretionYesNoPage(index), mode, draftId, updatedAnswers))
       )
   }
 }

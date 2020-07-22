@@ -14,27 +14,26 @@
  * limitations under the License.
  */
 
-package controllers.register.charityortrust.trust
+package controllers.register.beneficiaries.charityortrust.trust
 
 import base.SpecBase
 import forms.YesNoFormProvider
 import models.NormalMode
-import pages.register.beneficiaries.trust.{AddressUKYesNoPage, NamePage}
+import pages.register.beneficiaries.trust.{AddressYesNoPage, NamePage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.register.beneficiaries.charityortrust.trust.AddressUKYesNoView
+import views.html.register.beneficiaries.charityortrust.trust.AddressYesNoView
 
-class AddressUKYesNoControllerSpec extends SpecBase {
+class AddressYesNoControllerSpec extends SpecBase {
 
   val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix("trustBeneficiaryAddressUKYesNo")
+  val form = formProvider.withPrefix("trustBeneficiary.addressYesNo")
   val index: Int = 0
-
   val name = "Name"
 
-  lazy val trustBeneficiaryAddressUKYesNoRoute = routes.AddressUKYesNoController.onPageLoad(NormalMode, index, fakeDraftId).url
+  lazy val trustBeneficiaryAddressYesNoRoute = routes.AddressYesNoController.onPageLoad(NormalMode, index, fakeDraftId).url
 
-  "TrustBeneficiaryAddressUKYesNo Controller" must {
+  "TrustBeneficiaryAddressYesNo Controller" must {
 
     "return OK and the correct view for a GET" in {
 
@@ -43,11 +42,11 @@ class AddressUKYesNoControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trustBeneficiaryAddressUKYesNoRoute)
+      val request = FakeRequest(GET, trustBeneficiaryAddressYesNoRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[AddressUKYesNoView]
+      val view = application.injector.instanceOf[AddressYesNoView]
 
       status(result) mustEqual OK
 
@@ -59,14 +58,14 @@ class AddressUKYesNoControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(AddressUKYesNoPage(index), true).success.value
+      val userAnswers = emptyUserAnswers.set(AddressYesNoPage(index), true).success.value
         .set(NamePage(index),name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trustBeneficiaryAddressUKYesNoRoute)
+      val request = FakeRequest(GET, trustBeneficiaryAddressYesNoRoute)
 
-      val view = application.injector.instanceOf[AddressUKYesNoView]
+      val view = application.injector.instanceOf[AddressYesNoView]
 
       val result = route(application, request).value
 
@@ -87,7 +86,7 @@ class AddressUKYesNoControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, trustBeneficiaryAddressUKYesNoRoute)
+        FakeRequest(POST, trustBeneficiaryAddressYesNoRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -107,12 +106,12 @@ class AddressUKYesNoControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, trustBeneficiaryAddressUKYesNoRoute)
+        FakeRequest(POST, trustBeneficiaryAddressYesNoRoute)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[AddressUKYesNoView]
+      val view = application.injector.instanceOf[AddressYesNoView]
 
       val result = route(application, request).value
 
@@ -128,7 +127,7 @@ class AddressUKYesNoControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, trustBeneficiaryAddressUKYesNoRoute)
+      val request = FakeRequest(GET, trustBeneficiaryAddressYesNoRoute)
 
       val result = route(application, request).value
 
@@ -144,7 +143,7 @@ class AddressUKYesNoControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, trustBeneficiaryAddressUKYesNoRoute)
+        FakeRequest(POST, trustBeneficiaryAddressYesNoRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -155,21 +154,5 @@ class AddressUKYesNoControllerSpec extends SpecBase {
 
       application.stop()
     }
-
-    "redirect to IndividualBeneficiaryNamePage when individual beneficiary name is not answered" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-
-      val request = FakeRequest(GET, trustBeneficiaryAddressUKYesNoRoute)
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual routes.NameController.onPageLoad(NormalMode, index, fakeDraftId).url
-
-      application.stop()
-    }
-
   }
 }

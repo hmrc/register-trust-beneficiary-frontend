@@ -79,6 +79,6 @@ class AnswersController @Inject()(
       for {
         updatedAnswers <- Future.fromTry(answers)
         _ <- registrationsRepository.set(updatedAnswers)
-      } yield Redirect(navigator.nextPage(AnswersPage, NormalMode, draftId)(request.userAnswers))
+      } yield Redirect(navigator.nextPage(AnswersPage, NormalMode, draftId, request.userAnswers))
   }
 }

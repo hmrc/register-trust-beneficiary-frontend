@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.register.charityortrust.trust
+package controllers.register.beneficiaries.charityortrust.trust
 
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
@@ -85,7 +85,7 @@ class AddressInternationalController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressInternationalPage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddressInternationalPage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(AddressInternationalPage(index), mode, draftId, updatedAnswers))
         }
       )
   }
