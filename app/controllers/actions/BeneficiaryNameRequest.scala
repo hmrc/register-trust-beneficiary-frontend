@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.company
+package controllers.actions
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.beneficiaries.{Beneficiaries, CompanyBeneficiaries}
+import models.UserAnswers
+import models.requests.RegistrationDataRequest
+import play.api.mvc.WrappedRequest
 
-final case class CompanyBeneficiaryDiscretionYesNoPage(index: Int) extends QuestionPage[Boolean] {
-
-  override def path: JsPath = JsPath \ Beneficiaries \ CompanyBeneficiaries \ index \ toString
-
-  override def toString: String = "discretionYesNo"
+case class BeneficiaryNameRequest[T](request: RegistrationDataRequest[T], beneficiaryName: String) extends WrappedRequest[T](request){
+  val userAnswers:UserAnswers = request.userAnswers
 }
