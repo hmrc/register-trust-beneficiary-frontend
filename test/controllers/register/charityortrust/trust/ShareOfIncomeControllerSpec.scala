@@ -17,70 +17,72 @@
 package controllers.register.charityortrust.trust
 
 import base.SpecBase
-import forms.StringFormProvider
+import forms.IncomePercentageFormProvider
 import models.NormalMode
-import pages.register.beneficiaries.trust.NamePage
+import pages.register.beneficiaries.trust.{NamePage, ShareOfIncomePage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.register.beneficiaries.charityortrust.trust.NameView
+import views.html.register.beneficiaries.charityortrust.trust.ShareOfIncomeView
 
-class NameControllerSpec extends SpecBase {
+class ShareOfIncomeControllerSpec extends SpecBase {
 
-  val formProvider = new StringFormProvider()
-  val form = formProvider.withPrefix("trustBeneficiary.name", 105)
+  val formProvider = new IncomePercentageFormProvider()
+  val form = formProvider.withPrefix("trustBeneficiary.shareOfIncome")
   val name = "Name"
   val index: Int = 0
+  val userAnswers = emptyUserAnswers
+    .set(NamePage(index), name).success.value
 
-  lazy val trustBeneficiaryNameRoute = routes.NameController.onPageLoad(NormalMode, index, fakeDraftId).url
+  lazy val shareOfIncomeRoute = routes.ShareOfIncomeController.onPageLoad(NormalMode, index, fakeDraftId).url
 
-  "TrustBeneficiaryName Controller" must {
+  "ShareOfIncome Controller" must {
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trustBeneficiaryNameRoute)
+      val request = FakeRequest(GET, shareOfIncomeRoute)
 
-      val view = application.injector.instanceOf[NameView]
+      val view = application.injector.instanceOf[ShareOfIncomeView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, index)(request, messages).toString
+        view(form, NormalMode, fakeDraftId, name, index)(request, messages).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = emptyUserAnswers
-        .set(NamePage(index), name).success.value
+      val answers = userAnswers
+        .set(ShareOfIncomePage(index), 5).success.value
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 
-      val request = FakeRequest(GET, trustBeneficiaryNameRoute)
+      val request = FakeRequest(GET, shareOfIncomeRoute)
 
-      val view = application.injector.instanceOf[NameView]
+      val view = application.injector.instanceOf[ShareOfIncomeView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(name), NormalMode, fakeDraftId, index)(fakeRequest, messages).toString
+        view(form.fill(5), NormalMode, fakeDraftId, name, index)(fakeRequest, messages).toString
 
       application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
         val request =
-          FakeRequest(POST, trustBeneficiaryNameRoute)
-            .withFormUrlEncodedBody(("value", "name"))
+          FakeRequest(POST, shareOfIncomeRoute)
+            .withFormUrlEncodedBody(("value", "5"))
 
         val result = route(application, request).value
 
@@ -93,22 +95,22 @@ class NameControllerSpec extends SpecBase {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, trustBeneficiaryNameRoute)
+        FakeRequest(POST, shareOfIncomeRoute)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[NameView]
+      val view = application.injector.instanceOf[ShareOfIncomeView]
 
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId, index)(fakeRequest, messages).toString
+        view(boundForm, NormalMode, fakeDraftId, name, index)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -117,7 +119,7 @@ class NameControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, trustBeneficiaryNameRoute)
+      val request = FakeRequest(GET, shareOfIncomeRoute)
 
       val result = route(application, request).value
 
@@ -132,7 +134,7 @@ class NameControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, trustBeneficiaryNameRoute)
+        FakeRequest(POST, shareOfIncomeRoute)
           .withFormUrlEncodedBody(("firstName", "first"), ("middleName", "middle"), ("lastName", "last"))
 
       val result = route(application, request).value
