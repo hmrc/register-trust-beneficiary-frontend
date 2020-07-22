@@ -14,14 +14,24 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.charityortrust.charity
+package viewmodels.addAnother
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import models.Status
+import play.api.libs.json.{Reads, __}
 
-final case class CharityNamePage(index: Int) extends QuestionPage[String] {
+final case class CharityBeneficiaryViewModel(name: Option[String],
+                                             status: Status) {
 
-  override def path: JsPath = JsPath \ toString
+  def isComplete: Boolean = name.nonEmpty && (status == Status.Completed)
 
-  override def toString: String = "name"
+}
+
+object CharityBeneficiaryViewModel {
+
+  import play.api.libs.functional.syntax._
+
+  implicit val reads: Reads[CharityBeneficiaryViewModel] = (
+    (__ \ "name").readNullable[String] and
+      (__ \ "status").readWithDefault[Status](Status.InProgress)
+    )(CharityBeneficiaryViewModel.apply _)
 }
