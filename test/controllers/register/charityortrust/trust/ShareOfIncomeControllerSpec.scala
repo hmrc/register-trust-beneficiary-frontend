@@ -27,7 +27,7 @@ import views.html.register.beneficiaries.charityortrust.trust.ShareOfIncomeView
 class ShareOfIncomeControllerSpec extends SpecBase {
 
   val formProvider = new IncomePercentageFormProvider()
-  val form = formProvider.withPrefix("trustBeneficiary.shareOfIncome")
+  val form = formProvider.withPrefix("trustBeneficiaryShareOfIncome")
   val name = "Name"
   val index: Int = 0
   val userAnswers = emptyUserAnswers

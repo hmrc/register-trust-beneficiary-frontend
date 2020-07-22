@@ -24,7 +24,7 @@
 @(form: Form[_], mode: Mode, draftId: String, name: String, index: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("trustBeneficiary.shareOfIncome.title")}"
+    title = s"${errorPrefix(form)} ${messages("trustBeneficiaryShareOfIncome.title")}"
 ) {
 
     @formHelper(action = ShareOfIncomeController.onSubmit(mode, index, draftId), 'autoComplete -> "off") {
@@ -35,9 +35,9 @@
 
         @components.input_text(
             field = form("value"),
-            label = messages("trustBeneficiary.shareOfIncome.heading", name),
+            label = messages("trustBeneficiaryShareOfIncome.heading", name),
             labelAsHeading = true,
-            hint = Some(messages("trustBeneficiary.shareOfIncome.hint")),
+            hint = Some(messages("trustBeneficiaryShareOfIncome.hint")),
             labelClass=Some("heading-large")
         )
 

@@ -24,7 +24,7 @@
 @(form: Form[_], mode: Mode, draftId: String, name: String, index: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("trustBeneficiary.discretionYesNo.title")}"
+    title = s"${errorPrefix(form)} ${messages("trustBeneficiaryDiscretionYesNo.title")}"
 ) {
 
     @formHelper(action = DiscretionYesNoController.onSubmit(mode, index, draftId), 'autoComplete -> "off") {
@@ -35,9 +35,9 @@
 
         @components.input_yes_no(
             field = form("value"),
-            label = messages("trustBeneficiary.discretionYesNo.heading", name),
+            label = messages("trustBeneficiaryDiscretionYesNo.heading", name),
             legendAsHeading = true,
-            hint = Some(messages("trustBeneficiary.discretionYesNo.hint"))
+            hint = Some(messages("trustBeneficiaryDiscretionYesNo.hint"))
         )
 
         @components.submit_button()

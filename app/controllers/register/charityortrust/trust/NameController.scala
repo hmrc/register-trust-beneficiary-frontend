@@ -47,7 +47,7 @@ class NameController @Inject()(
 
   private val length: Int = 105
 
-  val form: Form[String] = formProvider.withPrefix("trustBeneficiary.name", length)
+  val form: Form[String] = formProvider.withPrefix("trustBeneficiaryName", length)
 
   def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(draftId) {
     implicit request =>

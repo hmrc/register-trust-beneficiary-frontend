@@ -51,7 +51,7 @@ class ShareOfIncomeController @Inject()(
       requireData andThen
       requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(NormalMode, index, draftId)))
 
-  val form: Form[Int] = formProvider.withPrefix("trustBeneficiary.shareOfIncome")
+  val form: Form[Int] = formProvider.withPrefix("trustBeneficiaryShareOfIncome")
 
   def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>

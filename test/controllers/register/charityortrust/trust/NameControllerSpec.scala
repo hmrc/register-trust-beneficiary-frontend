@@ -27,7 +27,7 @@ import views.html.register.beneficiaries.charityortrust.trust.NameView
 class NameControllerSpec extends SpecBase {
 
   val formProvider = new StringFormProvider()
-  val form = formProvider.withPrefix("trustBeneficiary.name", 105)
+  val form = formProvider.withPrefix("trustBeneficiaryName", 105)
   val name = "Name"
   val index: Int = 0
 
