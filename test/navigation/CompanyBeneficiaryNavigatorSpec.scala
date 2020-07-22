@@ -14,37 +14,36 @@
  * limitations under the License.
  */
 
-package navigation.navigators.registration
+package navigation
 
 import base.SpecBase
 import config.FrontendAppConfig
-import controllers.register.beneficiaries.companyoremploymentrelated.company.{routes => companyRoutes}
 import generators.Generators
 import models.{NormalMode, UserAnswers}
-import navigation.Navigator
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.beneficiaries.company.NamePage
 import play.api.mvc.Call
+import controllers.register.beneficiaries.companyoremploymentrelated.company.{routes => CompanyRoutes}
 
-trait CompanyBeneficiaryRoutes {
-  self: ScalaCheckPropertyChecks with Generators with SpecBase =>
+class CompanyBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   private def assetsCompletedRoute(draftId: String, config: FrontendAppConfig): Call = {
     Call("GET", config.registrationProgressUrl(draftId))
   }
 
-  def companyBeneficiaryRoutes()(implicit navigator: Navigator): Unit = {
+  val navigator = new CompanyBeneficiaryNavigator(frontendAppConfig)
+  val index = 0
 
-    val index = 0
+  "Other beneficiary navigator" when {
 
-//    "go to Discretion from company NamePage" in {
-//      forAll(arbitrary[UserAnswers]) {
-//        userAnswers =>
-//          navigator.nextPage(NamePage(index), NormalMode, fakeDraftId)(userAnswers)
-//            .mustBe(companyRoutes.DiscretionYesNoController.onPageLoad(NormalMode, index, fakeDraftId))
-//      }
-//    }
+    "go to Discretion from company NamePage" in {
+      forAll(arbitrary[UserAnswers]) {
+        userAnswers =>
+          navigator.nextPage(NamePage(index), NormalMode, fakeDraftId)(userAnswers)
+            .mustBe(CompanyRoutes.DiscretionYesNoController.onPageLoad(NormalMode, index, fakeDraftId))
+      }
+    }
 
     //    "go to DateOfBirthYesNoPage from yRoleInCompany" in {
     //      forAll(arbitrary[UserAnswers]) {

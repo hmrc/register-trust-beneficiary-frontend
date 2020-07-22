@@ -141,6 +141,7 @@ trait Formatters {
         baseFormatter.unbind(key, value.toString)
     }
 
+
   private[mappings] def percentageFormatter(requiredKey: String, wholeNumberKey: String, nonNumericKey: String, validPercentageKey: String): Formatter[Int] =
     new Formatter[Int] {
 

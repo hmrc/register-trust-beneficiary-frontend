@@ -20,9 +20,9 @@ import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.beneficiaries.{Beneficiaries, TrustBeneficiaries}
 
-case class TrustBeneficiaryShareOfIncomePage(index: Int) extends QuestionPage[String]{
+final case class NamePage(index: Int) extends QuestionPage[String] {
 
   override def path: JsPath = JsPath \ Beneficiaries \ TrustBeneficiaries \ index \ toString
 
-  override def toString: String = "shareOfIncome"
+  override def toString: String = "name"
 }

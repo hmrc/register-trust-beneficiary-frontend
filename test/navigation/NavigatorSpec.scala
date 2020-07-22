@@ -27,7 +27,6 @@ class NavigatorSpec extends SpecBase
   with ScalaCheckPropertyChecks
   with Generators
   with BeneficiaryRoutes
-  with CompanyBeneficiaryRoutes
 {
 
   implicit val navigator : Navigator = injector.instanceOf[Navigator]
@@ -42,8 +41,6 @@ class NavigatorSpec extends SpecBase
       }
 
       behave like beneficiaryRoutes
-
-      behave like companyBeneficiaryRoutes
     }
   }
 }

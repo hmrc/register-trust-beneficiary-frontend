@@ -17,17 +17,16 @@
 package navigation
 
 import config.FrontendAppConfig
+import controllers.register.beneficiaries.companyoremploymentrelated.company.{routes => rts}
 import javax.inject.Inject
-import models.{CheckMode, Mode, NormalMode, ReadableUserAnswers, UserAnswers}
+import models.{Mode, ReadableUserAnswers}
+import pages.register.beneficiaries.company._
 import pages.{Page, QuestionPage}
 import play.api.mvc.Call
-import uk.gov.hmrc.auth.core.AffinityGroup
-import controllers.register.beneficiaries.companyoremploymentrelated.company.{routes => rts}
-import pages.register.beneficiaries.company._
 
 class CompanyBeneficiaryNavigator @Inject()(frontendAppConfig: FrontendAppConfig) extends Navigator(frontendAppConfig) {
 
-  override def nextPage(page: Page, mode: Mode, draftId: String, af: AffinityGroup = AffinityGroup.Organisation):
+  override def nextPage(page: Page, mode: Mode, draftId: String):
     ReadableUserAnswers => Call = route(mode, draftId)(page)
 
   private def simpleNavigation(mode: Mode, draftId: String): PartialFunction[Page, Call] = {
