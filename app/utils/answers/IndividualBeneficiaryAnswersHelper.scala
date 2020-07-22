@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package utils
+package utils.answers
 
 import javax.inject.Inject
 import models.{NormalMode, UserAnswers}
-import pages.register.beneficiaries.individual.{AddressInternationalPage, AddressUKPage, AddressUKYesNoPage, AddressYesNoPage, DateOfBirthPage, DateOfBirthYesNoPage, IDCardDetailsPage, IDCardDetailsYesNoPage, IncomePage, IncomeYesNoPage, NamePage, NationalInsuranceNumberPage, NationalInsuranceYesNoPage, PassportDetailsPage, PassportDetailsYesNoPage, RoleInCompanyPage, VulnerableYesNoPage}
+import pages.register.beneficiaries.individual._
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import sections.beneficiaries.IndividualBeneficiaries
-import utils.CheckAnswersFormatters.{dateFormatter, formatNino, indBeneficiaryName, internationalAddress, passportOrIDCard, ukAddress, yesOrNo}
+import utils.answers.CheckAnswersFormatters._
 import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
 

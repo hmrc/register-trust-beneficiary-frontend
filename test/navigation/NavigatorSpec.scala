@@ -19,7 +19,6 @@ package navigation
 import base.SpecBase
 import generators.Generators
 import models.NormalMode
-import navigation.navigators.registration._
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
 

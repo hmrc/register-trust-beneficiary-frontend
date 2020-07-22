@@ -14,16 +14,25 @@
  * limitations under the License.
  */
 
-package sections.beneficiaries
+package viewmodels.addAnother
 
-import pages.QuestionPage
-import play.api.libs.json.{JsArray, JsPath}
-import viewmodels.addAnother.TrustBeneficiaryViewModel
+import models.Status
+import models.core.pages.FullName
+import play.api.libs.json.{Reads, __}
 
-case object TrustBeneficiaries extends QuestionPage[List[TrustBeneficiaryViewModel]]{
+case class TrustBeneficiaryViewModel(name: Option[String], status: Status) {
 
-  override def path: JsPath = JsPath \ Beneficiaries \ toString
+  def isComplete: Boolean = name.nonEmpty && (status == Status.Completed)
 
-  override def toString: String = "trusts"
+}
+
+object TrustBeneficiaryViewModel {
+
+  import play.api.libs.functional.syntax._
+
+  implicit val reads : Reads[TrustBeneficiaryViewModel] = (
+    (__ \ "name").readNullable[String] and
+      (__ \ "status").readWithDefault[Status](Status.InProgress)
+    )(TrustBeneficiaryViewModel.apply _)
 
 }

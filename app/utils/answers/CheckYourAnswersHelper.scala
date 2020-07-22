@@ -14,18 +14,15 @@
  * limitations under the License.
  */
 
-package utils
+package utils.answers
 
 import javax.inject.Inject
 import models.{NormalMode, UserAnswers}
-import pages.register.beneficiaries.individual._
 import pages.register.beneficiaries.{AddABeneficiaryPage, ClassBeneficiaryDescriptionPage}
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
-import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries}
-import utils.countryOptions.CountryOptions
+import sections.beneficiaries.ClassOfBeneficiaries
 import viewmodels.{AnswerRow, AnswerSection}
-import CheckAnswersFormatters._
 
 class CheckYourAnswersHelper @Inject()()
                                       (userAnswers: UserAnswers,

@@ -21,7 +21,8 @@ import mapping.registration.BeneficiariesMapper
 import models._
 import play.api.i18n.Messages
 import play.api.libs.json.Json
-import utils.{CheckYourAnswersHelper, IndividualBeneficiaryAnswersHelper, RegistrationProgress}
+import utils.RegistrationProgress
+import utils.answers.{CheckYourAnswersHelper, IndividualBeneficiaryAnswersHelper}
 import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
 

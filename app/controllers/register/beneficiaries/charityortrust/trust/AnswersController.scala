@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-package controllers.register.beneficiaries.individualBeneficiary
+package controllers.register.beneficiaries.charityortrust.trust
 
 import controllers.actions._
-import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
+import controllers.actions.register._
 import javax.inject.Inject
 import models.NormalMode
 import models.Status.Completed
 import navigation.Navigator
-import pages.entitystatus.IndividualBeneficiaryStatus
-import pages.register.beneficiaries.individual.{AnswersPage, NamePage}
+import pages.entitystatus.TrustBeneficiaryStatus
+import pages.register.beneficiaries.trust._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import utils.answers.IndividualBeneficiaryAnswersHelper
+import utils.answers.TrustBeneficiaryAnswersHelper
 import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
-import views.html.register.beneficiaries.individualBeneficiary.AnswersView
+import views.html.register.beneficiaries.charityortrust.trust.AnswersView
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -53,18 +53,18 @@ class AnswersController @Inject()(
     identify andThen
       getData(draftId) andThen
       requireData andThen
-      requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(NormalMode, 0, draftId)))
+      requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(0, draftId)))
 
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val answers = new IndividualBeneficiaryAnswersHelper(countryOptions)(request.userAnswers, draftId, canEdit = true)
+      val answers = new TrustBeneficiaryAnswersHelper(countryOptions)(request.userAnswers, draftId, canEdit = true)
 
       val sections = Seq(
         AnswerSection(
           None,
-          answers.individualBeneficiaryRows(index)
+          answers.trustBeneficiaryRows(index)
         )
       )
 
@@ -74,7 +74,7 @@ class AnswersController @Inject()(
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val answers = request.userAnswers.set(IndividualBeneficiaryStatus(index), Completed)
+      val answers = request.userAnswers.set(TrustBeneficiaryStatus(index), Completed)
 
       for {
         updatedAnswers <- Future.fromTry(answers)

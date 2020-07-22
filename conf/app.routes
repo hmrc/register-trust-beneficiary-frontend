@@ -134,6 +134,9 @@ POST       /:draftId/trust/:index/uk-address                                    
 GET        /:draftId/trust/:index/international-address                               controllers.register.beneficiaries.charityortrust.trust.AddressInternationalController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/trust/:index/international-address                               controllers.register.beneficiaries.charityortrust.trust.AddressInternationalController.onSubmit(index: Int, draftId: String)
 
+GET        /:draftId/trust/:index/check-answers                                       controllers.register.beneficiaries.charityortrust.trust.AnswersController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/trust/:index/check-answers                                       controllers.register.beneficiaries.charityortrust.trust.AnswersController.onSubmit(index: Int, draftId: String)
+
 ###
 
 GET        /:draftId/class/:index/description                                         controllers.register.beneficiaries.ClassBeneficiaryDescriptionController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)

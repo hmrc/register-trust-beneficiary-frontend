@@ -23,7 +23,7 @@ import models.core.pages.{FullName, UKAddress}
 import pages.register.beneficiaries.individual._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import utils.{CheckYourAnswersHelper, IndividualBeneficiaryAnswersHelper}
+import utils.answers.IndividualBeneficiaryAnswersHelper
 import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
 import views.html.register.beneficiaries.individualBeneficiary.AnswersView
