@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.trust
+package mapping.reads
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.beneficiaries.{Beneficiaries, TrustBeneficiaries}
+import models.core.pages.Address
+import play.api.libs.json.{Format, Json}
 
-case class TrustBeneficiaryShareOfIncomePage(index: Int) extends QuestionPage[String]{
 
-  override def path: JsPath = JsPath \ Beneficiaries \ TrustBeneficiaries \ index \ toString
+final case class CharityBeneficiary(name: String,
+                                    howMuchIncome: Option[String],
+                                    address: Option[Address]
+                                      )
 
-  override def toString: String = "shareOfIncome"
+object CharityBeneficiary {
+  implicit val classFormat: Format[CharityBeneficiary] = Json.format[CharityBeneficiary]
 }
+
+

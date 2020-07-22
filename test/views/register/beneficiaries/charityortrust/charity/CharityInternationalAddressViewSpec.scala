@@ -16,7 +16,7 @@
 
 package views.register.beneficiaries.charityortrust.charity
 
-import controllers.register.beneficiaries.charityortrust.charity.routes
+import controllers.register.beneficiaries.charityOrTrust.charity.routes
 import forms.InternationalAddressFormProvider
 import models.NormalMode
 import play.api.data.Form

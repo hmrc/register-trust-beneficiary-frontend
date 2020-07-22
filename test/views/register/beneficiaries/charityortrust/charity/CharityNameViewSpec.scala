@@ -27,7 +27,7 @@ class CharityNameViewSpec extends StringViewBehaviours {
 
   val prefix = "charity.name"
   val index = 0
-  override val form = new StringFormProvider().withConfig(prefix, 105)
+  override val form = new StringFormProvider().withPrefix(prefix, 105)
   val view = viewFor[CharityNameView](Some(emptyUserAnswers))
 
   "CharityNameView" must {

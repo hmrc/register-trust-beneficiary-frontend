@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.register.beneficiaries.charityortrust.charity
+package controllers.register.beneficiaries.charityOrTrust.charity
 
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.StringFormProvider
@@ -43,7 +43,7 @@ class CharityNameController @Inject()(
                                        view: CharityNameView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form: Form[String] = formProvider.withConfig("charity.name", 105)
+  private val form: Form[String] = formProvider.withPrefix("charity.name", 105)
 
   private def actions(draftId: String) =
     identify andThen

@@ -17,6 +17,7 @@
 package controllers.register.beneficiaries.charityortrust
 
 import base.SpecBase
+import controllers.register.beneficiaries.charityOrTrust.routes
 import forms.CharityOrTrustFormProvider
 import models.NormalMode
 import models.registration.pages.CharityOrTrust

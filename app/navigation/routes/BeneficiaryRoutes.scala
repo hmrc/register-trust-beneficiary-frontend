@@ -17,8 +17,8 @@
 package navigation.routes
 
 import config.FrontendAppConfig
-import controllers.register.beneficiaries.charityortrust.charity.{routes => charityRoutes}
-import controllers.register.beneficiaries.charityortrust.{routes => charityOrTrustRoutes}
+import controllers.register.beneficiaries.charityOrTrust.charity.{routes => charityRoutes}
+import controllers.register.beneficiaries.charityOrTrust.{routes => charityOrTrustRoutes}
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRoutes}
 import models.registration.pages.CharityOrTrust.{Charity, Trust}
 import models.registration.pages.KindOfTrust.Employees
@@ -32,41 +32,39 @@ import pages.register.beneficiaries.individual._
 import pages.register.beneficiaries.{AddABeneficiaryPage, AddABeneficiaryYesNoPage, ClassBeneficiaryDescriptionPage, WhatTypeOfBeneficiaryPage, _}
 import play.api.mvc.Call
 import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries}
-import uk.gov.hmrc.auth.core.AffinityGroup
 
 object BeneficiaryRoutes {
-  def route(draftId: String, config: FrontendAppConfig): PartialFunction[Page, AffinityGroup => ReadableUserAnswers => Call] = {
-    case NamePage(index) => _ => namePage(draftId, index)
-    case RoleInCompanyPage(index) => _ => _ => individualRoutes.DateOfBirthYesNoController.onPageLoad(NormalMode, index, draftId)
-    case DateOfBirthYesNoPage(index) => _ => ua => individualBeneficiaryDateOfBirthRoute(ua, index, draftId)
-    case DateOfBirthPage(index) => _ => _ => individualRoutes.IncomeYesNoController.onPageLoad(NormalMode, index, draftId)
-    case IncomeYesNoPage(index) => _ => ua => individualBeneficiaryIncomeRoute(ua, index, draftId)
-    case IncomePage(index) => _ => _ => individualRoutes.NationalInsuranceYesNoController.onPageLoad(NormalMode, index, draftId)
-    case NationalInsuranceYesNoPage(index) => _ => ua => individualBeneficiaryNationalInsuranceYesNoRoute(ua, index, draftId)
-    case NationalInsuranceNumberPage(index) => _ =>_ =>individualRoutes.VulnerableYesNoController.onPageLoad(NormalMode, index, draftId)
-    case individual.AddressYesNoPage(index) => _ => ua => individualBeneficiaryAddressRoute(ua, index, draftId)
-    case AddressUKYesNoPage(index) => _ => ua => individualBeneficiaryAddressUKYesNoRoute(ua, index, draftId)
-    case AddressUKPage(index) => _ => _ => individualRoutes.PassportDetailsYesNoController.onPageLoad(NormalMode, index, draftId)
-    case AddressInternationalPage(index) => _ => _ => individualRoutes.PassportDetailsYesNoController.onPageLoad(NormalMode, index, draftId)
-    case PassportDetailsYesNoPage(index) => _ => ua => individualBeneficiaryPassportDetailsYesNoRoute(ua, index, draftId)
-    case PassportDetailsPage(index) => _ => _ => individualRoutes.VulnerableYesNoController.onPageLoad(NormalMode, index, draftId)
-    case IDCardDetailsYesNoPage(index) => _ => ua => individualBeneficiaryIdCardDetailsYesNoRoute(ua, index, draftId)
-    case IDCardDetailsPage(index) => _ => _ => individualRoutes.VulnerableYesNoController.onPageLoad(NormalMode, index, draftId)
-    case VulnerableYesNoPage(index) => _ => _ => individualRoutes.AnswersController.onPageLoad(index, draftId)
-    case AnswersPage => _ => _ => controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
-    case AddABeneficiaryPage => _ => addABeneficiaryRoute(draftId, config)
-    case AddABeneficiaryYesNoPage => _ => addABeneficiaryYesNoRoute(draftId, config)
-    case WhatTypeOfBeneficiaryPage => _ => whatTypeOfBeneficiaryRoute(draftId)
-    case ClassBeneficiaryDescriptionPage(_) => _ => _ => controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
-
-    case CharityOrTrustPage => _ => charityOrTrust(draftId, 0)
-    case CharityNamePage(index) => _ => _ => charityRoutes.AmountDiscretionYesNoController.onPageLoad(NormalMode, index,draftId)
-    case AmountDiscretionYesNoPage(index) => _ => amountDiscretionYesNoRoute(draftId, index)
-    case HowMuchIncomePage(index) => _ => _ => charityRoutes.AddressYesNoController.onPageLoad(NormalMode, index,draftId)
-    case charity.AddressYesNoPage(index) => _ => addressYesNoRoute(draftId, index)
-    case AddressInTheUkYesNoPage(index) => _ => addressInTheUKYesNoRoute(draftId, index)
-    case CharityAddressUKPage(index) => _ => _ => charityRoutes.CharityAnswersController.onPageLoad(index, draftId)
-    case CharityInternationalAddressPage(index) => _ => _ => charityRoutes.CharityAnswersController.onPageLoad(index, draftId)
+  def route(draftId: String, config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
+    case NamePage(index) => namePage(draftId, index)
+    case RoleInCompanyPage(index) => _ => individualRoutes.DateOfBirthYesNoController.onPageLoad(NormalMode, index, draftId)
+    case DateOfBirthYesNoPage(index) => ua => individualBeneficiaryDateOfBirthRoute(ua, index, draftId)
+    case DateOfBirthPage(index) => _ => individualRoutes.IncomeYesNoController.onPageLoad(NormalMode, index, draftId)
+    case IncomeYesNoPage(index) => ua => individualBeneficiaryIncomeRoute(ua, index, draftId)
+    case IncomePage(index) => _ => individualRoutes.NationalInsuranceYesNoController.onPageLoad(NormalMode, index, draftId)
+    case NationalInsuranceYesNoPage(index) => ua => individualBeneficiaryNationalInsuranceYesNoRoute(ua, index, draftId)
+    case NationalInsuranceNumberPage(index) => _ => individualRoutes.VulnerableYesNoController.onPageLoad(NormalMode, index, draftId)
+    case pages.register.beneficiaries.individual.AddressYesNoPage(index) => ua => individualBeneficiaryAddressRoute(ua, index, draftId)
+    case AddressUKYesNoPage(index) => ua => individualBeneficiaryAddressUKYesNoRoute(ua, index, draftId)
+    case AddressUKPage(index) => _ => individualRoutes.PassportDetailsYesNoController.onPageLoad(NormalMode, index, draftId)
+    case AddressInternationalPage(index) => _ => individualRoutes.PassportDetailsYesNoController.onPageLoad(NormalMode, index, draftId)
+    case PassportDetailsYesNoPage(index) => ua => individualBeneficiaryPassportDetailsYesNoRoute(ua, index, draftId)
+    case PassportDetailsPage(index) => _ => individualRoutes.VulnerableYesNoController.onPageLoad(NormalMode, index, draftId)
+    case IDCardDetailsYesNoPage(index) => ua => individualBeneficiaryIdCardDetailsYesNoRoute(ua, index, draftId)
+    case IDCardDetailsPage(index) => _ => individualRoutes.VulnerableYesNoController.onPageLoad(NormalMode, index, draftId)
+    case VulnerableYesNoPage(index) => _ => individualRoutes.AnswersController.onPageLoad(index, draftId)
+    case AnswersPage => _ => controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
+    case AddABeneficiaryPage => addABeneficiaryRoute(draftId, config)
+    case AddABeneficiaryYesNoPage => addABeneficiaryYesNoRoute(draftId, config)
+    case WhatTypeOfBeneficiaryPage => whatTypeOfBeneficiaryRoute(draftId)
+    case ClassBeneficiaryDescriptionPage(_) => _ => controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
+    case CharityOrTrustPage => charityOrTrust(draftId, 0)
+    case CharityNamePage(index) => _ => charityRoutes.AmountDiscretionYesNoController.onPageLoad(NormalMode, index,draftId)
+    case AmountDiscretionYesNoPage(index) =>  amountDiscretionYesNoRoute(draftId, index)
+    case HowMuchIncomePage(index) => _ =>  charityRoutes.AddressYesNoController.onPageLoad(NormalMode, index,draftId)
+    case charity.AddressYesNoPage(index) =>  addressYesNoRoute(draftId, index)
+    case AddressInTheUkYesNoPage(index) =>  addressInTheUKYesNoRoute(draftId, index)
+    case CharityAddressUKPage(index) => _ => charityRoutes.CharityAnswersController.onPageLoad(index, draftId)
+    case CharityInternationalAddressPage(index) => _ =>  charityRoutes.CharityAnswersController.onPageLoad(index, draftId)
   }
 
   private def assetsCompletedRoute(draftId: String, config: FrontendAppConfig) : Call = {

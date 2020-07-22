@@ -25,5 +25,5 @@ case class CharityInternationalAddressPage(index: Int) extends QuestionPage[Inte
 
   override def path: JsPath = JsPath \ Beneficiaries \ CharityBeneficiaries \ index \ toString
 
-  override def toString: String = "internationalAddress"
+  override def toString: String = "address"
 }

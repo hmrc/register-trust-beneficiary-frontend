@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.register.beneficiaries.charityortrust.charity
+package controllers.register.beneficiaries.charityOrTrust.charity
 
 import controllers.actions._
 import controllers.actions.register._

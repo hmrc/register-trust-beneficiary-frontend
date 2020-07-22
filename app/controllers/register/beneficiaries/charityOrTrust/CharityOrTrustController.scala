@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.register.beneficiaries.charityortrust
+package controllers.register.beneficiaries.charityOrTrust
 
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.CharityOrTrustFormProvider

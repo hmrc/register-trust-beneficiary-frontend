@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.register.beneficiaries.charityortrust.charity.routes._
+@import controllers.register.beneficiaries.charityOrTrust.charity.routes._
 @import models.Mode
 
 @this(
@@ -38,7 +38,8 @@
             field = form("value"),
             label = messages("charity.discretionYesNo.heading", charityName),
             legendClass = Some("heading-large"),
-            legendAsHeading = true
+            legendAsHeading = true,
+            hint = Some(messages("charity.discretionYesNo.hint"))
         )
 
         @components.submit_button()
