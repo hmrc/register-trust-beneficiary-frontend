@@ -17,10 +17,14 @@
 package controllers.register.beneficiaries.charityortrust.charity
 
 import base.SpecBase
+import config.annotations.CharityBeneficiary
 import forms.UKAddressFormProvider
 import models.NormalMode
 import models.core.pages.UKAddress
+import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.charityortrust.charity.{CharityAddressUKPage, CharityNamePage}
+import play.api.data.Form
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.charityortrust.charity.CharityAddressUKView
@@ -28,12 +32,12 @@ import views.html.register.beneficiaries.charityortrust.charity.CharityAddressUK
 class CharityAddressUKControllerSpec extends SpecBase {
 
   val formProvider = new UKAddressFormProvider()
-  val form = formProvider()
+  val form: Form[UKAddress] = formProvider()
   val index: Int = 0
 
   val charityName = "Test"
 
-  lazy val charityAddressUKAddressUKRoute = routes.CharityAddressUKController.onPageLoad(NormalMode, index, fakeDraftId).url
+  lazy val charityAddressUKRoute: String = routes.CharityAddressUKController.onPageLoad(index, fakeDraftId).url
 
   "CharityAddressUK Controller" must {
 
@@ -44,7 +48,7 @@ class CharityAddressUKControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, charityAddressUKAddressUKRoute)
+      val request = FakeRequest(GET, charityAddressUKRoute)
 
       val view = application.injector.instanceOf[CharityAddressUKView]
 
@@ -53,7 +57,7 @@ class CharityAddressUKControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, charityName, index)(request, messages).toString
+        view(form, fakeDraftId, charityName, index)(request, messages).toString
 
       application.stop()
     }
@@ -66,7 +70,7 @@ class CharityAddressUKControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, charityAddressUKAddressUKRoute)
+      val request = FakeRequest(GET, charityAddressUKRoute)
 
       val view = application.injector.instanceOf[CharityAddressUKView]
 
@@ -75,7 +79,7 @@ class CharityAddressUKControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(UKAddress("line 1","line 2", Some("line 3"), Some("line 4"),"line 5")), NormalMode, fakeDraftId, charityName, index)(fakeRequest, messages).toString
+        view(form.fill(UKAddress("line 1","line 2", Some("line 3"), Some("line 4"),"line 5")), fakeDraftId, charityName, index)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -86,10 +90,13 @@ class CharityAddressUKControllerSpec extends SpecBase {
         .set(CharityNamePage(index), "Test").success.value
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[CharityBeneficiary]).toInstance(new FakeNavigator)
+          ).build()
 
       val request =
-        FakeRequest(POST, charityAddressUKAddressUKRoute)
+        FakeRequest(POST, charityAddressUKRoute)
           .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"),("postcode", "NE1 1ZZ"))
 
       val result = route(application, request).value
@@ -109,7 +116,7 @@ class CharityAddressUKControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, charityAddressUKAddressUKRoute)
+        FakeRequest(POST, charityAddressUKRoute)
           .withFormUrlEncodedBody(("value", "invalid value"))
 
       val boundForm = form.bind(Map("value" -> "invalid value"))
@@ -121,7 +128,7 @@ class CharityAddressUKControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId, charityName, index )(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, charityName, index )(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -130,7 +137,7 @@ class CharityAddressUKControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, charityAddressUKAddressUKRoute)
+      val request = FakeRequest(GET, charityAddressUKRoute)
 
       val result = route(application, request).value
 
@@ -145,7 +152,7 @@ class CharityAddressUKControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, charityAddressUKAddressUKRoute)
+        FakeRequest(POST, charityAddressUKRoute)
           .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"),("postcode", "NE1 1ZZ"))
 
       val result = route(application, request).value

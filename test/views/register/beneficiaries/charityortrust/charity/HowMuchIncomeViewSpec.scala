@@ -36,7 +36,7 @@ class HowMuchIncomeViewSpec extends StringViewBehaviours {
     val view = viewFor[HowMuchIncomeView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, fakeDraftId, index, charityName)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, index, charityName)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), prefix, charityName)
 

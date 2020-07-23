@@ -19,7 +19,6 @@ package controllers.register.beneficiaries.charityortrust.charity
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import javax.inject.Inject
-import models.NormalMode
 import models.Status.Completed
 import pages.entitystatus.CharityBeneficiaryStatus
 import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
@@ -50,7 +49,7 @@ class CharityAnswersController @Inject()(
     identify andThen
       getData(draftId) andThen
       requireData andThen
-      requiredAnswer(RequiredAnswer(CharityNamePage(index), routes.CharityNameController.onPageLoad(NormalMode, 0, draftId)))
+      requiredAnswer(RequiredAnswer(CharityNamePage(index), routes.CharityNameController.onPageLoad(index, draftId)))
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>

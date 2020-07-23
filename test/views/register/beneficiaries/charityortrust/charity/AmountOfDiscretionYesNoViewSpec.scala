@@ -28,14 +28,14 @@ class AmountOfDiscretionYesNoViewSpec extends YesNoViewBehaviours {
   val prefix = "charity.discretionYesNo"
   val index = 0
   val charityName = "Test"
-  val form = new YesNoFormProvider().withPrefix(prefix)
+  val form: Form[Boolean] = new YesNoFormProvider().withPrefix(prefix)
 
   "amountDiscretionYesNo view" must {
 
     val view = viewFor[AmountDiscretionYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, fakeDraftId, index, charityName)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, index, charityName)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), prefix, charityName)
 
