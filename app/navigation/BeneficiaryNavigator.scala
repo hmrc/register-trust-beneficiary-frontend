@@ -19,10 +19,12 @@ package navigation
 import config.FrontendAppConfig
 import controllers.register.beneficiaries.classofbeneficiaries.{routes => classOfBeneficiariesRts}
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRts}
+import controllers.register.beneficiaries.charityortrust.{routes => charityortrustRoutes}
 import javax.inject.Inject
 import models.registration.pages.{AddABeneficiary, WhatTypeOfBeneficiary}
-import models.{Mode, ReadableUserAnswers}
+import models.{Mode, NormalMode, ReadableUserAnswers}
 import pages.Page
+import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
 import pages.register.beneficiaries.{AddABeneficiaryPage, AddABeneficiaryYesNoPage, WhatTypeOfBeneficiaryPage}
 import play.api.mvc.Call
 import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries}
@@ -52,8 +54,20 @@ class BeneficiaryNavigator @Inject()(config: FrontendAppConfig) extends Navigato
         routeToIndividualBeneficiaryIndex(userAnswers, draftId)
       case Some(WhatTypeOfBeneficiary.ClassOfBeneficiary) =>
         routeToClassOfBeneficiaryIndex(userAnswers, draftId)
+      case Some(WhatTypeOfBeneficiary.CharityOrTrust) =>
+        routeToCharityOrTrustIndex(userAnswers, draftId)
       case _ =>
         controllers.routes.FeatureNotAvailableController.onPageLoad()
+    }
+  }
+
+  private def routeToCharityOrTrustIndex(userAnswers: ReadableUserAnswers, draftId: String) = {
+    val charityortrust = userAnswers.get(CharityOrTrustPage).getOrElse(List.empty)
+    charityortrust match {
+      case Nil =>
+        charityortrustRoutes.CharityOrTrustController.onPageLoad(NormalMode, draftId)
+      case _ =>
+        charityortrustRoutes.CharityOrTrustController.onPageLoad(NormalMode, draftId)
     }
   }
 
