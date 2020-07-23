@@ -24,8 +24,8 @@ import mapping.Mapping
 import models.core.pages.FullName
 import org.scalatest.{FreeSpec, MustMatchers, OptionValues}
 import pages.register.beneficiaries.ClassBeneficiaryDescriptionPage
-import pages.register.beneficiaries.charityortrust.charity.{AmountDiscretionYesNoPage, CharityNamePage, HowMuchIncomePage}
 import pages.register.beneficiaries.individual._
+import pages.register.beneficiaries.charityortrust.charity
 
 class BeneficiariesMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {
@@ -131,10 +131,10 @@ class BeneficiariesMapperSpec extends SpecBase with MustMatchers
           .set(NationalInsuranceNumberPage(index), "AB123456C").success.value
           .set(VulnerableYesNoPage(index), true).success.value
           .set(ClassBeneficiaryDescriptionPage(classOfBeneficiaryIndex), "class of ben 1").success.value
-          .set(CharityNamePage(charityBeneficiaryIndex), "Test").success.value
-          .set(AmountDiscretionYesNoPage(charityBeneficiaryIndex), false).success.value
-          .set(HowMuchIncomePage(charityBeneficiaryIndex), "1234").success.value
-          .set(pages.register.beneficiaries.charityortrust.charity.AddressYesNoPage(charityBeneficiaryIndex), false).success.value
+          .set(charity.CharityNamePage(charityBeneficiaryIndex), "Test").success.value
+          .set(charity.AmountDiscretionYesNoPage(charityBeneficiaryIndex), false).success.value
+          .set(charity.HowMuchIncomePage(charityBeneficiaryIndex), "1234").success.value
+          .set(charity.AddressYesNoPage(charityBeneficiaryIndex), false).success.value
 
         val result = beneficiariesMapper.build(userAnswers).value
 
