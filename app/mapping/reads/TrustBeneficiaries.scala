@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package sections.beneficiaries
+package mapping.reads
 
 import pages.QuestionPage
-import play.api.libs.json.{JsArray, JsPath}
-import viewmodels.addAnother.TrustBeneficiaryViewModel
+import play.api.libs.json.JsPath
+import sections.beneficiaries.Beneficiaries
 
-case object TrustBeneficiaries extends QuestionPage[List[TrustBeneficiaryViewModel]]{
+case object TrustBeneficiaries extends QuestionPage[List[TrustBeneficiary]]{
 
-  override def path: JsPath = JsPath \ Beneficiaries \ toString
+  override def path: JsPath = JsPath \ Beneficiaries \toString
 
   override def toString: String = "trustBeneficiaries"
 
