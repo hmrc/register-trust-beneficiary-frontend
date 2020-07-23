@@ -21,8 +21,8 @@ import controllers.register.beneficiaries.individualBeneficiary.{routes => indiv
 import models.UserAnswers
 import models.core.pages.FullName
 import play.api.i18n.Messages
-import sections.beneficiaries.{CharityBeneficiaries, ClassOfBeneficiaries, IndividualBeneficiaries}
-import viewmodels.addAnother.{CharityBeneficiaryViewModel, ClassOfBeneficiaryViewModel, IndividualBeneficiaryViewModel}
+import sections.beneficiaries.{CharityBeneficiaries, CompanyBeneficiaries, ClassOfBeneficiaries, IndividualBeneficiaries}
+import viewmodels.addAnother.{CharityBeneficiaryViewModel, CompanyBeneficiaryViewModel, ClassOfBeneficiaryViewModel, IndividualBeneficiaryViewModel}
 import viewmodels.{AddRow, AddToRows}
 
 class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(implicit messages: Messages) {
@@ -73,6 +73,20 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
     )
   }
 
+  private def parseCompanyBeneficiary(companyBeneficiary : (CompanyBeneficiaryViewModel, Int)) : AddRow = {
+
+    val vm = companyBeneficiary._1
+    val index = companyBeneficiary._2
+
+    val defaultValue = messages("entities.no.description.added")
+    AddRow(
+      vm.name.getOrElse(defaultValue),
+      messages("entities.beneficiary.company"),
+      controllers.routes.FeatureNotAvailableController.onPageLoad().url,
+      removeUrl = controllers.routes.FeatureNotAvailableController.onPageLoad().url
+    )
+  }
+
   private def individualBeneficiaries = {
     val individualBeneficiaries = userAnswers.get(IndividualBeneficiaries).toList.flatten.zipWithIndex
 
@@ -103,10 +117,26 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
     InProgressComplete(inProgress = progress, complete = completed)
   }
 
+  private def companyBeneficiaries = {
+    val beneficiaries = userAnswers.get(CompanyBeneficiaries).toList.flatten.zipWithIndex
+
+    val completed = beneficiaries.filter(_._1.isComplete).map(parseCompanyBeneficiary)
+
+    val progress = beneficiaries.filterNot(_._1.isComplete).map(parseCompanyBeneficiary)
+
+    InProgressComplete(inProgress = progress, complete = completed)
+  }
+
   def rows : AddToRows =
     AddToRows(
-      inProgress = individualBeneficiaries.inProgress ::: classOfBeneficiaries.inProgress ::: charityBeneficiaries.inProgress,
-      complete = individualBeneficiaries.complete ::: classOfBeneficiaries.complete ::: charityBeneficiaries.complete
+      inProgress = individualBeneficiaries.inProgress :::
+        classOfBeneficiaries.inProgress :::
+        charityBeneficiaries.inProgress :::
+        companyBeneficiaries.inProgress,
+      complete = individualBeneficiaries.complete :::
+        classOfBeneficiaries.complete :::
+        charityBeneficiaries.complete :::
+        companyBeneficiaries.complete
     )
 
 }

@@ -19,11 +19,12 @@ package navigation
 import base.SpecBase
 import config.FrontendAppConfig
 import controllers.register.beneficiaries.classofbeneficiaries.{routes => classOfBeneficiariesRoutes}
+import controllers.register.beneficiaries.companyoremploymentrelated.{routes => companyOrEmploymentRelatedRoutes}
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRoutes}
 import generators.Generators
+import models.UserAnswers
 import models.core.pages.FullName
 import models.registration.pages.{AddABeneficiary, WhatTypeOfBeneficiary}
-import models.{NormalMode, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.beneficiaries._
@@ -47,7 +48,7 @@ class BeneficiaryNavigatorSpec {
 
         val answers = userAnswers.set(AddABeneficiaryYesNoPage, true).success.value
 
-        navigator.nextPage(AddABeneficiaryYesNoPage, NormalMode, fakeDraftId, answers)
+        navigator.nextPage(AddABeneficiaryYesNoPage, fakeDraftId, answers)
           .mustBe(controllers.register.beneficiaries.routes.WhatTypeOfBeneficiaryController.onPageLoad(fakeDraftId))
     }
   }
@@ -58,7 +59,7 @@ class BeneficiaryNavigatorSpec {
 
         val answers = userAnswers.set(AddABeneficiaryPage, AddABeneficiary.YesNow).success.value
 
-        navigator.nextPage(AddABeneficiaryPage, NormalMode, fakeDraftId, answers)
+        navigator.nextPage(AddABeneficiaryPage, fakeDraftId, answers)
           .mustBe(controllers.register.beneficiaries.routes.WhatTypeOfBeneficiaryController.onPageLoad(fakeDraftId))
     }
   }
@@ -69,7 +70,7 @@ class BeneficiaryNavigatorSpec {
 
         val answers = userAnswers.set(AddABeneficiaryYesNoPage, false).success.value
 
-        navigator.nextPage(AddABeneficiaryYesNoPage, NormalMode, fakeDraftId, answers)
+        navigator.nextPage(AddABeneficiaryYesNoPage, fakeDraftId, answers)
           .mustBe(assetsCompletedRoute(fakeDraftId, frontendAppConfig))
     }
   }
@@ -83,7 +84,7 @@ class BeneficiaryNavigatorSpec {
             .set(NamePage(0), FullName("First", None, "Last")).success.value
             .set(AddABeneficiaryPage, AddABeneficiary.YesLater).success.value
 
-          navigator.nextPage(AddABeneficiaryPage, NormalMode, fakeDraftId, answers)
+          navigator.nextPage(AddABeneficiaryPage, fakeDraftId, answers)
             .mustBe(assetsCompletedRoute(fakeDraftId, frontendAppConfig))
       }
     }
@@ -96,7 +97,7 @@ class BeneficiaryNavigatorSpec {
             .set(NamePage(0), FullName("First", None, "Last")).success.value
             .set(AddABeneficiaryPage, AddABeneficiary.NoComplete).success.value
 
-          navigator.nextPage(AddABeneficiaryPage, NormalMode, fakeDraftId, answers)
+          navigator.nextPage(AddABeneficiaryPage, fakeDraftId, answers)
             .mustBe(assetsCompletedRoute(fakeDraftId, frontendAppConfig))
       }
     }
@@ -106,7 +107,7 @@ class BeneficiaryNavigatorSpec {
     forAll(arbitrary[UserAnswers]) {
       userAnswers =>
         val answers = userAnswers.set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.CompanyOrEmployment).success.value
-        navigator.nextPage(WhatTypeOfBeneficiaryPage, NormalMode, fakeDraftId, answers)
+        navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
           .mustBe(controllers.routes.FeatureNotAvailableController.onPageLoad())
     }
   }
@@ -119,7 +120,7 @@ class BeneficiaryNavigatorSpec {
           userAnswers =>
             val answers = userAnswers.set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.Individual).success.value
               .remove(IndividualBeneficiaries).success.value
-            navigator.nextPage(WhatTypeOfBeneficiaryPage, NormalMode, fakeDraftId, answers)
+            navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
               .mustBe(individualRoutes.NameController.onPageLoad(0, fakeDraftId))
         }
       }
@@ -132,7 +133,7 @@ class BeneficiaryNavigatorSpec {
           .set(NamePage(0), FullName("First", None, "Last")).success.value
           .set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.Individual).success.value
 
-        navigator.nextPage(WhatTypeOfBeneficiaryPage, NormalMode, fakeDraftId, answers)
+        navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
           .mustBe(individualRoutes.NameController.onPageLoad(1, fakeDraftId))
       }
     }
@@ -146,7 +147,7 @@ class BeneficiaryNavigatorSpec {
           userAnswers =>
             val answers = userAnswers.set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.ClassOfBeneficiary).success.value
               .remove(ClassOfBeneficiaries).success.value
-            navigator.nextPage(WhatTypeOfBeneficiaryPage, NormalMode, fakeDraftId, answers)
+            navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
               .mustBe(classOfBeneficiariesRoutes.ClassBeneficiaryDescriptionController.onPageLoad(0, fakeDraftId))
         }
       }
@@ -159,8 +160,20 @@ class BeneficiaryNavigatorSpec {
           .set(ClassBeneficiaryDescriptionPage(0), "description").success.value
           .set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.ClassOfBeneficiary).success.value
 
-        navigator.nextPage(WhatTypeOfBeneficiaryPage, NormalMode, fakeDraftId, answers)
+        navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
           .mustBe(classOfBeneficiariesRoutes.ClassBeneficiaryDescriptionController.onPageLoad(1, fakeDraftId))
+      }
+    }
+  }
+
+  "Company" when {
+    "go to CompanyOrEmploymentRelated from WhatTypeOfBeneficiaryPage when CompanyOrEmploymentRelated option selected" in {
+      forAll(arbitrary[UserAnswers]) {
+        userAnswers =>
+          val answers = userAnswers.set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.CompanyOrEmployment).success.value
+            .remove(IndividualBeneficiaries).success.value
+          navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
+            .mustBe(companyOrEmploymentRelatedRoutes.CompanyOrEmploymentRelatedController.onPageLoad(fakeDraftId))
       }
     }
   }

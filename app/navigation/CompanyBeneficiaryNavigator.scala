@@ -29,8 +29,8 @@ class CompanyBeneficiaryNavigator extends Navigator {
   private def simpleNavigation(draftId: String): PartialFunction[Page, Call] = {
     case NamePage(index) => rts.DiscretionYesNoController.onPageLoad(index, draftId)
     case ShareOfIncomePage(index) => rts.AddressYesNoController.onPageLoad(index, draftId)
-    case AddressUKPage(index) => checkDetailsRoute(index, draftId)
-    case AddressInternationalPage(index) => checkDetailsRoute(index, draftId)
+    case AddressUKPage(index) => rts.CheckDetailsController.onPageLoad(index, draftId)
+    case AddressInternationalPage(index) => rts.CheckDetailsController.onPageLoad(index, draftId)
   }
 
   private def yesNoNavigation(draftId: String) : PartialFunction[Page, ReadableUserAnswers => Call] = {
@@ -45,17 +45,13 @@ class CompanyBeneficiaryNavigator extends Navigator {
         ua,
         AddressYesNoPage(index),
         rts.AddressUkYesNoController.onPageLoad(index, draftId),
-        checkDetailsRoute(index, draftId))
+        rts.CheckDetailsController.onPageLoad(index, draftId))
     case AddressUKYesNoPage(index) => ua =>
       yesNoNav(
         ua,
         AddressUKYesNoPage(index),
         rts.UkAddressController.onPageLoad(index, draftId),
         rts.NonUkAddressController.onPageLoad(index, draftId))
-  }
-
-  private def checkDetailsRoute(index: Int, draftId: String) : Call = {
-      controllers.routes.SessionExpiredController.onPageLoad()
   }
 
   private def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {

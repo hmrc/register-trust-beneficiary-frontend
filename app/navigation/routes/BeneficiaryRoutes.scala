@@ -19,19 +19,24 @@ package navigation.routes
 import config.FrontendAppConfig
 import controllers.register.beneficiaries.charityortrust.charity.{routes => charityRoutes}
 import controllers.register.beneficiaries.charityortrust.trust.{routes => trustRoutes}
+import controllers.register.beneficiaries.companyoremploymentrelated.company.{routes => companyRoutes}
+import models.CompanyOrEmploymentRelatedToAdd.Company
+import models.ReadableUserAnswers
 import models.registration.pages.CharityOrTrust.{Charity, Trust}
-import models.{NormalMode, ReadableUserAnswers}
 import pages.Page
+import pages.register.beneficiaries.CompanyOrEmploymentRelatedPage
 import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
 import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
 import pages.register.beneficiaries.individual._
 import play.api.mvc.Call
+import sections.beneficiaries.CompanyBeneficiaries
 
 object BeneficiaryRoutes {
   def route(draftId: String, config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case AnswersPage => _ => controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
     case ClassBeneficiaryDescriptionPage(_) => _ => controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
     case CharityOrTrustPage => charityOrTrust(draftId, 0)
+    case CompanyOrEmploymentRelatedPage => companyOrEmploymentRelatedPage(draftId)
   }
 
   private def charityOrTrust(draftId: String, index: Int)(userAnswers: ReadableUserAnswers) : Call = userAnswers.get(CharityOrTrustPage) match {
@@ -39,5 +44,21 @@ object BeneficiaryRoutes {
     case Some(Trust) => trustRoutes.NameController.onPageLoad(index, draftId)
     case _ => controllers.routes.SessionExpiredController.onPageLoad()
   }
+
+  private def routeToCompanyBeneficiaryIndex(userAnswers: ReadableUserAnswers, draftId: String) = {
+    val companyBeneficiaries = userAnswers.get(CompanyBeneficiaries).getOrElse(List.empty)
+    companyBeneficiaries match {
+      case Nil =>
+        companyRoutes.NameController.onPageLoad(0, draftId)
+      case t if t.nonEmpty =>
+        companyRoutes.NameController.onPageLoad(t.size, draftId)
+    }
+  }
+
+  private def companyOrEmploymentRelatedPage(draftId: String)(userAnswers: ReadableUserAnswers) : Call =
+    userAnswers.get(CompanyOrEmploymentRelatedPage) match {
+      case Some(Company) => routeToCompanyBeneficiaryIndex(userAnswers, draftId)
+      case _ => controllers.routes.FeatureNotAvailableController.onPageLoad()
+    }
 }
 
