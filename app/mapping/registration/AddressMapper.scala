@@ -78,7 +78,6 @@ class AddressMapper  {
       case ukAddress : UKAddress => buildUkAddress(Some(ukAddress))
       case international : InternationalAddress => buildInternationalAddress(Some(international))
     }
-
   }
 
 
