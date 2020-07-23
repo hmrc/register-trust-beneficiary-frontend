@@ -20,7 +20,6 @@ import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import javax.inject.Inject
-import models.NormalMode
 import models.Status.Completed
 import navigation.Navigator
 import pages.entitystatus.IndividualBeneficiaryStatus
@@ -54,7 +53,7 @@ class AnswersController @Inject()(
     identify andThen
       getData(draftId) andThen
       requireData andThen
-      requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(NormalMode, 0, draftId)))
+      requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(index, draftId)))
 
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
@@ -80,6 +79,6 @@ class AnswersController @Inject()(
       for {
         updatedAnswers <- Future.fromTry(answers)
         _ <- registrationsRepository.set(updatedAnswers)
-      } yield Redirect(navigator.nextPage(AnswersPage, NormalMode, draftId, request.userAnswers))
+      } yield Redirect(navigator.nextPage(AnswersPage, draftId, request.userAnswers))
   }
 }

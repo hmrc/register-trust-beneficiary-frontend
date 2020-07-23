@@ -380,8 +380,8 @@ addABeneficiaryYesNo.title = Do you want to add a beneficiary?
 addABeneficiaryYesNo.heading = Do you want to add a beneficiary?
 addABeneficiaryYesNo.error.required = Select yes if you want to add a beneficiary
 
-individualBenficiaryAnswers.title = Check beneficiary details
-individualBenficiaryAnswers.heading = Check beneficiary details
+individualBeneficiaryAnswers.title = Check beneficiary details
+individualBeneficiaryAnswers.heading = Check beneficiary details
 
 individualBeneficiaryAddressUKYesNo.title = Does the individual beneficiary live in the UK?
 individualBeneficiaryAddressUKYesNo.heading = Does {0} live in the UK?

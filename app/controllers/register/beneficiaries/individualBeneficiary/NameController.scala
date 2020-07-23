@@ -20,7 +20,6 @@ import config.annotations.IndividualBeneficiary
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.IndividualBeneficiaryNameFormProvider
 import javax.inject.Inject
-import models.Mode
 import navigation.Navigator
 import pages.register.beneficiaries.individual.NamePage
 import play.api.data.Form
@@ -48,7 +47,7 @@ class NameController @Inject()(
 
   private val form = formProvider()
 
-  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(draftId) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(draftId) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(NamePage(index)) match {
@@ -56,15 +55,15 @@ class NameController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, draftId, index))
+      Ok(view(preparedForm, draftId, index))
   }
 
-  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(draftId).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId, index))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index))),
 
         value => {
           for {
@@ -72,7 +71,7 @@ class NameController @Inject()(
             _ <- registrationsRepository.set(updatedAnswers)
             mainAnswers <- registrationsRepository.getMainAnswers(draftId)
           } yield {
-            Redirect(navigator.nextPage(NamePage(index), mode, draftId, (mainAnswers getOrElse updatedAnswers)))
+            Redirect(navigator.nextPage(NamePage(index), draftId, (mainAnswers getOrElse updatedAnswers)))
           }
         }
       )

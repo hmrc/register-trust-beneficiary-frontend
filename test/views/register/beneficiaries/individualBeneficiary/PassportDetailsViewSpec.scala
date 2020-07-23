@@ -42,7 +42,7 @@ class PassportDetailsViewSpec extends QuestionViewBehaviours[PassportOrIdCardDet
     val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, countryOptions, NormalMode, fakeDraftId, index, name)(fakeRequest, messages)
+      view.apply(form, countryOptions, fakeDraftId, index, name)(fakeRequest, messages)
 
     val applyViewF = (form : Form[_]) => applyView(form)
 

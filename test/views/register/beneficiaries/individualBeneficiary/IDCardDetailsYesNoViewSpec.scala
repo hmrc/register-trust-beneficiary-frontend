@@ -37,7 +37,7 @@ class IDCardDetailsYesNoViewSpec extends YesNoViewBehaviours {
     val view = viewFor[IDCardDetailsYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, fakeDraftId, index, name)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, index, name)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString)
 

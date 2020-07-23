@@ -21,7 +21,6 @@ import controllers.actions._
 import controllers.actions.register._
 import forms.UKAddressFormProvider
 import javax.inject.Inject
-import models.{Mode, NormalMode}
 import navigation.Navigator
 import pages.register.beneficiaries.individual.{AddressUKPage, NamePage}
 import play.api.data.Form
@@ -52,9 +51,9 @@ class AddressUKController @Inject()(
     identify andThen
       getData(draftId) andThen
       requireData andThen
-      requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(NormalMode, index, draftId)))
+      requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(index, draftId)))
 
-  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
       val name = request.userAnswers.get(NamePage(index)).get
@@ -64,23 +63,23 @@ class AddressUKController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, draftId, name, index))
+      Ok(view(preparedForm, draftId, name, index))
   }
 
-  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
       val name = request.userAnswers.get(NamePage(index)).get
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId, name, index))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, name, index))),
 
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressUKPage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddressUKPage(index), mode, draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(AddressUKPage(index), draftId, updatedAnswers))
         }
       )
   }

@@ -17,13 +17,12 @@
 package navigation
 
 import config.FrontendAppConfig
-import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRts}
 import controllers.register.beneficiaries.classofbeneficiaries.{routes => classOfBeneficiariesRts}
+import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRts}
 import javax.inject.Inject
 import models.registration.pages.{AddABeneficiary, WhatTypeOfBeneficiary}
-import models.{Mode, NormalMode, ReadableUserAnswers}
+import models.{Mode, ReadableUserAnswers}
 import pages.Page
-import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
 import pages.register.beneficiaries.{AddABeneficiaryPage, AddABeneficiaryYesNoPage, WhatTypeOfBeneficiaryPage}
 import play.api.mvc.Call
 import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries}
@@ -61,20 +60,16 @@ class BeneficiaryNavigator @Inject()(config: FrontendAppConfig) extends Navigato
   private def routeToIndividualBeneficiaryIndex(userAnswers: ReadableUserAnswers, draftId: String) = {
     val indBeneficiaries = userAnswers.get(IndividualBeneficiaries).getOrElse(List.empty)
     indBeneficiaries match {
-      case Nil =>
-        individualRts.NameController.onPageLoad(NormalMode, 0, draftId)
-      case t if t.nonEmpty =>
-        individualRts.NameController.onPageLoad(NormalMode, t.size, draftId)
+      case list =>
+        individualRts.NameController.onPageLoad(list.size, draftId)
     }
   }
 
   private def routeToClassOfBeneficiaryIndex(userAnswers: ReadableUserAnswers, draftId: String) = {
     val classOfBeneficiaries = userAnswers.get(ClassOfBeneficiaries).getOrElse(List.empty)
     classOfBeneficiaries match {
-      case Nil =>
-        classOfBeneficiariesRts.ClassBeneficiaryDescriptionController.onPageLoad(NormalMode, 0, draftId)
-      case t if t.nonEmpty =>
-        classOfBeneficiariesRts.ClassBeneficiaryDescriptionController.onPageLoad(NormalMode, t.size, draftId)
+      case list =>
+        classOfBeneficiariesRts.ClassBeneficiaryDescriptionController.onPageLoad(list.size, draftId)
     }
   }
 

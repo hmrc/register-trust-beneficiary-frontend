@@ -20,7 +20,6 @@ import config.annotations.ClassOfBeneficiaries
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.ClassBeneficiaryDescriptionFormProvider
 import javax.inject.Inject
-import models.Mode
 import models.Status.Completed
 import navigation.Navigator
 import pages.entitystatus.ClassBeneficiaryStatus
@@ -50,7 +49,7 @@ class ClassBeneficiaryDescriptionController @Inject()(
 
   private val form = formProvider()
 
-  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(draftId) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(draftId) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(ClassBeneficiaryDescriptionPage(index)) match {
@@ -58,15 +57,15 @@ class ClassBeneficiaryDescriptionController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, draftId, index))
+      Ok(view(preparedForm, draftId, index))
   }
 
-  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = (identify andThen getData(draftId) andThen requireData).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = (identify andThen getData(draftId) andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId, index))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index))),
 
         value => {
 
@@ -76,7 +75,7 @@ class ClassBeneficiaryDescriptionController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(answers)
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ClassBeneficiaryDescriptionPage(index), mode, draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(ClassBeneficiaryDescriptionPage(index), draftId, updatedAnswers))
         }
       )
   }

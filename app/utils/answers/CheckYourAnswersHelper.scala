@@ -58,7 +58,7 @@ class CheckYourAnswersHelper @Inject()()
       AnswerRow(
         "classBeneficiaryDescription.checkYourAnswersLabel",
         HtmlFormat.escape(x),
-        Some(controllers.register.beneficiaries.classofbeneficiaries.routes.ClassBeneficiaryDescriptionController.onPageLoad(NormalMode, index, draftId).url),
+        Some(controllers.register.beneficiaries.classofbeneficiaries.routes.ClassBeneficiaryDescriptionController.onPageLoad(index, draftId).url),
         canEdit = canEdit
       )
   }

@@ -17,8 +17,8 @@
 package navigation
 
 import controllers.register.beneficiaries.individualBeneficiary.routes._
+import models.ReadableUserAnswers
 import models.registration.pages.KindOfTrust.Employees
-import models.{NormalMode, ReadableUserAnswers}
 import pages.Page
 import pages.register.beneficiaries.individual._
 import pages.register.settlors.living_settlor.trust_type.KindOfTrustPage
@@ -29,14 +29,14 @@ class IndividualBeneficiaryNavigator extends Navigator {
   override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call = routes(draftId)(page)(userAnswers)
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, Call] = {
-    case RoleInCompanyPage(index) => DateOfBirthYesNoController.onPageLoad(NormalMode, index, draftId)
-    case DateOfBirthPage(index) => IncomeYesNoController.onPageLoad(NormalMode, index, draftId)
-    case IncomePage(index) => NationalInsuranceYesNoController.onPageLoad(NormalMode, index, draftId)
-    case NationalInsuranceNumberPage(index) => VulnerableYesNoController.onPageLoad(NormalMode, index, draftId)
-    case AddressUKPage(index) => PassportDetailsYesNoController.onPageLoad(NormalMode, index, draftId)
-    case AddressInternationalPage(index) => PassportDetailsYesNoController.onPageLoad(NormalMode, index, draftId)
-    case PassportDetailsPage(index) => VulnerableYesNoController.onPageLoad(NormalMode, index, draftId)
-    case IDCardDetailsPage(index) => VulnerableYesNoController.onPageLoad(NormalMode, index, draftId)
+    case RoleInCompanyPage(index) => DateOfBirthYesNoController.onPageLoad(index, draftId)
+    case DateOfBirthPage(index) => IncomeYesNoController.onPageLoad(index, draftId)
+    case IncomePage(index) => NationalInsuranceYesNoController.onPageLoad(index, draftId)
+    case NationalInsuranceNumberPage(index) => VulnerableYesNoController.onPageLoad(index, draftId)
+    case AddressUKPage(index) => PassportDetailsYesNoController.onPageLoad(index, draftId)
+    case AddressInternationalPage(index) => PassportDetailsYesNoController.onPageLoad(index, draftId)
+    case PassportDetailsPage(index) => VulnerableYesNoController.onPageLoad(index, draftId)
+    case IDCardDetailsPage(index) => VulnerableYesNoController.onPageLoad(index, draftId)
     case VulnerableYesNoPage(index) => AnswersController.onPageLoad(index, draftId)
     case AnswersPage => controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
   }
@@ -46,57 +46,57 @@ class IndividualBeneficiaryNavigator extends Navigator {
       yesNoNav(
         ua,
         DateOfBirthYesNoPage(index),
-        DateOfBirthController.onPageLoad(NormalMode, index, draftId),
-        IncomeYesNoController.onPageLoad(NormalMode, index, draftId)
+        DateOfBirthController.onPageLoad(index, draftId),
+        IncomeYesNoController.onPageLoad(index, draftId)
       )
     case IncomeYesNoPage(index) => ua =>
       yesNoNav(
         ua,
         IncomeYesNoPage(index),
-        NationalInsuranceYesNoController.onPageLoad(NormalMode, index, draftId),
-        IncomeController.onPageLoad(NormalMode, index, draftId)
+        NationalInsuranceYesNoController.onPageLoad(index, draftId),
+        IncomeController.onPageLoad(index, draftId)
       )
     case NationalInsuranceYesNoPage(index) => ua =>
       yesNoNav(
         ua,
         NationalInsuranceYesNoPage(index),
-        NationalInsuranceNumberController.onPageLoad(NormalMode, index, draftId),
-        AddressYesNoController.onPageLoad(NormalMode, index, draftId)
+        NationalInsuranceNumberController.onPageLoad(index, draftId),
+        AddressYesNoController.onPageLoad(index, draftId)
       )
     case AddressYesNoPage(index) => ua =>
       yesNoNav(
         ua,
         AddressYesNoPage(index),
-        AddressUKYesNoController.onPageLoad(NormalMode, index, draftId),
-        VulnerableYesNoController.onPageLoad(NormalMode, index, draftId)
+        AddressUKYesNoController.onPageLoad(index, draftId),
+        VulnerableYesNoController.onPageLoad(index, draftId)
       )
     case AddressUKYesNoPage(index) => ua =>
       yesNoNav(
         ua,
         AddressUKYesNoPage(index),
-        AddressUKController.onPageLoad(NormalMode, index, draftId),
-        AddressInternationalController.onPageLoad(NormalMode, index, draftId)
+        AddressUKController.onPageLoad(index, draftId),
+        AddressInternationalController.onPageLoad(index, draftId)
       )
     case PassportDetailsYesNoPage(index) => ua =>
       yesNoNav(
         ua,
         PassportDetailsYesNoPage(index),
-        PassportDetailsController.onPageLoad(NormalMode, index, draftId),
-        IDCardDetailsYesNoController.onPageLoad(NormalMode, index, draftId)
+        PassportDetailsController.onPageLoad(index, draftId),
+        IDCardDetailsYesNoController.onPageLoad(index, draftId)
       )
     case IDCardDetailsYesNoPage(index) => ua =>
       yesNoNav(
         ua,
         IDCardDetailsYesNoPage(index),
-        IDCardDetailsController.onPageLoad(NormalMode, index, draftId),
-        VulnerableYesNoController.onPageLoad(NormalMode, index, draftId)
+        IDCardDetailsController.onPageLoad(index, draftId),
+        VulnerableYesNoController.onPageLoad(index, draftId)
       )
   }
 
   private def trustTypeNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case NamePage(index) => ua => ua.get(KindOfTrustPage) match {
-      case Some(Employees) => RoleInCompanyController.onPageLoad(NormalMode, index, draftId)
-      case _ => DateOfBirthYesNoController.onPageLoad(NormalMode, index, draftId)
+      case Some(Employees) => RoleInCompanyController.onPageLoad(index, draftId)
+      case _ => DateOfBirthYesNoController.onPageLoad(index, draftId)
     }
   }
 

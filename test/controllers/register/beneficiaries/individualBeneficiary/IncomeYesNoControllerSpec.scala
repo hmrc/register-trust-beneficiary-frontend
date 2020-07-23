@@ -19,7 +19,6 @@ package controllers.register.beneficiaries.individualBeneficiary
 import base.SpecBase
 import config.annotations.IndividualBeneficiary
 import forms.YesNoFormProvider
-import models.NormalMode
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.individual.{IncomeYesNoPage, NamePage}
@@ -36,7 +35,7 @@ class IncomeYesNoControllerSpec extends SpecBase {
 
   val name = FullName("first name", None, "Last name")
 
-  lazy val individualBeneficiaryIncomeYesNoRoute = routes.IncomeYesNoController.onPageLoad(NormalMode, index, fakeDraftId).url
+  lazy val individualBeneficiaryIncomeYesNoRoute = routes.IncomeYesNoController.onPageLoad(index, fakeDraftId).url
 
   "IndividualBeneficiaryIncomeYesNo Controller" must {
 
@@ -56,7 +55,7 @@ class IncomeYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, name, index)(fakeRequest, messages).toString
+        view(form, fakeDraftId, name, index)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -77,7 +76,7 @@ class IncomeYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode, fakeDraftId, name, index)(fakeRequest, messages).toString
+        view(form.fill(true), fakeDraftId, name, index)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -126,7 +125,7 @@ class IncomeYesNoControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId, name, index)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, name, index)(fakeRequest, messages).toString
 
       application.stop()
     }

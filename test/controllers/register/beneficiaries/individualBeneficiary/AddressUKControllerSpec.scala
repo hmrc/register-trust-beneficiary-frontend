@@ -19,7 +19,6 @@ package controllers.register.beneficiaries.individualBeneficiary
 import base.SpecBase
 import config.annotations.IndividualBeneficiary
 import forms.UKAddressFormProvider
-import models.NormalMode
 import models.core.pages.{FullName, UKAddress}
 import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.individual.{AddressUKPage, NamePage}
@@ -36,7 +35,7 @@ class AddressUKControllerSpec extends SpecBase {
 
   val name = FullName("first name", None, "Last name")
 
-  lazy val individualBeneficiaryAddressUKRoute = routes.AddressUKController.onPageLoad(NormalMode, index, fakeDraftId).url
+  lazy val individualBeneficiaryAddressUKRoute = routes.AddressUKController.onPageLoad(index, fakeDraftId).url
 
   "IndividualBeneficiaryAddressUK Controller" must {
 
@@ -56,7 +55,7 @@ class AddressUKControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, name, index)(request, messages).toString
+        view(form, fakeDraftId, name, index)(request, messages).toString
 
       application.stop()
     }
@@ -78,7 +77,7 @@ class AddressUKControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(UKAddress("line 1","line 2", Some("line 3"), Some("line 4"),"line 5")), NormalMode, fakeDraftId, name, index)(fakeRequest, messages).toString
+        view(form.fill(UKAddress("line 1","line 2", Some("line 3"), Some("line 4"),"line 5")), fakeDraftId, name, index)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -127,7 +126,7 @@ class AddressUKControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId, name, index )(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, name, index )(fakeRequest, messages).toString
 
       application.stop()
     }

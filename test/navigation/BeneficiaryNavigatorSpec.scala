@@ -121,7 +121,7 @@ class BeneficiaryNavigatorSpec {
             val answers = userAnswers.set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.Individual).success.value
               .remove(IndividualBeneficiaries).success.value
             navigator.nextPage(WhatTypeOfBeneficiaryPage, NormalMode, fakeDraftId, answers)
-              .mustBe(individualRoutes.NameController.onPageLoad(NormalMode, 0, fakeDraftId))
+              .mustBe(individualRoutes.NameController.onPageLoad(0, fakeDraftId))
         }
       }
     }
@@ -134,7 +134,7 @@ class BeneficiaryNavigatorSpec {
           .set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.Individual).success.value
 
         navigator.nextPage(WhatTypeOfBeneficiaryPage, NormalMode, fakeDraftId, answers)
-          .mustBe(individualRoutes.NameController.onPageLoad(NormalMode, 1, fakeDraftId))
+          .mustBe(individualRoutes.NameController.onPageLoad(1, fakeDraftId))
       }
     }
   }
@@ -148,7 +148,7 @@ class BeneficiaryNavigatorSpec {
             val answers = userAnswers.set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.ClassOfBeneficiary).success.value
               .remove(ClassOfBeneficiaries).success.value
             navigator.nextPage(WhatTypeOfBeneficiaryPage, NormalMode, fakeDraftId, answers)
-              .mustBe(classOfBeneficiariesRoutes.ClassBeneficiaryDescriptionController.onPageLoad(NormalMode, 0, fakeDraftId))
+              .mustBe(classOfBeneficiariesRoutes.ClassBeneficiaryDescriptionController.onPageLoad(0, fakeDraftId))
         }
       }
     }
@@ -161,7 +161,7 @@ class BeneficiaryNavigatorSpec {
           .set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.ClassOfBeneficiary).success.value
 
         navigator.nextPage(WhatTypeOfBeneficiaryPage, NormalMode, fakeDraftId, answers)
-          .mustBe(classOfBeneficiariesRoutes.ClassBeneficiaryDescriptionController.onPageLoad(NormalMode, 1, fakeDraftId))
+          .mustBe(classOfBeneficiariesRoutes.ClassBeneficiaryDescriptionController.onPageLoad(1, fakeDraftId))
       }
     }
   }

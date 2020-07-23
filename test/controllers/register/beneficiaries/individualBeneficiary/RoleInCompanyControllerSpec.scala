@@ -19,14 +19,12 @@ package controllers.register.beneficiaries.individualBeneficiary
 import base.SpecBase
 import config.annotations.IndividualBeneficiary
 import forms.RoleInCompanyFormProvider
-import models.NormalMode
 import models.core.pages.FullName
 import models.registration.pages.RoleInCompany.Director
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.individual.{NamePage, RoleInCompanyPage}
 import play.api.inject.bind
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.individualBeneficiary.RoleInCompanyView
@@ -45,7 +43,7 @@ class RoleInCompanyControllerSpec extends SpecBase with MockitoSugar {
       bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
     ).build()
 
-  lazy val roleInCompanyControllerRoute = routes.RoleInCompanyController.onPageLoad(NormalMode, index, draftId).url
+  lazy val roleInCompanyControllerRoute = routes.RoleInCompanyController.onPageLoad(index, draftId).url
 
   "AddressYesNo Controller" must {
 
@@ -60,7 +58,7 @@ class RoleInCompanyControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, draftId, name, 0)(fakeRequest, messages).toString
+        view(form, draftId, name, index)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -82,7 +80,7 @@ class RoleInCompanyControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(Director), NormalMode, draftId, name, index)(fakeRequest, messages).toString
+        view(form.fill(Director), draftId, name, index)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -117,7 +115,7 @@ class RoleInCompanyControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, draftId, name, index)(fakeRequest, messages).toString
+        view(boundForm, draftId, name, index)(fakeRequest, messages).toString
 
       application.stop()
     }

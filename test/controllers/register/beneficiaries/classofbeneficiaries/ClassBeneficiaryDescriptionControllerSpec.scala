@@ -19,7 +19,6 @@ package controllers.register.beneficiaries.classofbeneficiaries
 import base.SpecBase
 import config.annotations.ClassOfBeneficiaries
 import forms.ClassBeneficiaryDescriptionFormProvider
-import models.NormalMode
 import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
 import play.api.inject.bind
@@ -33,7 +32,7 @@ class ClassBeneficiaryDescriptionControllerSpec extends SpecBase {
   val form = formProvider()
   val index = 0
 
-  lazy val classBeneficiaryDescriptionRoute = routes.ClassBeneficiaryDescriptionController.onPageLoad(NormalMode,index,fakeDraftId).url
+  lazy val classBeneficiaryDescriptionRoute = routes.ClassBeneficiaryDescriptionController.onPageLoad(index, fakeDraftId).url
 
   "ClassBeneficiaryDescription Controller" must {
 
@@ -50,7 +49,7 @@ class ClassBeneficiaryDescriptionControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode,fakeDraftId,index)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -70,7 +69,7 @@ class ClassBeneficiaryDescriptionControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill("answer"), NormalMode,fakeDraftId,index)(fakeRequest, messages).toString
+        view(form.fill("answer"), fakeDraftId, index)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -112,7 +111,7 @@ class ClassBeneficiaryDescriptionControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode,fakeDraftId,index)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index)(fakeRequest, messages).toString
 
       application.stop()
     }
