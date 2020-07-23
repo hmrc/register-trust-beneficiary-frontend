@@ -23,22 +23,20 @@ import models.NormalMode
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.charityortrust.charity.{AddressYesNoPage, CharityNamePage}
+import play.api.data.Form
 import play.api.inject.bind
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.charityortrust.charity.AddressYesNoView
 
 class AddressYesNoControllerSpec extends SpecBase with MockitoSugar {
 
-  def onwardRoute = Call("GET", "/foo")
-
   val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix("charity.addressYesNo")
+  val form: Form[Boolean] = formProvider.withPrefix("charity.addressYesNo")
   val index: Int = 0
   val charityName = "Test"
 
-  lazy val addressYesNo = routes.AddressYesNoController.onPageLoad(NormalMode, index, draftId).url
+  lazy val addressYesNo: String = routes.AddressYesNoController.onPageLoad(index, draftId).url
 
   "AddressYesNo Controller" must {
 
@@ -58,7 +56,7 @@ class AddressYesNoControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, draftId, index, charityName)(fakeRequest, messages).toString
+        view(form, draftId, index, charityName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -80,7 +78,7 @@ class AddressYesNoControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode, draftId, index, charityName)(fakeRequest, messages).toString
+        view(form.fill(true), draftId, index, charityName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -95,7 +93,7 @@ class AddressYesNoControllerSpec extends SpecBase with MockitoSugar {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.CharityNameController.onPageLoad(NormalMode, index, fakeDraftId).url
+      redirectLocation(result).value mustEqual routes.CharityNameController.onPageLoad(index, fakeDraftId).url
 
       application.stop()
     }
@@ -143,7 +141,7 @@ class AddressYesNoControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, draftId, index, charityName)(fakeRequest, messages).toString
+        view(boundForm, draftId, index, charityName)(fakeRequest, messages).toString
 
       application.stop()
     }

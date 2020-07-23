@@ -27,13 +27,13 @@ class CharityNameViewSpec extends StringViewBehaviours {
 
   val prefix = "charity.name"
   val index = 0
-  override val form = new StringFormProvider().withPrefix(prefix, 105)
-  val view = viewFor[CharityNameView](Some(emptyUserAnswers))
+  override val form: Form[String] = new StringFormProvider().withPrefix(prefix, 105)
+  val view: CharityNameView = viewFor[CharityNameView](Some(emptyUserAnswers))
 
   "CharityNameView" must {
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, fakeDraftId, index)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, index)(fakeRequest, messages)
 
     behave like normalPage(applyView(form), prefix)
 

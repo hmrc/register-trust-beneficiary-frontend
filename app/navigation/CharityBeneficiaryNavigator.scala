@@ -27,8 +27,8 @@ class CharityBeneficiaryNavigator extends Navigator {
   override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call = routes(draftId)(page)(userAnswers)
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, Call] = {
-    case CharityNamePage(index) => AmountDiscretionYesNoController.onPageLoad(NormalMode, index, draftId)
-    case HowMuchIncomePage(index) => AddressYesNoController.onPageLoad(NormalMode, index, draftId)
+    case CharityNamePage(index) => AmountDiscretionYesNoController.onPageLoad(index, draftId)
+    case HowMuchIncomePage(index) => AddressYesNoController.onPageLoad(index, draftId)
     case CharityAddressUKPage(index) => CharityAnswersController.onPageLoad(index, draftId)
     case CharityInternationalAddressPage(index) => CharityAnswersController.onPageLoad(index, draftId)
   }
@@ -38,22 +38,22 @@ class CharityBeneficiaryNavigator extends Navigator {
       yesNoNav(
         ua,
         AmountDiscretionYesNoPage(index),
-        AddressYesNoController.onPageLoad(NormalMode, index, draftId),
-        HowMuchIncomeController.onPageLoad(NormalMode, index, draftId)
+        AddressYesNoController.onPageLoad(index, draftId),
+        HowMuchIncomeController.onPageLoad(index, draftId)
       )
     case AddressYesNoPage(index) => ua =>
       yesNoNav(
         ua,
         AddressYesNoPage(index),
-        AddressInTheUkYesNoController.onPageLoad(NormalMode, index, draftId),
+        AddressInTheUkYesNoController.onPageLoad(index, draftId),
         CharityAnswersController.onPageLoad(index, draftId)
       )
     case AddressInTheUkYesNoPage(index) => ua =>
       yesNoNav(
         ua,
         AddressInTheUkYesNoPage(index),
-        CharityAddressUKController.onPageLoad(NormalMode, index, draftId),
-        CharityInternationalAddressController.onPageLoad(NormalMode, index, draftId)
+        CharityAddressUKController.onPageLoad(index, draftId),
+        CharityInternationalAddressController.onPageLoad(index, draftId)
       )
   }
 

@@ -35,7 +35,7 @@ object BeneficiaryRoutes {
   }
 
   private def charityOrTrust(draftId: String, index: Int)(userAnswers: ReadableUserAnswers) : Call = userAnswers.get(CharityOrTrustPage) match {
-    case Some(Charity) => charityRoutes.CharityNameController.onPageLoad(NormalMode, index, draftId)
+    case Some(Charity) => charityRoutes.CharityNameController.onPageLoad(index, draftId)
     case Some(Trust) => trustRoutes.NameController.onPageLoad(index, draftId)
     case _ => controllers.routes.SessionExpiredController.onPageLoad()
   }

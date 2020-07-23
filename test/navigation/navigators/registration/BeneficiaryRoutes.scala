@@ -43,7 +43,7 @@ trait BeneficiaryRoutes {
     "go to CharityName for index 0 from CharityOrTrust when Charity option selected " in {
       val answers = emptyUserAnswers.set(pages.register.beneficiaries.charityortrust.CharityOrTrustPage, value = CharityOrTrust.Charity).success.value
       navigator.nextPage(pages.register.beneficiaries.charityortrust.CharityOrTrustPage, NormalMode, fakeDraftId, answers)
-        .mustBe(controllers.register.beneficiaries.charityortrust.charity.routes.CharityNameController.onPageLoad(NormalMode, 0, fakeDraftId))
+        .mustBe(controllers.register.beneficiaries.charityortrust.charity.routes.CharityNameController.onPageLoad(0, fakeDraftId))
     }
 
     "go to AddABeneficiaryPage from AnswersPage" in {

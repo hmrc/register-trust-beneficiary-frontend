@@ -21,7 +21,6 @@ import controllers.actions.register.{DraftIdRetrievalActionProvider, Registratio
 import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
 import forms.YesNoFormProvider
 import javax.inject.Inject
-import models.{Mode, NormalMode}
 import navigation.Navigator
 import pages.register.beneficiaries.charityortrust.charity.{AmountDiscretionYesNoPage, CharityNamePage}
 import play.api.data.Form
@@ -52,9 +51,9 @@ class AmountDiscretionYesNoController @Inject()(
     identify andThen
       getData(draftId) andThen
       requireData andThen
-      requiredAnswer(RequiredAnswer(CharityNamePage(index), routes.CharityNameController.onPageLoad(NormalMode, index, draftId)))
+      requiredAnswer(RequiredAnswer(CharityNamePage(index), routes.CharityNameController.onPageLoad(index, draftId)))
 
-  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(draftId, index) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(draftId, index) {
     implicit request =>
 
       val charityName = request.userAnswers.get(CharityNamePage(index)).get
@@ -64,17 +63,17 @@ class AmountDiscretionYesNoController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, draftId, index, charityName))
+      Ok(view(preparedForm, draftId, index, charityName))
   }
 
-  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(draftId, index).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(draftId, index).async {
     implicit request =>
 
       val charityName = request.userAnswers.get(CharityNamePage(index)).get
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId, index, charityName))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, charityName))),
 
         value =>
           for {

@@ -20,7 +20,6 @@ import config.annotations.CharityBeneficiary
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.StringFormProvider
 import javax.inject.Inject
-import models.Mode
 import navigation.Navigator
 import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
 import play.api.data.Form
@@ -51,7 +50,7 @@ class CharityNameController @Inject()(
       getData(draftId) andThen
       requireData
 
-  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(draftId) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(draftId) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(CharityNamePage(index)) match {
@@ -59,15 +58,15 @@ class CharityNameController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, draftId, index))
+      Ok(view(preparedForm, draftId, index))
   }
 
-  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(draftId).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId, index))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index))),
 
         value =>
           for {

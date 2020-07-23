@@ -32,7 +32,7 @@ class CharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
 
     "Name page -> Do you know date of birth page" in {
       navigator.nextPage(CharityNamePage(index), fakeDraftId, emptyUserAnswers)
-        .mustBe(AmountDiscretionYesNoController.onPageLoad(NormalMode, index, fakeDraftId))
+        .mustBe(AmountDiscretionYesNoController.onPageLoad(index, fakeDraftId))
     }
 
     "Do trustees have discretion page" when {
@@ -43,7 +43,7 @@ class CharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
             .set(AmountDiscretionYesNoPage(index), true).success.value
 
           navigator.nextPage(AmountDiscretionYesNoPage(index), fakeDraftId, answers)
-            .mustBe(AddressYesNoController.onPageLoad(NormalMode, index, fakeDraftId))
+            .mustBe(AddressYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
 
@@ -53,14 +53,14 @@ class CharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
             .set(AmountDiscretionYesNoPage(index), false).success.value
 
           navigator.nextPage(AmountDiscretionYesNoPage(index), fakeDraftId, answers)
-            .mustBe(HowMuchIncomeController.onPageLoad(NormalMode, index, fakeDraftId))
+            .mustBe(HowMuchIncomeController.onPageLoad(index, fakeDraftId))
         }
       }
     }
 
     "How much income page -> Do you know address page" in {
       navigator.nextPage(HowMuchIncomePage(index), fakeDraftId, emptyUserAnswers)
-        .mustBe(AddressYesNoController.onPageLoad(NormalMode, index, fakeDraftId))
+        .mustBe(AddressYesNoController.onPageLoad(index, fakeDraftId))
     }
 
     "Do you know address page" when {
@@ -71,7 +71,7 @@ class CharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
             .set(AddressYesNoPage(index), true).success.value
 
           navigator.nextPage(AddressYesNoPage(index), fakeDraftId, answers)
-            .mustBe(AddressInTheUkYesNoController.onPageLoad(NormalMode, index, fakeDraftId))
+            .mustBe(AddressInTheUkYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
 
@@ -94,7 +94,7 @@ class CharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
             .set(AddressInTheUkYesNoPage(index), true).success.value
 
           navigator.nextPage(AddressInTheUkYesNoPage(index), fakeDraftId, answers)
-            .mustBe(CharityAddressUKController.onPageLoad(NormalMode, index, fakeDraftId))
+            .mustBe(CharityAddressUKController.onPageLoad(index, fakeDraftId))
         }
       }
 
@@ -104,7 +104,7 @@ class CharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
             .set(AddressInTheUkYesNoPage(index), false).success.value
 
           navigator.nextPage(AddressInTheUkYesNoPage(index), fakeDraftId, answers)
-            .mustBe(CharityInternationalAddressController.onPageLoad(NormalMode, index, fakeDraftId))
+            .mustBe(CharityInternationalAddressController.onPageLoad(index, fakeDraftId))
         }
       }
     }

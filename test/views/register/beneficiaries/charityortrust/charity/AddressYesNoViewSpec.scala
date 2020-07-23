@@ -29,14 +29,14 @@ class AddressYesNoViewSpec extends YesNoViewBehaviours {
   val index = 0
   val charityName = "Test"
 
-  val form = new YesNoFormProvider().withPrefix(prefix)
+  val form: Form[Boolean] = new YesNoFormProvider().withPrefix(prefix)
 
   "addressYesNo view" must {
 
     val view = viewFor[AddressYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, fakeDraftId, index, charityName)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, index, charityName)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), prefix, charityName)
 
