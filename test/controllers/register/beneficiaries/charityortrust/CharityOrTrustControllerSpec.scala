@@ -23,6 +23,7 @@ import models.NormalMode
 import models.registration.pages.CharityOrTrust
 import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
+import play.api.data.Form
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -33,10 +34,10 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new CharityOrTrustFormProvider()()
-  val form = formProvider
+  val form: Form[CharityOrTrust] = formProvider
   val index: Int = 0
 
-  lazy val charityOrTrustRoute = routes.CharityOrTrustController.onPageLoad(NormalMode, draftId).url
+  lazy val charityOrTrustRoute: String = routes.CharityOrTrustController.onPageLoad(NormalMode, draftId).url
 
   "CharityOrTrust Controller" must {
 
@@ -84,7 +85,7 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
 
       val request =
         FakeRequest(POST, charityOrTrustRoute)
-          .withFormUrlEncodedBody(("value", "charity"))
+          .withFormUrlEncodedBody(("value", "Charity"))
 
       val result = route(application, request).value
 

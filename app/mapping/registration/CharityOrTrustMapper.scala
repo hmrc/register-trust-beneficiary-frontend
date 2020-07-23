@@ -16,11 +16,12 @@
 
 package mapping.registration
 
+import javax.inject.Inject
 import mapping.Mapping
 import mapping.reads.CharityBeneficiary
 import models.UserAnswers
 
-class CharityOrTrustMapper(addressMapper: AddressMapper) extends Mapping[List[CharityType]] {
+class CharityOrTrustMapper @Inject()(addressMapper: AddressMapper) extends Mapping[List[CharityType]] {
 
   override def build(userAnswers: UserAnswers): Option[List[CharityType]] = {
 
