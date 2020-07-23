@@ -14,16 +14,8 @@
  * limitations under the License.
  */
 
-package sections.beneficiaries
+package pages.register.beneficiaries.company
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import viewmodels.addAnother.CompanyBeneficiaryViewModel
+import pages.Page
 
-case object CompanyBeneficiaries extends QuestionPage[List[CompanyBeneficiaryViewModel]]{
-
-  override def path: JsPath = JsPath \ Beneficiaries \ toString
-
-  override def toString: String = "companyBeneficiaries"
-
-}
+case object AnswersPage extends Page

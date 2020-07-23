@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package sections.beneficiaries
+package forms
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import viewmodels.addAnother.CompanyBeneficiaryViewModel
+import forms.mappings.Mappings
+import javax.inject.Inject
+import models.CompanyOrEmploymentRelatedToAdd
+import play.api.data.Form
 
-case object CompanyBeneficiaries extends QuestionPage[List[CompanyBeneficiaryViewModel]]{
+class CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider @Inject() extends Mappings {
 
-  override def path: JsPath = JsPath \ Beneficiaries \ toString
-
-  override def toString: String = "companyBeneficiaries"
-
+  def apply(): Form[CompanyOrEmploymentRelatedToAdd] =
+    Form(
+      "value" -> enumerable[CompanyOrEmploymentRelatedToAdd]("companyOrEmploymentRelated.error.required")
+    )
 }

@@ -20,18 +20,20 @@ import config.FrontendAppConfig
 import controllers.register.beneficiaries.classofbeneficiaries.{routes => classOfBeneficiariesRts}
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRts}
 import controllers.register.beneficiaries.charityortrust.{routes => charityortrustRoutes}
+import controllers.register.beneficiaries.companyoremploymentrelated.company.{routes => companyRoutes}
 import controllers.register.beneficiaries.charityortrust.charity.{routes => charityRoutes}
 import controllers.register.beneficiaries.charityortrust.trust.{routes => trustRoutes}
 import javax.inject.Inject
+import models.CompanyOrEmploymentRelatedToAdd.Company
 import models.registration.pages.CharityOrTrust.{Charity, Trust}
 import models.registration.pages.{AddABeneficiary, WhatTypeOfBeneficiary}
 import models.{Mode, NormalMode, ReadableUserAnswers}
 import pages.Page
 import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
 import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
-import pages.register.beneficiaries.{AddABeneficiaryPage, AddABeneficiaryYesNoPage, AnswersPage, WhatTypeOfBeneficiaryPage}
+import pages.register.beneficiaries.{AddABeneficiaryPage, AddABeneficiaryYesNoPage, AnswersPage, CompanyOrEmploymentRelatedPage, WhatTypeOfBeneficiaryPage}
 import play.api.mvc.Call
-import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries}
+import sections.beneficiaries.{ClassOfBeneficiaries, CompanyBeneficiaries, IndividualBeneficiaries}
 
 class BeneficiaryNavigator @Inject()(config: FrontendAppConfig) extends Navigator {
 
@@ -47,20 +49,38 @@ class BeneficiaryNavigator @Inject()(config: FrontendAppConfig) extends Navigato
     case WhatTypeOfBeneficiaryPage => whatTypeOfBeneficiaryRoute(draftId)
     case CharityOrTrustPage => charityOrTrust(draftId, 0)
     case ClassBeneficiaryDescriptionPage(_) => _ => controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
+    case CompanyOrEmploymentRelatedPage => companyOrEmploymentRelatedPage(draftId)
     case AnswersPage => _ => controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
   }
 
-  private def assetsCompletedRoute(draftId: String, config: FrontendAppConfig) : Call = {
+  private def routeToCompanyBeneficiaryIndex(userAnswers: ReadableUserAnswers, draftId: String) = {
+    val companyBeneficiaries = userAnswers.get(CompanyBeneficiaries).getOrElse(List.empty)
+    companyBeneficiaries match {
+      case Nil =>
+        companyRoutes.NameController.onPageLoad(0, draftId)
+      case t if t.nonEmpty =>
+        companyRoutes.NameController.onPageLoad(t.size, draftId)
+    }
+  }
+
+  private def companyOrEmploymentRelatedPage(draftId: String)(userAnswers: ReadableUserAnswers): Call =
+    userAnswers.get(CompanyOrEmploymentRelatedPage) match {
+      case Some(Company) => routeToCompanyBeneficiaryIndex(userAnswers, draftId)
+      case _ => controllers.routes.FeatureNotAvailableController.onPageLoad()
+    }
+
+
+  private def assetsCompletedRoute(draftId: String, config: FrontendAppConfig): Call = {
     Call("GET", config.registrationProgressUrl(draftId))
   }
 
-  private def charityOrTrust(draftId: String, index: Int)(userAnswers: ReadableUserAnswers) : Call = userAnswers.get(CharityOrTrustPage) match {
+  private def charityOrTrust(draftId: String, index: Int)(userAnswers: ReadableUserAnswers): Call = userAnswers.get(CharityOrTrustPage) match {
     case Some(Charity) => charityRoutes.CharityNameController.onPageLoad(index, draftId)
     case Some(Trust) => trustRoutes.NameController.onPageLoad(index, draftId)
     case _ => controllers.routes.SessionExpiredController.onPageLoad()
   }
 
-  private def whatTypeOfBeneficiaryRoute(draftId: String)(userAnswers: ReadableUserAnswers) : Call = {
+  private def whatTypeOfBeneficiaryRoute(draftId: String)(userAnswers: ReadableUserAnswers): Call = {
     val whatBeneficiaryToAdd = userAnswers.get(WhatTypeOfBeneficiaryPage)
     whatBeneficiaryToAdd match {
       case Some(WhatTypeOfBeneficiary.Individual) =>
