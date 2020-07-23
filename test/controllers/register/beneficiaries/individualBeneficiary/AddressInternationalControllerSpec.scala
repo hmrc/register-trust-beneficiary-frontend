@@ -17,14 +17,16 @@
 package controllers.register.beneficiaries.individualBeneficiary
 
 import base.SpecBase
+import config.annotations.IndividualBeneficiary
 import forms.InternationalAddressFormProvider
-import models.core.pages.InternationalAddress
-import models.core.pages.FullName
-import models.{NormalMode, UserAnswers}
+import models.UserAnswers
+import models.core.pages.{FullName, InternationalAddress}
+import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.individual.{AddressInternationalPage, NamePage}
 import play.api.Application
 import play.api.data.Form
-import play.api.mvc.{Call, Result}
+import play.api.inject.bind
+import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils._
@@ -35,17 +37,14 @@ import scala.concurrent.Future
 
 class AddressInternationalControllerSpec extends SpecBase {
 
-  def onwardRoute = Call("GET", "/foo")
-
   val formProvider = new InternationalAddressFormProvider()
   val form: Form[InternationalAddress] = formProvider()
   val index = 0
-  val name = FullName("First Name", None, "Last Name")
+  val name: FullName = FullName("First Name", None, "Last Name")
 
-  lazy val addressInternationalRoute: String = routes.AddressInternationalController.onPageLoad(NormalMode, index, fakeDraftId).url
+  lazy val addressInternationalRoute: String = routes.AddressInternationalController.onPageLoad(index, fakeDraftId).url
 
-
-  "SettlorBusinessAddressInternational Controller" must {
+  "IndividualBeneficiaryAddressInternational Controller" must {
 
     "return OK and the correct view for a GET" in {
 
@@ -64,7 +63,7 @@ class AddressInternationalControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, countryOptions, NormalMode, index, fakeDraftId, name.toString)(request, messages).toString
+        view(form, countryOptions, index, fakeDraftId, name.toString)(request, messages).toString
 
       application.stop()
     }
@@ -90,7 +89,6 @@ class AddressInternationalControllerSpec extends SpecBase {
         view(
           form.fill(InternationalAddress("line 1", "line 2", Some("line 3"), "country")),
           countryOptions,
-          NormalMode,
           index,
           fakeDraftId,
           name.toString)(fakeRequest, messages).toString
@@ -104,7 +102,10 @@ class AddressInternationalControllerSpec extends SpecBase {
         .set(AddressInternationalPage(index), InternationalAddress("line 1", "line 2", Some("line 3"), "country")).success.value
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
+          ).build()
 
       val request =
         FakeRequest(POST, addressInternationalRoute)
@@ -114,7 +115,7 @@ class AddressInternationalControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual onwardRoute.url
+      redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
       application.stop()
     }
@@ -140,7 +141,7 @@ class AddressInternationalControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, countryOptions, NormalMode, index, fakeDraftId, name.toString)(fakeRequest, messages).toString
+        view(boundForm, countryOptions, index, fakeDraftId, name.toString)(fakeRequest, messages).toString
 
       application.stop()
     }

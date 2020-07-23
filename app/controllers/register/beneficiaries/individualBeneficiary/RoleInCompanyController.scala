@@ -16,13 +16,15 @@
 
 package controllers.register.beneficiaries.individualBeneficiary
 
-import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
+import config.annotations.IndividualBeneficiary
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
+import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
 import forms.RoleInCompanyFormProvider
 import javax.inject.Inject
-import models.{Mode, NormalMode}
+import models.registration.pages.RoleInCompany
 import navigation.Navigator
 import pages.register.beneficiaries.individual.{NamePage, RoleInCompanyPage}
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
@@ -34,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class RoleInCompanyController @Inject()(
                                          override val messagesApi: MessagesApi,
                                          registrationsRepository: RegistrationsRepository,
-                                         navigator: Navigator,
+                                         @IndividualBeneficiary navigator: Navigator,
                                          identify: RegistrationIdentifierAction,
                                          getData: DraftIdRetrievalActionProvider,
                                          requireData: RegistrationDataRequiredAction,
@@ -44,16 +46,15 @@ class RoleInCompanyController @Inject()(
                                          view: RoleInCompanyView
                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider()
+  val form: Form[RoleInCompany] = formProvider()
 
   private def actions(index: Int, draftId: String) =
     identify andThen
       getData(draftId) andThen
       requireData andThen
-      requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(NormalMode, index, draftId)))
+      requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(index, draftId)))
 
-
-  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
       val name = request.userAnswers.get(NamePage(index)).get
@@ -63,23 +64,23 @@ class RoleInCompanyController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, draftId, name, index))
+      Ok(view(preparedForm, draftId, name, index))
   }
 
-  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         formWithErrors => {
             val name = request.userAnswers.get(NamePage(index)).get
 
-            Future.successful(BadRequest(view(formWithErrors, mode, draftId, name, index)))
+            Future.successful(BadRequest(view(formWithErrors, draftId, name, index)))
           },
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(RoleInCompanyPage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(RoleInCompanyPage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(RoleInCompanyPage(index), draftId, updatedAnswers))
       )
   }
 

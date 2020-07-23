@@ -16,21 +16,22 @@
 
 package utils
 
-import controllers.register.beneficiaries.routes
+import controllers.register.beneficiaries.classofbeneficiaries.{routes => classOfBeneficiaryRts}
+import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRts}
 import models.UserAnswers
 import models.core.pages.FullName
 import play.api.i18n.Messages
-import sections.beneficiaries.{ClassOfBeneficiaries, CompanyBeneficiaries, IndividualBeneficiaries}
-import viewmodels.addAnother.{ClassOfBeneficiaryViewModel, CompanyBeneficiaryViewModel, IndividualBeneficiaryViewModel}
+import sections.beneficiaries.{CharityBeneficiaries, CompanyBeneficiaries, ClassOfBeneficiaries, IndividualBeneficiaries}
+import viewmodels.addAnother.{CharityBeneficiaryViewModel, CompanyBeneficiaryViewModel, ClassOfBeneficiaryViewModel, IndividualBeneficiaryViewModel}
 import viewmodels.{AddRow, AddToRows}
 
 class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(implicit messages: Messages) {
 
   private case class InProgressComplete(inProgress : List[AddRow], complete: List[AddRow])
 
-  private def parseName(name : Option[FullName]) : String = {
+  private def parseName(name : Option[String]) : String = {
     val defaultValue = messages("entities.no.name.added")
-    name.map(_.toString).getOrElse(defaultValue)
+    name.getOrElse(defaultValue)
   }
 
   private def parseIndividualBeneficiary(individualBeneficiary : (IndividualBeneficiaryViewModel, Int)) : AddRow = {
@@ -38,10 +39,10 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
     val index = individualBeneficiary._2
 
     AddRow(
-      name = parseName(vm.name),
+      name = parseName(vm.name.map(_.toString)),
       typeLabel = messages("entities.beneficiary.individual"),
       changeUrl = controllers.routes.FeatureNotAvailableController.onPageLoad().url,
-      removeUrl = routes.RemoveIndividualBeneficiaryController.onPageLoad(index, draftId).url
+      removeUrl = individualRts.RemoveIndividualBeneficiaryController.onPageLoad(index, draftId).url
     )
   }
 
@@ -55,7 +56,20 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
       vm.description.getOrElse(defaultValue),
       messages("entities.beneficiary.class"),
       controllers.routes.FeatureNotAvailableController.onPageLoad().url,
-      removeUrl = routes.RemoveClassOfBeneficiaryController.onPageLoad(index, draftId).url
+      removeUrl = classOfBeneficiaryRts.RemoveClassOfBeneficiaryController.onPageLoad(index, draftId).url
+    )
+  }
+
+  private def parseCharityBeneficiary(charityBeneficiary:(CharityBeneficiaryViewModel, Int)): AddRow = {
+
+    val vm = charityBeneficiary._1
+    val index = charityBeneficiary._2
+
+    AddRow(
+      name = parseName(vm.name),
+      messages("entities.beneficiary.charity"),
+      changeUrl = controllers.routes.FeatureNotAvailableController.onPageLoad().url,
+      removeUrl = controllers.routes.FeatureNotAvailableController.onPageLoad().url
     )
   }
 
@@ -69,7 +83,7 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
       vm.name.getOrElse(defaultValue),
       messages("entities.beneficiary.company"),
       controllers.routes.FeatureNotAvailableController.onPageLoad().url,
-      removeUrl = routes.RemoveClassOfBeneficiaryController.onPageLoad(index, draftId).url
+      removeUrl = controllers.routes.FeatureNotAvailableController.onPageLoad().url
     )
   }
 
@@ -93,6 +107,16 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
     InProgressComplete(inProgress = progress, complete = completed)
   }
 
+  private def charityBeneficiaries = {
+    val charityBeneficiaries = userAnswers.get(CharityBeneficiaries).toList.flatten.zipWithIndex
+
+    val completed = charityBeneficiaries.filter(_._1.isComplete).map(parseCharityBeneficiary)
+
+    val progress = charityBeneficiaries.filterNot(_._1.isComplete).map(parseCharityBeneficiary)
+
+    InProgressComplete(inProgress = progress, complete = completed)
+  }
+
   private def companyBeneficiaries = {
     val beneficiaries = userAnswers.get(CompanyBeneficiaries).toList.flatten.zipWithIndex
 
@@ -107,9 +131,11 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
     AddToRows(
       inProgress = individualBeneficiaries.inProgress :::
         classOfBeneficiaries.inProgress :::
+        charityBeneficiaries.inProgress :::
         companyBeneficiaries.inProgress,
       complete = individualBeneficiaries.complete :::
         classOfBeneficiaries.complete :::
+        charityBeneficiaries.complete :::
         companyBeneficiaries.complete
     )
 

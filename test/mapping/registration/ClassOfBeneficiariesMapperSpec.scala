@@ -21,7 +21,8 @@ import generators.Generators
 import mapping.Mapping
 import models.registration.pages.WhatTypeOfBeneficiary
 import org.scalatest.{FreeSpec, MustMatchers, OptionValues}
-import pages.register.beneficiaries.{ClassBeneficiaryDescriptionPage, WhatTypeOfBeneficiaryPage}
+import pages.register.beneficiaries.WhatTypeOfBeneficiaryPage
+import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
 
 class ClassOfBeneficiariesMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {

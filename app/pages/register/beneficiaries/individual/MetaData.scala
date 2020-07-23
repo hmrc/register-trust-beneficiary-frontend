@@ -16,7 +16,7 @@
 
 package pages.register.beneficiaries.individual
 
-import pages.{MetaData, QuestionPage}
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.beneficiaries.{Beneficiaries, IndividualBeneficiaries}
 

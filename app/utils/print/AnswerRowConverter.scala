@@ -27,7 +27,7 @@ import play.api.i18n.Messages
 import play.api.libs.json.Reads
 import play.twirl.api.HtmlFormat
 import queries.Gettable
-import utils.CheckAnswersFormatters._
+import utils.answers.CheckAnswersFormatters._
 import utils.countryOptions.CountryOptions
 import viewmodels.AnswerRow
 

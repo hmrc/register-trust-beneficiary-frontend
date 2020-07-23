@@ -30,7 +30,6 @@ class NameViewSpec extends QuestionViewBehaviours[FullName] with Generators {
   val messageKeyPrefix = "individualBeneficiaryName"
   val index = 0
 
-
   override val form = new IndividualBeneficiaryNameFormProvider()()
 
   "IndividualBeneficiaryNameView" must {
@@ -38,7 +37,7 @@ class NameViewSpec extends QuestionViewBehaviours[FullName] with Generators {
     val view = viewFor[NameView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, fakeDraftId,index)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, index)(fakeRequest, messages)
 
 
     behave like normalPage(applyView(form), messageKeyPrefix)

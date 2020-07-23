@@ -16,15 +16,15 @@
 
 package navigation
 
-import config.FrontendAppConfig
 import controllers.register.beneficiaries.companyoremploymentrelated.company.{routes => rts}
-import javax.inject.Inject
 import models.ReadableUserAnswers
+import pages.Page
 import pages.register.beneficiaries.company._
-import pages.{Page, QuestionPage}
 import play.api.mvc.Call
 
-class CompanyBeneficiaryNavigator @Inject()(frontendAppConfig: FrontendAppConfig) extends Navigator(frontendAppConfig) {
+class CompanyBeneficiaryNavigator extends Navigator {
+
+  override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call = routes(draftId)(page)(userAnswers)
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, Call] = {
     case NamePage(index) => rts.DiscretionYesNoController.onPageLoad(index, draftId)
@@ -54,13 +54,7 @@ class CompanyBeneficiaryNavigator @Inject()(frontendAppConfig: FrontendAppConfig
         rts.NonUkAddressController.onPageLoad(index, draftId))
   }
 
-  def yesNoNav(ua: ReadableUserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call = {
-    ua.get(fromPage)
-      .map(if (_) yesCall else noCall)
-      .getOrElse(controllers.routes.SessionExpiredController.onPageLoad())
-  }
-
-  override def route(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
+  private def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     simpleNavigation(draftId) andThen (c => (_:ReadableUserAnswers) => c) orElse
       yesNoNavigation(draftId)
   }

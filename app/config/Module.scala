@@ -17,9 +17,9 @@
 package config
 
 import com.google.inject.AbstractModule
-import config.annotations.CompanyBeneficiary
+import config.annotations.{CharityBeneficiary, ClassOfBeneficiaries, CompanyBeneficiary, IndividualBeneficiary, TrustBeneficiary}
 import controllers.actions.register._
-import navigation.{CompanyBeneficiaryNavigator, Navigator}
+import navigation.{BeneficiaryNavigator, CharityBeneficiaryNavigator, ClassOfBeneficiariesNavigator, CompanyBeneficiaryNavigator, IndividualBeneficiaryNavigator, Navigator, TrustBeneficiaryNavigator}
 import repositories.{DefaultRegistrationsRepository, RegistrationsRepository}
 
 class Module extends AbstractModule {
@@ -30,5 +30,10 @@ class Module extends AbstractModule {
     bind(classOf[DraftIdRetrievalActionProvider]).to(classOf[DraftIdDataRetrievalActionProviderImpl]).asEagerSingleton()
 
     bind(classOf[Navigator]).annotatedWith(classOf[CompanyBeneficiary]).to(classOf[CompanyBeneficiaryNavigator]).asEagerSingleton()
+    bind(classOf[Navigator]).annotatedWith(classOf[TrustBeneficiary]).to(classOf[TrustBeneficiaryNavigator]).asEagerSingleton()
+    bind(classOf[Navigator]).annotatedWith(classOf[IndividualBeneficiary]).to(classOf[IndividualBeneficiaryNavigator]).asEagerSingleton()
+    bind(classOf[Navigator]).annotatedWith(classOf[ClassOfBeneficiaries]).to(classOf[ClassOfBeneficiariesNavigator]).asEagerSingleton()
+    bind(classOf[Navigator]).annotatedWith(classOf[CharityBeneficiary]).to(classOf[CharityBeneficiaryNavigator]).asEagerSingleton()
+    bind(classOf[Navigator]).to(classOf[BeneficiaryNavigator]).asEagerSingleton()
   }
 }
