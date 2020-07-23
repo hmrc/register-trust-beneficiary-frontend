@@ -24,6 +24,7 @@ import models.NormalMode
 import models.Status.Completed
 import navigation.Navigator
 import pages.entitystatus.TrustBeneficiaryStatus
+import pages.register.beneficiaries.AnswersPage
 import pages.register.beneficiaries.trust._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -40,7 +41,7 @@ class AnswersController @Inject()(
                                    override val messagesApi: MessagesApi,
                                    registrationsRepository: RegistrationsRepository,
                                    identify: RegistrationIdentifierAction,
-                                   @TrustBeneficiary navigator: Navigator,
+                                   navigator: Navigator,
                                    getData: DraftIdRetrievalActionProvider,
                                    requireData: RegistrationDataRequiredAction,
                                    val controllerComponents: MessagesControllerComponents,
@@ -55,7 +56,6 @@ class AnswersController @Inject()(
       getData(draftId) andThen
       requireData andThen
       requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(0, draftId)))
-
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>

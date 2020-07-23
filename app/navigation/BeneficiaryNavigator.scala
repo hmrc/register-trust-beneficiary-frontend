@@ -20,12 +20,16 @@ import config.FrontendAppConfig
 import controllers.register.beneficiaries.classofbeneficiaries.{routes => classOfBeneficiariesRts}
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRts}
 import controllers.register.beneficiaries.charityortrust.{routes => charityortrustRoutes}
+import controllers.register.beneficiaries.charityortrust.charity.{routes => charityRoutes}
+import controllers.register.beneficiaries.charityortrust.trust.{routes => trustRoutes}
 import javax.inject.Inject
+import models.registration.pages.CharityOrTrust.{Charity, Trust}
 import models.registration.pages.{AddABeneficiary, WhatTypeOfBeneficiary}
 import models.{Mode, NormalMode, ReadableUserAnswers}
 import pages.Page
 import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
-import pages.register.beneficiaries.{AddABeneficiaryPage, AddABeneficiaryYesNoPage, WhatTypeOfBeneficiaryPage}
+import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
+import pages.register.beneficiaries.{AddABeneficiaryPage, AddABeneficiaryYesNoPage, AnswersPage, WhatTypeOfBeneficiaryPage}
 import play.api.mvc.Call
 import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries}
 
@@ -41,10 +45,19 @@ class BeneficiaryNavigator @Inject()(config: FrontendAppConfig) extends Navigato
     case AddABeneficiaryPage => addABeneficiaryRoute(draftId, config)
     case AddABeneficiaryYesNoPage => addABeneficiaryYesNoRoute(draftId, config)
     case WhatTypeOfBeneficiaryPage => whatTypeOfBeneficiaryRoute(draftId)
+    case CharityOrTrustPage => charityOrTrust(draftId, 0)
+    case ClassBeneficiaryDescriptionPage(_) => _ => controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
+    case AnswersPage => _ => controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
   }
 
   private def assetsCompletedRoute(draftId: String, config: FrontendAppConfig) : Call = {
     Call("GET", config.registrationProgressUrl(draftId))
+  }
+
+  private def charityOrTrust(draftId: String, index: Int)(userAnswers: ReadableUserAnswers) : Call = userAnswers.get(CharityOrTrustPage) match {
+    case Some(Charity) => charityRoutes.CharityNameController.onPageLoad(index, draftId)
+    case Some(Trust) => trustRoutes.NameController.onPageLoad(index, draftId)
+    case _ => controllers.routes.SessionExpiredController.onPageLoad()
   }
 
   private def whatTypeOfBeneficiaryRoute(draftId: String)(userAnswers: ReadableUserAnswers) : Call = {

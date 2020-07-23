@@ -21,6 +21,7 @@ import models.ReadableUserAnswers
 import models.registration.pages.KindOfTrust.Employees
 import pages.Page
 import pages.register.KindOfTrustPage
+import pages.register.beneficiaries.AnswersPage
 import pages.register.beneficiaries.individual._
 import play.api.mvc.Call
 

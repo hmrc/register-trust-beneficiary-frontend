@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.individual
+package pages.register.beneficiaries
 
 import pages.Page
 

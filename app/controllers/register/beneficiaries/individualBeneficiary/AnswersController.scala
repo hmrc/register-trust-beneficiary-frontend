@@ -23,7 +23,8 @@ import javax.inject.Inject
 import models.Status.Completed
 import navigation.Navigator
 import pages.entitystatus.IndividualBeneficiaryStatus
-import pages.register.beneficiaries.individual.{AnswersPage, NamePage}
+import pages.register.beneficiaries.AnswersPage
+import pages.register.beneficiaries.individual.NamePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
