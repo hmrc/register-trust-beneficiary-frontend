@@ -17,7 +17,32 @@
 package generators
 
 import org.scalacheck.Arbitrary
-import pages._
+import pages.register.beneficiaries.charityortrust._
+import pages.register.beneficiaries.charityortrust.charity.{AddressInTheUkYesNoPage, AddressYesNoPage, AmountDiscretionYesNoPage, CharityAddressUKPage, CharityInternationalAddressPage, CharityNamePage, HowMuchIncomePage}
 
 trait PageGenerators {
+
+  implicit lazy val arbitraryCharityInternationalAddressPage: Arbitrary[CharityInternationalAddressPage] =
+    Arbitrary(CharityInternationalAddressPage(0))
+
+  implicit lazy val arbitraryCharityUKAddressPage: Arbitrary[CharityAddressUKPage] =
+    Arbitrary(CharityAddressUKPage(0))
+
+  implicit lazy val arbitraryAddressInTheUkYesNoPage: Arbitrary[AddressInTheUkYesNoPage] =
+    Arbitrary(AddressInTheUkYesNoPage(0))
+
+  implicit lazy val arbitraryAddressYesNoPage: Arbitrary[AddressYesNoPage] =
+    Arbitrary(AddressYesNoPage(0))
+
+  implicit lazy val arbitraryHowMuchIncomePage: Arbitrary[HowMuchIncomePage] =
+    Arbitrary(HowMuchIncomePage(0))
+
+  implicit lazy val arbitraryAmountDiscretionYesNoPage: Arbitrary[AmountDiscretionYesNoPage] =
+    Arbitrary(AmountDiscretionYesNoPage(0))
+
+  implicit lazy val arbitraryCharityNamePage: Arbitrary[CharityNamePage] =
+    Arbitrary(CharityNamePage(0))
+
+  implicit lazy val arbitraryCharityOrTrustPage: Arbitrary[CharityOrTrustPage.type] =
+    Arbitrary(CharityOrTrustPage)
 }

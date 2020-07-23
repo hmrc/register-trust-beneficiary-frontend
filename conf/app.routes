@@ -162,3 +162,48 @@ GET        /:draftId/what-type                                                  
 POST       /:draftId/what-type                                                        controllers.register.beneficiaries.WhatTypeOfBeneficiaryController.onSubmit(mode: Mode = NormalMode, draftId: String)
 
 GET        /feature-not-available                                                                   controllers.FeatureNotAvailableController.onPageLoad()
+
+GET        /feature-not-available                                                     controllers.FeatureNotAvailableController.onPageLoad()
+
+GET        /:draftId/charity-or-trust                                                 controllers.register.beneficiaries.charityOrTrust.CharityOrTrustController.onPageLoad(mode: Mode = NormalMode, draftId: String)
+POST       /:draftId/charity-or-trust                                                 controllers.register.beneficiaries.charityOrTrust.CharityOrTrustController.onSubmit(mode: Mode = NormalMode, draftId: String)
+GET        /:draftId/change-charity-or-trust                                          controllers.register.beneficiaries.charityOrTrust.CharityOrTrustController.onPageLoad(mode: Mode = CheckMode, draftId: String)
+POST       /:draftId/change-charity-or-trust                                          controllers.register.beneficiaries.charityOrTrust.CharityOrTrustController.onSubmit(mode: Mode = CheckMode, draftId: String)
+
+GET        /:draftId/charity/:index/name                                              controllers.register.beneficiaries.charityOrTrust.charity.CharityNameController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
+POST       /:draftId/charity/:index/name                                              controllers.register.beneficiaries.charityOrTrust.charity.CharityNameController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
+GET        /:draftId/charity/:index/change-name                                       controllers.register.beneficiaries.charityOrTrust.charity.CharityNameController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
+POST       /:draftId/charity/:index/change-name                                       controllers.register.beneficiaries.charityOrTrust.charity.CharityNameController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
+
+GET        /:draftId/charity/:index/has-discretion                                    controllers.register.beneficiaries.charityOrTrust.charity.AmountDiscretionYesNoController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
+POST       /:draftId/charity/:index/has-discretion                                    controllers.register.beneficiaries.charityOrTrust.charity.AmountDiscretionYesNoController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
+GET        /:draftId/charity/:index/change-has-discretion                             controllers.register.beneficiaries.charityOrTrust.charity.AmountDiscretionYesNoController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
+POST       /:draftId/charity/:index/change-has-discretion                             controllers.register.beneficiaries.charityOrTrust.charity.AmountDiscretionYesNoController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
+
+GET        /:draftId/charity/:index/share-of-income                                   controllers.register.beneficiaries.charityOrTrust.charity.HowMuchIncomeController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
+POST       /:draftId/charity/:index/share-of-income                                   controllers.register.beneficiaries.charityOrTrust.charity.HowMuchIncomeController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
+GET        /:draftId/charity/:index/change-share-of-income                            controllers.register.beneficiaries.charityOrTrust.charity.HowMuchIncomeController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
+POST       /:draftId/charity/:index/change-share-of-income                            controllers.register.beneficiaries.charityOrTrust.charity.HowMuchIncomeController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
+
+GET        /:draftId/charity/:index/has-address                                       controllers.register.beneficiaries.charityOrTrust.charity.AddressYesNoController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
+POST       /:draftId/charity/:index/has-address                                       controllers.register.beneficiaries.charityOrTrust.charity.AddressYesNoController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
+GET        /:draftId/charity/:index/change-has-address                                controllers.register.beneficiaries.charityOrTrust.charity.AddressYesNoController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
+POST       /:draftId/charity/:index/change-has-address                                controllers.register.beneficiaries.charityOrTrust.charity.AddressYesNoController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
+
+GET        /:draftId/charity/:index/has-uk-address                                    controllers.register.beneficiaries.charityOrTrust.charity.AddressInTheUkYesNoController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
+POST       /:draftId/charity/:index/has-uk-address                                    controllers.register.beneficiaries.charityOrTrust.charity.AddressInTheUkYesNoController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
+GET        /:draftId/charity/:index/change-has-uk-address                             controllers.register.beneficiaries.charityOrTrust.charity.AddressInTheUkYesNoController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
+POST       /:draftId/charity/:index/change-has-uk-address                             controllers.register.beneficiaries.charityOrTrust.charity.AddressInTheUkYesNoController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
+
+GET        /:draftId/charity/:index/uk-address                                        controllers.register.beneficiaries.charityOrTrust.charity.CharityAddressUKController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
+POST       /:draftId/charity/:index/uk-address                                        controllers.register.beneficiaries.charityOrTrust.charity.CharityAddressUKController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
+GET        /:draftId/charity/:index/change-uk-address                                 controllers.register.beneficiaries.charityOrTrust.charity.CharityAddressUKController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
+POST       /:draftId/charity/:index/change-uk-address                                 controllers.register.beneficiaries.charityOrTrust.charity.CharityAddressUKController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
+
+GET        /:draftId/charity/:index/international-address                             controllers.register.beneficiaries.charityOrTrust.charity.CharityInternationalAddressController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
+POST       /:draftId/charity/:index/international-address                             controllers.register.beneficiaries.charityOrTrust.charity.CharityInternationalAddressController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
+GET        /:draftId/charity/:index/change-international-address                      controllers.register.beneficiaries.charityOrTrust.charity.CharityInternationalAddressController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
+POST       /:draftId/charity/:index/change-international-address                      controllers.register.beneficiaries.charityOrTrust.charity.CharityInternationalAddressController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
+
+GET        /:draftId/charity/:index/check-answers                                     controllers.register.beneficiaries.charityOrTrust.charity.CharityAnswersController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/charity/:index/check-answers                                     controllers.register.beneficiaries.charityOrTrust.charity.CharityAnswersController.onSubmit(index: Int, draftId: String)

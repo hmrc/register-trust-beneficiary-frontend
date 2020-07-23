@@ -18,19 +18,20 @@ package navigation.navigators.registration
 
 import base.SpecBase
 import config.FrontendAppConfig
-import controllers.register.beneficiaries.routes
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRoutes}
+import controllers.register.beneficiaries.routes
 import generators.Generators
-import models.{NormalMode, UserAnswers}
 import models.core.pages.FullName
 import models.registration.pages.KindOfTrust.Employees
-import models.registration.pages.{AddABeneficiary, WhatTypeOfBeneficiary}
+import models.registration.pages.{AddABeneficiary, CharityOrTrust, WhatTypeOfBeneficiary}
+import models.{NormalMode, UserAnswers}
 import navigation.Navigator
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.register.beneficiaries.individual._
+import pages.register.KindOfTrustPage
 import pages.register.beneficiaries._
-import pages.register.settlors.living_settlor.trust_type.KindOfTrustPage
+
+import pages.register.beneficiaries.individual._
 import play.api.mvc.Call
 import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries}
 
@@ -42,6 +43,82 @@ trait BeneficiaryRoutes {
   }
 
   def beneficiaryRoutes()(implicit navigator: Navigator): Unit = {
+
+    "go to CharityOrTrust from WhatTypeOfBeneficiaryPage when CharityOrTrust option selected " in {
+
+      val answers = emptyUserAnswers.set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.CharityOrTrust).success.value
+      navigator.nextPage(WhatTypeOfBeneficiaryPage, NormalMode, fakeDraftId)(answers)
+        .mustBe(controllers.register.beneficiaries.charityOrTrust.routes.CharityOrTrustController.onPageLoad(NormalMode, fakeDraftId))
+    }
+
+    "go to CharityName for index 0 from CharityOrTrust when Charity option selected " in {
+      val answers = emptyUserAnswers.set(pages.register.beneficiaries.charityortrust.CharityOrTrustPage, value = CharityOrTrust.Charity).success.value
+      navigator.nextPage(pages.register.beneficiaries.charityortrust.CharityOrTrustPage, NormalMode, fakeDraftId)(answers)
+        .mustBe(controllers.register.beneficiaries.charityOrTrust.charity.routes.CharityNameController.onPageLoad(NormalMode, 0, fakeDraftId))
+    }
+
+    "go to AmountDiscretionYesNo for index 0 from CharityName" in {
+      navigator.nextPage(pages.register.beneficiaries.charityortrust.charity.CharityNamePage(0), NormalMode, fakeDraftId)(emptyUserAnswers)
+        .mustBe(controllers.register.beneficiaries.charityOrTrust.charity.routes.AmountDiscretionYesNoController.onPageLoad(NormalMode, 0, fakeDraftId))
+    }
+
+    "go to HowMuchIncome for index 0 from AmountDiscretionYesNo when No is selected " in {
+      val index = 0
+      val answers = emptyUserAnswers
+        .set(pages.register.beneficiaries.charityortrust.charity.AmountDiscretionYesNoPage(index), false).success.value
+      navigator.nextPage(pages.register.beneficiaries.charityortrust.charity.AmountDiscretionYesNoPage(index), NormalMode, fakeDraftId)(answers)
+        .mustBe(controllers.register.beneficiaries.charityOrTrust.charity.routes.HowMuchIncomeController.onPageLoad(NormalMode, 0, fakeDraftId))
+    }
+
+    "go to AddressYesNo for index 0 from AmountDiscretionYesNo when yes is selected " in {
+      val index = 0
+      val answers = emptyUserAnswers
+        .set(pages.register.beneficiaries.charityortrust.charity.AmountDiscretionYesNoPage(index), true).success.value
+      navigator.nextPage(pages.register.beneficiaries.charityortrust.charity.AmountDiscretionYesNoPage(index), NormalMode, fakeDraftId)(answers)
+        .mustBe(controllers.register.beneficiaries.charityOrTrust.charity.routes.AddressYesNoController.onPageLoad(NormalMode, 0, fakeDraftId))
+    }
+
+    "go to AddressInTheUkYesNo for index 0 from AddressYesNo when Yes option selected " in {
+      val index = 0
+      val answers = emptyUserAnswers
+        .set(pages.register.beneficiaries.charityortrust.charity.AddressYesNoPage(index), true).success.value
+      navigator.nextPage(pages.register.beneficiaries.charityortrust.charity.AddressYesNoPage(index), NormalMode, fakeDraftId)(answers)
+        .mustBe(controllers.register.beneficiaries.charityOrTrust.charity.routes.AddressInTheUkYesNoController.onPageLoad(NormalMode, 0, fakeDraftId))
+    }
+
+    "go to CharityAnswers for index 0 from AddressYesNo when No option selected " in {
+      val index = 0
+      val answers = emptyUserAnswers
+        .set(pages.register.beneficiaries.charityortrust.charity.AddressYesNoPage(index), false).success.value
+      navigator.nextPage(pages.register.beneficiaries.charityortrust.charity.AddressYesNoPage(index), NormalMode, fakeDraftId)(answers)
+        .mustBe(controllers.register.beneficiaries.charityOrTrust.charity.routes.CharityAnswersController.onPageLoad(index = 0, fakeDraftId))
+    }
+
+    "go to CharityAddressUK for index 0 from AddressUkYesNo when Yes option selected " in {
+      val index = 0
+      val answers = emptyUserAnswers
+        .set(pages.register.beneficiaries.charityortrust.charity.AddressInTheUkYesNoPage(index), true).success.value
+      navigator.nextPage(pages.register.beneficiaries.charityortrust.charity.AddressInTheUkYesNoPage(index), NormalMode, fakeDraftId)(answers)
+        .mustBe(controllers.register.beneficiaries.charityOrTrust.charity.routes.CharityAddressUKController.onPageLoad(NormalMode, 0, fakeDraftId))
+    }
+
+    "go to CharityAddressInternational for index 0 from AddressUkYesNo when no option selected " in {
+      val index = 0
+      val answers = emptyUserAnswers
+        .set(pages.register.beneficiaries.charityortrust.charity.AddressInTheUkYesNoPage(index), false).success.value
+      navigator.nextPage(pages.register.beneficiaries.charityortrust.charity.AddressInTheUkYesNoPage(index), NormalMode, fakeDraftId)(answers)
+        .mustBe(controllers.register.beneficiaries.charityOrTrust.charity.routes.CharityInternationalAddressController.onPageLoad(NormalMode, 0, fakeDraftId))
+    }
+
+    "go to CharityAnswers for index 0 from CharityAddressUk when option selected " in {
+      navigator.nextPage(pages.register.beneficiaries.charityortrust.charity.CharityAddressUKPage(0), NormalMode, fakeDraftId)(emptyUserAnswers)
+        .mustBe(controllers.register.beneficiaries.charityOrTrust.charity.routes.CharityAnswersController.onPageLoad(index = 0, fakeDraftId))
+    }
+
+    "go to CharityAnswers for index 0 from CharityAddressInternational when option selected " in {
+      navigator.nextPage(pages.register.beneficiaries.charityortrust.charity.CharityInternationalAddressPage(0), NormalMode, fakeDraftId)(emptyUserAnswers)
+        .mustBe(controllers.register.beneficiaries.charityOrTrust.charity.routes.CharityAnswersController.onPageLoad(index = 0, fakeDraftId))
+    }
 
     "go to WhatTypeOfBeneficiaryPage from AddABeneficiaryYesNoPage when selected yes" in {
       forAll(arbitrary[UserAnswers]) {
@@ -214,8 +291,8 @@ trait BeneficiaryRoutes {
     "go to AddressUKYesNoPage from AddressYesNoPage when user answers yes" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
-          val answers = userAnswers.set(AddressYesNoPage(indexForBeneficiary), value = true).success.value
-          navigator.nextPage(AddressYesNoPage(indexForBeneficiary), NormalMode, fakeDraftId)(answers)
+          val answers = userAnswers.set(individual.AddressYesNoPage(indexForBeneficiary), value = true).success.value
+          navigator.nextPage(individual.AddressYesNoPage(indexForBeneficiary), NormalMode, fakeDraftId)(answers)
             .mustBe(individualRoutes.AddressUKYesNoController.onPageLoad(NormalMode, indexForBeneficiary, fakeDraftId))
       }
     }
@@ -223,8 +300,8 @@ trait BeneficiaryRoutes {
     "go to VulnerableYesNoPage from AddressYesNoPage when user answers no" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
-          val answers = userAnswers.set(AddressYesNoPage(indexForBeneficiary), value = false).success.value
-          navigator.nextPage(AddressYesNoPage(indexForBeneficiary), NormalMode, fakeDraftId)(answers)
+          val answers = userAnswers.set(individual.AddressYesNoPage(indexForBeneficiary), value = false).success.value
+          navigator.nextPage(individual.AddressYesNoPage(indexForBeneficiary), NormalMode, fakeDraftId)(answers)
             .mustBe(individualRoutes.VulnerableYesNoController.onPageLoad(NormalMode, indexForBeneficiary, fakeDraftId))
       }
     }
