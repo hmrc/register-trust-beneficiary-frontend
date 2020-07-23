@@ -17,7 +17,6 @@
 package views.register.beneficiaries.charityortrust.trust
 
 import forms.UKAddressFormProvider
-import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.UkAddressViewBehaviours
@@ -25,7 +24,7 @@ import views.html.register.beneficiaries.charityortrust.trust.AddressUKView
 
 class AddressUKViewSpec extends UkAddressViewBehaviours {
 
-  val messageKeyPrefix = "trustBeneficiaryAddressUK"
+  val messageKeyPrefix = "site.address.uk"
   val index = 0
   val name = "First Last"
 
@@ -36,7 +35,7 @@ class AddressUKViewSpec extends UkAddressViewBehaviours {
     val view = viewFor[AddressUKView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, fakeDraftId, name, index)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, name, index)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
 
@@ -45,7 +44,7 @@ class AddressUKViewSpec extends UkAddressViewBehaviours {
     behave like ukAddressPage(
       applyView,
       Some(messageKeyPrefix),
-      name.toString
+      name
     )
 
     behave like pageWithASubmitButton(applyView(form))

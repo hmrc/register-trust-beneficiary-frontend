@@ -311,13 +311,51 @@ individualBeneficiaryInfo.paragraph7 = Do not include named or specific employee
 individualBeneficiaryInfo.subheading5 = Other beneficiaries
 individualBeneficiaryInfo.paragraph8 = You need to give a short description for beneficiaries that do not fall into the other beneficiary types. For example, pets.
 
+trustBeneficiaryAnswers.title = Check trust beneficiary details
+trustBeneficiaryAnswers.heading = Check trust beneficiary details
+
 trustBeneficiaryName.checkYourAnswersLabel = What is the name of the trust?
-trustBeneficiaryShareOfIncomeYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
+trustBeneficiaryDiscretionYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
 trustBeneficiaryShareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
 trustBeneficiaryAddressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
 trustBeneficiaryAddressUKYesNo.checkYourAnswersLabel = Is {0}’s address in the UK?
 trustBeneficiaryAddress.checkYourAnswersLabel = What is {0}’s address?
 trustBeneficiaryUtr.checkYourAnswersLabel = What is {0}’s Unique Taxpayer Reference (UTR) number?
+
+trustBeneficiaryName.title = What is the trust’s name?
+trustBeneficiaryName.heading = What is the trust’s name?
+trustBeneficiaryName.error.required = Enter the trust’s name
+trustBeneficiaryName.error.invalidFormat = Trust’s name must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+trustBeneficiaryName.error.length = Trust’s name must be 105 characters or less
+
+trustBeneficiaryDiscretionYesNo.title = Do the trustees have discretion over how much income the trust beneficiary may get?
+trustBeneficiaryDiscretionYesNo.heading = Do the trustees have discretion over how much income {0} may get?
+trustBeneficiaryDiscretionYesNo.hint = See the trust deed for details
+trustBeneficiaryDiscretionYesNo.error.required = Select yes if the trustees have discretion over how much income the trust beneficiary may get
+
+trustBeneficiaryShareOfIncome.title = What percentage of the trust’s assets is the trust beneficiary entitled to?
+trustBeneficiaryShareOfIncome.heading = What percentage of the trust’s assets is {0} entitled to?
+trustBeneficiaryShareOfIncome.hint = Round this down to a whole number
+trustBeneficiaryShareOfIncome.error.required = Enter what percentage of the trust’s assets the trust beneficiary is entitled to
+trustBeneficiaryShareOfIncome.error.integer = The percentage of the trust’s assets the trust beneficiary is entitled to must be a whole number
+trustBeneficiaryShareOfIncome.error.non_numeric = The percentage of the trust’s assets the trust beneficiary is entitled to must be a whole number
+trustBeneficiaryShareOfIncome.error.less_than_100 = The percentage of the trust’s assets the trust  beneficiary is entitled to must be 100 or less
+
+trustBeneficiaryAddressYesNo.title = Do you know the trust beneficiary’s address?
+trustBeneficiaryAddressYesNo.heading = Do you know {0}’s address?
+trustBeneficiaryAddressYesNo.error.required = Select yes if you know the trust beneficiary’s address
+
+trustBeneficiaryAddressUKYesNo.title = Is the trust beneficiary’s address in the UK?
+trustBeneficiaryAddressUKYesNo.heading = Is {0}’s address in the UK?
+trustBeneficiaryAddressUKYesNo.error.required = Select yes if the trust beneficiary’s address is in the UK
+
+trustBeneficiary.checkDetails.title = Check trust beneficiary details
+trustBeneficiary.checkDetails.heading = Check trust beneficiary details
+
+trustBeneficiary.checkDetails.utr.checkYourAnswersLabel = What is {0}’s Unique Taxpayer Reference (UTR)?
+trustBeneficiary.checkDetails.utr.p1 = Some of the information we ask about trust beneficiaries has changed.
+trustBeneficiary.checkDetails.utr.p2 = If you need to update {0}’s details, you will need to remove them, then add them as a new beneficiary.
+trustBeneficiary.checkDetails.utr.p3 = When asked for the date {0} was added or removed from the trust use today’s date.
 
 otherBeneficiaryDescription.checkYourAnswersLabel = What is the description of the beneficiary?
 otherBeneficiaryShareOfIncomeYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
@@ -343,8 +381,8 @@ addABeneficiaryYesNo.title = Do you want to add a beneficiary?
 addABeneficiaryYesNo.heading = Do you want to add a beneficiary?
 addABeneficiaryYesNo.error.required = Select yes if you want to add a beneficiary
 
-individualBenficiaryAnswers.title = Check beneficiary details
-individualBenficiaryAnswers.heading = Check beneficiary details
+individualBeneficiaryAnswers.title = Check beneficiary details
+individualBeneficiaryAnswers.heading = Check beneficiary details
 
 individualBeneficiaryAddressUKYesNo.title = Does the individual beneficiary live in the UK?
 individualBeneficiaryAddressUKYesNo.heading = Does {0} live in the UK?
@@ -394,11 +432,11 @@ dateOfBirth.error.past = Date of birth must be after 31 December 1499
 
 #Charity or Trust
 
-charityOrTrust.title = Is the beneficiary a charity or trust?
-charityOrTrust.heading = Is the beneficiary a charity or trust?
-charityOrTrust.checkYourAnswersLabel = Is the beneficiary a charity or trust?
-charityOrTrust.error.required = Select the type of beneficiary you need to add
-charityOrTrust.hint = As named in the trust deed
+charityortrust.title = Is the beneficiary a charity or trust?
+charityortrust.heading = Is the beneficiary a charity or trust?
+charityortrust.checkYourAnswersLabel = Is the beneficiary a charity or trust?
+charityortrust.error.required = Select the type of beneficiary you need to add
+charityortrust.hint = As named in the trust deed
 entities.beneficiary.charity = Charity
 
 charity.name.title = What is the charity’s name?
@@ -441,8 +479,8 @@ charity.internationalAddress.title = What is the charity beneficiary’s address
 charity.internationalAddress.heading = What is {0}’s address?
 charity.internationalAddress.checkYourAnswersLabel = What is {0}’s address?
 
-charityOrTrust.charity = Charity
-charityOrTrust.trust = Trust
+charityortrust.charity = Charity
+charityortrust.trust = Trust
 
 charity.answers.title = Check charity beneficiary details
 charity.answers.heading = Check charity beneficiary details

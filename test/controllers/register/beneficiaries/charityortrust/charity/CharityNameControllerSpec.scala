@@ -17,7 +17,6 @@
 package controllers.register.beneficiaries.charityortrust.charity
 
 import base.SpecBase
-import controllers.register.beneficiaries.charityOrTrust.charity.routes
 import forms.StringFormProvider
 import models.{NormalMode, ReadOnlyUserAnswers}
 import org.mockito.Matchers.any

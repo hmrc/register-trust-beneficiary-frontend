@@ -22,13 +22,13 @@ import views.html.register.beneficiaries.individualBeneficiary.AnswersView
 class AnswersViewSpec extends ViewBehaviours {
   val index = 0
 
-  "IndividualBenficiaryAnswers view" must {
+  "IndividualBeneficiaryAnswers view" must {
 
     val view = viewFor[AnswersView](Some(emptyUserAnswers))
 
     val applyView = view.apply(index, fakeDraftId, Nil)(fakeRequest, messages)
 
-    behave like normalPage(applyView, "individualBenficiaryAnswers")
+    behave like normalPage(applyView, "individualBeneficiaryAnswers")
 
     behave like pageWithBackLink(applyView)
   }

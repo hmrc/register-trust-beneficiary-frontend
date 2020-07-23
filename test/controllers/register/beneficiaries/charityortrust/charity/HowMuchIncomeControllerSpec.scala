@@ -17,7 +17,6 @@
 package controllers.register.beneficiaries.charityortrust.charity
 
 import base.SpecBase
-import controllers.register.beneficiaries.charityOrTrust.charity.routes
 import forms.ShareOfIncomeFormProvider
 import models.NormalMode
 import org.scalatestplus.mockito.MockitoSugar

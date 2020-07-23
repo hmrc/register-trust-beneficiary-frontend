@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.register.beneficiaries.charityOrTrust.charity
+package controllers.register.beneficiaries.charityortrust.charity
 
 import controllers.actions._
 import controllers.actions.register._
@@ -82,7 +82,7 @@ class CharityInternationalAddressController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(CharityInternationalAddressPage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CharityInternationalAddressPage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(CharityInternationalAddressPage(index), draftId, updatedAnswers))
         }
       )
   }

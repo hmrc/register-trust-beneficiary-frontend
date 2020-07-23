@@ -18,8 +18,9 @@ package sections.beneficiaries
 
 import pages.QuestionPage
 import play.api.libs.json.{JsArray, JsPath}
+import viewmodels.addAnother.TrustBeneficiaryViewModel
 
-case object TrustBeneficiaries extends QuestionPage[JsArray]{
+case object TrustBeneficiaries extends QuestionPage[List[TrustBeneficiaryViewModel]]{
 
   override def path: JsPath = JsPath \ Beneficiaries \ toString
 

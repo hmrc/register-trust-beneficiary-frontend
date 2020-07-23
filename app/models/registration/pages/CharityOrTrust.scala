@@ -34,7 +34,7 @@ object CharityOrTrust extends Enumerable.Implicits {
 
   val options: List[RadioOption] = values.map {
     value =>
-      RadioOption("charityOrTrust", value.toString)
+      RadioOption("charityortrust", value.toString)
   }
 
   implicit val enumerable: Enumerable[CharityOrTrust] =

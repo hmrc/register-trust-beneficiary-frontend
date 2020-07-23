@@ -17,7 +17,6 @@
 package views.register.beneficiaries.charityortrust.trust
 
 import forms.IndividualBeneficiaryIncomeFormProvider
-import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.StringViewBehaviours
@@ -36,7 +35,7 @@ class ShareOfIncomeViewSpec extends StringViewBehaviours {
     val view = viewFor[ShareOfIncomeView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, fakeDraftId, name, index)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, name, index)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
 

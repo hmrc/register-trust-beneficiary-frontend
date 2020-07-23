@@ -68,7 +68,7 @@ class AddressYesNoController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressYesNoPage(index), value))
             _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddressYesNoPage(index), draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(AddressYesNoPage(index), draftId, updatedAnswers))
       )
   }
 }

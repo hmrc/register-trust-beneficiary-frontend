@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.register.beneficiaries.charityOrTrust.routes._
+@import controllers.register.beneficiaries.charityortrust.routes._
 @import models.Mode
 @import models.registration.pages.CharityOrTrust
 
@@ -26,7 +26,7 @@
 @(form: Form[_], mode: Mode, draftId: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("charityOrTrust.title")}"
+    title = s"${errorPrefix(form)} ${messages("charityortrust.title")}"
     ) {
 
     @formHelper(action = CharityOrTrustController.onSubmit(mode, draftId), 'autoComplete -> "off") {
@@ -37,7 +37,7 @@
 
         @components.input_radio(
             field = form("value"),
-            legend = messages("charityOrTrust.heading"),
+            legend = messages("charityortrust.heading"),
             legendClass = Some("heading-large"),
             legendAsHeading = true,
             inputs = CharityOrTrust.options

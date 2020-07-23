@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.register.beneficiaries.charityOrTrust.charity
+package controllers.register.beneficiaries.charityortrust.charity
 
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
@@ -79,7 +79,7 @@ class HowMuchIncomeController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(HowMuchIncomePage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(HowMuchIncomePage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(HowMuchIncomePage(index), draftId, updatedAnswers))
         }
       )
   }
