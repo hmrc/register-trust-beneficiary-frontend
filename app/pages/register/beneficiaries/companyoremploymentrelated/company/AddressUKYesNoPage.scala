@@ -14,16 +14,26 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.company
+package pages.register.beneficiaries.companyoremploymentrelated.company
 
-import models.core.pages.InternationalAddress
+import models.UserAnswers
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.beneficiaries.{Beneficiaries, CompanyBeneficiaries}
 
-case class AddressInternationalPage(index: Int) extends QuestionPage[InternationalAddress] {
+import scala.util.Try
+
+final case class AddressUKYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
   override def path: JsPath = JsPath \ Beneficiaries \ CompanyBeneficiaries \ index \ toString
 
-  override def toString: String = "internationalAddress"
+  override def toString: String = "addressUKYesNo"
+
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+    value match {
+      case Some(true) => userAnswers.remove(AddressInternationalPage(index))
+      case Some(false) => userAnswers.remove(AddressUKPage(index))
+      case _ => super.cleanup(value, userAnswers)
+    }
+  }
 }

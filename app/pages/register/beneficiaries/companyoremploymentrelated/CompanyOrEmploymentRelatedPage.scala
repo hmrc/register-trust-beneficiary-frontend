@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries
+package pages.register.beneficiaries.companyoremploymentrelated
 
-import models.CompanyOrEmploymentRelatedToAdd.{Company, EmploymentRelated}
-import models.{CompanyOrEmploymentRelatedToAdd, UserAnswers}
+import models.CompanyOrEmploymentRelatedToAdd
 import pages.QuestionPage
 import play.api.libs.json.JsPath
-
-import scala.util.Try
 
 case object CompanyOrEmploymentRelatedPage extends QuestionPage[CompanyOrEmploymentRelatedToAdd] {
 

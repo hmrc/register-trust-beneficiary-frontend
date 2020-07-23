@@ -21,7 +21,7 @@ import config.annotations.CompanyBeneficiary
 import forms.YesNoFormProvider
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.register.beneficiaries.company.{AddressUKYesNoPage, NamePage}
+import pages.register.beneficiaries.companyoremploymentrelated.company.{AddressUKYesNoPage, NamePage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call

@@ -24,9 +24,9 @@ import models.CompanyOrEmploymentRelatedToAdd.Company
 import models.ReadableUserAnswers
 import models.registration.pages.CharityOrTrust.{Charity, Trust}
 import pages.Page
-import pages.register.beneficiaries.CompanyOrEmploymentRelatedPage
 import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
 import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
+import pages.register.beneficiaries.companyoremploymentrelated.CompanyOrEmploymentRelatedPage
 import pages.register.beneficiaries.individual._
 import play.api.mvc.Call
 import sections.beneficiaries.CompanyBeneficiaries

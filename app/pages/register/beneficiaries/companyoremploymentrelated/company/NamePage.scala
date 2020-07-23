@@ -14,8 +14,15 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.company
+package pages.register.beneficiaries.companyoremploymentrelated.company
 
-import pages.Page
+import pages.QuestionPage
+import play.api.libs.json.JsPath
+import sections.beneficiaries.{Beneficiaries, CompanyBeneficiaries}
 
-case object AnswersPage extends Page
+final case class NamePage(index : Int) extends QuestionPage[String] {
+
+  override def path: JsPath = JsPath \ Beneficiaries \ CompanyBeneficiaries \ index \ toString
+
+  override def toString: String = "name"
+}
