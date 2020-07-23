@@ -18,6 +18,7 @@ package navigation.routes
 
 import config.FrontendAppConfig
 import controllers.register.beneficiaries.charityortrust.charity.{routes => charityRoutes}
+import controllers.register.beneficiaries.charityortrust.trust.{routes => trustRoutes}
 import models.registration.pages.CharityOrTrust.{Charity, Trust}
 import models.{NormalMode, ReadableUserAnswers}
 import pages.Page
@@ -43,7 +44,7 @@ object BeneficiaryRoutes {
 
   private def charityortrust(draftId: String, index: Int)(userAnswers: ReadableUserAnswers) : Call = userAnswers.get(CharityOrTrustPage) match {
     case Some(Charity) => charityRoutes.CharityNameController.onPageLoad(NormalMode, index, draftId)
-    case Some(Trust) => controllers.routes.FeatureNotAvailableController.onPageLoad()
+    case Some(Trust) => trustRoutes.NameController.onPageLoad(index, draftId)
     case _ => controllers.routes.SessionExpiredController.onPageLoad()
   }
 
