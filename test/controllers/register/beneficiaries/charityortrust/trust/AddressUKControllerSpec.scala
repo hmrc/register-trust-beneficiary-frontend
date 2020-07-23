@@ -17,9 +17,12 @@
 package controllers.register.beneficiaries.charityortrust.trust
 
 import base.SpecBase
+import config.annotations.TrustBeneficiary
 import forms.UKAddressFormProvider
 import models.core.pages.UKAddress
+import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.trust.{AddressUKPage, NamePage}
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.charityortrust.trust.AddressUKView
@@ -85,7 +88,10 @@ class AddressUKControllerSpec extends SpecBase {
         name).success.value
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(new FakeNavigator)
+          ).build()
 
       val request =
         FakeRequest(POST, addressUKRoute)

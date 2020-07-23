@@ -17,27 +17,20 @@
 package navigation
 
 import base.SpecBase
-import generators.Generators
-import models.NormalMode
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages._
+import pages.register.beneficiaries.classofbeneficiaries._
 
-class NavigatorSpec extends SpecBase
-  with ScalaCheckPropertyChecks
-  with Generators
-{
+class ClassOfBeneficiariesNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks {
 
-  implicit val navigator : Navigator = injector.instanceOf[Navigator]
+  val navigator = new ClassOfBeneficiariesNavigator
 
-  "Navigator" when {
+  val index = 0
 
-    "in Normal mode" must {
+  "Class of beneficiaries navigator" must {
 
-      "go to Index from a page that doesn't exist in the route map" in {
-        case object UnknownPage extends Page
-        navigator.nextPage(UnknownPage, NormalMode, fakeDraftId, emptyUserAnswers) mustBe controllers.routes.IndexController.onPageLoad(fakeDraftId)
-      }
-
+    "Description page -> Add-to page" in {
+      navigator.nextPage(ClassBeneficiaryDescriptionPage(index), fakeDraftId, emptyUserAnswers)
+        .mustBe(controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId))
     }
   }
 }

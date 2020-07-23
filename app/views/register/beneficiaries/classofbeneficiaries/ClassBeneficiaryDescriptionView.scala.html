@@ -14,21 +14,20 @@
  * limitations under the License.
  *@
 
-@import controllers.register.beneficiaries.routes._
-@import models.Mode
+@import controllers.register.beneficiaries.classofbeneficiaries.routes._
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode, draftId: String, index: Int)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, index: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("classBeneficiaryDescription.title")}"
     ) {
 
-    @formHelper(action = ClassBeneficiaryDescriptionController.onSubmit(mode, index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = ClassBeneficiaryDescriptionController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 

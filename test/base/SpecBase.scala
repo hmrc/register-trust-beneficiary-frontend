@@ -64,7 +64,6 @@ trait SpecBase extends PlaySpec
     new GuiceApplicationBuilder()
       .overrides(
         bind[Navigator].toInstance(navigator),
-        bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(navigator),
         bind[RegistrationDataRequiredAction].to[RegistrationDataRequiredActionImpl],
         bind[RegistrationIdentifierAction].toInstance(
           new FakeIdentifyForRegistration(affinityGroup, frontendAppConfig)(injectedParsers, trustsAuth, enrolments)

@@ -16,7 +16,8 @@
 
 package utils
 
-import controllers.register.beneficiaries.routes
+import controllers.register.beneficiaries.classofbeneficiaries.{routes => classOfBeneficiaryRts}
+import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRts}
 import models.UserAnswers
 import models.core.pages.FullName
 import play.api.i18n.Messages
@@ -41,7 +42,7 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
       name = parseName(vm.name),
       typeLabel = messages("entities.beneficiary.individual"),
       changeUrl = controllers.routes.FeatureNotAvailableController.onPageLoad().url,
-      removeUrl = routes.RemoveIndividualBeneficiaryController.onPageLoad(index, draftId).url
+      removeUrl = individualRts.RemoveIndividualBeneficiaryController.onPageLoad(index, draftId).url
     )
   }
 
@@ -55,7 +56,7 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
       vm.description.getOrElse(defaultValue),
       messages("entities.beneficiary.class"),
       controllers.routes.FeatureNotAvailableController.onPageLoad().url,
-      removeUrl = routes.RemoveClassOfBeneficiaryController.onPageLoad(index, draftId).url
+      removeUrl = classOfBeneficiaryRts.RemoveClassOfBeneficiaryController.onPageLoad(index, draftId).url
     )
   }
 

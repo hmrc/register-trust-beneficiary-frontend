@@ -16,12 +16,12 @@
 
 package controllers.register.beneficiaries.individualBeneficiary
 
+import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
 import forms.PassportOrIdCardFormProvider
 import javax.inject.Inject
-import models.{Mode, NormalMode}
 import navigation.Navigator
 import pages.register.beneficiaries.individual.{NamePage, PassportDetailsPage}
 import play.api.data.Form
@@ -36,19 +36,19 @@ import views.html.register.beneficiaries.individualBeneficiary.PassportDetailsVi
 import scala.concurrent.{ExecutionContext, Future}
 
 class PassportDetailsController @Inject()(
-                                                     override val messagesApi: MessagesApi,
-                                                     registrationsRepository: RegistrationsRepository,
-                                                     navigator: Navigator,
-                                                     identify: RegistrationIdentifierAction,
-                                                     getData: DraftIdRetrievalActionProvider,
-                                                     validateIndex: IndexActionFilterProvider,
-                                                     requireData: RegistrationDataRequiredAction,
-                                                     requiredAnswer: RequiredAnswerActionProvider,
-                                                     formProvider: PassportOrIdCardFormProvider,
-                                                     val controllerComponents: MessagesControllerComponents,
-                                                     view: PassportDetailsView,
-                                                     val countryOptions: CountryOptions
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                           override val messagesApi: MessagesApi,
+                                           registrationsRepository: RegistrationsRepository,
+                                           @IndividualBeneficiary navigator: Navigator,
+                                           identify: RegistrationIdentifierAction,
+                                           getData: DraftIdRetrievalActionProvider,
+                                           validateIndex: IndexActionFilterProvider,
+                                           requireData: RegistrationDataRequiredAction,
+                                           requiredAnswer: RequiredAnswerActionProvider,
+                                           formProvider: PassportOrIdCardFormProvider,
+                                           val controllerComponents: MessagesControllerComponents,
+                                           view: PassportDetailsView,
+                                           val countryOptions: CountryOptions
+                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form = formProvider("individualBeneficiaryPassportDetails")
 
@@ -57,10 +57,9 @@ class PassportDetailsController @Inject()(
       getData(draftId) andThen
       requireData andThen
       validateIndex(index, IndividualBeneficiaries) andThen
-      requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(NormalMode, index, draftId)))
+      requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(index, draftId)))
 
-
-  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
       val name = request.userAnswers.get(NamePage(index)).get
@@ -70,23 +69,23 @@ class PassportDetailsController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, countryOptions.options, mode, draftId, index, name))
+      Ok(view(preparedForm, countryOptions.options, draftId, index, name))
   }
 
-  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
       val name = request.userAnswers.get(NamePage(index)).get
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, mode, draftId, index, name))),
+          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, index, name))),
 
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PassportDetailsPage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PassportDetailsPage(index), mode, draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PassportDetailsPage(index), draftId, updatedAnswers))
         }
       )
   }

@@ -29,10 +29,10 @@ class IncomeYesNoViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "individualBeneficiaryIncomeYesNo"
   val index = 0
-  val name = "First Last"
-  val fullName = FullName("First", None, "Last")
+  val fullName: FullName = FullName("First", None, "Last")
+  val name: String = fullName.toString
 
-  val form = new YesNoFormProvider().withPrefix(messageKeyPrefix)
+  val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
   "IndividualBeneficiaryIncomeYesNo view" must {
 
@@ -42,7 +42,7 @@ class IncomeYesNoViewSpec extends YesNoViewBehaviours {
     val view = viewFor[IncomeYesNoView](Some(userAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, fakeDraftId, fullName, index)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, fullName, index)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
 

@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package views.register.beneficiaries
+package views.register.beneficiaries.classofbeneficiaries
 
 import forms.ClassBeneficiaryDescriptionFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.StringViewBehaviours
-import views.html.register.beneficiaries.ClassBeneficiaryDescriptionView
+import views.html.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionView
 
 class ClassBeneficiaryDescriptionViewSpec extends StringViewBehaviours {
 
@@ -37,7 +37,7 @@ class ClassBeneficiaryDescriptionViewSpec extends StringViewBehaviours {
     val view = viewFor[ClassBeneficiaryDescriptionView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, fakeDraftId, index)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, index)(fakeRequest, messages)
 
     behave like normalPage(applyView(form), messageKeyPrefix)
 

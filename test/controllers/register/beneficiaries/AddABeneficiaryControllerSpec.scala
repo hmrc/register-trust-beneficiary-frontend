@@ -17,14 +17,17 @@
 package controllers.register.beneficiaries
 
 import base.SpecBase
+import controllers.register.beneficiaries.classofbeneficiaries.{routes => classOfBeneficiariesRoutes}
+import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRoutes}
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import models.NormalMode
 import models.Status.Completed
 import models.core.pages.FullName
 import models.registration.pages.AddABeneficiary
 import pages.entitystatus.{ClassBeneficiaryStatus, IndividualBeneficiaryStatus}
+import pages.register.beneficiaries.AddABeneficiaryPage
+import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
 import pages.register.beneficiaries.individual.NamePage
-import pages.register.beneficiaries.{AddABeneficiaryPage, ClassBeneficiaryDescriptionPage}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -36,10 +39,10 @@ class AddABeneficiaryControllerSpec extends SpecBase {
   private def onwardRoute: Call = Call("GET", "/foo")
 
   private def removeIndividualRoute(index : Int): String =
-    routes.RemoveIndividualBeneficiaryController.onPageLoad(index, fakeDraftId).url
+    individualRoutes.RemoveIndividualBeneficiaryController.onPageLoad(index, fakeDraftId).url
 
   private def removeClassRoute(index : Int): String =
-    routes.RemoveClassOfBeneficiaryController.onPageLoad(index, fakeDraftId).url
+    classOfBeneficiariesRoutes.RemoveClassOfBeneficiaryController.onPageLoad(index, fakeDraftId).url
 
   private lazy val addABeneficiaryRoute = routes.AddABeneficiaryController.onPageLoad(fakeDraftId).url
 

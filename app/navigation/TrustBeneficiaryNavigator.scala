@@ -17,16 +17,12 @@
 package navigation
 
 import controllers.register.beneficiaries.charityortrust.trust.{routes => rts}
+import models.ReadableUserAnswers
+import pages.Page
 import pages.register.beneficiaries.trust._
-import javax.inject.Inject
-import models.{CheckMode, Mode, NormalMode, ReadableUserAnswers}
-import pages.{Page, QuestionPage}
 import play.api.mvc.Call
 
-class TrustBeneficiaryNavigator @Inject()() extends Navigator {
-
-  override def nextPage(page: Page, mode: Mode, draftId: String, userAnswers: ReadableUserAnswers): Call =
-    routes(draftId)(page)(userAnswers)
+class TrustBeneficiaryNavigator extends Navigator {
 
   override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call =
     routes(draftId)(page)(userAnswers)
@@ -49,13 +45,6 @@ class TrustBeneficiaryNavigator @Inject()() extends Navigator {
         AddressYesNoPage(index), rts.AddressUKYesNoController.onPageLoad(index, draftId),
         rts.AnswersController.onPageLoad(index, draftId)
       ))
-  }
-
-
-  def yesNoNav(ua: ReadableUserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call = {
-    ua.get(fromPage)
-      .map(if (_) yesCall else noCall)
-      .getOrElse(controllers.routes.SessionExpiredController.onPageLoad())
   }
 
   def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] =
