@@ -14,16 +14,24 @@
  * limitations under the License.
  */
 
-package sections.beneficiaries
+package viewmodels.addAnother
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import viewmodels.addAnother.CompanyBeneficiaryViewModel
+import models.Status
+import models.core.pages.FullName
+import play.api.libs.json.{Reads, __}
 
-case object CompanyBeneficiaries extends QuestionPage[List[CompanyBeneficiaryViewModel]]{
+case class CompanyBeneficiaryViewModel(name: Option[String], status: Status) {
 
-  override def path: JsPath = JsPath \ Beneficiaries \ toString
+  def isComplete: Boolean = name.nonEmpty && (status == Status.Completed)
 
-  override def toString: String = "companyBeneficiaries"
+}
 
+object CompanyBeneficiaryViewModel {
+
+  import play.api.libs.functional.syntax._
+
+  implicit val reads : Reads[CompanyBeneficiaryViewModel] = (
+    (__ \ "name").readNullable[String] and
+      (__ \ "status").readWithDefault[Status](Status.InProgress)
+    )(CompanyBeneficiaryViewModel.apply _)
 }

@@ -161,4 +161,7 @@ POST       /:draftId/class/:index/remove                                        
 GET        /:draftId/what-type                                                        controllers.register.beneficiaries.WhatTypeOfBeneficiaryController.onPageLoad(mode: Mode = NormalMode, draftId: String)
 POST       /:draftId/what-type                                                        controllers.register.beneficiaries.WhatTypeOfBeneficiaryController.onSubmit(mode: Mode = NormalMode, draftId: String)
 
-GET        /feature-not-available                                                                   controllers.FeatureNotAvailableController.onPageLoad()
+GET        /feature-not-available                                                     controllers.FeatureNotAvailableController.onPageLoad()
+
+GET        /:draftId/company-or-employment-related/                                   controllers.register.beneficiaries.companyoremploymentrelated.CompanyOrEmploymentRelatedController.onPageLoad(draftId: String)
+POST       /:draftId/company-or-employment-related/                                   controllers.register.beneficiaries.companyoremploymentrelated.CompanyOrEmploymentRelatedController.onSubmit(draftId: String)

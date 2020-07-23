@@ -392,6 +392,19 @@ dateOfBirth.error.invalid = Enter a real date of birth
 dateOfBirth.error.future = Date of birth must be today or in the past
 dateOfBirth.error.past = Date of birth must be after 31 December 1499
 
+# COMPANY OR EMPLOYMENT RELATED
+
+companyOrEmploymentRelated.title = Is the beneficiary a company or the employees and/or their families?
+companyOrEmploymentRelated.heading = Is the beneficiary a company or the employees and/or their families?
+companyOrEmploymentRelated.checkYourAnswersLabel = Is the beneficiary a company or the employees and/or their families?
+companyOrEmploymentRelated.hint = For example, employees and their children, spouses or widows would be employment related.
+companyOrEmploymentRelated.error.required = Select the type of beneficiary you need to add
+
+isTheBeneficiaryACompanyOrEmploymentRelated.company = Company
+isTheBeneficiaryACompanyOrEmploymentRelated.employmentRelated = Employees and/or their families
+
+# COMPANY
+
 companyBeneficiary.name.title = What is the company’s name?
 companyBeneficiary.name.heading = What is the company’s name?
 companyBeneficiary.name.checkYourAnswersLabel = What is the company’s name?
@@ -428,4 +441,7 @@ companyBeneficiary.addressUkYesNo.error.required = Select yes if the company ben
 companyBeneficiary.ukAddress.checkYourAnswersLabel = What is {0}’s address?
 
 companyBeneficiary.nonUkAddress.checkYourAnswersLabel = What is {0}’s address?
+
+companyBeneficiary.checkDetails.title = Check company beneficiary details
+companyBeneficiary.checkDetails.heading = Check company beneficiary details
 

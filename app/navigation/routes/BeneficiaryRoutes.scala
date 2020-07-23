@@ -18,16 +18,18 @@ package navigation.routes
 
 import config.FrontendAppConfig
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRoutes}
+import controllers.register.beneficiaries.companyoremploymentrelated.{routes => companyOrEmploymentRelatedRoutes}
+import controllers.register.beneficiaries.companyoremploymentrelated.company.{routes => companyRoutes}
+import models.CompanyOrEmploymentRelatedToAdd.{Company, EmploymentRelated}
 import models.registration.pages.KindOfTrust.Employees
-import models.{NormalMode, ReadableUserAnswers}
 import models.registration.pages.{AddABeneficiary, WhatTypeOfBeneficiary}
+import models.{NormalMode, ReadableUserAnswers}
 import pages.Page
 import pages.register.beneficiaries.individual._
-import pages.register.beneficiaries.{AddABeneficiaryPage, AddABeneficiaryYesNoPage, ClassBeneficiaryDescriptionPage, WhatTypeOfBeneficiaryPage}
+import pages.register.beneficiaries.{AddABeneficiaryPage, AddABeneficiaryYesNoPage, ClassBeneficiaryDescriptionPage, CompanyOrEmploymentRelatedPage, WhatTypeOfBeneficiaryPage}
 import pages.register.settlors.living_settlor.trust_type.KindOfTrustPage
 import play.api.mvc.Call
-import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries}
-import uk.gov.hmrc.auth.core.AffinityGroup
+import sections.beneficiaries.{ClassOfBeneficiaries, CompanyBeneficiaries, IndividualBeneficiaries}
 
 object BeneficiaryRoutes {
   def route(draftId: String, config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
@@ -53,16 +55,23 @@ object BeneficiaryRoutes {
     case AddABeneficiaryYesNoPage => addABeneficiaryYesNoRoute(draftId, config)
     case WhatTypeOfBeneficiaryPage => whatTypeOfBeneficiaryRoute(draftId)
     case ClassBeneficiaryDescriptionPage(_) => _ => controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
+    case CompanyOrEmploymentRelatedPage => companyOrEmploymentRelatedPage(draftId)
   }
 
   private def assetsCompletedRoute(draftId: String, config: FrontendAppConfig) : Call = {
     Call("GET", config.registrationProgressUrl(draftId))
   }
 
-  private def namePage(draftId: String, index: Int)(userAnswers: ReadableUserAnswers) : Call = userAnswers.get(KindOfTrustPage) match {
+  private def namePage(draftId: String, index: Int)(userAnswers: ReadableUserAnswers) : Call =userAnswers.get(KindOfTrustPage) match {
     case Some(Employees) => individualRoutes.RoleInCompanyController.onPageLoad(NormalMode, index, draftId)
     case _ => individualRoutes.DateOfBirthYesNoController.onPageLoad(NormalMode, index, draftId)
   }
+
+  private def companyOrEmploymentRelatedPage(draftId: String)(userAnswers: ReadableUserAnswers) : Call =
+    userAnswers.get(CompanyOrEmploymentRelatedPage) match {
+      case Some(Company) => routeToCompanyBeneficiaryIndex(userAnswers, draftId)
+      case _ => controllers.routes.FeatureNotAvailableController.onPageLoad()
+    }
 
   private def whatTypeOfBeneficiaryRoute(draftId: String)(userAnswers: ReadableUserAnswers) : Call = {
     val whatBeneficiaryToAdd = userAnswers.get(WhatTypeOfBeneficiaryPage)
@@ -71,6 +80,8 @@ object BeneficiaryRoutes {
         routeToIndividualBeneficiaryIndex(userAnswers, draftId)
       case Some(WhatTypeOfBeneficiary.ClassOfBeneficiary) =>
         routeToClassOfBeneficiaryIndex(userAnswers, draftId)
+      case Some(WhatTypeOfBeneficiary.CompanyOrEmployment) =>
+        companyOrEmploymentRelatedRoutes.CompanyOrEmploymentRelatedController.onPageLoad(draftId)
       case _ =>
         controllers.routes.FeatureNotAvailableController.onPageLoad()
     }
@@ -91,6 +102,16 @@ object BeneficiaryRoutes {
     classOfBeneficiaries match {
       case Nil =>
         controllers.register.beneficiaries.routes.ClassBeneficiaryDescriptionController.onPageLoad(NormalMode, 0, draftId)
+      case t if t.nonEmpty =>
+        controllers.register.beneficiaries.routes.ClassBeneficiaryDescriptionController.onPageLoad(NormalMode, t.size, draftId)
+    }
+  }
+
+  private def routeToCompanyBeneficiaryIndex(userAnswers: ReadableUserAnswers, draftId: String) = {
+    val companyBeneficiaries = userAnswers.get(CompanyBeneficiaries).getOrElse(List.empty)
+    companyBeneficiaries match {
+      case Nil =>
+        companyRoutes.NameController.onPageLoad(0, draftId)
       case t if t.nonEmpty =>
         controllers.register.beneficiaries.routes.ClassBeneficiaryDescriptionController.onPageLoad(NormalMode, t.size, draftId)
     }
