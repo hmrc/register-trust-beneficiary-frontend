@@ -81,7 +81,7 @@ class TrustBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
   def trustBeneficiaryAddressUK(index: Int): Option[AnswerRow] = userAnswers.get(AddressUKPage(index)) map {
     x =>
       AnswerRow(
-        "trustBeneficiaryAddressUK.checkYourAnswersLabel",
+        "site.address.uk.checkYourAnswersLabel",
         ukAddress(x),
         Some(routes.AddressUKController.onPageLoad(index, draftId).url),
         trustBeneficiaryName(index, userAnswers),
@@ -92,7 +92,7 @@ class TrustBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
   def trustBeneficiaryAddressInternational(index: Int): Option[AnswerRow] = userAnswers.get(AddressInternationalPage(index)) map {
     x =>
       AnswerRow(
-        "trustBeneficiaryAddressInternational.checkYourAnswersLabel",
+        "site.address.international.checkYourAnswersLabel",
         internationalAddress(x, countryOptions),
         Some(routes.AddressInternationalController.onPageLoad(index, draftId).url),
         trustBeneficiaryName(index, userAnswers),
@@ -110,7 +110,6 @@ class TrustBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
         canEdit = canEdit
       )
   }
-
 
   def trustBeneficiaryShareOfIncome(index: Int): Option[AnswerRow] = userAnswers.get(ShareOfIncomePage(index)) map {
     x =>

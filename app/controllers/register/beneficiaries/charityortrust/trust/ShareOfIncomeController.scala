@@ -16,6 +16,7 @@
 
 package controllers.register.beneficiaries.charityortrust.trust
 
+import config.annotations.TrustBeneficiary
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
 import forms.IncomePercentageFormProvider
@@ -35,7 +36,7 @@ class ShareOfIncomeController @Inject()(
                                          override val messagesApi: MessagesApi,
                                          registrationsRepository: RegistrationsRepository,
                                          override val controllerComponents: MessagesControllerComponents,
-                                         navigator: Navigator,
+                                         @TrustBeneficiary navigator: Navigator,
                                          identify: RegistrationIdentifierAction,
                                          getData: DraftIdRetrievalActionProvider,
                                          requireData: RegistrationDataRequiredAction,

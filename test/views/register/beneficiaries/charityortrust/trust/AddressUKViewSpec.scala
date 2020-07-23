@@ -24,7 +24,7 @@ import views.html.register.beneficiaries.charityortrust.trust.AddressUKView
 
 class AddressUKViewSpec extends UkAddressViewBehaviours {
 
-  val messageKeyPrefix = "trustBeneficiaryAddressUK"
+  val messageKeyPrefix = "site.address.uk"
   val index = 0
   val name = "First Last"
 

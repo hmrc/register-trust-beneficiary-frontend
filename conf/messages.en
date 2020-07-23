@@ -311,15 +311,16 @@ individualBeneficiaryInfo.paragraph7 = Do not include named or specific employee
 individualBeneficiaryInfo.subheading5 = Other beneficiaries
 individualBeneficiaryInfo.paragraph8 = You need to give a short description for beneficiaries that do not fall into the other beneficiary types. For example, pets.
 
+trustBeneficiaryAnswers.title = Check trust beneficiary details
+trustBeneficiaryAnswers.heading = Check trust beneficiary details
+
 trustBeneficiaryName.checkYourAnswersLabel = What is the name of the trust?
-trustBeneficiaryShareOfIncomeYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
+trustBeneficiaryDiscretionYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
 trustBeneficiaryShareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
 trustBeneficiaryAddressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
 trustBeneficiaryAddressUKYesNo.checkYourAnswersLabel = Is {0}’s address in the UK?
 trustBeneficiaryAddress.checkYourAnswersLabel = What is {0}’s address?
 trustBeneficiaryUtr.checkYourAnswersLabel = What is {0}’s Unique Taxpayer Reference (UTR) number?
-trustBeneficiary.ukAddress.checkYourAnswersLabel = What is {0}’s address?
-trustBeneficiary.nonUkAddress.checkYourAnswersLabel = What is {0}’s address?
 
 trustBeneficiaryName.title = What is the trust’s name?
 trustBeneficiaryName.heading = What is the trust’s name?
@@ -340,13 +341,13 @@ trustBeneficiaryShareOfIncome.error.integer = The percentage of the trust’s as
 trustBeneficiaryShareOfIncome.error.non_numeric = The percentage of the trust’s assets the trust beneficiary is entitled to must be a whole number
 trustBeneficiaryShareOfIncome.error.less_than_100 = The percentage of the trust’s assets the trust  beneficiary is entitled to must be 100 or less
 
-trustBeneficiaryShareOfIncome.title = Do you know the trust beneficiary’s address?
-trustBeneficiaryShareOfIncome.heading = Do you know {0}’s address?
-trustBeneficiaryShareOfIncome.error.required = Select yes if you know the trust beneficiary’s address
+trustBeneficiaryAddressYesNo.title = Do you know the trust beneficiary’s address?
+trustBeneficiaryAddressYesNo.heading = Do you know {0}’s address?
+trustBeneficiaryAddressYesNo.error.required = Select yes if you know the trust beneficiary’s address
 
-trustBeneficiaryAddressUkYesNo.title = Is the trust beneficiary’s address in the UK?
-trustBeneficiaryAddressUkYesNo.heading = Is {0}’s address in the UK?
-trustBeneficiaryAddressUkYesNo.error.required = Select yes if the trust beneficiary’s address is in the UK
+trustBeneficiaryAddressUKYesNo.title = Is the trust beneficiary’s address in the UK?
+trustBeneficiaryAddressUKYesNo.heading = Is {0}’s address in the UK?
+trustBeneficiaryAddressUKYesNo.error.required = Select yes if the trust beneficiary’s address is in the UK
 
 trustBeneficiary.checkDetails.title = Check trust beneficiary details
 trustBeneficiary.checkDetails.heading = Check trust beneficiary details

@@ -16,6 +16,7 @@
 
 package controllers.register.beneficiaries.charityortrust.trust
 
+import config.annotations.TrustBeneficiary
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.StringFormProvider
 import javax.inject.Inject
@@ -34,7 +35,7 @@ class NameController @Inject()(
                                 override val messagesApi: MessagesApi,
                                 registrationsRepository: RegistrationsRepository,
                                 override val controllerComponents: MessagesControllerComponents,
-                                navigator: Navigator,
+                                @TrustBeneficiary navigator: Navigator,
                                 formProvider: StringFormProvider,
                                 identify: RegistrationIdentifierAction,
                                 getData: DraftIdRetrievalActionProvider,
