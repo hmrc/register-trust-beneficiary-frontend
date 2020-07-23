@@ -118,6 +118,7 @@ class BeneficiariesMapperSpec extends SpecBase with MustMatchers
 
         val index = 0
         val classOfBeneficiaryIndex = 0
+        val charityBeneficiaryIndex = 0
         val dateOfBirth = LocalDate.of(2010, 10, 10)
 
         val userAnswers = emptyUserAnswers
@@ -129,11 +130,11 @@ class BeneficiariesMapperSpec extends SpecBase with MustMatchers
           .set(NationalInsuranceYesNoPage(index), true).success.value
           .set(NationalInsuranceNumberPage(index), "AB123456C").success.value
           .set(VulnerableYesNoPage(index), true).success.value
-          .set(ClassBeneficiaryDescriptionPage(1), "class of ben 1").success.value
-          .set(CharityNamePage(2), "Test").success.value
-          .set(AmountDiscretionYesNoPage(2), false).success.value
-          .set(HowMuchIncomePage(2), "1234").success.value
-          .set(pages.register.beneficiaries.charityortrust.charity.AddressYesNoPage(2), false).success.value
+          .set(ClassBeneficiaryDescriptionPage(classOfBeneficiaryIndex), "class of ben 1").success.value
+          .set(CharityNamePage(charityBeneficiaryIndex), "Test").success.value
+          .set(AmountDiscretionYesNoPage(charityBeneficiaryIndex), false).success.value
+          .set(HowMuchIncomePage(charityBeneficiaryIndex), "1234").success.value
+          .set(pages.register.beneficiaries.charityortrust.charity.AddressYesNoPage(charityBeneficiaryIndex), false).success.value
 
         val result = beneficiariesMapper.build(userAnswers).value
 

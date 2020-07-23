@@ -24,6 +24,6 @@ case object CharityBeneficiaries extends QuestionPage[List[CharityBeneficiaryVie
 
   override def path: JsPath = JsPath \ Beneficiaries \ toString
 
-  override def toString: String = "charities"
+  override def toString: String = "charityBeneficiaries"
 
 }
