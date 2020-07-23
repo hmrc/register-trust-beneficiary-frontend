@@ -21,7 +21,7 @@ import config.annotations.TrustBeneficiary
 import forms.UKAddressFormProvider
 import models.core.pages.UKAddress
 import navigation.{FakeNavigator, Navigator}
-import pages.register.beneficiaries.trust.{AddressUKPage, NamePage}
+import pages.register.beneficiaries.charityortrust.trust.{AddressUKPage, NamePage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._

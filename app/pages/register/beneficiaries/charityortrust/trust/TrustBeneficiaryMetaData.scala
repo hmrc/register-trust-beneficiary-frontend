@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.trust
+package pages.register.beneficiaries.charityortrust.trust
 
-import models.core.pages.UKAddress
-import pages.QuestionPage
+import pages.{MetaData, QuestionPage}
 import play.api.libs.json.JsPath
-import sections.beneficiaries.{Beneficiaries, IndividualBeneficiaries, TrustBeneficiaries}
+import sections.beneficiaries.{Beneficiaries, TrustBeneficiaries}
 
-final case class AddressUKPage(index: Int) extends QuestionPage[UKAddress] {
+case class TrustBeneficiaryMetaData(index: Int) extends QuestionPage[MetaData]{
 
-  override def path: JsPath = JsPath \  Beneficiaries \ TrustBeneficiaries \ index \ toString
+  override def path: JsPath = JsPath \ Beneficiaries \ TrustBeneficiaries \ index \ toString
 
-  override def toString: String = "address"
+  override def toString: String = "metaData"
+
 }

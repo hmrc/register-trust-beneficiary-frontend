@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.trust
+package pages.register.beneficiaries.charityortrust.trust
 
 import models.core.pages.InternationalAddress
 import pages.QuestionPage

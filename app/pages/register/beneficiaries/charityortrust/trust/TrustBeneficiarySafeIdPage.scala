@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.trust
+package pages.register.beneficiaries.charityortrust.trust
 
-import models.core.pages.Address
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.beneficiaries.{Beneficiaries, TrustBeneficiaries}
 
-case class TrustBeneficiaryAddressPage(index: Int) extends QuestionPage[Address] {
+case class TrustBeneficiarySafeIdPage(index: Int) extends QuestionPage[String] {
 
   override def path: JsPath = JsPath \ Beneficiaries \ TrustBeneficiaries \ index \ toString
 
-  override def toString: String = "address"
+  override def toString: String = "safeId"
 }

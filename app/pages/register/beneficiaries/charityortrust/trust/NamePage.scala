@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.trust
+package pages.register.beneficiaries.charityortrust.trust
 
-import pages.{MetaData, QuestionPage}
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.beneficiaries.{Beneficiaries, TrustBeneficiaries}
 
-case class TrustBeneficiaryMetaData(index: Int) extends QuestionPage[MetaData]{
+final case class NamePage(index: Int) extends QuestionPage[String] {
 
   override def path: JsPath = JsPath \ Beneficiaries \ TrustBeneficiaries \ index \ toString
 
-  override def toString: String = "metaData"
-
+  override def toString: String = "name"
 }

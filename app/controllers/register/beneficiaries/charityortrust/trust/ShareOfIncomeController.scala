@@ -22,7 +22,7 @@ import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
 import forms.IncomePercentageFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.beneficiaries.trust.{NamePage, ShareOfIncomePage}
+import pages.register.beneficiaries.charityortrust.trust.{NamePage, ShareOfIncomePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
