@@ -36,7 +36,7 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
   val form: Form[CharityOrTrust] = formProvider
   val index: Int = 0
 
-  lazy val charityortrustRoute: String = routes.CharityOrTrustController.onPageLoad(NormalMode, draftId).url
+  lazy val charityOrTrustRoute: String = routes.CharityOrTrustController.onPageLoad(NormalMode, draftId).url
 
   "CharityOrTrust Controller" must {
 
@@ -44,7 +44,7 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, charityortrustRoute)
+      val request = FakeRequest(GET, charityOrTrustRoute)
 
       val result = route(application, request).value
 
@@ -64,7 +64,7 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, charityortrustRoute)
+      val request = FakeRequest(GET, charityOrTrustRoute)
 
       val view = application.injector.instanceOf[CharityOrTrustView]
 
@@ -83,8 +83,8 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, charityortrustRoute)
-          .withFormUrlEncodedBody(("value", "Charity"))
+        FakeRequest(POST, charityOrTrustRoute)
+          .withFormUrlEncodedBody(("value", "charity"))
 
       val result = route(application, request).value
 
@@ -100,7 +100,7 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, charityortrustRoute)
+        FakeRequest(POST, charityOrTrustRoute)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
@@ -121,7 +121,7 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, charityortrustRoute)
+      val request = FakeRequest(GET, charityOrTrustRoute)
 
       val result = route(application, request).value
 
@@ -137,7 +137,7 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, charityortrustRoute)
+        FakeRequest(POST, charityOrTrustRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value

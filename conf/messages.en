@@ -480,8 +480,8 @@ charity.internationalAddress.title = What is the charity beneficiary’s address
 charity.internationalAddress.heading = What is {0}’s address?
 charity.internationalAddress.checkYourAnswersLabel = What is {0}’s address?
 
-charityortrust.charity = Charity
-charityortrust.trust = Trust
+charityOrTrust.charity = Charity
+charityOrTrust.trust = Trust
 
 charity.answers.title = Check charity beneficiary details
 charity.answers.heading = Check charity beneficiary details
