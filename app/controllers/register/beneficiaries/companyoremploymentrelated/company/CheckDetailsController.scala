@@ -17,7 +17,6 @@
 package controllers.register.beneficiaries.companyoremploymentrelated.company
 
 import config.FrontendAppConfig
-import config.annotations.CompanyBeneficiary
 import controllers.actions._
 import controllers.actions.register.company.NameRequiredAction
 import handlers.ErrorHandler
@@ -25,7 +24,7 @@ import javax.inject.Inject
 import models.NormalMode
 import models.Status.Completed
 import navigation.Navigator
-import pages.entitystatus.IndividualBeneficiaryStatus
+import pages.entitystatus.CompanyBeneficiaryStatus
 import pages.register.beneficiaries.individual.AnswersPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -40,7 +39,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class CheckDetailsController @Inject()(
                                         override val messagesApi: MessagesApi,
                                         registrationsRepository: RegistrationsRepository,
-                                        @CompanyBeneficiary navigator: Navigator,
+                                        navigator: Navigator,
                                         standardActionSets: StandardActionSets,
                                         val controllerComponents: MessagesControllerComponents,
                                         view: CheckDetailsView,
@@ -60,7 +59,7 @@ class CheckDetailsController @Inject()(
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).async {
     implicit request =>
 
-      val answers = request.userAnswers.set(IndividualBeneficiaryStatus(index), Completed)
+      val answers = request.userAnswers.set(CompanyBeneficiaryStatus(index), Completed)
 
       for {
         updatedAnswers <- Future.fromTry(answers)

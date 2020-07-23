@@ -119,6 +119,7 @@ entities.no.description.added = No description added
 
 entities.beneficiary.individual = Individual Beneficiary
 entities.beneficiary.class = Class of beneficiaries
+entities.beneficiary.company = Named company
 
 emailAddress.checkYourAnswersLabel = What is {0}’s email address?
 
