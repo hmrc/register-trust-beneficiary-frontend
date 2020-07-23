@@ -16,14 +16,10 @@
 
 package pages.register.beneficiaries.companyoremploymentrelated.company
 
-import java.time.LocalDate
-
 import models.UserAnswers
 import models.core.pages.{InternationalAddress, UKAddress}
-import models.registration.pages.PassportOrIdCardDetails
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-import pages.register.beneficiaries.companyoremploymentrelated.company._
 
 class AddressYesNoPageSpec extends PageBehaviours {
 
