@@ -20,8 +20,8 @@ import base.SpecBase
 import controllers.register.beneficiaries.individualBeneficiary.routes._
 import models.registration.pages.KindOfTrust._
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages.register.KindOfTrustPage
 import pages.register.beneficiaries.individual._
-import pages.register.settlors.living_settlor.trust_type.KindOfTrustPage
 
 class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks {
 

@@ -17,12 +17,13 @@
 package utils.answers
 
 import javax.inject.Inject
-import models.UserAnswers
+import models.{NormalMode, UserAnswers}
+import pages.register.beneficiaries._
 import pages.register.beneficiaries.individual._
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
-import sections.beneficiaries.IndividualBeneficiaries
 import utils.answers.CheckAnswersFormatters._
+import sections.beneficiaries.IndividualBeneficiaries
 import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
 
@@ -160,7 +161,7 @@ class IndividualBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOption
       )
   }
 
-  def individualBeneficiaryAddressYesNo(index: Int): Option[AnswerRow] = userAnswers.get(AddressYesNoPage(index)) map {
+  def individualBeneficiaryAddressYesNo(index: Int): Option[AnswerRow] = userAnswers.get(individual.AddressYesNoPage(index)) map {
     x =>
       AnswerRow(
         "individualBeneficiaryAddressYesNo.checkYourAnswersLabel",

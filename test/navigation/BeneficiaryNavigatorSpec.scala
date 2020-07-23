@@ -20,7 +20,6 @@ import base.SpecBase
 import config.FrontendAppConfig
 import controllers.register.beneficiaries.classofbeneficiaries.{routes => classOfBeneficiariesRoutes}
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRoutes}
-import controllers.register.beneficiaries.routes
 import generators.Generators
 import models.core.pages.FullName
 import models.registration.pages.{AddABeneficiary, WhatTypeOfBeneficiary}
@@ -49,7 +48,7 @@ class BeneficiaryNavigatorSpec {
         val answers = userAnswers.set(AddABeneficiaryYesNoPage, true).success.value
 
         navigator.nextPage(AddABeneficiaryYesNoPage, NormalMode, fakeDraftId, answers)
-          .mustBe(routes.WhatTypeOfBeneficiaryController.onPageLoad(fakeDraftId))
+          .mustBe(controllers.register.beneficiaries.routes.WhatTypeOfBeneficiaryController.onPageLoad(fakeDraftId))
     }
   }
 
@@ -60,7 +59,7 @@ class BeneficiaryNavigatorSpec {
         val answers = userAnswers.set(AddABeneficiaryPage, AddABeneficiary.YesNow).success.value
 
         navigator.nextPage(AddABeneficiaryPage, NormalMode, fakeDraftId, answers)
-          .mustBe(routes.WhatTypeOfBeneficiaryController.onPageLoad(fakeDraftId))
+          .mustBe(controllers.register.beneficiaries.routes.WhatTypeOfBeneficiaryController.onPageLoad(fakeDraftId))
     }
   }
 

@@ -23,6 +23,7 @@ import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescrip
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import sections.beneficiaries.ClassOfBeneficiaries
+import utils.answers.CheckAnswersFormatters._
 import viewmodels.{AnswerRow, AnswerSection}
 
 class CheckYourAnswersHelper @Inject()()

@@ -20,6 +20,8 @@ import java.time.LocalDate
 
 import models.core.pages.{FullName, UKAddress}
 import models.registration.pages.{AddABeneficiary, PassportOrIdCardDetails, WhatTypeOfBeneficiary}
+import models.core.pages.{FullName, InternationalAddress, UKAddress}
+import models.registration.pages.{AddABeneficiary, CharityOrTrust, WhatTypeOfBeneficiary}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 
@@ -40,6 +42,11 @@ trait ModelGenerators {
       Gen.oneOf(AddABeneficiary.values)
     }
 
+  implicit lazy val arbitraryCharityOrTrust: Arbitrary[CharityOrTrust] =
+    Arbitrary {
+      Gen.oneOf(CharityOrTrust.values.toSeq)
+    }
+
   implicit lazy val arbitraryUkAddress: Arbitrary[UKAddress] =
     Arbitrary {
       for {
@@ -49,6 +56,13 @@ trait ModelGenerators {
         line4 <- arbitrary[String]
         postcode <- arbitrary[String]
       } yield UKAddress(line1, line2, Some(line3), Some(line4), postcode)
+    }
+
+  implicit lazy val arbitraryInternationalAddress: Arbitrary[InternationalAddress] =
+    Arbitrary {
+      for {
+        str <- arbitrary[String]
+      } yield InternationalAddress(str,str,Some(str),str)
     }
 
   implicit lazy val arbitraryPassportOrIdCardDetails: Arbitrary[PassportOrIdCardDetails] =

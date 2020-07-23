@@ -16,11 +16,77 @@
 
 package generators
 
-import models._
+import models.core.pages.{FullName, InternationalAddress, UKAddress}
+import models.registration.pages.CharityOrTrust
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
-import pages._
+import pages.register.beneficiaries.charityortrust._
+import pages.register.beneficiaries.charityortrust.charity.{AddressInTheUkYesNoPage, AddressYesNoPage, AmountDiscretionYesNoPage, CharityAddressUKPage, CharityInternationalAddressPage, CharityNamePage, HowMuchIncomePage}
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
+
+  implicit lazy val arbitraryCharityInternationalAddressAnswersEntry: Arbitrary[(CharityInternationalAddressPage, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[CharityInternationalAddressPage]
+        value <- arbitrary[InternationalAddress].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryCharityAddressUKAnswersEntry: Arbitrary[(CharityAddressUKPage, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[CharityAddressUKPage]
+        value <- arbitrary[UKAddress].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryAddressInTheUkYesNoAnswersEntry: Arbitrary[(AddressInTheUkYesNoPage, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[AddressInTheUkYesNoPage]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryAddressYesNoAnswersEntry: Arbitrary[(AddressYesNoPage, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[AddressYesNoPage]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryHowMuchIncomeAnswersEntry: Arbitrary[(HowMuchIncomePage, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[HowMuchIncomePage]
+        value <- arbitrary[String].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryAmountDiscretionYesNoAnswersEntry: Arbitrary[(AmountDiscretionYesNoPage, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[AmountDiscretionYesNoPage]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryCharityNameUserAnswersEntry: Arbitrary[(CharityNamePage, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[CharityNamePage]
+        value <- arbitrary[FullName].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryCharityOrTrustUserAnswersEntry: Arbitrary[(CharityOrTrustPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[CharityOrTrustPage.type]
+        value <- arbitrary[CharityOrTrust].map(Json.toJson(_))
+      } yield (page, value)
+    }
 }

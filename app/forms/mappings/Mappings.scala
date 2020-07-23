@@ -42,6 +42,10 @@ trait Mappings extends Formatters with Constraints {
                               invalidKey: String = "error.invalid")(implicit ev: Enumerable[A]): FieldMapping[A] =
     of(enumerableFormatter[A](requiredKey, invalidKey))
 
+  protected def currency(requiredKey : String = "error.required",
+                         invalidKey : String = "error.invalid") : FieldMapping[String] =
+    of(currencyFormatter(requiredKey, invalidKey))
+
   protected def localDate(
                            invalidKey: String,
                            allRequiredKey: String,

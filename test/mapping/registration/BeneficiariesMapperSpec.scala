@@ -25,6 +25,7 @@ import models.core.pages.FullName
 import org.scalatest.{FreeSpec, MustMatchers, OptionValues}
 import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
 import pages.register.beneficiaries.individual._
+import pages.register.beneficiaries.charityortrust.charity
 
 class BeneficiariesMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {
@@ -107,6 +108,39 @@ class BeneficiariesMapperSpec extends SpecBase with MustMatchers
         result.individualDetails mustBe defined
         result.unidentified mustBe defined
         result.charity mustNot be(defined)
+        result.company mustNot be(defined)
+        result.trust mustNot be(defined)
+        result.large mustNot be(defined)
+        result.other mustNot be(defined)
+      }
+
+      "must be able to create BeneficiaryType when there is an individual beneficiary , class of beneficiary and charity beneficiary" in {
+
+        val index = 0
+        val classOfBeneficiaryIndex = 0
+        val charityBeneficiaryIndex = 0
+        val dateOfBirth = LocalDate.of(2010, 10, 10)
+
+        val userAnswers = emptyUserAnswers
+          .set(NamePage(index), FullName("first name", None, "last name")).success.value
+          .set(DateOfBirthYesNoPage(index), true).success.value
+          .set(DateOfBirthPage(index), dateOfBirth).success.value
+          .set(IncomeYesNoPage(index), false).success.value
+          .set(IncomePage(index), "100").success.value
+          .set(NationalInsuranceYesNoPage(index), true).success.value
+          .set(NationalInsuranceNumberPage(index), "AB123456C").success.value
+          .set(VulnerableYesNoPage(index), true).success.value
+          .set(ClassBeneficiaryDescriptionPage(classOfBeneficiaryIndex), "class of ben 1").success.value
+          .set(charity.CharityNamePage(charityBeneficiaryIndex), "Test").success.value
+          .set(charity.AmountDiscretionYesNoPage(charityBeneficiaryIndex), false).success.value
+          .set(charity.HowMuchIncomePage(charityBeneficiaryIndex), "1234").success.value
+          .set(charity.AddressYesNoPage(charityBeneficiaryIndex), false).success.value
+
+        val result = beneficiariesMapper.build(userAnswers).value
+
+        result.individualDetails mustBe defined
+        result.unidentified mustBe defined
+        result.charity mustBe defined
         result.company mustNot be(defined)
         result.trust mustNot be(defined)
         result.large mustNot be(defined)
