@@ -18,18 +18,18 @@ package navigation
 
 import base.SpecBase
 import config.FrontendAppConfig
+import controllers.register.beneficiaries.classofbeneficiaries.{routes => classOfBeneficiariesRoutes}
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRoutes}
 import controllers.register.beneficiaries.routes
 import generators.Generators
 import models.core.pages.FullName
-import models.registration.pages.KindOfTrust.Employees
 import models.registration.pages.{AddABeneficiary, WhatTypeOfBeneficiary}
 import models.{NormalMode, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.beneficiaries._
+import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
 import pages.register.beneficiaries.individual._
-import pages.register.settlors.living_settlor.trust_type.KindOfTrustPage
 import play.api.mvc.Call
 import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries}
 
@@ -103,10 +103,6 @@ class BeneficiaryNavigatorSpec {
     }
   }
 
-  val indexForBeneficiary = 0
-
-
-
   "go to feature not available when beneficiary option selected that is not available" in {
     forAll(arbitrary[UserAnswers]) {
       userAnswers =>
@@ -152,7 +148,7 @@ class BeneficiaryNavigatorSpec {
             val answers = userAnswers.set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.ClassOfBeneficiary).success.value
               .remove(ClassOfBeneficiaries).success.value
             navigator.nextPage(WhatTypeOfBeneficiaryPage, NormalMode, fakeDraftId, answers)
-              .mustBe(routes.ClassBeneficiaryDescriptionController.onPageLoad(NormalMode, 0, fakeDraftId))
+              .mustBe(classOfBeneficiariesRoutes.ClassBeneficiaryDescriptionController.onPageLoad(NormalMode, 0, fakeDraftId))
         }
       }
     }
@@ -165,19 +161,8 @@ class BeneficiaryNavigatorSpec {
           .set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.ClassOfBeneficiary).success.value
 
         navigator.nextPage(WhatTypeOfBeneficiaryPage, NormalMode, fakeDraftId, answers)
-          .mustBe(routes.ClassBeneficiaryDescriptionController.onPageLoad(NormalMode, 1, fakeDraftId))
+          .mustBe(classOfBeneficiariesRoutes.ClassBeneficiaryDescriptionController.onPageLoad(NormalMode, 1, fakeDraftId))
       }
-    }
-  }
-
-
-
-
-  "go to AddABeneficiaryPage from ClassBeneficiaryDescriptionPage" in {
-    forAll(arbitrary[UserAnswers]) {
-      userAnswers =>
-        navigator.nextPage(ClassBeneficiaryDescriptionPage(0), NormalMode, fakeDraftId, userAnswers)
-          .mustBe(routes.AddABeneficiaryController.onPageLoad(fakeDraftId))
     }
   }
 

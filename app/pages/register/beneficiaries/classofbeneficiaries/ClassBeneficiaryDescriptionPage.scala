@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.classOfBeneficiary
+package pages.register.beneficiaries.classofbeneficiaries
 
-import pages.{MetaData, QuestionPage}
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.beneficiaries.{Beneficiaries, ClassOfBeneficiaries}
 
-case class ClassOfBeneficiaryMetaData(index: Int) extends QuestionPage[MetaData]{
+final case class ClassBeneficiaryDescriptionPage(index: Int) extends QuestionPage[String] {
 
   override def path: JsPath = JsPath \ Beneficiaries \ ClassOfBeneficiaries \ index \ toString
 
-  override def toString: String = "metaData"
-
+  override def toString: String = "description"
 }

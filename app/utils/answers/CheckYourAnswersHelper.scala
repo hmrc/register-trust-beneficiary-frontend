@@ -18,7 +18,8 @@ package utils.answers
 
 import javax.inject.Inject
 import models.{NormalMode, UserAnswers}
-import pages.register.beneficiaries.{AddABeneficiaryPage, ClassBeneficiaryDescriptionPage}
+import pages.register.beneficiaries.AddABeneficiaryPage
+import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import sections.beneficiaries.ClassOfBeneficiaries
@@ -57,7 +58,7 @@ class CheckYourAnswersHelper @Inject()()
       AnswerRow(
         "classBeneficiaryDescription.checkYourAnswersLabel",
         HtmlFormat.escape(x),
-        Some(controllers.register.beneficiaries.routes.ClassBeneficiaryDescriptionController.onPageLoad(NormalMode, index, draftId).url),
+        Some(controllers.register.beneficiaries.classofbeneficiaries.routes.ClassBeneficiaryDescriptionController.onPageLoad(NormalMode, index, draftId).url),
         canEdit = canEdit
       )
   }

@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package views.register.beneficiaries
+package views.register.beneficiaries.classofbeneficiaries
 
 import forms.ClassBeneficiaryDescriptionFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.StringViewBehaviours
-import views.html.register.beneficiaries.ClassBeneficiaryDescriptionView
+import views.html.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionView
 
 class ClassBeneficiaryDescriptionViewSpec extends StringViewBehaviours {
 

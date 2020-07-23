@@ -20,7 +20,8 @@ import base.SpecBase
 import forms.WhatTypeOfBeneficiaryFormProvider
 import models.NormalMode
 import models.registration.pages.WhatTypeOfBeneficiary
-import pages.register.beneficiaries.{ClassBeneficiaryDescriptionPage, WhatTypeOfBeneficiaryPage}
+import pages.register.beneficiaries.WhatTypeOfBeneficiaryPage
+import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.WhatTypeOfBeneficiaryView

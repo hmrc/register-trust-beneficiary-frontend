@@ -17,19 +17,21 @@
 package navigation
 
 import config.FrontendAppConfig
-import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRoutes}
+import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRts}
+import controllers.register.beneficiaries.classofbeneficiaries.{routes => classOfBeneficiariesRts}
 import javax.inject.Inject
 import models.registration.pages.{AddABeneficiary, WhatTypeOfBeneficiary}
 import models.{Mode, NormalMode, ReadableUserAnswers}
 import pages.Page
-import pages.register.beneficiaries.{AddABeneficiaryPage, AddABeneficiaryYesNoPage, ClassBeneficiaryDescriptionPage, WhatTypeOfBeneficiaryPage}
+import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
+import pages.register.beneficiaries.{AddABeneficiaryPage, AddABeneficiaryYesNoPage, WhatTypeOfBeneficiaryPage}
 import play.api.mvc.Call
 import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries}
 
 class BeneficiaryNavigator @Inject()(config: FrontendAppConfig) extends Navigator {
 
   override def nextPage(page: Page, mode: Mode, draftId: String, userAnswers: ReadableUserAnswers): Call =
-    route(draftId, config)(page)(userAnswers)
+    nextPage(page, draftId, userAnswers)
 
   override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call =
     route(draftId, config)(page)(userAnswers)
@@ -38,7 +40,6 @@ class BeneficiaryNavigator @Inject()(config: FrontendAppConfig) extends Navigato
     case AddABeneficiaryPage => addABeneficiaryRoute(draftId, config)
     case AddABeneficiaryYesNoPage => addABeneficiaryYesNoRoute(draftId, config)
     case WhatTypeOfBeneficiaryPage => whatTypeOfBeneficiaryRoute(draftId)
-    case ClassBeneficiaryDescriptionPage(_) => _ => controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
   }
 
   private def assetsCompletedRoute(draftId: String, config: FrontendAppConfig) : Call = {
@@ -61,9 +62,9 @@ class BeneficiaryNavigator @Inject()(config: FrontendAppConfig) extends Navigato
     val indBeneficiaries = userAnswers.get(IndividualBeneficiaries).getOrElse(List.empty)
     indBeneficiaries match {
       case Nil =>
-        individualRoutes.NameController.onPageLoad(NormalMode, 0, draftId)
+        individualRts.NameController.onPageLoad(NormalMode, 0, draftId)
       case t if t.nonEmpty =>
-        individualRoutes.NameController.onPageLoad(NormalMode, t.size, draftId)
+        individualRts.NameController.onPageLoad(NormalMode, t.size, draftId)
     }
   }
 
@@ -71,9 +72,9 @@ class BeneficiaryNavigator @Inject()(config: FrontendAppConfig) extends Navigato
     val classOfBeneficiaries = userAnswers.get(ClassOfBeneficiaries).getOrElse(List.empty)
     classOfBeneficiaries match {
       case Nil =>
-        controllers.register.beneficiaries.routes.ClassBeneficiaryDescriptionController.onPageLoad(NormalMode, 0, draftId)
+        classOfBeneficiariesRts.ClassBeneficiaryDescriptionController.onPageLoad(NormalMode, 0, draftId)
       case t if t.nonEmpty =>
-        controllers.register.beneficiaries.routes.ClassBeneficiaryDescriptionController.onPageLoad(NormalMode, t.size, draftId)
+        classOfBeneficiariesRts.ClassBeneficiaryDescriptionController.onPageLoad(NormalMode, t.size, draftId)
     }
   }
 

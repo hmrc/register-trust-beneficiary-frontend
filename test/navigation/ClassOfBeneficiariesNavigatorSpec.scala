@@ -14,18 +14,23 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries
+package navigation
 
-import pages.behaviours.PageBehaviours
+import base.SpecBase
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages.register.beneficiaries.classofbeneficiaries._
 
-class ClassBeneficiaryDescriptionPageSpec extends PageBehaviours {
+class ClassOfBeneficiariesNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks {
 
-  "ClassBeneficiaryDescriptionPage" must {
+  val navigator = new ClassOfBeneficiariesNavigator
 
-    beRetrievable[String](ClassBeneficiaryDescriptionPage(0))
+  val index = 0
 
-    beSettable[String](ClassBeneficiaryDescriptionPage(0))
+  "Class of beneficiaries navigator" must {
 
-    beRemovable[String](ClassBeneficiaryDescriptionPage(0))
+    "Description page -> Add-to page" in {
+      navigator.nextPage(ClassBeneficiaryDescriptionPage(index), fakeDraftId, emptyUserAnswers)
+        .mustBe(controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId))
+    }
   }
 }

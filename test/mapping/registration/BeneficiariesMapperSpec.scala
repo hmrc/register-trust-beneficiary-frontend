@@ -23,7 +23,7 @@ import generators.Generators
 import mapping.Mapping
 import models.core.pages.FullName
 import org.scalatest.{FreeSpec, MustMatchers, OptionValues}
-import pages.register.beneficiaries.ClassBeneficiaryDescriptionPage
+import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
 import pages.register.beneficiaries.individual._
 
 class BeneficiariesMapperSpec extends SpecBase with MustMatchers

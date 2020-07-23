@@ -108,8 +108,8 @@ POST       /:draftId/individual/:index/is-address-in-uk                         
 GET        /:draftId/individual/:index/change-is-address-in-uk                        controllers.register.beneficiaries.individualBeneficiary.AddressUKYesNoController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
 POST       /:draftId/individual/:index/change-is-address-in-uk                        controllers.register.beneficiaries.individualBeneficiary.AddressUKYesNoController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
 
-GET        /:draftId/individual/:index/remove                                         controllers.register.beneficiaries.RemoveIndividualBeneficiaryController.onPageLoad(index: Int, draftId: String)
-POST       /:draftId/individual/:index/remove                                         controllers.register.beneficiaries.RemoveIndividualBeneficiaryController.onSubmit(index: Int, draftId: String)
+GET        /:draftId/individual/:index/remove                                         controllers.register.beneficiaries.individualBeneficiary.RemoveIndividualBeneficiaryController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/individual/:index/remove                                         controllers.register.beneficiaries.individualBeneficiary.RemoveIndividualBeneficiaryController.onSubmit(index: Int, draftId: String)
 
 # trust
 
@@ -139,13 +139,13 @@ POST       /:draftId/trust/:index/check-answers                                 
 
 ###
 
-GET        /:draftId/class/:index/description                                         controllers.register.beneficiaries.ClassBeneficiaryDescriptionController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
-POST       /:draftId/class/:index/description                                         controllers.register.beneficiaries.ClassBeneficiaryDescriptionController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
-GET        /:draftId/class/:index/change-description                                  controllers.register.beneficiaries.ClassBeneficiaryDescriptionController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
-POST       /:draftId/class/:index/change-description                                  controllers.register.beneficiaries.ClassBeneficiaryDescriptionController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
+GET        /:draftId/class/:index/description                                         controllers.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
+POST       /:draftId/class/:index/description                                         controllers.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
+GET        /:draftId/class/:index/change-description                                  controllers.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
+POST       /:draftId/class/:index/change-description                                  controllers.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
 
-GET        /:draftId/class/:index/remove                                              controllers.register.beneficiaries.RemoveClassOfBeneficiaryController.onPageLoad(index: Int, draftId: String)
-POST       /:draftId/class/:index/remove                                              controllers.register.beneficiaries.RemoveClassOfBeneficiaryController.onSubmit(index: Int, draftId: String)
+GET        /:draftId/class/:index/remove                                              controllers.register.beneficiaries.classofbeneficiaries.RemoveClassOfBeneficiaryController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/class/:index/remove                                              controllers.register.beneficiaries.classofbeneficiaries.RemoveClassOfBeneficiaryController.onSubmit(index: Int, draftId: String)
 
 GET        /:draftId/what-type                                                        controllers.register.beneficiaries.WhatTypeOfBeneficiaryController.onPageLoad(mode: Mode = NormalMode, draftId: String)
 POST       /:draftId/what-type                                                        controllers.register.beneficiaries.WhatTypeOfBeneficiaryController.onSubmit(mode: Mode = NormalMode, draftId: String)

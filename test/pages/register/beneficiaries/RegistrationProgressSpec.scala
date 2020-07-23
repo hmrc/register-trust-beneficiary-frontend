@@ -21,6 +21,7 @@ import models.core.pages.FullName
 import models.registration.pages._
 import models.{Status, UserAnswers}
 import pages.entitystatus._
+import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
 import pages.register.beneficiaries.individual.NamePage
 import play.api.libs.json.{JsObject, Json}
 import utils.RegistrationProgress

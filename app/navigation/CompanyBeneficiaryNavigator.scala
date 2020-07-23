@@ -54,11 +54,11 @@ class CompanyBeneficiaryNavigator extends Navigator {
         rts.NonUkAddressController.onPageLoad(index, draftId))
   }
 
-  def checkDetailsRoute(index: Int, draftId: String) : Call = {
+  private def checkDetailsRoute(index: Int, draftId: String) : Call = {
       controllers.routes.SessionExpiredController.onPageLoad()
   }
 
-  def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
+  private def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     simpleNavigation(draftId) andThen (c => (_:ReadableUserAnswers) => c) orElse
       yesNoNavigation(draftId)
   }
