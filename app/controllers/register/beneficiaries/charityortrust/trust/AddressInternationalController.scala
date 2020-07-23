@@ -16,6 +16,7 @@
 
 package controllers.register.beneficiaries.charityortrust.trust
 
+import config.annotations.TrustBeneficiary
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
 import controllers.filters.IndexActionFilterProvider
@@ -37,7 +38,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AddressInternationalController @Inject()(
                                                 override val messagesApi: MessagesApi,
                                                 registrationsRepository: RegistrationsRepository,
-                                                navigator: Navigator,
+                                                @TrustBeneficiary navigator: Navigator,
                                                 identify: RegistrationIdentifierAction,
                                                 getData: DraftIdRetrievalActionProvider,
                                                 validateIndex: IndexActionFilterProvider,

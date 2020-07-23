@@ -17,10 +17,13 @@
 package controllers.register.beneficiaries.individualBeneficiary
 
 import base.SpecBase
+import config.annotations.IndividualBeneficiary
 import forms.YesNoFormProvider
 import models.NormalMode
 import models.core.pages.FullName
+import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.individual.{DateOfBirthYesNoPage, NamePage}
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.individualBeneficiary.DateOfBirthYesNoView
@@ -84,7 +87,10 @@ class DateOfBirthYesNoControllerSpec extends SpecBase {
       val userAnswers = emptyUserAnswers.set(NamePage(index),
         name).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(
+          bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
+        ).build()
 
       val request =
         FakeRequest(POST, individualBeneficiaryDateOfBirthYesNoRoute)

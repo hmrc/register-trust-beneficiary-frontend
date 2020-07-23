@@ -16,6 +16,7 @@
 
 package controllers.register.beneficiaries.individualBeneficiary
 
+import config.annotations.IndividualBeneficiary
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
 import controllers.filters.IndexActionFilterProvider
@@ -38,7 +39,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AddressInternationalController @Inject()(
                                                 override val messagesApi: MessagesApi,
                                                 registrationsRepository: RegistrationsRepository,
-                                                navigator: Navigator,
+                                                @IndividualBeneficiary navigator: Navigator,
                                                 identify: RegistrationIdentifierAction,
                                                 getData: DraftIdRetrievalActionProvider,
                                                 validateIndex: IndexActionFilterProvider,

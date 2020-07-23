@@ -16,6 +16,7 @@
 
 package controllers.register.beneficiaries.individualBeneficiary
 
+import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import javax.inject.Inject
@@ -39,7 +40,7 @@ class AnswersController @Inject()(
                                    override val messagesApi: MessagesApi,
                                    registrationsRepository: RegistrationsRepository,
                                    identify: RegistrationIdentifierAction,
-                                   navigator: Navigator,
+                                   @IndividualBeneficiary navigator: Navigator,
                                    getData: DraftIdRetrievalActionProvider,
                                    requireData: RegistrationDataRequiredAction,
                                    val controllerComponents: MessagesControllerComponents,

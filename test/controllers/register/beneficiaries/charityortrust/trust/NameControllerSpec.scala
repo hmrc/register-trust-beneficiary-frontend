@@ -17,8 +17,11 @@
 package controllers.register.beneficiaries.charityortrust.trust
 
 import base.SpecBase
+import config.annotations.TrustBeneficiary
 import forms.StringFormProvider
+import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.trust.NamePage
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.charityortrust.trust.NameView
@@ -75,7 +78,10 @@ class NameControllerSpec extends SpecBase {
 
     "redirect to the next page when valid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(new FakeNavigator)
+        ).build()
 
         val request =
           FakeRequest(POST, trustBeneficiaryNameRoute)

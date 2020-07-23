@@ -17,22 +17,16 @@
 package navigation
 
 import base.SpecBase
-import config.FrontendAppConfig
 import controllers.register.beneficiaries.companyoremploymentrelated.company.{routes => CompanyRoutes}
 import generators.Generators
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.beneficiaries.company._
-import play.api.mvc.Call
 
 class CompanyBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
-  private def assetsCompletedRoute(draftId: String, config: FrontendAppConfig): Call = {
-    Call("GET", config.registrationProgressUrl(draftId))
-  }
-
-  val navigator = new CompanyBeneficiaryNavigator(frontendAppConfig)
+  val navigator = new CompanyBeneficiaryNavigator
   val index = 0
 
   "Company beneficiary navigator" must {

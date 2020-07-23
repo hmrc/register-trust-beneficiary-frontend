@@ -17,13 +17,15 @@
 package controllers.register.beneficiaries.individualBeneficiary
 
 import base.SpecBase
+import config.annotations.IndividualBeneficiary
 import forms.InternationalAddressFormProvider
-import models.core.pages.InternationalAddress
-import models.core.pages.FullName
+import models.core.pages.{FullName, InternationalAddress}
 import models.{NormalMode, UserAnswers}
+import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.individual.{AddressInternationalPage, NamePage}
 import play.api.Application
 import play.api.data.Form
+import play.api.inject.bind
 import play.api.mvc.{Call, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -104,7 +106,10 @@ class AddressInternationalControllerSpec extends SpecBase {
         .set(AddressInternationalPage(index), InternationalAddress("line 1", "line 2", Some("line 3"), "country")).success.value
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
+          ).build()
 
       val request =
         FakeRequest(POST, addressInternationalRoute)

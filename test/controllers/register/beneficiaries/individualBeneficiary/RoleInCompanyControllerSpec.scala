@@ -17,20 +17,21 @@
 package controllers.register.beneficiaries.individualBeneficiary
 
 import base.SpecBase
+import config.annotations.IndividualBeneficiary
 import forms.RoleInCompanyFormProvider
 import models.NormalMode
 import models.core.pages.FullName
 import models.registration.pages.RoleInCompany.Director
+import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.individual.{NamePage, RoleInCompanyPage}
+import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.individualBeneficiary.RoleInCompanyView
 
 class RoleInCompanyControllerSpec extends SpecBase with MockitoSugar {
-
-  def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new RoleInCompanyFormProvider()
   val form = formProvider()
@@ -39,7 +40,10 @@ class RoleInCompanyControllerSpec extends SpecBase with MockitoSugar {
 
   val userAnswers = emptyUserAnswers.set(NamePage(index), name).success.value
 
-  def application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+  def application = applicationBuilder(userAnswers = Some(userAnswers))
+    .overrides(
+      bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
+    ).build()
 
   lazy val roleInCompanyControllerRoute = routes.RoleInCompanyController.onPageLoad(NormalMode, index, draftId).url
 
@@ -93,7 +97,7 @@ class RoleInCompanyControllerSpec extends SpecBase with MockitoSugar {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual onwardRoute.url
+      redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
       application.stop()
     }

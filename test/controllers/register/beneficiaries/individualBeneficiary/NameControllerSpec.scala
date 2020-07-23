@@ -17,12 +17,15 @@
 package controllers.register.beneficiaries.individualBeneficiary
 
 import base.SpecBase
+import config.annotations.IndividualBeneficiary
 import forms.IndividualBeneficiaryNameFormProvider
 import models.{NormalMode, ReadOnlyUserAnswers}
 import models.core.pages.FullName
+import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import pages.register.beneficiaries.individual.NamePage
+import play.api.inject.bind
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -87,7 +90,10 @@ class NameControllerSpec extends SpecBase {
         when(registrationsRepository.getMainAnswers(any())(any()))
           .thenReturn(Future.successful(Some(ReadOnlyUserAnswers(Json.obj()))))
 
-        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
+          ).build()
 
         val request =
           FakeRequest(POST, individualBeneficiaryNameRoute)
@@ -106,7 +112,10 @@ class NameControllerSpec extends SpecBase {
         when(registrationsRepository.getMainAnswers(any())(any()))
           .thenReturn(Future.successful(None))
 
-        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
+          ).build()
 
         val request =
           FakeRequest(POST, individualBeneficiaryNameRoute)
