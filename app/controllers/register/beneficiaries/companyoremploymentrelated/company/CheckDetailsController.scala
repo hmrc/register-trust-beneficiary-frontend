@@ -25,7 +25,7 @@ import models.NormalMode
 import models.Status.Completed
 import navigation.Navigator
 import pages.entitystatus.CompanyBeneficiaryStatus
-import pages.register.beneficiaries.individual.AnswersPage
+import pages.register.beneficiaries.AnswersPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
