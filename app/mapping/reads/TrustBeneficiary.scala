@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-package sections.beneficiaries
+package mapping.reads
 
-import pages.QuestionPage
-import play.api.libs.json.{JsArray, JsPath}
-import viewmodels.addAnother.TrustBeneficiaryViewModel
+import models.core.pages.Address
+import play.api.libs.json.{Format, Json}
 
-case object TrustBeneficiaries extends QuestionPage[List[TrustBeneficiaryViewModel]]{
 
-  override def path: JsPath = JsPath \ Beneficiaries \ toString
+final case class TrustBeneficiary(name: String,
+                                  discretionYesNo: Boolean,
+                                  shareOfIncome: Option[Int],
+                                  address : Option[Address]
+                                 )
 
-  override def toString: String = "trustBeneficiaries"
 
+object TrustBeneficiary {
+  implicit val format: Format[TrustBeneficiary] = Json.format[TrustBeneficiary]
 }
+

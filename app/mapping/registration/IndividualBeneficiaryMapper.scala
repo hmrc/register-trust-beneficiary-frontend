@@ -25,6 +25,7 @@ import models.registration.pages.PassportOrIdCardDetails
 class IndividualBeneficiaryMapper @Inject()(nameMapper: NameMapper,
                                             addressMapper: AddressMapper) extends Mapping[List[IndividualDetailsType]] {
   override def build(userAnswers: UserAnswers): Option[List[IndividualDetailsType]] = {
+
     val individualBeneficiaries : List[mapping.reads.IndividualBeneficiary] =
       userAnswers.get(mapping.reads.IndividualBeneficiaries).getOrElse(List.empty)
 
