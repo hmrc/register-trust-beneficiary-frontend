@@ -20,6 +20,7 @@ import base.SpecBase
 import config.FrontendAppConfig
 import controllers.register.beneficiaries.routes
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRoutes}
+import controllers.register.beneficiaries.companyoremploymentrelated.{routes => companyOrEmploymentRelatedRoutes}
 import generators.Generators
 import models.{NormalMode, UserAnswers}
 import models.core.pages.FullName
@@ -342,13 +343,25 @@ trait BeneficiaryRoutes {
               .mustBe(individualRoutes.NameController.onPageLoad(NormalMode, 0, fakeDraftId))
         }
       }
+    }
 
+    "there are no Individual Beneficiaries" must {
+
+      "go to CompanyOrEmploymentRelated from WhatTypeOfBeneficiaryPage when CompanyOrEmploymentRelated option selected" in {
+        forAll(arbitrary[UserAnswers]) {
+          userAnswers =>
+            val answers = userAnswers.set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.CompanyOrEmployment).success.value
+              .remove(IndividualBeneficiaries).success.value
+            navigator.nextPage(WhatTypeOfBeneficiaryPage, NormalMode, fakeDraftId)(answers)
+              .mustBe(companyOrEmploymentRelatedRoutes.CompanyOrEmploymentRelatedController.onPageLoad(fakeDraftId))
+        }
+      }
     }
 
     "go to feature not available when beneficiary option selected that is not available" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
-          val answers = userAnswers.set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.CompanyOrEmployment).success.value
+          val answers = userAnswers.set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.Other).success.value
           navigator.nextPage(WhatTypeOfBeneficiaryPage, NormalMode, fakeDraftId)(answers)
             .mustBe(controllers.routes.FeatureNotAvailableController.onPageLoad())
       }
