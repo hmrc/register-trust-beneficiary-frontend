@@ -17,10 +17,13 @@
 package controllers.register.beneficiaries.charityortrust.charity
 
 import base.SpecBase
+import config.annotations.CharityBeneficiary
 import forms.UKAddressFormProvider
 import models.NormalMode
 import models.core.pages.UKAddress
+import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.charityortrust.charity.{CharityAddressUKPage, CharityNamePage}
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.charityortrust.charity.CharityAddressUKView
@@ -86,7 +89,10 @@ class CharityAddressUKControllerSpec extends SpecBase {
         .set(CharityNamePage(index), "Test").success.value
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[CharityBeneficiary]).toInstance(new FakeNavigator)
+          ).build()
 
       val request =
         FakeRequest(POST, charityAddressUKAddressUKRoute)

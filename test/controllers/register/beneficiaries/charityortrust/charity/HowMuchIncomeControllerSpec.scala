@@ -17,10 +17,13 @@
 package controllers.register.beneficiaries.charityortrust.charity
 
 import base.SpecBase
+import config.annotations.CharityBeneficiary
 import forms.ShareOfIncomeFormProvider
 import models.NormalMode
+import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.charityortrust.charity.{CharityNamePage, HowMuchIncomePage}
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
 import views.html.register.beneficiaries.charityortrust.charity.HowMuchIncomeView
@@ -99,7 +102,10 @@ class HowMuchIncomeControllerSpec extends SpecBase with MockitoSugar {
         .set(CharityNamePage(index), "Test").success.value
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[CharityBeneficiary]).toInstance(new FakeNavigator)
+          ).build()
 
       val request =
         FakeRequest(POST, howMuchIncomeRoute)

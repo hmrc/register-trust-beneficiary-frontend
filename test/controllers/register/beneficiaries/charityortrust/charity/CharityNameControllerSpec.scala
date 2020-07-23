@@ -17,12 +17,15 @@
 package controllers.register.beneficiaries.charityortrust.charity
 
 import base.SpecBase
+import config.annotations.CharityBeneficiary
 import forms.StringFormProvider
 import models.{NormalMode, ReadOnlyUserAnswers}
+import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
+import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -89,7 +92,10 @@ class CharityNameControllerSpec extends SpecBase with MockitoSugar {
       when(registrationsRepository.getMainAnswers(any())(any()))
         .thenReturn(Future.successful(Some(ReadOnlyUserAnswers(Json.obj()))))
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[Navigator].qualifiedWith(classOf[CharityBeneficiary]).toInstance(new FakeNavigator)
+        ).build()
 
       val request =
         FakeRequest(POST, charityNameRoute)

@@ -16,6 +16,7 @@
 
 package controllers.register.beneficiaries.charityortrust.charity
 
+import config.annotations.CharityBeneficiary
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
 import forms.YesNoFormProvider
@@ -35,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AmountDiscretionYesNoController @Inject()(
                                                  override val messagesApi: MessagesApi,
                                                  registrationsRepository: RegistrationsRepository,
-                                                 navigator: Navigator,
+                                                 @CharityBeneficiary navigator: Navigator,
                                                  identify: RegistrationIdentifierAction,
                                                  getData: DraftIdRetrievalActionProvider,
                                                  requireData: RegistrationDataRequiredAction,

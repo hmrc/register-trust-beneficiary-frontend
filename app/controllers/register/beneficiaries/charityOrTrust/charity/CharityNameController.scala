@@ -16,6 +16,7 @@
 
 package controllers.register.beneficiaries.charityortrust.charity
 
+import config.annotations.CharityBeneficiary
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.StringFormProvider
 import javax.inject.Inject
@@ -34,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class CharityNameController @Inject()(
                                        override val messagesApi: MessagesApi,
                                        registrationsRepository: RegistrationsRepository,
-                                       navigator: Navigator,
+                                       @CharityBeneficiary navigator: Navigator,
                                        identify: RegistrationIdentifierAction,
                                        getData: DraftIdRetrievalActionProvider,
                                        requireData: RegistrationDataRequiredAction,

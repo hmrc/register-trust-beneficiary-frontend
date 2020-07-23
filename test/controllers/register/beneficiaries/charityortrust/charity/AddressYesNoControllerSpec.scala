@@ -17,10 +17,13 @@
 package controllers.register.beneficiaries.charityortrust.charity
 
 import base.SpecBase
+import config.annotations.CharityBeneficiary
 import forms.YesNoFormProvider
 import models.NormalMode
+import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.charityortrust.charity.{AddressYesNoPage, CharityNamePage}
+import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -102,7 +105,10 @@ class AddressYesNoControllerSpec extends SpecBase with MockitoSugar {
       val userAnswers = emptyUserAnswers
         .set(CharityNamePage(index), "Test").success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(
+          bind[Navigator].qualifiedWith(classOf[CharityBeneficiary]).toInstance(new FakeNavigator)
+        ).build()
 
       val request =
         FakeRequest(POST, addressYesNo)

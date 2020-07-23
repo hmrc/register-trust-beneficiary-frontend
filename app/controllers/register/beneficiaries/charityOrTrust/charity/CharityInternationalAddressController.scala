@@ -16,6 +16,7 @@
 
 package controllers.register.beneficiaries.charityortrust.charity
 
+import config.annotations.CharityBeneficiary
 import controllers.actions._
 import controllers.actions.register._
 import forms.InternationalAddressFormProvider
@@ -37,7 +38,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class CharityInternationalAddressController @Inject()(
                                                        override val messagesApi: MessagesApi,
                                                        registrationsRepository: RegistrationsRepository,
-                                                       navigator: Navigator,
+                                                       @CharityBeneficiary navigator: Navigator,
                                                        identify: RegistrationIdentifierAction,
                                                        getData: DraftIdRetrievalActionProvider,
                                                        requireData: RegistrationDataRequiredAction,
