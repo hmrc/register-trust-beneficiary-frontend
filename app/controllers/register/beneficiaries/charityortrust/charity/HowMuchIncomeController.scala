@@ -19,7 +19,7 @@ package controllers.register.beneficiaries.charityortrust.charity
 import config.annotations.CharityBeneficiary
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
-import forms.ShareOfIncomeFormProvider
+import forms.IncomePercentageFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.beneficiaries.charityortrust.charity.{CharityNamePage, HowMuchIncomePage}
@@ -40,12 +40,12 @@ class HowMuchIncomeController @Inject()(
                                          getData: DraftIdRetrievalActionProvider,
                                          requireData: RegistrationDataRequiredAction,
                                          requiredAnswer: RequiredAnswerActionProvider,
-                                         formProvider: ShareOfIncomeFormProvider,
+                                         formProvider: IncomePercentageFormProvider,
                                          val controllerComponents: MessagesControllerComponents,
                                          view: HowMuchIncomeView)
                                        (implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form: Form[String] = formProvider.withPrefix("charity.shareOfIncome")
+  private val form: Form[Int] = formProvider.withPrefix("charity.shareOfIncome")
 
   private def actions(draftId: String, index: Int) =
     identify andThen

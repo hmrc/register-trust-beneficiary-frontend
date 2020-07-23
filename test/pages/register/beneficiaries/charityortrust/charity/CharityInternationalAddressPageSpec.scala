@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package forms
+package pages.register.beneficiaries.charityortrust.charity
 
-import forms.mappings.Mappings
-import javax.inject.Inject
-import play.api.data.Form
+import models.core.pages.InternationalAddress
+import pages.behaviours.PageBehaviours
 
-class IndividualBeneficiaryNationalInsuranceNumberFormProvider @Inject() extends Mappings {
+class CharityInternationalAddressPageSpec extends PageBehaviours {
 
-  def apply(): Form[String] =
-    Form("value" -> nino("individualBeneficiaryNationalInsuranceNumber.error.required")
-      .verifying(
-        firstError(
-          isNotEmpty("value", "individualBeneficiaryNationalInsuranceNumber.error.required"),
-          isNinoValid("value", "individualBeneficiaryNationalInsuranceNumber.error.invalid")
+  "CharityInternationalAddress" must {
 
-    )))
+    beRetrievable[InternationalAddress](CharityInternationalAddressPage(0))
+
+    beSettable[InternationalAddress](CharityInternationalAddressPage(0))
+
+    beRemovable[InternationalAddress](CharityInternationalAddressPage(0))
+  }
 }

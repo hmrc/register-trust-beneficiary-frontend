@@ -14,20 +14,18 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.charityortrust
+package pages.register.beneficiaries.charityortrust.charity
 
-import models.core.pages.InternationalAddress
 import pages.behaviours.PageBehaviours
-import pages.register.beneficiaries.charityortrust.charity.CharityInternationalAddressPage
 
-class CharityInternationalAddressPageSpec extends PageBehaviours {
+class CharityNamePageSpec extends PageBehaviours {
 
-  "CharityInternationalAddress" must {
+  "CharityNamePage" must {
 
-    beRetrievable[InternationalAddress](CharityInternationalAddressPage(0))
+    beRetrievable[String](CharityNamePage(0))
 
-    beSettable[InternationalAddress](CharityInternationalAddressPage(0))
+    beSettable[String](CharityNamePage(0))
 
-    beRemovable[InternationalAddress](CharityInternationalAddressPage(0))
+    beRemovable[String](CharityNamePage(0))
   }
 }

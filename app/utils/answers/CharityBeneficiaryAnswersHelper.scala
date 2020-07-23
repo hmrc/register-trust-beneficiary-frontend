@@ -25,7 +25,7 @@ import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import utils.answers.CheckAnswersFormatters._
 import utils.countryOptions.CountryOptions
-import viewmodels.{AnswerRow}
+import viewmodels.AnswerRow
 
 class CharityBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
                                                (userAnswers: UserAnswers,
@@ -36,7 +36,7 @@ class CharityBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
 
   def charityBeneficiaryRows(index: Int): Seq[AnswerRow] = {
     Seq(
-      charityortrust,
+      charityOrTrust,
       charityName(index),
       amountDiscretionYesNo(index),
       howMuchIncome(index),
@@ -47,10 +47,10 @@ class CharityBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
     ).flatten
   }
 
-  def charityortrust: Option[AnswerRow] = userAnswers.get(CharityOrTrustPage) map {
+  def charityOrTrust: Option[AnswerRow] = userAnswers.get(CharityOrTrustPage) map {
     x =>
       AnswerRow(
-        "charityortrust.checkYourAnswersLabel",
+        "charityOrTrust.checkYourAnswersLabel",
         formatCharityOrTrust(x),
         Some(controllers.register.beneficiaries.charityortrust.routes.CharityOrTrustController.onPageLoad(NormalMode, draftId).url),
         canEdit = canEdit
@@ -93,7 +93,7 @@ class CharityBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
     x =>
       AnswerRow(
         "charity.shareOfIncome.checkYourAnswersLabel",
-        currency(x),
+        percentage(x.toString),
         Some(HowMuchIncomeController.onPageLoad(index, draftId).url),
         canEdit = canEdit
       )

@@ -20,14 +20,14 @@ import java.time.{LocalDate, ZoneOffset}
 
 import base.FakeTrustsApp
 import forms.behaviours.DateBehaviours
-import play.api.data.FormError
+import play.api.data.{Form, FormError}
 
 class DateOfBirthFormProviderSpec extends DateBehaviours with FakeTrustsApp {
 
   val messagePrefix = "dateOfBirth"
-  val form = new DateOfBirthFormProvider(frontendAppConfig)()
+  val form: Form[LocalDate] = new DateOfBirthFormProvider(frontendAppConfig).withPrefix(messagePrefix)
 
-  private val min = LocalDate.of(1500, 1, 1)
+  private val min = frontendAppConfig.minDate
   private val max = LocalDate.now(ZoneOffset.UTC)
 
   ".value" should {
@@ -39,16 +39,16 @@ class DateOfBirthFormProviderSpec extends DateBehaviours with FakeTrustsApp {
 
     behave like dateField(form, "value", validData)
 
-    behave like mandatoryDateField(form, "value", "dateOfBirth.error.required.all")
+    behave like mandatoryDateField(form, "value", s"$messagePrefix.error.required.all")
 
     behave like dateFieldWithMax(form, "value",
       max = max,
-      FormError("value", "dateOfBirth.error.future", List("day", "month", "year"))
+      FormError("value", s"$messagePrefix.error.future", List("day", "month", "year"))
     )
 
     behave like dateFieldWithMin(form, "value",
       min = min,
-      FormError("value", "dateOfBirth.error.past", List("day", "month", "year"))
+      FormError("value", s"$messagePrefix.error.past", List("day", "month", "year"))
     )
 
   }

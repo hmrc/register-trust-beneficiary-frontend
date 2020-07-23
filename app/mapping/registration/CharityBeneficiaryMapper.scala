@@ -21,7 +21,7 @@ import mapping.Mapping
 import mapping.reads.CharityBeneficiary
 import models.UserAnswers
 
-class CharityOrTrustMapper @Inject()(addressMapper: AddressMapper) extends Mapping[List[CharityType]] {
+class CharityBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapping[List[CharityType]] {
 
   override def build(userAnswers: UserAnswers): Option[List[CharityType]] = {
 
@@ -36,7 +36,7 @@ class CharityOrTrustMapper @Inject()(addressMapper: AddressMapper) extends Mappi
             CharityType(
               organisationName = charBen.name,
               beneficiaryDiscretion = Some(charBen.howMuchIncome.isEmpty),
-              beneficiaryShareOfIncome = charBen.howMuchIncome,
+              beneficiaryShareOfIncome = charBen.howMuchIncome.map(_.toString),
               identification = identificationMap(charBen))
           }
         )

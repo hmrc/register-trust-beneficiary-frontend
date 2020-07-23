@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.charityortrust
+package forms
 
-import models.core.pages.FullName
-import pages.behaviours.PageBehaviours
-import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-class CharityNamePageSpec extends PageBehaviours {
+class NationalInsuranceNumberFormProvider @Inject() extends Mappings {
 
-  "CharityNamePage" must {
+  def withPrefix(prefix: String): Form[String] =
+    Form("value" -> nino(s"$prefix.error.required")
+      .verifying(
+        firstError(
+          isNotEmpty("value", s"$prefix.error.required"),
+          isNinoValid("value", s"$prefix.error.invalid")
 
-    beRetrievable[String](CharityNamePage(0))
-
-    beSettable[String](CharityNamePage(0))
-
-    beRemovable[String](CharityNamePage(0))
-  }
+    )))
 }

@@ -16,7 +16,7 @@
 
 package views.register.beneficiaries.individualBeneficiary
 
-import forms.IndividualBeneficiaryNationalInsuranceNumberFormProvider
+import forms.NationalInsuranceNumberFormProvider
 import models.core.pages.FullName
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -30,7 +30,8 @@ class NationalInsuranceNumberViewSpec extends StringViewBehaviours {
   val fullName: FullName = FullName("First", None, "Last")
   val name: String = fullName.toString
 
-  val form = new IndividualBeneficiaryNationalInsuranceNumberFormProvider()()
+  val form: Form[String] =
+    new NationalInsuranceNumberFormProvider().withPrefix("individualBeneficiaryNationalInsuranceNumber")
 
   "IndividualBeneficiaryNationalInsuranceNumberView view" must {
 

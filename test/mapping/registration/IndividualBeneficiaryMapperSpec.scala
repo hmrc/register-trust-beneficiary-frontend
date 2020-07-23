@@ -58,7 +58,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
               .set(DateOfBirthYesNoPage(index0), true).success.value
               .set(DateOfBirthPage(index0), dateOfBirth).success.value
               .set(IncomeYesNoPage(index0), false).success.value
-              .set(IncomePage(index0), "100").success.value
+              .set(IncomePage(index0), 100).success.value
               .set(NationalInsuranceYesNoPage(index0), true).success.value
               .set(NationalInsuranceNumberPage(index0), "AB123456C").success.value
               .set(VulnerableYesNoPage(index0), true).success.value
@@ -84,7 +84,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
               .set(DateOfBirthYesNoPage(index0), true).success.value
               .set(DateOfBirthPage(index0), dateOfBirth).success.value
               .set(IncomeYesNoPage(index0), false).success.value
-              .set(IncomePage(index0), "100").success.value
+              .set(IncomePage(index0), 100).success.value
               .set(RoleInCompanyPage(index0), Director).success.value
               .set(VulnerableYesNoPage(index0), true).success.value
 
@@ -228,7 +228,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
             .set(DateOfBirthYesNoPage(index0), true).success.value
             .set(DateOfBirthPage(index0), dateOfBirth).success.value
             .set(IncomeYesNoPage(index0), false).success.value
-            .set(IncomePage(index0), "100").success.value
+            .set(IncomePage(index0), 100).success.value
             .set(NationalInsuranceYesNoPage(index0), true).success.value
             .set(NationalInsuranceNumberPage(index0), "AB123456C").success.value
             .set(VulnerableYesNoPage(index0), true).success.value
@@ -237,7 +237,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
             .set(DateOfBirthYesNoPage(index1), true).success.value
             .set(DateOfBirthPage(index1), dateOfBirth).success.value
             .set(IncomeYesNoPage(index1), false).success.value
-            .set(IncomePage(index1), "100").success.value
+            .set(IncomePage(index1), 100).success.value
             .set(NationalInsuranceYesNoPage(index1), false).success.value
             .set(VulnerableYesNoPage(index1), false).success.value
             .set(AddressYesNoPage(index1), true).success.value

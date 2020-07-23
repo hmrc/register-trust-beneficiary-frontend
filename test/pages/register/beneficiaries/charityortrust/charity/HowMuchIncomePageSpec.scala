@@ -14,22 +14,18 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.charityortrust
+package pages.register.beneficiaries.charityortrust.charity
 
-import models.UserAnswers
-import models.core.pages.UKAddress
-import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-import pages.register.beneficiaries.charityortrust.charity.CharityAddressUKPage
 
-class CharityAddressUKPageSpec extends PageBehaviours {
+class HowMuchIncomePageSpec extends PageBehaviours {
 
-  "CharityAddressUk" must {
+  "CharityOrTrustPage" must {
 
-    beRetrievable[UKAddress](CharityAddressUKPage(0))
+    beRetrievable[Int](HowMuchIncomePage(0))
 
-    beSettable[UKAddress](CharityAddressUKPage(0))
+    beSettable[Int](HowMuchIncomePage(0))
 
-    beRemovable[UKAddress](CharityAddressUKPage(0))
+    beRemovable[Int](HowMuchIncomePage(0))
   }
- }
+}

@@ -55,7 +55,7 @@ class BeneficiariesMapperSpec extends SpecBase with MustMatchers
           .set(DateOfBirthYesNoPage(index), true).success.value
           .set(DateOfBirthPage(index), dateOfBirth).success.value
           .set(IncomeYesNoPage(index), false).success.value
-          .set(IncomePage(index), "100").success.value
+          .set(IncomePage(index), 100).success.value
 
         beneficiariesMapper.build(userAnswers) mustNot be(defined)
       }
@@ -70,7 +70,7 @@ class BeneficiariesMapperSpec extends SpecBase with MustMatchers
           .set(DateOfBirthYesNoPage(index), true).success.value
           .set(DateOfBirthPage(index), dateOfBirth).success.value
           .set(IncomeYesNoPage(index), false).success.value
-          .set(IncomePage(index), "100").success.value
+          .set(IncomePage(index), 100).success.value
           .set(NationalInsuranceYesNoPage(index), true).success.value
           .set(NationalInsuranceNumberPage(index), "AB123456C").success.value
           .set(VulnerableYesNoPage(index), true).success.value
@@ -97,7 +97,7 @@ class BeneficiariesMapperSpec extends SpecBase with MustMatchers
           .set(DateOfBirthYesNoPage(index), true).success.value
           .set(DateOfBirthPage(index), dateOfBirth).success.value
           .set(IncomeYesNoPage(index), false).success.value
-          .set(IncomePage(index), "100").success.value
+          .set(IncomePage(index), 100).success.value
           .set(NationalInsuranceYesNoPage(index), true).success.value
           .set(NationalInsuranceNumberPage(index), "AB123456C").success.value
           .set(VulnerableYesNoPage(index), true).success.value
@@ -126,14 +126,14 @@ class BeneficiariesMapperSpec extends SpecBase with MustMatchers
           .set(DateOfBirthYesNoPage(index), true).success.value
           .set(DateOfBirthPage(index), dateOfBirth).success.value
           .set(IncomeYesNoPage(index), false).success.value
-          .set(IncomePage(index), "100").success.value
+          .set(IncomePage(index), 100).success.value
           .set(NationalInsuranceYesNoPage(index), true).success.value
           .set(NationalInsuranceNumberPage(index), "AB123456C").success.value
           .set(VulnerableYesNoPage(index), true).success.value
           .set(ClassBeneficiaryDescriptionPage(classOfBeneficiaryIndex), "class of ben 1").success.value
           .set(charity.CharityNamePage(charityBeneficiaryIndex), "Test").success.value
           .set(charity.AmountDiscretionYesNoPage(charityBeneficiaryIndex), false).success.value
-          .set(charity.HowMuchIncomePage(charityBeneficiaryIndex), "1234").success.value
+          .set(charity.HowMuchIncomePage(charityBeneficiaryIndex), 100).success.value
           .set(charity.AddressYesNoPage(charityBeneficiaryIndex), false).success.value
 
         val result = beneficiariesMapper.build(userAnswers).value

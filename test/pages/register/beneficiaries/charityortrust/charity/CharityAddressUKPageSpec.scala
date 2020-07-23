@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.charityortrust
+package pages.register.beneficiaries.charityortrust.charity
 
+import models.core.pages.UKAddress
 import pages.behaviours.PageBehaviours
-import pages.register.beneficiaries.charityortrust.charity.HowMuchIncomePage
 
-class HowMuchIncomePageSpec extends PageBehaviours {
+class CharityAddressUKPageSpec extends PageBehaviours {
 
-  "CharityOrTrustPage" must {
+  "CharityAddressUk" must {
 
-    beRetrievable[String](HowMuchIncomePage(0))
+    beRetrievable[UKAddress](CharityAddressUKPage(0))
 
-    beSettable[String](HowMuchIncomePage(0))
+    beSettable[UKAddress](CharityAddressUKPage(0))
 
-    beRemovable[String](HowMuchIncomePage(0))
+    beRemovable[UKAddress](CharityAddressUKPage(0))
   }
-}
+ }

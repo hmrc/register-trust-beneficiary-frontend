@@ -25,7 +25,7 @@ import views.html.register.beneficiaries.charityortrust.CharityOrTrustView
 
 class CharityOrTrustViewSpec extends ViewBehaviours {
 
-  val messageKeyPrefix = "charityortrust"
+  val messageKeyPrefix = "charityOrTrust"
   val index = 0
 
   val form = new CharityOrTrustFormProvider()()
