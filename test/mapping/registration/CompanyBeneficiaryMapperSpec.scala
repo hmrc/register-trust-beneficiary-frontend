@@ -137,79 +137,53 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers
         }
 
       }
-//      "must be able to create multiple IndividualDetailsType, first with Nino and second with UKAddress" in {
-//        val userAnswers =
-//          emptyUserAnswers
-//            .set(NamePage(index0), FullName("first name", None, "last name")).success.value
-//            .set(DateOfBirthYesNoPage(index0), true).success.value
-//            .set(DateOfBirthPage(index0), dateOfBirth).success.value
-//            .set(IncomeYesNoPage(index0), false).success.value
-//            .set(IncomePage(index0), 100).success.value
-//            .set(NationalInsuranceYesNoPage(index0), true).success.value
-//            .set(NationalInsuranceNumberPage(index0), "AB123456C").success.value
-//            .set(VulnerableYesNoPage(index0), true).success.value
-//
-//            .set(NamePage(index1), FullName("first name", None, "last name")).success.value
-//            .set(DateOfBirthYesNoPage(index1), true).success.value
-//            .set(DateOfBirthPage(index1), dateOfBirth).success.value
-//            .set(IncomeYesNoPage(index1), false).success.value
-//            .set(IncomePage(index1), 100).success.value
-//            .set(NationalInsuranceYesNoPage(index1), false).success.value
-//            .set(VulnerableYesNoPage(index1), false).success.value
-//            .set(AddressYesNoPage(index1), true).success.value
-//            .set(AddressUKYesNoPage(index1), true).success.value
-//            .set(AddressUKPage(index1),
-//              UKAddress("line1", "line2", None, None, "NE62RT")).success.value
-//
-//
-//        val individuals = mapper.build(userAnswers)
-//
-//        individuals mustBe defined
-//        individuals.value mustBe
-//          List(
-//            IndividualDetailsType(
-//              name = NameType("first name", None, "last name"),
-//              dateOfBirth = Some(dateOfBirth),
-//              vulnerableBeneficiary = true,
-//              beneficiaryType = None,
-//              beneficiaryDiscretion = false,
-//              beneficiaryShareOfIncome = Some("100"),
-//              identification = Some(
-//                IdentificationType(
-//                  nino = Some("AB123456C"),
-//                  passport = None,
-//                  address = None)
-//              )),
-//
-//            IndividualDetailsType(
-//              name = NameType("first name", None, "last name"),
-//              dateOfBirth = Some(dateOfBirth),
-//              vulnerableBeneficiary = false,
-//              beneficiaryType = None,
-//              beneficiaryDiscretion = false,
-//              beneficiaryShareOfIncome = Some("100"),
-//              identification = Some(
-//                IdentificationType(
-//                  nino = None,
-//                  passport = None,
-//                  address = Some(
-//                    AddressType("line1", "line2", None, None, Some("NE62RT"), "GB")
-//                  ))
-//              ))
-//          )
-//      }
+      "must be able to create multiple Company beneficiaries" in {
+        val userAnswers =
+          emptyUserAnswers
+            .set(NamePage(index0), "Company 1").success.value
+            .set(IncomeYesNoPage(index0), false).success.value
+            .set(IncomePage(index0), 100).success.value
 
-//      "must not be able to create IndividualDetailsType when incomplete data " in {
-//        val userAnswers =
-//          emptyUserAnswers
-//            .set(NamePage(index0), FullName("first name", None, "last name")).success.value
-//            .set(DateOfBirthYesNoPage(index0), false).success.value
-//            .set(IncomeYesNoPage(index0), true).success.value
-//            .set(NationalInsuranceYesNoPage(index0), false).success.value
-//            .set(AddressYesNoPage(index0), false).success.value
-//
-//        mapper.build(userAnswers) mustNot be(defined)
-//      }
+            .set(NamePage(index1), "Company 2").success.value
+            .set(IncomeYesNoPage(index1), true).success.value
+            .set(AddressYesNoPage(index1), true).success.value
+            .set(AddressUKYesNoPage(index1), true).success.value
+            .set(AddressUKPage(index1),
+              UKAddress("line1", "line2", None, None, "NE62RT")).success.value
+
+
+        val individuals = mapper.build(userAnswers)
+
+        individuals mustBe defined
+        individuals.value mustBe
+          List(
+            CompanyType(
+              organisationName = "Company 1",
+              beneficiaryDiscretion = Some(false),
+              beneficiaryShareOfIncome = Some("100"),
+              identification = None),
+
+            CompanyType(
+              organisationName = "Company 2",
+              beneficiaryDiscretion = Some(true),
+              beneficiaryShareOfIncome = None,
+              identification = Some(
+                IdentificationOrgType(
+                  None,
+                  address = Some(
+                    AddressType("line1", "line2", None, None, Some("NE62RT"), "GB")
+                  ))
+              ))
+          )
+      }
+
+      "must not be able to create IndividualDetailsType when incomplete data " in {
+        val userAnswers =
+          emptyUserAnswers
+            .set(NamePage(index0), "Company Name").success.value
+
+        mapper.build(userAnswers) mustNot be(defined)
+      }
     }
   }
 }
