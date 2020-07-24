@@ -17,7 +17,6 @@
 package views.register.beneficiaries.charityortrust
 
 import forms.CharityOrTrustFormProvider
-import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.ViewBehaviours
@@ -25,18 +24,17 @@ import views.html.register.beneficiaries.charityortrust.CharityOrTrustView
 
 class CharityOrTrustViewSpec extends ViewBehaviours {
 
-  val messageKeyPrefix = "charityortrust"
+  val messageKeyPrefix = "charityOrTrust"
   val index = 0
 
   val form = new CharityOrTrustFormProvider()()
-
 
   "CharityOrTrust view" must {
 
     val view = viewFor[CharityOrTrustView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, fakeDraftId)(fakeRequest, messages)
+      view.apply(form, fakeDraftId)(fakeRequest, messages)
 
     behave like normalPage(applyView(form), messageKeyPrefix)
 

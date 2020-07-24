@@ -16,9 +16,8 @@
 
 package views.register.beneficiaries.individualBeneficiary
 
-import forms.IndividualBeneficiaryNameFormProvider
+import forms.NameFormProvider
 import generators.Generators
-import models.NormalMode
 import models.core.pages.FullName
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -30,7 +29,7 @@ class NameViewSpec extends QuestionViewBehaviours[FullName] with Generators {
   val messageKeyPrefix = "individualBeneficiaryName"
   val index = 0
 
-  override val form = new IndividualBeneficiaryNameFormProvider()()
+  override val form: Form[FullName] = new NameFormProvider().withPrefix("individualBeneficiaryName")
 
   "IndividualBeneficiaryNameView" must {
 

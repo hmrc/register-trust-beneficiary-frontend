@@ -19,7 +19,7 @@ package controllers.register.beneficiaries.individualBeneficiary
 import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import forms.IndividualBeneficiaryIncomeFormProvider
+import forms.IncomePercentageFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.beneficiaries.individual.{IncomePage, NamePage}
@@ -40,12 +40,12 @@ class IncomeController @Inject()(
                                   getData: DraftIdRetrievalActionProvider,
                                   requireData: RegistrationDataRequiredAction,
                                   requiredAnswer: RequiredAnswerActionProvider,
-                                  formProvider: IndividualBeneficiaryIncomeFormProvider,
+                                  formProvider: IncomePercentageFormProvider,
                                   val controllerComponents: MessagesControllerComponents,
                                   view: IncomeView
                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form = formProvider()
+  private val form = formProvider.withPrefix("individualBeneficiaryIncome")
 
   private def actions(index: Int, draftId: String) =
     identify andThen

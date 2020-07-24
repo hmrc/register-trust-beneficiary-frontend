@@ -19,7 +19,7 @@ package controllers.register.beneficiaries.individualBeneficiary
 import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import forms.IndividualBeneficiaryNationalInsuranceNumberFormProvider
+import forms.NationalInsuranceNumberFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.beneficiaries.individual.{NamePage, NationalInsuranceNumberPage}
@@ -40,12 +40,12 @@ class NationalInsuranceNumberController @Inject()(
                                                    getData: DraftIdRetrievalActionProvider,
                                                    requireData: RegistrationDataRequiredAction,
                                                    requiredAnswer: RequiredAnswerActionProvider,
-                                                   formProvider: IndividualBeneficiaryNationalInsuranceNumberFormProvider,
+                                                   formProvider: NationalInsuranceNumberFormProvider,
                                                    val controllerComponents: MessagesControllerComponents,
                                                    view: NationalInsuranceNumberView
                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form = formProvider()
+  private val form = formProvider.withPrefix("individualBeneficiaryNationalInsuranceNumber")
 
   private def actions(index: Int, draftId: String) =
     identify andThen

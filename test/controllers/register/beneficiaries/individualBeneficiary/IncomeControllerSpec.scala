@@ -18,10 +18,11 @@ package controllers.register.beneficiaries.individualBeneficiary
 
 import base.SpecBase
 import config.annotations.IndividualBeneficiary
-import forms.IndividualBeneficiaryIncomeFormProvider
+import forms.IncomePercentageFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.individual.{IncomePage, NamePage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -29,13 +30,14 @@ import views.html.register.beneficiaries.individualBeneficiary.IncomeView
 
 class IncomeControllerSpec extends SpecBase {
 
-  val formProvider = new IndividualBeneficiaryIncomeFormProvider()
-  val form = formProvider()
+  val formProvider = new IncomePercentageFormProvider()
+  val form: Form[Int] = formProvider.withPrefix("individualBeneficiaryIncome")
   val index: Int = 0
 
-  val name = FullName("first name", None, "Last name")
+  val name: FullName = FullName("first name", None, "Last name")
+  val validAnswer: Int = 60
 
-  lazy val individualBeneficiaryIncomeRoute = routes.IncomeController.onPageLoad(index, fakeDraftId).url
+  lazy val individualBeneficiaryIncomeRoute: String = routes.IncomeController.onPageLoad(index, fakeDraftId).url
 
   "IndividualBeneficiaryIncome Controller" must {
 
@@ -62,7 +64,8 @@ class IncomeControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(IncomePage(index), "answer").success.value
+      val userAnswers = emptyUserAnswers
+        .set(IncomePage(index), validAnswer).success.value
         .set(NamePage(index),name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -76,7 +79,7 @@ class IncomeControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill("answer"), fakeDraftId, name, index)(fakeRequest, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, name, index)(fakeRequest, messages).toString
 
       application.stop()
     }

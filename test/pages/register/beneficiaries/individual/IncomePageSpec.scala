@@ -23,10 +23,10 @@ class IncomePageSpec extends PageBehaviours {
 
   "IndividualBeneficiaryIncomePage" must {
 
-    beRetrievable[String](IncomePage(0))
+    beRetrievable[Int](IncomePage(0))
 
-    beSettable[String](IncomePage(0))
+    beSettable[Int](IncomePage(0))
 
-    beRemovable[String](IncomePage(0))
+    beRemovable[Int](IncomePage(0))
   }
 }

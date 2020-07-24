@@ -20,7 +20,7 @@ import java.time.{LocalDate, ZoneOffset}
 
 import base.SpecBase
 import config.annotations.IndividualBeneficiary
-import forms.IndividualBeneficiaryDateOfBirthFormProvider
+import forms.DateOfBirthFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
@@ -32,8 +32,8 @@ import views.html.register.beneficiaries.individualBeneficiary.DateOfBirthView
 
 class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new IndividualBeneficiaryDateOfBirthFormProvider(frontendAppConfig)
-  val form = formProvider()
+  val formProvider = new DateOfBirthFormProvider(frontendAppConfig)
+  val form = formProvider.withPrefix("individualBeneficiaryDateOfBirth")
   val index: Int = 0
 
   val name = FullName("first name", None, "Last name")

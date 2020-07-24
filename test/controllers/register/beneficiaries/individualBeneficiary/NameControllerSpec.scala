@@ -18,7 +18,7 @@ package controllers.register.beneficiaries.individualBeneficiary
 
 import base.SpecBase
 import config.annotations.IndividualBeneficiary
-import forms.IndividualBeneficiaryNameFormProvider
+import forms.NameFormProvider
 import models.ReadOnlyUserAnswers
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
@@ -35,8 +35,8 @@ import scala.concurrent.Future
 
 class NameControllerSpec extends SpecBase {
 
-  val formProvider = new IndividualBeneficiaryNameFormProvider()
-  val form = formProvider()
+  val formProvider = new NameFormProvider()
+  val form = formProvider.withPrefix("individualBeneficiaryName")
   val name = FullName("first name", Some("middle name"), "last name")
   val index: Int = 0
 

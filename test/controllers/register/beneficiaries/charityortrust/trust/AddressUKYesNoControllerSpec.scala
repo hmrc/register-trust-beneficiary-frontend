@@ -20,7 +20,7 @@ import base.SpecBase
 import config.annotations.TrustBeneficiary
 import forms.YesNoFormProvider
 import navigation.{FakeNavigator, Navigator}
-import pages.register.beneficiaries.trust.{AddressUKYesNoPage, NamePage}
+import pages.register.beneficiaries.charityortrust.trust.{AddressUKYesNoPage, NamePage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._

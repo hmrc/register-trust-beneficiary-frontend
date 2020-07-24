@@ -22,7 +22,7 @@ import controllers.actions.register.company.NameRequiredAction
 import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.beneficiaries.company.DiscretionYesNoPage
+import pages.register.beneficiaries.companyoremploymentrelated.company.DiscretionYesNoPage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

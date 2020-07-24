@@ -42,7 +42,7 @@ class AnswersControllerSpec extends SpecBase {
           .set(DateOfBirthYesNoPage(index),true).success.value
           .set(DateOfBirthPage(index),LocalDate.now(ZoneOffset.UTC)).success.value
           .set(IncomeYesNoPage(index),true).success.value
-          .set(IncomePage(index),"100").success.value
+          .set(IncomePage(index),100).success.value
           .set(NationalInsuranceYesNoPage(index),true).success.value
           .set(NationalInsuranceNumberPage(index),"AB123456C").success.value
           .set(AddressYesNoPage(index),true).success.value

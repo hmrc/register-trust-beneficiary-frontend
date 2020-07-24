@@ -118,10 +118,8 @@ GET        /feature-not-available                                               
 
 GET        /feature-not-available                                                     controllers.FeatureNotAvailableController.onPageLoad()
 
-GET        /:draftId/charity-or-trust                                                 controllers.register.beneficiaries.charityortrust.CharityOrTrustController.onPageLoad(mode: Mode = NormalMode, draftId: String)
-POST       /:draftId/charity-or-trust                                                 controllers.register.beneficiaries.charityortrust.CharityOrTrustController.onSubmit(mode: Mode = NormalMode, draftId: String)
-GET        /:draftId/change-charity-or-trust                                          controllers.register.beneficiaries.charityortrust.CharityOrTrustController.onPageLoad(mode: Mode = CheckMode, draftId: String)
-POST       /:draftId/change-charity-or-trust                                          controllers.register.beneficiaries.charityortrust.CharityOrTrustController.onSubmit(mode: Mode = CheckMode, draftId: String)
+GET        /:draftId/charity-or-trust                                                 controllers.register.beneficiaries.charityortrust.CharityOrTrustController.onPageLoad(draftId: String)
+POST       /:draftId/charity-or-trust                                                 controllers.register.beneficiaries.charityortrust.CharityOrTrustController.onSubmit(draftId: String)
 
 GET        /:draftId/charity/:index/name                                              controllers.register.beneficiaries.charityortrust.charity.CharityNameController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/charity/:index/name                                              controllers.register.beneficiaries.charityortrust.charity.CharityNameController.onSubmit(index: Int, draftId: String)

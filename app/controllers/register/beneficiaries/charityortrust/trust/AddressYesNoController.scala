@@ -22,7 +22,7 @@ import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
 import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.beneficiaries.trust.{AddressYesNoPage, NamePage}
+import pages.register.beneficiaries.charityortrust.trust.{AddressYesNoPage, NamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

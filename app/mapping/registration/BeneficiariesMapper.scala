@@ -24,7 +24,7 @@ import play.api.Logger
 class BeneficiariesMapper @Inject()(
                                      individualMapper: IndividualBeneficiaryMapper,
                                      unidentifiedMapper: ClassOfBeneficiariesMapper,
-                                     charityortrustMapper: CharityOrTrustMapper
+                                     charityortrustMapper: CharityBeneficiaryMapper
                                    ) extends Mapping[BeneficiaryType] {
   override def build(userAnswers: UserAnswers): Option[BeneficiaryType] = {
     val individuals = individualMapper.build(userAnswers)
