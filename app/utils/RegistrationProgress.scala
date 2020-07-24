@@ -17,55 +17,87 @@
 package utils
 
 import javax.inject.Inject
+import models.Status.{Completed, InProgress}
 import models.registration.pages._
-import models.{Status, UserAnswers}
+import models.{ReadableUserAnswers, Status}
 import pages.register.beneficiaries.AddABeneficiaryPage
 import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries}
+import viewmodels.addAnother.{ClassOfBeneficiaryViewModel, IndividualBeneficiaryViewModel}
 
 class RegistrationProgress @Inject()() {
 
-  private def determineStatus(complete: Boolean): Option[Status] = {
+  private def determineStatus(complete: Boolean): Status = {
     if (complete) {
-      Some(Status.Completed)
+      Status.Completed
     } else {
-      Some(Status.InProgress)
+      Status.InProgress
     }
   }
 
-  def beneficiariesStatus(userAnswers: UserAnswers): Option[Status] = {
+  def beneficiariesStatus(userAnswers: ReadableUserAnswers): Option[Status] = {
 
-    def individualBeneficiariesComplete: Boolean = {
-      val individuals = userAnswers.get(IndividualBeneficiaries).getOrElse(List.empty)
+    val statusList: List[IsComplete] = List(
+      userAnswers.get(IndividualBeneficiaries) map IndividualBeneficiariesStatus,
+      userAnswers.get(ClassOfBeneficiaries) map ClassStatus
+    ).flatten
 
-      if (individuals.isEmpty) {
-        false
-      } else {
-        !individuals.exists(_.status == Status.InProgress)
-      }
+    statusList map (_.isComplete(userAnswers))
+
+    statusList match {
+      case Nil => None
+      case list =>
+
+        list.foldLeft[Option[Status]](None){ (x, y) =>
+          y.isComplete(userAnswers) match {
+            case Some(false) =>
+              Some(InProgress)
+            case Some(true) =>
+              x orElse Some(Completed)
+            case _ =>
+              None
+
+          }
+        }
     }
 
-    def classComplete: Boolean = {
-      val classes = userAnswers.get(ClassOfBeneficiaries).getOrElse(List.empty)
-      if (classes.isEmpty) {
-        false
-      } else {
-        !classes.exists(_.status == Status.InProgress)
+  }
+
+  trait IsComplete {
+
+    def isComplete(userAnswers: ReadableUserAnswers): Option[Boolean]
+
+    def status(userAnswers: ReadableUserAnswers): Option[Status] = {
+
+      val noMoreToAdd = userAnswers.get(AddABeneficiaryPage).contains(AddABeneficiary.NoComplete)
+
+      isComplete(userAnswers) map { isComplete =>
+        determineStatus(isComplete && noMoreToAdd)
       }
-    }
 
-    val noMoreToAdd = userAnswers.get(AddABeneficiaryPage).contains(AddABeneficiary.NoComplete)
-
-    val individuals = userAnswers.get(IndividualBeneficiaries).getOrElse(List.empty)
-    val classes = userAnswers.get(ClassOfBeneficiaries).getOrElse(List.empty)
-
-    (individuals, classes) match {
-      case (Nil, Nil) => None
-      case (_, Nil) =>
-        determineStatus(individualBeneficiariesComplete && noMoreToAdd)
-      case (Nil, _) =>
-        determineStatus(classComplete && noMoreToAdd)
-      case (_, _) =>
-        determineStatus(individualBeneficiariesComplete && classComplete && noMoreToAdd)
     }
   }
+
+  case class IndividualBeneficiariesStatus(list: List[IndividualBeneficiaryViewModel]) extends IsComplete {
+
+    def isComplete(userAnswers: ReadableUserAnswers): Option[Boolean] = {
+
+      userAnswers.get(IndividualBeneficiaries) match {
+        case Some(individuals@_::_) => Some(!individuals.exists(_.status == Status.InProgress))
+        case _ => None
+      }
+
+    }
+  }
+
+  case class ClassStatus(list: List[ClassOfBeneficiaryViewModel]) extends IsComplete {
+
+    def isComplete(userAnswers: ReadableUserAnswers): Option[Boolean] = {
+      userAnswers.get(ClassOfBeneficiaries) match {
+        case Some(classes@_::_) => Some(!classes.exists(_.status == Status.InProgress))
+        case _ => None
+      }
+    }
+
+  }
+
 }

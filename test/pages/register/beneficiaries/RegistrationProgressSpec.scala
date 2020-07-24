@@ -30,7 +30,7 @@ class RegistrationProgressSpec extends SpecBase {
 
   "Beneficiary section" must {
 
-      "render no tag" when {
+    "render no tag" when {
 
         "there is no beneficiaries in user answers" in {
           val registrationProgress = injector.instanceOf[RegistrationProgress]
@@ -103,7 +103,7 @@ class RegistrationProgressSpec extends SpecBase {
         registrationProgress.beneficiariesStatus(userAnswers).value mustBe Status.InProgress
       }
 
-      "there are benficiaries that are all complete, but user answered AddMore" in {
+      "there are beneficiaries that are all complete, but user answered AddMore" in {
 
         val registrationProgress = injector.instanceOf[RegistrationProgress]
 

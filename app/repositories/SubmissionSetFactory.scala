@@ -67,6 +67,7 @@ class SubmissionSetFactory @Inject()(
 
       val entitySections = List(
         individualBeneficiariesHelper.individualBeneficiaries,
+        trustBeneficiariesHelper.trustBeneficiaries,
         classOfBeneficiariesHelper.classOfBeneficiaries(individualBeneficiariesHelper.individualBeneficiaries.exists(_.nonEmpty)),
         classOfBeneficiariesHelper.classOfBeneficiaries(charityBeneficiariesHelper.charityOrTrust.nonEmpty)
       ).flatten.flatten
