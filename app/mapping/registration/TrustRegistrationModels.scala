@@ -24,19 +24,6 @@ import play.api.libs.json._
   * Trust Registration API Schema - definitions models below
   */
 
-
-case class BeneficiaryType(individualDetails: Option[List[IndividualDetailsType]],
-                           company: Option[List[CompanyType]],
-                           trust: Option[List[BeneficiaryTrustType]],
-                           charity: Option[List[CharityType]],
-                           unidentified: Option[List[UnidentifiedType]],
-                           large: Option[List[LargeType]],
-                           other: Option[List[OtherType]])
-
-object BeneficiaryType {
-  implicit val beneficiaryTypeFormat: Format[BeneficiaryType] = Json.format[BeneficiaryType]
-}
-
 case class IndividualDetailsType(name: NameType,
                                  dateOfBirth: Option[LocalDate],
                                  vulnerableBeneficiary: Boolean,

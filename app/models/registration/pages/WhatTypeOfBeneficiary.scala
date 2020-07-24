@@ -23,21 +23,23 @@ sealed trait WhatTypeOfBeneficiary
 
 object WhatTypeOfBeneficiary extends Enumerable.Implicits {
 
-  case object Individual extends WithName("Individual") with WhatTypeOfBeneficiary
-  case object ClassOfBeneficiary extends WithName("ClassOfBeneficiary") with WhatTypeOfBeneficiary
-  case object CharityOrTrust extends WithName("CharityOrTrust") with WhatTypeOfBeneficiary
-  case object CompanyOrEmployment extends WithName("CompanyOrEmployment") with WhatTypeOfBeneficiary
-  case object Other extends WithName("Other") with WhatTypeOfBeneficiary
+  val prefix = "whatTypeOfBeneficiary"
 
+  case object Individual extends WithName("individual") with WhatTypeOfBeneficiary
+  case object ClassOfBeneficiary extends WithName("classOfBeneficiary") with WhatTypeOfBeneficiary
+  case object CharityOrTrust extends WithName("charityOrTrust") with WhatTypeOfBeneficiary
+  case object CompanyOrEmployment extends WithName("companyOrEmployment") with WhatTypeOfBeneficiary
+  case object Other extends WithName("other") with WhatTypeOfBeneficiary
+
+  case object Charity extends WithName("charity") with WhatTypeOfBeneficiary
+  case object Trust extends WithName("trust") with WhatTypeOfBeneficiary
+  case object Company extends WithName("company") with WhatTypeOfBeneficiary
+  case object EmploymentRelated extends WithName("employmentRelated") with WhatTypeOfBeneficiary
 
   val values: List[WhatTypeOfBeneficiary] = List(
-    Individual, ClassOfBeneficiary, CharityOrTrust, CompanyOrEmployment, Other
+    Individual, ClassOfBeneficiary, CharityOrTrust, CompanyOrEmployment, Other,
+    Charity, Trust, Company, EmploymentRelated
   )
-
-  val options: List[RadioOption] = values.map {
-    value =>
-      RadioOption("whatTypeOfBeneficiary", value.toString)
-  }
 
   implicit val enumerable: Enumerable[WhatTypeOfBeneficiary] =
     Enumerable(values.map(v => v.toString -> v): _*)

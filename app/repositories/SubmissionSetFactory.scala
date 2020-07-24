@@ -22,8 +22,7 @@ import models._
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 import utils.RegistrationProgress
-import utils.answers.{CharityBeneficiaryAnswersHelper, ClassOfBeneficiariesAnswersHelper, IndividualBeneficiaryAnswersHelper}
-import utils.answers.{CharityBeneficiaryAnswersHelper, CheckYourAnswersHelper, IndividualBeneficiaryAnswersHelper, TrustBeneficiaryAnswersHelper}
+import utils.answers.{CharityBeneficiaryAnswersHelper, ClassOfBeneficiariesAnswersHelper, IndividualBeneficiaryAnswersHelper, TrustBeneficiaryAnswersHelper}
 import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
 

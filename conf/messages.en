@@ -412,11 +412,17 @@ whatTypeOfBeneficiary.next.title = What kind of beneficiary do you need to add n
 whatTypeOfBeneficiary.first.heading = What kind of beneficiary do you need to add first?
 whatTypeOfBeneficiary.next.heading = What kind of beneficiary do you need to add next?
 
-whatTypeOfBeneficiary.Individual = Individual
-whatTypeOfBeneficiary.ClassOfBeneficiary = Class of beneficiaries
-whatTypeOfBeneficiary.CharityOrTrust = Charity or trust
-whatTypeOfBeneficiary.CompanyOrEmployment = Company or employment related
-whatTypeOfBeneficiary.Other = Other beneficiary
+whatTypeOfBeneficiary.individual = Individual
+whatTypeOfBeneficiary.classOfBeneficiary = Class of beneficiaries
+whatTypeOfBeneficiary.charityOrTrust = Charity or trust
+whatTypeOfBeneficiary.companyOrEmployment = Company or employment related
+whatTypeOfBeneficiary.other = Other beneficiary
+
+whatTypeOfBeneficiary.charity = Charity
+whatTypeOfBeneficiary.trust = Trust
+whatTypeOfBeneficiary.company = Company
+whatTypeOfBeneficiary.employmentRelated = Employment related
+
 whatTypeOfBeneficiary.error.required = Select the type of beneficiary you need to add
 whatTypeOfBeneficiary.hint = You can enter a maximum of 25 entries for each beneficiary type
 

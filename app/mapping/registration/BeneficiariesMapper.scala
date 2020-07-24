@@ -18,7 +18,7 @@ package mapping.registration
 
 import javax.inject.Inject
 import mapping.Mapping
-import models.UserAnswers
+import models.{BeneficiaryType, UserAnswers}
 import play.api.Logger
 
 class BeneficiariesMapper @Inject()(
@@ -28,7 +28,9 @@ class BeneficiariesMapper @Inject()(
                                      trustBeneficiaryMapper: TrustBeneficiaryMapper,
                                      companyBeneficiaryMapper: CompanyBeneficiaryMapper
                                    ) extends Mapping[BeneficiaryType] {
+
   override def build(userAnswers: UserAnswers): Option[BeneficiaryType] = {
+
     val individuals = individualBeneficiaryMapper.build(userAnswers)
     val unidentified = unidentifiedBeneficiaryMapper.build(userAnswers)
     val charity = charityBeneficiaryMapper.build(userAnswers)
