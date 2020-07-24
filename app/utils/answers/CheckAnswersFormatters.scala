@@ -45,13 +45,6 @@ object CheckAnswersFormatters {
     }
   }
 
-  def formatCharityOrTrust(answer: CharityOrTrust)(implicit messages: Messages): Html = {
-    answer match {
-      case Charity => HtmlFormat.escape(messages("charity"))
-      case Trust => HtmlFormat.escape(messages("trust"))
-    }
-  }
-
   def formatNino(nino: String): String = Nino(nino).formatted
 
   def country(code: String, countryOptions: CountryOptions): String =

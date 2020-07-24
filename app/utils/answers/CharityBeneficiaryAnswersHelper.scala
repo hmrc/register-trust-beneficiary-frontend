@@ -18,7 +18,7 @@ package utils.answers
 
 import controllers.register.beneficiaries.charityortrust.charity.routes._
 import javax.inject.Inject
-import models.{NormalMode, UserAnswers}
+import models.UserAnswers
 import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
 import pages.register.beneficiaries.charityortrust.charity._
 import play.api.i18n.Messages
@@ -51,7 +51,7 @@ class CharityBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
     x =>
       AnswerRow(
         "charityOrTrust.checkYourAnswersLabel",
-        formatCharityOrTrust(x),
+        HtmlFormat.escape(messages(s"charityOrTrust.$x")),
         Some(controllers.register.beneficiaries.charityortrust.routes.CharityOrTrustController.onPageLoad(draftId).url),
         canEdit = canEdit
       )
