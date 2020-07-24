@@ -435,6 +435,11 @@ removeTrustBeneficiary.heading = Are you sure you want to remove {0}?
 removeTrustBeneficiary.default = the trust beneficiary
 removeTrustBeneficiary.error.required = Select yes if you want to remove the trust beneficiary
 
+removeCompanyBeneficiary.title = Are you sure you want to remove the company beneficiary?
+removeCompanyBeneficiary.heading = Are you sure you want to remove {0}?
+removeCompanyBeneficiary.default = the company beneficiary
+removeCompanyBeneficiary.error.required = Select yes if you want to remove the company beneficiary
+
 dateOfBirth.error.required.all = Enter a date of birth
 dateOfBirth.error.required.two = The date of birth must include {0} and {1}
 dateOfBirth.error.required = The date of birth must include {0}

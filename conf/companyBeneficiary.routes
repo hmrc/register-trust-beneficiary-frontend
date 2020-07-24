@@ -22,3 +22,6 @@ POST        /:draftId/:index/non-uk-address             controllers.register.ben
 
 GET         /:draftId/:index/check-details              controllers.register.beneficiaries.companyoremploymentrelated.company.CheckDetailsController.onPageLoad(index: Int, draftId: String)
 POST        /:draftId/:index/check-details              controllers.register.beneficiaries.companyoremploymentrelated.company.CheckDetailsController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/:index/remove                                              controllers.register.beneficiaries.companyoremploymentrelated.company.RemoveCompanyBeneficiaryController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/remove                                              controllers.register.beneficiaries.companyoremploymentrelated.company.RemoveCompanyBeneficiaryController.onSubmit(index: Int, draftId: String)
