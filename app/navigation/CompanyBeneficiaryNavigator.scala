@@ -28,16 +28,16 @@ class CompanyBeneficiaryNavigator extends Navigator {
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, Call] = {
     case NamePage(index) => rts.DiscretionYesNoController.onPageLoad(index, draftId)
-    case ShareOfIncomePage(index) => rts.AddressYesNoController.onPageLoad(index, draftId)
+    case IncomePage(index) => rts.AddressYesNoController.onPageLoad(index, draftId)
     case AddressUKPage(index) => rts.CheckDetailsController.onPageLoad(index, draftId)
     case AddressInternationalPage(index) => rts.CheckDetailsController.onPageLoad(index, draftId)
   }
 
   private def yesNoNavigation(draftId: String) : PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case DiscretionYesNoPage(index) => ua =>
+    case IncomeYesNoPage(index) => ua =>
       yesNoNav(
         ua,
-        DiscretionYesNoPage(index),
+        IncomeYesNoPage(index),
         rts.AddressYesNoController.onPageLoad(index, draftId),
         rts.ShareOfIncomeController.onPageLoad(index, draftId))
     case AddressYesNoPage(index) => ua =>

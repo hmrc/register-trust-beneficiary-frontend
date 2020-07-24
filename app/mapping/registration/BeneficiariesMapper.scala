@@ -22,21 +22,27 @@ import models.UserAnswers
 import play.api.Logger
 
 class BeneficiariesMapper @Inject()(
-                                     individualMapper: IndividualBeneficiaryMapper,
-                                     unidentifiedMapper: ClassOfBeneficiariesMapper,
-                                     charityortrustMapper: CharityBeneficiaryMapper
+                                     individualBeneficiaryMapper: IndividualBeneficiaryMapper,
+                                     unidentifiedBeneficiaryMapper: ClassOfBeneficiariesMapper,
+                                     charityBeneficiaryMapper: CharityBeneficiaryMapper,
+                                     trustBeneficiaryMapper: TrustBeneficiaryMapper,
+                                     companyBeneficiaryMapper: CompanyBeneficiaryMapper
                                    ) extends Mapping[BeneficiaryType] {
   override def build(userAnswers: UserAnswers): Option[BeneficiaryType] = {
-    val individuals = individualMapper.build(userAnswers)
-    val unidentified = unidentifiedMapper.build(userAnswers)
-    val charity = charityortrustMapper.build(userAnswers)
+    val individuals = individualBeneficiaryMapper.build(userAnswers)
+    val unidentified = unidentifiedBeneficiaryMapper.build(userAnswers)
+    val charity = charityBeneficiaryMapper.build(userAnswers)
+    val trust = trustBeneficiaryMapper.build(userAnswers)
+    val company = companyBeneficiaryMapper.build(userAnswers)
 
-    if (individuals.isDefined || unidentified.isDefined) {
+    val all = Seq(individuals, unidentified, charity, trust, company).flatten.flatten
+
+    if (all.nonEmpty) {
       Some(
         BeneficiaryType(
           individualDetails = individuals,
-          company = None,
-          trust = None,
+          company = company,
+          trust = trust,
           charity = charity,
           unidentified = unidentified,
           large = None,
@@ -44,7 +50,7 @@ class BeneficiariesMapper @Inject()(
         )
       )
     } else {
-      Logger.info(s"[BeneficiariesMapper][build] unable to map beneficiaries")
+      Logger.info(s"[BeneficiariesMapper][build] no beneficiaries to map")
       None
     }
   }

@@ -42,8 +42,8 @@ class CompanyBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
     "go to AddressYesNo from DiscretionYesNo if Yes" in {
       forAll(arbitrary[UserAnswers]) {
         baseAnswers =>
-          val answers = baseAnswers.set(DiscretionYesNoPage(index), true).success.value
-          navigator.nextPage(DiscretionYesNoPage(index), fakeDraftId, answers)
+          val answers = baseAnswers.set(IncomeYesNoPage(index), true).success.value
+          navigator.nextPage(IncomeYesNoPage(index), fakeDraftId, answers)
             .mustBe(CompanyRoutes.AddressYesNoController.onPageLoad(index, fakeDraftId))
       }
     }
@@ -51,8 +51,8 @@ class CompanyBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
     "go to ShareOfIncomePage from DiscretionYesNo if No" in {
       forAll(arbitrary[UserAnswers]) {
         baseAnswers =>
-          val answers = baseAnswers.set(DiscretionYesNoPage(index), false).success.value
-          navigator.nextPage(DiscretionYesNoPage(index), fakeDraftId, answers)
+          val answers = baseAnswers.set(IncomeYesNoPage(index), false).success.value
+          navigator.nextPage(IncomeYesNoPage(index), fakeDraftId, answers)
             .mustBe(CompanyRoutes.ShareOfIncomeController.onPageLoad(index, fakeDraftId))
       }
     }
@@ -60,7 +60,7 @@ class CompanyBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
     "go to AddressYesNo from ShareOfIncomePage" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
-          navigator.nextPage(ShareOfIncomePage(index), fakeDraftId, userAnswers)
+          navigator.nextPage(IncomePage(index), fakeDraftId, userAnswers)
             .mustBe(CompanyRoutes.AddressYesNoController.onPageLoad(index, fakeDraftId))
       }
     }

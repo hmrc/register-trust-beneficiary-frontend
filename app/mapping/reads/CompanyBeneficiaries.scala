@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.companyoremploymentrelated.company
+package mapping.reads
 
 import pages.QuestionPage
 import play.api.libs.json.JsPath
-import sections.beneficiaries.{Beneficiaries, CompanyBeneficiaries}
+import sections.beneficiaries.{CompanyBeneficiaries => section}
 
-case class ShareOfIncomePage(index: Int) extends QuestionPage[Int]{
-
-  override def path: JsPath = JsPath \ Beneficiaries \ CompanyBeneficiaries \ index \ toString
-
-  override def toString: String = "shareOfIncome"
+case object CompanyBeneficiaries extends QuestionPage[List[CompanyBeneficiary]]{
+  override def path: JsPath = section.path
+  override def toString: String = section.toString
 }

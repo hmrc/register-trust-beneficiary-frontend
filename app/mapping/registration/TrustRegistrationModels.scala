@@ -124,7 +124,7 @@ object OtherType {
 case class CompanyType(organisationName: String,
                        beneficiaryDiscretion: Option[Boolean],
                        beneficiaryShareOfIncome: Option[String],
-                       identification: IdentificationOrgType)
+                       identification: Option[IdentificationOrgType])
 
 object CompanyType {
   implicit val companyTypeFormat: Format[CompanyType] = Json.format[CompanyType]
