@@ -46,16 +46,12 @@ class RegistrationProgress @Inject()() extends AnyBeneficiaries {
 
           val complete = list.forall(isComplete => isComplete(userAnswers))
 
-          Some(determineStatus(complete))
+          Some(if (complete) {
+            Status.Completed
+          } else {
+            Status.InProgress
+          })
       }
-    }
-  }
-
-  private def determineStatus(complete: Boolean): Status = {
-    if (complete) {
-      Status.Completed
-    } else {
-      Status.InProgress
     }
   }
 
