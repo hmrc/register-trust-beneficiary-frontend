@@ -16,6 +16,7 @@
 
 package utils.answers
 
+import controllers.register.beneficiaries.charityortrust.trust.routes
 import javax.inject.Inject
 import models.UserAnswers
 import pages.register.beneficiaries.charityortrust.trust._
@@ -25,7 +26,6 @@ import sections.beneficiaries.TrustBeneficiaries
 import utils.answers.CheckAnswersFormatters._
 import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
-import controllers.register.beneficiaries.charityortrust.trust.routes
 
 class TrustBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
                                              (userAnswers: UserAnswers,
@@ -46,12 +46,11 @@ class TrustBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
 
         val questions = trustBeneficiaryRows(index)
 
-        AnswerSection(Some(Messages("answerPage.section.trustBeneficiary.subheading") + " " + (index + 1)),
-          questions, if (index == 0) {
-            Some(Messages("answerPage.section.beneficiaries.heading"))
-          } else {
-            None
-          })
+        AnswerSection(
+          Some(Messages("answerPage.section.trustBeneficiary.subheading", index + 1)),
+          questions,
+          None
+        )
     }
   }
 
