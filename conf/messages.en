@@ -121,6 +121,7 @@ entities.beneficiary.individual = Individual Beneficiary
 entities.beneficiary.class = Class of beneficiaries
 entities.beneficiary.company = Named company
 entities.beneficiary.trust = Named trust
+entities.beneficiary.charity = Charity
 
 emailAddress.checkYourAnswersLabel = What is {0}’s email address?
 
@@ -131,14 +132,6 @@ charityBeneficiaryAddressYesNo.checkYourAnswersLabel = Do you know {0}’s addre
 charityBeneficiaryAddressUKYesNo.checkYourAnswersLabel = Is {0}’s address in the UK?
 charityBeneficiaryAddress.checkYourAnswersLabel = What is {0}’s address?
 charityBeneficiaryUtr.checkYourAnswersLabel = What is {0}’s Unique Taxpayer Reference (UTR) number?
-
-companyBeneficiaryName.checkYourAnswersLabel = What is the name of the company?
-companyBeneficiaryShareOfIncomeYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
-companyBeneficiaryShareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
-companyBeneficiaryAddressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
-companyBeneficiaryAddressUKYesNo.checkYourAnswersLabel = Is {0}’s address in the UK?
-companyBeneficiaryAddress.checkYourAnswersLabel = What is {0}’s address?
-companyBeneficiaryUtr.checkYourAnswersLabel = What is {0}’s Unique Taxpayer Reference (UTR) number?
 
 largeBeneficiaryName.checkYourAnswersLabel = What is the business’s name?
 largeBeneficiaryShareOfIncomeYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
@@ -313,6 +306,14 @@ individualBeneficiaryInfo.paragraph7 = Do not include named or specific employee
 individualBeneficiaryInfo.subheading5 = Other beneficiaries
 individualBeneficiaryInfo.paragraph8 = You need to give a short description for beneficiaries that do not fall into the other beneficiary types. For example, pets.
 
+individualBeneficiaryAnswers.title = Check beneficiary details
+individualBeneficiaryAnswers.heading = Check beneficiary details
+
+individualBeneficiaryAddressUKYesNo.title = Does the individual beneficiary live in the UK?
+individualBeneficiaryAddressUKYesNo.heading = Does {0} live in the UK?
+individualBeneficiaryAddressUKYesNo.checkYourAnswersLabel = Does {0} live in the UK?
+individualBeneficiaryAddressUKYesNo.error.required = Select yes if the individual beneficiary lives in the UK
+
 trustBeneficiaryAnswers.title = Check trust beneficiary details
 trustBeneficiaryAnswers.heading = Check trust beneficiary details
 
@@ -383,14 +384,6 @@ addABeneficiaryYesNo.title = Do you want to add a beneficiary?
 addABeneficiaryYesNo.heading = Do you want to add a beneficiary?
 addABeneficiaryYesNo.error.required = Select yes if you want to add a beneficiary
 
-individualBeneficiaryAnswers.title = Check beneficiary details
-individualBeneficiaryAnswers.heading = Check beneficiary details
-
-individualBeneficiaryAddressUKYesNo.title = Does the individual beneficiary live in the UK?
-individualBeneficiaryAddressUKYesNo.heading = Does {0} live in the UK?
-individualBeneficiaryAddressUKYesNo.checkYourAnswersLabel = Does {0} live in the UK?
-individualBeneficiaryAddressUKYesNo.error.required = Select yes if the individual beneficiary lives in the UK
-
 classBeneficiaryDescription.title = What is the description for the class of beneficiaries?
 classBeneficiaryDescription.heading = What is the description for the class of beneficiaries?
 classBeneficiaryDescription.checkYourAnswersLabel = What is the description for the class of beneficiaries?
@@ -454,7 +447,6 @@ charityOrTrust.heading = Is the beneficiary a charity or trust?
 charityOrTrust.checkYourAnswersLabel = Is the beneficiary a charity or trust?
 charityOrTrust.error.required = Select the type of beneficiary you need to add
 charityOrTrust.hint = As named in the trust deed
-entities.beneficiary.charity = Charity
 
 charity.name.title = What is the charity’s name?
 charity.name.heading = What is the charity’s name?

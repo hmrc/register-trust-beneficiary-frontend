@@ -44,7 +44,11 @@ class WhatTypeOfBeneficiaryController @Inject()(
                                                  formProvider: WhatTypeOfBeneficiaryFormProvider,
                                                  val controllerComponents: MessagesControllerComponents,
                                                  view: WhatTypeOfBeneficiaryView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+                                     )(implicit ec: ExecutionContext)
+  extends FrontendBaseController
+    with I18nSupport
+    with Enumerable.Implicits
+    with AnyBeneficiaries {
 
   private def actions(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] = identify andThen getData(draftId) andThen requireData
 
@@ -52,7 +56,7 @@ class WhatTypeOfBeneficiaryController @Inject()(
 
   def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = actions(draftId) {
     implicit request =>
-      Ok(view(form, mode, draftId, isAnyBeneficiaryAdded(request)))
+      Ok(view(form, mode, draftId, isAnyBeneficiaryAdded(request.userAnswers)))
   }
 
   def onSubmit(mode: Mode, draftId: String): Action[AnyContent] = actions(draftId).async {
@@ -60,7 +64,7 @@ class WhatTypeOfBeneficiaryController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId ,isAnyBeneficiaryAdded(request)))),
+          Future.successful(BadRequest(view(formWithErrors, mode, draftId ,isAnyBeneficiaryAdded(request.userAnswers)))),
 
         value => {
           for {
@@ -71,13 +75,4 @@ class WhatTypeOfBeneficiaryController @Inject()(
       )
   }
 
-  private def isAnyBeneficiaryAdded(request: RegistrationDataRequest[AnyContent]) = {
-   request.userAnswers.get(IndividualBeneficiaries).getOrElse(List.empty).nonEmpty ||
-     request.userAnswers.get(ClassOfBeneficiaries).getOrElse(List.empty).nonEmpty ||
-    request.userAnswers.get(CharityBeneficiaries).getOrElse(List.empty).nonEmpty ||
-    request.userAnswers.get(TrustBeneficiaries).getOrElse(List.empty).nonEmpty ||
-    request.userAnswers.get(CompanyBeneficiaries).getOrElse(List.empty).nonEmpty ||
-    request.userAnswers.get(LargeBeneficiaries).getOrElse(JsArray()).value.nonEmpty ||
-    request.userAnswers.get(OtherBeneficiaries).getOrElse(JsArray()).value.nonEmpty
-  }
 }
