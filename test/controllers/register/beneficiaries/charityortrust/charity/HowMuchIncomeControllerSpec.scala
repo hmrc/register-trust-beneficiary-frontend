@@ -18,8 +18,7 @@ package controllers.register.beneficiaries.charityortrust.charity
 
 import base.SpecBase
 import config.annotations.CharityBeneficiary
-import forms.ShareOfIncomeFormProvider
-import models.NormalMode
+import forms.IncomePercentageFormProvider
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.charityortrust.charity.{CharityNamePage, HowMuchIncomePage}
@@ -31,10 +30,11 @@ import views.html.register.beneficiaries.charityortrust.charity.HowMuchIncomeVie
 
 class HowMuchIncomeControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new ShareOfIncomeFormProvider()
-  val form: Form[String] = formProvider.withPrefix("charity.shareOfIncome")
+  val formProvider = new IncomePercentageFormProvider()
+  val form: Form[Int] = formProvider.withPrefix("charity.shareOfIncome")
   val index: Int = 0
   val charityName = "Test"
+  val validAnswer: Int = 60
 
   lazy val howMuchIncomeRoute: String = routes.HowMuchIncomeController.onPageLoad(index, fakeDraftId).url
 
@@ -64,7 +64,7 @@ class HowMuchIncomeControllerSpec extends SpecBase with MockitoSugar {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers.set(CharityNamePage(index), "Test").success.value
-        .set(HowMuchIncomePage(index), "345").success.value
+        .set(HowMuchIncomePage(index), validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -77,7 +77,7 @@ class HowMuchIncomeControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill("345"), fakeDraftId, index, charityName)(fakeRequest, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, index, charityName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -110,7 +110,7 @@ class HowMuchIncomeControllerSpec extends SpecBase with MockitoSugar {
 
       val request =
         FakeRequest(POST, howMuchIncomeRoute)
-          .withFormUrlEncodedBody(("value", "12345678"))
+          .withFormUrlEncodedBody(("value", "100"))
 
       val result = route(application, request).value
 

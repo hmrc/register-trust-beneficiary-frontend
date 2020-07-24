@@ -16,22 +16,21 @@
 
 package views.register.beneficiaries.individualBeneficiary
 
-import forms.IndividualBeneficiaryIncomeFormProvider
-import models.NormalMode
+import forms.IncomePercentageFormProvider
 import models.core.pages.FullName
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.StringViewBehaviours
+import views.behaviours.IntViewBehaviours
 import views.html.register.beneficiaries.individualBeneficiary.IncomeView
 
-class IncomeViewSpec extends StringViewBehaviours {
+class IncomeViewSpec extends IntViewBehaviours {
 
   val messageKeyPrefix = "individualBeneficiaryIncome"
   val index = 0
   val fullName: FullName = FullName("First", None, "Last")
   val name: String = fullName.toString
 
-  val form = new IndividualBeneficiaryIncomeFormProvider()()
+  val form: Form[Int] = new IncomePercentageFormProvider().withPrefix(messageKeyPrefix)
 
   "IndividualBeneficiaryIncomeView view" must {
 
@@ -44,7 +43,7 @@ class IncomeViewSpec extends StringViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like stringPageWithDynamicTitle(form, applyView, messageKeyPrefix, name)
+    behave like intPage(form, applyView, messageKeyPrefix, name)
 
     behave like pageWithASubmitButton(applyView(form))
   }

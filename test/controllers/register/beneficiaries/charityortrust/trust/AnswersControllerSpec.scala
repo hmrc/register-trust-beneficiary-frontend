@@ -18,7 +18,7 @@ package controllers.register.beneficiaries.charityortrust.trust
 
 import base.SpecBase
 import models.core.pages.UKAddress
-import pages.register.beneficiaries.trust._
+import pages.register.beneficiaries.charityortrust.trust._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils.answers.TrustBeneficiaryAnswersHelper

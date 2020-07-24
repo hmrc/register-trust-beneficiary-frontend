@@ -18,7 +18,7 @@ package views.register.beneficiaries.individualBeneficiary
 
 import java.time.LocalDate
 
-import forms.IndividualBeneficiaryDateOfBirthFormProvider
+import forms.DateOfBirthFormProvider
 import models.core.pages.FullName
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -32,7 +32,7 @@ class DateOfBirthViewSpec extends QuestionViewBehaviours[LocalDate] {
   val fullName: FullName = FullName("First", None, "Last")
   val name: String = fullName.toString
 
-  val form = new IndividualBeneficiaryDateOfBirthFormProvider(frontendAppConfig)()
+  val form = new DateOfBirthFormProvider(frontendAppConfig).withPrefix("individualBeneficiaryDateOfBirth")
 
   "IndividualBeneficiaryDateOfBirthView view" must {
 

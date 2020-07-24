@@ -16,19 +16,19 @@
 
 package views.register.beneficiaries.charityortrust.trust
 
-import forms.IndividualBeneficiaryIncomeFormProvider
+import forms.IncomePercentageFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.StringViewBehaviours
+import views.behaviours.IntViewBehaviours
 import views.html.register.beneficiaries.charityortrust.trust.ShareOfIncomeView
 
-class ShareOfIncomeViewSpec extends StringViewBehaviours {
+class ShareOfIncomeViewSpec extends IntViewBehaviours {
 
   val messageKeyPrefix = "trustBeneficiaryShareOfIncome"
   val index = 0
   val name = "First Last"
 
-  val form = new IndividualBeneficiaryIncomeFormProvider()()
+  val form: Form[Int] = new IncomePercentageFormProvider().withPrefix(messageKeyPrefix)
 
   "TrustBeneficiaryIncomeView view" must {
 
@@ -41,7 +41,7 @@ class ShareOfIncomeViewSpec extends StringViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like stringPageWithDynamicTitle(form, applyView, messageKeyPrefix, name)
+    behave like intPage(form, applyView, messageKeyPrefix, name)
 
     behave like pageWithASubmitButton(applyView(form))
   }

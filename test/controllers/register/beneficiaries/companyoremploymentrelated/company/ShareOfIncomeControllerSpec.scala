@@ -21,7 +21,7 @@ import config.annotations.CompanyBeneficiary
 import forms.IncomePercentageFormProvider
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.register.beneficiaries.company.{NamePage, ShareOfIncomePage}
+import pages.register.beneficiaries.companyoremploymentrelated.company.{NamePage, ShareOfIncomePage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call

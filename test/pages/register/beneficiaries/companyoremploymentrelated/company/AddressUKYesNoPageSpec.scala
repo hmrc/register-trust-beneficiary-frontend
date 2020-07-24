@@ -20,7 +20,6 @@ import models.UserAnswers
 import models.core.pages.{InternationalAddress, UKAddress}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-import pages.register.beneficiaries.company.{AddressInternationalPage, AddressUKPage, AddressUKYesNoPage, AddressYesNoPage}
 
 class AddressUKYesNoPageSpec extends PageBehaviours {
 

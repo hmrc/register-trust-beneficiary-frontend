@@ -18,7 +18,7 @@ package utils.answers
 
 import javax.inject.Inject
 import models.UserAnswers
-import pages.register.beneficiaries.trust._
+import pages.register.beneficiaries.charityortrust.trust._
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import sections.beneficiaries.TrustBeneficiaries

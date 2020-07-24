@@ -17,13 +17,13 @@
 package utils.answers
 
 import javax.inject.Inject
-import models.{NormalMode, UserAnswers}
+import models.UserAnswers
 import pages.register.beneficiaries._
 import pages.register.beneficiaries.individual._
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
-import utils.answers.CheckAnswersFormatters._
 import sections.beneficiaries.IndividualBeneficiaries
+import utils.answers.CheckAnswersFormatters._
 import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
 
@@ -199,7 +199,7 @@ class IndividualBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOption
     x =>
       AnswerRow(
         "individualBeneficiaryIncome.checkYourAnswersLabel",
-        HtmlFormat.escape(x),
+        percentage(x.toString),
         Some(controllers.register.beneficiaries.individualBeneficiary.routes.IncomeController.onPageLoad(index, draftId).url),
         indBeneficiaryName(index, userAnswers),
         canEdit = canEdit

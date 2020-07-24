@@ -20,7 +20,7 @@ import base.SpecBase
 import forms.CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider
 import models.{CompanyOrEmploymentRelatedToAdd, NormalMode}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.register.beneficiaries.CompanyOrEmploymentRelatedPage
+import pages.register.beneficiaries.companyoremploymentrelated.CompanyOrEmploymentRelatedPage
 import play.api.data.Form
 import play.api.mvc.Call
 import play.api.test.FakeRequest

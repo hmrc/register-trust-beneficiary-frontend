@@ -22,7 +22,7 @@ import controllers.actions.register.company.NameRequiredAction
 import forms.IncomePercentageFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.beneficiaries.company.ShareOfIncomePage
+import pages.register.beneficiaries.companyoremploymentrelated.company.ShareOfIncomePage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
