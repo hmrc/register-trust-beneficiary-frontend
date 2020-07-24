@@ -23,6 +23,7 @@ import models.UserAnswers
 import pages.entitystatus.CharityBeneficiaryStatus
 import pages.register.beneficiaries.charityortrust.charity._
 import viewmodels.{AddRow, AddToRows}
+import controllers.register.beneficiaries.charityortrust.charity.{routes => charityRts}
 
 class AddABeneficiaryViewHelperSpec extends SpecBase {
 
@@ -53,7 +54,7 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
               name = name,
               typeLabel = label,
               changeUrl = featureUnavailableUrl,
-              removeUrl = featureUnavailableUrl
+              removeUrl = charityRts.RemoveCharityBeneficiaryController.onPageLoad(0, draftId).url
             )
           )
         )
@@ -73,7 +74,7 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
                 name = name,
                 typeLabel = label,
                 changeUrl = featureUnavailableUrl,
-                removeUrl = featureUnavailableUrl
+                removeUrl = charityRts.RemoveCharityBeneficiaryController.onPageLoad(0, draftId).url
               )
             ),
             complete = Nil
@@ -91,7 +92,7 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
                 name = default,
                 typeLabel = label,
                 changeUrl = featureUnavailableUrl,
-                removeUrl = featureUnavailableUrl
+                removeUrl = charityRts.RemoveCharityBeneficiaryController.onPageLoad(0, draftId).url
               )
             ),
             complete = Nil
@@ -127,13 +128,13 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
               name = name3,
               typeLabel = label,
               changeUrl = featureUnavailableUrl,
-              removeUrl = featureUnavailableUrl
+              removeUrl = charityRts.RemoveCharityBeneficiaryController.onPageLoad(2, draftId).url
             ),
             AddRow(
               name = default,
               typeLabel = label,
               changeUrl = featureUnavailableUrl,
-              removeUrl = featureUnavailableUrl
+              removeUrl = charityRts.RemoveCharityBeneficiaryController.onPageLoad(3, draftId).url
             )
           ),
           complete = List(
@@ -141,13 +142,13 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
               name = name1,
               typeLabel = label,
               changeUrl = featureUnavailableUrl,
-              removeUrl = featureUnavailableUrl
+              removeUrl = charityRts.RemoveCharityBeneficiaryController.onPageLoad(0, draftId).url
             ),
             AddRow(
               name = name2,
               typeLabel = label,
               changeUrl = featureUnavailableUrl,
-              removeUrl = featureUnavailableUrl
+              removeUrl = charityRts.RemoveCharityBeneficiaryController.onPageLoad(1, draftId).url
             )
           )
         )

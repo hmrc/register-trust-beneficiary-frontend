@@ -18,6 +18,7 @@ package utils
 
 import controllers.register.beneficiaries.classofbeneficiaries.{routes => classOfBeneficiaryRts}
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRts}
+import controllers.register.beneficiaries.charityortrust.charity.{routes => charityRts}
 import models.UserAnswers
 import play.api.i18n.Messages
 import sections.beneficiaries._
@@ -68,7 +69,7 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
       name = parseName(vm.name),
       messages("entities.beneficiary.charity"),
       changeUrl = controllers.routes.FeatureNotAvailableController.onPageLoad().url,
-      removeUrl = controllers.routes.FeatureNotAvailableController.onPageLoad().url
+      removeUrl = charityRts.RemoveCharityBeneficiaryController.onPageLoad(index, draftId).url
     )
   }
 

@@ -425,6 +425,11 @@ removeIndividualBeneficiary.heading = Are you sure you want to remove {0}?
 removeIndividualBeneficiary.default = the individual beneficiary
 removeIndividualBeneficiary.error.required = Select yes if you want to remove the individual beneficiary
 
+removeCharityBeneficiary.title = Are you sure you want to remove the charity beneficiary?
+removeCharityBeneficiary.heading = Are you sure you want to remove {0}?
+removeCharityBeneficiary.default = the charity beneficiary
+removeCharityBeneficiary.error.required = Select yes if you want to remove the charity beneficiary
+
 dateOfBirth.error.required.all = Enter a date of birth
 dateOfBirth.error.required.two = The date of birth must include {0} and {1}
 dateOfBirth.error.required = The date of birth must include {0}
