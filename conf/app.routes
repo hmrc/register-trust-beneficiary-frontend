@@ -150,3 +150,6 @@ POST       /:draftId/company-or-employment-related/                             
 
 GET        /:draftId/charity/:index/remove                                              controllers.register.beneficiaries.charityortrust.charity.RemoveCharityBeneficiaryController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/charity/:index/remove                                              controllers.register.beneficiaries.charityortrust.charity.RemoveCharityBeneficiaryController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/trust/:index/remove                                              controllers.register.beneficiaries.charityortrust.trust.RemoveTrustBeneficiaryController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/trust/:index/remove                                              controllers.register.beneficiaries.charityortrust.trust.RemoveTrustBeneficiaryController.onSubmit(index: Int, draftId: String)
