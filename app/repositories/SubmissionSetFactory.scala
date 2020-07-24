@@ -23,6 +23,7 @@ import play.api.i18n.Messages
 import play.api.libs.json.Json
 import utils.RegistrationProgress
 import utils.answers.{CharityBeneficiaryAnswersHelper, ClassOfBeneficiariesAnswersHelper, IndividualBeneficiaryAnswersHelper}
+import utils.answers.{CharityBeneficiaryAnswersHelper, CheckYourAnswersHelper, IndividualBeneficiaryAnswersHelper, TrustBeneficiaryAnswersHelper}
 import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
 
@@ -54,22 +55,32 @@ class SubmissionSetFactory @Inject()(
     }
   }
 
-  private def answerSectionsIfCompleted(userAnswers: UserAnswers, status: Option[Status])
+  def answerSectionsIfCompleted(userAnswers: UserAnswers, status: Option[Status])
                                        (implicit messages: Messages): List[RegistrationSubmission.AnswerSection] = {
 
     if (status.contains(Status.Completed)) {
 
       val individualBeneficiariesHelper = new IndividualBeneficiaryAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, false)
-      val charityBeneficiariesHelper = new CharityBeneficiaryAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, false)
       val classOfBeneficiariesHelper = new ClassOfBeneficiariesAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, false)
+      val charityBeneficiariesHelper = new CharityBeneficiaryAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, false)
+      val trustBeneficiariesHelper = new TrustBeneficiaryAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, false)
 
       val entitySections = List(
         individualBeneficiariesHelper.individualBeneficiaries,
-        classOfBeneficiariesHelper.classOfBeneficiaries(individualBeneficiariesHelper.individualBeneficiaries.exists(_.nonEmpty)),
-        classOfBeneficiariesHelper.classOfBeneficiaries(charityBeneficiariesHelper.charityOrTrust.nonEmpty)
+        classOfBeneficiariesHelper.classOfBeneficiaries,
+        // TODO - charity beneficiary
+        trustBeneficiariesHelper.trustBeneficiaries
       ).flatten.flatten
 
-      entitySections.map(convertForSubmission)
+      val updatedFirstSection = AnswerSection(
+        entitySections.head.headingKey,
+        entitySections.head.rows,
+        Some(Messages("answerPage.section.beneficiaries.heading"))
+      )
+
+      val updatedSections = updatedFirstSection :: entitySections.tail
+
+      updatedSections.map(convertForSubmission)
 
     } else {
       List.empty

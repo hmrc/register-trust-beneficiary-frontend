@@ -44,6 +44,12 @@ class AddABeneficiaryControllerSpec extends SpecBase {
   private def removeClassRoute(index : Int): String =
     classOfBeneficiariesRoutes.RemoveClassOfBeneficiaryController.onPageLoad(index, fakeDraftId).url
 
+  private def changeIndividualRoute(index: Int): String =
+    individualRoutes.AnswersController.onPageLoad(index, fakeDraftId).url
+
+  private def changeClassOfBeneficiariesRoute(index: Int): String =
+    classOfBeneficiariesRoutes.ClassBeneficiaryDescriptionController.onPageLoad(index, fakeDraftId).url
+
   private lazy val addABeneficiaryRoute = routes.AddABeneficiaryController.onPageLoad(fakeDraftId).url
 
   private lazy val addOnePostRoute = routes.AddABeneficiaryController.submitOne(fakeDraftId).url
@@ -56,8 +62,8 @@ class AddABeneficiaryControllerSpec extends SpecBase {
   private val yesNoForm = new YesNoFormProvider().withPrefix("addABeneficiaryYesNo")
 
   private lazy val beneficiariesComplete = List(
-    AddRow("First Last", typeLabel = "Individual Beneficiary", "/trusts-registration/beneficiaries/feature-not-available", removeIndividualRoute(0)),
-    AddRow("description", typeLabel = "Class of beneficiaries", "/trusts-registration/beneficiaries/feature-not-available", removeClassRoute(0))
+    AddRow("First Last", typeLabel = "Individual Beneficiary", changeIndividualRoute(0), removeIndividualRoute(0)),
+    AddRow("description", typeLabel = "Class of beneficiaries", changeClassOfBeneficiariesRoute(0), removeClassRoute(0))
   )
 
   private val userAnswersWithBeneficiariesComplete = emptyUserAnswers
