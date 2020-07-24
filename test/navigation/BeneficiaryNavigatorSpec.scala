@@ -18,23 +18,32 @@ package navigation
 
 import base.SpecBase
 import config.FrontendAppConfig
+import controllers.register.beneficiaries.charityortrust.charity.{routes => charityRoutes}
+import controllers.register.beneficiaries.companyoremploymentrelated.company.{routes => companyRoutes}
+import controllers.register.beneficiaries.charityortrust.trust.{routes => trustRoutes}
+import controllers.register.beneficiaries.charityortrust.{routes => charityortrustRoutes}
 import controllers.register.beneficiaries.classofbeneficiaries.{routes => classOfBeneficiariesRoutes}
 import controllers.register.beneficiaries.companyoremploymentrelated.{routes => companyOrEmploymentRelatedRoutes}
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRoutes}
 import generators.Generators
-import models.UserAnswers
+import models.Status.InProgress
 import models.core.pages.FullName
-import models.registration.pages.{AddABeneficiary, WhatTypeOfBeneficiary}
+import models.registration.pages.{AddABeneficiary, CharityOrTrust, WhatTypeOfBeneficiary}
+import models.{CompanyOrEmploymentRelatedToAdd, NormalMode, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages.entitystatus.{CharityBeneficiaryStatus, CompanyBeneficiaryStatus, TrustBeneficiaryStatus}
 import pages.register.beneficiaries._
+import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
+import pages.register.beneficiaries.charityortrust.{CharityOrTrustPage, trust}
 import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
+import pages.register.beneficiaries.companyoremploymentrelated.CompanyOrEmploymentRelatedPage
+import pages.register.beneficiaries.companyoremploymentrelated.company
 import pages.register.beneficiaries.individual._
 import play.api.mvc.Call
 import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries}
 
-class BeneficiaryNavigatorSpec {
-  self: ScalaCheckPropertyChecks with Generators with SpecBase =>
+class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   private def assetsCompletedRoute(draftId: String, config: FrontendAppConfig): Call = {
     Call("GET", config.registrationProgressUrl(draftId))
@@ -106,7 +115,7 @@ class BeneficiaryNavigatorSpec {
   "go to feature not available when beneficiary option selected that is not available" in {
     forAll(arbitrary[UserAnswers]) {
       userAnswers =>
-        val answers = userAnswers.set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.CompanyOrEmployment).success.value
+        val answers = userAnswers.set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.Other).success.value
         navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
           .mustBe(controllers.routes.FeatureNotAvailableController.onPageLoad())
     }
@@ -166,7 +175,7 @@ class BeneficiaryNavigatorSpec {
     }
   }
 
-  "Company" when {
+  "Company or employment related" when {
     "go to CompanyOrEmploymentRelated from WhatTypeOfBeneficiaryPage when CompanyOrEmploymentRelated option selected" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
@@ -176,6 +185,94 @@ class BeneficiaryNavigatorSpec {
             .mustBe(companyOrEmploymentRelatedRoutes.CompanyOrEmploymentRelatedController.onPageLoad(fakeDraftId))
       }
     }
+
+    "Company" when {
+      "no existing company beneficiaries" must {
+        "go to CompanyNamePage from CompanyOrEmploymentRelatedPage when 'company' selected" in {
+          val answers = emptyUserAnswers.set(CompanyOrEmploymentRelatedPage, value = CompanyOrEmploymentRelatedToAdd.Company).success.value
+
+          navigator.nextPage(CompanyOrEmploymentRelatedPage, fakeDraftId, answers)
+            .mustBe(companyRoutes.NameController.onPageLoad(0, fakeDraftId))
+        }
+      }
+
+      "existing charity beneficiary" must {
+        val answers = emptyUserAnswers
+          .set(company.NamePage(0), "Name").success.value
+          .set(CompanyBeneficiaryStatus(0), InProgress).success.value
+          .set(CompanyOrEmploymentRelatedPage, value = CompanyOrEmploymentRelatedToAdd.Company).success.value
+
+        "go to CompanyNamePage from CompanyOrEmploymentRelatedPage when 'company' selected" in {
+          navigator.nextPage(CompanyOrEmploymentRelatedPage, fakeDraftId, answers)
+            .mustBe(companyRoutes.NameController.onPageLoad(1, fakeDraftId))
+        }
+      }
+    }
+
+    "Employment related" when {
+      "go to feature available" in {
+        val answers = emptyUserAnswers.set(CompanyOrEmploymentRelatedPage, value = CompanyOrEmploymentRelatedToAdd.EmploymentRelated).success.value
+
+        navigator.nextPage(CompanyOrEmploymentRelatedPage, fakeDraftId, answers)
+          .mustBe(controllers.routes.FeatureNotAvailableController.onPageLoad())
+      }
+    }
+  }
+
+  "Charity or trust" when {
+    "go to CharityOrTrustPage from WhatTypeOfBeneficiaryPage when 'charity or trust' selected" in {
+      val answers = emptyUserAnswers.set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.CharityOrTrust).success.value
+
+      navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
+        .mustBe(charityortrustRoutes.CharityOrTrustController.onPageLoad(NormalMode, fakeDraftId))
+    }
+
+    "Charity" when {
+      "no existing charity beneficiaries" must {
+        "go to CharityNamePage from CharityOrTrustPage when 'charity' selected" in {
+          val answers = emptyUserAnswers.set(CharityOrTrustPage, value = CharityOrTrust.Charity).success.value
+
+          navigator.nextPage(CharityOrTrustPage, fakeDraftId, answers)
+            .mustBe(charityRoutes.CharityNameController.onPageLoad(0, fakeDraftId))
+        }
+      }
+
+      "existing charity beneficiary" must {
+        val answers = emptyUserAnswers
+          .set(CharityNamePage(0), "Name").success.value
+          .set(CharityBeneficiaryStatus(0), InProgress).success.value
+          .set(CharityOrTrustPage, value = CharityOrTrust.Charity).success.value
+
+        "go to CharityNamePage from CharityOrTrustPage when 'charity' selected" in {
+          navigator.nextPage(CharityOrTrustPage, fakeDraftId, answers)
+            .mustBe(charityRoutes.CharityNameController.onPageLoad(1, fakeDraftId))
+        }
+      }
+    }
+
+    "Trust" when {
+      "no existing trust beneficiaries" must {
+        "go to TrustNamePage from CharityOrTrustPage when 'trust' selected" in {
+          val answers = emptyUserAnswers.set(CharityOrTrustPage, value = CharityOrTrust.Trust).success.value
+
+          navigator.nextPage(CharityOrTrustPage, fakeDraftId, answers)
+            .mustBe(trustRoutes.NameController.onPageLoad(0, fakeDraftId))
+        }
+      }
+
+      "existing trust beneficiary" must {
+        val answers = emptyUserAnswers
+          .set(trust.NamePage(0), "Name").success.value
+          .set(TrustBeneficiaryStatus(0), InProgress).success.value
+          .set(CharityOrTrustPage, value = CharityOrTrust.Trust).success.value
+
+        "go to TrustNamePage from CharityOrTrustPage when 'trust' selected" in {
+          navigator.nextPage(CharityOrTrustPage, fakeDraftId, answers)
+            .mustBe(trustRoutes.NameController.onPageLoad(1, fakeDraftId))
+        }
+      }
+    }
+
   }
 
 }

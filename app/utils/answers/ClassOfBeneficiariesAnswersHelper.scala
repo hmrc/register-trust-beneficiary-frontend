@@ -20,25 +20,25 @@ import javax.inject.Inject
 import models.UserAnswers
 import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
 import play.api.i18n.Messages
-import play.twirl.api.HtmlFormat
 import sections.beneficiaries.ClassOfBeneficiaries
+import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
 
-class ClassOfBeneficiariesAnswersHelper @Inject()(userAnswers: UserAnswers,
+class ClassOfBeneficiariesAnswersHelper @Inject()(countryOptions: CountryOptions)
+                                                 (userAnswers: UserAnswers,
                                                   draftId: String,
                                                   canEdit: Boolean)
                                                  (implicit messages: Messages) {
 
   def classOfBeneficiaries(individualBeneficiariesExist: Boolean): Option[Seq[AnswerSection]] = {
+
     for {
       beneficiaries <- userAnswers.get(ClassOfBeneficiaries)
       indexed = beneficiaries.zipWithIndex
     } yield indexed.map {
       case (_, index) =>
 
-        val questions = Seq(
-          classBeneficiaryDescription(index)
-        ).flatten
+        val questions = classOfBeneficiariesRows(index)
 
         val sectionKey = if (index == 0 && !individualBeneficiariesExist) {
           Some(Messages("answerPage.section.beneficiaries.heading"))
@@ -46,19 +46,24 @@ class ClassOfBeneficiariesAnswersHelper @Inject()(userAnswers: UserAnswers,
           None
         }
 
-        AnswerSection(Some(Messages("answerPage.section.classOfBeneficiary.subheading") + " " + (index + 1)),
-          questions, sectionKey)
+        AnswerSection(
+          Some(Messages("answerPage.section.classOfBeneficiary.subheading") + " " + (index + 1)),
+          questions,
+          sectionKey
+        )
     }
   }
 
-  def classBeneficiaryDescription(index: Int): Option[AnswerRow] = userAnswers.get(ClassBeneficiaryDescriptionPage(index)) map {
-    x =>
-      AnswerRow(
-        "classBeneficiaryDescription.checkYourAnswersLabel",
-        HtmlFormat.escape(x),
-        Some(controllers.register.beneficiaries.classofbeneficiaries.routes.ClassBeneficiaryDescriptionController.onPageLoad(index, draftId).url),
-        canEdit = canEdit
+  private def classOfBeneficiariesRows(index: Int): Seq[AnswerRow] = {
+    val helper = new CheckYourAnswersHelper(countryOptions)(userAnswers, canEdit = canEdit)
+
+    Seq(
+      helper.stringQuestion(
+        ClassBeneficiaryDescriptionPage(index),
+        "classBeneficiaryDescription",
+        Some(controllers.register.beneficiaries.classofbeneficiaries.routes.ClassBeneficiaryDescriptionController.onPageLoad(index, draftId).url)
       )
+    ).flatten
   }
 
 }
