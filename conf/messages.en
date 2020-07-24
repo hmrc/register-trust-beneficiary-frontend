@@ -414,7 +414,7 @@ whatTypeOfBeneficiary.other = Other beneficiary
 whatTypeOfBeneficiary.charity = Charity
 whatTypeOfBeneficiary.trust = Trust
 whatTypeOfBeneficiary.company = Company
-whatTypeOfBeneficiary.employmentRelated = Employment related
+whatTypeOfBeneficiary.employment = Employment related
 
 whatTypeOfBeneficiary.error.required = Select the type of beneficiary you need to add
 whatTypeOfBeneficiary.hint = You can enter a maximum of 25 entries for each beneficiary type

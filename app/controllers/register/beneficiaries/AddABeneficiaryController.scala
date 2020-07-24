@@ -53,7 +53,6 @@ class AddABeneficiaryController @Inject()(
   private def routes(draftId: String) =
     identify andThen getData(draftId) andThen requireData
 
-  // TODO - remove
   private def heading(count: Int)(implicit mp : MessagesProvider) = {
     count match {
       case 0 => Messages("addABeneficiary.heading")

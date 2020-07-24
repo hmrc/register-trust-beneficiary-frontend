@@ -18,7 +18,7 @@ package mapping.registration
 
 import javax.inject.Inject
 import mapping.Mapping
-import models.{BeneficiaryType, UserAnswers}
+import models.UserAnswers
 import play.api.Logger
 
 class BeneficiariesMapper @Inject()(

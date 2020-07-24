@@ -16,43 +16,42 @@
 
 package models
 
-import mapping.registration._
 import models.registration.pages.WhatTypeOfBeneficiary
-import play.api.i18n.{Messages, MessagesProvider}
-import play.api.libs.json.{Format, Json}
+import play.api.libs.json.JsArray
 import viewmodels.RadioOption
+import viewmodels.addAnother._
 
-case class BeneficiaryType(individualDetails: Option[List[IndividualDetailsType]],
-                           company: Option[List[CompanyType]],
-                           trust: Option[List[BeneficiaryTrustType]],
-                           charity: Option[List[CharityType]],
-                           unidentified: Option[List[UnidentifiedType]],
-                           large: Option[List[LargeType]],
-                           other: Option[List[OtherType]]) {
+case class Beneficiaries(individuals: List[IndividualBeneficiaryViewModel] = Nil,
+                         unidentified: List[ClassOfBeneficiaryViewModel] = Nil,
+                         charities: List[CharityBeneficiaryViewModel] = Nil,
+                         trusts: List[TrustBeneficiaryViewModel] = Nil,
+                         companies: List[CompanyBeneficiaryViewModel] = Nil,
+                         large: JsArray = JsArray(),
+                         other: JsArray = JsArray()) {
 
   type BeneficiaryOption = (Int, WhatTypeOfBeneficiary)
   type BeneficiaryOptions = List[BeneficiaryOption]
 
-  def addToHeading()(implicit mp: MessagesProvider): String =
-    (individualDetails ++ unidentified ++ company ++ large ++ trust ++ charity ++ other).size match {
-      case 0 => Messages("addABeneficiary.heading")
-      case 1 => Messages("addABeneficiary.singular.heading")
-      case l => Messages("addABeneficiary.count.heading", l)
-    }
-
   private val options: BeneficiaryOptions = {
-    (individualDetails.size, WhatTypeOfBeneficiary.Individual) ::
+    (individuals.size, WhatTypeOfBeneficiary.Individual) ::
       (unidentified.size, WhatTypeOfBeneficiary.ClassOfBeneficiary) ::
-      (charity.size, WhatTypeOfBeneficiary.Charity) ::
-      (trust.size, WhatTypeOfBeneficiary.Trust) ::
-      (company.size, WhatTypeOfBeneficiary.Company) ::
-      (large.size, WhatTypeOfBeneficiary.EmploymentRelated) ::
-      (other.size, WhatTypeOfBeneficiary.Other) ::
+      (charities.size, WhatTypeOfBeneficiary.Charity) ::
+      (trusts.size, WhatTypeOfBeneficiary.Trust) ::
+      (companies.size, WhatTypeOfBeneficiary.Company) ::
+      (large.value.size, WhatTypeOfBeneficiary.Employment) ::
+      (other.value.size, WhatTypeOfBeneficiary.Other) ::
       Nil
   }
 
   val nonMaxedOutOptions: List[RadioOption] = {
 
+    /** Determines which Radio Options to display.
+      *
+      *  A beneficiary type is considered 'maxed-out' if there are 25 or more instances of it.
+      *  This recursive function begins with a list of 'uncombined' and 'non-maxed-out' beneficiary types.
+      *  In the case of Charity and Trust, and Company and EmploymentRelated, it will combine the two if neither are 'maxed-out'.
+      *  This is so that no radio option is displayed that corresponds to a beneficiary type that is 'maxed-out'.
+      */
     def combineOptions(uncombinedOptions: BeneficiaryOptions): BeneficiaryOptions = {
       @scala.annotation.tailrec
       def recurse(uncombinedOptions: BeneficiaryOptions, combinedOptions: BeneficiaryOptions): BeneficiaryOptions = {
@@ -61,7 +60,7 @@ case class BeneficiaryType(individualDetails: Option[List[IndividualDetailsType]
           case List(head, next, _*) if head._2 == WhatTypeOfBeneficiary.Charity && next._2 == WhatTypeOfBeneficiary.Trust =>
             val combinedOption: BeneficiaryOption = (head._1 + next._1, WhatTypeOfBeneficiary.CharityOrTrust)
             recurse(uncombinedOptions.tail.tail, combinedOptions :+ combinedOption)
-          case List(head, next, _*) if head._2 == WhatTypeOfBeneficiary.Company && next._2 == WhatTypeOfBeneficiary.EmploymentRelated =>
+          case List(head, next, _*) if head._2 == WhatTypeOfBeneficiary.Company && next._2 == WhatTypeOfBeneficiary.Employment =>
             val combinedOption: BeneficiaryOption = (head._1 + next._1, WhatTypeOfBeneficiary.CompanyOrEmployment)
             recurse(uncombinedOptions.tail.tail, combinedOptions :+ combinedOption)
           case _ =>
@@ -83,8 +82,4 @@ case class BeneficiaryType(individualDetails: Option[List[IndividualDetailsType]
     }
   }
 
-}
-
-object BeneficiaryType {
-  implicit val formats: Format[BeneficiaryType] = Json.format[BeneficiaryType]
 }
