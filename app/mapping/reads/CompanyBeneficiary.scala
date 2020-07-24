@@ -16,11 +16,17 @@
 
 package mapping.reads
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.beneficiaries.{TrustBeneficiaries => section}
+import models.core.pages.{Address, FullName, InternationalAddress, UKAddress}
+import play.api.libs.json.{Format, Json}
 
-case object TrustBeneficiaries extends QuestionPage[List[TrustBeneficiary]]{
-  override def path: JsPath = section.path
-  override def toString: String = section.toString
+final case class CompanyBeneficiary(name: String,
+                                    ukAddress : Option[UKAddress],
+                                    internationalAddress : Option[InternationalAddress],
+                                    income: Option[Int],
+                                    incomeYesNo: Boolean
+                                   ) {
+}
+
+object CompanyBeneficiary {
+  implicit val classFormat: Format[CompanyBeneficiary] = Json.format[CompanyBeneficiary]
 }

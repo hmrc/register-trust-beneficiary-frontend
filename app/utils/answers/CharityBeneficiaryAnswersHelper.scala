@@ -18,8 +18,7 @@ package utils.answers
 
 import controllers.register.beneficiaries.charityortrust.charity.routes._
 import javax.inject.Inject
-import models.{NormalMode, UserAnswers}
-import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
+import models.UserAnswers
 import pages.register.beneficiaries.charityortrust.charity._
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
@@ -36,7 +35,6 @@ class CharityBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
 
   def charityBeneficiaryRows(index: Int): Seq[AnswerRow] = {
     Seq(
-      charityOrTrust,
       charityName(index),
       amountDiscretionYesNo(index),
       howMuchIncome(index),
@@ -45,16 +43,6 @@ class CharityBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
       charityAddressUK(index),
       charityInternationalAddress(index)
     ).flatten
-  }
-
-  def charityOrTrust: Option[AnswerRow] = userAnswers.get(CharityOrTrustPage) map {
-    x =>
-      AnswerRow(
-        "charityOrTrust.checkYourAnswersLabel",
-        formatCharityOrTrust(x),
-        Some(controllers.register.beneficiaries.charityortrust.routes.CharityOrTrustController.onPageLoad(draftId).url),
-        canEdit = canEdit
-      )
   }
 
   def addressYesNo(index: Int): Option[AnswerRow] = userAnswers.get(AddressYesNoPage(index)) map {

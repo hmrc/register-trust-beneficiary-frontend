@@ -51,8 +51,8 @@ answerPage.section.charityBeneficiary.subheading = Charity beneficiary {0}
 answerPage.section.companyBeneficiary.subheading = Company beneficiary {0}
 answerPage.section.individualBeneficiary.subheading = Individual beneficiary
 answerPage.section.classOfBeneficiary.subheading = Class of beneficiary
-answerPage.section.trustBeneficiary.heading = Trust beneficiary {0}
-answerPage.section.otherBeneficiary.heading = Other beneficiary {0}
+answerPage.section.trustBeneficiary.subheading = Trust beneficiary {0}
+answerPage.section.otherBeneficiary.subheading = Other beneficiary {0}
 answerPage.section.largeBeneficiary.subheading = Employment related beneficiary {0}
 
 footer.links.accessibility.text = Accessibility
@@ -424,6 +424,21 @@ removeIndividualBeneficiary.title = Are you sure you want to remove the individu
 removeIndividualBeneficiary.heading = Are you sure you want to remove {0}?
 removeIndividualBeneficiary.default = the individual beneficiary
 removeIndividualBeneficiary.error.required = Select yes if you want to remove the individual beneficiary
+
+removeCharityBeneficiary.title = Are you sure you want to remove the charity beneficiary?
+removeCharityBeneficiary.heading = Are you sure you want to remove {0}?
+removeCharityBeneficiary.default = the charity beneficiary
+removeCharityBeneficiary.error.required = Select yes if you want to remove the charity beneficiary
+
+removeTrustBeneficiary.title = Are you sure you want to remove the trust beneficiary?
+removeTrustBeneficiary.heading = Are you sure you want to remove {0}?
+removeTrustBeneficiary.default = the trust beneficiary
+removeTrustBeneficiary.error.required = Select yes if you want to remove the trust beneficiary
+
+removeCompanyBeneficiary.title = Are you sure you want to remove the company beneficiary?
+removeCompanyBeneficiary.heading = Are you sure you want to remove {0}?
+removeCompanyBeneficiary.default = the company beneficiary
+removeCompanyBeneficiary.error.required = Select yes if you want to remove the company beneficiary
 
 dateOfBirth.error.required.all = Enter a date of birth
 dateOfBirth.error.required.two = The date of birth must include {0} and {1}

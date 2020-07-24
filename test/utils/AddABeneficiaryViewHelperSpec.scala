@@ -23,10 +23,14 @@ import models.UserAnswers
 import pages.entitystatus.CharityBeneficiaryStatus
 import pages.register.beneficiaries.charityortrust.charity._
 import viewmodels.{AddRow, AddToRows}
+import controllers.register.beneficiaries.charityortrust.charity.{routes => charityRts}
 
 class AddABeneficiaryViewHelperSpec extends SpecBase {
 
   private lazy val featureUnavailableUrl: String = routes.FeatureNotAvailableController.onPageLoad().url
+
+  private def changeInProgressCharityBeneficiaryRoute(index: Int): String = charityRts.CharityNameController.onPageLoad(index, draftId).url
+  private def changeCompleteCharityBeneficiaryRoute(index: Int): String = charityRts.CharityAnswersController.onPageLoad(index, draftId).url
 
   "Add a beneficiary view helper" when {
 
@@ -39,12 +43,14 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
       val default: String = "No name added"
 
       "render a complete charity beneficiary" in {
+        
+        val index: Int = 0
 
         val userAnswers = emptyUserAnswers
-          .set(CharityNamePage(0), name).success.value
-          .set(AmountDiscretionYesNoPage(0), true).success.value
-          .set(AddressYesNoPage(0), false).success.value
-          .set(CharityBeneficiaryStatus(0), Completed).success.value
+          .set(CharityNamePage(index), name).success.value
+          .set(AmountDiscretionYesNoPage(index), true).success.value
+          .set(AddressYesNoPage(index), false).success.value
+          .set(CharityBeneficiaryStatus(index), Completed).success.value
 
         helper(userAnswers).rows mustEqual AddToRows(
           inProgress = Nil,
@@ -52,8 +58,8 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
             AddRow(
               name = name,
               typeLabel = label,
-              changeUrl = featureUnavailableUrl,
-              removeUrl = featureUnavailableUrl
+              changeUrl = changeCompleteCharityBeneficiaryRoute(index),
+              removeUrl = charityRts.RemoveCharityBeneficiaryController.onPageLoad(0, draftId).url
             )
           )
         )
@@ -62,18 +68,20 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
       "render an in progress charity beneficiary" when {
 
         "it has a name" in {
+          
+          val index: Int = 0
 
           val userAnswers = emptyUserAnswers
-            .set(CharityNamePage(0), name).success.value
-            .set(CharityBeneficiaryStatus(0), InProgress).success.value
+            .set(CharityNamePage(index), name).success.value
+            .set(CharityBeneficiaryStatus(index), InProgress).success.value
 
           helper(userAnswers).rows mustEqual AddToRows(
             inProgress = List(
               AddRow(
                 name = name,
                 typeLabel = label,
-                changeUrl = featureUnavailableUrl,
-                removeUrl = featureUnavailableUrl
+                changeUrl = changeInProgressCharityBeneficiaryRoute(index),
+                removeUrl = charityRts.RemoveCharityBeneficiaryController.onPageLoad(0, draftId).url
               )
             ),
             complete = Nil
@@ -82,16 +90,18 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
 
         "it has no name" in {
 
+          val index: Int = 0
+
           val userAnswers = emptyUserAnswers
-            .set(CharityBeneficiaryStatus(0), InProgress).success.value
+            .set(CharityBeneficiaryStatus(index), InProgress).success.value
 
           helper(userAnswers).rows mustEqual AddToRows(
             inProgress = List(
               AddRow(
                 name = default,
                 typeLabel = label,
-                changeUrl = featureUnavailableUrl,
-                removeUrl = featureUnavailableUrl
+                changeUrl = changeInProgressCharityBeneficiaryRoute(index),
+                removeUrl = charityRts.RemoveCharityBeneficiaryController.onPageLoad(0, draftId).url
               )
             ),
             complete = Nil
@@ -126,28 +136,28 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
             AddRow(
               name = name3,
               typeLabel = label,
-              changeUrl = featureUnavailableUrl,
-              removeUrl = featureUnavailableUrl
+              changeUrl = changeInProgressCharityBeneficiaryRoute(2),
+              removeUrl = charityRts.RemoveCharityBeneficiaryController.onPageLoad(2, draftId).url
             ),
             AddRow(
               name = default,
               typeLabel = label,
-              changeUrl = featureUnavailableUrl,
-              removeUrl = featureUnavailableUrl
+              changeUrl = changeInProgressCharityBeneficiaryRoute(3),
+              removeUrl = charityRts.RemoveCharityBeneficiaryController.onPageLoad(3, draftId).url
             )
           ),
           complete = List(
             AddRow(
               name = name1,
               typeLabel = label,
-              changeUrl = featureUnavailableUrl,
-              removeUrl = featureUnavailableUrl
+              changeUrl = changeCompleteCharityBeneficiaryRoute(0),
+              removeUrl = charityRts.RemoveCharityBeneficiaryController.onPageLoad(0, draftId).url
             ),
             AddRow(
               name = name2,
               typeLabel = label,
-              changeUrl = featureUnavailableUrl,
-              removeUrl = featureUnavailableUrl
+              changeUrl = changeCompleteCharityBeneficiaryRoute(1),
+              removeUrl = charityRts.RemoveCharityBeneficiaryController.onPageLoad(1, draftId).url
             )
           )
         )

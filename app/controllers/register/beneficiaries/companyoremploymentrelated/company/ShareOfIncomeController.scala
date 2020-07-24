@@ -22,7 +22,7 @@ import controllers.actions.register.company.NameRequiredAction
 import forms.IncomePercentageFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.beneficiaries.companyoremploymentrelated.company.ShareOfIncomePage
+import pages.register.beneficiaries.companyoremploymentrelated.company.IncomePage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -48,7 +48,7 @@ class ShareOfIncomeController @Inject()(
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(ShareOfIncomePage(index)) match {
+      val preparedForm = request.userAnswers.get(IncomePage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -66,9 +66,9 @@ class ShareOfIncomeController @Inject()(
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ShareOfIncomePage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(IncomePage(index), value))
             _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ShareOfIncomePage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(IncomePage(index), draftId, updatedAnswers))
       )
   }
 }

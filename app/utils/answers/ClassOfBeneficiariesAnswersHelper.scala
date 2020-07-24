@@ -30,7 +30,7 @@ class ClassOfBeneficiariesAnswersHelper @Inject()(countryOptions: CountryOptions
                                                   canEdit: Boolean)
                                                  (implicit messages: Messages) {
 
-  def classOfBeneficiaries(individualBeneficiariesExist: Boolean): Option[Seq[AnswerSection]] = {
+  def classOfBeneficiaries: Option[Seq[AnswerSection]] = {
 
     for {
       beneficiaries <- userAnswers.get(ClassOfBeneficiaries)
@@ -40,16 +40,10 @@ class ClassOfBeneficiariesAnswersHelper @Inject()(countryOptions: CountryOptions
 
         val questions = classOfBeneficiariesRows(index)
 
-        val sectionKey = if (index == 0 && !individualBeneficiariesExist) {
-          Some(Messages("answerPage.section.beneficiaries.heading"))
-        } else {
-          None
-        }
-
         AnswerSection(
           Some(Messages("answerPage.section.classOfBeneficiary.subheading") + " " + (index + 1)),
           questions,
-          sectionKey
+          None
         )
     }
   }

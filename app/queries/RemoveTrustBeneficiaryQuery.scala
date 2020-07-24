@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package mapping.reads
+package queries
 
-import pages.QuestionPage
 import play.api.libs.json.JsPath
-import sections.beneficiaries.{TrustBeneficiaries => section}
+import sections.beneficiaries.{Beneficiaries, TrustBeneficiaries}
 
-case object TrustBeneficiaries extends QuestionPage[List[TrustBeneficiary]]{
-  override def path: JsPath = section.path
-  override def toString: String = section.toString
+final case class RemoveTrustBeneficiaryQuery(index : Int) extends Settable[Boolean] {
+
+    override def path: JsPath = JsPath \ Beneficiaries \ TrustBeneficiaries \ index
 }
