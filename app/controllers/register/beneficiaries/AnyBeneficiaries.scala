@@ -16,13 +16,13 @@
 
 package controllers.register.beneficiaries
 
-import models.{Beneficiaries, UserAnswers}
+import models.{Beneficiaries, ReadableUserAnswers}
 import play.api.libs.json.JsArray
 import sections.beneficiaries._
 
 trait AnyBeneficiaries {
 
-  def beneficiaries(userAnswers: UserAnswers): Beneficiaries = Beneficiaries(
+  def beneficiaries(userAnswers: ReadableUserAnswers): Beneficiaries = Beneficiaries(
     userAnswers.get(IndividualBeneficiaries).getOrElse(List.empty),
     userAnswers.get(ClassOfBeneficiaries).getOrElse(List.empty),
     userAnswers.get(CharityBeneficiaries).getOrElse(List.empty),
@@ -32,7 +32,7 @@ trait AnyBeneficiaries {
     userAnswers.get(OtherBeneficiaries).getOrElse(JsArray())
   )
 
-  def isAnyBeneficiaryAdded(userAnswers: UserAnswers): Boolean = {
+  def isAnyBeneficiaryAdded(userAnswers: ReadableUserAnswers): Boolean = {
     val beneficiaryLists: Beneficiaries = beneficiaries(userAnswers)
 
     beneficiaryLists.individuals.nonEmpty ||
