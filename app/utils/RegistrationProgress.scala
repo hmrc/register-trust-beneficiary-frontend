@@ -26,14 +26,6 @@ import viewmodels.addAnother.{ClassOfBeneficiaryViewModel, IndividualBeneficiary
 
 class RegistrationProgress @Inject()() {
 
-  private def determineStatus(complete: Boolean): Status = {
-    if (complete) {
-      Status.Completed
-    } else {
-      Status.InProgress
-    }
-  }
-
   def beneficiariesStatus(userAnswers: ReadableUserAnswers): Option[Status] = {
 
     val statusList: List[IsComplete] = List(
@@ -41,14 +33,20 @@ class RegistrationProgress @Inject()() {
       userAnswers.get(ClassOfBeneficiaries) map ClassStatus
     ).flatten
 
-    statusList map (_.isComplete(userAnswers))
-
     statusList match {
       case Nil => None
       case list =>
 
-        list.foldLeft[Option[Status]](None){ (x, y) =>
-          y.status(userAnswers)
+        list.foldLeft[Option[Status]](None) { (status, isComplete) =>
+          isComplete.status(userAnswers) match {
+            case inProgress@Some(InProgress) =>
+              inProgress
+            case completed@Some(Completed) =>
+              status orElse completed
+            case _ =>
+              None
+
+          }
         }
     }
 
@@ -57,6 +55,14 @@ class RegistrationProgress @Inject()() {
   trait IsComplete {
 
     def isComplete(userAnswers: ReadableUserAnswers): Option[Boolean]
+
+    private def determineStatus(complete: Boolean): Status = {
+      if (complete) {
+        Status.Completed
+      } else {
+        Status.InProgress
+      }
+    }
 
     def status(userAnswers: ReadableUserAnswers): Option[Status] = {
 
@@ -74,7 +80,7 @@ class RegistrationProgress @Inject()() {
     def isComplete(userAnswers: ReadableUserAnswers): Option[Boolean] = {
 
       userAnswers.get(IndividualBeneficiaries) match {
-        case Some(individuals@_::_) => Some(!individuals.exists(_.status == Status.InProgress))
+        case Some(individuals@_ :: _) => Some(!individuals.exists(_.status == Status.InProgress))
         case _ => None
       }
 
@@ -85,7 +91,7 @@ class RegistrationProgress @Inject()() {
 
     def isComplete(userAnswers: ReadableUserAnswers): Option[Boolean] = {
       userAnswers.get(ClassOfBeneficiaries) match {
-        case Some(classes@_::_) => Some(!classes.exists(_.status == Status.InProgress))
+        case Some(classes@_ :: _) => Some(!classes.exists(_.status == Status.InProgress))
         case _ => None
       }
     }
