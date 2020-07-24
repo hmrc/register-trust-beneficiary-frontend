@@ -24,18 +24,23 @@ import play.api.Logger
 class BeneficiariesMapper @Inject()(
                                      individualMapper: IndividualBeneficiaryMapper,
                                      unidentifiedMapper: ClassOfBeneficiariesMapper,
-                                     charityortrustMapper: CharityBeneficiaryMapper
+                                     charityortrustMapper: CharityBeneficiaryMapper,
+                                     companyBeneficiaryMapper: CompanyBeneficiaryMapper
                                    ) extends Mapping[BeneficiaryType] {
   override def build(userAnswers: UserAnswers): Option[BeneficiaryType] = {
     val individuals = individualMapper.build(userAnswers)
     val unidentified = unidentifiedMapper.build(userAnswers)
     val charity = charityortrustMapper.build(userAnswers)
+    val company = companyBeneficiaryMapper.build(userAnswers)
 
-    if (individuals.isDefined || unidentified.isDefined) {
+    if (individuals.isDefined ||
+        unidentified.isDefined ||
+        charity.isDefined ||
+        company.isDefined) {
       Some(
         BeneficiaryType(
           individualDetails = individuals,
-          company = None,
+          company = company,
           trust = None,
           charity = charity,
           unidentified = unidentified,

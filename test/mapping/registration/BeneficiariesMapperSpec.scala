@@ -22,10 +22,11 @@ import base.SpecBase
 import generators.Generators
 import mapping.Mapping
 import models.core.pages.FullName
-import org.scalatest.{FreeSpec, MustMatchers, OptionValues}
-import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
-import pages.register.beneficiaries.individual._
+import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.beneficiaries.charityortrust.charity
+import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
+import pages.register.beneficiaries.companyoremploymentrelated.company
+import pages.register.beneficiaries.individual._
 
 class BeneficiariesMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {
@@ -147,8 +148,25 @@ class BeneficiariesMapperSpec extends SpecBase with MustMatchers
         result.other mustNot be(defined)
       }
 
+      "must be able to create BeneficiaryType when there is a company beneficiary" in {
+
+        val index = 0
+
+        val userAnswers = emptyUserAnswers
+          .set(company.NamePage(index), "Company Name").success.value
+          .set(company.IncomeYesNoPage(index), false).success.value
+          .set(company.IncomePage(index), 100).success.value
+
+        val result = beneficiariesMapper.build(userAnswers).value
+
+        result.individualDetails mustNot be(defined)
+        result.unidentified mustNot be(defined)
+        result.charity mustNot be(defined)
+        result.company must be(defined)
+        result.trust mustNot be(defined)
+        result.large mustNot be(defined)
+        result.other mustNot be(defined)
+      }
     }
-
   }
-
 }
