@@ -97,7 +97,7 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
       } else {
         trustRts.NameController.onPageLoad(index, draftId).url
       },
-      removeUrl = controllers.routes.FeatureNotAvailableController.onPageLoad().url
+      removeUrl = trustRts.RemoveTrustBeneficiaryController.onPageLoad(index, draftId).url
     )
   }
 
@@ -114,7 +114,7 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
       } else {
         companyRts.NameController.onPageLoad(index, draftId).url
       },
-      removeUrl = controllers.routes.FeatureNotAvailableController.onPageLoad().url
+      removeUrl = companyRts.RemoveCompanyBeneficiaryController.onPageLoad(index, draftId).url
     )
   }
 
