@@ -19,10 +19,9 @@ package utils
 import controllers.register.beneficiaries.classofbeneficiaries.{routes => classOfBeneficiaryRts}
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRts}
 import models.UserAnswers
-import models.core.pages.FullName
 import play.api.i18n.Messages
-import sections.beneficiaries.{CharityBeneficiaries, CompanyBeneficiaries, ClassOfBeneficiaries, IndividualBeneficiaries}
-import viewmodels.addAnother.{CharityBeneficiaryViewModel, CompanyBeneficiaryViewModel, ClassOfBeneficiaryViewModel, IndividualBeneficiaryViewModel}
+import sections.beneficiaries._
+import viewmodels.addAnother._
 import viewmodels.{AddRow, AddToRows}
 
 class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(implicit messages: Messages) {
@@ -73,6 +72,16 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
     )
   }
 
+  private def parseTrustBeneficiary(trustBeneficiary:(TrustBeneficiaryViewModel, Int)): AddRow = {
+
+    AddRow(
+      name = parseName(trustBeneficiary._1.name),
+      messages("entities.beneficiary.trust"),
+      changeUrl = controllers.routes.FeatureNotAvailableController.onPageLoad().url,
+      removeUrl = controllers.routes.FeatureNotAvailableController.onPageLoad().url
+    )
+  }
+
   private def parseCompanyBeneficiary(companyBeneficiary : (CompanyBeneficiaryViewModel, Int)) : AddRow = {
 
     val vm = companyBeneficiary._1
@@ -117,6 +126,16 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
     InProgressComplete(inProgress = progress, complete = completed)
   }
 
+  private def trustBeneficiaries = {
+    val trustBeneficiaries = userAnswers.get(TrustBeneficiaries).toList.flatten.zipWithIndex
+
+    val completed = trustBeneficiaries.filter(_._1.isComplete).map(parseTrustBeneficiary)
+
+    val progress = trustBeneficiaries.filterNot(_._1.isComplete).map(parseTrustBeneficiary)
+
+    InProgressComplete(inProgress = progress, complete = completed)
+  }
+
   private def companyBeneficiaries = {
     val beneficiaries = userAnswers.get(CompanyBeneficiaries).toList.flatten.zipWithIndex
 
@@ -132,10 +151,12 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
       inProgress = individualBeneficiaries.inProgress :::
         classOfBeneficiaries.inProgress :::
         charityBeneficiaries.inProgress :::
+        trustBeneficiaries.inProgress :::
         companyBeneficiaries.inProgress,
       complete = individualBeneficiaries.complete :::
         classOfBeneficiaries.complete :::
         charityBeneficiaries.complete :::
+        trustBeneficiaries.complete :::
         companyBeneficiaries.complete
     )
 
