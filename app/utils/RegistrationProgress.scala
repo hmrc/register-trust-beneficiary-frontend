@@ -48,15 +48,7 @@ class RegistrationProgress @Inject()() {
       case list =>
 
         list.foldLeft[Option[Status]](None){ (x, y) =>
-          y.isComplete(userAnswers) match {
-            case Some(false) =>
-              Some(InProgress)
-            case Some(true) =>
-              x orElse Some(Completed)
-            case _ =>
-              None
-
-          }
+          y.status(userAnswers)
         }
     }
 
