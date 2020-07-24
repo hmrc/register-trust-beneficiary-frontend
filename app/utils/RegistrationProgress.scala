@@ -16,86 +16,108 @@
 
 package utils
 
+import controllers.register.beneficiaries.AnyBeneficiaries
 import javax.inject.Inject
-import models.Status.{Completed, InProgress}
 import models.registration.pages._
 import models.{ReadableUserAnswers, Status}
 import pages.register.beneficiaries.AddABeneficiaryPage
-import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries}
-import viewmodels.addAnother.{ClassOfBeneficiaryViewModel, IndividualBeneficiaryViewModel}
+import sections.beneficiaries.{CharityBeneficiaries, ClassOfBeneficiaries, CompanyBeneficiaries, IndividualBeneficiaries, TrustBeneficiaries}
 
-class RegistrationProgress @Inject()() {
+class RegistrationProgress @Inject()() extends AnyBeneficiaries {
 
   def beneficiariesStatus(userAnswers: ReadableUserAnswers): Option[Status] = {
 
-    val statusList: List[IsComplete] = List(
-      userAnswers.get(IndividualBeneficiaries) map IndividualBeneficiariesStatus,
-      userAnswers.get(ClassOfBeneficiaries) map ClassStatus
-    ).flatten
+    if (!isAnyBeneficiaryAdded(userAnswers)) {
+      None
+    } else {
 
-    statusList match {
-      case Nil => None
-      case list =>
+      val statusList: List[IsComplete] = List(
+        AddingBeneficiariesIsComplete,
+        IndividualBeneficiariesAreComplete,
+        ClassBeneficiariesAreComplete,
+        CompanyBeneficiariesAreComplete,
+        TrustBeneficiariesAreComplete,
+        CharityBeneficiariesAreComplete
+      )
 
-        list.foldLeft[Option[Status]](None) { (status, isComplete) =>
-          isComplete.status(userAnswers) match {
-            case inProgress@Some(InProgress) =>
-              inProgress
-            case completed@Some(Completed) =>
-              status orElse completed
-            case _ =>
-              None
+      statusList match {
+        case Nil => None
+        case list =>
 
-          }
-        }
+          val complete = list.forall(isComplete => isComplete(userAnswers))
+
+          Some(determineStatus(complete))
+      }
     }
+  }
 
+  private def determineStatus(complete: Boolean): Status = {
+    if (complete) {
+      Status.Completed
+    } else {
+      Status.InProgress
+    }
   }
 
   trait IsComplete {
+    def apply(userAnswers: ReadableUserAnswers): Boolean
+  }
 
-    def isComplete(userAnswers: ReadableUserAnswers): Option[Boolean]
+  object AddingBeneficiariesIsComplete extends IsComplete {
 
-    private def determineStatus(complete: Boolean): Status = {
-      if (complete) {
-        Status.Completed
-      } else {
-        Status.InProgress
-      }
-    }
-
-    def status(userAnswers: ReadableUserAnswers): Option[Status] = {
-
-      val noMoreToAdd = userAnswers.get(AddABeneficiaryPage).contains(AddABeneficiary.NoComplete)
-
-      isComplete(userAnswers) map { isComplete =>
-        determineStatus(isComplete && noMoreToAdd)
-      }
-
+    def apply(userAnswers: ReadableUserAnswers): Boolean = {
+      userAnswers.get(AddABeneficiaryPage).contains(AddABeneficiary.NoComplete)
     }
   }
 
-  case class IndividualBeneficiariesStatus(list: List[IndividualBeneficiaryViewModel]) extends IsComplete {
+  object IndividualBeneficiariesAreComplete extends IsComplete {
 
-    def isComplete(userAnswers: ReadableUserAnswers): Option[Boolean] = {
+    def apply(userAnswers: ReadableUserAnswers): Boolean = {
 
       userAnswers.get(IndividualBeneficiaries) match {
-        case Some(individuals@_ :: _) => Some(!individuals.exists(_.status == Status.InProgress))
-        case _ => None
+        case Some(individuals@_ :: _) => !individuals.exists(_.status == Status.InProgress)
+        case _ => true
       }
-
     }
   }
 
-  case class ClassStatus(list: List[ClassOfBeneficiaryViewModel]) extends IsComplete {
+  object ClassBeneficiariesAreComplete extends IsComplete {
 
-    def isComplete(userAnswers: ReadableUserAnswers): Option[Boolean] = {
+    def apply(userAnswers: ReadableUserAnswers): Boolean = {
       userAnswers.get(ClassOfBeneficiaries) match {
-        case Some(classes@_ :: _) => Some(!classes.exists(_.status == Status.InProgress))
-        case _ => None
+        case Some(classes@_ :: _) => !classes.exists(_.status == Status.InProgress)
+        case _ => true
       }
     }
-
   }
 
+  object CompanyBeneficiariesAreComplete extends IsComplete {
+
+    def apply(userAnswers: ReadableUserAnswers): Boolean = {
+      userAnswers.get(CompanyBeneficiaries) match {
+        case Some(classes@_ :: _) => !classes.exists(_.status == Status.InProgress)
+        case _ => true
+      }
+    }
+  }
+
+  object TrustBeneficiariesAreComplete extends IsComplete {
+
+    def apply(userAnswers: ReadableUserAnswers): Boolean = {
+      userAnswers.get(TrustBeneficiaries) match {
+        case Some(classes@_ :: _) => !classes.exists(_.status == Status.InProgress)
+        case _ => true
+      }
+    }
+  }
+
+  object CharityBeneficiariesAreComplete extends IsComplete {
+
+    def apply(userAnswers: ReadableUserAnswers): Boolean = {
+      userAnswers.get(CharityBeneficiaries) match {
+        case Some(classes@_ :: _) => !classes.exists(_.status == Status.InProgress)
+        case _ => true
+      }
+    }
+  }
 }
