@@ -18,7 +18,7 @@ package controllers.register.beneficiaries.individualBeneficiary
 
 import base.SpecBase
 import config.annotations.IndividualBeneficiary
-import forms.IndividualBeneficiaryNationalInsuranceNumberFormProvider
+import forms.NationalInsuranceNumberFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.individual.{NamePage, NationalInsuranceNumberPage}
@@ -29,8 +29,8 @@ import views.html.register.beneficiaries.individualBeneficiary.NationalInsurance
 
 class NationalInsuranceNumberControllerSpec extends SpecBase {
 
-  val formProvider = new IndividualBeneficiaryNationalInsuranceNumberFormProvider()
-  val form = formProvider()
+  val formProvider = new NationalInsuranceNumberFormProvider()
+  val form = formProvider.withPrefix("individualBeneficiaryNationalInsuranceNumber")
   val index: Int = 0
 
   val name = FullName("first name", None, "Last name")

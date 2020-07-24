@@ -17,7 +17,7 @@
 package views.register.beneficiaries.charityortrust.trust
 
 import forms.YesNoFormProvider
-import pages.register.beneficiaries.trust.NamePage
+import pages.register.beneficiaries.charityortrust.trust.NamePage
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours

@@ -21,7 +21,7 @@ import generators.Generators
 import mapping._
 import models.core.pages.{UKAddress,InternationalAddress}
 import org.scalatest.{MustMatchers, OptionValues}
-import pages.register.beneficiaries.trust._
+import pages.register.beneficiaries.charityortrust.trust._
 
 class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {

@@ -16,62 +16,125 @@
 
 package utils.answers
 
-import javax.inject.Inject
-import models.{NormalMode, UserAnswers}
-import pages.register.beneficiaries.AddABeneficiaryPage
-import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
-import play.api.i18n.Messages
-import play.twirl.api.HtmlFormat
-import sections.beneficiaries.ClassOfBeneficiaries
-import utils.answers.CheckAnswersFormatters._
-import viewmodels.{AnswerRow, AnswerSection}
+import java.time.LocalDate
 
-class CheckYourAnswersHelper @Inject()()
+import javax.inject.Inject
+import models.UserAnswers
+import models.core.pages.{Address, FullName}
+import models.registration.pages.PassportOrIdCardDetails
+import pages.QuestionPage
+import play.api.i18n.Messages
+import play.api.libs.json.Reads
+import play.twirl.api.HtmlFormat
+import queries.Gettable
+import viewmodels.AnswerRow
+import utils.answers.CheckAnswersFormatters._
+import utils.countryOptions.CountryOptions
+
+class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
                                       (userAnswers: UserAnswers,
-                                       draftId: String,
+                                       arg: String = "",
                                        canEdit: Boolean)
                                       (implicit messages: Messages) {
 
-  def classOfBeneficiaries(individualBeneficiariesExist: Boolean): Option[Seq[AnswerSection]] = {
-    for {
-      beneficiaries <- userAnswers.get(ClassOfBeneficiaries)
-      indexed = beneficiaries.zipWithIndex
-    } yield indexed.map {
-      case (_, index) =>
+  def nameQuestion(query: Gettable[FullName],
+                   labelKey: String,
+                   changeUrl: Option[String]): Option[AnswerRow] = {
 
-        val questions = Seq(
-          classBeneficiaryDescription(index)
-        ).flatten
-
-        val sectionKey = if (index == 0 && !individualBeneficiariesExist) {
-          Some(Messages("answerPage.section.beneficiaries.heading"))
-        } else {
-          None
-        }
-
-        AnswerSection(Some(Messages("answerPage.section.classOfBeneficiary.subheading") + " " + (index + 1)),
-          questions, sectionKey)
+    userAnswers.get(query) map {x =>
+      AnswerRow(
+        label = s"$labelKey.checkYourAnswersLabel",
+        answer = HtmlFormat.escape(x.displayFullName),
+        changeUrl = changeUrl,
+        labelArg = arg,
+        canEdit = canEdit
+      )
     }
   }
 
-  def classBeneficiaryDescription(index: Int): Option[AnswerRow] = userAnswers.get(ClassBeneficiaryDescriptionPage(index)) map {
-    x =>
+  def stringQuestion(query: QuestionPage[String],
+                     labelKey: String,
+                     changeUrl: Option[String]): Option[AnswerRow] = {
+    userAnswers.get(query) map {x =>
       AnswerRow(
-        "classBeneficiaryDescription.checkYourAnswersLabel",
-        HtmlFormat.escape(x),
-        Some(controllers.register.beneficiaries.classofbeneficiaries.routes.ClassBeneficiaryDescriptionController.onPageLoad(index, draftId).url),
+        label = s"$labelKey.checkYourAnswersLabel",
+        answer = HtmlFormat.escape(x),
+        changeUrl = changeUrl,
+        labelArg = arg,
         canEdit = canEdit
       )
+    }
   }
 
-  def addABeneficiary(): Option[AnswerRow] = userAnswers.get(AddABeneficiaryPage) map {
-    x =>
+  def yesNoQuestion(query: QuestionPage[Boolean],
+                    labelKey: String,
+                    changeUrl: Option[String]): Option[AnswerRow] = {
+    userAnswers.get(query) map {x =>
       AnswerRow(
-        "addABeneficiary.checkYourAnswersLabel",
-        HtmlFormat.escape(messages(s"addABeneficiary.$x")),
-        Some(controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId).url),
+        label = s"$labelKey.checkYourAnswersLabel",
+        answer = yesOrNo(x),
+        changeUrl = changeUrl,
+        labelArg = arg,
         canEdit = canEdit
       )
+    }
+  }
+
+  def dateQuestion(query: QuestionPage[LocalDate],
+                   labelKey: String,
+                   changeUrl: Option[String]): Option[AnswerRow] = {
+    userAnswers.get(query) map {x =>
+      AnswerRow(
+        label = s"$labelKey.checkYourAnswersLabel",
+        answer = HtmlFormat.escape(x.format(dateFormatter)),
+        changeUrl = changeUrl,
+        labelArg = arg,
+        canEdit = canEdit
+      )
+    }
+  }
+
+  def ninoQuestion(query: QuestionPage[String],
+                   labelKey: String,
+                   changeUrl: Option[String]): Option[AnswerRow] = {
+    userAnswers.get(query) map {x =>
+      AnswerRow(
+        label = s"$labelKey.checkYourAnswersLabel",
+        answer = HtmlFormat.escape(formatNino(x)),
+        changeUrl = changeUrl,
+        labelArg = arg,
+        canEdit = canEdit
+      )
+    }
+  }
+
+  def addressQuestion[T <: Address](query: QuestionPage[T],
+                                    labelKey: String,
+                                    changeUrl: Option[String])
+                                   (implicit reads: Reads[T]): Option[AnswerRow] = {
+    userAnswers.get(query) map {x =>
+      AnswerRow(
+        label = s"$labelKey.checkYourAnswersLabel",
+        answer = addressFormatter(x, countryOptions),
+        changeUrl = changeUrl,
+        labelArg = arg,
+        canEdit = canEdit
+      )
+    }
+  }
+
+  def passportOrIdCardDetailsQuestion(query: QuestionPage[PassportOrIdCardDetails],
+                                      labelKey: String,
+                                      changeUrl: Option[String]): Option[AnswerRow] = {
+    userAnswers.get(query) map {x =>
+      AnswerRow(
+        label = s"$labelKey.checkYourAnswersLabel",
+        answer = passportOrIDCard(x, countryOptions),
+        changeUrl = changeUrl,
+        labelArg = arg,
+        canEdit = canEdit
+      )
+    }
   }
 
 }

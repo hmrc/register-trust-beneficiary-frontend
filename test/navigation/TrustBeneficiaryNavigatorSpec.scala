@@ -18,7 +18,7 @@ package navigation
 
 import base.SpecBase
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.register.beneficiaries.trust._
+import pages.register.beneficiaries.charityortrust.trust._
 import controllers.register.beneficiaries.charityortrust.trust.routes._
 
 class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks  {

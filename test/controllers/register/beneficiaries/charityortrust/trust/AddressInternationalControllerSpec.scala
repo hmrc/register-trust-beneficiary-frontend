@@ -22,7 +22,7 @@ import forms.InternationalAddressFormProvider
 import models.core.pages.InternationalAddress
 import models.UserAnswers
 import navigation.{FakeNavigator, Navigator}
-import pages.register.beneficiaries.trust.{AddressInternationalPage, NamePage}
+import pages.register.beneficiaries.charityortrust.trust.{AddressInternationalPage, NamePage}
 import play.api.Application
 import play.api.data.Form
 import play.api.inject.bind

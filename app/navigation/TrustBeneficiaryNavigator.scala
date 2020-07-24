@@ -19,7 +19,7 @@ package navigation
 import controllers.register.beneficiaries.charityortrust.trust.{routes => rts}
 import models.ReadableUserAnswers
 import pages.Page
-import pages.register.beneficiaries.trust._
+import pages.register.beneficiaries.charityortrust.trust._
 import play.api.mvc.Call
 
 class TrustBeneficiaryNavigator extends Navigator {

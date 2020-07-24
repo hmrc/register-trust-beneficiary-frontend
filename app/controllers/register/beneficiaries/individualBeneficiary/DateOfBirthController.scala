@@ -21,7 +21,7 @@ import java.time.LocalDate
 import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import forms.IndividualBeneficiaryDateOfBirthFormProvider
+import forms.DateOfBirthFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.beneficiaries.individual.{DateOfBirthPage, NamePage}
@@ -42,12 +42,12 @@ class DateOfBirthController @Inject()(
                                        getData: DraftIdRetrievalActionProvider,
                                        requireData: RegistrationDataRequiredAction,
                                        requiredAnswer: RequiredAnswerActionProvider,
-                                       formProvider: IndividualBeneficiaryDateOfBirthFormProvider,
+                                       formProvider: DateOfBirthFormProvider,
                                        val controllerComponents: MessagesControllerComponents,
                                        view: DateOfBirthView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[LocalDate] = formProvider()
+  val form: Form[LocalDate] = formProvider.withPrefix("individualBeneficiaryDateOfBirth")
 
   private def actions(index: Int, draftId: String) =
     identify andThen

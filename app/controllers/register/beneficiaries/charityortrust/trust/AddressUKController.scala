@@ -22,7 +22,7 @@ import controllers.actions.register._
 import forms.UKAddressFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.beneficiaries.trust.{AddressUKPage, NamePage}
+import pages.register.beneficiaries.charityortrust.trust.{AddressUKPage, NamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

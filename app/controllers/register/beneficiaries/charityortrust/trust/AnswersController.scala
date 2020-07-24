@@ -24,7 +24,7 @@ import models.NormalMode
 import models.Status.Completed
 import navigation.Navigator
 import pages.entitystatus.TrustBeneficiaryStatus
-import pages.register.beneficiaries.trust._
+import pages.register.beneficiaries.charityortrust.trust._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository

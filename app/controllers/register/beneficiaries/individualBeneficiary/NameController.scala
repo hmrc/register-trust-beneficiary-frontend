@@ -18,7 +18,7 @@ package controllers.register.beneficiaries.individualBeneficiary
 
 import config.annotations.IndividualBeneficiary
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import forms.IndividualBeneficiaryNameFormProvider
+import forms.NameFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.beneficiaries.individual.NamePage
@@ -38,14 +38,14 @@ class NameController @Inject()(
                                 identify: RegistrationIdentifierAction,
                                 getData: DraftIdRetrievalActionProvider,
                                 requireData: RegistrationDataRequiredAction,
-                                formProvider: IndividualBeneficiaryNameFormProvider,
+                                formProvider: NameFormProvider,
                                 val controllerComponents: MessagesControllerComponents,
                                 view: NameView
                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def actions(draftId: String) = identify andThen getData(draftId) andThen requireData
 
-  private val form = formProvider()
+  private val form = formProvider.withPrefix("individualBeneficiaryName")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(draftId) {
     implicit request =>
@@ -71,7 +71,7 @@ class NameController @Inject()(
             _ <- registrationsRepository.set(updatedAnswers)
             mainAnswers <- registrationsRepository.getMainAnswers(draftId)
           } yield {
-            Redirect(navigator.nextPage(NamePage(index), draftId, (mainAnswers getOrElse updatedAnswers)))
+            Redirect(navigator.nextPage(NamePage(index), draftId, mainAnswers getOrElse updatedAnswers))
           }
         }
       )

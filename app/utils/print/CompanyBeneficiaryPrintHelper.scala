@@ -19,7 +19,7 @@ package utils.print
 import com.google.inject.Inject
 import controllers.register.beneficiaries.companyoremploymentrelated.company.routes._
 import models.UserAnswers
-import pages.register.beneficiaries.company._
+import pages.register.beneficiaries.companyoremploymentrelated.company._
 import play.api.i18n.Messages
 import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection

@@ -22,7 +22,7 @@ import javax.inject.Inject
 import models.CompanyOrEmploymentRelatedToAdd.{Company, EmploymentRelated}
 import models.{CompanyOrEmploymentRelatedToAdd, NormalMode}
 import navigation.Navigator
-import pages.register.beneficiaries.CompanyOrEmploymentRelatedPage
+import pages.register.beneficiaries.companyoremploymentrelated.CompanyOrEmploymentRelatedPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

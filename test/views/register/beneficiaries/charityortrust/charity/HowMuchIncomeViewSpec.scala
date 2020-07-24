@@ -16,18 +16,17 @@
 
 package views.register.beneficiaries.charityortrust.charity
 
-import forms.ShareOfIncomeFormProvider
-import models.NormalMode
+import forms.IncomePercentageFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.StringViewBehaviours
+import views.behaviours.IntViewBehaviours
 import views.html.register.beneficiaries.charityortrust.charity.HowMuchIncomeView
 
-class HowMuchIncomeViewSpec extends StringViewBehaviours {
+class HowMuchIncomeViewSpec extends IntViewBehaviours {
 
   val prefix = "charity.shareOfIncome"
 
-  val form: Form[String] = new ShareOfIncomeFormProvider().withPrefix(prefix)
+  val form: Form[Int] = new IncomePercentageFormProvider().withPrefix(prefix)
   val charityName = "Test"
   val index = 0
 
@@ -42,7 +41,7 @@ class HowMuchIncomeViewSpec extends StringViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like stringPageWithDynamicTitle(form, applyView, prefix, charityName, Some(s"$prefix.hint"))
+    behave like intPage(form, applyView, prefix, charityName)
 
     behave like pageWithASubmitButton(applyView(form))
 

@@ -20,7 +20,7 @@ import base.SpecBase
 import config.annotations.TrustBeneficiary
 import forms.StringFormProvider
 import navigation.{FakeNavigator, Navigator}
-import pages.register.beneficiaries.trust.NamePage
+import pages.register.beneficiaries.charityortrust.trust.NamePage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
