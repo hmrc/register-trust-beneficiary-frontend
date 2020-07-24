@@ -18,6 +18,7 @@ package controllers.register.beneficiaries.charityOrTrust.charity
 
 import controllers.actions._
 import controllers.actions.register._
+import controllers.actions.register.company.NameRequiredAction
 import forms.InternationalAddressFormProvider
 import javax.inject.Inject
 import models.core.pages.InternationalAddress
@@ -35,28 +36,20 @@ import views.html.register.beneficiaries.charityortrust.charity.CharityInternati
 import scala.concurrent.{ExecutionContext, Future}
 
 class CharityInternationalAddressController @Inject()(
-                                                       override val messagesApi: MessagesApi,
-                                                       registrationsRepository: RegistrationsRepository,
-                                                       navigator: Navigator,
-                                                       identify: RegistrationIdentifierAction,
-                                                       getData: DraftIdRetrievalActionProvider,
-                                                       requireData: RegistrationDataRequiredAction,
-                                                       requiredAnswer: RequiredAnswerActionProvider,
-                                                       formProvider: InternationalAddressFormProvider,
                                                        val controllerComponents: MessagesControllerComponents,
+                                                       repository: RegistrationsRepository,
+                                                       navigator: Navigator,
+                                                       standardActionSets: StandardActionSets,
+                                                       nameAction: NameRequiredAction,
+                                                       formProvider: InternationalAddressFormProvider,
                                                        view: CharityInternationalAddressView,
                                                        val countryOptions: CountryOptionsNonUK
                                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form: Form[InternationalAddress] = formProvider()
 
-  private def actions(draftId: String, index: Int) =
-    identify andThen
-      getData(draftId) andThen
-      requireData andThen
-      requiredAnswer(RequiredAnswer(CharityNamePage(index), routes.CharityNameController.onPageLoad(NormalMode, index, draftId)))
-
-  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(draftId, index) {
+  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] =
+    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
     implicit request =>
 
       val charityName = request.userAnswers.get(CharityNamePage(index)).get
@@ -69,7 +62,8 @@ class CharityInternationalAddressController @Inject()(
       Ok(view(preparedForm, countryOptions.options, mode, draftId, index, charityName))
   }
 
-  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(draftId, index).async {
+  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] =
+    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
     implicit request =>
 
       val charityName = request.userAnswers.get(CharityNamePage(index)).get
@@ -81,7 +75,7 @@ class CharityInternationalAddressController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(CharityInternationalAddressPage(index), value))
-            _              <- registrationsRepository.set(updatedAnswers)
+            _              <- repository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(CharityInternationalAddressPage(index), mode, draftId)(updatedAnswers))
         }
       )

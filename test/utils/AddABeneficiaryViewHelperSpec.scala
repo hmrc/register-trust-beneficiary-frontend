@@ -40,6 +40,8 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
 
       "render a complete charity beneficiary" in {
 
+        val index = 0
+
         val userAnswers = emptyUserAnswers
           .set(CharityNamePage(0), name).success.value
           .set(AmountDiscretionYesNoPage(0), true).success.value
@@ -52,7 +54,7 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
             AddRow(
               name = name,
               typeLabel = label,
-              changeUrl = featureUnavailableUrl,
+              changeUrl = controllers.register.beneficiaries.charityOrTrust.charity.routes.CharityAnswersController.onPageLoad(index, draftId).url,
               removeUrl = featureUnavailableUrl
             )
           )
@@ -63,6 +65,8 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
 
         "it has a name" in {
 
+          val index = 0
+
           val userAnswers = emptyUserAnswers
             .set(CharityNamePage(0), name).success.value
             .set(CharityBeneficiaryStatus(0), InProgress).success.value
@@ -72,7 +76,7 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
               AddRow(
                 name = name,
                 typeLabel = label,
-                changeUrl = featureUnavailableUrl,
+                changeUrl = controllers.register.beneficiaries.charityOrTrust.charity.routes.CharityAnswersController.onPageLoad(index, draftId).url,
                 removeUrl = featureUnavailableUrl
               )
             ),
@@ -82,6 +86,8 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
 
         "it has no name" in {
 
+          val index = 0
+
           val userAnswers = emptyUserAnswers
             .set(CharityBeneficiaryStatus(0), InProgress).success.value
 
@@ -90,7 +96,7 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
               AddRow(
                 name = default,
                 typeLabel = label,
-                changeUrl = featureUnavailableUrl,
+                changeUrl = controllers.register.beneficiaries.charityOrTrust.charity.routes.CharityAnswersController.onPageLoad(index, draftId).url,
                 removeUrl = featureUnavailableUrl
               )
             ),
@@ -126,13 +132,13 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
             AddRow(
               name = name3,
               typeLabel = label,
-              changeUrl = featureUnavailableUrl,
+              changeUrl = controllers.register.beneficiaries.charityOrTrust.charity.routes.CharityAnswersController.onPageLoad(2, draftId).url,
               removeUrl = featureUnavailableUrl
             ),
             AddRow(
               name = default,
               typeLabel = label,
-              changeUrl = featureUnavailableUrl,
+              changeUrl = controllers.register.beneficiaries.charityOrTrust.charity.routes.CharityAnswersController.onPageLoad(3, draftId).url,
               removeUrl = featureUnavailableUrl
             )
           ),
@@ -140,13 +146,13 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
             AddRow(
               name = name1,
               typeLabel = label,
-              changeUrl = featureUnavailableUrl,
+              changeUrl = controllers.register.beneficiaries.charityOrTrust.charity.routes.CharityAnswersController.onPageLoad(0, draftId).url,
               removeUrl = featureUnavailableUrl
             ),
             AddRow(
               name = name2,
               typeLabel = label,
-              changeUrl = featureUnavailableUrl,
+              changeUrl = controllers.register.beneficiaries.charityOrTrust.charity.routes.CharityAnswersController.onPageLoad(1, draftId).url,
               removeUrl = featureUnavailableUrl
             )
           )

@@ -138,7 +138,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
     x =>
       AnswerRow(
         "charity.shareOfIncome.checkYourAnswersLabel",
-        currency(x),
+        percentage(x),
         Some(controllers.register.beneficiaries.charityOrTrust.charity.routes.HowMuchIncomeController.onPageLoad(NormalMode, index, draftId).url),
         canEdit = canEdit
       )

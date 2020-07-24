@@ -16,6 +16,7 @@
 
 package controllers.register.beneficiaries.charityOrTrust.charity
 
+import controllers.actions.StandardActionSets
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.StringFormProvider
 import javax.inject.Inject
@@ -33,11 +34,9 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class CharityNameController @Inject()(
                                        override val messagesApi: MessagesApi,
-                                       registrationsRepository: RegistrationsRepository,
+                                       repository: RegistrationsRepository,
                                        navigator: Navigator,
-                                       identify: RegistrationIdentifierAction,
-                                       getData: DraftIdRetrievalActionProvider,
-                                       requireData: RegistrationDataRequiredAction,
+                                       standardActionSets: StandardActionSets,
                                        formProvider: StringFormProvider,
                                        val controllerComponents: MessagesControllerComponents,
                                        view: CharityNameView
@@ -45,12 +44,8 @@ class CharityNameController @Inject()(
 
   private val form: Form[String] = formProvider.withPrefix("charity.name", 105)
 
-  private def actions(draftId: String) =
-    identify andThen
-      getData(draftId) andThen
-      requireData
-
-  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(draftId) {
+  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] =
+    standardActionSets.identifiedUserWithData(draftId) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(CharityNamePage(index)) match {
@@ -61,7 +56,8 @@ class CharityNameController @Inject()(
       Ok(view(preparedForm, mode, draftId, index))
   }
 
-  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(draftId).async {
+  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] =
+    standardActionSets.identifiedUserWithData(draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(
@@ -71,7 +67,7 @@ class CharityNameController @Inject()(
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(CharityNamePage(index), value))
-            _              <- registrationsRepository.set(updatedAnswers)
+            _              <- repository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(CharityNamePage(index), mode, draftId) (updatedAnswers))
       )
   }

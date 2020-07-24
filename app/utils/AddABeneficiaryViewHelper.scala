@@ -67,7 +67,7 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
     AddRow(
       name = parseName(vm.name),
       messages("entities.beneficiary.charity"),
-      changeUrl = controllers.routes.FeatureNotAvailableController.onPageLoad().url,
+      changeUrl = controllers.register.beneficiaries.charityOrTrust.charity.routes.CharityAnswersController.onPageLoad(index, draftId).url,
       removeUrl = controllers.routes.FeatureNotAvailableController.onPageLoad().url
     )
   }

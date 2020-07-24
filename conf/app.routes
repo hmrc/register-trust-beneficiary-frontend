@@ -192,7 +192,7 @@ POST       /:draftId/charity/:index/change-has-address                          
 
 GET        /:draftId/charity/:index/has-uk-address                                    controllers.register.beneficiaries.charityOrTrust.charity.AddressInTheUkYesNoController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
 POST       /:draftId/charity/:index/has-uk-address                                    controllers.register.beneficiaries.charityOrTrust.charity.AddressInTheUkYesNoController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
-GET        /:draftId/charity/:index/change-has-uk-address                             controllers.register.beneficiaries.charityOrTrust.charity.AddressInTheUkYesNoController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
+GET        /:draftId/charity/:index/change-has-uk-address                             controllers.register.beneficiaries.charityOrTrust.charity.AddressInTheUkYesNoController.onPageLoad(mode: Mode = CheckMode,index: Int, draftId: String)
 POST       /:draftId/charity/:index/change-has-uk-address                             controllers.register.beneficiaries.charityOrTrust.charity.AddressInTheUkYesNoController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
 
 GET        /:draftId/charity/:index/uk-address                                        controllers.register.beneficiaries.charityOrTrust.charity.CharityAddressUKController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)

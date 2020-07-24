@@ -18,6 +18,7 @@ package controllers.register.beneficiaries.charityOrTrust.charity
 
 import controllers.actions._
 import controllers.actions.register._
+import controllers.actions.register.company.NameRequiredAction
 import forms.UKAddressFormProvider
 import javax.inject.Inject
 import models.{Mode, NormalMode}
@@ -33,27 +34,19 @@ import views.html.register.beneficiaries.charityortrust.charity.CharityAddressUK
 import scala.concurrent.{ExecutionContext, Future}
 
 class CharityAddressUKController @Inject()(
-                                            override val messagesApi: MessagesApi,
-                                            registrationsRepository: RegistrationsRepository,
-                                            navigator: Navigator,
-                                            identify: RegistrationIdentifierAction,
-                                            getData: DraftIdRetrievalActionProvider,
-                                            requireData: RegistrationDataRequiredAction,
-                                            requiredAnswer: RequiredAnswerActionProvider,
-                                            formProvider: UKAddressFormProvider,
                                             val controllerComponents: MessagesControllerComponents,
+                                            repository: RegistrationsRepository,
+                                            navigator: Navigator,
+                                            standardActionSets: StandardActionSets,
+                                            nameAction: NameRequiredAction,
+                                            formProvider: UKAddressFormProvider,
                                             view: CharityAddressUKView
                                           )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form = formProvider()
 
-  private def actions(index: Int, draftId: String) =
-    identify andThen
-      getData(draftId) andThen
-      requireData andThen
-      requiredAnswer(RequiredAnswer(CharityNamePage(index), routes.CharityNameController.onPageLoad(NormalMode, index, draftId)))
-
-  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
+  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] =
+    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
     implicit request =>
 
       val charityName = request.userAnswers.get(CharityNamePage(index)).get
@@ -66,7 +59,8 @@ class CharityAddressUKController @Inject()(
       Ok(view(preparedForm, mode, draftId, charityName, index))
   }
 
-  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
+  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] =
+    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
     implicit request =>
 
       val charityName = request.userAnswers.get(CharityNamePage(index)).get
@@ -78,7 +72,7 @@ class CharityAddressUKController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(CharityAddressUKPage(index), value))
-            _ <- registrationsRepository.set(updatedAnswers)
+            _ <- repository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(CharityAddressUKPage(index), mode, draftId)(updatedAnswers))
         }
       )

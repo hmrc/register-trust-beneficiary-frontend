@@ -20,6 +20,7 @@ import config.FrontendAppConfig
 import controllers.register.beneficiaries.charityOrTrust.charity.{routes => charityRoutes}
 import controllers.register.beneficiaries.charityOrTrust.{routes => charityOrTrustRoutes}
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRoutes}
+import mapping.reads.CharityBeneficiary
 import models.registration.pages.CharityOrTrust.{Charity, Trust}
 import models.registration.pages.KindOfTrust.Employees
 import models.registration.pages.{AddABeneficiary, WhatTypeOfBeneficiary}
@@ -31,7 +32,7 @@ import pages.register.beneficiaries.charityortrust.{CharityOrTrustPage, charity}
 import pages.register.beneficiaries.individual._
 import pages.register.beneficiaries.{AddABeneficiaryPage, AddABeneficiaryYesNoPage, ClassBeneficiaryDescriptionPage, WhatTypeOfBeneficiaryPage, _}
 import play.api.mvc.Call
-import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries}
+import sections.beneficiaries.{CharityBeneficiaries, ClassOfBeneficiaries, IndividualBeneficiaries}
 
 object BeneficiaryRoutes {
   def route(draftId: String, config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
@@ -57,7 +58,7 @@ object BeneficiaryRoutes {
     case AddABeneficiaryYesNoPage => addABeneficiaryYesNoRoute(draftId, config)
     case WhatTypeOfBeneficiaryPage => whatTypeOfBeneficiaryRoute(draftId)
     case ClassBeneficiaryDescriptionPage(_) => _ => controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
-    case CharityOrTrustPage => charityOrTrust(draftId, 0)
+    case CharityOrTrustPage => charityOrTrust(draftId)
     case CharityNamePage(index) => _ => charityRoutes.AmountDiscretionYesNoController.onPageLoad(NormalMode, index,draftId)
     case AmountDiscretionYesNoPage(index) =>  amountDiscretionYesNoRoute(draftId, index)
     case HowMuchIncomePage(index) => _ =>  charityRoutes.AddressYesNoController.onPageLoad(NormalMode, index,draftId)
@@ -90,7 +91,7 @@ object BeneficiaryRoutes {
       case Some(WhatTypeOfBeneficiary.ClassOfBeneficiary) =>
         routeToClassOfBeneficiaryIndex(userAnswers, draftId)
       case Some(WhatTypeOfBeneficiary.CharityOrTrust) =>
-        routeToCharityOrTrustIndex(userAnswers, draftId)
+        charityOrTrustRoutes.CharityOrTrustController.onPageLoad(NormalMode, draftId)
       case _ =>
         controllers.routes.FeatureNotAvailableController.onPageLoad()
     }
@@ -106,13 +107,13 @@ object BeneficiaryRoutes {
     }
   }
 
-  private def routeToCharityOrTrustIndex(userAnswers: ReadableUserAnswers, draftId: String) = {
-    val charityOrTrust = userAnswers.get(CharityOrTrustPage).getOrElse(List.empty)
+  private def routeToCharityIndex(userAnswers: ReadableUserAnswers, draftId: String) = {
+    val charityOrTrust = userAnswers.get(CharityBeneficiaries).getOrElse(List.empty)
     charityOrTrust match {
       case Nil =>
-        charityOrTrustRoutes.CharityOrTrustController.onPageLoad(NormalMode, draftId)
-      case _ =>
-        charityOrTrustRoutes.CharityOrTrustController.onPageLoad(NormalMode, draftId)
+        controllers.register.beneficiaries.charityOrTrust.charity.routes.CharityNameController.onPageLoad(NormalMode, 0  ,draftId)
+      case t if t.nonEmpty =>
+        controllers.register.beneficiaries.charityOrTrust.charity.routes.CharityNameController.onPageLoad(NormalMode, t.size, draftId)
     }
   }
 
@@ -191,8 +192,8 @@ object BeneficiaryRoutes {
     case _ => individualRoutes.DateOfBirthYesNoController.onPageLoad(NormalMode, index, draftId)
   }
 
-  private def charityOrTrust(draftId: String, index: Int)(userAnswers: ReadableUserAnswers) : Call = userAnswers.get(CharityOrTrustPage) match {
-    case Some(Charity) => charityRoutes.CharityNameController.onPageLoad(NormalMode, index, draftId)
+  private def charityOrTrust(draftId: String)(userAnswers: ReadableUserAnswers) : Call = userAnswers.get(CharityOrTrustPage) match {
+    case Some(Charity) => routeToCharityIndex(userAnswers, draftId)
     case Some(Trust) => controllers.routes.FeatureNotAvailableController.onPageLoad()
     case _ => controllers.routes.SessionExpiredController.onPageLoad()
   }
