@@ -16,7 +16,10 @@
 
 package utils
 
+import controllers.register.beneficiaries.charityortrust.charity.{routes => charityRts}
+import controllers.register.beneficiaries.charityortrust.trust.{routes => trustRts}
 import controllers.register.beneficiaries.classofbeneficiaries.{routes => classOfBeneficiaryRts}
+import controllers.register.beneficiaries.companyoremploymentrelated.company.{routes => companyRts}
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRts}
 import models.UserAnswers
 import play.api.i18n.Messages
@@ -34,13 +37,18 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
   }
 
   private def parseIndividualBeneficiary(individualBeneficiary : (IndividualBeneficiaryViewModel, Int)) : AddRow = {
+
     val vm = individualBeneficiary._1
     val index = individualBeneficiary._2
 
     AddRow(
       name = parseName(vm.name.map(_.toString)),
       typeLabel = messages("entities.beneficiary.individual"),
-      changeUrl = controllers.routes.FeatureNotAvailableController.onPageLoad().url,
+      changeUrl = if (vm.isComplete) {
+        individualRts.AnswersController.onPageLoad(index, draftId).url
+      } else {
+        individualRts.NameController.onPageLoad(index, draftId).url
+      },
       removeUrl = individualRts.RemoveIndividualBeneficiaryController.onPageLoad(index, draftId).url
     )
   }
@@ -52,32 +60,43 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
 
     val defaultValue = messages("entities.no.description.added")
     AddRow(
-      vm.description.getOrElse(defaultValue),
-      messages("entities.beneficiary.class"),
-      controllers.routes.FeatureNotAvailableController.onPageLoad().url,
+      name = vm.description.getOrElse(defaultValue),
+      typeLabel = messages("entities.beneficiary.class"),
+      changeUrl = classOfBeneficiaryRts.ClassBeneficiaryDescriptionController.onPageLoad(index, draftId).url,
       removeUrl = classOfBeneficiaryRts.RemoveClassOfBeneficiaryController.onPageLoad(index, draftId).url
     )
   }
 
-  private def parseCharityBeneficiary(charityBeneficiary:(CharityBeneficiaryViewModel, Int)): AddRow = {
+  private def parseCharityBeneficiary(charityBeneficiary: (CharityBeneficiaryViewModel, Int)): AddRow = {
 
     val vm = charityBeneficiary._1
     val index = charityBeneficiary._2
 
     AddRow(
       name = parseName(vm.name),
-      messages("entities.beneficiary.charity"),
-      changeUrl = controllers.routes.FeatureNotAvailableController.onPageLoad().url,
+      typeLabel = messages("entities.beneficiary.charity"),
+      changeUrl = if (vm.isComplete) {
+        charityRts.CharityAnswersController.onPageLoad(index, draftId).url
+      } else {
+        charityRts.CharityNameController.onPageLoad(index, draftId).url
+      },
       removeUrl = controllers.routes.FeatureNotAvailableController.onPageLoad().url
     )
   }
 
-  private def parseTrustBeneficiary(trustBeneficiary:(TrustBeneficiaryViewModel, Int)): AddRow = {
+  private def parseTrustBeneficiary(trustBeneficiary: (TrustBeneficiaryViewModel, Int)): AddRow = {
+
+    val vm = trustBeneficiary._1
+    val index = trustBeneficiary._2
 
     AddRow(
-      name = parseName(trustBeneficiary._1.name),
+      name = parseName(vm.name),
       messages("entities.beneficiary.trust"),
-      changeUrl = controllers.routes.FeatureNotAvailableController.onPageLoad().url,
+      changeUrl = if (vm.isComplete) {
+        trustRts.AnswersController.onPageLoad(index, draftId).url
+      } else {
+        trustRts.NameController.onPageLoad(index, draftId).url
+      },
       removeUrl = controllers.routes.FeatureNotAvailableController.onPageLoad().url
     )
   }
@@ -87,11 +106,14 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
     val vm = companyBeneficiary._1
     val index = companyBeneficiary._2
 
-    val defaultValue = messages("entities.no.description.added")
     AddRow(
-      vm.name.getOrElse(defaultValue),
-      messages("entities.beneficiary.company"),
-      controllers.routes.FeatureNotAvailableController.onPageLoad().url,
+      name = parseName(vm.name),
+      typeLabel = messages("entities.beneficiary.company"),
+      changeUrl = if (vm.isComplete) {
+        companyRts.CheckDetailsController.onPageLoad(index, draftId).url
+      } else {
+        companyRts.NameController.onPageLoad(index, draftId).url
+      },
       removeUrl = controllers.routes.FeatureNotAvailableController.onPageLoad().url
     )
   }

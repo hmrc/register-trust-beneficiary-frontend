@@ -42,12 +42,11 @@ class IndividualBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOption
 
         val questions = individualBeneficiaryRows(index)
 
-        AnswerSection(Some(Messages("answerPage.section.individualBeneficiary.subheading") + " " + (index + 1)),
-          questions, if (index == 0) {
-            Some(Messages("answerPage.section.beneficiaries.heading"))
-          } else {
-            None
-          })
+        AnswerSection(
+          Some(Messages("answerPage.section.individualBeneficiary.subheading") + " " + (index + 1)),
+          questions,
+          None
+        )
     }
   }
 
