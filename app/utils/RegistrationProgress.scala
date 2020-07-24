@@ -71,7 +71,7 @@ class RegistrationProgress @Inject()() extends AnyBeneficiaries {
     def apply(userAnswers: ReadableUserAnswers): Boolean = {
 
       userAnswers.get(IndividualBeneficiaries) match {
-        case Some(individuals@_ :: _) => !individuals.exists(_.status == Status.InProgress)
+        case Some(beneficiaries@_ :: _) => !beneficiaries.exists(_.status == Status.InProgress)
         case _ => true
       }
     }
@@ -81,7 +81,7 @@ class RegistrationProgress @Inject()() extends AnyBeneficiaries {
 
     def apply(userAnswers: ReadableUserAnswers): Boolean = {
       userAnswers.get(ClassOfBeneficiaries) match {
-        case Some(classes@_ :: _) => !classes.exists(_.status == Status.InProgress)
+        case Some(beneficiaries@_ :: _) => !beneficiaries.exists(_.status == Status.InProgress)
         case _ => true
       }
     }
@@ -91,7 +91,7 @@ class RegistrationProgress @Inject()() extends AnyBeneficiaries {
 
     def apply(userAnswers: ReadableUserAnswers): Boolean = {
       userAnswers.get(CompanyBeneficiaries) match {
-        case Some(classes@_ :: _) => !classes.exists(_.status == Status.InProgress)
+        case Some(beneficiaries@_ :: _) => !beneficiaries.exists(_.status == Status.InProgress)
         case _ => true
       }
     }
@@ -101,7 +101,7 @@ class RegistrationProgress @Inject()() extends AnyBeneficiaries {
 
     def apply(userAnswers: ReadableUserAnswers): Boolean = {
       userAnswers.get(TrustBeneficiaries) match {
-        case Some(classes@_ :: _) => !classes.exists(_.status == Status.InProgress)
+        case Some(beneficiaries@_ :: _) => !beneficiaries.exists(_.status == Status.InProgress)
         case _ => true
       }
     }
@@ -111,7 +111,7 @@ class RegistrationProgress @Inject()() extends AnyBeneficiaries {
 
     def apply(userAnswers: ReadableUserAnswers): Boolean = {
       userAnswers.get(CharityBeneficiaries) match {
-        case Some(classes@_ :: _) => !classes.exists(_.status == Status.InProgress)
+        case Some(beneficiaries@_ :: _) => !beneficiaries.exists(_.status == Status.InProgress)
         case _ => true
       }
     }
