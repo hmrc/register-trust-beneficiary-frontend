@@ -52,7 +52,7 @@ class CharityBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
       AnswerRow(
         "charityOrTrust.checkYourAnswersLabel",
         formatCharityOrTrust(x),
-        Some(controllers.register.beneficiaries.charityortrust.routes.CharityOrTrustController.onPageLoad(NormalMode, draftId).url),
+        Some(controllers.register.beneficiaries.charityortrust.routes.CharityOrTrustController.onPageLoad(draftId).url),
         canEdit = canEdit
       )
   }

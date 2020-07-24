@@ -15,7 +15,6 @@
  *@
 
 @import controllers.register.beneficiaries.charityortrust.routes._
-@import models.Mode
 @import models.registration.pages.CharityOrTrust
 
 @this(
@@ -23,13 +22,13 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode, draftId: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("charityOrTrust.title")}"
     ) {
 
-    @formHelper(action = CharityOrTrustController.onSubmit(mode, draftId), 'autoComplete -> "off") {
+    @formHelper(action = CharityOrTrustController.onSubmit(draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 

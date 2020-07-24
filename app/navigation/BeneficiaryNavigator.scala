@@ -28,7 +28,7 @@ import javax.inject.Inject
 import models.CompanyOrEmploymentRelatedToAdd._
 import models.registration.pages.CharityOrTrust._
 import models.registration.pages.{AddABeneficiary, WhatTypeOfBeneficiary}
-import models.{Mode, NormalMode, ReadableUserAnswers}
+import models.{Mode, ReadableUserAnswers}
 import pages.Page
 import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
 import pages.register.beneficiaries.companyoremploymentrelated.CompanyOrEmploymentRelatedPage
@@ -64,7 +64,7 @@ class BeneficiaryNavigator @Inject()(config: FrontendAppConfig) extends Navigato
       case Some(WhatTypeOfBeneficiary.ClassOfBeneficiary) =>
         routeToClassOfBeneficiaryIndex(userAnswers, draftId)
       case Some(WhatTypeOfBeneficiary.CharityOrTrust) =>
-        charityortrustRoutes.CharityOrTrustController.onPageLoad(NormalMode, draftId)
+        charityortrustRoutes.CharityOrTrustController.onPageLoad(draftId)
       case Some(WhatTypeOfBeneficiary.CompanyOrEmployment) =>
         companyOrEmploymentRelatedRoutes.CompanyOrEmploymentRelatedController.onPageLoad(draftId)
       case _ =>

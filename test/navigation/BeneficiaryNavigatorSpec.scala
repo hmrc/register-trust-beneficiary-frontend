@@ -19,17 +19,17 @@ package navigation
 import base.SpecBase
 import config.FrontendAppConfig
 import controllers.register.beneficiaries.charityortrust.charity.{routes => charityRoutes}
-import controllers.register.beneficiaries.companyoremploymentrelated.company.{routes => companyRoutes}
 import controllers.register.beneficiaries.charityortrust.trust.{routes => trustRoutes}
 import controllers.register.beneficiaries.charityortrust.{routes => charityortrustRoutes}
 import controllers.register.beneficiaries.classofbeneficiaries.{routes => classOfBeneficiariesRoutes}
+import controllers.register.beneficiaries.companyoremploymentrelated.company.{routes => companyRoutes}
 import controllers.register.beneficiaries.companyoremploymentrelated.{routes => companyOrEmploymentRelatedRoutes}
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRoutes}
 import generators.Generators
 import models.Status.InProgress
 import models.core.pages.FullName
 import models.registration.pages.{AddABeneficiary, CharityOrTrust, WhatTypeOfBeneficiary}
-import models.{CompanyOrEmploymentRelatedToAdd, NormalMode, UserAnswers}
+import models.{CompanyOrEmploymentRelatedToAdd, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.entitystatus.{CharityBeneficiaryStatus, CompanyBeneficiaryStatus, TrustBeneficiaryStatus}
@@ -37,8 +37,7 @@ import pages.register.beneficiaries._
 import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
 import pages.register.beneficiaries.charityortrust.{CharityOrTrustPage, trust}
 import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
-import pages.register.beneficiaries.companyoremploymentrelated.CompanyOrEmploymentRelatedPage
-import pages.register.beneficiaries.companyoremploymentrelated.company
+import pages.register.beneficiaries.companyoremploymentrelated.{CompanyOrEmploymentRelatedPage, company}
 import pages.register.beneficiaries.individual._
 import play.api.mvc.Call
 import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries}
@@ -224,7 +223,7 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
       val answers = emptyUserAnswers.set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.CharityOrTrust).success.value
 
       navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
-        .mustBe(charityortrustRoutes.CharityOrTrustController.onPageLoad(NormalMode, fakeDraftId))
+        .mustBe(charityortrustRoutes.CharityOrTrustController.onPageLoad(fakeDraftId))
     }
 
     "Charity" when {

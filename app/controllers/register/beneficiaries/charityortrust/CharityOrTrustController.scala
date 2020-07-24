@@ -19,7 +19,6 @@ package controllers.register.beneficiaries.charityortrust
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.CharityOrTrustFormProvider
 import javax.inject.Inject
-import models.Mode
 import models.registration.pages.CharityOrTrust
 import navigation.Navigator
 import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
@@ -51,7 +50,7 @@ class CharityOrTrustController @Inject()(
       getData(draftId) andThen
       requireData
 
-  def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = actions(draftId) {
+  def onPageLoad(draftId: String): Action[AnyContent] = actions(draftId) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(CharityOrTrustPage) match {
@@ -59,15 +58,15 @@ class CharityOrTrustController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, draftId))
+      Ok(view(preparedForm, draftId))
   }
 
-  def onSubmit(mode: Mode, draftId: String): Action[AnyContent] = actions(draftId).async {
+  def onSubmit(draftId: String): Action[AnyContent] = actions(draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId))),
+          Future.successful(BadRequest(view(formWithErrors, draftId))),
 
         value =>
           for {
