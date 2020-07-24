@@ -53,7 +53,6 @@ class CharityAnswersControllerSpec extends SpecBase {
         AnswerSection(
           None,
           Seq(
-            checkYourAnswersHelper.charityOrTrust.value,
             checkYourAnswersHelper.charityName(index).value,
             checkYourAnswersHelper.amountDiscretionYesNo(index).value,
             checkYourAnswersHelper.howMuchIncome(index).value,
