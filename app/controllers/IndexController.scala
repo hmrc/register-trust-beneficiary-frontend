@@ -17,6 +17,7 @@
 package controllers
 
 import controllers.actions.register.RegistrationIdentifierAction
+import controllers.register.beneficiaries.AnyBeneficiaries
 import javax.inject.Inject
 import models.UserAnswers
 import play.api.i18n.I18nSupport
@@ -32,7 +33,7 @@ class IndexController @Inject()(
                                  val controllerComponents: MessagesControllerComponents,
                                  repository: RegistrationsRepository,
                                  identify: RegistrationIdentifierAction
-                               ) extends FrontendBaseController with I18nSupport {
+                               ) extends FrontendBaseController with I18nSupport with AnyBeneficiaries {
 
   implicit val executionContext: ExecutionContext =
     scala.concurrent.ExecutionContext.Implicits.global
@@ -56,13 +57,5 @@ class IndexController @Inject()(
     } else {
       Redirect(controllers.register.beneficiaries.individualBeneficiary.routes.InfoController.onPageLoad(draftId))
     }
-  }
-
-  private def isAnyBeneficiaryAdded(answers: UserAnswers) = {
-
-    val individuals = answers.get(IndividualBeneficiaries).getOrElse(Nil)
-    val classes = answers.get(ClassOfBeneficiaries).getOrElse(Nil)
-
-    individuals.nonEmpty || classes.nonEmpty
   }
 }
