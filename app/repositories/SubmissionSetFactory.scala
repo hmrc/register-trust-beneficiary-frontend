@@ -70,7 +70,7 @@ class SubmissionSetFactory @Inject()(
       val entitySections = List(
         individualBeneficiariesHelper.individualBeneficiaries,
         classOfBeneficiariesHelper.classOfBeneficiaries,
-        // TODO - charity beneficiary
+        charityBeneficiariesHelper.charityBeneficiaries,
         trustBeneficiariesHelper.trustBeneficiaries,
         companyBeneficiaryAnswersHelper.companyBeneficiaries(userAnswers, canEdit = false)
       ).flatten.flatten

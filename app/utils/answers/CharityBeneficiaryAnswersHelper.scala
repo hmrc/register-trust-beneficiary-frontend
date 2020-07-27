@@ -22,9 +22,10 @@ import models.UserAnswers
 import pages.register.beneficiaries.charityortrust.charity._
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
+import sections.beneficiaries.{CharityBeneficiaries, IndividualBeneficiaries}
 import utils.answers.CheckAnswersFormatters._
 import utils.countryOptions.CountryOptions
-import viewmodels.AnswerRow
+import viewmodels.{AnswerRow, AnswerSection}
 
 class CharityBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
                                                (userAnswers: UserAnswers,
@@ -32,6 +33,22 @@ class CharityBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
                                               canEdit: Boolean)
                                                (implicit messages: Messages) {
 
+  def charityBeneficiaries: Option[Seq[AnswerSection]] = {
+    for {
+      beneficiaries <- userAnswers.get(CharityBeneficiaries)
+      indexed = beneficiaries.zipWithIndex
+    } yield indexed.map {
+      case (_, index) =>
+
+        val questions = charityBeneficiaryRows(index)
+
+        AnswerSection(
+          Some(Messages("answerPage.section.charityBeneficiary.subheading", index + 1)),
+          questions,
+          None
+        )
+    }
+  }
 
   def charityBeneficiaryRows(index: Int): Seq[AnswerRow] = {
     Seq(
