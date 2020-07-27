@@ -21,6 +21,7 @@ import models.NormalMode
 import models.registration.pages.WhatTypeOfBeneficiary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
+import viewmodels.RadioOption
 import views.behaviours.ViewBehaviours
 import views.html.register.beneficiaries.WhatTypeOfBeneficiaryView
 
@@ -31,22 +32,31 @@ class WhatTypeOfBeneficiaryViewSpec extends ViewBehaviours {
 
   val form = new WhatTypeOfBeneficiaryFormProvider()()
 
-  val view = viewFor[WhatTypeOfBeneficiaryView](Some(emptyUserAnswers))
+  val view: WhatTypeOfBeneficiaryView = viewFor[WhatTypeOfBeneficiaryView](Some(emptyUserAnswers))
+
+  val roPrefix: String = "whatTypeOfBeneficiary"
+  val defaultOptions: List[RadioOption] = List(
+    RadioOption(roPrefix, WhatTypeOfBeneficiary.Individual.toString),
+    RadioOption(roPrefix, WhatTypeOfBeneficiary.ClassOfBeneficiary.toString),
+    RadioOption(roPrefix, WhatTypeOfBeneficiary.CharityOrTrust.toString),
+    RadioOption(roPrefix, WhatTypeOfBeneficiary.CompanyOrEmployment.toString),
+    RadioOption(roPrefix, WhatTypeOfBeneficiary.Other.toString)
+  )
 
   def applyView(form: Form[_], isAdded :Boolean): HtmlFormat.Appendable =
-    view.apply(form, NormalMode, fakeDraftId,isAdded)(fakeRequest, messages)
+    view.apply(form, NormalMode, fakeDraftId, isAdded, defaultOptions)(fakeRequest, messages)
 
   "WhatTypeOfBeneficiaryView" must {
 
     "when no beneficiaries have been added" must {
-      behave like normalPage(applyView(form,false), messageKeyPrefixFirst)
+      behave like normalPage(applyView(form, isAdded = false), messageKeyPrefixFirst)
     }
 
     "when beneficiaries has been added" must {
-      behave like normalPage(applyView(form, true), messageKeyPrefixNext)
+      behave like normalPage(applyView(form, isAdded = true), messageKeyPrefixNext)
     }
 
-    behave like pageWithBackLink(applyView(form,false))
+    behave like pageWithBackLink(applyView(form, isAdded = false))
   }
 
   "WhatTypeOfBeneficiaryView" when {
@@ -55,26 +65,26 @@ class WhatTypeOfBeneficiaryViewSpec extends ViewBehaviours {
 
       "contain radio buttons for the value" in {
 
-        val doc = asDocument(applyView(form,false))
+        val doc = asDocument(applyView(form, isAdded = false))
 
-        for (option <- WhatTypeOfBeneficiary.options) {
-          assertContainsRadioButton(doc, option.id, "value", option.value, false)
+        for (option <- defaultOptions) {
+          assertContainsRadioButton(doc, option.id, "value", option.value, isChecked = false)
         }
       }
     }
 
-    for (option <- WhatTypeOfBeneficiary.options) {
+    for (option <- defaultOptions) {
 
       s"rendered with a value of '${option.value}'" must {
 
         s"have the '${option.value}' radio button selected" in {
 
-          val doc = asDocument(applyView(form.bind(Map("value" -> s"${option.value}")), false))
+          val doc = asDocument(applyView(form.bind(Map("value" -> s"${option.value}")), isAdded = false))
 
-          assertContainsRadioButton(doc, option.id, "value", option.value, true)
+          assertContainsRadioButton(doc, option.id, "value", option.value, isChecked = true)
 
-          for (unselectedOption <- WhatTypeOfBeneficiary.options.filterNot(o => o == option)) {
-            assertContainsRadioButton(doc, unselectedOption.id, "value", unselectedOption.value, false)
+          for (unselectedOption <- defaultOptions.filterNot(o => o == option)) {
+            assertContainsRadioButton(doc, unselectedOption.id, "value", unselectedOption.value, isChecked = false)
           }
         }
       }

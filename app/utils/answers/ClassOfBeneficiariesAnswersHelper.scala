@@ -41,7 +41,7 @@ class ClassOfBeneficiariesAnswersHelper @Inject()(countryOptions: CountryOptions
         val questions = classOfBeneficiariesRows(index)
 
         AnswerSection(
-          Some(Messages("answerPage.section.classOfBeneficiary.subheading") + " " + (index + 1)),
+          Some(Messages("answerPage.section.classOfBeneficiary.subheading", index + 1)),
           questions,
           None
         )

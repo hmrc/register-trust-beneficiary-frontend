@@ -22,9 +22,8 @@ import models._
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 import utils.RegistrationProgress
-import utils.answers.{CharityBeneficiaryAnswersHelper, CheckYourAnswersHelper, ClassOfBeneficiariesAnswersHelper, CompanyBeneficiaryAnswersHelper, IndividualBeneficiaryAnswersHelper, TrustBeneficiaryAnswersHelper}
+import utils.answers._
 import utils.countryOptions.CountryOptions
-import utils.print.CompanyBeneficiaryPrintHelper
 import viewmodels.{AnswerRow, AnswerSection}
 
 class SubmissionSetFactory @Inject()(
@@ -70,7 +69,7 @@ class SubmissionSetFactory @Inject()(
       val entitySections = List(
         individualBeneficiariesHelper.individualBeneficiaries,
         classOfBeneficiariesHelper.classOfBeneficiaries,
-        // TODO - charity beneficiary
+        charityBeneficiariesHelper.charityBeneficiaries,
         trustBeneficiariesHelper.trustBeneficiaries,
         companyBeneficiaryAnswersHelper.companyBeneficiaries(userAnswers, canEdit = false)
       ).flatten.flatten

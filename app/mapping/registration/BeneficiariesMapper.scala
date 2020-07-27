@@ -28,7 +28,9 @@ class BeneficiariesMapper @Inject()(
                                      trustBeneficiaryMapper: TrustBeneficiaryMapper,
                                      companyBeneficiaryMapper: CompanyBeneficiaryMapper
                                    ) extends Mapping[BeneficiaryType] {
+
   override def build(userAnswers: UserAnswers): Option[BeneficiaryType] = {
+
     val individuals = individualBeneficiaryMapper.build(userAnswers)
     val unidentified = unidentifiedBeneficiaryMapper.build(userAnswers)
     val charity = charityBeneficiaryMapper.build(userAnswers)

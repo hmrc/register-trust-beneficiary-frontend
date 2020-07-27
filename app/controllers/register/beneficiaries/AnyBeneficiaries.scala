@@ -16,18 +16,31 @@
 
 package controllers.register.beneficiaries
 
-import models.ReadableUserAnswers
+import models.{Beneficiaries, ReadableUserAnswers}
 import play.api.libs.json.JsArray
 import sections.beneficiaries._
 
 trait AnyBeneficiaries {
+
+  def beneficiaries(userAnswers: ReadableUserAnswers): Beneficiaries = Beneficiaries(
+    userAnswers.get(IndividualBeneficiaries).getOrElse(List.empty),
+    userAnswers.get(ClassOfBeneficiaries).getOrElse(List.empty),
+    userAnswers.get(CharityBeneficiaries).getOrElse(List.empty),
+    userAnswers.get(TrustBeneficiaries).getOrElse(List.empty),
+    userAnswers.get(CompanyBeneficiaries).getOrElse(List.empty),
+    userAnswers.get(LargeBeneficiaries).getOrElse(JsArray()),
+    userAnswers.get(OtherBeneficiaries).getOrElse(JsArray())
+  )
+
   def isAnyBeneficiaryAdded(userAnswers: ReadableUserAnswers): Boolean = {
-      userAnswers.get(IndividualBeneficiaries).getOrElse(List.empty).nonEmpty ||
-      userAnswers.get(ClassOfBeneficiaries).getOrElse(List.empty).nonEmpty ||
-      userAnswers.get(CharityBeneficiaries).getOrElse(List.empty).nonEmpty ||
-      userAnswers.get(TrustBeneficiaries).getOrElse(List.empty).nonEmpty ||
-      userAnswers.get(CompanyBeneficiaries).getOrElse(List.empty).nonEmpty ||
-      userAnswers.get(LargeBeneficiaries).getOrElse(JsArray()).value.nonEmpty ||
-      userAnswers.get(OtherBeneficiaries).getOrElse(JsArray()).value.nonEmpty
+    val beneficiaryLists: Beneficiaries = beneficiaries(userAnswers)
+
+    beneficiaryLists.individuals.nonEmpty ||
+      beneficiaryLists.unidentified.nonEmpty ||
+      beneficiaryLists.charities.nonEmpty ||
+      beneficiaryLists.trusts.nonEmpty ||
+      beneficiaryLists.companies.nonEmpty ||
+      beneficiaryLists.large.value.nonEmpty ||
+      beneficiaryLists.other.value.nonEmpty
   }
 }
