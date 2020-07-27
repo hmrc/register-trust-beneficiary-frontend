@@ -17,8 +17,10 @@
 package controllers.register.beneficiaries.charityortrust
 
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
+import controllers.register.beneficiaries.AnyBeneficiaries
 import forms.CharityOrTrustFormProvider
 import javax.inject.Inject
+import models.Enumerable
 import models.registration.pages.CharityOrTrust
 import navigation.Navigator
 import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
@@ -41,7 +43,12 @@ class CharityOrTrustController @Inject()(
                                           formProvider: CharityOrTrustFormProvider,
                                           val controllerComponents: MessagesControllerComponents,
                                           view: CharityOrTrustView
-                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                        )(implicit ec: ExecutionContext)
+
+  extends FrontendBaseController
+  with I18nSupport
+  with Enumerable.Implicits
+  with AnyBeneficiaries {
 
   private val form: Form[CharityOrTrust] = formProvider()
 
@@ -58,7 +65,7 @@ class CharityOrTrustController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId))
+      Ok(view(preparedForm, draftId, beneficiaries(request.userAnswers).nonMaxedOutOptions))
   }
 
   def onSubmit(draftId: String): Action[AnyContent] = actions(draftId).async {
@@ -66,7 +73,7 @@ class CharityOrTrustController @Inject()(
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, draftId))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, beneficiaries(request.userAnswers).nonMaxedOutOptions))),
 
         value =>
           for {

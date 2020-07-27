@@ -18,12 +18,13 @@ package controllers.register.beneficiaries.charityortrust
 
 import base.SpecBase
 import forms.CharityOrTrustFormProvider
-import models.registration.pages.CharityOrTrust
+import models.registration.pages.{CharityOrTrust, WhatTypeOfBeneficiary}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
 import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import viewmodels.RadioOption
 import views.html.register.beneficiaries.charityortrust.CharityOrTrustView
 
 class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
@@ -31,6 +32,16 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
   val formProvider = new CharityOrTrustFormProvider()()
   val form: Form[CharityOrTrust] = formProvider
   val index: Int = 0
+
+  val roPrefix: String = "whatTypeOfBeneficiary"
+
+  val defaultOptions: List[RadioOption] = List(
+    RadioOption(roPrefix, WhatTypeOfBeneficiary.Individual.toString),
+    RadioOption(roPrefix, WhatTypeOfBeneficiary.ClassOfBeneficiary.toString),
+    RadioOption(roPrefix, WhatTypeOfBeneficiary.CharityOrTrust.toString),
+    RadioOption(roPrefix, WhatTypeOfBeneficiary.CompanyOrEmployment.toString),
+    RadioOption(roPrefix, WhatTypeOfBeneficiary.Other.toString)
+  )
 
   lazy val charityOrTrustRoute: String = routes.CharityOrTrustController.onPageLoad(draftId).url
 
@@ -49,7 +60,7 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, draftId)(fakeRequest, messages).toString
+        view(form, draftId, defaultOptions)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -69,7 +80,7 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(CharityOrTrust.Charity), draftId)(fakeRequest, messages).toString
+        view(form.fill(CharityOrTrust.Charity), draftId, defaultOptions)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -108,7 +119,7 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, draftId)(fakeRequest, messages).toString
+        view(boundForm, draftId, defaultOptions)(fakeRequest, messages).toString
 
       application.stop()
     }

@@ -17,8 +17,10 @@
 package views.register.beneficiaries.charityortrust
 
 import forms.CharityOrTrustFormProvider
+import models.registration.pages.WhatTypeOfBeneficiary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
+import viewmodels.RadioOption
 import views.behaviours.ViewBehaviours
 import views.html.register.beneficiaries.charityortrust.CharityOrTrustView
 
@@ -29,12 +31,21 @@ class CharityOrTrustViewSpec extends ViewBehaviours {
 
   val form = new CharityOrTrustFormProvider()()
 
+  val roPrefix: String = "whatTypeOfBeneficiary"
+  val defaultOptions: List[RadioOption] = List(
+    RadioOption(roPrefix, WhatTypeOfBeneficiary.Individual.toString),
+    RadioOption(roPrefix, WhatTypeOfBeneficiary.ClassOfBeneficiary.toString),
+    RadioOption(roPrefix, WhatTypeOfBeneficiary.CharityOrTrust.toString),
+    RadioOption(roPrefix, WhatTypeOfBeneficiary.CompanyOrEmployment.toString),
+    RadioOption(roPrefix, WhatTypeOfBeneficiary.Other.toString)
+  )
+
   "CharityOrTrust view" must {
 
     val view = viewFor[CharityOrTrustView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, fakeDraftId)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, defaultOptions)(fakeRequest, messages)
 
     behave like normalPage(applyView(form), messageKeyPrefix)
 
