@@ -17,7 +17,6 @@
 package pages.register.beneficiaries.companyoremploymentrelated.company
 
 import models.UserAnswers
-import models.core.pages.{InternationalAddress, UKAddress}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
@@ -35,7 +34,7 @@ class IncomeYesNoPageSpec extends PageBehaviours {
   "remove Income page when IncomeYesNoPage is set to yes/true" in {
     val index = 0
     forAll(arbitrary[UserAnswers], arbitrary[String]) {
-      (initial, str) =>
+      (initial, _) =>
         val answers: UserAnswers = initial.set(IncomePage(index), 55).success.value
 
         val result = answers.set(IncomeYesNoPage(index), true).success.value
