@@ -67,12 +67,6 @@ class CompanyOrEmploymentRelatedController @Inject()(
             updatedAnswers <- Future.fromTry(request.userAnswers.set(CompanyOrEmploymentRelatedPage, value))
             _ <- repository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(CompanyOrEmploymentRelatedPage, draftId, updatedAnswers))
-//            {
-//            value match {
-//              case Company => Redirect(controllers.companyoremploymentrelated.company.routes.NameController.onPageLoad(NormalMode))
-//              case EmploymentRelated => Redirect(controllers.companyoremploymentrelated.employment.add.routes.NameController.onPageLoad())
-//            }
-//          }
       )
   }
 }
