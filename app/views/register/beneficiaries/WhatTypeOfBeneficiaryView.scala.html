@@ -17,13 +17,14 @@
 @import controllers.register.beneficiaries.routes._
 @import models.Mode
 @import models.registration.pages.WhatTypeOfBeneficiary
+@import viewmodels.RadioOption
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode, draftId: String, beneficiaryAdded : Boolean )(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, draftId: String, beneficiaryAdded : Boolean, options: List[RadioOption])(implicit request: Request[_], messages: Messages)
 
 @title = {
     @if(beneficiaryAdded==true) {
@@ -55,7 +56,7 @@
             field = form("value"),
             legend = heading.toString,
             legendClass = Some("heading-large"),
-            inputs = WhatTypeOfBeneficiary.options,
+            inputs = options.toSeq,
             hint = Some(messages(s"whatTypeOfBeneficiary.hint")),
             legendAsHeading = true
         )

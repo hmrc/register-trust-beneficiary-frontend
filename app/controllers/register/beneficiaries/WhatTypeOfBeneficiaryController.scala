@@ -25,10 +25,8 @@ import navigation.Navigator
 import pages.register.beneficiaries.WhatTypeOfBeneficiaryPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.JsArray
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
-import sections.beneficiaries._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.register.beneficiaries.WhatTypeOfBeneficiaryView
 
@@ -44,7 +42,7 @@ class WhatTypeOfBeneficiaryController @Inject()(
                                                  formProvider: WhatTypeOfBeneficiaryFormProvider,
                                                  val controllerComponents: MessagesControllerComponents,
                                                  view: WhatTypeOfBeneficiaryView
-                                     )(implicit ec: ExecutionContext)
+                                               )(implicit ec: ExecutionContext)
   extends FrontendBaseController
     with I18nSupport
     with Enumerable.Implicits
@@ -56,7 +54,13 @@ class WhatTypeOfBeneficiaryController @Inject()(
 
   def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = actions(draftId) {
     implicit request =>
-      Ok(view(form, mode, draftId, isAnyBeneficiaryAdded(request.userAnswers)))
+      Ok(view(
+        form,
+        mode,
+        draftId,
+        isAnyBeneficiaryAdded(request.userAnswers),
+        beneficiaries(request.userAnswers).nonMaxedOutOptions)
+      )
   }
 
   def onSubmit(mode: Mode, draftId: String): Action[AnyContent] = actions(draftId).async {
@@ -64,7 +68,13 @@ class WhatTypeOfBeneficiaryController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId ,isAnyBeneficiaryAdded(request.userAnswers)))),
+          Future.successful(BadRequest(view(
+            formWithErrors,
+            mode,
+            draftId,
+            isAnyBeneficiaryAdded(request.userAnswers),
+            beneficiaries(request.userAnswers).nonMaxedOutOptions
+          ))),
 
         value => {
           for {

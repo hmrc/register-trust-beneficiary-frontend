@@ -22,16 +22,28 @@ import models.NormalMode
 import models.registration.pages.WhatTypeOfBeneficiary
 import pages.register.beneficiaries.WhatTypeOfBeneficiaryPage
 import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
+import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import viewmodels.RadioOption
 import views.html.register.beneficiaries.WhatTypeOfBeneficiaryView
 
 class WhatTypeOfBeneficiaryControllerSpec extends SpecBase {
 
-  lazy val whatTypeOfBeneficiaryRoute = routes.WhatTypeOfBeneficiaryController.onPageLoad(fakeDraftId).url
+  lazy val whatTypeOfBeneficiaryRoute: String = routes.WhatTypeOfBeneficiaryController.onPageLoad(fakeDraftId).url
 
   val formProvider = new WhatTypeOfBeneficiaryFormProvider()
-  val form = formProvider()
+  val form: Form[WhatTypeOfBeneficiary] = formProvider()
+
+  val roPrefix: String = "whatTypeOfBeneficiary"
+
+  val defaultOptions: List[RadioOption] = List(
+    RadioOption(roPrefix, WhatTypeOfBeneficiary.Individual.toString),
+    RadioOption(roPrefix, WhatTypeOfBeneficiary.ClassOfBeneficiary.toString),
+    RadioOption(roPrefix, WhatTypeOfBeneficiary.CharityOrTrust.toString),
+    RadioOption(roPrefix, WhatTypeOfBeneficiary.CompanyOrEmployment.toString),
+    RadioOption(roPrefix, WhatTypeOfBeneficiary.Other.toString)
+  )
 
   "WhatTypeOfBeneficiary Controller" must {
 
@@ -48,7 +60,7 @@ class WhatTypeOfBeneficiaryControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, false)(fakeRequest, messages).toString
+        view(form, NormalMode, fakeDraftId, beneficiaryAdded = false, defaultOptions)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -67,7 +79,7 @@ class WhatTypeOfBeneficiaryControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, true)(fakeRequest, messages).toString
+        view(form, NormalMode, fakeDraftId, beneficiaryAdded = true, defaultOptions)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -87,7 +99,7 @@ class WhatTypeOfBeneficiaryControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, false)(fakeRequest, messages).toString
+        view(form, NormalMode, fakeDraftId, beneficiaryAdded = false, defaultOptions)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -99,7 +111,7 @@ class WhatTypeOfBeneficiaryControllerSpec extends SpecBase {
 
       val request =
         FakeRequest(POST, whatTypeOfBeneficiaryRoute)
-          .withFormUrlEncodedBody(("value", WhatTypeOfBeneficiary.options.head.value))
+          .withFormUrlEncodedBody(("value", defaultOptions.head.value))
 
       val result = route(application, request).value
 
@@ -127,7 +139,7 @@ class WhatTypeOfBeneficiaryControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId,false)(fakeRequest, messages).toString
+        view(boundForm, NormalMode, fakeDraftId, beneficiaryAdded = false, defaultOptions)(fakeRequest, messages).toString
 
       application.stop()
     }
