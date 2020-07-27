@@ -17,7 +17,6 @@
 package views.register.beneficiaries.charityortrust.trust
 
 import forms.YesNoFormProvider
-import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
@@ -36,7 +35,7 @@ class AddressUKYesNoViewSpec extends YesNoViewBehaviours {
     val view = viewFor[AddressUKYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, fakeDraftId, name, index)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, name, index)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
 

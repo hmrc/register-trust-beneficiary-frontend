@@ -23,7 +23,7 @@ import models.core.pages.{FullName, UKAddress}
 import pages.register.beneficiaries.individual._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import utils.CheckYourAnswersHelper
+import utils.answers.IndividualBeneficiaryAnswersHelper
 import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
 import views.html.register.beneficiaries.individualBeneficiary.AnswersView
@@ -42,7 +42,7 @@ class AnswersControllerSpec extends SpecBase {
           .set(DateOfBirthYesNoPage(index),true).success.value
           .set(DateOfBirthPage(index),LocalDate.now(ZoneOffset.UTC)).success.value
           .set(IncomeYesNoPage(index),true).success.value
-          .set(IncomePage(index),"100").success.value
+          .set(IncomePage(index),100).success.value
           .set(NationalInsuranceYesNoPage(index),true).success.value
           .set(NationalInsuranceNumberPage(index),"AB123456C").success.value
           .set(AddressYesNoPage(index),true).success.value
@@ -52,7 +52,7 @@ class AnswersControllerSpec extends SpecBase {
 
 
       val countryOptions = injector.instanceOf[CountryOptions]
-      val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions)(userAnswers, fakeDraftId, canEdit = true)
+      val checkYourAnswersHelper = new IndividualBeneficiaryAnswersHelper(countryOptions)(userAnswers, fakeDraftId, canEdit = true)
 
       val expectedSections = Seq(
         AnswerSection(

@@ -23,7 +23,7 @@ import forms.UKAddressFormProvider
 import javax.inject.Inject
 import models.core.pages.UKAddress
 import navigation.Navigator
-import pages.register.beneficiaries.company.AddressUKPage
+import pages.register.beneficiaries.companyoremploymentrelated.company.AddressUKPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -70,7 +70,7 @@ class UkAddressController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressUKPage(index), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddressUKPage(index), draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(AddressUKPage(index), draftId, updatedAnswers))
       )
   }
 }

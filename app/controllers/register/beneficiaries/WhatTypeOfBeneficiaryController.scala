@@ -25,9 +25,10 @@ import navigation.Navigator
 import pages.register.beneficiaries.WhatTypeOfBeneficiaryPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.libs.json.JsArray
+import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
-import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries}
+import sections.beneficiaries._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.register.beneficiaries.WhatTypeOfBeneficiaryView
 
@@ -43,38 +44,35 @@ class WhatTypeOfBeneficiaryController @Inject()(
                                                  formProvider: WhatTypeOfBeneficiaryFormProvider,
                                                  val controllerComponents: MessagesControllerComponents,
                                                  view: WhatTypeOfBeneficiaryView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+                                     )(implicit ec: ExecutionContext)
+  extends FrontendBaseController
+    with I18nSupport
+    with Enumerable.Implicits
+    with AnyBeneficiaries {
 
-  private def actions(draftId: String) = identify andThen getData(draftId) andThen requireData
+  private def actions(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] = identify andThen getData(draftId) andThen requireData
 
   private val form = formProvider()
 
   def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = actions(draftId) {
     implicit request =>
-      Ok(view(form, mode, draftId, isAnyBeneficiaryAdded(request)))
+      Ok(view(form, mode, draftId, isAnyBeneficiaryAdded(request.userAnswers)))
   }
-
-
 
   def onSubmit(mode: Mode, draftId: String): Action[AnyContent] = actions(draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId ,isAnyBeneficiaryAdded(request)))),
+          Future.successful(BadRequest(view(formWithErrors, mode, draftId ,isAnyBeneficiaryAdded(request.userAnswers)))),
 
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(WhatTypeOfBeneficiaryPage, value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(WhatTypeOfBeneficiaryPage, mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(WhatTypeOfBeneficiaryPage, mode, draftId, updatedAnswers))
         }
       )
   }
 
-  private def isAnyBeneficiaryAdded(request: RegistrationDataRequest[AnyContent]) = {
-   request.userAnswers.get(IndividualBeneficiaries).
-     getOrElse(List.empty).nonEmpty  ||
-     request.userAnswers.get(ClassOfBeneficiaries).getOrElse(List.empty).nonEmpty
-  }
 }

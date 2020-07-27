@@ -17,10 +17,12 @@
 package controllers.register.beneficiaries.individualBeneficiary
 
 import base.SpecBase
+import config.annotations.IndividualBeneficiary
 import forms.YesNoFormProvider
-import models.NormalMode
 import models.core.pages.FullName
+import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.individual.{NamePage, VulnerableYesNoPage}
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.individualBeneficiary.VulnerableYesNoView
@@ -33,7 +35,7 @@ class VulnerableYesNoControllerSpec extends SpecBase {
 
   val name = FullName("first name", None, "Last name")
 
-  lazy val individualBeneficiaryVulnerableYesNoRoute = routes.VulnerableYesNoController.onPageLoad(NormalMode, index, fakeDraftId).url
+  lazy val individualBeneficiaryVulnerableYesNoRoute = routes.VulnerableYesNoController.onPageLoad(index, fakeDraftId).url
 
   "IndividualBeneficiaryVulnerableYesNo Controller" must {
 
@@ -53,7 +55,7 @@ class VulnerableYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, name, index)(fakeRequest, messages).toString
+        view(form, fakeDraftId, name, index)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -74,7 +76,7 @@ class VulnerableYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode, fakeDraftId, name, index)(fakeRequest, messages).toString
+        view(form.fill(true), fakeDraftId, name, index)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -85,7 +87,10 @@ class VulnerableYesNoControllerSpec extends SpecBase {
         name).success.value
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
+          ).build()
 
       val request =
         FakeRequest(POST, individualBeneficiaryVulnerableYesNoRoute)
@@ -120,7 +125,7 @@ class VulnerableYesNoControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId, name, index)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, name, index)(fakeRequest, messages).toString
 
       application.stop()
     }

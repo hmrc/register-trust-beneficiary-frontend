@@ -14,8 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.register.beneficiaries.charityOrTrust.charity.routes._
-@import models.Mode
+@import controllers.register.beneficiaries.charityortrust.charity.routes._
 @import utils.InputOption
 
 @this(
@@ -23,13 +22,13 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], countryOptions: Seq[InputOption], mode: Mode, draftId: String, index: Int, charityName: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], countryOptions: Seq[InputOption], draftId: String, index: Int, charityName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("charity.internationalAddress.title")}"
 ) {
 
-    @formHelper(action = CharityInternationalAddressController.onSubmit(mode, index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = CharityInternationalAddressController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 

@@ -16,25 +16,20 @@
 
 package navigation
 
-import config.FrontendAppConfig
-import javax.inject.{Inject, Singleton}
-import models.{UserAnswers, _}
-import navigation.routes.BeneficiaryRoutes
+import models.{Mode, ReadableUserAnswers}
 import pages._
 import play.api.mvc.Call
-import uk.gov.hmrc.auth.core.AffinityGroup
 
-@Singleton
-class Navigator @Inject()(config: FrontendAppConfig) {
+trait Navigator {
 
-  private def defaultRoute(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case _ => _ => controllers.routes.IndexController.onPageLoad(draftId)
+  def nextPage(page: Page, mode: Mode, draftId: String, userAnswers: ReadableUserAnswers): Call = nextPage(page, draftId, userAnswers)
+
+  def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call
+
+  def yesNoNav(ua: ReadableUserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call = {
+    ua.get(fromPage)
+      .map(if (_) yesCall else noCall)
+      .getOrElse(controllers.routes.SessionExpiredController.onPageLoad())
   }
 
-  protected def route(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] =
-      BeneficiaryRoutes.route(draftId, config) orElse
-      defaultRoute(draftId)
-
-  def nextPage(page: Page, draftId: String): ReadableUserAnswers => Call = route(draftId)(page)
-  def nextPage(page: Page, mode: Mode, draftId: String): ReadableUserAnswers => Call = nextPage(page, draftId)
 }

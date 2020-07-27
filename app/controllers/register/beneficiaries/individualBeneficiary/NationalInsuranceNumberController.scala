@@ -16,11 +16,11 @@
 
 package controllers.register.beneficiaries.individualBeneficiary
 
+import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import forms.IndividualBeneficiaryNationalInsuranceNumberFormProvider
+import forms.NationalInsuranceNumberFormProvider
 import javax.inject.Inject
-import models.{Mode, NormalMode}
 import navigation.Navigator
 import pages.register.beneficiaries.individual.{NamePage, NationalInsuranceNumberPage}
 import play.api.data.Form
@@ -35,25 +35,25 @@ import scala.concurrent.{ExecutionContext, Future}
 class NationalInsuranceNumberController @Inject()(
                                                    override val messagesApi: MessagesApi,
                                                    registrationsRepository: RegistrationsRepository,
-                                                   navigator: Navigator,
+                                                   @IndividualBeneficiary navigator: Navigator,
                                                    identify: RegistrationIdentifierAction,
                                                    getData: DraftIdRetrievalActionProvider,
                                                    requireData: RegistrationDataRequiredAction,
                                                    requiredAnswer: RequiredAnswerActionProvider,
-                                                   formProvider: IndividualBeneficiaryNationalInsuranceNumberFormProvider,
+                                                   formProvider: NationalInsuranceNumberFormProvider,
                                                    val controllerComponents: MessagesControllerComponents,
                                                    view: NationalInsuranceNumberView
                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form = formProvider()
+  private val form = formProvider.withPrefix("individualBeneficiaryNationalInsuranceNumber")
 
   private def actions(index: Int, draftId: String) =
     identify andThen
       getData(draftId) andThen
       requireData andThen
-      requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(NormalMode, index, draftId)))
+      requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(index, draftId)))
 
-  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
       val name = request.userAnswers.get(NamePage(index)).get
@@ -63,23 +63,23 @@ class NationalInsuranceNumberController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, draftId, name, index))
+      Ok(view(preparedForm, draftId, name, index))
   }
 
-  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
       val name = request.userAnswers.get(NamePage(index)).get
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId, name, index))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, name, index))),
 
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(NationalInsuranceNumberPage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(NationalInsuranceNumberPage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(NationalInsuranceNumberPage(index), draftId, updatedAnswers))
         }
       )
   }

@@ -17,23 +17,25 @@
 package controllers.register.beneficiaries.individualBeneficiary
 
 import base.SpecBase
-import forms.IndividualBeneficiaryNationalInsuranceNumberFormProvider
-import models.NormalMode
+import config.annotations.IndividualBeneficiary
+import forms.NationalInsuranceNumberFormProvider
 import models.core.pages.FullName
+import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.individual.{NamePage, NationalInsuranceNumberPage}
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.individualBeneficiary.NationalInsuranceNumberView
 
 class NationalInsuranceNumberControllerSpec extends SpecBase {
 
-  val formProvider = new IndividualBeneficiaryNationalInsuranceNumberFormProvider()
-  val form = formProvider()
+  val formProvider = new NationalInsuranceNumberFormProvider()
+  val form = formProvider.withPrefix("individualBeneficiaryNationalInsuranceNumber")
   val index: Int = 0
 
   val name = FullName("first name", None, "Last name")
 
-  lazy val individualBeneficiaryNationalInsuranceNumberRoute = routes.NationalInsuranceNumberController.onPageLoad(NormalMode, index, fakeDraftId).url
+  lazy val individualBeneficiaryNationalInsuranceNumberRoute = routes.NationalInsuranceNumberController.onPageLoad(index, fakeDraftId).url
 
   "IndividualBeneficiaryNationalInsuranceNumber Controller" must {
 
@@ -53,7 +55,7 @@ class NationalInsuranceNumberControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, name, index)(fakeRequest, messages).toString
+        view(form, fakeDraftId, name, index)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -74,7 +76,7 @@ class NationalInsuranceNumberControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill("answer"), NormalMode, fakeDraftId, name, index)(fakeRequest, messages).toString
+        view(form.fill("answer"), fakeDraftId, name, index)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -85,7 +87,10 @@ class NationalInsuranceNumberControllerSpec extends SpecBase {
         name).success.value
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
+          ).build()
 
       val request =
         FakeRequest(POST, individualBeneficiaryNationalInsuranceNumberRoute)
@@ -119,7 +124,7 @@ class NationalInsuranceNumberControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId, name, index)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, name, index)(fakeRequest, messages).toString
 
       application.stop()
     }

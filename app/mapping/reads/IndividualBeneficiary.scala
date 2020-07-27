@@ -31,7 +31,7 @@ final case class IndividualBeneficiary(name: FullName,
                                        idCardDetails: Option[PassportOrIdCardDetails],
                                        address : Option[Address],
                                        vulnerableYesNo: Boolean,
-                                       income: Option[String] ,
+                                       income: Option[Int] ,
                                        incomeYesNo: Boolean
                                       ) {
 }

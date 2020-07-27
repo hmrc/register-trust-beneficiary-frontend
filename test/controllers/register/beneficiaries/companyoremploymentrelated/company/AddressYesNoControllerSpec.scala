@@ -21,7 +21,7 @@ import config.annotations.CompanyBeneficiary
 import forms.YesNoFormProvider
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.register.beneficiaries.company.{AddressYesNoPage, NamePage}
+import pages.register.beneficiaries.companyoremploymentrelated.company.{AddressYesNoPage, NamePage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -84,7 +84,7 @@ class AddressYesNoControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[CompanyBeneficiary]).toInstance(new FakeNavigator(frontendAppConfig, onwardRoute))
+            bind[Navigator].qualifiedWith(classOf[CompanyBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
           ).build()
 
       val request =

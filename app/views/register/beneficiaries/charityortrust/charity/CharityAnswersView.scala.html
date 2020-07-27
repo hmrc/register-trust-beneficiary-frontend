@@ -14,12 +14,12 @@
  * limitations under the License.
  *@
 
-@import controllers.register.beneficiaries.charityOrTrust.charity.routes._
+@import controllers.register.beneficiaries.charityortrust.charity.routes._
 @import viewmodels.{AnswerSection, RepeaterAnswerSection, Section}
 
 @this(
-main_template: MainTemplate,
-formHelper: FormWithCSRF
+    main_template: MainTemplate,
+    formHelper: FormWithCSRF
 )
 
 @(index : Int, draftId: String, answerSections: Seq[Section])(implicit request: Request[_], messages: Messages)

@@ -21,14 +21,18 @@ import mapping.registration.BeneficiariesMapper
 import models._
 import play.api.i18n.Messages
 import play.api.libs.json.Json
-import utils.{CheckYourAnswersHelper, RegistrationProgress}
+import utils.RegistrationProgress
+import utils.answers.{CharityBeneficiaryAnswersHelper, CheckYourAnswersHelper, ClassOfBeneficiariesAnswersHelper, CompanyBeneficiaryAnswersHelper, IndividualBeneficiaryAnswersHelper, TrustBeneficiaryAnswersHelper}
 import utils.countryOptions.CountryOptions
+import utils.print.CompanyBeneficiaryPrintHelper
 import viewmodels.{AnswerRow, AnswerSection}
 
 class SubmissionSetFactory @Inject()(
                                       registrationProgress: RegistrationProgress,
                                       beneficiariesMapper: BeneficiariesMapper,
-                                      countryOptions: CountryOptions) {
+                                      countryOptions: CountryOptions,
+                                      companyBeneficiaryAnswersHelper: CompanyBeneficiaryAnswersHelper
+                                    ) {
 
   def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet = {
     val status = registrationProgress.beneficiariesStatus(userAnswers)
@@ -53,20 +57,33 @@ class SubmissionSetFactory @Inject()(
     }
   }
 
-  private def answerSectionsIfCompleted(userAnswers: UserAnswers, status: Option[Status])
-                            (implicit messages: Messages): List[RegistrationSubmission.AnswerSection] = {
+  def answerSectionsIfCompleted(userAnswers: UserAnswers, status: Option[Status])
+                               (implicit messages: Messages): List[RegistrationSubmission.AnswerSection] = {
 
     if (status.contains(Status.Completed)) {
 
-      val helper = new CheckYourAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, false)
+      val individualBeneficiariesHelper = new IndividualBeneficiaryAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, false)
+      val classOfBeneficiariesHelper = new ClassOfBeneficiariesAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, false)
+      val charityBeneficiariesHelper = new CharityBeneficiaryAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, false)
+      val trustBeneficiariesHelper = new TrustBeneficiaryAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, false)
 
       val entitySections = List(
-        helper.individualBeneficiaries,
-        helper.classOfBeneficiaries(helper.individualBeneficiaries.exists(_.nonEmpty)),
-        helper.classOfBeneficiaries(helper.charityOrTrust.nonEmpty)
+        individualBeneficiariesHelper.individualBeneficiaries,
+        classOfBeneficiariesHelper.classOfBeneficiaries,
+        // TODO - charity beneficiary
+        trustBeneficiariesHelper.trustBeneficiaries,
+        companyBeneficiaryAnswersHelper.companyBeneficiaries(userAnswers, canEdit = false)
       ).flatten.flatten
 
-      entitySections.map(convertForSubmission)
+      val updatedFirstSection = AnswerSection(
+        entitySections.head.headingKey,
+        entitySections.head.rows,
+        Some(Messages("answerPage.section.beneficiaries.heading"))
+      )
+
+      val updatedSections = updatedFirstSection :: entitySections.tail
+
+      updatedSections.map(convertForSubmission)
 
     } else {
       List.empty

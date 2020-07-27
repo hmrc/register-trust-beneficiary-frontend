@@ -15,7 +15,6 @@
  *@
 
 @import controllers.register.beneficiaries.individualBeneficiary.routes._
-@import models.Mode
 @import models.core.pages.FullName
 
 @this(
@@ -23,13 +22,13 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode, draftId: String, name: FullName, index: Int)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, name: FullName, index: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("individualBeneficiaryNationalInsuranceYesNo.title")}"
     ) {
 
-    @formHelper(action = NationalInsuranceYesNoController.onSubmit(mode, index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = NationalInsuranceYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 

@@ -17,23 +17,26 @@
 package controllers.register.beneficiaries.charityortrust.charity
 
 import base.SpecBase
-import controllers.register.beneficiaries.charityOrTrust.charity.routes
-import forms.ShareOfIncomeFormProvider
-import models.NormalMode
+import config.annotations.CharityBeneficiary
+import forms.IncomePercentageFormProvider
+import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.charityortrust.charity.{CharityNamePage, HowMuchIncomePage}
+import play.api.data.Form
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
 import views.html.register.beneficiaries.charityortrust.charity.HowMuchIncomeView
 
 class HowMuchIncomeControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new ShareOfIncomeFormProvider()
-  val form = formProvider.withPrefix("charity.shareOfIncome")
+  val formProvider = new IncomePercentageFormProvider()
+  val form: Form[Int] = formProvider.withPrefix("charity.shareOfIncome")
   val index: Int = 0
   val charityName = "Test"
+  val validAnswer: Int = 60
 
-  lazy val howMuchIncomeRoute = routes.HowMuchIncomeController.onPageLoad(NormalMode, index, fakeDraftId).url
+  lazy val howMuchIncomeRoute: String = routes.HowMuchIncomeController.onPageLoad(index, fakeDraftId).url
 
   "HowMuchIncome Controller" must {
 
@@ -53,7 +56,7 @@ class HowMuchIncomeControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, index, charityName)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, charityName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -61,7 +64,7 @@ class HowMuchIncomeControllerSpec extends SpecBase with MockitoSugar {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers.set(CharityNamePage(index), "Test").success.value
-        .set(HowMuchIncomePage(index), "345").success.value
+        .set(HowMuchIncomePage(index), validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -74,7 +77,7 @@ class HowMuchIncomeControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill("345"), NormalMode, fakeDraftId, index, charityName)(fakeRequest, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, index, charityName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -85,11 +88,14 @@ class HowMuchIncomeControllerSpec extends SpecBase with MockitoSugar {
         .set(CharityNamePage(index), "Test").success.value
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[CharityBeneficiary]).toInstance(new FakeNavigator)
+          ).build()
 
       val request =
         FakeRequest(POST, howMuchIncomeRoute)
-          .withFormUrlEncodedBody(("value", "12345678"))
+          .withFormUrlEncodedBody(("value", "100"))
 
       val result = route(application, request).value
 
@@ -119,7 +125,7 @@ class HowMuchIncomeControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId, index, charityName)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, charityName)(fakeRequest, messages).toString
 
       application.stop()
     }

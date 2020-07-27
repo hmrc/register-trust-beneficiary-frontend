@@ -6,18 +6,18 @@ echo "Applying migration CharityOrTrust"
 echo "Adding routes to conf/app.routes"
 
 echo "" >> ../conf/app.routes
-echo "GET        /charityOrTrust                        controllers.CharityOrTrustController.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
-echo "POST       /charityOrTrust                        controllers.CharityOrTrustController.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "GET        /charityortrust                        controllers.CharityOrTrustController.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "POST       /charityortrust                        controllers.CharityOrTrustController.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
 
 echo "GET        /changeCharityOrTrust                  controllers.CharityOrTrustController.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
 echo "POST       /changeCharityOrTrust                  controllers.CharityOrTrustController.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
 
 echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages.en
-echo "charityOrTrust.title = charityOrTrust" >> ../conf/messages.en
-echo "charityOrTrust.heading = charityOrTrust" >> ../conf/messages.en
-echo "charityOrTrust.checkYourAnswersLabel = charityOrTrust" >> ../conf/messages.en
-echo "charityOrTrust.error.required = Select yes if charityOrTrust" >> ../conf/messages.en
+echo "charityortrust.title = charityortrust" >> ../conf/messages.en
+echo "charityortrust.heading = charityortrust" >> ../conf/messages.en
+echo "charityortrust.checkYourAnswersLabel = charityortrust" >> ../conf/messages.en
+echo "charityortrust.error.required = Select yes if charityortrust" >> ../conf/messages.en
 
 echo "Adding to UserAnswersEntryGenerators"
 awk '/trait UserAnswersEntryGenerators/ {\
@@ -50,10 +50,10 @@ echo "Adding helper method to CheckYourAnswersHelper"
 awk '/class/ {\
      print;\
      print "";\
-     print "  def charityOrTrust: Option[AnswerRow] = userAnswers.get(CharityOrTrustPage) map {";\
+     print "  def charityortrust: Option[AnswerRow] = userAnswers.get(CharityOrTrustPage) map {";\
      print "    x =>";\
      print "      AnswerRow(";\
-     print "        HtmlFormat.escape(messages(\"charityOrTrust.checkYourAnswersLabel\")),";\
+     print "        HtmlFormat.escape(messages(\"charityortrust.checkYourAnswersLabel\")),";\
      print "        yesOrNo(x),";\
      print "        routes.CharityOrTrustController.onPageLoad(CheckMode).url";\
      print "      )"

@@ -22,7 +22,7 @@ import controllers.actions.register.company.NameRequiredAction
 import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.beneficiaries.company.AddressYesNoPage
+import pages.register.beneficiaries.companyoremploymentrelated.company.AddressYesNoPage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -68,7 +68,7 @@ class AddressYesNoController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressYesNoPage(index), value))
             _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddressYesNoPage(index), draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(AddressYesNoPage(index), draftId, updatedAnswers))
       )
   }
 }

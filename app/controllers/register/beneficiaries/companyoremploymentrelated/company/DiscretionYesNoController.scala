@@ -22,7 +22,7 @@ import controllers.actions.register.company.NameRequiredAction
 import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.beneficiaries.company.DiscretionYesNoPage
+import pages.register.beneficiaries.companyoremploymentrelated.company.IncomeYesNoPage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -48,7 +48,7 @@ class DiscretionYesNoController @Inject()(
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(DiscretionYesNoPage(index)) match {
+      val preparedForm = request.userAnswers.get(IncomeYesNoPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -66,9 +66,9 @@ class DiscretionYesNoController @Inject()(
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(DiscretionYesNoPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(IncomeYesNoPage(index), value))
             _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(DiscretionYesNoPage(index), draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(IncomeYesNoPage(index), draftId, updatedAnswers))
       )
   }
 }

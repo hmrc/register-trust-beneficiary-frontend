@@ -21,6 +21,7 @@ import models.core.pages.FullName
 import models.registration.pages._
 import models.{Status, UserAnswers}
 import pages.entitystatus._
+import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
 import pages.register.beneficiaries.individual.NamePage
 import play.api.libs.json.{JsObject, Json}
 import utils.RegistrationProgress
@@ -29,7 +30,7 @@ class RegistrationProgressSpec extends SpecBase {
 
   "Beneficiary section" must {
 
-      "render no tag" when {
+    "render no tag" when {
 
         "there is no beneficiaries in user answers" in {
           val registrationProgress = injector.instanceOf[RegistrationProgress]
@@ -102,7 +103,7 @@ class RegistrationProgressSpec extends SpecBase {
         registrationProgress.beneficiariesStatus(userAnswers).value mustBe Status.InProgress
       }
 
-      "there are benficiaries that are all complete, but user answered AddMore" in {
+      "there are beneficiaries that are all complete, but user answered AddMore" in {
 
         val registrationProgress = injector.instanceOf[RegistrationProgress]
 

@@ -25,5 +25,5 @@ import sections.beneficiaries.Beneficiaries
 
   override def path: JsPath = JsPath \ Beneficiaries \ toString
 
-  override def toString: String = "charityOrTrust"
+  override def toString: String = "charityortrust"
 }

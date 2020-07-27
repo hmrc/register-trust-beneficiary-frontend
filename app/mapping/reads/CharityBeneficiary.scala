@@ -21,9 +21,9 @@ import play.api.libs.json.{Format, Json}
 
 
 final case class CharityBeneficiary(name: String,
-                                    howMuchIncome: Option[String],
+                                    howMuchIncome: Option[Int],
                                     address: Option[Address]
-                                      )
+                                   )
 
 object CharityBeneficiary {
   implicit val classFormat: Format[CharityBeneficiary] = Json.format[CharityBeneficiary]

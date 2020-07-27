@@ -17,26 +17,25 @@
 package controllers.register.beneficiaries.charityortrust.charity
 
 import base.SpecBase
-import controllers.register.beneficiaries.charityOrTrust.charity.routes
+import config.annotations.CharityBeneficiary
 import forms.YesNoFormProvider
-import models.NormalMode
+import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.charityortrust.charity.{AddressInTheUkYesNoPage, CharityNamePage}
-import play.api.mvc.Call
+import play.api.data.Form
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.charityortrust.charity.AddressInTheUkYesNoView
 
 class AddressInTheUkYesNoControllerSpec extends SpecBase with MockitoSugar {
 
-  def onwardRoute = Call("GET", "/foo")
-
   val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix("charity.addressInTheUkYesNo")
+  val form: Form[Boolean] = formProvider.withPrefix("charity.addressInTheUkYesNo")
   val index: Int = 0
   val charityName = "Test"
 
-  lazy val addressInTheUkYesNo = routes.AddressInTheUkYesNoController.onPageLoad(NormalMode, index, draftId).url
+  lazy val addressInTheUkYesNo: String = routes.AddressInTheUkYesNoController.onPageLoad(index, draftId).url
 
   "AddressInTheUkYesNo Controller" must {
 
@@ -56,7 +55,7 @@ class AddressInTheUkYesNoControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, draftId, index, charityName)(fakeRequest, messages).toString
+        view(form, draftId, index, charityName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -78,7 +77,7 @@ class AddressInTheUkYesNoControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode, draftId, index, charityName)(fakeRequest, messages).toString
+        view(form.fill(true), draftId, index, charityName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -88,7 +87,10 @@ class AddressInTheUkYesNoControllerSpec extends SpecBase with MockitoSugar {
       val userAnswers = emptyUserAnswers
         .set(CharityNamePage(index), "Test").success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(
+          bind[Navigator].qualifiedWith(classOf[CharityBeneficiary]).toInstance(new FakeNavigator)
+        ).build()
 
       val request =
         FakeRequest(POST, addressInTheUkYesNo)
@@ -123,7 +125,7 @@ class AddressInTheUkYesNoControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, draftId, index, charityName)(fakeRequest, messages).toString
+        view(boundForm, draftId, index, charityName)(fakeRequest, messages).toString
 
       application.stop()
     }

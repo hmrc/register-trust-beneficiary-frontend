@@ -16,6 +16,7 @@
 
 package base
 
+import config.annotations.TrustBeneficiary
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationDataRequiredActionImpl, RegistrationIdentifierAction}
 import controllers.actions.{FakeDraftIdRetrievalActionProvider, FakeIdentifyForRegistration}
 import models.{Status, UserAnswers}
@@ -45,7 +46,7 @@ trait SpecBase extends PlaySpec
 
   def emptyUserAnswers: UserAnswers = UserAnswers(draftId, Json.obj(), internalAuthId = userInternalId)
 
-  lazy val fakeNavigator: FakeNavigator = new FakeNavigator(frontendAppConfig)
+  lazy val fakeNavigator: FakeNavigator = new FakeNavigator()
 
   private def fakeDraftIdAction(userAnswers: Option[UserAnswers]): FakeDraftIdRetrievalActionProvider =
     new FakeDraftIdRetrievalActionProvider(

@@ -17,14 +17,13 @@
 package controllers.register.beneficiaries.charityortrust.charity
 
 import base.SpecBase
-import controllers.register.beneficiaries.charityOrTrust.charity.routes
 import models.core.pages.UKAddress
 import models.registration.pages.CharityOrTrust.Charity
 import pages.register.beneficiaries.charityortrust._
 import pages.register.beneficiaries.charityortrust.charity.{AddressInTheUkYesNoPage, AddressYesNoPage, AmountDiscretionYesNoPage, CharityAddressUKPage, CharityNamePage, HowMuchIncomePage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import utils.CheckYourAnswersHelper
+import utils.answers.CharityBeneficiaryAnswersHelper
 import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
 import views.html.register.beneficiaries.charityortrust.charity.CharityAnswersView
@@ -42,19 +41,18 @@ class CharityAnswersControllerSpec extends SpecBase {
           .set(CharityOrTrustPage, Charity).success.value
           .set(CharityNamePage(index),"Test").success.value
           .set(AmountDiscretionYesNoPage(index), false).success.value
-          .set(HowMuchIncomePage(index),"123").success.value
+          .set(HowMuchIncomePage(index),60).success.value
           .set(AddressYesNoPage(index),true).success.value
           .set(AddressInTheUkYesNoPage(index),true).success.value
           .set(CharityAddressUKPage(index),UKAddress("Test 1","Test 2", None, None, "AB11AB")).success.value
 
       val countryOptions = injector.instanceOf[CountryOptions]
-      val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions)(userAnswers, fakeDraftId, canEdit = true)
+      val checkYourAnswersHelper = new CharityBeneficiaryAnswersHelper(countryOptions)(userAnswers, fakeDraftId, canEdit = true)
 
       val expectedSections = Seq(
         AnswerSection(
           None,
           Seq(
-            checkYourAnswersHelper.charityOrTrust.value,
             checkYourAnswersHelper.charityName(index).value,
             checkYourAnswersHelper.amountDiscretionYesNo(index).value,
             checkYourAnswersHelper.howMuchIncome(index).value,

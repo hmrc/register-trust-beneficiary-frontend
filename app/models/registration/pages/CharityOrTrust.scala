@@ -26,7 +26,7 @@ object CharityOrTrust extends Enumerable.Implicits {
 
   case object Charity extends WithName("charity") with CharityOrTrust
 
-  case object Trust extends WithName("crust") with CharityOrTrust
+  case object Trust extends WithName("trust") with CharityOrTrust
 
   val values: List[CharityOrTrust] = List(
     Charity, Trust

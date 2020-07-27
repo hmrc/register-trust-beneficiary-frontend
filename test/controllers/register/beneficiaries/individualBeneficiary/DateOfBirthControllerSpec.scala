@@ -19,26 +19,28 @@ package controllers.register.beneficiaries.individualBeneficiary
 import java.time.{LocalDate, ZoneOffset}
 
 import base.SpecBase
-import forms.IndividualBeneficiaryDateOfBirthFormProvider
-import models.NormalMode
+import config.annotations.IndividualBeneficiary
+import forms.DateOfBirthFormProvider
 import models.core.pages.FullName
+import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.individual.{DateOfBirthPage, NamePage}
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.individualBeneficiary.DateOfBirthView
 
 class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new IndividualBeneficiaryDateOfBirthFormProvider(frontendAppConfig)
-  val form = formProvider()
+  val formProvider = new DateOfBirthFormProvider(frontendAppConfig)
+  val form = formProvider.withPrefix("individualBeneficiaryDateOfBirth")
   val index: Int = 0
 
   val name = FullName("first name", None, "Last name")
 
   val validAnswer = LocalDate.now(ZoneOffset.UTC)
 
-  lazy val individualBeneficiaryDateOfBirthRoute = routes.DateOfBirthController.onPageLoad(NormalMode, index, fakeDraftId).url
+  lazy val individualBeneficiaryDateOfBirthRoute = routes.DateOfBirthController.onPageLoad(index, fakeDraftId).url
 
   "IndividualBeneficiaryDateOfBirth Controller" must {
 
@@ -58,7 +60,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, name, index)(fakeRequest, messages).toString
+        view(form, fakeDraftId, name, index)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -79,7 +81,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), NormalMode, fakeDraftId, name, index)(fakeRequest, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, name, index)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -89,7 +91,10 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
       val userAnswers = emptyUserAnswers.set(NamePage(index),
         name).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(
+          bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
+        ).build()
 
       val request =
         FakeRequest(POST, individualBeneficiaryDateOfBirthRoute)
@@ -128,7 +133,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId, name, index)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, name, index)(fakeRequest, messages).toString
 
       application.stop()
     }

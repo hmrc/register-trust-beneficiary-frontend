@@ -16,7 +16,7 @@
 
 package views.register.beneficiaries.charityortrust.charity
 
-import controllers.register.beneficiaries.charityOrTrust.charity.routes
+import controllers.register.beneficiaries.charityortrust.charity.routes
 import forms.InternationalAddressFormProvider
 import models.NormalMode
 import play.api.data.Form
@@ -42,14 +42,14 @@ class CharityInternationalAddressViewSpec extends InternationalAddressViewBehavi
     val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, countryOptions, NormalMode, fakeDraftId, index, charityName)(fakeRequest, messages)
+      view.apply(form, countryOptions, fakeDraftId, index, charityName)(fakeRequest, messages)
 
     behave like pageWithBackLink(applyView(form))
 
     behave like internationalAddress(
       applyView,
       Some(prefix),
-      routes.CharityInternationalAddressController.onSubmit(NormalMode, index, fakeDraftId).url,
+      routes.CharityInternationalAddressController.onSubmit(index, fakeDraftId).url,
       charityName
     )
 

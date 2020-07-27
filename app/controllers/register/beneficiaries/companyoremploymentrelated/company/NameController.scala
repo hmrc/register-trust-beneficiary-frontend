@@ -21,7 +21,7 @@ import controllers.actions.StandardActionSets
 import forms.StringFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.beneficiaries.company.NamePage
+import pages.register.beneficiaries.companyoremploymentrelated.company.NamePage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -66,7 +66,7 @@ class NameController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(NamePage(index), value))
             _ <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(NamePage(index), draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(NamePage(index), draftId, updatedAnswers))
       )
   }
 }
