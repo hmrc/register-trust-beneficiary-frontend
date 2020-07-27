@@ -22,15 +22,17 @@ import models._
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 import utils.RegistrationProgress
-import utils.answers.{CharityBeneficiaryAnswersHelper, ClassOfBeneficiariesAnswersHelper, IndividualBeneficiaryAnswersHelper}
-import utils.answers.{CharityBeneficiaryAnswersHelper, CheckYourAnswersHelper, IndividualBeneficiaryAnswersHelper, TrustBeneficiaryAnswersHelper}
+import utils.answers.{CharityBeneficiaryAnswersHelper, CheckYourAnswersHelper, ClassOfBeneficiariesAnswersHelper, CompanyBeneficiaryAnswersHelper, IndividualBeneficiaryAnswersHelper, TrustBeneficiaryAnswersHelper}
 import utils.countryOptions.CountryOptions
+import utils.print.CompanyBeneficiaryPrintHelper
 import viewmodels.{AnswerRow, AnswerSection}
 
 class SubmissionSetFactory @Inject()(
                                       registrationProgress: RegistrationProgress,
                                       beneficiariesMapper: BeneficiariesMapper,
-                                      countryOptions: CountryOptions) {
+                                      countryOptions: CountryOptions,
+                                      companyBeneficiaryAnswersHelper: CompanyBeneficiaryAnswersHelper
+                                    ) {
 
   def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet = {
     val status = registrationProgress.beneficiariesStatus(userAnswers)
@@ -56,7 +58,7 @@ class SubmissionSetFactory @Inject()(
   }
 
   def answerSectionsIfCompleted(userAnswers: UserAnswers, status: Option[Status])
-                                       (implicit messages: Messages): List[RegistrationSubmission.AnswerSection] = {
+                               (implicit messages: Messages): List[RegistrationSubmission.AnswerSection] = {
 
     if (status.contains(Status.Completed)) {
 
@@ -69,7 +71,8 @@ class SubmissionSetFactory @Inject()(
         individualBeneficiariesHelper.individualBeneficiaries,
         classOfBeneficiariesHelper.classOfBeneficiaries,
         // TODO - charity beneficiary
-        trustBeneficiariesHelper.trustBeneficiaries
+        trustBeneficiariesHelper.trustBeneficiaries,
+        companyBeneficiaryAnswersHelper.companyBeneficiaries(userAnswers, canEdit = false)
       ).flatten.flatten
 
       val updatedFirstSection = AnswerSection(
