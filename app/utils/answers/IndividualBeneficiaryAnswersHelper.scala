@@ -19,10 +19,13 @@ package utils.answers
 import javax.inject.Inject
 import models.UserAnswers
 import pages.register.beneficiaries._
+import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
+import pages.register.beneficiaries.charityortrust.charity.{AddressInTheUkYesNoPage, AmountDiscretionYesNoPage, CharityAddressUKPage, CharityInternationalAddressPage, CharityNamePage, HowMuchIncomePage}
+import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
 import pages.register.beneficiaries.individual._
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
-import sections.beneficiaries.IndividualBeneficiaries
+import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries}
 import utils.answers.CheckAnswersFormatters._
 import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
@@ -71,6 +74,39 @@ class IndividualBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOption
       individualBeneficiaryVulnerableYesNo(index)
     ).flatten
   }
+
+  def classOfBeneficiaries(individualBeneficiariesExist: Boolean): Option[Seq[AnswerSection]] = {
+    for {
+      beneficiaries <- userAnswers.get(ClassOfBeneficiaries)
+      indexed = beneficiaries.zipWithIndex
+    } yield indexed.map {
+      case (_, index) =>
+
+        val questions = Seq(
+          classBeneficiaryDescription(index)
+        ).flatten
+
+        val sectionKey = if (index == 0 && !individualBeneficiariesExist) {
+          Some(Messages("answerPage.section.beneficiaries.heading"))
+        } else {
+          None
+        }
+
+        AnswerSection(Some(Messages("answerPage.section.classOfBeneficiary.subheading") + " " + (index + 1)),
+          questions, sectionKey)
+    }
+  }
+
+  def classBeneficiaryDescription(index: Int): Option[AnswerRow] = userAnswers.get(ClassBeneficiaryDescriptionPage(index)) map {
+    x =>
+      AnswerRow(
+        "classBeneficiaryDescription.checkYourAnswersLabel",
+        HtmlFormat.escape(x),
+        Some(controllers.register.beneficiaries.classofbeneficiaries.routes.ClassBeneficiaryDescriptionController.onPageLoad(index, draftId).url),
+        canEdit = canEdit
+      )
+  }
+
 
   def individualBeneficiaryAddressUKYesNo(index: Int): Option[AnswerRow] = userAnswers.get(AddressUKYesNoPage(index)) map {
     x =>

@@ -36,6 +36,7 @@
         @components.input_text(
           field = form("value"),
           label = messages("charity.shareOfIncome.heading", charityName),
+          symbol = Some("percentage"),
           labelClass = Some("heading-large"),
           labelAsHeading = true,
           hint = Some(messages("charity.shareOfIncome.hint"))

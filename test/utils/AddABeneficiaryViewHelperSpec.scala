@@ -43,7 +43,7 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
       val default: String = "No name added"
 
       "render a complete charity beneficiary" in {
-        
+
         val index: Int = 0
 
         val userAnswers = emptyUserAnswers
@@ -68,7 +68,7 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
       "render an in progress charity beneficiary" when {
 
         "it has a name" in {
-          
+
           val index: Int = 0
 
           val userAnswers = emptyUserAnswers

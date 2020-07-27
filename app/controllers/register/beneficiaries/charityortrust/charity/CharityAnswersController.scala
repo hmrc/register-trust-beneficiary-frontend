@@ -17,6 +17,7 @@
 package controllers.register.beneficiaries.charityortrust.charity
 
 import controllers.actions._
+import controllers.actions.register.company.NameRequiredAction
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import javax.inject.Inject
 import models.Status.Completed
@@ -34,24 +35,16 @@ import views.html.register.beneficiaries.charityortrust.charity.CharityAnswersVi
 import scala.concurrent.{ExecutionContext, Future}
 
 class CharityAnswersController @Inject()(
-                                          override val messagesApi: MessagesApi,
-                                          registrationsRepository: RegistrationsRepository,
-                                          identify: RegistrationIdentifierAction,
-                                          getData: DraftIdRetrievalActionProvider,
-                                          requireData: RegistrationDataRequiredAction,
                                           val controllerComponents: MessagesControllerComponents,
-                                          requiredAnswer: RequiredAnswerActionProvider,
+                                          repository: RegistrationsRepository,
+                                          standardActionSets: StandardActionSets,
+                                          nameAction: NameRequiredAction,
                                           view: CharityAnswersView,
                                           countryOptions: CountryOptions
                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private def actions(index: Int, draftId: String) =
-    identify andThen
-      getData(draftId) andThen
-      requireData andThen
-      requiredAnswer(RequiredAnswer(CharityNamePage(index), routes.CharityNameController.onPageLoad(index, draftId)))
-
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
+    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
     implicit request =>
 
       val answers = new CharityBeneficiaryAnswersHelper(countryOptions)(request.userAnswers, draftId, canEdit = true)
@@ -66,14 +59,15 @@ class CharityAnswersController @Inject()(
       Ok(view(index, draftId, sections))
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] =
+    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
     implicit request =>
 
       val answers = request.userAnswers.set(CharityBeneficiaryStatus(index), Completed)
 
       for {
         updatedAnswers <- Future.fromTry(answers)
-        _ <- registrationsRepository.set(updatedAnswers)
+        _ <- repository.set(updatedAnswers)
       } yield Redirect(controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId))
   }
 }

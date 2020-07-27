@@ -459,7 +459,7 @@ charity.name.heading = What is the charity’s name?
 charity.name.checkYourAnswersLabel = What is the charity’s name?
 charity.name.error.required = Enter the charity’s name
 charity.name.error.length = Charity’s name must be 105 characters or less
-charity.name.error.invalid = Charity’s name must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+charity.name.error.invalidFormat = Charity’s name must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
 
 charity.discretionYesNo.title = Do the trustees have discretion over how much income the charity beneficiary may get?
 charity.discretionYesNo.heading = Do the trustees have discretion over how much income {0} may get?

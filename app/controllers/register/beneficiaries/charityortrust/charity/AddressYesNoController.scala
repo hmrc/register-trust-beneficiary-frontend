@@ -19,8 +19,10 @@ package controllers.register.beneficiaries.charityortrust.charity
 import config.annotations.CharityBeneficiary
 import controllers.actions._
 import controllers.actions.register._
+import controllers.actions.register.company.NameRequiredAction
 import forms.YesNoFormProvider
 import javax.inject.Inject
+import models._
 import navigation.Navigator
 import pages.register.beneficiaries.charityortrust.charity.{AddressYesNoPage, CharityNamePage}
 import play.api.data.Form
@@ -33,27 +35,19 @@ import views.html.register.beneficiaries.charityortrust.charity.AddressYesNoView
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddressYesNoController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        registrationsRepository: RegistrationsRepository,
-                                        @CharityBeneficiary navigator: Navigator,
-                                        identify: RegistrationIdentifierAction,
-                                        getData: DraftIdRetrievalActionProvider,
-                                        requireData: RegistrationDataRequiredAction,
-                                        requiredAnswer: RequiredAnswerActionProvider,
-                                        formProvider: YesNoFormProvider,
                                         val controllerComponents: MessagesControllerComponents,
+                                        repository: RegistrationsRepository,
+                                        @CharityBeneficiary navigator: Navigator,
+                                        standardActionSets: StandardActionSets,
+                                        nameAction: NameRequiredAction,
+                                        formProvider: YesNoFormProvider,
                                         view: AddressYesNoView
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form: Form[Boolean] = formProvider.withPrefix("charity.addressYesNo")
 
-  private def actions(draftId: String, index: Int) =
-    identify andThen
-      getData(draftId) andThen
-      requireData andThen
-      requiredAnswer(RequiredAnswer(CharityNamePage(index), routes.CharityNameController.onPageLoad(index, draftId)))
-
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(draftId, index) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
+    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
     implicit request =>
 
       val charityName = request.userAnswers.get(CharityNamePage(index)).get
@@ -66,7 +60,8 @@ class AddressYesNoController @Inject()(
       Ok(view(preparedForm, draftId, index, charityName))
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(draftId, index).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] =
+    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
     implicit request =>
 
       val charityName = request.userAnswers.get(CharityNamePage(index)).get
@@ -78,7 +73,7 @@ class AddressYesNoController @Inject()(
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressYesNoPage(index), value))
-            _              <- registrationsRepository.set(updatedAnswers)
+            _              <- repository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(AddressYesNoPage(index), draftId, updatedAnswers))
       )
   }

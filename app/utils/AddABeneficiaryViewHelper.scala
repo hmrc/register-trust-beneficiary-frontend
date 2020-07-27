@@ -16,11 +16,11 @@
 
 package utils
 
-import controllers.register.beneficiaries.charityortrust.trust.{routes => trustRts}
-import controllers.register.beneficiaries.classofbeneficiaries.{routes => classOfBeneficiaryRts}
 import controllers.register.beneficiaries.companyoremploymentrelated.company.{routes => companyRts}
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRts}
 import controllers.register.beneficiaries.charityortrust.charity.{routes => charityRts}
+import controllers.register.beneficiaries.charityortrust.trust.{routes => trustRts}
+import controllers.register.beneficiaries.classofbeneficiaries.{routes => classOfBeneficiaryRts}
 import models.UserAnswers
 import play.api.i18n.Messages
 import sections.beneficiaries._

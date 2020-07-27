@@ -17,14 +17,14 @@
 package controllers.register.beneficiaries.charityortrust.charity
 
 import config.annotations.CharityBeneficiary
-import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
+import controllers.actions.StandardActionSets
+import controllers.actions.register.company.NameRequiredAction
 import forms.IncomePercentageFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.beneficiaries.charityortrust.charity.{CharityNamePage, HowMuchIncomePage}
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
@@ -33,27 +33,19 @@ import views.html.register.beneficiaries.charityortrust.charity.HowMuchIncomeVie
 import scala.concurrent.{ExecutionContext, Future}
 
 class HowMuchIncomeController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         registrationsRepository: RegistrationsRepository,
-                                         @CharityBeneficiary navigator: Navigator,
-                                         identify: RegistrationIdentifierAction,
-                                         getData: DraftIdRetrievalActionProvider,
-                                         requireData: RegistrationDataRequiredAction,
-                                         requiredAnswer: RequiredAnswerActionProvider,
-                                         formProvider: IncomePercentageFormProvider,
                                          val controllerComponents: MessagesControllerComponents,
+                                         repository: RegistrationsRepository,
+                                         @CharityBeneficiary navigator: Navigator,
+                                         standardActionSets: StandardActionSets,
+                                         nameAction: NameRequiredAction,
+                                         formProvider: IncomePercentageFormProvider,
                                          view: HowMuchIncomeView)
                                        (implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form: Form[Int] = formProvider.withPrefix("charity.shareOfIncome")
 
-  private def actions(draftId: String, index: Int) =
-    identify andThen
-      getData(draftId) andThen
-      requireData andThen
-      requiredAnswer(RequiredAnswer(CharityNamePage(index), routes.CharityNameController.onPageLoad(index, draftId)))
-
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(draftId, index) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
+    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)){
     implicit request =>
 
       val charityName = request.userAnswers.get(CharityNamePage(index)).get
@@ -66,7 +58,8 @@ class HowMuchIncomeController @Inject()(
       Ok(view(preparedForm, draftId, index, charityName))
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(draftId, index).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] =
+    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
     implicit request =>
 
       val charityName = request.userAnswers.get(CharityNamePage(index)).get
@@ -78,7 +71,7 @@ class HowMuchIncomeController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(HowMuchIncomePage(index), value))
-            _              <- registrationsRepository.set(updatedAnswers)
+            _              <- repository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(HowMuchIncomePage(index), draftId, updatedAnswers))
         }
       )
