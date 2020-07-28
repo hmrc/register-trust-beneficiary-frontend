@@ -29,7 +29,7 @@ import views.html.register.beneficiaries.charityortrust.trust.DiscretionYesNoVie
 class DiscretionYesNoControllerSpec extends SpecBase {
 
   val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix("trustBeneficiary.discretionYesNo")
+  val form = formProvider.withPrefix("trustBeneficiaryDiscretionYesNo")
   val index: Int = 0
 
   val name = "Name"

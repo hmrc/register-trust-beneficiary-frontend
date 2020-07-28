@@ -17,22 +17,29 @@
 package pages.register.beneficiaries.companyoremploymentrelated.company
 
 import models.UserAnswers
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.beneficiaries.{Beneficiaries, CompanyBeneficiaries}
+import org.scalacheck.Arbitrary.arbitrary
+import pages.behaviours.PageBehaviours
 
-import scala.util.Try
+class IncomeYesNoPageSpec extends PageBehaviours {
 
-final case class IncomeYesNoPage(index: Int) extends QuestionPage[Boolean] {
+  "IncomeYesNoPage" must {
 
-  override def path: JsPath = JsPath \ Beneficiaries \ CompanyBeneficiaries \ index \ toString
+    beRetrievable[Boolean](IncomeYesNoPage(0))
 
-  override def toString: String = "incomeYesNo"
+    beSettable[Boolean](IncomeYesNoPage(0))
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
-    value match {
-      case Some(true) => userAnswers.remove(IncomePage(index))
-      case _ => super.cleanup(value, userAnswers)
+    beRemovable[Boolean](IncomeYesNoPage(0))
+  }
+
+  "remove Income page when IncomeYesNoPage is set to yes/true" in {
+    val index = 0
+    forAll(arbitrary[UserAnswers], arbitrary[String]) {
+      (initial, _) =>
+        val answers: UserAnswers = initial.set(IncomePage(index), 55).success.value
+
+        val result = answers.set(IncomeYesNoPage(index), true).success.value
+        result.get(IncomePage(index)) mustNot be(defined)
     }
   }
+
 }

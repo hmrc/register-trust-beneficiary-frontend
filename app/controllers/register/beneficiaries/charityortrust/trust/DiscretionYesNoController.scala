@@ -51,7 +51,7 @@ class DiscretionYesNoController @Inject()(
       requireData andThen
       requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(index, draftId)))
 
-  val form: Form[Boolean] = formProvider.withPrefix("trustBeneficiary.discretionYesNo")
+  val form: Form[Boolean] = formProvider.withPrefix("trustBeneficiaryDiscretionYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
