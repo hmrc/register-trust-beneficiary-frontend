@@ -32,8 +32,6 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
   val form: Form[CharityOrTrust] = formProvider
   val index: Int = 0
 
-  val roPrefix: String = "whatTypeOfBeneficiary"
-
   lazy val charityOrTrustRoute: String = routes.CharityOrTrustController.onPageLoad(draftId).url
 
   "CharityOrTrust Controller" must {
