@@ -53,9 +53,12 @@
         id="@{field.id}"
         name="@{field.name}"
         value="@{field.value}"
-        autocomplete="@autocomplete"
+        @if(autocomplete.nonEmpty){
+        autocomplete="@{autocomplete.get}"
+        }
+
         @if(inputMode.nonEmpty) {
-            inputmode="@inputMode"
+            inputmode="@{inputMode.get}"
         }
         @if(symbolText.nonEmpty) {
             aria-label='@{label} @{symbolText.get}'
