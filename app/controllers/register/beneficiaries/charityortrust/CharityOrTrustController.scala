@@ -59,13 +59,7 @@ class CharityOrTrustController @Inject()(
 
   def onPageLoad(draftId: String): Action[AnyContent] = actions(draftId) {
     implicit request =>
-
-      val preparedForm = request.userAnswers.get(CharityOrTrustPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, draftId, beneficiaries(request.userAnswers).nonMaxedOutOptions))
+      Ok(view(form, draftId, beneficiaries(request.userAnswers).nonMaxedOutOptions))
   }
 
   def onSubmit(draftId: String): Action[AnyContent] = actions(draftId).async {
