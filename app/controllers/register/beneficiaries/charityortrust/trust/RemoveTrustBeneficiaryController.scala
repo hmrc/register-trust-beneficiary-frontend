@@ -18,7 +18,6 @@ package controllers.register.beneficiaries.charityortrust.trust
 
 import controllers.RemoveIndexController
 import controllers.actions._
-import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.RemoveIndexFormProvider
 import javax.inject.Inject
 import models.requests.RegistrationDataRequest
@@ -33,25 +32,22 @@ import views.html.RemoveIndexView
 import scala.concurrent.ExecutionContext
 
 class RemoveTrustBeneficiaryController @Inject()(
-                                                       override val messagesApi: MessagesApi,
-                                                       override val registrationsRepository: RegistrationsRepository,
-                                                       identify: RegistrationIdentifierAction,
-                                                       getData: DraftIdRetrievalActionProvider,
-                                                       requireData: RegistrationDataRequiredAction,
-                                                       val formProvider: RemoveIndexFormProvider,
-                                                       val controllerComponents: MessagesControllerComponents,
-                                                       val removeView: RemoveIndexView,
-                                                       require: RequiredAnswerActionProvider
-                                 )(implicit ec: ExecutionContext) extends RemoveIndexController {
+                                                  override val messagesApi: MessagesApi,
+                                                  override val registrationsRepository: RegistrationsRepository,
+                                                  standardActionSets: StandardActionSets,
+                                                  val formProvider: RemoveIndexFormProvider,
+                                                  val controllerComponents: MessagesControllerComponents,
+                                                  val removeView: RemoveIndexView
+                                                )(implicit ec: ExecutionContext) extends RemoveIndexController {
 
-  override val messagesPrefix : String = "removeTrustBeneficiary"
+  override val messagesPrefix: String = "removeTrustBeneficiary"
 
   override def page(index: Int): QuestionPage[String] = NamePage(index)
 
-  override def actions(draftId : String, index: Int) =
-    identify andThen getData(draftId) andThen requireData
+  override def actions(draftId: String, index: Int) =
+    standardActionSets.identifiedUserWithData(draftId)
 
-  override def redirect(draftId : String) : Call =
+  override def redirect(draftId: String): Call =
     controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
 
   override def formRoute(draftId: String, index: Int): Call =
@@ -59,7 +55,7 @@ class RemoveTrustBeneficiaryController @Inject()(
 
   override def removeQuery(index: Int): Settable[_] = RemoveTrustBeneficiaryQuery(index)
 
-  override def content(index: Int)(implicit request: RegistrationDataRequest[AnyContent]) : String =
+  override def content(index: Int)(implicit request: RegistrationDataRequest[AnyContent]): String =
     request.userAnswers.get(page(index)).getOrElse(Messages(s"$messagesPrefix.default"))
 
 }

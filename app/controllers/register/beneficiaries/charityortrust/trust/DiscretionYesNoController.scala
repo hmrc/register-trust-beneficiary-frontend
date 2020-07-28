@@ -17,12 +17,12 @@
 package controllers.register.beneficiaries.charityortrust.trust
 
 import config.annotations.TrustBeneficiary
-import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
+import controllers.actions.register.trust.NameRequiredAction
+import controllers.actions.StandardActionSets
 import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.beneficiaries.charityortrust.trust.{DiscretionYesNoPage, NamePage}
+import pages.register.beneficiaries.charityortrust.trust.DiscretionYesNoPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -37,45 +37,31 @@ class DiscretionYesNoController @Inject()(
                                            registrationsRepository: RegistrationsRepository,
                                            override val controllerComponents: MessagesControllerComponents,
                                            @TrustBeneficiary navigator: Navigator,
-                                           identify: RegistrationIdentifierAction,
-                                           getData: DraftIdRetrievalActionProvider,
-                                           requireData: RegistrationDataRequiredAction,
-                                           requiredAnswer: RequiredAnswerActionProvider,
+                                           standardActionSets: StandardActionSets,
+                                           nameAction: NameRequiredAction,
                                            formProvider: YesNoFormProvider,
                                            view: DiscretionYesNoView
                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private def actions(index: Int, draftId: String) =
-    identify andThen
-      getData(draftId) andThen
-      requireData andThen
-      requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(index, draftId)))
-
   val form: Form[Boolean] = formProvider.withPrefix("trustBeneficiaryDiscretionYesNo")
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
     implicit request =>
-
-      val name = request.userAnswers.get(NamePage(index)).get
 
       val preparedForm = request.userAnswers.get(DiscretionYesNoPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm,  draftId, name, index))
+      Ok(view(preparedForm,  draftId, request.beneficiaryName, index))
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         formWithErrors => {
-
-          val name = request.userAnswers.get(NamePage(index)).get
-
-          Future.successful(BadRequest(view(formWithErrors,  draftId, name, index)))
-
+          Future.successful(BadRequest(view(formWithErrors,  draftId, request.beneficiaryName, index)))
         },
         value =>
           for {

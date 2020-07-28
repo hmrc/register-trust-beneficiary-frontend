@@ -53,7 +53,7 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
 
       application.stop()
     }
-    
+
     "redirect to the next page when valid data is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()

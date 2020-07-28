@@ -18,11 +18,11 @@ package controllers.register.beneficiaries.charityortrust.trust
 
 import config.annotations.TrustBeneficiary
 import controllers.actions._
-import controllers.actions.register._
+import controllers.actions.register.trust.NameRequiredAction
 import forms.UKAddressFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.beneficiaries.charityortrust.trust.{AddressUKPage, NamePage}
+import pages.register.beneficiaries.charityortrust.trust.AddressUKPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -36,10 +36,8 @@ class AddressUKController @Inject()(
                                      override val messagesApi: MessagesApi,
                                      registrationsRepository: RegistrationsRepository,
                                      @TrustBeneficiary navigator: Navigator,
-                                     identify: RegistrationIdentifierAction,
-                                     getData: DraftIdRetrievalActionProvider,
-                                     requireData: RegistrationDataRequiredAction,
-                                     requiredAnswer: RequiredAnswerActionProvider,
+                                     standardActionSets: StandardActionSets,
+                                     nameAction: NameRequiredAction,
                                      formProvider: UKAddressFormProvider,
                                      val controllerComponents: MessagesControllerComponents,
                                      view: AddressUKView
@@ -47,33 +45,23 @@ class AddressUKController @Inject()(
 
   private val form = formProvider()
 
-  private def actions(index: Int, draftId: String) =
-    identify andThen
-      getData(draftId) andThen
-      requireData andThen
-      requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(index, draftId)))
-
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
     implicit request =>
 
-      val name = request.userAnswers.get(NamePage(index)).get
 
       val preparedForm = request.userAnswers.get(AddressUKPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm,  draftId, name, index))
+      Ok(view(preparedForm,  draftId, request.beneficiaryName, index))
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
     implicit request =>
-
-      val name = request.userAnswers.get(NamePage(index)).get
-
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors,  draftId, name, index))),
+          Future.successful(BadRequest(view(formWithErrors,  draftId, request.beneficiaryName, index))),
 
         value => {
           for {

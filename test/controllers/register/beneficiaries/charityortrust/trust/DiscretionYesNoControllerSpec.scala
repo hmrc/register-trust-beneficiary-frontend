@@ -161,20 +161,5 @@ class DiscretionYesNoControllerSpec extends SpecBase {
       application.stop()
     }
 
-    "redirect to IndividualBeneficiaryNamePage when individual beneficiary name is not answered" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-
-      val request = FakeRequest(GET, trustBeneficiaryDiscretionYesNoRoute)
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual routes.NameController.onPageLoad(index, fakeDraftId).url
-
-      application.stop()
-    }
-
   }
 }
