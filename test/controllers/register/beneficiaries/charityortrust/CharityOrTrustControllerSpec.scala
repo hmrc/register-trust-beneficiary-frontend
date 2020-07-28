@@ -53,7 +53,27 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
 
       application.stop()
     }
-    
+
+    "populate the view correctly on a GET when the question has previously been answered" in {
+
+      val userAnswers = emptyUserAnswers.set(CharityOrTrustPage, CharityOrTrust.Charity).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      val request = FakeRequest(GET, charityOrTrustRoute)
+
+      val view = application.injector.instanceOf[CharityOrTrustView]
+
+      val result = route(application, request).value
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(form, draftId)(fakeRequest, messages).toString
+
+      application.stop()
+    }
+
     "redirect to the next page when valid data is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
