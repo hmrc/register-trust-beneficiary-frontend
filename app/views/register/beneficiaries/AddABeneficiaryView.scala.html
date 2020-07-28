@@ -24,7 +24,13 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode, draftId: String, inProgressIndividualBeneficiaries: Seq[AddRow], completeIndividualBeneficiaries: Seq[AddRow], heading : String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_],
+    mode: Mode,
+    draftId: String,
+    inProgressIndividualBeneficiaries: Seq[AddRow],
+    completeIndividualBeneficiaries: Seq[AddRow],
+    heading : String,
+    maxedOut: List[String])(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} $heading"
@@ -41,6 +47,25 @@
         @components.data_list(inProgressIndividualBeneficiaries, "inprogress", "beneficiary")
 
         @components.data_list(completeIndividualBeneficiaries, "complete", "beneficiary")
+
+        @if(maxedOut.size == 1) {
+        <ul>
+            <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.just1", messages(maxedOut.head).toLowerCase)</p></li>
+            <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.just1.paragraph")</p></li>
+        </ul>
+        } else if(maxedOut.size > 1) {
+        <ul>
+            <li class="panel-indent">
+                <p>@messages("addABeneficiary.maxedOut.moreThan1")</p>
+                <ul class="govuk-list">
+                    @for(option <- maxedOut) {
+                    <li>@messages(option)</li>
+                    }
+                </ul>
+            </li>
+            <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.moreThan1.paragraph")</p></li>
+        </ul>
+        }
 
         @components.input_radio(
             field = form("value"),

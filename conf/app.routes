@@ -17,6 +17,7 @@ GET        /unauthorised                                controllers.Unauthorised
 GET        /:draftId/add                                                              controllers.register.beneficiaries.AddABeneficiaryController.onPageLoad(mode: Mode = NormalMode, draftId: String)
 POST       /:draftId/add                                                              controllers.register.beneficiaries.AddABeneficiaryController.submitOne(mode: Mode = NormalMode, draftId: String)
 POST       /:draftId/add-another                                                      controllers.register.beneficiaries.AddABeneficiaryController.submitAnother(mode: Mode = NormalMode, draftId: String)
+POST       /complete                                                                  controllers.register.beneficiaries.AddABeneficiaryController.submitComplete(mode: Mode = NormalMode, draftId: String)
 
 GET        /:draftId/individual/:index/name                                           controllers.register.beneficiaries.individualBeneficiary.NameController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/individual/:index/name                                           controllers.register.beneficiaries.individualBeneficiary.NameController.onSubmit(index: Int, draftId: String)
