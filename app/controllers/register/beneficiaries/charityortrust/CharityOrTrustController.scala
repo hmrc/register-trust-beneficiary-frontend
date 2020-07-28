@@ -43,12 +43,7 @@ class CharityOrTrustController @Inject()(
                                           formProvider: CharityOrTrustFormProvider,
                                           val controllerComponents: MessagesControllerComponents,
                                           view: CharityOrTrustView
-                                        )(implicit ec: ExecutionContext)
-
-  extends FrontendBaseController
-  with I18nSupport
-  with Enumerable.Implicits
-  with AnyBeneficiaries {
+                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form: Form[CharityOrTrust] = formProvider()
 
@@ -58,8 +53,7 @@ class CharityOrTrustController @Inject()(
       requireData
 
   def onPageLoad(draftId: String): Action[AnyContent] = actions(draftId) {
-    implicit request =>
-      Ok(view(form, draftId, beneficiaries(request.userAnswers).nonMaxedOutOptions))
+    implicit request => Ok(view(form, draftId))
   }
 
   def onSubmit(draftId: String): Action[AnyContent] = actions(draftId).async {
@@ -67,7 +61,7 @@ class CharityOrTrustController @Inject()(
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, beneficiaries(request.userAnswers).nonMaxedOutOptions))),
+          Future.successful(BadRequest(view(formWithErrors, draftId))),
 
         value =>
           for {

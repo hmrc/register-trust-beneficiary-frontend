@@ -35,14 +35,6 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
 
   val roPrefix: String = "whatTypeOfBeneficiary"
 
-  val defaultOptions: List[RadioOption] = List(
-    RadioOption(roPrefix, WhatTypeOfBeneficiary.Individual.toString),
-    RadioOption(roPrefix, WhatTypeOfBeneficiary.ClassOfBeneficiary.toString),
-    RadioOption(roPrefix, WhatTypeOfBeneficiary.CharityOrTrust.toString),
-    RadioOption(roPrefix, WhatTypeOfBeneficiary.CompanyOrEmployment.toString),
-    RadioOption(roPrefix, WhatTypeOfBeneficiary.Other.toString)
-  )
-
   lazy val charityOrTrustRoute: String = routes.CharityOrTrustController.onPageLoad(draftId).url
 
   "CharityOrTrust Controller" must {
@@ -60,7 +52,7 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, draftId, defaultOptions)(fakeRequest, messages).toString
+        view(form, draftId)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -80,7 +72,7 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(CharityOrTrust.Charity), draftId, defaultOptions)(fakeRequest, messages).toString
+        view(form, draftId)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -119,7 +111,7 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, draftId, defaultOptions)(fakeRequest, messages).toString
+        view(boundForm, draftId)(fakeRequest, messages).toString
 
       application.stop()
     }

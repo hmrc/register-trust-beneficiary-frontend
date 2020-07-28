@@ -45,7 +45,7 @@ class CharityOrTrustViewSpec extends ViewBehaviours {
     val view = viewFor[CharityOrTrustView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, fakeDraftId, defaultOptions)(fakeRequest, messages)
+      view.apply(form, fakeDraftId)(fakeRequest, messages)
 
     behave like normalPage(applyView(form), messageKeyPrefix)
 
