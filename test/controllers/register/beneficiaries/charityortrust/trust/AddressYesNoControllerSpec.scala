@@ -29,7 +29,7 @@ import views.html.register.beneficiaries.charityortrust.trust.AddressYesNoView
 class AddressYesNoControllerSpec extends SpecBase {
 
   val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix("trustBeneficiary.addressYesNo")
+  val form = formProvider.withPrefix("trustBeneficiaryAddressYesNo")
   val index: Int = 0
   val name = "Name"
 

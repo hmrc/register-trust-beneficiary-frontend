@@ -113,7 +113,7 @@ class TrustBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
   def trustBeneficiaryShareOfIncome(index: Int): Option[AnswerRow] = userAnswers.get(ShareOfIncomePage(index)) map {
     x =>
       AnswerRow(
-        "trustBeneficiaryIncome.checkYourAnswersLabel",
+        "trustBeneficiaryShareOfIncome.checkYourAnswersLabel",
         HtmlFormat.escape(x.toString),
         Some(routes.ShareOfIncomeController.onPageLoad(index, draftId).url),
         trustBeneficiaryName(index, userAnswers),
