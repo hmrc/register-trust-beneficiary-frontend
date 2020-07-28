@@ -17,10 +17,8 @@
 package controllers.register.beneficiaries.charityortrust
 
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import controllers.register.beneficiaries.AnyBeneficiaries
 import forms.CharityOrTrustFormProvider
 import javax.inject.Inject
-import models.Enumerable
 import models.registration.pages.CharityOrTrust
 import navigation.Navigator
 import pages.register.beneficiaries.charityortrust.CharityOrTrustPage

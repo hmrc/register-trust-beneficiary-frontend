@@ -18,13 +18,12 @@ package controllers.register.beneficiaries.charityortrust
 
 import base.SpecBase
 import forms.CharityOrTrustFormProvider
-import models.registration.pages.{CharityOrTrust, WhatTypeOfBeneficiary}
+import models.registration.pages.CharityOrTrust
 import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
 import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import viewmodels.RadioOption
 import views.html.register.beneficiaries.charityortrust.CharityOrTrustView
 
 class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
