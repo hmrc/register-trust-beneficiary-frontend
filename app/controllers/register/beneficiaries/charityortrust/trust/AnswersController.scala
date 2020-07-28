@@ -16,16 +16,13 @@
 
 package controllers.register.beneficiaries.charityortrust.trust
 
-import config.annotations.TrustBeneficiary
 import controllers.actions._
-import controllers.actions.register._
 import javax.inject.Inject
 import models.NormalMode
 import models.Status.Completed
 import navigation.Navigator
 import pages.entitystatus.TrustBeneficiaryStatus
 import pages.register.beneficiaries.AnswersPage
-import pages.register.beneficiaries.charityortrust.trust._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
@@ -40,24 +37,15 @@ import scala.concurrent.{ExecutionContext, Future}
 class AnswersController @Inject()(
                                    override val messagesApi: MessagesApi,
                                    registrationsRepository: RegistrationsRepository,
-                                   identify: RegistrationIdentifierAction,
                                    navigator: Navigator,
-                                   getData: DraftIdRetrievalActionProvider,
-                                   requireData: RegistrationDataRequiredAction,
+                                   standardActionSets: StandardActionSets,
                                    val controllerComponents: MessagesControllerComponents,
-                                   requiredAnswer: RequiredAnswerActionProvider,
                                    view: AnswersView,
                                    countryOptions: CountryOptions
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
 
-  private def actions(index: Int, draftId: String) =
-    identify andThen
-      getData(draftId) andThen
-      requireData andThen
-      requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(0, draftId)))
-
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId) {
     implicit request =>
 
       val answers = new TrustBeneficiaryAnswersHelper(countryOptions)(request.userAnswers, draftId, canEdit = true)
@@ -72,7 +60,7 @@ class AnswersController @Inject()(
       Ok(view(index, draftId, sections))
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).async {
     implicit request =>
 
       val answers = request.userAnswers.set(TrustBeneficiaryStatus(index), Completed)

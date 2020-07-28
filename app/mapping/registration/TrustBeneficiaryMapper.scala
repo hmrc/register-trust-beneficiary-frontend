@@ -39,20 +39,18 @@ class TrustBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Map
               organisationName = trustBen.name,
               beneficiaryDiscretion = Some(trustBen.discretionYesNo),
               beneficiaryShareOfIncome = trustBen.shareOfIncome.map(_.toString),
-              identification = identificationMapper(trustBen)
+              identification = identificationMap(trustBen)
             )
           }
         )
     }
   }
 
-  private def identificationMapper(trustBen: TrustBeneficiary): IdentificationOrgType = {
-    IdentificationOrgType(
-      utr = None,
-      address = trustBen.address.flatMap{ address =>
-        addressMapper.build(address)
-      }
-    )
+  private def identificationMap(trustBen: TrustBeneficiary): Option[IdentificationOrgType] = {
+    trustBen.address match {
+      case Some(x) => Some(IdentificationOrgType(utr = None, address = addressMapper.build(x)))
+      case None => None
+    }
   }
 
 }

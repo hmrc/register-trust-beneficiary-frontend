@@ -17,7 +17,7 @@
 package controllers.register.beneficiaries.charityortrust.trust
 
 import config.annotations.TrustBeneficiary
-import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
+import controllers.actions.StandardActionSets
 import forms.StringFormProvider
 import javax.inject.Inject
 import navigation.Navigator
@@ -37,19 +37,15 @@ class NameController @Inject()(
                                 override val controllerComponents: MessagesControllerComponents,
                                 @TrustBeneficiary navigator: Navigator,
                                 formProvider: StringFormProvider,
-                                identify: RegistrationIdentifierAction,
-                                getData: DraftIdRetrievalActionProvider,
-                                requireData: RegistrationDataRequiredAction,
+                                standardActionSets: StandardActionSets,
                                 view: NameView
                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
-
-  private def actions(draftId: String) = identify andThen getData(draftId) andThen requireData
 
   private val length: Int = 105
 
   val form: Form[String] = formProvider.withPrefix("trustBeneficiaryName", length)
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(draftId) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(NamePage(index)) match {
@@ -60,7 +56,7 @@ class NameController @Inject()(
       Ok(view(preparedForm,  draftId, index))
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(draftId).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(

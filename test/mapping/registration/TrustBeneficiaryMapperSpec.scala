@@ -61,7 +61,7 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
             organisationName = "Trust Name",
             beneficiaryDiscretion = Some(false),
             beneficiaryShareOfIncome = Some("100"),
-            identification = IdentificationOrgType(None, None)
+            identification = None
           )
         }
 
@@ -82,13 +82,13 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
             organisationName = "Trust Name",
             beneficiaryDiscretion = Some(true),
             beneficiaryShareOfIncome = None,
-            identification = IdentificationOrgType(
+            identification = Some(IdentificationOrgType(
               None,
               address = Some(
                 AddressType("Line1", "Line2", None, Some("Newcastle"), Some("NE62RT"), "GB")
               )
             )
-          )
+          ))
         }
 
         "International Address is set" in {
@@ -108,13 +108,13 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
             organisationName = "Trust Name",
             beneficiaryDiscretion = Some(true),
             beneficiaryShareOfIncome = None,
-            identification = IdentificationOrgType(
+            identification = Some(IdentificationOrgType(
               None,
               address = Some(
                 AddressType("Line1", "Line2", Some("Paris"), None, None, "FR")
               )
             )
-          )
+          ))
         }
 
       }
@@ -146,24 +146,24 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
               organisationName = "Trust Name",
               beneficiaryDiscretion = Some(true),
               beneficiaryShareOfIncome = None,
-              identification = IdentificationOrgType(
+              identification = Some(IdentificationOrgType(
                 None,
                 address = Some(
                   AddressType("Line1", "Line2", None, Some("Newcastle"), Some("NE62RT"), "GB")
                 )
               )
-            ),
+            )),
             BeneficiaryTrustType(
               organisationName = "Trust Name",
               beneficiaryDiscretion = Some(true),
               beneficiaryShareOfIncome = None,
-              identification = IdentificationOrgType(
+              identification = Some(IdentificationOrgType(
                 None,
                 address = Some(
                   AddressType("Line1", "Line2", Some("Paris"), None, None, "FR")
                 )
               )
-            )
+            ))
           )
       }
 

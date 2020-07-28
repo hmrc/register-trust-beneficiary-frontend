@@ -37,8 +37,10 @@ title = s"${errorPrefix(form)} ${messages("trustBeneficiaryName.title")}"
         @components.input_text(
             field = form("value"),
             label = messages("trustBeneficiaryName.heading"),
-            labelClass = Some("heading-large"),
-            inputClass = Some("form-control-3-4")
+            inputClass = Some("form-control-3-4"),
+            labelAsHeading = true,
+            labelClass=Some("heading-large"),
+            autocomplete = Some("name")
         )
 
         @components.submit_button()
