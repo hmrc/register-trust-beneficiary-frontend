@@ -51,9 +51,7 @@ class CharityOrTrustController @Inject()(
       requireData
 
   def onPageLoad(draftId: String): Action[AnyContent] = actions(draftId) {
-    implicit request =>
-
-      Ok(view(form, draftId))
+    implicit request => Ok(view(form, draftId))
   }
 
   def onSubmit(draftId: String): Action[AnyContent] = actions(draftId).async {

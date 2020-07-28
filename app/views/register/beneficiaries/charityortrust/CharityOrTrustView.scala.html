@@ -40,7 +40,7 @@
             legendClass = Some("heading-large"),
             legendAsHeading = true,
             fieldSetClass = Some("inline"),
-            inputs = CharityOrTrust.options
+            inputs = CharityOrTrust.options.toSeq
         )
 
         @components.submit_button()

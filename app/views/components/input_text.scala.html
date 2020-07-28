@@ -54,8 +54,9 @@
         name="@{field.name}"
         value="@{field.value}"
         @if(autocomplete.nonEmpty){
-            autocomplete="@{autocomplete.get}"
+        autocomplete="@{autocomplete.get}"
         }
+
         @if(inputMode.nonEmpty) {
             inputmode="@{inputMode.get}"
         }
