@@ -53,7 +53,7 @@ class CompanyOrEmploymentRelatedControllerSpec extends SpecBase with MockitoSuga
       application.stop()
     }
 
-    "populate the view correctly on a GET when the question has previously been answered" in {
+    "populate the view without the previous answer when the question has previously been answered" in {
 
       val answers = emptyUserAnswers.set(CompanyOrEmploymentRelatedPage, companyOrEmploymentRelatedBeneficiaryAnswer).success.value
 
@@ -68,7 +68,7 @@ class CompanyOrEmploymentRelatedControllerSpec extends SpecBase with MockitoSuga
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(companyOrEmploymentRelatedBeneficiaryAnswer), draftId)(fakeRequest, messages).toString
+        view(form, draftId)(request, messages).toString
 
       application.stop()
     }

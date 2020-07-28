@@ -45,14 +45,7 @@ class CompanyOrEmploymentRelatedController @Inject()(
   val form: Form[CompanyOrEmploymentRelatedToAdd] = formProvider()
 
   def onPageLoad(draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId) {
-    implicit request =>
-
-      val preparedForm = request.userAnswers.get(CompanyOrEmploymentRelatedPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, draftId))
+    implicit request => Ok(view(form, draftId))
   }
 
   def onSubmit(draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).async {
