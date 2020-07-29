@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.register.beneficiaries.other
+package controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated
 
 import controllers.RemoveIndexController
 import controllers.actions._
@@ -23,16 +23,16 @@ import forms.RemoveIndexFormProvider
 import javax.inject.Inject
 import models.requests.RegistrationDataRequest
 import pages.QuestionPage
-import pages.register.beneficiaries.other.DescriptionPage
+import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.NamePage
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.mvc.{AnyContent, Call, MessagesControllerComponents}
-import queries.{RemoveOtherBeneficiaryQuery, Settable}
+import queries.{RemoveEmploymentRelatedBeneficiaryQuery, Settable}
 import repositories.RegistrationsRepository
 import views.html.RemoveIndexView
 
 import scala.concurrent.ExecutionContext
 
-class RemoveOtherBeneficiaryController @Inject()(
+class RemoveEmploymentRelatedBeneficiaryController @Inject()(
                                                        override val messagesApi: MessagesApi,
                                                        override val registrationsRepository: RegistrationsRepository,
                                                        identify: RegistrationIdentifierAction,
@@ -44,22 +44,22 @@ class RemoveOtherBeneficiaryController @Inject()(
                                                        require: RequiredAnswerActionProvider
                                  )(implicit ec: ExecutionContext) extends RemoveIndexController {
 
-  override val messagesPrefix : String = "removeOtherBeneficiary"
+  override val messagesPrefix: String = "removeEmploymentRelatedBeneficiary"
 
-  override def page(index: Int): QuestionPage[String] = DescriptionPage(index)
+  override def page(index: Int): QuestionPage[String] = NamePage(index)
 
-  override def actions(draftId : String, index: Int) =
+  override def actions(draftId: String, index: Int) =
     identify andThen getData(draftId) andThen requireData
 
-  override def redirect(draftId : String) : Call =
+  override def redirect(draftId: String): Call =
     controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
 
   override def formRoute(draftId: String, index: Int): Call =
-    controllers.register.beneficiaries.other.routes.RemoveOtherBeneficiaryController.onSubmit(index, draftId)
+    routes.RemoveEmploymentRelatedBeneficiaryController.onSubmit(index, draftId)
 
-  override def removeQuery(index: Int): Settable[_] = RemoveOtherBeneficiaryQuery(index)
+  override def removeQuery(index: Int): Settable[_] = RemoveEmploymentRelatedBeneficiaryQuery(index)
 
-  override def content(index: Int)(implicit request: RegistrationDataRequest[AnyContent]) : String =
+  override def content(index: Int)(implicit request: RegistrationDataRequest[AnyContent]): String =
     request.userAnswers.get(page(index)).getOrElse(Messages(s"$messagesPrefix.default"))
 
 }

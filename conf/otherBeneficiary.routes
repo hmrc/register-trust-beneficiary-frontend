@@ -1,0 +1,2 @@
+GET        /:draftId/:index/remove                     controllers.register.beneficiaries.other.RemoveOtherBeneficiaryController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/remove                     controllers.register.beneficiaries.other.RemoveOtherBeneficiaryController.onSubmit(index: Int, draftId: String)

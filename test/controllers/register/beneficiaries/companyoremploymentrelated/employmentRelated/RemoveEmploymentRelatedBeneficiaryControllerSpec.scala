@@ -14,39 +14,39 @@
  * limitations under the License.
  */
 
-package controllers.register.beneficiaries.other
+package controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated
 
 import base.SpecBase
 import forms.RemoveIndexFormProvider
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.register.beneficiaries.other.DescriptionPage
+import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
+import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.NamePage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.RemoveIndexView
 
-class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
+class RemoveEmploymentRelatedBeneficiaryControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
-  val messagesPrefix = "removeOtherBeneficiary"
+  val messagesPrefix = "removeEmploymentRelatedBeneficiary"
 
   val formProvider = new RemoveIndexFormProvider()
   val form = formProvider(messagesPrefix)
 
-  lazy val formRoute = routes.RemoveOtherBeneficiaryController.onSubmit(0, fakeDraftId)
+  lazy val formRoute = routes.RemoveEmploymentRelatedBeneficiaryController.onSubmit(0, fakeDraftId)
 
   val index = 0
 
-  "RemoveOtherBeneficiary Controller" when {
+  "RemoveEmploymentRelatedBeneficiary Controller" when {
 
     "no name added" must {
-
       "return OK and the correct view for a GET" in {
 
         val userAnswers = emptyUserAnswers
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-        val request = FakeRequest(GET, routes.RemoveOtherBeneficiaryController.onPageLoad(index, fakeDraftId).url)
+        val request = FakeRequest(GET, routes.RemoveEmploymentRelatedBeneficiaryController.onPageLoad(index, fakeDraftId).url)
 
         val result = route(application, request).value
 
@@ -55,7 +55,7 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(messagesPrefix, form, index, fakeDraftId, "Other", formRoute)(fakeRequest, messages).toString
+          view(messagesPrefix, form, index, fakeDraftId, "the employment related beneficiary", formRoute)(fakeRequest, messages).toString
 
         application.stop()
       }
@@ -66,11 +66,11 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
       "return OK and the correct view for a GET" in {
 
-        val userAnswers = emptyUserAnswers.set(DescriptionPage(0), "Other").success.value
+        val userAnswers = emptyUserAnswers.set(NamePage(0), "Employment Related").success.value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-        val request = FakeRequest(GET, routes.RemoveOtherBeneficiaryController.onPageLoad(index, fakeDraftId).url)
+        val request = FakeRequest(GET, routes.RemoveEmploymentRelatedBeneficiaryController.onPageLoad(index, fakeDraftId).url)
 
         val result = route(application, request).value
 
@@ -78,7 +78,7 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(messagesPrefix, form, index, fakeDraftId, "Other", formRoute)(fakeRequest, messages).toString
+        contentAsString(result) mustEqual view(messagesPrefix, form, index, fakeDraftId, "Employment Related", formRoute)(fakeRequest, messages).toString
 
         application.stop()
       }
@@ -87,7 +87,7 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(DescriptionPage(0), "Other").success.value
+      val userAnswers = emptyUserAnswers.set(NamePage(0), "Employment Related").success.value
 
       forAll(arbitrary[Boolean]) {
         value =>
@@ -96,7 +96,7 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
             .build()
 
         val request =
-          FakeRequest(POST, routes.RemoveOtherBeneficiaryController.onSubmit(index, fakeDraftId).url)
+          FakeRequest(POST, routes.RemoveEmploymentRelatedBeneficiaryController.onSubmit(index, fakeDraftId).url)
             .withFormUrlEncodedBody(("value", value.toString))
 
         val result = route(application, request).value
@@ -112,12 +112,12 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(DescriptionPage(0), "Other").success.value
+      val userAnswers = emptyUserAnswers.set(NamePage(0), "Employment related").success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, routes.RemoveOtherBeneficiaryController.onSubmit(index, fakeDraftId).url)
+        FakeRequest(POST, routes.RemoveEmploymentRelatedBeneficiaryController.onSubmit(index, fakeDraftId).url)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
@@ -129,7 +129,7 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(messagesPrefix, boundForm, index, fakeDraftId, "Other", formRoute)(fakeRequest, messages).toString
+        view(messagesPrefix, boundForm, index, fakeDraftId, "Employment related", formRoute)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -138,7 +138,7 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, routes.RemoveOtherBeneficiaryController.onPageLoad(index, fakeDraftId).url)
+      val request = FakeRequest(GET, routes.RemoveEmploymentRelatedBeneficiaryController.onPageLoad(index, fakeDraftId).url)
 
       val result = route(application, request).value
 
@@ -154,7 +154,7 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, routes.RemoveOtherBeneficiaryController.onSubmit(index, fakeDraftId).url)
+        FakeRequest(POST, routes.RemoveEmploymentRelatedBeneficiaryController.onSubmit(index, fakeDraftId).url)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
