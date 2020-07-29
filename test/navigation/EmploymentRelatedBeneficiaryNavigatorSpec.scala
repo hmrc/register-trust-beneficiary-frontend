@@ -22,7 +22,7 @@ import generators.Generators
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.register.beneficiaries.large.LargeBeneficiaryNamePage
+import pages.register.beneficiaries.large.{LargeBeneficiaryNamePage, LargeBeneficiaryAddressYesNoPage}
 
 class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -31,11 +31,29 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
 
   "Employment related beneficiary navigator" must {
 
-    "go to ??? from NamePage" in { // TODO rename to correct page
+    "go to AddressYesNo from NamePage" in {
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           navigator.nextPage(LargeBeneficiaryNamePage(index), fakeDraftId, userAnswers)
-            .mustBe(rts.NameController.onPageLoad(index, fakeDraftId))  // TODO Redirect to correct page
+            .mustBe(rts.AddressYesNoController.onPageLoad(index, fakeDraftId))
+      }
+    }
+
+    "go to AddressUkYesNo from AddressYesNo if Yes" in {
+      forAll(arbitrary[UserAnswers]) {
+        baseAnswers =>
+          val answers = baseAnswers.set(LargeBeneficiaryAddressYesNoPage(index), true).success.value
+          navigator.nextPage(LargeBeneficiaryAddressYesNoPage(index), fakeDraftId, answers)
+            .mustBe(rts.AddressYesNoController.onPageLoad(index, fakeDraftId)) // TODO Redirect to AddressUkYesNoController
+      }
+    }
+
+    "go to Description from AddressYesNo if No" in {
+      forAll(arbitrary[UserAnswers]) {
+        baseAnswers =>
+          val answers = baseAnswers.set(LargeBeneficiaryAddressYesNoPage(index), false).success.value
+          navigator.nextPage(LargeBeneficiaryAddressYesNoPage(index), fakeDraftId, answers)
+            .mustBe(rts.AddressYesNoController.onPageLoad(index, fakeDraftId)) // TODO Redirect to DescriptionController
       }
     }
 
