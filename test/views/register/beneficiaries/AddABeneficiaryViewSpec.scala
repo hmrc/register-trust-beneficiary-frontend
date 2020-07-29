@@ -49,11 +49,11 @@ class AddABeneficiaryViewSpec extends OptionsViewBehaviours with TabularDataView
   val view = viewFor[AddABeneficiaryView](Some(emptyUserAnswers))
 
   def applyView(form: Form[_]): HtmlFormat.Appendable =
-    view.apply(form, NormalMode, fakeDraftId, Nil, Nil, "Add a beneficiary")(fakeRequest, messages)
+    view.apply(form, NormalMode, fakeDraftId, Nil, Nil, "Add a beneficiary", Nil)(fakeRequest, messages)
 
-  def applyView(form: Form[_], inProgressBeneficiaries: Seq[AddRow], completeBeneficiaries: Seq[AddRow], count : Int): HtmlFormat.Appendable = {
+  def applyView(form: Form[_], inProgressBeneficiaries: Seq[AddRow], completeBeneficiaries: Seq[AddRow], count : Int, maxedOut: List[String]): HtmlFormat.Appendable = {
     val title = if (count > 1) s"You have added $count beneficiaries" else "You have added 1 beneficiary"
-    view.apply(form, NormalMode, fakeDraftId, inProgressBeneficiaries, completeBeneficiaries, title)(fakeRequest, messages)
+    view.apply(form, NormalMode, fakeDraftId, inProgressBeneficiaries, completeBeneficiaries, title, maxedOut)(fakeRequest, messages)
   }
 
   "AddABeneficiaryView" when {
@@ -71,7 +71,7 @@ class AddABeneficiaryViewSpec extends OptionsViewBehaviours with TabularDataView
 
     "there is data in progress" must {
 
-      val viewWithData = applyView(form, inProgressBeneficiaries, Nil, 4)
+      val viewWithData = applyView(form, inProgressBeneficiaries, Nil, 4, Nil)
 
       behave like dynamicTitlePage(viewWithData, "addABeneficiary.count", "4")
 
@@ -84,7 +84,7 @@ class AddABeneficiaryViewSpec extends OptionsViewBehaviours with TabularDataView
 
     "there is complete data" must {
 
-      val viewWithData = applyView(form, Nil, completeBeneficiaries, 4)
+      val viewWithData = applyView(form, Nil, completeBeneficiaries, 4, Nil)
 
       behave like dynamicTitlePage(viewWithData, "addABeneficiary.count", "4")
 
@@ -97,7 +97,7 @@ class AddABeneficiaryViewSpec extends OptionsViewBehaviours with TabularDataView
 
     "there is both in progress and complete data" must {
 
-      val viewWithData = applyView(form, inProgressBeneficiaries, completeBeneficiaries, 8)
+      val viewWithData = applyView(form, inProgressBeneficiaries, completeBeneficiaries, 8, Nil)
 
       behave like dynamicTitlePage(viewWithData, "addABeneficiary.count", "8")
 
@@ -106,6 +106,46 @@ class AddABeneficiaryViewSpec extends OptionsViewBehaviours with TabularDataView
       behave like pageWithTabularData(viewWithData, inProgressBeneficiaries, completeBeneficiaries)
 
       behave like pageWithOptions(form, applyView, AddABeneficiary.options.toSet)
+    }
+
+    "there is one maxed out beneficiary" must {
+      val viewWithData = applyView(form, inProgressBeneficiaries, completeBeneficiaries, 8, List("Charity"))
+
+      behave like dynamicTitlePage(viewWithData, "addABeneficiary.count", "8")
+
+      behave like pageWithBackLink(viewWithData)
+
+      behave like pageWithTabularData(viewWithData, inProgressBeneficiaries, completeBeneficiaries)
+
+      behave like pageWithOptions(form, applyView, AddABeneficiary.options.toSet)
+
+      "content shows maxed beneficiary" in {
+        val doc = asDocument(viewWithData)
+
+        assertContainsText(doc, "You cannot add another charity as you have entered a maximum of 25.")
+        assertContainsText(doc, "Check the beneficiaries you have added. If you have further beneficiaries to add within this type, write to HMRC with their details.")
+      }
+    }
+
+    "there are many maxed out beneficiaries" must {
+      val viewWithData = applyView(form, inProgressBeneficiaries, completeBeneficiaries, 8, List("Charity", "Individual"))
+
+      behave like dynamicTitlePage(viewWithData, "addABeneficiary.count", "8")
+
+      behave like pageWithBackLink(viewWithData)
+
+      behave like pageWithTabularData(viewWithData, inProgressBeneficiaries, completeBeneficiaries)
+
+      behave like pageWithOptions(form, applyView, AddABeneficiary.options.toSet)
+
+      "content shows maxed beneficiaries" in {
+        val doc = asDocument(viewWithData)
+
+        assertContainsText(doc, "You have entered the maximum number of beneficiaries for:")
+        assertContainsText(doc, "Charity")
+        assertContainsText(doc, "Individual")
+        assertContainsText(doc, "Check the beneficiaries you have added. If you have further beneficiaries to add within these types, write to HMRC with their details.")
+      }
     }
   }
 
