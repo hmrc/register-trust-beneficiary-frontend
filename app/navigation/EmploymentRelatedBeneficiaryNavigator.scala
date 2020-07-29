@@ -19,7 +19,7 @@ package navigation
 import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.{routes => rts}
 import models.ReadableUserAnswers
 import pages.Page
-import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated._
+import pages.register.beneficiaries.large.LargeBeneficiaryNamePage
 import play.api.mvc.Call
 
 class EmploymentRelatedBeneficiaryNavigator extends Navigator {
@@ -27,7 +27,7 @@ class EmploymentRelatedBeneficiaryNavigator extends Navigator {
   override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call = routes(draftId)(page)(userAnswers)
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, Call] = {
-    case NamePage(index) => rts.NameController.onPageLoad(index, draftId) // TODO Redirect to correct page
+    case LargeBeneficiaryNamePage(index) => rts.NameController.onPageLoad(index, draftId) // TODO Redirect to correct page
   }
 
   private def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {

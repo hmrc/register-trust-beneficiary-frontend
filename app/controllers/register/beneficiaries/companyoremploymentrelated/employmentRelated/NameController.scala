@@ -21,7 +21,7 @@ import controllers.actions.StandardActionSets
 import forms.StringFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.NamePage
+import pages.register.beneficiaries.large.LargeBeneficiaryNamePage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -45,7 +45,7 @@ class NameController @Inject()(
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(NamePage(index)) match {
+      val preparedForm = request.userAnswers.get(LargeBeneficiaryNamePage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -63,9 +63,9 @@ class NameController @Inject()(
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(NamePage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(LargeBeneficiaryNamePage(index), value))
             _ <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(NamePage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(LargeBeneficiaryNamePage(index), draftId, updatedAnswers))
       )
   }
 }
