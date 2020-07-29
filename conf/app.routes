@@ -13,6 +13,7 @@ GET        /logout                                      controllers.register.Log
 GET        /unauthorised                                controllers.UnauthorisedController.onPageLoad
 
 ->         /company                                     companyBeneficiary.Routes
+->         /employment-related                          employmentRelatedBeneficiary.Routes
 
 GET        /:draftId/add                                                              controllers.register.beneficiaries.AddABeneficiaryController.onPageLoad(mode: Mode = NormalMode, draftId: String)
 POST       /:draftId/add                                                              controllers.register.beneficiaries.AddABeneficiaryController.submitOne(mode: Mode = NormalMode, draftId: String)

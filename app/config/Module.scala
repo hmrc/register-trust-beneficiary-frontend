@@ -17,9 +17,9 @@
 package config
 
 import com.google.inject.AbstractModule
-import config.annotations.{CharityBeneficiary, ClassOfBeneficiaries, CompanyBeneficiary, IndividualBeneficiary, TrustBeneficiary}
+import config.annotations._
 import controllers.actions.register._
-import navigation.{BeneficiaryNavigator, CharityBeneficiaryNavigator, ClassOfBeneficiariesNavigator, CompanyBeneficiaryNavigator, IndividualBeneficiaryNavigator, Navigator, TrustBeneficiaryNavigator}
+import navigation._
 import repositories.{DefaultRegistrationsRepository, RegistrationsRepository}
 
 class Module extends AbstractModule {
@@ -30,6 +30,7 @@ class Module extends AbstractModule {
     bind(classOf[DraftIdRetrievalActionProvider]).to(classOf[DraftIdDataRetrievalActionProviderImpl]).asEagerSingleton()
 
     bind(classOf[Navigator]).annotatedWith(classOf[CompanyBeneficiary]).to(classOf[CompanyBeneficiaryNavigator]).asEagerSingleton()
+    bind(classOf[Navigator]).annotatedWith(classOf[EmploymentRelatedBeneficiary]).to(classOf[EmploymentRelatedBeneficiaryNavigator]).asEagerSingleton()
     bind(classOf[Navigator]).annotatedWith(classOf[TrustBeneficiary]).to(classOf[TrustBeneficiaryNavigator]).asEagerSingleton()
     bind(classOf[Navigator]).annotatedWith(classOf[IndividualBeneficiary]).to(classOf[IndividualBeneficiaryNavigator]).asEagerSingleton()
     bind(classOf[Navigator]).annotatedWith(classOf[ClassOfBeneficiaries]).to(classOf[ClassOfBeneficiariesNavigator]).asEagerSingleton()
