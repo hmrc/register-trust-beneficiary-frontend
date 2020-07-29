@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.other
+package config.annotations;
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.beneficiaries.{Beneficiaries, OtherBeneficiaries}
+import com.google.inject.BindingAnnotation;
 
-case class ShareOfIncomePage(index: Int) extends QuestionPage[Int]{
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-  override def path: JsPath = JsPath \ Beneficiaries \ OtherBeneficiaries \ index \ toString
-
-  override def toString: String = "shareOfIncome"
-}
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
+@BindingAnnotation
+public @interface OtherBeneficiary {}
