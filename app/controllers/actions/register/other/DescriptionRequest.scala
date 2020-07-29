@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.other
+package controllers.actions.register.other
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.beneficiaries.{Beneficiaries, OtherBeneficiaries}
+import models.UserAnswers
+import models.requests.{DataRequest, RegistrationDataRequest}
+import play.api.mvc.WrappedRequest
 
-case class ShareOfIncomePage(index: Int) extends QuestionPage[Int]{
-
-  override def path: JsPath = JsPath \ Beneficiaries \ OtherBeneficiaries \ index \ toString
-
-  override def toString: String = "shareOfIncome"
+case class DescriptionRequest[T](request: RegistrationDataRequest[T], description: String) extends WrappedRequest[T](request){
+  val userAnswers:UserAnswers = request.userAnswers
 }
