@@ -78,26 +78,18 @@ class AddABeneficiaryControllerSpec extends SpecBase {
     .set(ClassBeneficiaryStatus(0), Completed).success.value
 
   private def genTrustBeneficiaries(userAnswers: UserAnswers, range: Int) = {
-    val ua = emptyUserAnswers
-
     (0 to range)
-        .map(index => ua.set(pages.register.beneficiaries.companyoremploymentrelated.company.NamePage(index), "Company Name").success.value)
+      .foldLeft(emptyUserAnswers)((ua,index) => ua.set(pages.register.beneficiaries.charityortrust.trust.NamePage(index), "Company Name").success.value)
   }
 
   private def genCompanyBeneficiaries(userAnswers: UserAnswers, range: Int) = {
-    val ua = emptyUserAnswers
-
     (0 to range)
-      .map(index => ua.set(pages.register.beneficiaries.charityortrust.trust.NamePage(index), "Trust Name").success.value)
+      .foldLeft(emptyUserAnswers)((ua,index) => ua.set(pages.register.beneficiaries.companyoremploymentrelated.company.NamePage(index), "Trust Name").success.value)
   }
 
   private def genIndividualBeneficiaries(userAnswers: UserAnswers, range: Int) = {
-
-    val ua = emptyUserAnswers
-
     (0 to range)
-      .map(index =>
-        ua.set(
+      .foldLeft(emptyUserAnswers)((ua,index) => ua.set(
           pages.register.beneficiaries.individual.NamePage(index),
           FullName("first name", None, "last name")
         ).success.value
@@ -105,28 +97,23 @@ class AddABeneficiaryControllerSpec extends SpecBase {
   }
 
   private def genUnidentifiedBeneficiaries(userAnswers: UserAnswers, range: Int) = {
-    val ua = emptyUserAnswers
     (0 to range)
-      .map(index =>
-      ua.set(ClassBeneficiaryDescriptionPage(index), s"description $index").success.value)
+      .foldLeft(emptyUserAnswers)((ua,index) => ua.set(ClassBeneficiaryDescriptionPage(index), s"description $index").success.value)
   }
 
   private def genCharityBeneficiaries(userAnswers: UserAnswers, range: Int) = {
-    val ua = emptyUserAnswers
     (0 to range)
-      .map(index => ua.set(CharityNamePage(index), s"Charity name $index").success.value)
+      .foldLeft(emptyUserAnswers)((ua,index) => ua.set(CharityNamePage(index), s"Charity name $index").success.value)
   }
 
   private def genLargeBeneficiaries(userAnswers: UserAnswers, range: Int) = {
-    val ua = emptyUserAnswers
     (0 to range)
-      .map(index => ua.set(LargeBeneficiaryDescriptionPage(index), Description(s"description $index", None, None, None, None)).success.value)
+      .foldLeft(emptyUserAnswers)((ua,index) => ua.set(LargeBeneficiaryDescriptionPage(index), Description(s"description $index", None, None, None, None)).success.value)
   }
 
   private def genOtherBeneficiaries(userAnswers: UserAnswers, range: Int) = {
-    val ua = emptyUserAnswers
     (0 to range)
-      .map(index => ua.set(OtherBeneficiaryDescriptionPage(index), s"Other description $index").success.value)
+      .foldLeft(emptyUserAnswers)((ua,index) => ua.set(OtherBeneficiaryDescriptionPage(index), s"Other description $index").success.value)
   }
 
   "AddABeneficiary Controller" when {
@@ -314,14 +301,14 @@ class AddABeneficiaryControllerSpec extends SpecBase {
       "return correct view when all are maxed out" in {
 
         val beneficiaries = List(
-//          genTrustBeneficiaries(emptyUserAnswers, 25),
+          genTrustBeneficiaries(emptyUserAnswers, 25),
           genIndividualBeneficiaries(emptyUserAnswers, 25),
           genUnidentifiedBeneficiaries(emptyUserAnswers, 25),
           genCompanyBeneficiaries(emptyUserAnswers, 25),
           genCharityBeneficiaries(emptyUserAnswers, 25),
           genLargeBeneficiaries(emptyUserAnswers, 25),
           genOtherBeneficiaries(emptyUserAnswers, 25)
-        ).flatten
+        )
 
         val userAnswers = beneficiaries.foldLeft(emptyUserAnswers)((x, acc) => acc.copy(data = x.data.deepMerge(acc.data)))
 
@@ -339,7 +326,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
         val content = contentAsString(result)
 
-        content mustEqual view(fakeDraftId, beneficiaryRows.inProgress, beneficiaryRows.complete, "The trust has 175 beneficiaries")(fakeRequest, messages).toString
+        content mustEqual view(fakeDraftId, beneficiaryRows.inProgress, beneficiaryRows.complete, "You have added 130 beneficiaries")(fakeRequest, messages).toString
         content must include("You cannot enter another beneficiary as you have entered a maximum of 175.")
         content must include("If you have further beneficiaries to add, write to HMRC with their details.")
 
@@ -357,7 +344,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
           genCharityBeneficiaries(emptyUserAnswers, 25),
           genLargeBeneficiaries(emptyUserAnswers, 0),
           genOtherBeneficiaries(emptyUserAnswers, 0)
-        ).flatten
+        )
 
         val userAnswers = beneficiaries.foldLeft(emptyUserAnswers)((x, acc) => acc.copy(data = x.data.deepMerge(acc.data)))
 
@@ -383,7 +370,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
           genCharityBeneficiaries(emptyUserAnswers, 25),
           genLargeBeneficiaries(emptyUserAnswers, 0),
           genOtherBeneficiaries(emptyUserAnswers, 0)
-        ).flatten
+        )
 
         val userAnswers = beneficiaries.foldLeft(emptyUserAnswers)((x, acc) => acc.copy(data = x.data.deepMerge(acc.data)))
 

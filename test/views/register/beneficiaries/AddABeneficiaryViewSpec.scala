@@ -123,7 +123,7 @@ class AddABeneficiaryViewSpec extends OptionsViewBehaviours with TabularDataView
         val doc = asDocument(viewWithData)
 
         assertContainsText(doc, "You cannot add another charity as you have entered a maximum of 25.")
-        assertContainsText(doc, "Check the beneficiaries you have added. If you have further beneficiaries to add within these types, write to HMRC with their details.")
+        assertContainsText(doc, "Check the beneficiaries you have added. If you have further beneficiaries to add within this type, write to HMRC with their details.")
       }
     }
 
