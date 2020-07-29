@@ -20,6 +20,7 @@ import config.FrontendAppConfig
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import javax.inject.Inject
+import models.registration.pages.AddABeneficiary.NoComplete
 import models.{Enumerable, Mode}
 import navigation.Navigator
 import pages.register.beneficiaries.{AddABeneficiaryPage, AddABeneficiaryYesNoPage}
@@ -127,9 +128,12 @@ class AddABeneficiaryController @Inject()(
       )
   }
 
-  def submitComplete(mode: Mode, draftId: String): Action[AnyContent] = routes(draftId) {
+  def submitComplete(mode: Mode, draftId: String): Action[AnyContent] = routes(draftId).async {
     implicit request =>
-      Redirect(Call("GET", config.registrationProgressUrl(draftId)))
+      for {
+        updatedAnswers <- Future.fromTry(request.userAnswers.set(AddABeneficiaryPage, NoComplete))
+        _              <- registrationsRepository.set(updatedAnswers)
+      } yield Redirect(Call("GET", config.registrationProgressUrl(draftId)))
   }
 
 }
