@@ -16,14 +16,13 @@
 
 package pages.register.beneficiaries.other
 
-import pages.{MetaData, QuestionPage}
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.beneficiaries.{Beneficiaries, OtherBeneficiaries}
 
-case class OtherBeneficiaryMetaData(index: Int) extends QuestionPage[MetaData]{
+final case class IncomeYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
   override def path: JsPath = JsPath \ Beneficiaries \ OtherBeneficiaries \ index \ toString
 
-  override def toString: String = "metaData"
-
+  override def toString: String = "discretionYesNo"
 }
