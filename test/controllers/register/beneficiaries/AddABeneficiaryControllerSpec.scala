@@ -121,7 +121,6 @@ class AddABeneficiaryControllerSpec extends SpecBase {
     "no data" must {
 
       "redirect to Session Expired for a GET if no existing data is found" in {
-
         val application = applicationBuilder(userAnswers = None).build()
 
         val request = FakeRequest(GET, addABeneficiaryRoute)
