@@ -21,7 +21,7 @@ import config.annotations.EmploymentRelatedBeneficiary
 import forms.StringFormProvider
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.NamePage
+import pages.register.beneficiaries.large.LargeBeneficiaryNamePage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -59,7 +59,7 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = emptyUserAnswers.set(NamePage(index), name).success.value
+      val answers = emptyUserAnswers.set(LargeBeneficiaryNamePage(index), name).success.value
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 

@@ -22,7 +22,7 @@ import generators.Generators
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated._
+import pages.register.beneficiaries.large.LargeBeneficiaryNamePage
 
 class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -34,7 +34,7 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
     "go to ??? from NamePage" in { // TODO rename to correct page
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
-          navigator.nextPage(NamePage(index), fakeDraftId, userAnswers)
+          navigator.nextPage(LargeBeneficiaryNamePage(index), fakeDraftId, userAnswers)
             .mustBe(rts.NameController.onPageLoad(index, fakeDraftId))  // TODO Redirect to correct page
       }
     }
