@@ -14,16 +14,25 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.other
+package viewmodels.addAnother
 
-import models.core.pages.Address
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.beneficiaries.{Beneficiaries, OtherBeneficiaries}
+import models.Status
+import play.api.libs.json.{Reads, __}
 
-case class OtherBeneficiaryAddressPage(index: Int) extends QuestionPage[Address] {
+case class EmploymentRelatedBeneficiaryViewModel(name: Option[String], status: Status) {
 
-  override def path: JsPath = JsPath \ Beneficiaries \ OtherBeneficiaries \ index \ toString
+  def isComplete: Boolean = name.nonEmpty && (status == Status.Completed)
 
-  override def toString: String = "address"
 }
+
+object EmploymentRelatedBeneficiaryViewModel {
+
+  import play.api.libs.functional.syntax._
+
+  implicit val reads : Reads[EmploymentRelatedBeneficiaryViewModel] = (
+    (__ \ "name").readNullable[String] and
+      (__ \ "status").readWithDefault[Status](Status.InProgress)
+    )(EmploymentRelatedBeneficiaryViewModel.apply _)
+}
+
+

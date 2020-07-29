@@ -1,5 +1,9 @@
 @import '_forms__mixin';
 
+label.heading-large {
+    margin: 0;
+}
+
 /*
 ====================================
 Makes relationship between legend and inputs/hint tighter

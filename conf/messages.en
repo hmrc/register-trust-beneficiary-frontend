@@ -559,3 +559,11 @@ companyBeneficiary.nonUkAddress.checkYourAnswersLabel = What is {0}’s address?
 companyBeneficiary.checkDetails.title = Check company beneficiary details
 companyBeneficiary.checkDetails.heading = Check company beneficiary details
 
+# EMPLOYMENT RELATED
+
+employmentRelatedBeneficiary.name.title = What is the business name?
+employmentRelatedBeneficiary.name.heading = What is the business name?
+employmentRelatedBeneficiary.name.checkYourAnswersLabel = What is the business name?
+employmentRelatedBeneficiary.name.error.required = Enter the business name
+employmentRelatedBeneficiary.name.error.invalidFormat = Business name must only include letters a to z, numbers, ampersands (&), apostrophes, forward slashes, full stops, hyphens, round brackets and spaces
+employmentRelatedBeneficiary.name.error.length = Business name cannot be more than 105 characters
