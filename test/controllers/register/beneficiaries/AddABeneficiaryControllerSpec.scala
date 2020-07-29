@@ -29,7 +29,7 @@ import pages.register.beneficiaries.AddABeneficiaryPage
 import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
 import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
 import pages.register.beneficiaries.large.LargeBeneficiaryDescriptionPage
-import pages.register.beneficiaries.other.OtherBeneficiaryDescriptionPage
+import pages.register.beneficiaries.other.DescriptionPage
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -113,7 +113,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
   private def genOtherBeneficiaries(userAnswers: UserAnswers, range: Int) = {
     (0 to range)
-      .foldLeft(emptyUserAnswers)((ua,index) => ua.set(OtherBeneficiaryDescriptionPage(index), s"Other description $index").success.value)
+      .foldLeft(emptyUserAnswers)((ua,index) => ua.set(DescriptionPage(index), s"Other description $index").success.value)
   }
 
   "AddABeneficiary Controller" when {
