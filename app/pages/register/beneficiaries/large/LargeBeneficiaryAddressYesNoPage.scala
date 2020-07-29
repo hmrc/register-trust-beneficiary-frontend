@@ -16,13 +16,27 @@
 
 package pages.register.beneficiaries.large
 
+import models.UserAnswers
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.beneficiaries.{Beneficiaries, LargeBeneficiaries}
+
+import scala.util.Try
 
 final case class LargeBeneficiaryAddressYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
   override def path: JsPath = JsPath \ Beneficiaries \ LargeBeneficiaries \ index \ toString
 
   override def toString: String = "addressYesNo"
+
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+    value match {
+      case Some(false) =>
+        userAnswers.remove(LargeBeneficiaryAddressUKYesNoPage(index))
+          .flatMap(_.remove(LargeBeneficiaryAddressPage(index)))
+          .flatMap(_.remove(LargeBeneficiaryAddressInternationalPage(index)))
+      case _ => super.cleanup(value, userAnswers)
+    }
+  }
+
 }

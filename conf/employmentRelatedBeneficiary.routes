@@ -1,2 +1,5 @@
 GET         /:draftId/:index/name                       controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.NameController.onPageLoad(index: Int, draftId: String)
 POST        /:draftId/:index/name                       controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.NameController.onSubmit(index: Int, draftId: String)
+
+GET         /:draftId/:index/has-address                controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.AddressYesNoController.onPageLoad(index: Int, draftId: String)
+POST        /:draftId/:index/has-address                controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.AddressYesNoController.onSubmit(index: Int, draftId: String)

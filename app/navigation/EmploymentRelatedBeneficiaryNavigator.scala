@@ -19,7 +19,7 @@ package navigation
 import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.{routes => rts}
 import models.ReadableUserAnswers
 import pages.Page
-import pages.register.beneficiaries.large.LargeBeneficiaryNamePage
+import pages.register.beneficiaries.large.{LargeBeneficiaryAddressYesNoPage, LargeBeneficiaryNamePage}
 import play.api.mvc.Call
 
 class EmploymentRelatedBeneficiaryNavigator extends Navigator {
@@ -27,11 +27,21 @@ class EmploymentRelatedBeneficiaryNavigator extends Navigator {
   override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call = routes(draftId)(page)(userAnswers)
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, Call] = {
-    case LargeBeneficiaryNamePage(index) => rts.NameController.onPageLoad(index, draftId) // TODO Redirect to correct page
+    case LargeBeneficiaryNamePage(index) => rts.AddressYesNoController.onPageLoad(index, draftId)
+  }
+
+  private def yesNoNavigation(draftId: String) : PartialFunction[Page, ReadableUserAnswers => Call] = {
+    case LargeBeneficiaryAddressYesNoPage(index) => ua =>
+      yesNoNav(
+        ua,
+        LargeBeneficiaryAddressYesNoPage(index),
+        rts.AddressYesNoController.onPageLoad(index, draftId), // TODO Redirect to AddressUkYesNoController
+        rts.AddressYesNoController.onPageLoad(index, draftId)) // TODO Redirect to DescriptionController
   }
 
   private def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    simpleNavigation(draftId) andThen (c => (_:ReadableUserAnswers) => c)
+    simpleNavigation(draftId) andThen (c => (_:ReadableUserAnswers) => c) orElse
+      yesNoNavigation(draftId)
   }
 
 }
