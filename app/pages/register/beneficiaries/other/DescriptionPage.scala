@@ -16,14 +16,13 @@
 
 package pages.register.beneficiaries.other
 
-import models.core.pages.Address
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.beneficiaries.{Beneficiaries, OtherBeneficiaries}
 
-case class OtherBeneficiaryAddressPage(index: Int) extends QuestionPage[Address] {
+final case class DescriptionPage(index : Int) extends QuestionPage[String] {
 
   override def path: JsPath = JsPath \ Beneficiaries \ OtherBeneficiaries \ index \ toString
 
-  override def toString: String = "address"
+  override def toString: String = "description"
 }
