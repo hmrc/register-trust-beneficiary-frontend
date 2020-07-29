@@ -1,0 +1,27 @@
+GET         /:draftId/:index/description                 controllers.register.beneficiaries.other.DescriptionController.onPageLoad(index: Int, draftId: String)
+POST        /:draftId/:index/description                 controllers.register.beneficiaries.other.DescriptionController.onSubmit(index: Int, draftId: String)
+
+#GET         /:draftId/:index/has-discretion             controllers.register.beneficiaries.other.DiscretionYesNoController.onPageLoad(index: Int, draftId: String)
+#POST        /:draftId/:index/has-discretion             controllers.register.beneficiaries.other.DiscretionYesNoController.onSubmit(index: Int, draftId: String)
+#
+#GET         /:draftId/:index/share-of-income            controllers.register.beneficiaries.other.ShareOfIncomeController.onPageLoad(index: Int, draftId: String)
+#POST        /:draftId/:index/share-of-income            controllers.register.beneficiaries.other.ShareOfIncomeController.onSubmit(index: Int, draftId: String)
+#
+#GET         /:draftId/:index/has-address                controllers.register.beneficiaries.other.AddressYesNoController.onPageLoad(index: Int, draftId: String)
+#POST        /:draftId/:index/has-address                controllers.register.beneficiaries.other.AddressYesNoController.onSubmit(index: Int, draftId: String)
+#
+#GET         /:draftId/:index/has-uk-address             controllers.register.beneficiaries.other.AddressUkYesNoController.onPageLoad(index: Int, draftId: String)
+#POST        /:draftId/:index/has-uk-address             controllers.register.beneficiaries.other.AddressUkYesNoController.onSubmit(index: Int, draftId: String)
+#
+#GET         /:draftId/:index/uk-address                 controllers.register.beneficiaries.other.UkAddressController.onPageLoad(index: Int, draftId: String)
+#POST        /:draftId/:index/uk-address                 controllers.register.beneficiaries.other.UkAddressController.onSubmit(index: Int, draftId: String)
+#
+#GET         /:draftId/:index/non-uk-address             controllers.register.beneficiaries.other.NonUkAddressController.onPageLoad(index: Int, draftId: String)
+#POST        /:draftId/:index/non-uk-address             controllers.register.beneficiaries.other.NonUkAddressController.onSubmit(index: Int, draftId: String)
+#
+#
+#GET         /:draftId/:index/check-details              controllers.register.beneficiaries.other.CheckDetailsController.onPageLoad(index: Int, draftId: String)
+#POST        /:draftId/:index/check-details              controllers.register.beneficiaries.other.CheckDetailsController.onSubmit(index: Int, draftId: String)
+#
+#GET        /:draftId/:index/remove                      controllers.register.beneficiaries.other.RemoveCompanyBeneficiaryController.onPageLoad(index: Int, draftId: String)
+#POST       /:draftId/:index/remove                      controllers.register.beneficiaries.other.RemoveCompanyBeneficiaryController.onSubmit(index: Int, draftId: String)

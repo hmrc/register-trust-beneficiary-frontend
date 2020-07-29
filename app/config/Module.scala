@@ -35,6 +35,7 @@ class Module extends AbstractModule {
     bind(classOf[Navigator]).annotatedWith(classOf[IndividualBeneficiary]).to(classOf[IndividualBeneficiaryNavigator]).asEagerSingleton()
     bind(classOf[Navigator]).annotatedWith(classOf[ClassOfBeneficiaries]).to(classOf[ClassOfBeneficiariesNavigator]).asEagerSingleton()
     bind(classOf[Navigator]).annotatedWith(classOf[CharityBeneficiary]).to(classOf[CharityBeneficiaryNavigator]).asEagerSingleton()
+    bind(classOf[Navigator]).annotatedWith(classOf[OtherBeneficiary]).to(classOf[OtherBeneficiaryNavigator]).asEagerSingleton()
     bind(classOf[Navigator]).to(classOf[BeneficiaryNavigator]).asEagerSingleton()
   }
 }
