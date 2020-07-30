@@ -132,7 +132,7 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
       } else {
         otherRts.DescriptionController.onPageLoad(index, draftId).url
       },
-      removeUrl = controllers.routes.FeatureNotAvailableController.onPageLoad().url
+      removeUrl = otherRts.RemoveOtherBeneficiaryController.onPageLoad(index, draftId).url
     )
   }
 
