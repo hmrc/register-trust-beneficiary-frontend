@@ -6,3 +6,6 @@ POST        /:draftId/:index/has-address                controllers.register.ben
 
 GET         /:draftId/:index/has-uk-address             controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.AddressUkYesNoController.onPageLoad(index: Int, draftId: String)
 POST        /:draftId/:index/has-uk-address             controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.AddressUkYesNoController.onSubmit(index: Int, draftId: String)
+
+GET         /:draftId/:index/uk-address                 controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.UkAddressController.onPageLoad(index: Int, draftId: String)
+POST        /:draftId/:index/uk-address                 controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.UkAddressController.onSubmit(index: Int, draftId: String)

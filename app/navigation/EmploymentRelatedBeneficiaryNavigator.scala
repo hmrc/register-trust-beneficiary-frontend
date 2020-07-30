@@ -19,7 +19,7 @@ package navigation
 import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.{routes => rts}
 import models.ReadableUserAnswers
 import pages.Page
-import pages.register.beneficiaries.large.{LargeBeneficiaryAddressUKYesNoPage, LargeBeneficiaryAddressYesNoPage, LargeBeneficiaryNamePage}
+import pages.register.beneficiaries.large.{LargeBeneficiaryAddressPage, LargeBeneficiaryAddressUKYesNoPage, LargeBeneficiaryAddressYesNoPage, LargeBeneficiaryNamePage}
 import play.api.mvc.Call
 
 class EmploymentRelatedBeneficiaryNavigator extends Navigator {
@@ -28,6 +28,7 @@ class EmploymentRelatedBeneficiaryNavigator extends Navigator {
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, Call] = {
     case LargeBeneficiaryNamePage(index) => rts.AddressYesNoController.onPageLoad(index, draftId)
+    case LargeBeneficiaryAddressPage(index) => rts.UkAddressController.onPageLoad(index, draftId) // TODO Redirect to DescriptionController
   }
 
   private def yesNoNavigation(draftId: String) : PartialFunction[Page, ReadableUserAnswers => Call] = {
@@ -41,7 +42,7 @@ class EmploymentRelatedBeneficiaryNavigator extends Navigator {
       yesNoNav(
         ua,
         LargeBeneficiaryAddressUKYesNoPage(index),
-        rts.AddressUkYesNoController.onPageLoad(index, draftId), // TODO Redirect to UkAddressController
+        rts.UkAddressController.onPageLoad(index, draftId),
         rts.AddressUkYesNoController.onPageLoad(index, draftId)) // TODO Redirect to NonUkAddressController
   }
 
