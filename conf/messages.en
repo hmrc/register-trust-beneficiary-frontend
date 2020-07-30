@@ -122,6 +122,7 @@ entities.beneficiary.class = Class of beneficiaries
 entities.beneficiary.company = Named company
 entities.beneficiary.trust = Named trust
 entities.beneficiary.charity = Charity
+entities.beneficiary.other = Other beneficiary
 
 emailAddress.checkYourAnswersLabel = What is {0}’s email address?
 
@@ -587,7 +588,7 @@ otherBeneficiary.description.default = the other beneficiary
 otherBeneficiary.description.title = What is the description of the other beneficiary?
 otherBeneficiary.description.heading = What is the description of the other beneficiary?
 otherBeneficiary.description.checkYourAnswersLabel = What is the description of the other beneficiary?
-otherBeneficiary.description.hint = Do not include named or specific individuals, they must be listed as individual beneficiaries. This must be 70 characters or less.
+otherBeneficiary.description.hint = Do not include named or specific individuals. They must be listed as individual beneficiaries. This must be 70 characters or less.
 otherBeneficiary.description.error.required = Enter the description of the other beneficiary
 otherBeneficiary.description.error.invalidFormat = The description of the other beneficiary must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
 otherBeneficiary.description.error.length = The description of the other beneficiary must be 70 characters or less

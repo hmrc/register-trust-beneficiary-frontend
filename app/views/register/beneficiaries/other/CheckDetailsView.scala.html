@@ -14,31 +14,28 @@
  * limitations under the License.
  *@
 
+@import viewmodels.AnswerSection
 @import controllers.register.beneficiaries.other.routes._
-@import utils.InputOption
 
 @this(
-        main_template: MainTemplate,
-        formHelper: FormWithCSRF
+    main_template: MainTemplate,
+    formHelper: FormWithCSRF
 )
 
-@(form: Form[_], countryOptions: Seq[InputOption], name: String, index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
+@(answerSection: AnswerSection, index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("site.address.international.title")}"
-) {
+    title = messages("otherBeneficiary.checkDetails.title")
+    ) {
 
-    @formHelper(action = NonUkAddressController.onSubmit(index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = CheckDetailsController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 
-        @components.error_summary(form.errors)
+        @components.heading("otherBeneficiary.checkDetails.heading")
 
-        @components.heading("site.address.international.heading", Some(name))
-
-        @components.international_address(form, countryOptions)
+        @components.answer_section(answerSection)
 
         @components.submit_button()
-
     }
 }

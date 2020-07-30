@@ -25,6 +25,7 @@ import controllers.register.beneficiaries.charityortrust.{routes => charityortru
 import controllers.register.beneficiaries.companyoremploymentrelated.company.{routes => companyRoutes}
 import controllers.register.beneficiaries.charityortrust.charity.{routes => charityRoutes}
 import controllers.register.beneficiaries.charityortrust.trust.{routes => trustRoutes}
+import controllers.register.beneficiaries.other.{routes => otherRoutes}
 import models.CompanyOrEmploymentRelatedToAdd.Company
 import models.CompanyOrEmploymentRelatedToAdd._
 import pages.Page
@@ -81,6 +82,8 @@ class BeneficiaryNavigator @Inject()(config: FrontendAppConfig) extends Navigato
         routeToCompanyBeneficiaryIndex(userAnswers, draftId)
       case Some(WhatTypeOfBeneficiary.Employment) =>
         routeToEmploymentBeneficiaryIndex(userAnswers, draftId)
+      case Some(WhatTypeOfBeneficiary.Other) =>
+        routeToOtherBeneficiaryIndex(userAnswers, draftId)
       case _ =>
         controllers.routes.FeatureNotAvailableController.onPageLoad()
     }
@@ -128,6 +131,11 @@ class BeneficiaryNavigator @Inject()(config: FrontendAppConfig) extends Navigato
   private def routeToClassOfBeneficiaryIndex(userAnswers: ReadableUserAnswers, draftId: String): Call = {
     val classOfBeneficiaries = userAnswers.get(ClassOfBeneficiaries).getOrElse(List.empty)
     classOfBeneficiariesRts.ClassBeneficiaryDescriptionController.onPageLoad(classOfBeneficiaries.size, draftId)
+  }
+
+  private def routeToOtherBeneficiaryIndex(userAnswers: ReadableUserAnswers, draftId: String): Call = {
+    val beneficiaries = userAnswers.get(OtherBeneficiaries).getOrElse(List.empty)
+    otherRoutes.DescriptionController.onPageLoad(beneficiaries.size, draftId)
   }
 
   private def addABeneficiaryYesNoRoute(draftId: String, config: FrontendAppConfig)(answers: ReadableUserAnswers): Call = {

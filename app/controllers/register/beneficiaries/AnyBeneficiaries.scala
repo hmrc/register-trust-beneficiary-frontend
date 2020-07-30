@@ -29,7 +29,7 @@ trait AnyBeneficiaries {
     userAnswers.get(TrustBeneficiaries).getOrElse(List.empty),
     userAnswers.get(CompanyBeneficiaries).getOrElse(List.empty),
     userAnswers.get(LargeBeneficiaries).getOrElse(JsArray()),
-    userAnswers.get(OtherBeneficiaries).getOrElse(JsArray())
+    userAnswers.get(OtherBeneficiaries).getOrElse(List.empty)
   )
 
   def isAnyBeneficiaryAdded(userAnswers: ReadableUserAnswers): Boolean = {
@@ -41,6 +41,6 @@ trait AnyBeneficiaries {
       beneficiaryLists.trusts.nonEmpty ||
       beneficiaryLists.companies.nonEmpty ||
       beneficiaryLists.large.value.nonEmpty ||
-      beneficiaryLists.other.value.nonEmpty
+      beneficiaryLists.other.nonEmpty
   }
 }

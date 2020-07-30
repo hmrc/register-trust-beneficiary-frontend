@@ -28,7 +28,7 @@ import views.html.register.beneficiaries.other.NonUkAddressView
 class NonUkAddressViewSpec extends NonUkAddressViewBehaviours {
 
   private val index = 0
-  private val messageKeyPrefix = "site.address.nonUk"
+  private val messageKeyPrefix = "site.address.international"
   private val description = "Other"
 
   override val form: Form[InternationalAddress] = new InternationalAddressFormProvider().apply()

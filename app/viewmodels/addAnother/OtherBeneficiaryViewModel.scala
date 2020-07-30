@@ -14,16 +14,23 @@
  * limitations under the License.
  */
 
-package sections.beneficiaries
+package viewmodels.addAnother
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import viewmodels.addAnother.OtherBeneficiaryViewModel
+import models.Status
+import play.api.libs.json.{Reads, __}
 
-case object OtherBeneficiaries extends QuestionPage[List[OtherBeneficiaryViewModel]]{
+case class OtherBeneficiaryViewModel(description: Option[String], status: Status) {
 
-  override def path: JsPath = JsPath \ Beneficiaries \ toString
+  def isComplete: Boolean = description.nonEmpty && (status == Status.Completed)
 
-  override def toString: String = "other"
+}
 
+object OtherBeneficiaryViewModel {
+
+  import play.api.libs.functional.syntax._
+
+  implicit val reads : Reads[OtherBeneficiaryViewModel] = (
+    (__ \ "description").readNullable[String] and
+      (__ \ "status").readWithDefault[Status](Status.InProgress)
+    )(OtherBeneficiaryViewModel.apply _)
 }

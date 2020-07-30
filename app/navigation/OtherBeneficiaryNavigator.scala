@@ -18,36 +18,48 @@ package navigation
 
 import javax.inject.Inject
 import models.ReadableUserAnswers
-//import pages.register.beneficiaries.other._
+import pages.register.beneficiaries.other._
 import pages.Page
 import play.api.mvc.Call
+import controllers.register.beneficiaries.other
 
 class OtherBeneficiaryNavigator @Inject()() extends Navigator {
 
   override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call =
-    routes(page)(userAnswers)
+    routes(draftId)(page)(userAnswers)
 
-  private val simpleNavigation: PartialFunction[Page, Call] =
+  private def simpleNavigation(draftId: String): PartialFunction[Page, Call] =
   {
-    case _ => controllers.routes.SessionExpiredController.onPageLoad()
-//    case DescriptionPage(index) => rts.DiscretionYesNoController.onPageLoad()
-//    case ShareOfIncomePage(index) => rts.AddressYesNoController.onPageLoad()
-//    case UkAddressPage => rts.StartDateController.onPageLoad()
-//    case NonUkAddressPage => rts.StartDateController.onPageLoad()
+    case DescriptionPage(index) => other.routes.DiscretionYesNoController.onPageLoad(index, draftId)
+    case ShareOfIncomePage(index) => other.routes.AddressYesNoController.onPageLoad(index, draftId)
+    case AddressUKPage(index) => other.routes.CheckDetailsController.onPageLoad(index, draftId)
+    case AddressInternationalPage(index) => other.routes.CheckDetailsController.onPageLoad(index, draftId)
   }
 
-//  private val yesNoNavigation : PartialFunction[Page, ReadableUserAnswers => Call] =
-//  {
-//    case IncomeYesNoPage(index) => ua =>
-//      yesNoNav(ua, IncomeYesNoPage(index), rts.AddressYesNoController.onPageLoad(), rts.ShareOfIncomeController.onPageLoad())
-//    case AddressYesNoPage(index) => ua =>
-//      yesNoNav(ua, AddressYesNoPage(index), rts.AddressUkYesNoController.onPageLoad(), rts.StartDateController.onPageLoad())
-//    case AddressUKYesNoPage(index) => ua =>
-//      yesNoNav(ua, AddressUKYesNoPage(index), rts.UkAddressController.onPageLoad(), rts.NonUkAddressController.onPageLoad())
-//  }
+  private def yesNoNavigation(draftId: String) : PartialFunction[Page, ReadableUserAnswers => Call] =
+  {
+    case IncomeYesNoPage(index) => ua =>
+      yesNoNav(
+        ua,
+        IncomeYesNoPage(index),
+        other.routes.AddressYesNoController.onPageLoad(index, draftId),
+        other.routes.ShareOfIncomeController.onPageLoad(index, draftId))
+    case AddressYesNoPage(index) => ua =>
+      yesNoNav(
+        ua,
+        AddressYesNoPage(index),
+        other.routes.AddressUkYesNoController.onPageLoad(index, draftId),
+        other.routes.CheckDetailsController.onPageLoad(index, draftId))
+    case AddressUKYesNoPage(index) => ua =>
+      yesNoNav(
+        ua,
+        AddressUKYesNoPage(index),
+        other.routes.UkAddressController.onPageLoad(index, draftId),
+        other.routes.NonUkAddressController.onPageLoad(index, draftId))
+  }
 
-  val routes: PartialFunction[Page, ReadableUserAnswers => Call] =
-    simpleNavigation andThen (c => (_:ReadableUserAnswers) => c)
-//  orElse yesNoNavigation
+  def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] =
+    simpleNavigation(draftId) andThen (c => (_:ReadableUserAnswers) => c) orElse
+    yesNoNavigation(draftId)
 
 }
