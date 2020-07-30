@@ -40,6 +40,7 @@ class RemoveEmploymentRelatedBeneficiaryControllerSpec extends SpecBase with Sca
   "RemoveEmploymentRelatedBeneficiary Controller" when {
 
     "no name added" must {
+
       "return OK and the correct view for a GET" in {
 
         val userAnswers = emptyUserAnswers
