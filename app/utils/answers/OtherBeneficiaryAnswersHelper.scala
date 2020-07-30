@@ -30,7 +30,7 @@ class OtherBeneficiaryAnswersHelper @Inject()(answerRowConverter: AnswerRowConve
                                               countryOptions: CountryOptions
                                  ) {
 
-  def companyBeneficiaries(userAnswers: UserAnswers,
+  def otherBeneficiaries(userAnswers: UserAnswers,
                            canEdit: Boolean)(implicit messages: Messages): Option[Seq[AnswerSection]] = {
     for {
       beneficiaries <- userAnswers.get(OtherBeneficiaries)
