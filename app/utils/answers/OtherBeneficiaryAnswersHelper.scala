@@ -1,0 +1,69 @@
+/*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package utils.answers
+
+import com.google.inject.Inject
+import controllers.register.beneficiaries.other.routes._
+import models.UserAnswers
+import pages.register.beneficiaries.other._
+import play.api.i18n.Messages
+import sections.beneficiaries.OtherBeneficiaries
+import utils.countryOptions.CountryOptions
+import utils.print.AnswerRowConverter
+import viewmodels.{AnswerRow, AnswerSection}
+
+class OtherBeneficiaryAnswersHelper @Inject()(answerRowConverter: AnswerRowConverter,
+                                              countryOptions: CountryOptions
+                                 ) {
+
+  def companyBeneficiaries(userAnswers: UserAnswers,
+                           canEdit: Boolean)(implicit messages: Messages): Option[Seq[AnswerSection]] = {
+    for {
+      beneficiaries <- userAnswers.get(OtherBeneficiaries)
+      indexed = beneficiaries.zipWithIndex
+    } yield indexed.map {
+      case (beneficiaryViewModel, index) =>
+        val description = beneficiaryViewModel.description.getOrElse("")
+        AnswerSection(
+          Some(Messages("answerPage.section.companyBeneficiary.subheading", index + 1)),
+          answers(userAnswers, description, index, userAnswers.draftId)
+        )
+    }
+  }
+
+  def checkDetailsSection(userAnswers: UserAnswers, description: String, index: Int, draftId: String)(implicit messages: Messages): AnswerSection = {
+    AnswerSection(
+      None,
+      answers(userAnswers, description, index, draftId)
+    )
+  }
+
+  def answers(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
+             (implicit messages: Messages): Seq[AnswerRow] = {
+    val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name, countryOptions)
+
+    Seq(
+      bound.stringQuestion(DescriptionPage(index), "companyBeneficiary.name", DescriptionController.onPageLoad(index, draftId).url),
+      bound.yesNoQuestion(IncomeYesNoPage(index), "companyBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad(index, draftId).url),
+      bound.percentageQuestion(ShareOfIncomePage(index), "companyBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad(index, draftId).url),
+      bound.yesNoQuestion(AddressYesNoPage(index), "companyBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(index, draftId).url),
+      bound.yesNoQuestion(AddressUKYesNoPage(index), "companyBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(index, draftId).url),
+      bound.addressQuestion(AddressUKPage(index), "companyBeneficiary.ukAddress", UkAddressController.onPageLoad(index, draftId).url),
+      bound.addressQuestion(AddressInternationalPage(index), "companyBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad(index, draftId).url)
+    ).flatten
+  }
+}

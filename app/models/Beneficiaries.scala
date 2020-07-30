@@ -27,7 +27,7 @@ case class Beneficiaries(individuals: List[IndividualBeneficiaryViewModel] = Nil
                          trusts: List[TrustBeneficiaryViewModel] = Nil,
                          companies: List[CompanyBeneficiaryViewModel] = Nil,
                          large: JsArray = JsArray(),
-                         other: JsArray = JsArray()) {
+                         other: List[OtherBeneficiaryViewModel] = Nil) {
 
   type BeneficiaryOption = (Int, WhatTypeOfBeneficiary)
   type BeneficiaryOptions = List[BeneficiaryOption]
@@ -39,7 +39,7 @@ case class Beneficiaries(individuals: List[IndividualBeneficiaryViewModel] = Nil
       (trusts.size, WhatTypeOfBeneficiary.Trust) ::
       (companies.size, WhatTypeOfBeneficiary.Company) ::
       (large.value.size, WhatTypeOfBeneficiary.Employment) ::
-      (other.value.size, WhatTypeOfBeneficiary.Other) ::
+      (other.size, WhatTypeOfBeneficiary.Other) ::
       Nil
   }
 

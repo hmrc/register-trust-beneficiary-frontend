@@ -25,6 +25,7 @@ import controllers.register.beneficiaries.classofbeneficiaries.{routes => classO
 import controllers.register.beneficiaries.companyoremploymentrelated.company.{routes => companyRoutes}
 import controllers.register.beneficiaries.companyoremploymentrelated.{routes => companyOrEmploymentRelatedRoutes}
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRoutes}
+import controllers.register.beneficiaries.other.{routes => otherRoutes}
 import generators.Generators
 import models.Status.InProgress
 import models.core.pages.FullName
@@ -39,8 +40,9 @@ import pages.register.beneficiaries.charityortrust.{CharityOrTrustPage, trust}
 import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
 import pages.register.beneficiaries.companyoremploymentrelated.{CompanyOrEmploymentRelatedPage, company}
 import pages.register.beneficiaries.individual._
+import pages.register.beneficiaries.other.DescriptionPage
 import play.api.mvc.Call
-import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries}
+import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries, OtherBeneficiaries}
 
 class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -108,15 +110,6 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           navigator.nextPage(AddABeneficiaryPage, fakeDraftId, answers)
             .mustBe(assetsCompletedRoute(fakeDraftId, frontendAppConfig))
       }
-    }
-  }
-
-  "go to feature not available when beneficiary option selected that is not available" in {
-    forAll(arbitrary[UserAnswers]) {
-      userAnswers =>
-        val answers = userAnswers.set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.Other).success.value
-        navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
-          .mustBe(controllers.routes.FeatureNotAvailableController.onPageLoad())
     }
   }
 
@@ -314,6 +307,33 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         "go to TrustNamePage from CharityOrTrustPage when 'trust' selected" in {
           navigator.nextPage(CharityOrTrustPage, fakeDraftId, baseAnswers)
             .mustBe(trustRoutes.NameController.onPageLoad(1, fakeDraftId))
+        }
+      }
+    }
+    "Other Beneficiary" when {
+
+      "there are no Other Beneficiaries" must {
+        "go to description page for index 0 from WhatTypeOfBeneficiaryPage when Other option selected " in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+              val answers = userAnswers.set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.Other).success.value
+                .remove(OtherBeneficiaries).success.value
+
+              navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
+                .mustBe(otherRoutes.DescriptionController.onPageLoad(0, fakeDraftId))
+          }
+        }
+      }
+
+      "there is at least one Other Beneficiary" must {
+        "go to the next description page from WhatTypeOfBeneficiaryPage when Other option selected" in {
+
+          val answers = emptyUserAnswers
+            .set(DescriptionPage(0), "Other description").success.value
+            .set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.Other).success.value
+
+          navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
+            .mustBe(otherRoutes.DescriptionController.onPageLoad(1, fakeDraftId))
         }
       }
     }

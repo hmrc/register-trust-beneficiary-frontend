@@ -20,8 +20,8 @@ GET         /:draftId/:index/non-uk-address             controllers.register.ben
 POST        /:draftId/:index/non-uk-address             controllers.register.beneficiaries.other.NonUkAddressController.onSubmit(index: Int, draftId: String)
 
 
-#GET         /:draftId/:index/check-details              controllers.register.beneficiaries.other.CheckDetailsController.onPageLoad(index: Int, draftId: String)
-#POST        /:draftId/:index/check-details              controllers.register.beneficiaries.other.CheckDetailsController.onSubmit(index: Int, draftId: String)
+GET         /:draftId/:index/check-details              controllers.register.beneficiaries.other.CheckDetailsController.onPageLoad(index: Int, draftId: String)
+POST        /:draftId/:index/check-details              controllers.register.beneficiaries.other.CheckDetailsController.onSubmit(index: Int, draftId: String)
 #
 #GET        /:draftId/:index/remove                      controllers.register.beneficiaries.other.RemoveCompanyBeneficiaryController.onPageLoad(index: Int, draftId: String)
 #POST       /:draftId/:index/remove                      controllers.register.beneficiaries.other.RemoveCompanyBeneficiaryController.onSubmit(index: Int, draftId: String)
