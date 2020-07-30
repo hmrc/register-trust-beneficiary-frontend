@@ -26,7 +26,8 @@ class BeneficiariesMapper @Inject()(
                                      unidentifiedBeneficiaryMapper: ClassOfBeneficiariesMapper,
                                      charityBeneficiaryMapper: CharityBeneficiaryMapper,
                                      trustBeneficiaryMapper: TrustBeneficiaryMapper,
-                                     companyBeneficiaryMapper: CompanyBeneficiaryMapper
+                                     companyBeneficiaryMapper: CompanyBeneficiaryMapper,
+                                     otherBeneficiaryMapper: OtherBeneficiaryMapper
                                    ) extends Mapping[BeneficiaryType] {
 
   override def build(userAnswers: UserAnswers): Option[BeneficiaryType] = {
@@ -36,8 +37,9 @@ class BeneficiariesMapper @Inject()(
     val charity = charityBeneficiaryMapper.build(userAnswers)
     val trust = trustBeneficiaryMapper.build(userAnswers)
     val company = companyBeneficiaryMapper.build(userAnswers)
+    val other = otherBeneficiaryMapper.build(userAnswers)
 
-    val all = Seq(individuals, unidentified, charity, trust, company).flatten.flatten
+    val all = Seq(individuals, unidentified, charity, trust, company, other).flatten.flatten
 
     if (all.nonEmpty) {
       Some(
@@ -48,7 +50,7 @@ class BeneficiariesMapper @Inject()(
           charity = charity,
           unidentified = unidentified,
           large = None,
-          other = None
+          other = other
         )
       )
     } else {

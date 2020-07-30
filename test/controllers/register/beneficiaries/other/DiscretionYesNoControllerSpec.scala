@@ -21,7 +21,7 @@ import config.annotations.OtherBeneficiary
 import forms.YesNoFormProvider
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.register.beneficiaries.other.{DescriptionPage, IncomeYesNoPage}
+import pages.register.beneficiaries.other.{DescriptionPage, IncomeDiscretionYesNoPage}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -59,7 +59,7 @@ class DiscretionYesNoControllerSpec extends SpecBase with MockitoSugar {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = baseAnswers.set(IncomeYesNoPage(index), true).success.value
+      val answers = baseAnswers.set(IncomeDiscretionYesNoPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 

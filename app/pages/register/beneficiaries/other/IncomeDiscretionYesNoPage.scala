@@ -23,11 +23,11 @@ import sections.beneficiaries.{Beneficiaries, OtherBeneficiaries}
 
 import scala.util.Try
 
-final case class IncomeYesNoPage(index: Int) extends QuestionPage[Boolean] {
+final case class IncomeDiscretionYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
   override def path: JsPath = JsPath \ Beneficiaries \ OtherBeneficiaries \ index \ toString
 
-  override def toString: String = "discretionYesNo"
+  override def toString: String = "incomeDiscretionYesNo"
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
     value match {

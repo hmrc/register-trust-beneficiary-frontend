@@ -38,10 +38,10 @@ class OtherBeneficiaryNavigator @Inject()() extends Navigator {
 
   private def yesNoNavigation(draftId: String) : PartialFunction[Page, ReadableUserAnswers => Call] =
   {
-    case IncomeYesNoPage(index) => ua =>
+    case IncomeDiscretionYesNoPage(index) => ua =>
       yesNoNav(
         ua,
-        IncomeYesNoPage(index),
+        IncomeDiscretionYesNoPage(index),
         other.routes.AddressYesNoController.onPageLoad(index, draftId),
         other.routes.ShareOfIncomeController.onPageLoad(index, draftId))
     case AddressYesNoPage(index) => ua =>

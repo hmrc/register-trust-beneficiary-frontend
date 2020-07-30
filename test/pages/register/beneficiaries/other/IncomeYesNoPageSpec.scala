@@ -24,11 +24,11 @@ class IncomeYesNoPageSpec extends PageBehaviours {
 
   "IncomeYesNoPage" must {
 
-    beRetrievable[Boolean](IncomeYesNoPage(0))
+    beRetrievable[Boolean](IncomeDiscretionYesNoPage(0))
 
-    beSettable[Boolean](IncomeYesNoPage(0))
+    beSettable[Boolean](IncomeDiscretionYesNoPage(0))
 
-    beRemovable[Boolean](IncomeYesNoPage(0))
+    beRemovable[Boolean](IncomeDiscretionYesNoPage(0))
   }
 
   "remove Income page when IncomeYesNoPage is set to yes/true" in {
@@ -37,7 +37,7 @@ class IncomeYesNoPageSpec extends PageBehaviours {
       (initial, _) =>
         val answers: UserAnswers = initial.set(ShareOfIncomePage(index), 55).success.value
 
-        val result = answers.set(IncomeYesNoPage(index), true).success.value
+        val result = answers.set(IncomeDiscretionYesNoPage(index), true).success.value
         result.get(ShareOfIncomePage(index)) mustNot be(defined)
     }
   }

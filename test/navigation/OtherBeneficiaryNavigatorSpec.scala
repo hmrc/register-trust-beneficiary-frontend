@@ -35,17 +35,17 @@ class OtherBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
     "Discretion yes no page -> Yes -> Address yes no page" in {
       val answers = emptyUserAnswers
-        .set(IncomeYesNoPage(index), true).success.value
+        .set(IncomeDiscretionYesNoPage(index), true).success.value
 
-      navigator.nextPage(IncomeYesNoPage(index), draftId, answers)
+      navigator.nextPage(IncomeDiscretionYesNoPage(index), draftId, answers)
         .mustBe(AddressYesNoController.onPageLoad(index, draftId))
     }
 
     "Discretion yes no page -> No -> Share of income page" in {
       val answers = emptyUserAnswers
-        .set(IncomeYesNoPage(index), false).success.value
+        .set(IncomeDiscretionYesNoPage(index), false).success.value
 
-      navigator.nextPage(IncomeYesNoPage(index), draftId, answers)
+      navigator.nextPage(IncomeDiscretionYesNoPage(index), draftId, answers)
         .mustBe(ShareOfIncomeController.onPageLoad(index, draftId))
     }
 
