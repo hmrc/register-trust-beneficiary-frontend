@@ -16,13 +16,23 @@
 
 package pages.register.beneficiaries.other
 
+import models.UserAnswers
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.beneficiaries.{Beneficiaries, OtherBeneficiaries}
+
+import scala.util.Try
 
 final case class IncomeYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
   override def path: JsPath = JsPath \ Beneficiaries \ OtherBeneficiaries \ index \ toString
 
   override def toString: String = "discretionYesNo"
+
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+    value match {
+      case Some(true) => userAnswers.remove(ShareOfIncomePage(index))
+      case _ => super.cleanup(value, userAnswers)
+    }
+  }
 }
