@@ -39,7 +39,7 @@ class OtherBeneficiaryAnswersHelper @Inject()(answerRowConverter: AnswerRowConve
       case (beneficiaryViewModel, index) =>
         val description = beneficiaryViewModel.description.getOrElse("")
         AnswerSection(
-          Some(Messages("answerPage.section.companyBeneficiary.subheading", index + 1)),
+          Some(Messages("answerPage.section.otherBeneficiary.subheading", index + 1)),
           answers(userAnswers, description, index, userAnswers.draftId)
         )
     }
@@ -57,13 +57,13 @@ class OtherBeneficiaryAnswersHelper @Inject()(answerRowConverter: AnswerRowConve
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name, countryOptions)
 
     Seq(
-      bound.stringQuestion(DescriptionPage(index), "companyBeneficiary.name", DescriptionController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(IncomeYesNoPage(index), "companyBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad(index, draftId).url),
-      bound.percentageQuestion(ShareOfIncomePage(index), "companyBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(AddressYesNoPage(index), "companyBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(AddressUKYesNoPage(index), "companyBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(index, draftId).url),
-      bound.addressQuestion(AddressUKPage(index), "companyBeneficiary.ukAddress", UkAddressController.onPageLoad(index, draftId).url),
-      bound.addressQuestion(AddressInternationalPage(index), "companyBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad(index, draftId).url)
+      bound.stringQuestion(DescriptionPage(index), "otherBeneficiary.description", DescriptionController.onPageLoad(index, draftId).url),
+      bound.yesNoQuestion(IncomeYesNoPage(index), "otherBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad(index, draftId).url),
+      bound.percentageQuestion(ShareOfIncomePage(index), "otherBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad(index, draftId).url),
+      bound.yesNoQuestion(AddressYesNoPage(index), "otherBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(index, draftId).url),
+      bound.yesNoQuestion(AddressUKYesNoPage(index), "otherBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(index, draftId).url),
+      bound.addressQuestion(AddressUKPage(index), "otherBeneficiary.ukAddress", UkAddressController.onPageLoad(index, draftId).url),
+      bound.addressQuestion(AddressInternationalPage(index), "otherBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad(index, draftId).url)
     ).flatten
   }
 }
