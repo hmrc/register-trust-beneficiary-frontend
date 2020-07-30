@@ -22,7 +22,7 @@ import generators.Generators
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.register.beneficiaries.large.{LargeBeneficiaryNamePage, LargeBeneficiaryAddressYesNoPage}
+import pages.register.beneficiaries.large.{LargeBeneficiaryAddressUKYesNoPage, LargeBeneficiaryAddressYesNoPage, LargeBeneficiaryNamePage}
 
 class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -44,7 +44,7 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
         baseAnswers =>
           val answers = baseAnswers.set(LargeBeneficiaryAddressYesNoPage(index), true).success.value
           navigator.nextPage(LargeBeneficiaryAddressYesNoPage(index), fakeDraftId, answers)
-            .mustBe(rts.AddressYesNoController.onPageLoad(index, fakeDraftId)) // TODO Redirect to AddressUkYesNoController
+            .mustBe(rts.AddressUkYesNoController.onPageLoad(index, fakeDraftId))
       }
     }
 
@@ -54,6 +54,24 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
           val answers = baseAnswers.set(LargeBeneficiaryAddressYesNoPage(index), false).success.value
           navigator.nextPage(LargeBeneficiaryAddressYesNoPage(index), fakeDraftId, answers)
             .mustBe(rts.AddressYesNoController.onPageLoad(index, fakeDraftId)) // TODO Redirect to DescriptionController
+      }
+    }
+
+    "go to UkAddress from AddressYesUkNo if Yes" in {
+      forAll(arbitrary[UserAnswers]) {
+        baseAnswers =>
+          val answers = baseAnswers.set(LargeBeneficiaryAddressUKYesNoPage(index), true).success.value
+          navigator.nextPage(LargeBeneficiaryAddressUKYesNoPage(index), fakeDraftId, answers)
+            .mustBe(rts.AddressUkYesNoController.onPageLoad(index, fakeDraftId)) // TODO Redirect to UkAddressController
+      }
+    }
+
+    "go to NonUkAddress from AddressYesUkNo if No" in {
+      forAll(arbitrary[UserAnswers]) {
+        baseAnswers =>
+          val answers = baseAnswers.set(LargeBeneficiaryAddressUKYesNoPage(index), false).success.value
+          navigator.nextPage(LargeBeneficiaryAddressUKYesNoPage(index), fakeDraftId, answers)
+            .mustBe(rts.AddressUkYesNoController.onPageLoad(index, fakeDraftId)) // TODO Redirect to NonUkAddressController
       }
     }
 
