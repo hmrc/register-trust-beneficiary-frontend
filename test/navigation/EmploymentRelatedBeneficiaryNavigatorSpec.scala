@@ -22,7 +22,7 @@ import generators.Generators
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.register.beneficiaries.large.{LargeBeneficiaryAddressUKYesNoPage, LargeBeneficiaryAddressYesNoPage, LargeBeneficiaryNamePage}
+import pages.register.beneficiaries.large.{LargeBeneficiaryAddressPage, LargeBeneficiaryAddressUKYesNoPage, LargeBeneficiaryAddressYesNoPage, LargeBeneficiaryNamePage}
 
 class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -62,7 +62,7 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
         baseAnswers =>
           val answers = baseAnswers.set(LargeBeneficiaryAddressUKYesNoPage(index), true).success.value
           navigator.nextPage(LargeBeneficiaryAddressUKYesNoPage(index), fakeDraftId, answers)
-            .mustBe(rts.AddressUkYesNoController.onPageLoad(index, fakeDraftId)) // TODO Redirect to UkAddressController
+            .mustBe(rts.UkAddressController.onPageLoad(index, fakeDraftId))
       }
     }
 
@@ -74,6 +74,15 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
             .mustBe(rts.AddressUkYesNoController.onPageLoad(index, fakeDraftId)) // TODO Redirect to NonUkAddressController
       }
     }
+
+    "go to Description from UkAddress " in {
+      forAll(arbitrary[UserAnswers]) {
+        userAnswers =>
+          navigator.nextPage(LargeBeneficiaryAddressPage(index), fakeDraftId, userAnswers)
+            .mustBe(rts.UkAddressController.onPageLoad(index, fakeDraftId)) // TODO Redirect to DescriptionController
+      }
+    }
+
 
   }
 }
