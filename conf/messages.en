@@ -122,6 +122,7 @@ entities.beneficiary.class = Class of beneficiaries
 entities.beneficiary.company = Named company
 entities.beneficiary.trust = Named trust
 entities.beneficiary.charity = Charity
+entities.beneficiary.other = Other beneficiary
 
 emailAddress.checkYourAnswersLabel = What is {0}’s email address?
 
