@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.other
+package pages.entitystatus
 
-import models.core.pages.Address
+import models.Status
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.beneficiaries.{Beneficiaries, OtherBeneficiaries}
 
-case class AddressPage(index: Int) extends QuestionPage[Address] {
+final case class OtherBeneficiaryStatus(index : Int) extends QuestionPage[Status] {
 
-  override def path: JsPath = JsPath \ Beneficiaries \ OtherBeneficiaries \ index \ toString
+  override def path: JsPath = JsPath \  Beneficiaries \ OtherBeneficiaries \ index \ toString
 
-  override def toString: String = "address"
+  override def toString: String = "status"
 }

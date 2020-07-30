@@ -23,7 +23,7 @@ import forms.RemoveIndexFormProvider
 import javax.inject.Inject
 import models.requests.RegistrationDataRequest
 import pages.QuestionPage
-import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.NamePage
+import pages.register.beneficiaries.companyoremploymentrelated.company.NamePage
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.mvc.{AnyContent, Call, MessagesControllerComponents}
 import queries.{RemoveEmploymentRelatedBeneficiaryQuery, Settable}

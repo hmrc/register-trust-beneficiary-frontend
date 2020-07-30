@@ -20,8 +20,7 @@ import base.SpecBase
 import forms.RemoveIndexFormProvider
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
-import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.NamePage
+import pages.register.beneficiaries.companyoremploymentrelated.company.NamePage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.RemoveIndexView

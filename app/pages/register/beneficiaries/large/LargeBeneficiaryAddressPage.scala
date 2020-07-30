@@ -16,12 +16,12 @@
 
 package pages.register.beneficiaries.large
 
-import models.core.pages.Address
+import models.core.pages.UKAddress
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.beneficiaries.{Beneficiaries, LargeBeneficiaries}
 
-case class LargeBeneficiaryAddressPage(index: Int) extends QuestionPage[Address] {
+case class LargeBeneficiaryAddressPage(index: Int) extends QuestionPage[UKAddress] {
 
   override def path: JsPath = JsPath \ Beneficiaries \ LargeBeneficiaries \ index \ toString
 

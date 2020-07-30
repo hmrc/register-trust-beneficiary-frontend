@@ -19,7 +19,7 @@ package navigation
 import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.{routes => rts}
 import models.ReadableUserAnswers
 import pages.Page
-import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated._
+import pages.register.beneficiaries.large.{LargeBeneficiaryAddressUKYesNoPage, LargeBeneficiaryAddressYesNoPage, LargeBeneficiaryNamePage}
 import play.api.mvc.Call
 
 class EmploymentRelatedBeneficiaryNavigator extends Navigator {
@@ -27,11 +27,27 @@ class EmploymentRelatedBeneficiaryNavigator extends Navigator {
   override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call = routes(draftId)(page)(userAnswers)
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, Call] = {
-    case NamePage(index) => rts.NameController.onPageLoad(index, draftId) // TODO Redirect to correct page
+    case LargeBeneficiaryNamePage(index) => rts.AddressYesNoController.onPageLoad(index, draftId)
+  }
+
+  private def yesNoNavigation(draftId: String) : PartialFunction[Page, ReadableUserAnswers => Call] = {
+    case LargeBeneficiaryAddressYesNoPage(index) => ua =>
+      yesNoNav(
+        ua,
+        LargeBeneficiaryAddressYesNoPage(index),
+        rts.AddressUkYesNoController.onPageLoad(index, draftId),
+        rts.AddressYesNoController.onPageLoad(index, draftId)) // TODO Redirect to DescriptionController
+    case LargeBeneficiaryAddressUKYesNoPage(index) => ua =>
+      yesNoNav(
+        ua,
+        LargeBeneficiaryAddressUKYesNoPage(index),
+        rts.AddressUkYesNoController.onPageLoad(index, draftId), // TODO Redirect to UkAddressController
+        rts.AddressUkYesNoController.onPageLoad(index, draftId)) // TODO Redirect to NonUkAddressController
   }
 
   private def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    simpleNavigation(draftId) andThen (c => (_:ReadableUserAnswers) => c)
+    simpleNavigation(draftId) andThen (c => (_:ReadableUserAnswers) => c) orElse
+      yesNoNavigation(draftId)
   }
 
 }

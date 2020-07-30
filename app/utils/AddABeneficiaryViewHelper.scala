@@ -20,6 +20,7 @@ import controllers.register.beneficiaries.companyoremploymentrelated.company.{ro
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRts}
 import controllers.register.beneficiaries.charityortrust.charity.{routes => charityRts}
 import controllers.register.beneficiaries.charityortrust.trust.{routes => trustRts}
+import controllers.register.beneficiaries.other.{routes => otherRts}
 import controllers.register.beneficiaries.classofbeneficiaries.{routes => classOfBeneficiaryRts}
 import models.UserAnswers
 import play.api.i18n.Messages
@@ -118,6 +119,23 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
     )
   }
 
+  private def parseOtherBeneficiary(companyBeneficiary : (OtherBeneficiaryViewModel, Int)) : AddRow = {
+
+    val vm = companyBeneficiary._1
+    val index = companyBeneficiary._2
+
+    AddRow(
+      name = parseName(vm.description),
+      typeLabel = messages("entities.beneficiary.other"),
+      changeUrl = if (vm.isComplete) {
+        otherRts.CheckDetailsController.onPageLoad(index, draftId).url
+      } else {
+        otherRts.DescriptionController.onPageLoad(index, draftId).url
+      },
+      removeUrl = controllers.routes.FeatureNotAvailableController.onPageLoad().url
+    )
+  }
+
   private def individualBeneficiaries = {
     val individualBeneficiaries = userAnswers.get(IndividualBeneficiaries).toList.flatten.zipWithIndex
 
@@ -168,18 +186,30 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
     InProgressComplete(inProgress = progress, complete = completed)
   }
 
+  private def otherBeneficiaries = {
+    val beneficiaries = userAnswers.get(OtherBeneficiaries).toList.flatten.zipWithIndex
+
+    val completed = beneficiaries.filter(_._1.isComplete).map(parseOtherBeneficiary)
+
+    val progress = beneficiaries.filterNot(_._1.isComplete).map(parseOtherBeneficiary)
+
+    InProgressComplete(inProgress = progress, complete = completed)
+  }
+
   def rows : AddToRows =
     AddToRows(
       inProgress = individualBeneficiaries.inProgress :::
         classOfBeneficiaries.inProgress :::
         charityBeneficiaries.inProgress :::
         trustBeneficiaries.inProgress :::
-        companyBeneficiaries.inProgress,
+        companyBeneficiaries.inProgress :::
+        otherBeneficiaries.inProgress,
       complete = individualBeneficiaries.complete :::
         classOfBeneficiaries.complete :::
         charityBeneficiaries.complete :::
         trustBeneficiaries.complete :::
-        companyBeneficiaries.complete
+        companyBeneficiaries.complete :::
+        otherBeneficiaries.complete
     )
 
 }

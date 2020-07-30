@@ -55,7 +55,7 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(messagesPrefix, form, index, fakeDraftId, "Other beneficiary", formRoute)(fakeRequest, messages).toString
+          view(messagesPrefix, form, index, fakeDraftId, "the other beneficiary", formRoute)(fakeRequest, messages).toString
 
         application.stop()
       }
@@ -66,7 +66,7 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
       "return OK and the correct view for a GET" in {
 
-        val userAnswers = emptyUserAnswers.set(DescriptionPage(0), "Other beneficiary").success.value
+        val userAnswers = emptyUserAnswers.set(DescriptionPage(0), "other beneficiary").success.value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -78,7 +78,7 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(messagesPrefix, form, index, fakeDraftId, "Other beneficiary", formRoute)(fakeRequest, messages).toString
+        contentAsString(result) mustEqual view(messagesPrefix, form, index, fakeDraftId, "other beneficiary", formRoute)(fakeRequest, messages).toString
 
         application.stop()
       }
@@ -87,7 +87,7 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(DescriptionPage(0), "Other beneficiary").success.value
+      val userAnswers = emptyUserAnswers.set(DescriptionPage(0), "other beneficiary").success.value
 
       forAll(arbitrary[Boolean]) {
         value =>
@@ -112,7 +112,7 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(DescriptionPage(0), "Other beneficiary").success.value
+      val userAnswers = emptyUserAnswers.set(DescriptionPage(0), "other beneficiary").success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -129,7 +129,7 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(messagesPrefix, boundForm, index, fakeDraftId, "Other beneficiary", formRoute)(fakeRequest, messages).toString
+        view(messagesPrefix, boundForm, index, fakeDraftId, "other beneficiary", formRoute)(fakeRequest, messages).toString
 
       application.stop()
     }
