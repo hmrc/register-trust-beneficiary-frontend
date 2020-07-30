@@ -46,6 +46,11 @@ site.error = Error:
 site.address = Address
 site.sign_out = Sign out
 
+#timeout dialog
+timeout.title=Your application will time out soon
+timeout.message=We will reset your application if you do not respond in
+timeout.keep-alive-button=Continue application
+
 answerPage.section.beneficiaries.heading = Beneficiaries
 answerPage.section.charityBeneficiary.subheading = Charity beneficiary {0}
 answerPage.section.companyBeneficiary.subheading = Company beneficiary {0}
