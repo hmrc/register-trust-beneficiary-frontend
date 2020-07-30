@@ -573,6 +573,11 @@ employmentRelatedBeneficiary.addressYesNo.heading = Do you know {0}’s address?
 employmentRelatedBeneficiary.addressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
 employmentRelatedBeneficiary.addressYesNo.error.required = Select yes if you know the business address
 
+employmentRelatedBeneficiary.addressUkYesNo.title = Is the business address in the UK?
+employmentRelatedBeneficiary.addressUkYesNo.heading = Is {0}’s address in the UK?
+employmentRelatedBeneficiary.addressUkYesNo.checkYourAnswersLabel = Is {0}’s address in the UK?
+employmentRelatedBeneficiary.addressUkYesNo.error.required = Select yes if the business address is in the UK
+
 # OTHER
 
 otherBeneficiary.description.default = the other beneficiary

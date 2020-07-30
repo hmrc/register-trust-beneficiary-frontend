@@ -25,5 +25,5 @@ case class LargeBeneficiaryAddressInternationalPage(index: Int) extends Question
 
   override def path: JsPath = JsPath \ Beneficiaries \ LargeBeneficiaries \ index \ toString
 
-  override def toString: String = "address"
+  override def toString: String = "internationalAddress"
 }
