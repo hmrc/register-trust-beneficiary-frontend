@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.large
+package controllers.actions.register.other
 
-import models.core.pages.UKAddress
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.beneficiaries.{Beneficiaries, LargeBeneficiaries}
+import models.UserAnswers
+import models.requests.{DataRequest, RegistrationDataRequest}
+import play.api.mvc.WrappedRequest
 
-case class LargeBeneficiaryAddressPage(index: Int) extends QuestionPage[UKAddress] {
-
-  override def path: JsPath = JsPath \ Beneficiaries \ LargeBeneficiaries \ index \ toString
-
-  override def toString: String = "address"
+case class DescriptionRequest[T](request: RegistrationDataRequest[T], description: String) extends WrappedRequest[T](request){
+  val userAnswers:UserAnswers = request.userAnswers
 }

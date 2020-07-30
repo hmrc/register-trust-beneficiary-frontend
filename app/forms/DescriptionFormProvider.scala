@@ -14,15 +14,22 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.other
+package forms
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.beneficiaries.{Beneficiaries, OtherBeneficiaries}
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-final case class OtherBeneficiaryAddressYesNoPage(index: Int) extends QuestionPage[Boolean] {
-
-  override def path: JsPath = JsPath \ Beneficiaries \ OtherBeneficiaries \ index \ toString
-
-  override def toString: String = "addressYesNo"
+class DescriptionFormProvider @Inject() extends Mappings {
+  def withPrefix(prefix: String, length: Int): Form[String] =
+    Form(
+      "value" -> text(s"$prefix.error.required")
+        .verifying(
+          firstError(
+            isNotEmpty("value", s"$prefix.error.required"),
+            maxLength(length, s"$prefix.error.length"),
+            regexp(Validation.descriptionRegex, s"$prefix.error.invalidFormat")
+          )
+        )
+    )
 }

@@ -27,9 +27,7 @@ trait ReadableUserAnswers {
   def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] = {
     Reads.at(page.path).reads(data) match {
       case JsSuccess(value, _) => Some(value)
-      case JsError(errors) =>
-        Logger.info(s"[UserAnswers] tried to read path ${page.path} errors: $errors")
-        None
+      case JsError(_) => None
     }
   }
 }

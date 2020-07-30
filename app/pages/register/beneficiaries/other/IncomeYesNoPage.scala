@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.large
+package pages.register.beneficiaries.other
 
-import models.core.pages.UKAddress
 import pages.QuestionPage
 import play.api.libs.json.JsPath
-import sections.beneficiaries.{Beneficiaries, LargeBeneficiaries}
+import sections.beneficiaries.{Beneficiaries, OtherBeneficiaries}
 
-case class LargeBeneficiaryAddressPage(index: Int) extends QuestionPage[UKAddress] {
+final case class IncomeYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
-  override def path: JsPath = JsPath \ Beneficiaries \ LargeBeneficiaries \ index \ toString
+  override def path: JsPath = JsPath \ Beneficiaries \ OtherBeneficiaries \ index \ toString
 
-  override def toString: String = "address"
+  override def toString: String = "discretionYesNo"
 }

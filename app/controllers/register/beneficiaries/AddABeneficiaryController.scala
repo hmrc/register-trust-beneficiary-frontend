@@ -16,19 +16,22 @@
 
 package controllers.register.beneficiaries
 
+import config.FrontendAppConfig
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import javax.inject.Inject
+import models.registration.pages.AddABeneficiary.NoComplete
 import models.{Enumerable, Mode}
 import navigation.Navigator
 import pages.register.beneficiaries.{AddABeneficiaryPage, AddABeneficiaryYesNoPage}
+import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi, MessagesProvider}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.AddABeneficiaryViewHelper
-import views.html.register.beneficiaries.{AddABeneficiaryView, AddABeneficiaryYesNoView}
+import views.html.register.beneficiaries.{AddABeneficiaryView, AddABeneficiaryYesNoView, MaxedOutBeneficiariesView}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -43,8 +46,12 @@ class AddABeneficiaryController @Inject()(
                                            yesNoFormProvider: YesNoFormProvider,
                                            val controllerComponents: MessagesControllerComponents,
                                            addAnotherView: AddABeneficiaryView,
-                                           yesNoView: AddABeneficiaryYesNoView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+                                           yesNoView: AddABeneficiaryYesNoView,
+                                           maxedOutView: MaxedOutBeneficiariesView,
+                                           config: FrontendAppConfig
+                                     )(implicit ec: ExecutionContext) extends FrontendBaseController
+
+  with I18nSupport with Enumerable.Implicits with AnyBeneficiaries {
 
   private val addAnotherForm = addAnotherFormProvider()
 
@@ -64,13 +71,22 @@ class AddABeneficiaryController @Inject()(
   def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = routes(draftId) {
     implicit request =>
 
-      val beneficiaries = new AddABeneficiaryViewHelper(request.userAnswers, draftId).rows
-      val count = beneficiaries.count
+      val rows = new AddABeneficiaryViewHelper(request.userAnswers, draftId).rows
 
-      if(beneficiaries.count > 0) {
-        Ok(addAnotherView(addAnotherForm, mode, draftId, beneficiaries.inProgress, beneficiaries.complete, heading(count)))
+      val allBeneficiaries = beneficiaries(request.userAnswers)
+
+      if (allBeneficiaries.nonMaxedOutOptions.isEmpty) {
+        Logger.info(s"[AddABeneficiaryController] ${request.internalId} has maxed out beneficiaries")
+        Ok(maxedOutView(draftId, rows.inProgress, rows.complete, heading(rows.count)))
       } else {
-        Ok(yesNoView(yesNoForm, mode, draftId))
+        if(rows.count > 0) {
+          Logger.info(s"[AddABeneficiaryController] ${request.internalId} has not out beneficiaries")
+          val listOfMaxed = allBeneficiaries.maxedOutOptions.map(_.messageKey)
+          Ok(addAnotherView(addAnotherForm, mode, draftId, rows.inProgress, rows.complete, heading(rows.count), listOfMaxed))
+        } else {
+          Logger.info(s"[AddABeneficiaryController] ${request.internalId} has added no beneficiaries")
+          Ok(yesNoView(yesNoForm, mode, draftId))
+        }
       }
   }
 
@@ -96,10 +112,12 @@ class AddABeneficiaryController @Inject()(
 
       addAnotherForm.bindFromRequest().fold(
         (formWithErrors: Form[_]) => {
-          val beneficiaries = new AddABeneficiaryViewHelper(request.userAnswers, draftId).rows
+          val rows = new AddABeneficiaryViewHelper(request.userAnswers, draftId).rows
 
-          val count = beneficiaries.count
-          Future.successful(BadRequest(addAnotherView(formWithErrors, mode, draftId, beneficiaries.inProgress, beneficiaries.complete, heading(count))))
+          val allBeneficiaries = beneficiaries(request.userAnswers)
+          val listOfMaxed = allBeneficiaries.maxedOutOptions.map(_.messageKey)
+
+          Future.successful(BadRequest(addAnotherView(formWithErrors, mode, draftId, rows.inProgress, rows.complete, heading(rows.count), listOfMaxed)))
         },
         value => {
           for {
@@ -108,6 +126,14 @@ class AddABeneficiaryController @Inject()(
           } yield Redirect(navigator.nextPage(AddABeneficiaryPage, mode, draftId, updatedAnswers))
         }
       )
+  }
+
+  def submitComplete(mode: Mode, draftId: String): Action[AnyContent] = routes(draftId).async {
+    implicit request =>
+      for {
+        updatedAnswers <- Future.fromTry(request.userAnswers.set(AddABeneficiaryPage, NoComplete))
+        _              <- registrationsRepository.set(updatedAnswers)
+      } yield Redirect(Call("GET", config.registrationProgressUrl(draftId)))
   }
 
 }

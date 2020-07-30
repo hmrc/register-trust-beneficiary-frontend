@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.large
+package config.annotations;
 
-import models.core.pages.UKAddress
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.beneficiaries.{Beneficiaries, LargeBeneficiaries}
+import com.google.inject.BindingAnnotation;
 
-case class LargeBeneficiaryAddressPage(index: Int) extends QuestionPage[UKAddress] {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-  override def path: JsPath = JsPath \ Beneficiaries \ LargeBeneficiaries \ index \ toString
-
-  override def toString: String = "address"
-}
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
+@BindingAnnotation
+public @interface OtherBeneficiary {}

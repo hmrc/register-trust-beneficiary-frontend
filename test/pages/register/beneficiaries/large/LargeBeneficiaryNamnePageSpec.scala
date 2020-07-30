@@ -16,14 +16,16 @@
 
 package pages.register.beneficiaries.large
 
-import models.core.pages.UKAddress
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.beneficiaries.{Beneficiaries, LargeBeneficiaries}
+import pages.behaviours.PageBehaviours
 
-case class LargeBeneficiaryAddressPage(index: Int) extends QuestionPage[UKAddress] {
+class LargeBeneficiaryNamnePageSpec extends PageBehaviours {
 
-  override def path: JsPath = JsPath \ Beneficiaries \ LargeBeneficiaries \ index \ toString
+  "LargeBeneficiaryNamePage" must {
 
-  override def toString: String = "address"
+    beRetrievable[String](LargeBeneficiaryNamePage(0))
+
+    beSettable[String](LargeBeneficiaryNamePage(0))
+
+    beRemovable[String](LargeBeneficiaryNamePage(0))
+  }
 }

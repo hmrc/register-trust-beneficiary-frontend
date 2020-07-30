@@ -16,14 +16,14 @@
 
 package pages.register.beneficiaries.other
 
-import pages.{MetaData, QuestionPage}
+import models.core.pages.InternationalAddress
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.beneficiaries.{Beneficiaries, OtherBeneficiaries}
 
-case class OtherBeneficiaryMetaData(index: Int) extends QuestionPage[MetaData]{
+case class AddressInternationalPage(index: Int) extends QuestionPage[InternationalAddress] {
 
   override def path: JsPath = JsPath \ Beneficiaries \ OtherBeneficiaries \ index \ toString
 
-  override def toString: String = "metaData"
-
+  override def toString: String = "internationalAddress"
 }
