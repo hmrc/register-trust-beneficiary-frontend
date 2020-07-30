@@ -37,7 +37,7 @@ class BeneficiariesSpec extends SpecBase {
   val trust: TrustBeneficiaryViewModel = TrustBeneficiaryViewModel(Some(name), Completed)
   val company: CompanyBeneficiaryViewModel = CompanyBeneficiaryViewModel(Some(name), Completed)
   val large: JsValue = JsString("Large")
-  val other: JsValue = JsString("Other")
+  val other: OtherBeneficiaryViewModel = OtherBeneficiaryViewModel(Some(name), Completed)
 
   val prefix: String = WhatTypeOfBeneficiary.prefix
 
@@ -157,7 +157,7 @@ class BeneficiariesSpec extends SpecBase {
 
       "other maxed out" in {
         val beneficiaries = Beneficiaries(
-          other = JsArray(Seq.fill(max)(other))
+          other = List.fill(max)(other)
         )
 
         beneficiaries.nonMaxedOutOptions mustBe List(
@@ -176,7 +176,7 @@ class BeneficiariesSpec extends SpecBase {
           trusts = List.fill(max)(trust),
           companies = List.fill(max)(company),
           large = JsArray(Seq.fill(max)(large)),
-          other = JsArray(Seq.fill(max)(other))
+          other = List.fill(max)(other)
         )
 
         beneficiaries.nonMaxedOutOptions mustBe Nil
