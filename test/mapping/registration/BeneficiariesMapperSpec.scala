@@ -28,6 +28,7 @@ import pages.register.beneficiaries.charityortrust.trust
 import pages.register.beneficiaries.classofbeneficiaries
 import pages.register.beneficiaries.companyoremploymentrelated.company
 import pages.register.beneficiaries.individual
+import pages.register.beneficiaries.other
 
 class BeneficiariesMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {
@@ -168,6 +169,7 @@ class BeneficiariesMapperSpec extends SpecBase with MustMatchers
         result.large mustNot be(defined)
         result.other mustNot be(defined)
       }
+
       "must be able to create BeneficiaryType when there is a trust beneficiary" in {
 
         val index = 0
@@ -188,6 +190,27 @@ class BeneficiariesMapperSpec extends SpecBase with MustMatchers
         result.large mustNot be(defined)
         result.other mustNot be(defined)
       }
+
+      "must be able to create BeneficiaryType when there is an other beneficiary" in {
+
+        val index = 0
+
+        val userAnswers = emptyUserAnswers
+          .set(other.DescriptionPage(index), "Other Description").success.value
+          .set(other.IncomeDiscretionYesNoPage(index), false).success.value
+          .set(other.ShareOfIncomePage(index), 100).success.value
+
+        val result = beneficiariesMapper.build(userAnswers).value
+
+        result.individualDetails mustNot be(defined)
+        result.unidentified mustNot be(defined)
+        result.charity mustNot be(defined)
+        result.company mustNot be(defined)
+        result.trust mustNot be(defined)
+        result.large mustNot be(defined)
+        result.other must be(defined)
+      }
+
     }
   }
 }

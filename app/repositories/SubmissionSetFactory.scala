@@ -30,7 +30,8 @@ class SubmissionSetFactory @Inject()(
                                       registrationProgress: RegistrationProgress,
                                       beneficiariesMapper: BeneficiariesMapper,
                                       countryOptions: CountryOptions,
-                                      companyBeneficiaryAnswersHelper: CompanyBeneficiaryAnswersHelper
+                                      companyBeneficiaryAnswersHelper: CompanyBeneficiaryAnswersHelper,
+                                      otherBeneficiaryAnswersHelper: OtherBeneficiaryAnswersHelper
                                     ) {
 
   def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet = {
@@ -71,7 +72,8 @@ class SubmissionSetFactory @Inject()(
         classOfBeneficiariesHelper.classOfBeneficiaries,
         charityBeneficiariesHelper.charityBeneficiaries,
         trustBeneficiariesHelper.trustBeneficiaries,
-        companyBeneficiaryAnswersHelper.companyBeneficiaries(userAnswers, canEdit = false)
+        companyBeneficiaryAnswersHelper.companyBeneficiaries(userAnswers, canEdit = false),
+        otherBeneficiaryAnswersHelper.otherBeneficiaries(userAnswers, canEdit = false)
       ).flatten.flatten
 
       val updatedFirstSection = AnswerSection(

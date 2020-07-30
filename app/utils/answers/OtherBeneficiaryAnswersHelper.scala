@@ -30,7 +30,7 @@ class OtherBeneficiaryAnswersHelper @Inject()(answerRowConverter: AnswerRowConve
                                               countryOptions: CountryOptions
                                  ) {
 
-  def companyBeneficiaries(userAnswers: UserAnswers,
+  def otherBeneficiaries(userAnswers: UserAnswers,
                            canEdit: Boolean)(implicit messages: Messages): Option[Seq[AnswerSection]] = {
     for {
       beneficiaries <- userAnswers.get(OtherBeneficiaries)
@@ -58,7 +58,7 @@ class OtherBeneficiaryAnswersHelper @Inject()(answerRowConverter: AnswerRowConve
 
     Seq(
       bound.stringQuestion(DescriptionPage(index), "otherBeneficiary.description", DescriptionController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(IncomeYesNoPage(index), "otherBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad(index, draftId).url),
+      bound.yesNoQuestion(IncomeDiscretionYesNoPage(index), "otherBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad(index, draftId).url),
       bound.percentageQuestion(ShareOfIncomePage(index), "otherBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(AddressYesNoPage(index), "otherBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(AddressUKYesNoPage(index), "otherBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(index, draftId).url),
