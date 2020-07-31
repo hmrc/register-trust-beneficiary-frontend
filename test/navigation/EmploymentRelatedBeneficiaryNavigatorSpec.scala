@@ -22,7 +22,7 @@ import generators.Generators
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.register.beneficiaries.large.{LargeBeneficiaryAddressInternationalPage, LargeBeneficiaryAddressPage, LargeBeneficiaryAddressUKYesNoPage, LargeBeneficiaryAddressYesNoPage, LargeBeneficiaryNamePage}
+import pages.register.beneficiaries.large._
 
 class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -53,7 +53,7 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
         baseAnswers =>
           val answers = baseAnswers.set(LargeBeneficiaryAddressYesNoPage(index), false).success.value
           navigator.nextPage(LargeBeneficiaryAddressYesNoPage(index), fakeDraftId, answers)
-            .mustBe(rts.AddressYesNoController.onPageLoad(index, fakeDraftId)) // TODO Redirect to DescriptionController
+            .mustBe(rts.DescriptionController.onPageLoad(index, fakeDraftId))
       }
     }
 
@@ -79,7 +79,7 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           navigator.nextPage(LargeBeneficiaryAddressPage(index), fakeDraftId, userAnswers)
-            .mustBe(rts.UkAddressController.onPageLoad(index, fakeDraftId)) // TODO Redirect to DescriptionController
+            .mustBe(rts.DescriptionController.onPageLoad(index, fakeDraftId))
       }
     }
 
@@ -87,9 +87,18 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           navigator.nextPage(LargeBeneficiaryAddressInternationalPage(index), fakeDraftId, userAnswers)
-            .mustBe(rts.NonUkAddressController.onPageLoad(index, fakeDraftId)) // TODO Redirect to DescriptionController
+            .mustBe(rts.DescriptionController.onPageLoad(index, fakeDraftId))
       }
     }
+
+    "go to NumberOfBeneficiaries from Description" in {
+      forAll(arbitrary[UserAnswers]) {
+        userAnswers =>
+          navigator.nextPage(LargeBeneficiaryDescriptionPage(index), fakeDraftId, userAnswers)
+            .mustBe(rts.DescriptionController.onPageLoad(index, fakeDraftId)) // TODO redirect to NumberOfBeneficiaries controller
+      }
+    }
+
 
   }
 }
