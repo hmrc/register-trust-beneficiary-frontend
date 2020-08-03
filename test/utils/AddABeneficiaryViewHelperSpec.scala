@@ -39,7 +39,7 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
     "charity beneficiary" must {
 
       val name: String = "Name"
-      val label: String = "Charity"
+      val label: String = "Named charity"
       val default: String = "No name added"
 
       "render a complete charity beneficiary" in {
