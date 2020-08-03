@@ -19,7 +19,7 @@ package navigation
 import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.{routes => rts}
 import models.ReadableUserAnswers
 import pages.Page
-import pages.register.beneficiaries.large.{LargeBeneficiaryAddressInternationalPage, LargeBeneficiaryAddressPage, LargeBeneficiaryAddressUKYesNoPage, LargeBeneficiaryAddressYesNoPage, LargeBeneficiaryDescriptionPage, LargeBeneficiaryNamePage}
+import pages.register.beneficiaries.large._
 import play.api.mvc.Call
 
 class EmploymentRelatedBeneficiaryNavigator extends Navigator {
@@ -30,7 +30,8 @@ class EmploymentRelatedBeneficiaryNavigator extends Navigator {
     case LargeBeneficiaryNamePage(index) => rts.AddressYesNoController.onPageLoad(index, draftId)
     case LargeBeneficiaryAddressPage(index) => rts.DescriptionController.onPageLoad(index, draftId)
     case LargeBeneficiaryAddressInternationalPage(index) => rts.DescriptionController.onPageLoad(index, draftId)
-    case LargeBeneficiaryDescriptionPage(index) => rts.DescriptionController.onPageLoad(index, draftId) // TODO redirect to NumberOfBeneficiaries controller
+    case LargeBeneficiaryDescriptionPage(index) => rts.NumberOfBeneficiariesController.onPageLoad(index, draftId)
+    case LargeBeneficiaryNumberOfBeneficiariesPage(index) => rts.NumberOfBeneficiariesController.onPageLoad(index, draftId)
   }
 
   private def yesNoNavigation(draftId: String) : PartialFunction[Page, ReadableUserAnswers => Call] = {
