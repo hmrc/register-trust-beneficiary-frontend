@@ -12,6 +12,9 @@ GET        /logout                                      controllers.register.Log
 
 GET        /unauthorised                                controllers.UnauthorisedController.onPageLoad
 
+GET        /keep-alive                                  controllers.SessionTimeoutController.keepAlive
+GET        /timeout                                     controllers.SessionTimeoutController.timeout
+
 ->         /company                                     companyBeneficiary.Routes
 ->         /employment-related                          employmentRelatedBeneficiary.Routes
 ->         /other                                       otherBeneficiary.Routes
