@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.large
+package forms
 
+import forms.mappings.Mappings
+import javax.inject.Inject
 import models.registration.pages.HowManyBeneficiaries
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.beneficiaries.{Beneficiaries, LargeBeneficiaries}
+import play.api.data.Form
 
-case class LargeBeneficiaryNumberOfBeneficiariesPage(index: Int) extends QuestionPage[HowManyBeneficiaries] {
+class NumberOfBeneficiariesFormProvider @Inject() extends Mappings {
 
-  override def path: JsPath = JsPath \ Beneficiaries \ LargeBeneficiaries \ index \ toString
-
-  override def toString: String = "numberOfBeneficiaries"
+  def apply(): Form[HowManyBeneficiaries] =
+    Form(
+      "value" -> enumerable[HowManyBeneficiaries]("employmentRelatedBeneficiary.numberOfBeneficiaries.error.required")
+    )
 }

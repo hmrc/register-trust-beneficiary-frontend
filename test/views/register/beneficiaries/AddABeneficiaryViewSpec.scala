@@ -66,7 +66,7 @@ class AddABeneficiaryViewSpec extends OptionsViewBehaviours with TabularDataView
 
       behave like pageWithNoTabularData(applyView(form))
 
-      behave like pageWithOptions(form, applyView, AddABeneficiary.options.toSet)
+      behave like pageWithOptions(form, applyView, AddABeneficiary.options)
     }
 
     "there is data in progress" must {
@@ -79,7 +79,7 @@ class AddABeneficiaryViewSpec extends OptionsViewBehaviours with TabularDataView
 
       behave like pageWithInProgressTabularData(viewWithData, inProgressBeneficiaries)
 
-      behave like pageWithOptions(form, applyView, AddABeneficiary.options.toSet)
+      behave like pageWithOptions(form, applyView, AddABeneficiary.options)
     }
 
     "there is complete data" must {
@@ -92,7 +92,7 @@ class AddABeneficiaryViewSpec extends OptionsViewBehaviours with TabularDataView
 
       behave like pageWithCompleteTabularData(viewWithData, completeBeneficiaries)
 
-      behave like pageWithOptions(form, applyView, AddABeneficiary.options.toSet)
+      behave like pageWithOptions(form, applyView, AddABeneficiary.options)
     }
 
     "there is both in progress and complete data" must {
@@ -105,7 +105,7 @@ class AddABeneficiaryViewSpec extends OptionsViewBehaviours with TabularDataView
 
       behave like pageWithTabularData(viewWithData, inProgressBeneficiaries, completeBeneficiaries)
 
-      behave like pageWithOptions(form, applyView, AddABeneficiary.options.toSet)
+      behave like pageWithOptions(form, applyView, AddABeneficiary.options)
     }
 
     "there is one maxed out beneficiary" must {
@@ -117,7 +117,7 @@ class AddABeneficiaryViewSpec extends OptionsViewBehaviours with TabularDataView
 
       behave like pageWithTabularData(viewWithData, inProgressBeneficiaries, completeBeneficiaries)
 
-      behave like pageWithOptions(form, applyView, AddABeneficiary.options.toSet)
+      behave like pageWithOptions(form, applyView, AddABeneficiary.options)
 
       "content shows maxed beneficiary" in {
         val doc = asDocument(viewWithData)
@@ -136,7 +136,7 @@ class AddABeneficiaryViewSpec extends OptionsViewBehaviours with TabularDataView
 
       behave like pageWithTabularData(viewWithData, inProgressBeneficiaries, completeBeneficiaries)
 
-      behave like pageWithOptions(form, applyView, AddABeneficiary.options.toSet)
+      behave like pageWithOptions(form, applyView, AddABeneficiary.options)
 
       "content shows maxed beneficiaries" in {
         val doc = asDocument(viewWithData)
