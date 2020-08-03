@@ -19,7 +19,7 @@ package utils.answers
 import javax.inject.Inject
 import models.UserAnswers
 import play.api.i18n.Messages
-import sections.beneficiaries.EmploymentRelatedBeneficiaries
+import sections.beneficiaries.LargeBeneficiaries
 import utils.print.EmploymentRelatedBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 
@@ -28,7 +28,7 @@ class EmploymentRelatedBeneficiaryAnswersHelper @Inject()(employmentRelatedBenef
   def employmentRelatedBeneficiaries(userAnswers: UserAnswers,
                            canEdit: Boolean)(implicit messages: Messages): Option[Seq[AnswerSection]] = {
     for {
-      beneficiaries <- userAnswers.get(EmploymentRelatedBeneficiaries)
+      beneficiaries <- userAnswers.get(LargeBeneficiaries)
       indexed = beneficiaries.zipWithIndex
     } yield indexed.map {
       case (beneficiaryViewModel, index) =>

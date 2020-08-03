@@ -24,7 +24,7 @@ import javax.inject.Inject
 import models.NormalMode
 import models.Status.Completed
 import navigation.Navigator
-import pages.entitystatus.EmploymentRelatedBeneficiaryStatus
+import pages.entitystatus.LargeBeneficiaryStatus
 import pages.register.beneficiaries.AnswersPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -59,7 +59,7 @@ class CheckDetailsController @Inject()(
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).async {
     implicit request =>
 
-      val answers = request.userAnswers.set(EmploymentRelatedBeneficiaryStatus(index), Completed)
+      val answers = request.userAnswers.set(LargeBeneficiaryStatus(index), Completed)
 
       for {
         updatedAnswers <- Future.fromTry(answers)
