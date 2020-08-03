@@ -21,6 +21,7 @@ import controllers.register.beneficiaries.individualBeneficiary.{routes => indiv
 import controllers.register.beneficiaries.charityortrust.charity.{routes => charityRts}
 import controllers.register.beneficiaries.charityortrust.trust.{routes => trustRts}
 import controllers.register.beneficiaries.other.{routes => otherRts}
+import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.{routes => largeRts}
 import controllers.register.beneficiaries.classofbeneficiaries.{routes => classOfBeneficiaryRts}
 import models.UserAnswers
 import play.api.i18n.Messages
@@ -119,6 +120,23 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
     )
   }
 
+  private def parseLargeBeneficiary(largeBeneficiary: (EmploymentRelatedBeneficiaryViewModel, Int)): AddRow = {
+
+    val vm = largeBeneficiary._1
+    val index = largeBeneficiary._2
+
+    AddRow(
+      name = parseName(vm.name),
+      typeLabel = messages("entities.beneficiary.large"),
+      changeUrl = if (vm.isComplete) {
+        controllers.routes.FeatureNotAvailableController.onPageLoad().url
+      } else {
+        largeRts.NameController.onPageLoad(index, draftId).url
+      },
+      removeUrl = largeRts.RemoveEmploymentRelatedBeneficiaryController.onPageLoad(index, draftId).url
+    )
+  }
+
   private def parseOtherBeneficiary(companyBeneficiary : (OtherBeneficiaryViewModel, Int)) : AddRow = {
 
     val vm = companyBeneficiary._1
@@ -186,6 +204,16 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
     InProgressComplete(inProgress = progress, complete = completed)
   }
 
+  private def largeBeneficiaries = {
+    val beneficiaries = userAnswers.get(LargeBeneficiaries).toList.flatten.zipWithIndex
+
+    val completed = beneficiaries.filter(_._1.isComplete).map(parseLargeBeneficiary)
+
+    val progress = beneficiaries.filterNot(_._1.isComplete).map(parseLargeBeneficiary)
+
+    InProgressComplete(inProgress = progress, complete = completed)
+  }
+
   private def otherBeneficiaries = {
     val beneficiaries = userAnswers.get(OtherBeneficiaries).toList.flatten.zipWithIndex
 
@@ -203,12 +231,14 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
         charityBeneficiaries.inProgress :::
         trustBeneficiaries.inProgress :::
         companyBeneficiaries.inProgress :::
+        largeBeneficiaries.inProgress :::
         otherBeneficiaries.inProgress,
       complete = individualBeneficiaries.complete :::
         classOfBeneficiaries.complete :::
         charityBeneficiaries.complete :::
         trustBeneficiaries.complete :::
         companyBeneficiaries.complete :::
+        largeBeneficiaries.complete :::
         otherBeneficiaries.complete
     )
 

@@ -122,11 +122,12 @@ entities.no.value.added = No value added
 entities.no.address.added = No address added
 entities.no.description.added = No description added
 
-entities.beneficiary.individual = Individual Beneficiary
+entities.beneficiary.individual = Named individual
 entities.beneficiary.class = Class of beneficiaries
 entities.beneficiary.company = Named company
+entities.beneficiary.large = Employment related
 entities.beneficiary.trust = Named trust
-entities.beneficiary.charity = Charity
+entities.beneficiary.charity = Named charity
 entities.beneficiary.other = Other beneficiary
 
 emailAddress.checkYourAnswersLabel = What is {0}’s email address?
