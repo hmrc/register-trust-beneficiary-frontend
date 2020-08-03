@@ -17,9 +17,9 @@
 package queries
 
 import play.api.libs.json.JsPath
-import sections.beneficiaries.{Beneficiaries, EmploymentRelatedBeneficiaries}
+import sections.beneficiaries.{Beneficiaries, LargeBeneficiaries}
 
 final case class RemoveEmploymentRelatedBeneficiaryQuery(index : Int) extends Settable[Boolean] {
 
-    override def path: JsPath = JsPath \ Beneficiaries \ EmploymentRelatedBeneficiaries \ index
+    override def path: JsPath = JsPath \ Beneficiaries \ LargeBeneficiaries \ index
 }

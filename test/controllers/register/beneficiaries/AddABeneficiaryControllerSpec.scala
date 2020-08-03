@@ -89,7 +89,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
     companyRoutes.CheckDetailsController.onPageLoad(index, fakeDraftId).url
 
   private lazy val changeLargeRoute: String =
-    controllers.routes.FeatureNotAvailableController.onPageLoad().url
+    largeRoutes.CheckDetailsController.onPageLoad(index, fakeDraftId).url
 
   private lazy val changeOtherRoute: String =
     otherRoutes.CheckDetailsController.onPageLoad(index, fakeDraftId).url

@@ -19,9 +19,8 @@ package utils.answers
 import java.time.format.DateTimeFormatter
 
 import models.UserAnswers
-import models.core.pages.{Address, FullName, InternationalAddress, UKAddress}
-import models.registration.pages.CharityOrTrust.{Charity, Trust}
-import models.registration.pages.{CharityOrTrust, PassportOrIdCardDetails}
+import models.core.pages.{Address, Description, FullName, InternationalAddress, UKAddress}
+import models.registration.pages.{HowManyBeneficiaries, PassportOrIdCardDetails}
 import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
 import pages.register.beneficiaries.individual.NamePage
 import play.api.i18n.Messages
@@ -114,4 +113,22 @@ object CheckAnswersFormatters {
     val middle = fullname.middleName.map(" " + _ + " ").getOrElse(" ")
     s"${fullname.firstName}$middle${fullname.lastName}"
   }
+
+  def formatDescription(description: Description): Html = {
+    val lines =
+      Seq(
+        Some(HtmlFormat.escape(description.description)),
+        description.description1.map(HtmlFormat.escape),
+        description.description2.map(HtmlFormat.escape),
+        description.description3.map(HtmlFormat.escape),
+        description.description4.map(HtmlFormat.escape)
+      ).flatten
+
+    Html(lines.mkString("<br />"))
+  }
+
+  def formatNumberOfBeneficiaries(answer: HowManyBeneficiaries)(implicit messages: Messages): Html = {
+    HtmlFormat.escape(messages(s"numberOfBeneficiaries.$answer"))
+  }
+
 }

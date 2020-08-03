@@ -590,6 +590,9 @@ employmentRelatedBeneficiary.addressUkYesNo.heading = Is {0}’s address in the 
 employmentRelatedBeneficiary.addressUkYesNo.checkYourAnswersLabel = Is {0}’s address in the UK?
 employmentRelatedBeneficiary.addressUkYesNo.error.required = Select yes if the business address is in the UK
 
+employmentRelatedBeneficiary.ukAddress.checkYourAnswersLabel = What is {0}’s address?
+employmentRelatedBeneficiary.nonUkAddress.checkYourAnswersLabel = What is {0}’s address?
+
 employmentRelatedBeneficiary.description.title = What is the description of the beneficiary?
 employmentRelatedBeneficiary.description.heading = What is the description of the beneficiary?
 employmentRelatedBeneficiary.description.checkYourAnswersLabel = What is the description of the beneficiary?
@@ -613,6 +616,9 @@ numberOfBeneficiaries.over101 = 101 to 200
 numberOfBeneficiaries.over201 = 201 to 500
 numberOfBeneficiaries.over501 = 501 to 1,000
 numberOfBeneficiaries.over1001 = Over 1,001
+
+employmentRelatedBeneficiary.checkDetails.title = Check employment related beneficiary details
+employmentRelatedBeneficiary.checkDetails.heading = Check employment related beneficiary details
 
 # OTHER
 

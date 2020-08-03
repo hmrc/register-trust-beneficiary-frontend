@@ -20,9 +20,9 @@ import java.time.LocalDate
 
 import com.google.inject.Inject
 import models.UserAnswers
-import models.core.pages.{Address, FullName}
+import models.core.pages.{Address, Description, FullName}
 import models.registration.pages.RoleInCompany.NA
-import models.registration.pages.{PassportOrIdCardDetails, RoleInCompany}
+import models.registration.pages.{HowManyBeneficiaries, PassportOrIdCardDetails, RoleInCompany}
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
 import play.twirl.api.HtmlFormat
@@ -171,5 +171,30 @@ class AnswerRowConverter @Inject()() {
         )
       }
     }
+
+    def descriptionQuestion(query: Gettable[Description],
+                            labelKey: String,
+                            changeUrl: String): Option[AnswerRow] = {
+      userAnswers.get(query) map {x =>
+        AnswerRow(
+          s"$labelKey.checkYourAnswersLabel",
+          formatDescription(x),
+          Some(changeUrl)
+        )
+      }
+    }
+
+    def numberOfBeneficiariesQuestion(query: Gettable[HowManyBeneficiaries],
+                                      labelKey: String,
+                                      changeUrl: String): Option[AnswerRow] = {
+      userAnswers.get(query) map {x =>
+        AnswerRow(
+          s"$labelKey.checkYourAnswersLabel",
+          formatNumberOfBeneficiaries(x),
+          Some(changeUrl)
+        )
+      }
+    }
+
   }
 }

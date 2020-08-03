@@ -103,7 +103,7 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           navigator.nextPage(LargeBeneficiaryNumberOfBeneficiariesPage(index), fakeDraftId, userAnswers)
-            .mustBe(rts.NumberOfBeneficiariesController.onPageLoad(index, fakeDraftId))
+            .mustBe(rts.CheckDetailsController.onPageLoad(index, fakeDraftId))
       }
     }
 
