@@ -17,19 +17,27 @@
 package controllers.register.beneficiaries
 
 import base.SpecBase
+import controllers.register.beneficiaries.charityortrust.charity.{routes => charityRoutes}
+import controllers.register.beneficiaries.charityortrust.trust.{routes => trustRoutes}
 import controllers.register.beneficiaries.classofbeneficiaries.{routes => classOfBeneficiariesRoutes}
+import controllers.register.beneficiaries.companyoremploymentrelated.company.{routes => companyRoutes}
+import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.{routes => largeRoutes}
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRoutes}
+import controllers.register.beneficiaries.other.{routes => otherRoutes}
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import models.Status.Completed
 import models.core.pages.{Description, FullName}
 import models.registration.pages.AddABeneficiary
 import models.{NormalMode, UserAnswers}
-import pages.entitystatus.{ClassBeneficiaryStatus, IndividualBeneficiaryStatus}
+import pages.entitystatus._
+import pages.register.beneficiaries.charityortrust.{charity => charityPages}
+import pages.register.beneficiaries.charityortrust.{trust => trustPages}
+import pages.register.beneficiaries.companyoremploymentrelated.{company => companyPages}
+import pages.register.beneficiaries.{classofbeneficiaries => classOfBeneficiariesPages}
+import pages.register.beneficiaries.{other => otherPages}
+import pages.register.beneficiaries.{large => largePages}
+import pages.register.beneficiaries.{individual => individualPages}
 import pages.register.beneficiaries.AddABeneficiaryPage
-import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
-import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
-import pages.register.beneficiaries.large.LargeBeneficiaryDescriptionPage
-import pages.register.beneficiaries.other.DescriptionPage
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -41,17 +49,50 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
   private def onwardRoute: Call = Call("GET", "/foo")
 
-  private def removeIndividualRoute(index : Int): String =
+  private val index: Int = 0
+  private val max: Int = 25
+
+  private lazy val removeIndividualRoute: String =
     individualRoutes.RemoveIndividualBeneficiaryController.onPageLoad(index, fakeDraftId).url
 
-  private def removeClassRoute(index : Int): String =
+  private lazy val removeClassRoute: String =
     classOfBeneficiariesRoutes.RemoveClassOfBeneficiaryController.onPageLoad(index, fakeDraftId).url
 
-  private def changeIndividualRoute(index: Int): String =
+  private lazy val removeCharityRoute: String =
+    charityRoutes.RemoveCharityBeneficiaryController.onPageLoad(index, fakeDraftId).url
+
+  private lazy val removeTrustRoute: String =
+    trustRoutes.RemoveTrustBeneficiaryController.onPageLoad(index, fakeDraftId).url
+
+  private lazy val removeCompanyRoute: String =
+    companyRoutes.RemoveCompanyBeneficiaryController.onPageLoad(index, fakeDraftId).url
+
+  private lazy val removeLargeRoute: String =
+    largeRoutes.RemoveEmploymentRelatedBeneficiaryController.onPageLoad(index, fakeDraftId).url
+
+  private lazy val removeOtherRoute: String =
+    otherRoutes.RemoveOtherBeneficiaryController.onPageLoad(index, fakeDraftId).url
+
+  private lazy val changeIndividualRoute: String =
     individualRoutes.AnswersController.onPageLoad(index, fakeDraftId).url
 
-  private def changeClassOfBeneficiariesRoute(index: Int): String =
+  private lazy val changeClassOfBeneficiariesRoute: String =
     classOfBeneficiariesRoutes.ClassBeneficiaryDescriptionController.onPageLoad(index, fakeDraftId).url
+
+  private lazy val changeCharityRoute: String =
+    charityRoutes.CharityAnswersController.onPageLoad(index, fakeDraftId).url
+
+  private lazy val changeTrustRoute: String =
+    trustRoutes.AnswersController.onPageLoad(index, fakeDraftId).url
+
+  private lazy val changeCompanyRoute: String =
+    companyRoutes.CheckDetailsController.onPageLoad(index, fakeDraftId).url
+
+  private lazy val changeLargeRoute: String =
+    controllers.routes.FeatureNotAvailableController.onPageLoad().url
+
+  private lazy val changeOtherRoute: String =
+    otherRoutes.CheckDetailsController.onPageLoad(index, fakeDraftId).url
 
   private lazy val addABeneficiaryRoute = routes.AddABeneficiaryController.onPageLoad(fakeDraftId).url
 
@@ -67,53 +108,83 @@ class AddABeneficiaryControllerSpec extends SpecBase {
   private val yesNoForm = new YesNoFormProvider().withPrefix("addABeneficiaryYesNo")
 
   private lazy val beneficiariesComplete = List(
-    AddRow("First Last", typeLabel = "Named individual", changeIndividualRoute(0), removeIndividualRoute(0)),
-    AddRow("description", typeLabel = "Class of beneficiaries", changeClassOfBeneficiariesRoute(0), removeClassRoute(0))
+    AddRow("Individual Name", typeLabel = "Named individual", changeIndividualRoute, removeIndividualRoute),
+    AddRow("Unidentified Description", typeLabel = "Class of beneficiaries", changeClassOfBeneficiariesRoute, removeClassRoute),
+    AddRow("Charity Name", typeLabel = "Named charity", changeCharityRoute, removeCharityRoute),
+    AddRow("Trust Name", typeLabel = "Named trust", changeTrustRoute, removeTrustRoute),
+    AddRow("Company Name", typeLabel = "Named company", changeCompanyRoute, removeCompanyRoute),
+    AddRow("Large Name", typeLabel = "Employment related", changeLargeRoute, removeLargeRoute),
+    AddRow("Other Description", typeLabel = "Other beneficiary", changeOtherRoute, removeOtherRoute)
   )
 
   private val userAnswersWithBeneficiariesComplete = emptyUserAnswers
-    .set(pages.register.beneficiaries.individual.NamePage(0), FullName("First", None, "Last")).success.value
-    .set(IndividualBeneficiaryStatus(0), Completed).success.value
-    .set(ClassBeneficiaryDescriptionPage(0), "description").success.value
-    .set(ClassBeneficiaryStatus(0), Completed).success.value
+    .set(individualPages.NamePage(index), FullName("Individual", None, "Name")).success.value
+    .set(IndividualBeneficiaryStatus(index), Completed).success.value
 
-  private def genTrustBeneficiaries(userAnswers: UserAnswers, range: Int) = {
+    .set(classOfBeneficiariesPages.ClassBeneficiaryDescriptionPage(index), "Unidentified Description").success.value
+    .set(ClassBeneficiaryStatus(index), Completed).success.value
+
+    .set(charityPages.CharityNamePage(index), "Charity Name").success.value
+    .set(CharityBeneficiaryStatus(index), Completed).success.value
+
+    .set(trustPages.NamePage(index), "Trust Name").success.value
+    .set(TrustBeneficiaryStatus(index), Completed).success.value
+
+    .set(companyPages.NamePage(index), "Company Name").success.value
+    .set(CompanyBeneficiaryStatus(index), Completed).success.value
+
+    .set(largePages.LargeBeneficiaryNamePage(index), "Large Name").success.value
+    .set(LargeBeneficiaryStatus(index), Completed).success.value
+
+    .set(otherPages.DescriptionPage(index), "Other Description").success.value
+    .set(OtherBeneficiaryStatus(index), Completed).success.value
+
+  private def genTrustBeneficiaries(range: Int): UserAnswers = {
     (0 until range)
-      .foldLeft(emptyUserAnswers)((ua,index) => ua.set(pages.register.beneficiaries.charityortrust.trust.NamePage(index), "Company Name").success.value)
+      .foldLeft(emptyUserAnswers)((ua,index) =>
+        ua.set(trustPages.NamePage(index), "Company Name").success.value)
   }
 
-  private def genCompanyBeneficiaries(userAnswers: UserAnswers, range: Int) = {
+  private def genCompanyBeneficiaries(range: Int): UserAnswers = {
     (0 until range)
-      .foldLeft(emptyUserAnswers)((ua,index) => ua.set(pages.register.beneficiaries.companyoremploymentrelated.company.NamePage(index), "Trust Name").success.value)
-  }
-
-  private def genIndividualBeneficiaries(userAnswers: UserAnswers, range: Int) = {
-    (0 until range)
-      .foldLeft(emptyUserAnswers)((ua,index) => ua.set(
-          pages.register.beneficiaries.individual.NamePage(index),
-          FullName("first name", None, "last name")
-        ).success.value
+      .foldLeft(emptyUserAnswers)(
+        (ua,index) => ua.set(companyPages.NamePage(index), "Trust Name").success.value
       )
   }
 
-  private def genUnidentifiedBeneficiaries(userAnswers: UserAnswers, range: Int) = {
+  private def genIndividualBeneficiaries(range: Int): UserAnswers = {
     (0 until range)
-      .foldLeft(emptyUserAnswers)((ua,index) => ua.set(ClassBeneficiaryDescriptionPage(index), s"description $index").success.value)
+      .foldLeft(emptyUserAnswers)(
+        (ua,index) => ua.set(individualPages.NamePage(index), FullName("first name", None, "last name")).success.value
+      )
   }
 
-  private def genCharityBeneficiaries(userAnswers: UserAnswers, range: Int) = {
+  private def genUnidentifiedBeneficiaries(range: Int): UserAnswers = {
     (0 until range)
-      .foldLeft(emptyUserAnswers)((ua,index) => ua.set(CharityNamePage(index), s"Charity name $index").success.value)
+      .foldLeft(emptyUserAnswers)(
+        (ua,index) => ua.set(classOfBeneficiariesPages.ClassBeneficiaryDescriptionPage(index), s"Unidentified Description $index").success.value
+      )
   }
 
-  private def genLargeBeneficiaries(userAnswers: UserAnswers, range: Int) = {
+  private def genCharityBeneficiaries(range: Int): UserAnswers = {
     (0 until range)
-      .foldLeft(emptyUserAnswers)((ua,index) => ua.set(LargeBeneficiaryDescriptionPage(index), Description(s"description $index", None, None, None, None)).success.value)
+      .foldLeft(emptyUserAnswers)(
+        (ua,index) => ua.set(charityPages.CharityNamePage(index), s"Charity Name $index").success.value
+      )
   }
 
-  private def genOtherBeneficiaries(userAnswers: UserAnswers, range: Int) = {
+  private def genLargeBeneficiaries(range: Int): UserAnswers = {
     (0 until range)
-      .foldLeft(emptyUserAnswers)((ua,index) => ua.set(DescriptionPage(index), s"Other description $index").success.value)
+      .foldLeft(emptyUserAnswers)(
+        (ua,index) => ua.set(largePages.LargeBeneficiaryDescriptionPage(index), Description(s"Large Name $index", None, None, None, None)).success.value
+      )
+  }
+
+  private def genOtherBeneficiaries(range: Int): UserAnswers = {
+    (0 until range)
+      .foldLeft(emptyUserAnswers)(
+        (ua,index) => ua.set(otherPages.DescriptionPage(index), s"Other Description $index").success.value
+      )
   }
 
   "AddABeneficiary Controller" when {
@@ -228,14 +299,14 @@ class AddABeneficiaryControllerSpec extends SpecBase {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form, NormalMode, fakeDraftId, Nil, beneficiariesComplete, "You have added 2 beneficiaries", Nil)(fakeRequest, messages).toString
+          view(form, NormalMode, fakeDraftId, Nil, beneficiariesComplete, "You have added 7 beneficiaries", Nil)(fakeRequest, messages).toString
 
         application.stop()
       }
 
       "populate the view without value on a GET when the question has previously been answered" in {
         val userAnswers = userAnswersWithBeneficiariesComplete.
-          set(AddABeneficiaryPage,AddABeneficiary.YesNow).success.value
+          set(AddABeneficiaryPage, AddABeneficiary.YesNow).success.value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -248,7 +319,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form, NormalMode, fakeDraftId, Nil, beneficiariesComplete, "You have added 2 beneficiaries", Nil)(fakeRequest, messages).toString
+          view(form, NormalMode, fakeDraftId, Nil, beneficiariesComplete, "You have added 7 beneficiaries", Nil)(fakeRequest, messages).toString
 
         application.stop()
       }
@@ -300,13 +371,13 @@ class AddABeneficiaryControllerSpec extends SpecBase {
       "return correct view when all are maxed out" in {
 
         val beneficiaries = List(
-          genTrustBeneficiaries(emptyUserAnswers, 25),
-          genIndividualBeneficiaries(emptyUserAnswers, 25),
-          genUnidentifiedBeneficiaries(emptyUserAnswers, 25),
-          genCompanyBeneficiaries(emptyUserAnswers, 25),
-          genCharityBeneficiaries(emptyUserAnswers, 25),
-          genLargeBeneficiaries(emptyUserAnswers, 25),
-          genOtherBeneficiaries(emptyUserAnswers, 25)
+          genTrustBeneficiaries(max),
+          genIndividualBeneficiaries(max),
+          genUnidentifiedBeneficiaries(max),
+          genCompanyBeneficiaries(max),
+          genCharityBeneficiaries(max),
+          genLargeBeneficiaries(max),
+          genOtherBeneficiaries(max)
         )
 
         val userAnswers = beneficiaries.foldLeft(emptyUserAnswers)((x, acc) => acc.copy(data = x.data.deepMerge(acc.data)))
@@ -325,7 +396,13 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
         val content = contentAsString(result)
 
-        content mustEqual view(fakeDraftId, beneficiaryRows.inProgress, beneficiaryRows.complete, "You have added 175 beneficiaries")(fakeRequest, messages).toString
+        content mustEqual view(
+          fakeDraftId,
+          beneficiaryRows.inProgress,
+          beneficiaryRows.complete,
+          "You have added 175 beneficiaries"
+        )(fakeRequest, messages).toString
+
         content must include("You cannot enter another beneficiary as you have entered a maximum of 175.")
         content must include("If you have further beneficiaries to add, write to HMRC with their details.")
 
@@ -336,13 +413,13 @@ class AddABeneficiaryControllerSpec extends SpecBase {
       "return correct view when one type of beneficiary is maxed out" in {
 
         val beneficiaries = List(
-          genTrustBeneficiaries(emptyUserAnswers, 0),
-          genIndividualBeneficiaries(emptyUserAnswers, 0),
-          genUnidentifiedBeneficiaries(emptyUserAnswers, 0),
-          genCompanyBeneficiaries(emptyUserAnswers, 0),
-          genCharityBeneficiaries(emptyUserAnswers, 25),
-          genLargeBeneficiaries(emptyUserAnswers, 0),
-          genOtherBeneficiaries(emptyUserAnswers, 0)
+          genTrustBeneficiaries(0),
+          genIndividualBeneficiaries(0),
+          genUnidentifiedBeneficiaries(0),
+          genCompanyBeneficiaries(0),
+          genCharityBeneficiaries(max),
+          genLargeBeneficiaries(0),
+          genOtherBeneficiaries(0)
         )
 
         val userAnswers = beneficiaries.foldLeft(emptyUserAnswers)((x, acc) => acc.copy(data = x.data.deepMerge(acc.data)))
@@ -362,13 +439,13 @@ class AddABeneficiaryControllerSpec extends SpecBase {
       "return correct view when more than one type of beneficiary is maxed out" in {
 
         val beneficiaries = List(
-          genTrustBeneficiaries(emptyUserAnswers, 0),
-          genIndividualBeneficiaries(emptyUserAnswers, 25),
-          genUnidentifiedBeneficiaries(emptyUserAnswers, 0),
-          genCompanyBeneficiaries(emptyUserAnswers, 0),
-          genCharityBeneficiaries(emptyUserAnswers, 25),
-          genLargeBeneficiaries(emptyUserAnswers, 0),
-          genOtherBeneficiaries(emptyUserAnswers, 0)
+          genTrustBeneficiaries(0),
+          genIndividualBeneficiaries(max),
+          genUnidentifiedBeneficiaries(0),
+          genCompanyBeneficiaries(0),
+          genCharityBeneficiaries(max),
+          genLargeBeneficiaries(0),
+          genOtherBeneficiaries(0)
         )
 
         val userAnswers = beneficiaries.foldLeft(emptyUserAnswers)((x, acc) => acc.copy(data = x.data.deepMerge(acc.data)))
