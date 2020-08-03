@@ -19,7 +19,7 @@ package navigation
 import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.{routes => rts}
 import models.ReadableUserAnswers
 import pages.Page
-import pages.register.beneficiaries.large.{LargeBeneficiaryAddressInternationalPage, LargeBeneficiaryAddressPage, LargeBeneficiaryAddressUKYesNoPage, LargeBeneficiaryAddressYesNoPage, LargeBeneficiaryNamePage}
+import pages.register.beneficiaries.large.{LargeBeneficiaryAddressInternationalPage, LargeBeneficiaryAddressPage, LargeBeneficiaryAddressUKYesNoPage, LargeBeneficiaryAddressYesNoPage, LargeBeneficiaryDescriptionPage, LargeBeneficiaryNamePage}
 import play.api.mvc.Call
 
 class EmploymentRelatedBeneficiaryNavigator extends Navigator {
@@ -28,8 +28,9 @@ class EmploymentRelatedBeneficiaryNavigator extends Navigator {
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, Call] = {
     case LargeBeneficiaryNamePage(index) => rts.AddressYesNoController.onPageLoad(index, draftId)
-    case LargeBeneficiaryAddressPage(index) => rts.UkAddressController.onPageLoad(index, draftId) // TODO Redirect to DescriptionController
-    case LargeBeneficiaryAddressInternationalPage(index) => rts.NonUkAddressController.onPageLoad(index, draftId) // TODO Redirect to DescriptionController
+    case LargeBeneficiaryAddressPage(index) => rts.DescriptionController.onPageLoad(index, draftId)
+    case LargeBeneficiaryAddressInternationalPage(index) => rts.DescriptionController.onPageLoad(index, draftId)
+    case LargeBeneficiaryDescriptionPage(index) => rts.DescriptionController.onPageLoad(index, draftId) // TODO redirect to NumberOfBeneficiaries controller
   }
 
   private def yesNoNavigation(draftId: String) : PartialFunction[Page, ReadableUserAnswers => Call] = {
@@ -38,7 +39,7 @@ class EmploymentRelatedBeneficiaryNavigator extends Navigator {
         ua,
         LargeBeneficiaryAddressYesNoPage(index),
         rts.AddressUkYesNoController.onPageLoad(index, draftId),
-        rts.AddressYesNoController.onPageLoad(index, draftId)) // TODO Redirect to DescriptionController
+        rts.DescriptionController.onPageLoad(index, draftId))
     case LargeBeneficiaryAddressUKYesNoPage(index) => ua =>
       yesNoNav(
         ua,

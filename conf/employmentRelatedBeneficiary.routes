@@ -15,3 +15,6 @@ POST        /:draftId/:index/uk-address                 controllers.register.ben
 
 GET         /:draftId/:index/non-uk-address             controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.NonUkAddressController.onPageLoad(index: Int, draftId: String)
 POST        /:draftId/:index/non-uk-address             controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.NonUkAddressController.onSubmit(index: Int, draftId: String)
+
+GET         /:draftId/:index/description                controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.DescriptionController.onPageLoad(index: Int, draftId: String)
+POST        /:draftId/:index/description                controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.DescriptionController.onSubmit(index: Int, draftId: String)
