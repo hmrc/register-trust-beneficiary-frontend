@@ -17,7 +17,6 @@
 package models
 
 import models.registration.pages.WhatTypeOfBeneficiary
-import play.api.libs.json.JsArray
 import viewmodels.RadioOption
 import viewmodels.addAnother._
 
@@ -26,7 +25,7 @@ case class Beneficiaries(individuals: List[IndividualBeneficiaryViewModel] = Nil
                          charities: List[CharityBeneficiaryViewModel] = Nil,
                          trusts: List[TrustBeneficiaryViewModel] = Nil,
                          companies: List[CompanyBeneficiaryViewModel] = Nil,
-                         large: JsArray = JsArray(),
+                         large: List[EmploymentRelatedBeneficiaryViewModel] = Nil,
                          other: List[OtherBeneficiaryViewModel] = Nil) {
 
   type BeneficiaryOption = (Int, WhatTypeOfBeneficiary)
@@ -38,7 +37,7 @@ case class Beneficiaries(individuals: List[IndividualBeneficiaryViewModel] = Nil
       (charities.size, WhatTypeOfBeneficiary.Charity) ::
       (trusts.size, WhatTypeOfBeneficiary.Trust) ::
       (companies.size, WhatTypeOfBeneficiary.Company) ::
-      (large.value.size, WhatTypeOfBeneficiary.Employment) ::
+      (large.size, WhatTypeOfBeneficiary.Employment) ::
       (other.size, WhatTypeOfBeneficiary.Other) ::
       Nil
   }

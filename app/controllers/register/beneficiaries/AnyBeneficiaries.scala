@@ -28,7 +28,7 @@ trait AnyBeneficiaries {
     userAnswers.get(CharityBeneficiaries).getOrElse(List.empty),
     userAnswers.get(TrustBeneficiaries).getOrElse(List.empty),
     userAnswers.get(CompanyBeneficiaries).getOrElse(List.empty),
-    userAnswers.get(LargeBeneficiaries).getOrElse(JsArray()),
+    userAnswers.get(LargeBeneficiaries).getOrElse(List.empty),
     userAnswers.get(OtherBeneficiaries).getOrElse(List.empty)
   )
 
@@ -40,7 +40,7 @@ trait AnyBeneficiaries {
       beneficiaryLists.charities.nonEmpty ||
       beneficiaryLists.trusts.nonEmpty ||
       beneficiaryLists.companies.nonEmpty ||
-      beneficiaryLists.large.value.nonEmpty ||
+      beneficiaryLists.large.nonEmpty ||
       beneficiaryLists.other.nonEmpty
   }
 }

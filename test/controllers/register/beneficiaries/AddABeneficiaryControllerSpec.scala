@@ -325,7 +325,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
         val content = contentAsString(result)
 
-        content mustEqual view(fakeDraftId, beneficiaryRows.inProgress, beneficiaryRows.complete, "You have added 150 beneficiaries")(fakeRequest, messages).toString
+        content mustEqual view(fakeDraftId, beneficiaryRows.inProgress, beneficiaryRows.complete, "You have added 175 beneficiaries")(fakeRequest, messages).toString
         content must include("You cannot enter another beneficiary as you have entered a maximum of 175.")
         content must include("If you have further beneficiaries to add, write to HMRC with their details.")
 

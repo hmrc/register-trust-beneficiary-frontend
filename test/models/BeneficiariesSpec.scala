@@ -20,7 +20,6 @@ import base.SpecBase
 import models.Status._
 import models.core.pages.FullName
 import models.registration.pages.WhatTypeOfBeneficiary
-import play.api.libs.json.{JsArray, JsString, JsValue}
 import viewmodels.RadioOption
 import viewmodels.addAnother._
 
@@ -36,7 +35,7 @@ class BeneficiariesSpec extends SpecBase {
   val charity: CharityBeneficiaryViewModel = CharityBeneficiaryViewModel(Some(name), Completed)
   val trust: TrustBeneficiaryViewModel = TrustBeneficiaryViewModel(Some(name), Completed)
   val company: CompanyBeneficiaryViewModel = CompanyBeneficiaryViewModel(Some(name), Completed)
-  val large: JsValue = JsString("Large")
+  val large: EmploymentRelatedBeneficiaryViewModel = EmploymentRelatedBeneficiaryViewModel(Some(name), Completed)
   val other: OtherBeneficiaryViewModel = OtherBeneficiaryViewModel(Some(name), Completed)
 
   val prefix: String = WhatTypeOfBeneficiary.prefix
@@ -129,7 +128,7 @@ class BeneficiariesSpec extends SpecBase {
 
       "employment maxed out" in {
         val beneficiaries = Beneficiaries(
-          large = JsArray(Seq.fill(max)(large))
+          large = List.fill(max)(large)
         )
 
         beneficiaries.nonMaxedOutOptions mustBe List(
@@ -144,7 +143,7 @@ class BeneficiariesSpec extends SpecBase {
       "company and employment maxed out" in {
         val beneficiaries = Beneficiaries(
           companies = List.fill(max)(company),
-          large = JsArray(Seq.fill(max)(large))
+          large = List.fill(max)(large)
         )
 
         beneficiaries.nonMaxedOutOptions mustBe List(
@@ -175,7 +174,7 @@ class BeneficiariesSpec extends SpecBase {
           charities = List.fill(max)(charity),
           trusts = List.fill(max)(trust),
           companies = List.fill(max)(company),
-          large = JsArray(Seq.fill(max)(large)),
+          large = List.fill(max)(large),
           other = List.fill(max)(other)
         )
 
