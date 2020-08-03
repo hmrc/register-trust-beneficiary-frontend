@@ -18,7 +18,6 @@ package pages.register.beneficiaries.other
 
 import models.UserAnswers
 import pages.QuestionPage
-import pages.register.beneficiaries.companyoremploymentrelated.company.{AddressInternationalPage, AddressUKPage, AddressUKYesNoPage}
 import play.api.libs.json.JsPath
 import sections.beneficiaries.{Beneficiaries, OtherBeneficiaries}
 
