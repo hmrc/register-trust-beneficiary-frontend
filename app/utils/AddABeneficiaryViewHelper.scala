@@ -129,7 +129,7 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
       name = parseName(vm.name),
       typeLabel = messages("entities.beneficiary.large"),
       changeUrl = if (vm.isComplete) {
-        controllers.routes.FeatureNotAvailableController.onPageLoad().url
+        largeRts.CheckDetailsController.onPageLoad(index, draftId).url
       } else {
         largeRts.NameController.onPageLoad(index, draftId).url
       },
