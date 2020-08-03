@@ -26,18 +26,13 @@ import controllers.register.beneficiaries.individualBeneficiary.{routes => indiv
 import controllers.register.beneficiaries.other.{routes => otherRoutes}
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import models.Status.Completed
+import models.UserAnswers
 import models.core.pages.{Description, FullName}
 import models.registration.pages.AddABeneficiary
-import models.{NormalMode, UserAnswers}
 import pages.entitystatus._
-import pages.register.beneficiaries.charityortrust.{charity => charityPages}
-import pages.register.beneficiaries.charityortrust.{trust => trustPages}
+import pages.register.beneficiaries.charityortrust.{charity => charityPages, trust => trustPages}
 import pages.register.beneficiaries.companyoremploymentrelated.{company => companyPages}
-import pages.register.beneficiaries.{classofbeneficiaries => classOfBeneficiariesPages}
-import pages.register.beneficiaries.{other => otherPages}
-import pages.register.beneficiaries.{large => largePages}
-import pages.register.beneficiaries.{individual => individualPages}
-import pages.register.beneficiaries.AddABeneficiaryPage
+import pages.register.beneficiaries.{AddABeneficiaryPage, classofbeneficiaries => classOfBeneficiariesPages, individual => individualPages, large => largePages, other => otherPages}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -142,7 +137,8 @@ class AddABeneficiaryControllerSpec extends SpecBase {
   private def genTrustBeneficiaries(range: Int): UserAnswers = {
     (0 until range)
       .foldLeft(emptyUserAnswers)((ua,index) =>
-        ua.set(trustPages.NamePage(index), "Company Name").success.value)
+        ua.set(trustPages.NamePage(index), "Company Name").success.value
+      )
   }
 
   private def genCompanyBeneficiaries(range: Int): UserAnswers = {
@@ -237,7 +233,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form, NormalMode, fakeDraftId)(fakeRequest, messages).toString
+          view(form, fakeDraftId)(fakeRequest, messages).toString
 
         application.stop()
       }
@@ -277,7 +273,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, NormalMode, fakeDraftId)(fakeRequest, messages).toString
+          view(boundForm, fakeDraftId)(fakeRequest, messages).toString
 
         application.stop()
       }
@@ -299,7 +295,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form, NormalMode, fakeDraftId, Nil, beneficiariesComplete, "You have added 7 beneficiaries", Nil)(fakeRequest, messages).toString
+          view(form, fakeDraftId, Nil, beneficiariesComplete, "You have added 7 beneficiaries", Nil)(fakeRequest, messages).toString
 
         application.stop()
       }
@@ -319,7 +315,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form, NormalMode, fakeDraftId, Nil, beneficiariesComplete, "You have added 7 beneficiaries", Nil)(fakeRequest, messages).toString
+          view(form, fakeDraftId, Nil, beneficiariesComplete, "You have added 7 beneficiaries", Nil)(fakeRequest, messages).toString
 
         application.stop()
       }
@@ -359,7 +355,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, NormalMode, fakeDraftId, Nil, Nil, "Add a beneficiary", Nil)(fakeRequest, messages).toString
+          view(boundForm, fakeDraftId, Nil, Nil, "Add a beneficiary", Nil)(fakeRequest, messages).toString
 
         application.stop()
       }

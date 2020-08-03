@@ -17,7 +17,6 @@
 package views.register.beneficiaries
 
 import forms.WhatTypeOfBeneficiaryFormProvider
-import models.NormalMode
 import models.registration.pages.WhatTypeOfBeneficiary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -44,7 +43,7 @@ class WhatTypeOfBeneficiaryViewSpec extends ViewBehaviours {
   )
 
   def applyView(form: Form[_], isAdded :Boolean): HtmlFormat.Appendable =
-    view.apply(form, NormalMode, fakeDraftId, isAdded, defaultOptions)(fakeRequest, messages)
+    view.apply(form, fakeDraftId, isAdded, defaultOptions)(fakeRequest, messages)
 
   "WhatTypeOfBeneficiaryView" must {
 

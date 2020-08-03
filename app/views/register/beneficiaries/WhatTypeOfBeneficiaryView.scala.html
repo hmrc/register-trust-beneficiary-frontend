@@ -15,7 +15,6 @@
  *@
 
 @import controllers.register.beneficiaries.routes._
-@import models.Mode
 @import models.registration.pages.WhatTypeOfBeneficiary
 @import viewmodels.RadioOption
 
@@ -24,7 +23,7 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode, draftId: String, beneficiaryAdded : Boolean, options: List[RadioOption])(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, beneficiaryAdded : Boolean, options: List[RadioOption])(implicit request: Request[_], messages: Messages)
 
 @title = {
     @if(beneficiaryAdded==true) {

@@ -17,7 +17,6 @@
 package views.register.beneficiaries
 
 import forms.AddABeneficiaryFormProvider
-import models.NormalMode
 import models.registration.pages.AddABeneficiary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -49,11 +48,11 @@ class AddABeneficiaryViewSpec extends OptionsViewBehaviours with TabularDataView
   val view = viewFor[AddABeneficiaryView](Some(emptyUserAnswers))
 
   def applyView(form: Form[_]): HtmlFormat.Appendable =
-    view.apply(form, NormalMode, fakeDraftId, Nil, Nil, "Add a beneficiary", Nil)(fakeRequest, messages)
+    view.apply(form, fakeDraftId, Nil, Nil, "Add a beneficiary", Nil)(fakeRequest, messages)
 
   def applyView(form: Form[_], inProgressBeneficiaries: Seq[AddRow], completeBeneficiaries: Seq[AddRow], count : Int, maxedOut: List[String]): HtmlFormat.Appendable = {
     val title = if (count > 1) s"You have added $count beneficiaries" else "You have added 1 beneficiary"
-    view.apply(form, NormalMode, fakeDraftId, inProgressBeneficiaries, completeBeneficiaries, title, maxedOut)(fakeRequest, messages)
+    view.apply(form, fakeDraftId, inProgressBeneficiaries, completeBeneficiaries, title, maxedOut)(fakeRequest, messages)
   }
 
   "AddABeneficiaryView" when {

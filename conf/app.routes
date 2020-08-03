@@ -19,10 +19,10 @@ GET        /timeout                                     controllers.SessionTimeo
 ->         /employment-related                          employmentRelatedBeneficiary.Routes
 ->         /other                                       otherBeneficiary.Routes
 
-GET        /:draftId/add                                                              controllers.register.beneficiaries.AddABeneficiaryController.onPageLoad(mode: Mode = NormalMode, draftId: String)
-POST       /:draftId/add                                                              controllers.register.beneficiaries.AddABeneficiaryController.submitOne(mode: Mode = NormalMode, draftId: String)
-POST       /:draftId/add-another                                                      controllers.register.beneficiaries.AddABeneficiaryController.submitAnother(mode: Mode = NormalMode, draftId: String)
-POST       /complete                                                                  controllers.register.beneficiaries.AddABeneficiaryController.submitComplete(mode: Mode = NormalMode, draftId: String)
+GET        /:draftId/add                                                              controllers.register.beneficiaries.AddABeneficiaryController.onPageLoad(draftId: String)
+POST       /:draftId/add                                                              controllers.register.beneficiaries.AddABeneficiaryController.submitOne(draftId: String)
+POST       /:draftId/add-another                                                      controllers.register.beneficiaries.AddABeneficiaryController.submitAnother(draftId: String)
+POST       /complete                                                                  controllers.register.beneficiaries.AddABeneficiaryController.submitComplete(draftId: String)
 
 GET        /:draftId/individual/:index/name                                           controllers.register.beneficiaries.individualBeneficiary.NameController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/individual/:index/name                                           controllers.register.beneficiaries.individualBeneficiary.NameController.onSubmit(index: Int, draftId: String)
@@ -117,8 +117,8 @@ POST       /:draftId/class/:index/description                                   
 GET        /:draftId/class/:index/remove                                              controllers.register.beneficiaries.classofbeneficiaries.RemoveClassOfBeneficiaryController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/class/:index/remove                                              controllers.register.beneficiaries.classofbeneficiaries.RemoveClassOfBeneficiaryController.onSubmit(index: Int, draftId: String)
 
-GET        /:draftId/what-type                                                        controllers.register.beneficiaries.WhatTypeOfBeneficiaryController.onPageLoad(mode: Mode = NormalMode, draftId: String)
-POST       /:draftId/what-type                                                        controllers.register.beneficiaries.WhatTypeOfBeneficiaryController.onSubmit(mode: Mode = NormalMode, draftId: String)
+GET        /:draftId/what-type                                                        controllers.register.beneficiaries.WhatTypeOfBeneficiaryController.onPageLoad(draftId: String)
+POST       /:draftId/what-type                                                        controllers.register.beneficiaries.WhatTypeOfBeneficiaryController.onSubmit(draftId: String)
 
 GET        /feature-not-available                                                     controllers.FeatureNotAvailableController.onPageLoad()
 

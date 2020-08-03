@@ -19,8 +19,8 @@ package controllers.register.beneficiaries
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.WhatTypeOfBeneficiaryFormProvider
 import javax.inject.Inject
+import models.Enumerable
 import models.requests.RegistrationDataRequest
-import models.{Enumerable, Mode}
 import navigation.Navigator
 import pages.register.beneficiaries.WhatTypeOfBeneficiaryPage
 import play.api.data.Form
@@ -52,25 +52,23 @@ class WhatTypeOfBeneficiaryController @Inject()(
 
   private val form = formProvider()
 
-  def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = actions(draftId) {
+  def onPageLoad(draftId: String): Action[AnyContent] = actions(draftId) {
     implicit request =>
       Ok(view(
         form,
-        mode,
         draftId,
         isAnyBeneficiaryAdded(request.userAnswers),
         beneficiaries(request.userAnswers).nonMaxedOutOptions)
       )
   }
 
-  def onSubmit(mode: Mode, draftId: String): Action[AnyContent] = actions(draftId).async {
+  def onSubmit(draftId: String): Action[AnyContent] = actions(draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(
             formWithErrors,
-            mode,
             draftId,
             isAnyBeneficiaryAdded(request.userAnswers),
             beneficiaries(request.userAnswers).nonMaxedOutOptions
@@ -80,7 +78,7 @@ class WhatTypeOfBeneficiaryController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(WhatTypeOfBeneficiaryPage, value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(WhatTypeOfBeneficiaryPage, mode, draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(WhatTypeOfBeneficiaryPage, draftId, updatedAnswers))
         }
       )
   }
