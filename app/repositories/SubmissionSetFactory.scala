@@ -31,6 +31,7 @@ class SubmissionSetFactory @Inject()(
                                       beneficiariesMapper: BeneficiariesMapper,
                                       countryOptions: CountryOptions,
                                       companyBeneficiaryAnswersHelper: CompanyBeneficiaryAnswersHelper,
+                                      largeBeneficiaryAnswersHelper: EmploymentRelatedBeneficiaryAnswersHelper,
                                       otherBeneficiaryAnswersHelper: OtherBeneficiaryAnswersHelper
                                     ) {
 
@@ -73,6 +74,7 @@ class SubmissionSetFactory @Inject()(
         charityBeneficiariesHelper.charityBeneficiaries,
         trustBeneficiariesHelper.trustBeneficiaries,
         companyBeneficiaryAnswersHelper.companyBeneficiaries(userAnswers, canEdit = false),
+        largeBeneficiaryAnswersHelper.employmentRelatedBeneficiaries(userAnswers, canEdit = false),
         otherBeneficiaryAnswersHelper.otherBeneficiaries(userAnswers, canEdit = false)
       ).flatten.flatten
 
