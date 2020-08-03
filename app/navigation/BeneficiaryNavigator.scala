@@ -28,9 +28,9 @@ import controllers.register.beneficiaries.individualBeneficiary.{routes => indiv
 import controllers.register.beneficiaries.other.{routes => otherRoutes}
 import javax.inject.Inject
 import models.CompanyOrEmploymentRelatedToAdd.{Company, _}
+import models.ReadableUserAnswers
 import models.registration.pages.CharityOrTrust.{Charity, Trust, _}
 import models.registration.pages.{AddABeneficiary, WhatTypeOfBeneficiary}
-import models.{Mode, ReadableUserAnswers}
 import pages.Page
 import pages.register.beneficiaries._
 import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
@@ -39,9 +39,6 @@ import play.api.mvc.Call
 import sections.beneficiaries.{ClassOfBeneficiaries, CompanyBeneficiaries, IndividualBeneficiaries, _}
 
 class BeneficiaryNavigator @Inject()(config: FrontendAppConfig) extends Navigator {
-
-  override def nextPage(page: Page, mode: Mode, draftId: String, userAnswers: ReadableUserAnswers): Call =
-    nextPage(page, draftId, userAnswers)
 
   override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call =
     route(draftId, config)(page)(userAnswers)

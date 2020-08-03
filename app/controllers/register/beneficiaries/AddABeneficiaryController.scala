@@ -68,7 +68,7 @@ class AddABeneficiaryController @Inject()(
     }
   }
 
-  def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = routes(draftId) {
+  def onPageLoad(draftId: String): Action[AnyContent] = routes(draftId) {
     implicit request =>
 
       val rows = new AddABeneficiaryViewHelper(request.userAnswers, draftId).rows
@@ -82,32 +82,32 @@ class AddABeneficiaryController @Inject()(
         if(rows.count > 0) {
           Logger.info(s"[AddABeneficiaryController] ${request.internalId} has not out beneficiaries")
           val listOfMaxed = allBeneficiaries.maxedOutOptions.map(_.messageKey)
-          Ok(addAnotherView(addAnotherForm, mode, draftId, rows.inProgress, rows.complete, heading(rows.count), listOfMaxed))
+          Ok(addAnotherView(addAnotherForm, draftId, rows.inProgress, rows.complete, heading(rows.count), listOfMaxed))
         } else {
           Logger.info(s"[AddABeneficiaryController] ${request.internalId} has added no beneficiaries")
-          Ok(yesNoView(yesNoForm, mode, draftId))
+          Ok(yesNoView(yesNoForm, draftId))
         }
       }
   }
 
-  def submitOne(mode: Mode, draftId : String) : Action[AnyContent] = routes(draftId).async {
+  def submitOne(draftId : String) : Action[AnyContent] = routes(draftId).async {
     implicit request =>
       yesNoForm.bindFromRequest().fold(
         (formWithErrors: Form[_]) => {
           Future.successful(
-            BadRequest(yesNoView(formWithErrors, mode, draftId))
+            BadRequest(yesNoView(formWithErrors, draftId))
           )
         },
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddABeneficiaryYesNoPage, value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddABeneficiaryYesNoPage, mode, draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(AddABeneficiaryYesNoPage, draftId, updatedAnswers))
         }
       )
   }
 
-  def submitAnother(mode: Mode, draftId: String): Action[AnyContent] = routes(draftId).async {
+  def submitAnother(draftId: String): Action[AnyContent] = routes(draftId).async {
     implicit request =>
 
       addAnotherForm.bindFromRequest().fold(
@@ -117,18 +117,18 @@ class AddABeneficiaryController @Inject()(
           val allBeneficiaries = beneficiaries(request.userAnswers)
           val listOfMaxed = allBeneficiaries.maxedOutOptions.map(_.messageKey)
 
-          Future.successful(BadRequest(addAnotherView(formWithErrors, mode, draftId, rows.inProgress, rows.complete, heading(rows.count), listOfMaxed)))
+          Future.successful(BadRequest(addAnotherView(formWithErrors, draftId, rows.inProgress, rows.complete, heading(rows.count), listOfMaxed)))
         },
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddABeneficiaryPage, value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddABeneficiaryPage, mode, draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(AddABeneficiaryPage, draftId, updatedAnswers))
         }
       )
   }
 
-  def submitComplete(mode: Mode, draftId: String): Action[AnyContent] = routes(draftId).async {
+  def submitComplete(draftId: String): Action[AnyContent] = routes(draftId).async {
     implicit request =>
       for {
         updatedAnswers <- Future.fromTry(request.userAnswers.set(AddABeneficiaryPage, NoComplete))

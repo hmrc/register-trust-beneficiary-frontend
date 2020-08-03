@@ -22,8 +22,6 @@ import play.api.mvc.Call
 
 trait Navigator {
 
-  def nextPage(page: Page, mode: Mode, draftId: String, userAnswers: ReadableUserAnswers): Call = nextPage(page, draftId, userAnswers)
-
   def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call
 
   def yesNoNav(ua: ReadableUserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call = {

@@ -18,12 +18,10 @@ package controllers.register.beneficiaries.charityortrust.charity
 
 import controllers.actions._
 import controllers.actions.register.company.NameRequiredAction
-import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import javax.inject.Inject
 import models.Status.Completed
 import pages.entitystatus.CharityBeneficiaryStatus
-import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
