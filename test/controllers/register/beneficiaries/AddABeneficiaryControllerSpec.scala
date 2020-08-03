@@ -142,7 +142,8 @@ class AddABeneficiaryControllerSpec extends SpecBase {
   private def genTrustBeneficiaries(range: Int): UserAnswers = {
     (0 until range)
       .foldLeft(emptyUserAnswers)((ua,index) =>
-        ua.set(trustPages.NamePage(index), "Company Name").success.value)
+        ua.set(trustPages.NamePage(index), "Company Name").success.value
+      )
   }
 
   private def genCompanyBeneficiaries(range: Int): UserAnswers = {
