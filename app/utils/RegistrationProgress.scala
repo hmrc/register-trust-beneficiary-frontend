@@ -21,7 +21,7 @@ import javax.inject.Inject
 import models.registration.pages._
 import models.{ReadableUserAnswers, Status}
 import pages.register.beneficiaries.AddABeneficiaryPage
-import sections.beneficiaries.{CharityBeneficiaries, ClassOfBeneficiaries, CompanyBeneficiaries, IndividualBeneficiaries, OtherBeneficiaries, TrustBeneficiaries}
+import sections.beneficiaries._
 
 class RegistrationProgress @Inject()() extends AnyBeneficiaries {
 
@@ -36,6 +36,7 @@ class RegistrationProgress @Inject()() extends AnyBeneficiaries {
         IndividualBeneficiariesAreComplete,
         ClassBeneficiariesAreComplete,
         CompanyBeneficiariesAreComplete,
+        EmploymentRelatedBeneficiariesAreComplete,
         TrustBeneficiariesAreComplete,
         CharityBeneficiariesAreComplete,
         OtherBeneficiariesAreComplete
@@ -92,6 +93,16 @@ class RegistrationProgress @Inject()() extends AnyBeneficiaries {
 
     def apply(userAnswers: ReadableUserAnswers): Boolean = {
       userAnswers.get(CompanyBeneficiaries) match {
+        case Some(beneficiaries@_ :: _) => !beneficiaries.exists(_.status == Status.InProgress)
+        case _ => true
+      }
+    }
+  }
+
+  object EmploymentRelatedBeneficiariesAreComplete extends IsComplete {
+
+    def apply(userAnswers: ReadableUserAnswers): Boolean = {
+      userAnswers.get(LargeBeneficiaries) match {
         case Some(beneficiaries@_ :: _) => !beneficiaries.exists(_.status == Status.InProgress)
         case _ => true
       }

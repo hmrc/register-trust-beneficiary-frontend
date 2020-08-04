@@ -121,7 +121,11 @@ class BeneficiaryNavigator @Inject()(config: FrontendAppConfig) extends Navigato
 
   private def routeToEmploymentBeneficiaryIndex(userAnswers: ReadableUserAnswers, draftId: String): Call = {
     val employmentRelatedBeneficiaries = userAnswers.get(LargeBeneficiaries).getOrElse(List.empty)
-    emplymentRelatedRoutes.NameController.onPageLoad(employmentRelatedBeneficiaries.size, draftId)
+    if (config.employmentRelatedEnabled) {
+      emplymentRelatedRoutes.NameController.onPageLoad(employmentRelatedBeneficiaries.size, draftId)
+    } else {
+      controllers.routes.FeatureNotAvailableController.onPageLoad()
+    }
   }
 
   private def routeToIndividualBeneficiaryIndex(userAnswers: ReadableUserAnswers, draftId: String): Call = {

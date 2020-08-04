@@ -23,6 +23,7 @@ import controllers.register.beneficiaries.charityortrust.trust.{routes => trustR
 import controllers.register.beneficiaries.charityortrust.{routes => charityortrustRoutes}
 import controllers.register.beneficiaries.classofbeneficiaries.{routes => classOfBeneficiariesRoutes}
 import controllers.register.beneficiaries.companyoremploymentrelated.company.{routes => companyRoutes}
+import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.{routes => employmentRelatedRoutes}
 import controllers.register.beneficiaries.companyoremploymentrelated.{routes => companyOrEmploymentRelatedRoutes}
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRoutes}
 import controllers.register.beneficiaries.other.{routes => otherRoutes}
@@ -33,16 +34,17 @@ import models.registration.pages.{AddABeneficiary, CharityOrTrust, WhatTypeOfBen
 import models.{CompanyOrEmploymentRelatedToAdd, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.entitystatus.{CharityBeneficiaryStatus, CompanyBeneficiaryStatus, TrustBeneficiaryStatus}
+import pages.entitystatus.{CharityBeneficiaryStatus, CompanyBeneficiaryStatus, LargeBeneficiaryStatus, TrustBeneficiaryStatus}
 import pages.register.beneficiaries._
 import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
 import pages.register.beneficiaries.charityortrust.{CharityOrTrustPage, trust}
 import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
 import pages.register.beneficiaries.companyoremploymentrelated.{CompanyOrEmploymentRelatedPage, company}
 import pages.register.beneficiaries.individual._
+import pages.register.beneficiaries.large.LargeBeneficiaryNamePage
 import pages.register.beneficiaries.other.DescriptionPage
 import play.api.mvc.Call
-import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries, OtherBeneficiaries}
+import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries, LargeBeneficiaries, OtherBeneficiaries}
 
 class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -221,14 +223,60 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
       }
     }
 
-    "Employment related" when {
-      "go to feature available" in {
-        val answers = emptyUserAnswers.set(CompanyOrEmploymentRelatedPage, value = CompanyOrEmploymentRelatedToAdd.EmploymentRelated).success.value
+    if (frontendAppConfig.employmentRelatedEnabled) {
+      "Employment related feature enabled" when {
+        "no existing employment related beneficiaries" must {
+          "go to CompanyNamePage from WhatTypeOfBeneficiaryPage when 'company or employment related' option selected" in {
+            forAll(arbitrary[UserAnswers]) {
+              userAnswers =>
+                val answers = userAnswers.set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.Employment).success.value
+                  .remove(LargeBeneficiaries).success.value
+                navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
+                  .mustBe(employmentRelatedRoutes.NameController.onPageLoad(0, fakeDraftId))
+            }
+          }
+          "go to CompanyNamePage from CompanyOrEmploymentRelatedPage when 'employment related' selected" in {
+            val answers = emptyUserAnswers.set(CompanyOrEmploymentRelatedPage, value = CompanyOrEmploymentRelatedToAdd.EmploymentRelated).success.value
 
-        navigator.nextPage(CompanyOrEmploymentRelatedPage, fakeDraftId, answers)
-          .mustBe(controllers.routes.FeatureNotAvailableController.onPageLoad())
+            navigator.nextPage(CompanyOrEmploymentRelatedPage, fakeDraftId, answers)
+              .mustBe(employmentRelatedRoutes.NameController.onPageLoad(0, fakeDraftId))
+          }
+        }
+
+        "existing employment related beneficiary" must {
+          val baseAnswers = emptyUserAnswers
+            .set(LargeBeneficiaryNamePage(0), "Name").success.value
+            .set(LargeBeneficiaryStatus(0), InProgress).success.value
+            .set(CompanyOrEmploymentRelatedPage, value = CompanyOrEmploymentRelatedToAdd.EmploymentRelated).success.value
+
+          "go to LargeBeneficiaryNamePage from WhatTypeOfBeneficiaryPage when 'employment' option selected" in {
+            forAll(arbitrary[UserAnswers]) {
+              userAnswers =>
+                val answers = baseAnswers
+                  .set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.Employment).success.value
+                  .remove(IndividualBeneficiaries).success.value
+                navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
+                  .mustBe(employmentRelatedRoutes.NameController.onPageLoad(1, fakeDraftId))
+            }
+          }
+
+          "go to LargeBeneficiaryNamePage from CompanyOrEmploymentRelatedPage when 'employment' selected" in {
+            navigator.nextPage(CompanyOrEmploymentRelatedPage, fakeDraftId, baseAnswers)
+              .mustBe(employmentRelatedRoutes.NameController.onPageLoad(1, fakeDraftId))
+          }
+        }
+      }
+    } else {
+      "Employment related feature disabled" must {
+        "go to feature available" in {
+          val answers = emptyUserAnswers.set(CompanyOrEmploymentRelatedPage, value = CompanyOrEmploymentRelatedToAdd.EmploymentRelated).success.value
+
+          navigator.nextPage(CompanyOrEmploymentRelatedPage, fakeDraftId, answers)
+            .mustBe(controllers.routes.FeatureNotAvailableController.onPageLoad())
+        }
       }
     }
+
   }
 
   "Charity or trust" when {
