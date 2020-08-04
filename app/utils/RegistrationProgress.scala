@@ -62,10 +62,10 @@ class RegistrationProgress extends AnyBeneficiaries {
     def apply(userAnswers: ReadableUserAnswers): Boolean
   }
 
-  sealed trait ListIsComplete extends IsComplete {
-    def apply[T <: ViewModel](userAnswers: ReadableUserAnswers, section: QuestionPage[List[T]])
-                             (implicit reads: Reads[List[T]]): Boolean = {
+  sealed class ListIsComplete[T <: ViewModel](section: QuestionPage[List[T]])
+                                             (implicit reads: Reads[T]) extends IsComplete {
 
+    override def apply(userAnswers: ReadableUserAnswers): Boolean = {
       userAnswers.get(section) match {
         case Some(beneficiaries) => !beneficiaries.exists(_.status == Status.InProgress)
         case _ => true
@@ -78,33 +78,15 @@ class RegistrationProgress extends AnyBeneficiaries {
       userAnswers.get(AddABeneficiaryPage).contains(AddABeneficiary.NoComplete)
   }
 
-  object IndividualBeneficiariesAreComplete extends ListIsComplete {
-    override def apply(userAnswers: ReadableUserAnswers): Boolean =
-      apply(userAnswers, IndividualBeneficiaries)
-  }
+  object IndividualBeneficiariesAreComplete extends ListIsComplete(IndividualBeneficiaries)
 
-  object ClassBeneficiariesAreComplete extends ListIsComplete {
-    override def apply(userAnswers: ReadableUserAnswers): Boolean =
-      apply(userAnswers, ClassOfBeneficiaries)
-  }
+  object ClassBeneficiariesAreComplete extends ListIsComplete(ClassOfBeneficiaries)
 
-  object CharityBeneficiariesAreComplete extends ListIsComplete {
-    override def apply(userAnswers: ReadableUserAnswers): Boolean =
-      apply(userAnswers, CharityBeneficiaries)
-  }
+  object CharityBeneficiariesAreComplete extends ListIsComplete(CharityBeneficiaries)
 
-  object TrustBeneficiariesAreComplete extends ListIsComplete {
-    override def apply(userAnswers: ReadableUserAnswers): Boolean =
-      apply(userAnswers, TrustBeneficiaries)
-  }
+  object TrustBeneficiariesAreComplete extends ListIsComplete(TrustBeneficiaries)
 
-  object CompanyBeneficiariesAreComplete extends ListIsComplete {
-    override def apply(userAnswers: ReadableUserAnswers): Boolean =
-      apply(userAnswers, CompanyBeneficiaries)
-  }
+  object CompanyBeneficiariesAreComplete extends ListIsComplete(CompanyBeneficiaries)
 
-  object OtherBeneficiariesAreComplete extends ListIsComplete {
-    override def apply(userAnswers: ReadableUserAnswers): Boolean =
-      apply(userAnswers, OtherBeneficiaries)
-  }
+  object OtherBeneficiariesAreComplete extends ListIsComplete(OtherBeneficiaries)
 }
