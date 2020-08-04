@@ -23,6 +23,7 @@ import controllers.register.beneficiaries.companyoremploymentrelated.{routes => 
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRts}
 import controllers.register.beneficiaries.charityortrust.{routes => charityortrustRoutes}
 import controllers.register.beneficiaries.companyoremploymentrelated.company.{routes => companyRoutes}
+import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.{routes => emplymentRelatedRoutes}
 import controllers.register.beneficiaries.charityortrust.charity.{routes => charityRoutes}
 import controllers.register.beneficiaries.charityortrust.trust.{routes => trustRoutes}
 import controllers.register.beneficiaries.other.{routes => otherRoutes}
@@ -120,7 +121,7 @@ class BeneficiaryNavigator @Inject()(config: FrontendAppConfig) extends Navigato
 
   private def routeToEmploymentBeneficiaryIndex(userAnswers: ReadableUserAnswers, draftId: String): Call = {
     val employmentRelatedBeneficiaries = userAnswers.get(LargeBeneficiaries).getOrElse(List.empty)
-    controllers.routes.FeatureNotAvailableController.onPageLoad()
+    emplymentRelatedRoutes.NameController.onPageLoad(employmentRelatedBeneficiaries.size, draftId)
   }
 
   private def routeToIndividualBeneficiaryIndex(userAnswers: ReadableUserAnswers, draftId: String): Call = {
