@@ -17,15 +17,15 @@
 package utils
 
 import controllers.register.beneficiaries.AnyBeneficiaries
-import javax.inject.Inject
 import models.registration.pages._
 import models.{ReadableUserAnswers, Status}
+import pages.QuestionPage
 import pages.register.beneficiaries.AddABeneficiaryPage
 import play.api.libs.json.Reads
 import sections.beneficiaries._
 import viewmodels.addAnother._
 
-class RegistrationProgress @Inject()() extends AnyBeneficiaries {
+class RegistrationProgress extends AnyBeneficiaries {
 
   def beneficiariesStatus(userAnswers: ReadableUserAnswers): Option[Status] = {
 
@@ -37,9 +37,9 @@ class RegistrationProgress @Inject()() extends AnyBeneficiaries {
         AddingBeneficiariesIsComplete,
         IndividualBeneficiariesAreComplete,
         ClassBeneficiariesAreComplete,
-        CompanyBeneficiariesAreComplete,
-        TrustBeneficiariesAreComplete,
         CharityBeneficiariesAreComplete,
+        TrustBeneficiariesAreComplete,
+        CompanyBeneficiariesAreComplete,
         OtherBeneficiariesAreComplete
       )
 
@@ -61,7 +61,9 @@ class RegistrationProgress @Inject()() extends AnyBeneficiaries {
   trait IsComplete {
     def apply(userAnswers: ReadableUserAnswers): Boolean
 
-    def apply[T <: ViewModel](userAnswers: ReadableUserAnswers, section: Section[T])(implicit reads: Reads[List[T]]): Boolean = {
+    def apply[T <: ViewModel](userAnswers: ReadableUserAnswers, section: QuestionPage[List[T]])
+                             (implicit reads: Reads[List[T]]): Boolean = {
+
       userAnswers.get(section) match {
         case Some(beneficiaries @ _ :: _) => !beneficiaries.exists(_.status == Status.InProgress)
         case _ => true
@@ -70,33 +72,37 @@ class RegistrationProgress @Inject()() extends AnyBeneficiaries {
   }
 
   object AddingBeneficiariesIsComplete extends IsComplete {
-
-    override def apply(userAnswers: ReadableUserAnswers): Boolean = {
+    override def apply(userAnswers: ReadableUserAnswers): Boolean =
       userAnswers.get(AddABeneficiaryPage).contains(AddABeneficiary.NoComplete)
-    }
   }
 
   object IndividualBeneficiariesAreComplete extends IsComplete {
-    override def apply(userAnswers: ReadableUserAnswers): Boolean = super.apply(userAnswers, IndividualBeneficiaries)
+    override def apply(userAnswers: ReadableUserAnswers): Boolean =
+      super.apply(userAnswers, IndividualBeneficiaries)
   }
 
   object ClassBeneficiariesAreComplete extends IsComplete {
-    override def apply(userAnswers: ReadableUserAnswers): Boolean = super.apply(userAnswers, ClassOfBeneficiaries)
+    override def apply(userAnswers: ReadableUserAnswers): Boolean =
+      super.apply(userAnswers, ClassOfBeneficiaries)
   }
 
   object CharityBeneficiariesAreComplete extends IsComplete {
-    override def apply(userAnswers: ReadableUserAnswers): Boolean = super.apply(userAnswers, CharityBeneficiaries)
+    override def apply(userAnswers: ReadableUserAnswers): Boolean =
+      super.apply(userAnswers, CharityBeneficiaries)
   }
 
   object TrustBeneficiariesAreComplete extends IsComplete {
-    override def apply(userAnswers: ReadableUserAnswers): Boolean = super.apply(userAnswers, TrustBeneficiaries)
+    override def apply(userAnswers: ReadableUserAnswers): Boolean =
+      super.apply(userAnswers, TrustBeneficiaries)
   }
 
   object CompanyBeneficiariesAreComplete extends IsComplete {
-    override def apply(userAnswers: ReadableUserAnswers): Boolean = super.apply(userAnswers, CompanyBeneficiaries)
+    override def apply(userAnswers: ReadableUserAnswers): Boolean =
+      super.apply(userAnswers, CompanyBeneficiaries)
   }
 
   object OtherBeneficiariesAreComplete extends IsComplete {
-    override def apply(userAnswers: ReadableUserAnswers): Boolean = super.apply(userAnswers, OtherBeneficiaries)
+    override def apply(userAnswers: ReadableUserAnswers): Boolean =
+      super.apply(userAnswers, OtherBeneficiaries)
   }
 }
