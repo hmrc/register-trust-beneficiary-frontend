@@ -20,7 +20,7 @@ import pages.QuestionPage
 import play.api.libs.json.JsPath
 import viewmodels.addAnother.CompanyBeneficiaryViewModel
 
-case object CompanyBeneficiaries extends QuestionPage[List[CompanyBeneficiaryViewModel]]{
+case object CompanyBeneficiaries extends QuestionPage[List[CompanyBeneficiaryViewModel]] {
 
   override def path: JsPath = JsPath \ Beneficiaries \ toString
 
