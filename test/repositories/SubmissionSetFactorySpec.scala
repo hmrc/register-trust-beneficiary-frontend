@@ -68,7 +68,7 @@ class SubmissionSetFactorySpec extends SpecBase {
               )
           }
 
-          "charity beneficiary only" ignore {
+          "charity beneficiary only" in {
             val userAnswers: UserAnswers = emptyUserAnswers
               .set(CharityBeneficiaryStatus(0), Completed).success.value
 
@@ -96,7 +96,7 @@ class SubmissionSetFactorySpec extends SpecBase {
               )
           }
 
-          "company beneficiary only" ignore {
+          "company beneficiary only" in {
             val userAnswers: UserAnswers = emptyUserAnswers
               .set(CompanyBeneficiaryStatus(0), Completed).success.value
 
@@ -104,6 +104,34 @@ class SubmissionSetFactorySpec extends SpecBase {
               List(
                 AnswerSection(
                   Some("Company beneficiary 1"),
+                  Nil,
+                  Some("Beneficiaries")
+                )
+              )
+          }
+
+          "large beneficiary only" in {
+            val userAnswers: UserAnswers = emptyUserAnswers
+              .set(LargeBeneficiaryStatus(0), Completed).success.value
+
+            factory.answerSectionsIfCompleted(userAnswers, Some(Completed)) mustBe
+              List(
+                AnswerSection(
+                  Some("Employment related beneficiary 1"),
+                  Nil,
+                  Some("Beneficiaries")
+                )
+              )
+          }
+
+          "other beneficiary only" in {
+            val userAnswers: UserAnswers = emptyUserAnswers
+              .set(OtherBeneficiaryStatus(0), Completed).success.value
+
+            factory.answerSectionsIfCompleted(userAnswers, Some(Completed)) mustBe
+              List(
+                AnswerSection(
+                  Some("Other beneficiary 1"),
                   Nil,
                   Some("Beneficiaries")
                 )

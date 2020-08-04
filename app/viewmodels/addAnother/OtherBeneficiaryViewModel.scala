@@ -19,7 +19,7 @@ package viewmodels.addAnother
 import models.Status
 import play.api.libs.json.{Reads, __}
 
-case class OtherBeneficiaryViewModel(description: Option[String], status: Status) {
+case class OtherBeneficiaryViewModel(description: Option[String], override val status: Status) extends ViewModel {
 
   def isComplete: Boolean = description.nonEmpty && (status == Status.Completed)
 

@@ -16,13 +16,11 @@
 
 package navigation
 
-import models.{Mode, ReadableUserAnswers}
+import models.ReadableUserAnswers
 import pages._
 import play.api.mvc.Call
 
 trait Navigator {
-
-  def nextPage(page: Page, mode: Mode, draftId: String, userAnswers: ReadableUserAnswers): Call = nextPage(page, draftId, userAnswers)
 
   def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call
 

@@ -20,7 +20,7 @@ import models.Status
 import models.core.pages.FullName
 import play.api.libs.json.{Reads, _}
 
-case class IndividualBeneficiaryViewModel(name: Option[FullName], status: Status) {
+case class IndividualBeneficiaryViewModel(name: Option[FullName], override val status: Status) extends ViewModel {
 
   def isComplete: Boolean = name.nonEmpty && (status == Status.Completed)
 

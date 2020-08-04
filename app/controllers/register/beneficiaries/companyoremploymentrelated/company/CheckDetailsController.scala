@@ -19,9 +19,7 @@ package controllers.register.beneficiaries.companyoremploymentrelated.company
 import config.FrontendAppConfig
 import controllers.actions._
 import controllers.actions.register.company.NameRequiredAction
-import handlers.ErrorHandler
 import javax.inject.Inject
-import models.NormalMode
 import models.Status.Completed
 import navigation.Navigator
 import pages.entitystatus.CompanyBeneficiaryStatus
@@ -45,8 +43,7 @@ class CheckDetailsController @Inject()(
                                         view: CheckDetailsView,
                                         val appConfig: FrontendAppConfig,
                                         printHelper: CompanyBeneficiaryPrintHelper,
-                                        nameAction: NameRequiredAction,
-                                        errorHandler: ErrorHandler
+                                        nameAction: NameRequiredAction
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
@@ -64,6 +61,6 @@ class CheckDetailsController @Inject()(
       for {
         updatedAnswers <- Future.fromTry(answers)
         _ <- registrationsRepository.set(updatedAnswers)
-      } yield Redirect(navigator.nextPage(AnswersPage, NormalMode, draftId, request.userAnswers))
+      } yield Redirect(navigator.nextPage(AnswersPage, draftId, request.userAnswers))
   }
 }

@@ -17,13 +17,15 @@
 package utils
 
 import controllers.register.beneficiaries.AnyBeneficiaries
-import javax.inject.Inject
 import models.registration.pages._
 import models.{ReadableUserAnswers, Status}
+import pages.QuestionPage
 import pages.register.beneficiaries.AddABeneficiaryPage
+import play.api.libs.json.Reads
 import sections.beneficiaries._
+import viewmodels.addAnother._
 
-class RegistrationProgress @Inject()() extends AnyBeneficiaries {
+class RegistrationProgress extends AnyBeneficiaries {
 
   def beneficiariesStatus(userAnswers: ReadableUserAnswers): Option[Status] = {
 
@@ -35,10 +37,11 @@ class RegistrationProgress @Inject()() extends AnyBeneficiaries {
         AddingBeneficiariesIsComplete,
         IndividualBeneficiariesAreComplete,
         ClassBeneficiariesAreComplete,
+        CharityBeneficiariesAreComplete,
         CompanyBeneficiariesAreComplete,
         EmploymentRelatedBeneficiariesAreComplete,
         TrustBeneficiariesAreComplete,
-        CharityBeneficiariesAreComplete,
+        CompanyBeneficiariesAreComplete,
         OtherBeneficiariesAreComplete
       )
 
@@ -57,85 +60,37 @@ class RegistrationProgress @Inject()() extends AnyBeneficiaries {
     }
   }
 
-  trait IsComplete {
+  sealed trait IsComplete {
     def apply(userAnswers: ReadableUserAnswers): Boolean
   }
 
-  object AddingBeneficiariesIsComplete extends IsComplete {
+  sealed class ListIsComplete[T <: ViewModel](section: QuestionPage[List[T]])
+                                             (implicit reads: Reads[T]) extends IsComplete {
 
-    def apply(userAnswers: ReadableUserAnswers): Boolean = {
+    override def apply(userAnswers: ReadableUserAnswers): Boolean = {
+      userAnswers.get(section) match {
+        case Some(beneficiaries) => !beneficiaries.exists(_.status == Status.InProgress)
+        case _ => true
+      }
+    }
+  }
+
+  private object AddingBeneficiariesIsComplete extends IsComplete {
+    override def apply(userAnswers: ReadableUserAnswers): Boolean =
       userAnswers.get(AddABeneficiaryPage).contains(AddABeneficiary.NoComplete)
-    }
   }
 
-  object IndividualBeneficiariesAreComplete extends IsComplete {
+  private object IndividualBeneficiariesAreComplete extends ListIsComplete(IndividualBeneficiaries)
 
-    def apply(userAnswers: ReadableUserAnswers): Boolean = {
+  private object ClassBeneficiariesAreComplete extends ListIsComplete(ClassOfBeneficiaries)
 
-      userAnswers.get(IndividualBeneficiaries) match {
-        case Some(beneficiaries@_ :: _) => !beneficiaries.exists(_.status == Status.InProgress)
-        case _ => true
-      }
-    }
-  }
+  private object CharityBeneficiariesAreComplete extends ListIsComplete(CharityBeneficiaries)
 
-  object ClassBeneficiariesAreComplete extends IsComplete {
+  private object TrustBeneficiariesAreComplete extends ListIsComplete(TrustBeneficiaries)
 
-    def apply(userAnswers: ReadableUserAnswers): Boolean = {
-      userAnswers.get(ClassOfBeneficiaries) match {
-        case Some(beneficiaries@_ :: _) => !beneficiaries.exists(_.status == Status.InProgress)
-        case _ => true
-      }
-    }
-  }
+  private object CompanyBeneficiariesAreComplete extends ListIsComplete(CompanyBeneficiaries)
 
-  object CompanyBeneficiariesAreComplete extends IsComplete {
+  private object EmploymentRelatedBeneficiariesAreComplete extends ListIsComplete(LargeBeneficiaries)
 
-    def apply(userAnswers: ReadableUserAnswers): Boolean = {
-      userAnswers.get(CompanyBeneficiaries) match {
-        case Some(beneficiaries@_ :: _) => !beneficiaries.exists(_.status == Status.InProgress)
-        case _ => true
-      }
-    }
-  }
-
-  object EmploymentRelatedBeneficiariesAreComplete extends IsComplete {
-
-    def apply(userAnswers: ReadableUserAnswers): Boolean = {
-      userAnswers.get(LargeBeneficiaries) match {
-        case Some(beneficiaries@_ :: _) => !beneficiaries.exists(_.status == Status.InProgress)
-        case _ => true
-      }
-    }
-  }
-
-  object TrustBeneficiariesAreComplete extends IsComplete {
-
-    def apply(userAnswers: ReadableUserAnswers): Boolean = {
-      userAnswers.get(TrustBeneficiaries) match {
-        case Some(beneficiaries@_ :: _) => !beneficiaries.exists(_.status == Status.InProgress)
-        case _ => true
-      }
-    }
-  }
-
-  object CharityBeneficiariesAreComplete extends IsComplete {
-
-    def apply(userAnswers: ReadableUserAnswers): Boolean = {
-      userAnswers.get(CharityBeneficiaries) match {
-        case Some(beneficiaries@_ :: _) => !beneficiaries.exists(_.status == Status.InProgress)
-        case _ => true
-      }
-    }
-  }
-
-  object OtherBeneficiariesAreComplete extends IsComplete {
-
-    def apply(userAnswers: ReadableUserAnswers): Boolean = {
-      userAnswers.get(OtherBeneficiaries) match {
-        case Some(beneficiaries@_ :: _) => !beneficiaries.exists(_.status == Status.InProgress)
-        case _ => true
-      }
-    }
-  }
+  private object OtherBeneficiariesAreComplete extends ListIsComplete(OtherBeneficiaries)
 }

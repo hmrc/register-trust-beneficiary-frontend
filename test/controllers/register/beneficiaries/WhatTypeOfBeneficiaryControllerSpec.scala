@@ -18,7 +18,6 @@ package controllers.register.beneficiaries
 
 import base.SpecBase
 import forms.WhatTypeOfBeneficiaryFormProvider
-import models.NormalMode
 import models.registration.pages.WhatTypeOfBeneficiary
 import pages.register.beneficiaries.WhatTypeOfBeneficiaryPage
 import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
@@ -60,7 +59,7 @@ class WhatTypeOfBeneficiaryControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, beneficiaryAdded = false, defaultOptions)(fakeRequest, messages).toString
+        view(form, fakeDraftId, beneficiaryAdded = false, defaultOptions)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -79,7 +78,7 @@ class WhatTypeOfBeneficiaryControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, beneficiaryAdded = true, defaultOptions)(fakeRequest, messages).toString
+        view(form, fakeDraftId, beneficiaryAdded = true, defaultOptions)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -99,7 +98,7 @@ class WhatTypeOfBeneficiaryControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, beneficiaryAdded = false, defaultOptions)(fakeRequest, messages).toString
+        view(form, fakeDraftId, beneficiaryAdded = false, defaultOptions)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -139,7 +138,7 @@ class WhatTypeOfBeneficiaryControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId, beneficiaryAdded = false, defaultOptions)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, beneficiaryAdded = false, defaultOptions)(fakeRequest, messages).toString
 
       application.stop()
     }

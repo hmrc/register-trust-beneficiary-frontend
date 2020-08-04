@@ -56,8 +56,6 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val languageTranslationEnabled: Boolean =
     configuration.get[Boolean]("microservice.services.features.welsh-translation")
 
-  lazy val employmentRelatedEnabled : Boolean = configuration.get[Boolean]("microservice.services.features.journey.employmentRelated.enabled")
-
   private def getInt(path: String): Int = configuration.get[Int](path)
   private def getDate(entry: String): LocalDate =
     LocalDate.of(

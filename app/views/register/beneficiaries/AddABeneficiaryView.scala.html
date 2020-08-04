@@ -15,7 +15,6 @@
  *@
 
 @import controllers.register.beneficiaries.routes._
-@import models.Mode
 @import models.registration.pages.AddABeneficiary
 @import viewmodels.AddRow
 
@@ -25,7 +24,6 @@
 )
 
 @(form: Form[_],
-    mode: Mode,
     draftId: String,
     inProgressIndividualBeneficiaries: Seq[AddRow],
     completeIndividualBeneficiaries: Seq[AddRow],

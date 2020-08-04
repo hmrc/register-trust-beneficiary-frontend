@@ -23,7 +23,7 @@ import controllers.register.beneficiaries.charityortrust.trust.{routes => trustR
 import controllers.register.beneficiaries.charityortrust.{routes => charityortrustRoutes}
 import controllers.register.beneficiaries.classofbeneficiaries.{routes => classOfBeneficiariesRoutes}
 import controllers.register.beneficiaries.companyoremploymentrelated.company.{routes => companyRoutes}
-import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.{routes => employmentRelatedRoutes}
+import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.{routes => largeRoutes}
 import controllers.register.beneficiaries.companyoremploymentrelated.{routes => companyOrEmploymentRelatedRoutes}
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRoutes}
 import controllers.register.beneficiaries.other.{routes => otherRoutes}
@@ -41,10 +41,9 @@ import pages.register.beneficiaries.charityortrust.{CharityOrTrustPage, trust}
 import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
 import pages.register.beneficiaries.companyoremploymentrelated.{CompanyOrEmploymentRelatedPage, company}
 import pages.register.beneficiaries.individual._
-import pages.register.beneficiaries.large.LargeBeneficiaryNamePage
 import pages.register.beneficiaries.other.DescriptionPage
 import play.api.mvc.Call
-import sections.beneficiaries.{ClassOfBeneficiaries, IndividualBeneficiaries, LargeBeneficiaries, OtherBeneficiaries}
+import sections.beneficiaries._
 
 class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -121,7 +120,8 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
       "go to IndividualBeneficiaryNamePage for index 0 from WhatTypeOfBeneficiaryPage when Individual option selected " in {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
-            val answers = userAnswers.set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.Individual).success.value
+            val answers = userAnswers
+              .set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.Individual).success.value
               .remove(IndividualBeneficiaries).success.value
             navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
               .mustBe(individualRoutes.NameController.onPageLoad(0, fakeDraftId))
@@ -148,7 +148,8 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
       "go to ClassBeneficiaryDescriptionPage for index 0 from WhatTypeOfBeneficiaryPage when ClassOfBeneficiary option selected " in {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
-            val answers = userAnswers.set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.ClassOfBeneficiary).success.value
+            val answers = userAnswers
+              .set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.ClassOfBeneficiary).success.value
               .remove(ClassOfBeneficiaries).success.value
             navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
               .mustBe(classOfBeneficiariesRoutes.ClassBeneficiaryDescriptionController.onPageLoad(0, fakeDraftId))
@@ -174,7 +175,7 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
       forAll(arbitrary[UserAnswers]) {
         userAnswers =>
           val answers = userAnswers.set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.CompanyOrEmployment).success.value
-            .remove(IndividualBeneficiaries).success.value
+
           navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
             .mustBe(companyOrEmploymentRelatedRoutes.CompanyOrEmploymentRelatedController.onPageLoad(fakeDraftId))
       }
@@ -185,8 +186,10 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         "go to CompanyNamePage from WhatTypeOfBeneficiaryPage when 'company' option selected" in {
           forAll(arbitrary[UserAnswers]) {
             userAnswers =>
-              val answers = userAnswers.set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.Company).success.value
-                .remove(IndividualBeneficiaries).success.value
+              val answers = userAnswers
+                .set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.Company).success.value
+                .remove(CompanyBeneficiaries).success.value
+
               navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
                 .mustBe(companyRoutes.NameController.onPageLoad(0, fakeDraftId))
           }
@@ -206,14 +209,11 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           .set(CompanyOrEmploymentRelatedPage, value = CompanyOrEmploymentRelatedToAdd.Company).success.value
 
         "go to CompanyNamePage from WhatTypeOfBeneficiaryPage when 'company' option selected" in {
-          forAll(arbitrary[UserAnswers]) {
-            userAnswers =>
-              val answers = baseAnswers
-                .set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.Company).success.value
-                .remove(IndividualBeneficiaries).success.value
-              navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
-                .mustBe(companyRoutes.NameController.onPageLoad(1, fakeDraftId))
-          }
+          val answers = baseAnswers
+            .set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.Company).success.value
+
+          navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
+            .mustBe(companyRoutes.NameController.onPageLoad(1, fakeDraftId))
         }
 
         "go to CompanyNamePage from CompanyOrEmploymentRelatedPage when 'company' selected" in {
@@ -223,60 +223,47 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
       }
     }
 
-    if (frontendAppConfig.employmentRelatedEnabled) {
-      "Employment related feature enabled" when {
-        "no existing employment related beneficiaries" must {
-          "go to CompanyNamePage from WhatTypeOfBeneficiaryPage when 'company or employment related' option selected" in {
-            forAll(arbitrary[UserAnswers]) {
-              userAnswers =>
-                val answers = userAnswers.set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.Employment).success.value
-                  .remove(LargeBeneficiaries).success.value
-                navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
-                  .mustBe(employmentRelatedRoutes.NameController.onPageLoad(0, fakeDraftId))
-            }
-          }
-          "go to CompanyNamePage from CompanyOrEmploymentRelatedPage when 'employment related' selected" in {
-            val answers = emptyUserAnswers.set(CompanyOrEmploymentRelatedPage, value = CompanyOrEmploymentRelatedToAdd.EmploymentRelated).success.value
+    "Employment related" when {
+      "no existing employment related beneficiaries" must {
+        "go to LargeBeneficiaryNamePage from WhatTypeOfBeneficiaryPage when 'employment' option selected" in {
+          forAll(arbitrary[UserAnswers]) {
+            userAnswers =>
+              val answers = userAnswers
+                .set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.Employment).success.value
+                .remove(LargeBeneficiaries).success.value
 
-            navigator.nextPage(CompanyOrEmploymentRelatedPage, fakeDraftId, answers)
-              .mustBe(employmentRelatedRoutes.NameController.onPageLoad(0, fakeDraftId))
+              navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
+                .mustBe(largeRoutes.NameController.onPageLoad(0, fakeDraftId))
           }
         }
-
-        "existing employment related beneficiary" must {
-          val baseAnswers = emptyUserAnswers
-            .set(LargeBeneficiaryNamePage(0), "Name").success.value
-            .set(LargeBeneficiaryStatus(0), InProgress).success.value
-            .set(CompanyOrEmploymentRelatedPage, value = CompanyOrEmploymentRelatedToAdd.EmploymentRelated).success.value
-
-          "go to LargeBeneficiaryNamePage from WhatTypeOfBeneficiaryPage when 'employment' option selected" in {
-            forAll(arbitrary[UserAnswers]) {
-              userAnswers =>
-                val answers = baseAnswers
-                  .set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.Employment).success.value
-                  .remove(IndividualBeneficiaries).success.value
-                navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
-                  .mustBe(employmentRelatedRoutes.NameController.onPageLoad(1, fakeDraftId))
-            }
-          }
-
-          "go to LargeBeneficiaryNamePage from CompanyOrEmploymentRelatedPage when 'employment' selected" in {
-            navigator.nextPage(CompanyOrEmploymentRelatedPage, fakeDraftId, baseAnswers)
-              .mustBe(employmentRelatedRoutes.NameController.onPageLoad(1, fakeDraftId))
-          }
-        }
-      }
-    } else {
-      "Employment related feature disabled" must {
-        "go to feature available" in {
+        "go to LargeBeneficiaryNamePage from CompanyOrEmploymentRelatedPage when 'employment related' selected" in {
           val answers = emptyUserAnswers.set(CompanyOrEmploymentRelatedPage, value = CompanyOrEmploymentRelatedToAdd.EmploymentRelated).success.value
 
           navigator.nextPage(CompanyOrEmploymentRelatedPage, fakeDraftId, answers)
-            .mustBe(controllers.routes.FeatureNotAvailableController.onPageLoad())
+            .mustBe(largeRoutes.NameController.onPageLoad(0, fakeDraftId))
+        }
+      }
+
+      "existing employment related beneficiary" must {
+        val baseAnswers = emptyUserAnswers
+          .set(large.LargeBeneficiaryNamePage(0), "Name").success.value
+          .set(LargeBeneficiaryStatus(0), InProgress).success.value
+          .set(CompanyOrEmploymentRelatedPage, value = CompanyOrEmploymentRelatedToAdd.EmploymentRelated).success.value
+
+        "go to LargeBeneficiaryNamePage from WhatTypeOfBeneficiaryPage when 'employment related' option selected" in {
+          val answers = baseAnswers
+            .set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.Employment).success.value
+
+          navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
+            .mustBe(largeRoutes.NameController.onPageLoad(1, fakeDraftId))
+        }
+
+        "go to LargeBeneficiaryNamePage from CompanyOrEmploymentRelatedPage when 'employment related' selected" in {
+          navigator.nextPage(CompanyOrEmploymentRelatedPage, fakeDraftId, baseAnswers)
+            .mustBe(largeRoutes.NameController.onPageLoad(1, fakeDraftId))
         }
       }
     }
-
   }
 
   "Charity or trust" when {
@@ -290,7 +277,9 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
     "Charity" when {
       "no existing charity beneficiaries" must {
         "go to CharityNamePage from WhatTypeOfBeneficiaryPage when 'charity' selected" in {
-          val answers = emptyUserAnswers.set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.Charity).success.value
+          val answers = emptyUserAnswers
+            .set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.Charity).success.value
+            .remove(CharityBeneficiaries).success.value
 
           navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
             .mustBe(charityRoutes.CharityNameController.onPageLoad(0, fakeDraftId))
@@ -326,7 +315,9 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
     "Trust" when {
       "no existing trust beneficiaries" must {
         "go to TrustNamePage from WhatTypeOfBeneficiaryPage when 'trust' selected" in {
-          val answers = emptyUserAnswers.set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.Trust).success.value
+          val answers = emptyUserAnswers
+            .set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.Trust).success.value
+            .remove(TrustBeneficiaries).success.value
 
           navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
             .mustBe(trustRoutes.NameController.onPageLoad(0, fakeDraftId))
@@ -364,7 +355,8 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         "go to description page for index 0 from WhatTypeOfBeneficiaryPage when Other option selected " in {
           forAll(arbitrary[UserAnswers]) {
             userAnswers =>
-              val answers = userAnswers.set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.Other).success.value
+              val answers = userAnswers
+                .set(WhatTypeOfBeneficiaryPage, value = WhatTypeOfBeneficiary.Other).success.value
                 .remove(OtherBeneficiaries).success.value
 
               navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
