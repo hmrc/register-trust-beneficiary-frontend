@@ -65,7 +65,7 @@ class RegistrationProgress extends AnyBeneficiaries {
                              (implicit reads: Reads[List[T]]): Boolean = {
 
       userAnswers.get(section) match {
-        case Some(beneficiaries @ _ :: _) => !beneficiaries.exists(_.status == Status.InProgress)
+        case Some(beneficiaries) => !beneficiaries.exists(_.status == Status.InProgress)
         case _ => true
       }
     }
