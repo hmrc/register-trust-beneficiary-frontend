@@ -73,20 +73,20 @@ class RegistrationProgress extends AnyBeneficiaries {
     }
   }
 
-  object AddingBeneficiariesIsComplete extends IsComplete {
+  private object AddingBeneficiariesIsComplete extends IsComplete {
     override def apply(userAnswers: ReadableUserAnswers): Boolean =
       userAnswers.get(AddABeneficiaryPage).contains(AddABeneficiary.NoComplete)
   }
 
-  object IndividualBeneficiariesAreComplete extends ListIsComplete(IndividualBeneficiaries)
+  private object IndividualBeneficiariesAreComplete extends ListIsComplete(IndividualBeneficiaries)
 
-  object ClassBeneficiariesAreComplete extends ListIsComplete(ClassOfBeneficiaries)
+  private object ClassBeneficiariesAreComplete extends ListIsComplete(ClassOfBeneficiaries)
 
-  object CharityBeneficiariesAreComplete extends ListIsComplete(CharityBeneficiaries)
+  private object CharityBeneficiariesAreComplete extends ListIsComplete(CharityBeneficiaries)
 
-  object TrustBeneficiariesAreComplete extends ListIsComplete(TrustBeneficiaries)
+  private object TrustBeneficiariesAreComplete extends ListIsComplete(TrustBeneficiaries)
 
-  object CompanyBeneficiariesAreComplete extends ListIsComplete(CompanyBeneficiaries)
+  private object CompanyBeneficiariesAreComplete extends ListIsComplete(CompanyBeneficiaries)
 
-  object OtherBeneficiariesAreComplete extends ListIsComplete(OtherBeneficiaries)
+  private object OtherBeneficiariesAreComplete extends ListIsComplete(OtherBeneficiaries)
 }
