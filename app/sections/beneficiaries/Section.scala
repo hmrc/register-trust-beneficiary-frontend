@@ -16,13 +16,7 @@
 
 package sections.beneficiaries
 
-import play.api.libs.json.JsPath
-import viewmodels.addAnother.TrustBeneficiaryViewModel
+import pages.QuestionPage
+import viewmodels.addAnother.ViewModel
 
-case object TrustBeneficiaries extends Section[TrustBeneficiaryViewModel] {
-
-  override def path: JsPath = JsPath \ Beneficiaries \ toString
-
-  override def toString: String = "trustBeneficiaries"
-
-}
+trait Section[T <: ViewModel] extends QuestionPage[List[T]]

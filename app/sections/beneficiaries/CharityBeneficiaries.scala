@@ -16,11 +16,10 @@
 
 package sections.beneficiaries
 
-import pages.QuestionPage
-import play.api.libs.json.{JsArray, JsPath}
+import play.api.libs.json.JsPath
 import viewmodels.addAnother.CharityBeneficiaryViewModel
 
-case object CharityBeneficiaries extends QuestionPage[List[CharityBeneficiaryViewModel]]{
+case object CharityBeneficiaries extends Section[CharityBeneficiaryViewModel] {
 
   override def path: JsPath = JsPath \ Beneficiaries \ toString
 

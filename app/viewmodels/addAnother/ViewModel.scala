@@ -14,15 +14,10 @@
  * limitations under the License.
  */
 
-package sections.beneficiaries
+package viewmodels.addAnother
 
-import play.api.libs.json.JsPath
-import viewmodels.addAnother.TrustBeneficiaryViewModel
+import models.Status
 
-case object TrustBeneficiaries extends Section[TrustBeneficiaryViewModel] {
-
-  override def path: JsPath = JsPath \ Beneficiaries \ toString
-
-  override def toString: String = "trustBeneficiaries"
-
+trait ViewModel {
+  val status: Status
 }
