@@ -176,7 +176,7 @@ class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
             ),
 
             LargeType(
-              organisationName = "Employment Related Name",
+              organisationName = "Employment Related Name 2",
               description = "Description",
               description1 = None,
               description2 = None,

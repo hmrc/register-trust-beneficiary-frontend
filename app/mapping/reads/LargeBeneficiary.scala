@@ -16,20 +16,16 @@
 
 package mapping.reads
 
-import models.core.pages.{InternationalAddress, UKAddress}
+import models.core.pages.{Description, InternationalAddress, UKAddress}
 import play.api.libs.json.{Format, Json}
 
 final case class LargeBeneficiary(name: String,
-                                  description: String,
-                                  description1: Option[String],
-                                  description2: Option[String],
-                                  description3: Option[String],
-                                  description4: Option[String],
-                                  numberOfBeneficiary: String,
-                                  ukAddress : Option[UKAddress],
+                                  description: Description,
+                                  numberOfBeneficiaries: String,
+                                  address : Option[UKAddress],
                                   internationalAddress : Option[InternationalAddress],
-                                  beneficiaryDiscretion: Boolean,
-                                  beneficiaryShareOfIncome: Option[String]
+                                  discretionYesNo: Option[Boolean],
+                                  shareOfIncome: Option[String]
                                    ) {
 }
 

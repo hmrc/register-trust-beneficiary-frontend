@@ -35,15 +35,15 @@ class LargeBeneficiaryMapper @Inject()(nameMapper: NameMapper,
           list.map { beneficiary =>
             LargeType(
               organisationName = beneficiary.name,
-              description = beneficiary.description,
-              description1 = beneficiary.description1 map(_.toString),
-              description2 = beneficiary.description2 map(_.toString),
-              description3 = beneficiary.description3 map(_.toString),
-              description4 = beneficiary.description4 map(_.toString),
-              numberOfBeneficiary = beneficiary.numberOfBeneficiary,
+              description = beneficiary.description.description,
+              description1 = beneficiary.description.description1 map(_.toString),
+              description2 = beneficiary.description.description2 map(_.toString),
+              description3 = beneficiary.description.description3 map(_.toString),
+              description4 = beneficiary.description.description4 map(_.toString),
+              numberOfBeneficiary = beneficiary.numberOfBeneficiaries,
               identification = buildIdentification(beneficiary),
-              beneficiaryDiscretion = Some(beneficiary.beneficiaryDiscretion),
-              beneficiaryShareOfIncome = beneficiary.beneficiaryShareOfIncome map(_.toString)
+              beneficiaryDiscretion = beneficiary.discretionYesNo,
+              beneficiaryShareOfIncome = beneficiary.shareOfIncome map(_.toString)
             )
           }
         )
@@ -51,7 +51,7 @@ class LargeBeneficiaryMapper @Inject()(nameMapper: NameMapper,
   }
 
   private def buildIdentification(beneficiary: LargeBeneficiary): Option[IdentificationOrgType] = {
-    (beneficiary.ukAddress, beneficiary.internationalAddress) match {
+    (beneficiary.address, beneficiary.internationalAddress) match {
       case (None, None) => None
       case (Some(address), _) => Some(IdentificationOrgType(None, addressMapper.build(address)))
       case (_, Some(address)) => Some(IdentificationOrgType(None, addressMapper.build(address)))
