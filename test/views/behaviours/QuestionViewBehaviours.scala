@@ -79,14 +79,35 @@ trait QuestionViewBehaviours[A] extends ViewBehaviours {
             errorSpan.parent.getElementsByClass("form-label").attr("for") mustBe field._1
           }
         }
-      }
 
-      for (field <- fields) {
         s"contains a label and optional hint text for the field '$field'" in {
           val doc = asDocument(createView(form))
           val fieldName = field._1
           val fieldHint = field._2 map (k => messages(k))
           assertContainsLabel(doc, fieldName, messages(s"$messageKeyPrefix.$fieldName"), fieldHint)
+        }
+
+        s"show an error associated with the field '${field._1}'" in {
+
+          val fieldId = if(field._1.contains("_")) {
+            field._1.replace("_", ".")
+          } else {
+            field._1
+          }
+
+          val doc = asDocument(createView(form.withError(FormError(fieldId, "error"))))
+
+          val errorSpan = doc.getElementsByClass("error-message").first
+
+          // error id is that of the input field
+          errorSpan.attr("id") must include(field._1)
+          errorSpan.getElementsByClass("visually-hidden").first().text() must include("Error:")
+
+          // input is described by error to screen readers
+          doc.getElementById(field._1).attr("aria-describedby") must include(errorSpan.attr("id"))
+
+          // error is linked with input
+          errorSpan.siblingElements().get(0).attr("for") mustBe field._1
         }
       }
 

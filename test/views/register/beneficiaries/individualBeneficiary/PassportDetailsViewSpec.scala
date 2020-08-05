@@ -65,7 +65,7 @@ class PassportDetailsViewSpec extends QuestionViewBehaviours[PassportOrIdCardDet
         form,
         applyView,
         messageKeyPrefix,
-        Seq(("country", None), ("number", None)),
+        Seq(("number", None)),
         name.toString
       )
     }
