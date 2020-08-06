@@ -21,12 +21,14 @@ import java.time.LocalDate
 import base.SpecBase
 import generators.Generators
 import mapping.Mapping
-import models.core.pages.FullName
+import models.core.pages.{Description, FullName}
+import models.registration.pages.HowManyBeneficiaries
 import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.beneficiaries.charityortrust.charity
 import pages.register.beneficiaries.charityortrust.trust
 import pages.register.beneficiaries.classofbeneficiaries
 import pages.register.beneficiaries.companyoremploymentrelated.company
+import pages.register.beneficiaries.large
 import pages.register.beneficiaries.individual
 import pages.register.beneficiaries.other
 
@@ -167,6 +169,27 @@ class BeneficiariesMapperSpec extends SpecBase with MustMatchers
         result.company must be(defined)
         result.trust mustNot be(defined)
         result.large mustNot be(defined)
+        result.other mustNot be(defined)
+      }
+
+      "must be able to create BeneficiaryType when there is a large beneficiary" in {
+
+        val index = 0
+
+        val userAnswers = emptyUserAnswers
+          .set(large.LargeBeneficiaryNamePage(index), "Employment Related Name").success.value
+          .set(large.LargeBeneficiaryAddressYesNoPage(index), false).success.value
+          .set(large.LargeBeneficiaryDescriptionPage(index), Description("Description", None, None, None, None)).success.value
+          .set(large.LargeBeneficiaryNumberOfBeneficiariesPage(index), HowManyBeneficiaries.Over1).success.value
+
+        val result = beneficiariesMapper.build(userAnswers).value
+
+        result.individualDetails mustNot be(defined)
+        result.unidentified mustNot be(defined)
+        result.charity mustNot be(defined)
+        result.company mustNot be(defined)
+        result.trust mustNot be(defined)
+        result.large must be(defined)
         result.other mustNot be(defined)
       }
 

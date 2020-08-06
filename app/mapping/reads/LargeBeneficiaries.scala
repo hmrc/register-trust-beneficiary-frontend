@@ -14,20 +14,13 @@
  * limitations under the License.
  */
 
-package navigation
+package mapping.reads
 
-import models.ReadableUserAnswers
-import pages._
-import play.api.mvc.Call
+import pages.QuestionPage
+import play.api.libs.json.JsPath
+import sections.beneficiaries.{LargeBeneficiaries => section}
 
-trait Navigator {
-
-  def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call
-
-  def yesNoNav(ua: ReadableUserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call = {
-    ua.get(fromPage)
-      .map(if (_) yesCall else noCall)
-      .getOrElse(controllers.routes.SessionExpiredController.onPageLoad())
-  }
-
+case object LargeBeneficiaries extends QuestionPage[List[LargeBeneficiary]]{
+  override def path: JsPath = section.path
+  override def toString: String = section.toString
 }

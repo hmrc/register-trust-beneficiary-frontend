@@ -38,6 +38,8 @@ class RegistrationProgress extends AnyBeneficiaries {
         IndividualBeneficiariesAreComplete,
         ClassBeneficiariesAreComplete,
         CharityBeneficiariesAreComplete,
+        CompanyBeneficiariesAreComplete,
+        EmploymentRelatedBeneficiariesAreComplete,
         TrustBeneficiariesAreComplete,
         CompanyBeneficiariesAreComplete,
         OtherBeneficiariesAreComplete
@@ -87,6 +89,8 @@ class RegistrationProgress extends AnyBeneficiaries {
   private object TrustBeneficiariesAreComplete extends ListIsComplete(TrustBeneficiaries)
 
   private object CompanyBeneficiariesAreComplete extends ListIsComplete(CompanyBeneficiaries)
+
+  private object EmploymentRelatedBeneficiariesAreComplete extends ListIsComplete(LargeBeneficiaries)
 
   private object OtherBeneficiariesAreComplete extends ListIsComplete(OtherBeneficiaries)
 }
