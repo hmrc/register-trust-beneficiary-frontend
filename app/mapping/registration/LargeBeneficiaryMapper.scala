@@ -20,6 +20,9 @@ import javax.inject.Inject
 import mapping.Mapping
 import mapping.reads.{LargeBeneficiaries, LargeBeneficiary}
 import models.UserAnswers
+import models.registration.pages.HowManyBeneficiaries
+import pages.register.beneficiaries.large.LargeBeneficiaryNumberOfBeneficiariesPage
+import play.api.libs.json.Reads
 
 class LargeBeneficiaryMapper @Inject()(nameMapper: NameMapper,
                                        addressMapper: AddressMapper) extends Mapping[List[LargeType]] {
@@ -40,7 +43,7 @@ class LargeBeneficiaryMapper @Inject()(nameMapper: NameMapper,
               description2 = beneficiary.description.description2 map(_.toString),
               description3 = beneficiary.description.description3 map(_.toString),
               description4 = beneficiary.description.description4 map(_.toString),
-              numberOfBeneficiary = beneficiary.numberOfBeneficiaries,
+              numberOfBeneficiary = convertNumberOfBeneficiaries(beneficiary.numberOfBeneficiaries),
               identification = buildIdentification(beneficiary),
               beneficiaryDiscretion = beneficiary.discretionYesNo,
               beneficiaryShareOfIncome = beneficiary.shareOfIncome map(_.toString)
@@ -57,4 +60,15 @@ class LargeBeneficiaryMapper @Inject()(nameMapper: NameMapper,
       case (_, Some(address)) => Some(IdentificationOrgType(None, addressMapper.build(address)))
     }
   }
+
+  private def convertNumberOfBeneficiaries(numberOfBeneficiaries: HowManyBeneficiaries): String = {
+    numberOfBeneficiaries match {
+      case HowManyBeneficiaries.Over1 => "1"
+      case HowManyBeneficiaries.Over101 => "101"
+      case HowManyBeneficiaries.Over201 => "201"
+      case HowManyBeneficiaries.Over501 => "501"
+      case HowManyBeneficiaries.Over1001 => "1001"
+    }
+  }
+
 }
