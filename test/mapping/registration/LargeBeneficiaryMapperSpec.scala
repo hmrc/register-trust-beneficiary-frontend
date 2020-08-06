@@ -64,7 +64,7 @@ class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
             description2 = None,
             description3 = None,
             description4 = None,
-            numberOfBeneficiary = "over1",
+            numberOfBeneficiary = "1",
             identification = None,
             beneficiaryDiscretion = None,
             beneficiaryShareOfIncome = None
@@ -93,7 +93,7 @@ class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
             description2 = None,
             description3 = None,
             description4 = None,
-            numberOfBeneficiary = "over1",
+            numberOfBeneficiary = "1",
             identification = Some(IdentificationOrgType(
               None,
               address = Some(
@@ -114,7 +114,7 @@ class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
               .set(LargeBeneficiaryAddressInternationalPage(index0),
                 InternationalAddress("Line1", "Line2", Some("Line3"), "US")).success.value
               .set(LargeBeneficiaryDescriptionPage(index0), Description("Description", None, None, None, None)).success.value
-              .set(LargeBeneficiaryNumberOfBeneficiariesPage(index0), HowManyBeneficiaries.Over1).success.value
+              .set(LargeBeneficiaryNumberOfBeneficiariesPage(index0), HowManyBeneficiaries.Over201).success.value
 
           val large = mapper.build(userAnswers)
 
@@ -126,7 +126,7 @@ class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
             description2 = None,
             description3 = None,
             description4 = None,
-            numberOfBeneficiary = "over1",
+            numberOfBeneficiary = "201",
             identification = Some(IdentificationOrgType(
               None,
               address = Some(
@@ -154,7 +154,7 @@ class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
             .set(LargeBeneficiaryAddressPage(index1),
               UKAddress("Line1", "Line2", Some("Line3"), Some("Newcastle"), "NE62RT")).success.value
             .set(LargeBeneficiaryDescriptionPage(index1), Description("Description", None, None, None, None)).success.value
-            .set(LargeBeneficiaryNumberOfBeneficiariesPage(index1), HowManyBeneficiaries.Over1).success.value
+            .set(LargeBeneficiaryNumberOfBeneficiariesPage(index1), HowManyBeneficiaries.Over501).success.value
 
 
         val large = mapper.build(userAnswers)
@@ -169,7 +169,7 @@ class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
               description2 = None,
               description3 = None,
               description4 = None,
-              numberOfBeneficiary = "over1",
+              numberOfBeneficiary = "1",
               identification = None,
               beneficiaryDiscretion = None,
               beneficiaryShareOfIncome = None
@@ -182,7 +182,7 @@ class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
               description2 = None,
               description3 = None,
               description4 = None,
-              numberOfBeneficiary = "over1",
+              numberOfBeneficiary = "501",
               identification = Some(IdentificationOrgType(
                 None,
                 address = Some(
