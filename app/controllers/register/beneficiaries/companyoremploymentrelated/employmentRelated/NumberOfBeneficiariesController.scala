@@ -22,7 +22,7 @@ import forms.NumberOfBeneficiariesFormProvider
 import javax.inject.Inject
 import models.registration.pages.HowManyBeneficiaries
 import navigation.Navigator
-import pages.register.beneficiaries.large.LargeBeneficiaryNumberOfBeneficiariesPage
+import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.LargeBeneficiaryNumberOfBeneficiariesPage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

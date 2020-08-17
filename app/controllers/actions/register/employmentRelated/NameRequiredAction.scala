@@ -20,7 +20,7 @@ import controllers.actions
 import controllers.actions.BeneficiaryNameRequest
 import javax.inject.Inject
 import models.requests.RegistrationDataRequest
-import pages.register.beneficiaries.large.LargeBeneficiaryNamePage
+import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.LargeBeneficiaryNamePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.ActionTransformer
 

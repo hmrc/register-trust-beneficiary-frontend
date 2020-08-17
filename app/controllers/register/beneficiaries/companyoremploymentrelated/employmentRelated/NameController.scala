@@ -21,7 +21,7 @@ import controllers.actions.StandardActionSets
 import forms.StringFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.beneficiaries.large.LargeBeneficiaryNamePage
+import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.LargeBeneficiaryNamePage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

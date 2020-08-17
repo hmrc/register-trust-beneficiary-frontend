@@ -22,7 +22,7 @@ import forms.InternationalAddressFormProvider
 import models.core.pages.InternationalAddress
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.register.beneficiaries.large.{LargeBeneficiaryAddressInternationalPage, LargeBeneficiaryNamePage}
+import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.{LargeBeneficiaryAddressInternationalPage, LargeBeneficiaryNamePage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call

@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.large
+package pages.register.beneficiaries.companyoremploymentrelated.employmentRelated
 
-import pages.QuestionPage
+import pages.{MetaData, QuestionPage}
 import play.api.libs.json.JsPath
 import sections.beneficiaries.{Beneficiaries, LargeBeneficiaries}
 
-case class LargeBeneficiarySafeIdPage(index: Int) extends QuestionPage[String] {
+case class LargeBeneficiaryMetaData(index: Int) extends QuestionPage[MetaData] {
 
   override def path: JsPath = JsPath \ Beneficiaries \ LargeBeneficiaries \ index \ toString
 
-  override def toString: String = "safeId"
+  override def toString: String = "metaData"
+
 }

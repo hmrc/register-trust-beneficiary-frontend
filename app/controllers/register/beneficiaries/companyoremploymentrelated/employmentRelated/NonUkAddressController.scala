@@ -22,7 +22,7 @@ import controllers.actions.register.employmentRelated.NameRequiredAction
 import forms.InternationalAddressFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.beneficiaries.large.LargeBeneficiaryAddressInternationalPage
+import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.LargeBeneficiaryAddressInternationalPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository

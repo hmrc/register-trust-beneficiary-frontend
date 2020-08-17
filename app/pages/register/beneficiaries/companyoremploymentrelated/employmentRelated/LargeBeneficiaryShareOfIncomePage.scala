@@ -14,20 +14,15 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.large
+package pages.register.beneficiaries.companyoremploymentrelated.employmentRelated
 
-import models.core.pages.UKAddress
-import pages.behaviours.PageBehaviours
+import pages.QuestionPage
+import play.api.libs.json.JsPath
+import sections.beneficiaries.{Beneficiaries, LargeBeneficiaries}
 
-class LargeBeneficiaryAddressPageSpec extends PageBehaviours {
+case class LargeBeneficiaryShareOfIncomePage(index: Int) extends QuestionPage[String] {
 
-  "LargeBeneficiaryAddressPage" must {
+  override def path: JsPath = JsPath \ Beneficiaries \ LargeBeneficiaries \ index \ toString
 
-    beRetrievable[UKAddress](LargeBeneficiaryAddressPage(0))
-
-    beSettable[UKAddress](LargeBeneficiaryAddressPage(0))
-
-    beRemovable[UKAddress](LargeBeneficiaryAddressPage(0))
-  }
-
+  override def toString: String = "shareOfIncome"
 }
