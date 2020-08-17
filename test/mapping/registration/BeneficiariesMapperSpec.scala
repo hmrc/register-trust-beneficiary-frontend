@@ -24,14 +24,10 @@ import mapping.Mapping
 import models.core.pages.{Description, FullName}
 import models.registration.pages.HowManyBeneficiaries
 import org.scalatest.{MustMatchers, OptionValues}
-import pages.register.beneficiaries.charityortrust.charity
-import pages.register.beneficiaries.charityortrust.trust
-import pages.register.beneficiaries.classofbeneficiaries
+import pages.register.beneficiaries.charityortrust.{charity, trust}
 import pages.register.beneficiaries.companyoremploymentrelated.company
 import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.{LargeBeneficiaryAddressYesNoPage, LargeBeneficiaryDescriptionPage, LargeBeneficiaryNamePage, LargeBeneficiaryNumberOfBeneficiariesPage}
-import pages.register.beneficiaries.large
-import pages.register.beneficiaries.individual
-import pages.register.beneficiaries.other
+import pages.register.beneficiaries.{classofbeneficiaries, individual, other}
 
 class BeneficiariesMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {

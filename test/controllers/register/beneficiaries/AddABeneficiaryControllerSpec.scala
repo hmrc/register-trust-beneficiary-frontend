@@ -33,7 +33,7 @@ import pages.entitystatus._
 import pages.register.beneficiaries.charityortrust.{charity => charityPages, trust => trustPages}
 import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.{LargeBeneficiaryDescriptionPage, LargeBeneficiaryNamePage}
 import pages.register.beneficiaries.companyoremploymentrelated.{company => companyPages}
-import pages.register.beneficiaries.{AddABeneficiaryPage, classofbeneficiaries => classOfBeneficiariesPages, individual => individualPages, large => largePages, other => otherPages}
+import pages.register.beneficiaries.{AddABeneficiaryPage, classofbeneficiaries => classOfBeneficiariesPages, individual => individualPages, other => otherPages}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._

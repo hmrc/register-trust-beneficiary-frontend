@@ -21,8 +21,7 @@ import generators.Generators
 import models.core.pages.{Description, InternationalAddress, UKAddress}
 import models.registration.pages.HowManyBeneficiaries
 import org.scalatest.{MustMatchers, OptionValues}
-import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.{LargeBeneficiaryAddressInternationalPage, LargeBeneficiaryAddressPage, LargeBeneficiaryAddressUKYesNoPage, LargeBeneficiaryAddressYesNoPage, LargeBeneficiaryDescriptionPage, LargeBeneficiaryNamePage, LargeBeneficiaryNumberOfBeneficiariesPage}
-import pages.register.beneficiaries.large._
+import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated._
 
 class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {
