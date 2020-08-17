@@ -16,14 +16,15 @@
 
 package mapping.reads
 
-import models.core.pages.Address
+import models.core.pages.{InternationalAddress, UKAddress}
 import play.api.libs.json.{Format, Json}
 
 
 final case class TrustBeneficiary(name: String,
                                   discretionYesNo: Boolean,
                                   shareOfIncome: Option[Int],
-                                  address : Option[Address]
+                                  ukAddress : Option[UKAddress],
+                                  internationalAddress : Option[InternationalAddress]
                                  )
 
 
