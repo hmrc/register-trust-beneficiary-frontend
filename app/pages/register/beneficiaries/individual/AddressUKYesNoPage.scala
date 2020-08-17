@@ -31,6 +31,8 @@ final case class AddressUKYesNoPage(index : Int) extends QuestionPage[Boolean] {
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
     value match {
+      case Some(true) =>
+        userAnswers.remove(AddressInternationalPage(index))
       case Some(false) =>
         userAnswers.remove(AddressUKPage(index))
       case _ => super.cleanup(value, userAnswers)

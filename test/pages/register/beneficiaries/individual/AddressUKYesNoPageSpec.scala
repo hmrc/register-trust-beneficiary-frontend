@@ -16,8 +16,10 @@
 
 package pages.register.beneficiaries.individual
 
+import models.UserAnswers
+import models.core.pages.{InternationalAddress, UKAddress}
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-
 class AddressUKYesNoPageSpec extends PageBehaviours {
 
   "IndividualBeneficiaryAddressUKYesNoPage" must {
@@ -27,5 +29,30 @@ class AddressUKYesNoPageSpec extends PageBehaviours {
     beSettable[Boolean](AddressUKYesNoPage(0))
 
     beRemovable[Boolean](AddressUKYesNoPage(0))
+
+    "implement cleanup logic" when {
+
+      "YES selected" in {
+        forAll(arbitrary[UserAnswers]) {
+          userAnswers =>
+            val result: UserAnswers = userAnswers
+              .set(AddressInternationalPage(0), InternationalAddress("Line 1", "Line 2", None, "COUNTRY")).success.value
+              .set(AddressUKYesNoPage(0), true).success.value
+
+            result.get(AddressInternationalPage(0)) mustNot be(defined)
+        }
+      }
+
+      "NO selected" in {
+        forAll(arbitrary[UserAnswers]) {
+          userAnswers =>
+            val result: UserAnswers = userAnswers
+              .set(AddressUKPage(0), UKAddress("Line 1", "Line 2", None, None, "POSTCODE")).success.value
+              .set(AddressUKYesNoPage(0), false).success.value
+
+            result.get(AddressUKPage(0)) mustNot be(defined)
+        }
+      }
+    }
   }
 }
