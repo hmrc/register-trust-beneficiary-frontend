@@ -52,8 +52,8 @@ class IndividualBeneficiaryMapper @Inject()(nameMapper: NameMapper,
     val nino = indBen.nationalInsuranceNumber
     val address = (indBen.ukAddress, indBen.internationalAddress) match {
       case (None, None) => None
-      case (Some(address), None) =>addressMapper.build(address)
-      case (None, Some(address)) =>addressMapper.build(address)
+      case (Some(address), _) => addressMapper.build(address)
+      case (_, Some(address)) => addressMapper.build(address)
     }
     val passport = indBen.passportDetails
     val idCard = indBen.idCardDetails

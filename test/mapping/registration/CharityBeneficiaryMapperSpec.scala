@@ -106,39 +106,37 @@ class CharityBeneficiaryMapperSpec extends SpecBase with MustMatchers
         }
       }
 
-//      "must be able to list of 'class of beneficiary' (UnidentifiedType)" in {
-//        val index0 = 0
-//        val index1 = 1
-//
-//        val userAnswers =
-//          emptyUserAnswers
-//            .set(ClassBeneficiaryDescriptionPage(index0), "class of ben 1").success.value
-//            .set(ClassBeneficiaryDescriptionPage(index1), "class of ben 2").success.value
-//
-//        charityBeneficiaryMapper.build(userAnswers).value mustBe List(UnidentifiedType(
-//          description = "class of ben 1",
-//          beneficiaryDiscretion = None,
-//          beneficiaryShareOfIncome = None),
-//          UnidentifiedType(
-//          description = "class of ben 2",
-//          beneficiaryDiscretion = None,
-//          beneficiaryShareOfIncome = None)
-//        )
-//      }
-//
-//      "must not able to create a beneficiary of 'class of beneficiary' (UnidentifiedType) when only this type of beneficiary does not exist" in {
-//
-//        val userAnswers =
-//          emptyUserAnswers
-//            .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Individual).success.value
-//
-//        charityBeneficiaryMapper.build(userAnswers) mustBe None
-//
-//      }
+      "must be able to create multiple charity beneficiaries" in {
+        val index0 = 0
+        val index1 = 1
+        val name1 = "Name 1"
+        val name2 = "Name 2"
 
+        val userAnswers =
+          emptyUserAnswers
+            .set(CharityNamePage(index0), name1).success.value
+            .set(AmountDiscretionYesNoPage(index0), true).success.value
+            .set(AddressYesNoPage(index0), false).success.value
 
+            .set(CharityNamePage(index1), name2).success.value
+            .set(AmountDiscretionYesNoPage(index1), true).success.value
+            .set(AddressYesNoPage(index1), false).success.value
+
+        charityBeneficiaryMapper.build(userAnswers).value mustBe List(
+          CharityType(
+            organisationName = name1,
+            beneficiaryDiscretion = Some(true),
+            beneficiaryShareOfIncome = None,
+            identification = None
+          ),
+          CharityType(
+            organisationName = name2,
+            beneficiaryDiscretion = Some(true),
+            beneficiaryShareOfIncome = None,
+            identification = None
+          )
+        )
+      }
     }
-
   }
-
 }
