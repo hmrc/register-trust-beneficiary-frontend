@@ -64,7 +64,8 @@ class IndividualBeneficiaryMapper @Inject()(nameMapper: NameMapper,
          Some(IdentificationType(
            nino = None,
            passport = buildPassportOrIdCard(indBen.passportDetails, indBen.idCardDetails),
-           address = address)
+           address = address
+         )
        )
      }
   }
