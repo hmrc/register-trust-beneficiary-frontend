@@ -20,7 +20,11 @@ import models.UserAnswers
 import models.core.pages.{InternationalAddress, UKAddress}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
+
 class AddressUKYesNoPageSpec extends PageBehaviours {
+
+  private val ukAddress: UKAddress = UKAddress("Line 1", "Line 2", None, None, "POSTCODE")
+  private val internationalAddress: InternationalAddress = InternationalAddress("Line 1", "Line 2", None, "COUNTRY")
 
   "IndividualBeneficiaryAddressUKYesNoPage" must {
 
@@ -36,7 +40,7 @@ class AddressUKYesNoPageSpec extends PageBehaviours {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
             val result: UserAnswers = userAnswers
-              .set(AddressInternationalPage(0), InternationalAddress("Line 1", "Line 2", None, "COUNTRY")).success.value
+              .set(AddressInternationalPage(0), internationalAddress).success.value
               .set(AddressUKYesNoPage(0), true).success.value
 
             result.get(AddressInternationalPage(0)) mustNot be(defined)
@@ -47,10 +51,35 @@ class AddressUKYesNoPageSpec extends PageBehaviours {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
             val result: UserAnswers = userAnswers
-              .set(AddressUKPage(0), UKAddress("Line 1", "Line 2", None, None, "POSTCODE")).success.value
+              .set(AddressUKPage(0), ukAddress).success.value
               .set(AddressUKYesNoPage(0), false).success.value
 
             result.get(AddressUKPage(0)) mustNot be(defined)
+        }
+      }
+    }
+
+    "not implement cleanup logic" when {
+
+      "previous selection YES selected" in {
+        forAll(arbitrary[UserAnswers]) {
+          userAnswers =>
+            val result: UserAnswers = userAnswers
+              .set(AddressUKPage(0), ukAddress).success.value
+              .set(AddressUKYesNoPage(0), true).success.value
+
+            result.get(AddressUKPage(0)).get mustBe ukAddress
+        }
+      }
+
+      "previous selection NO selected" in {
+        forAll(arbitrary[UserAnswers]) {
+          userAnswers =>
+            val result: UserAnswers = userAnswers
+              .set(AddressInternationalPage(0), internationalAddress).success.value
+              .set(AddressUKYesNoPage(0), false).success.value
+
+            result.get(AddressInternationalPage(0)).get mustBe internationalAddress
         }
       }
     }

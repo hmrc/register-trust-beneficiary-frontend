@@ -50,7 +50,11 @@ class IndividualBeneficiaryMapper @Inject()(nameMapper: NameMapper,
 
   private def identificationMap(indBen: IndividualBeneficiary): Option[IdentificationType] = {
     val nino = indBen.nationalInsuranceNumber
-    val address = indBen.address
+    val address = (indBen.ukAddress, indBen.internationalAddress) match {
+      case (None, None) => None
+      case (Some(address), None) =>addressMapper.build(address)
+      case (None, Some(address)) =>addressMapper.build(address)
+    }
     val passport = indBen.passportDetails
     val idCard = indBen.idCardDetails
      (nino, address, passport, idCard) match {
@@ -60,7 +64,7 @@ class IndividualBeneficiaryMapper @Inject()(nameMapper: NameMapper,
          Some(IdentificationType(
            nino = None,
            passport = buildPassportOrIdCard(indBen.passportDetails, indBen.idCardDetails),
-           address = addressMapper.build(indBen.address))
+           address = address)
        )
      }
   }
