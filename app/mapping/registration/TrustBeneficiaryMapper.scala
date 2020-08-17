@@ -46,10 +46,11 @@ class TrustBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Map
     }
   }
 
-  private def identificationMap(trustBen: TrustBeneficiary): Option[IdentificationOrgType] = {
-    trustBen.address match {
-      case Some(x) => Some(IdentificationOrgType(utr = None, address = addressMapper.build(x)))
-      case None => None
+  private def identificationMap(beneficiary: TrustBeneficiary): Option[IdentificationOrgType] = {
+    (beneficiary.ukAddress, beneficiary.internationalAddress) match {
+      case (None, None) => None
+      case (Some(address), _) => Some(IdentificationOrgType(None, addressMapper.build(address)))
+      case (_, Some(address)) => Some(IdentificationOrgType(None, addressMapper.build(address)))
     }
   }
 

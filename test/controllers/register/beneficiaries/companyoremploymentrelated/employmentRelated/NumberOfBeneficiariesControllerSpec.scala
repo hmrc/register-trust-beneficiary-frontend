@@ -22,7 +22,7 @@ import forms.NumberOfBeneficiariesFormProvider
 import models.registration.pages.HowManyBeneficiaries
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.register.beneficiaries.large.LargeBeneficiaryNumberOfBeneficiariesPage
+import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.LargeBeneficiaryNumberOfBeneficiariesPage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call

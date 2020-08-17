@@ -24,13 +24,10 @@ import mapping.Mapping
 import models.core.pages.{Description, FullName}
 import models.registration.pages.HowManyBeneficiaries
 import org.scalatest.{MustMatchers, OptionValues}
-import pages.register.beneficiaries.charityortrust.charity
-import pages.register.beneficiaries.charityortrust.trust
-import pages.register.beneficiaries.classofbeneficiaries
+import pages.register.beneficiaries.charityortrust.{charity, trust}
 import pages.register.beneficiaries.companyoremploymentrelated.company
-import pages.register.beneficiaries.large
-import pages.register.beneficiaries.individual
-import pages.register.beneficiaries.other
+import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.{LargeBeneficiaryAddressYesNoPage, LargeBeneficiaryDescriptionPage, LargeBeneficiaryNamePage, LargeBeneficiaryNumberOfBeneficiariesPage}
+import pages.register.beneficiaries.{classofbeneficiaries, individual, other}
 
 class BeneficiariesMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {
@@ -177,10 +174,10 @@ class BeneficiariesMapperSpec extends SpecBase with MustMatchers
         val index = 0
 
         val userAnswers = emptyUserAnswers
-          .set(large.LargeBeneficiaryNamePage(index), "Employment Related Name").success.value
-          .set(large.LargeBeneficiaryAddressYesNoPage(index), false).success.value
-          .set(large.LargeBeneficiaryDescriptionPage(index), Description("Description", None, None, None, None)).success.value
-          .set(large.LargeBeneficiaryNumberOfBeneficiariesPage(index), HowManyBeneficiaries.Over1).success.value
+          .set(LargeBeneficiaryNamePage(index), "Employment Related Name").success.value
+          .set(LargeBeneficiaryAddressYesNoPage(index), false).success.value
+          .set(LargeBeneficiaryDescriptionPage(index), Description("Description", None, None, None, None)).success.value
+          .set(LargeBeneficiaryNumberOfBeneficiariesPage(index), HowManyBeneficiaries.Over1).success.value
 
         val result = beneficiariesMapper.build(userAnswers).value
 

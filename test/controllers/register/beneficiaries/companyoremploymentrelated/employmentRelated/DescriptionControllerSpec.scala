@@ -22,7 +22,7 @@ import forms.EmploymentRelatedBeneficiaryDescriptionFormProvider
 import models.core.pages.Description
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.register.beneficiaries.large.LargeBeneficiaryDescriptionPage
+import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.LargeBeneficiaryDescriptionPage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call

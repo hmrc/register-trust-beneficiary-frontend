@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.large
+package pages.register.beneficiaries.companyoremploymentrelated.employmentRelated
 
-import models.core.pages.InternationalAddress
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.beneficiaries.{Beneficiaries, LargeBeneficiaries}
 
-case class LargeBeneficiaryAddressInternationalPage(index: Int) extends QuestionPage[InternationalAddress] {
+case class LargeBeneficiaryUtrPage(index: Int) extends QuestionPage[String] {
 
   override def path: JsPath = JsPath \ Beneficiaries \ LargeBeneficiaries \ index \ toString
 
-  override def toString: String = "internationalAddress"
+  override def toString: String = "utr"
 }

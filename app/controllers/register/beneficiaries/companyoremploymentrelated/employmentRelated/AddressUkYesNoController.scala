@@ -22,7 +22,7 @@ import controllers.actions.register.employmentRelated.NameRequiredAction
 import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.beneficiaries.large.LargeBeneficiaryAddressUKYesNoPage
+import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.LargeBeneficiaryAddressUKYesNoPage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

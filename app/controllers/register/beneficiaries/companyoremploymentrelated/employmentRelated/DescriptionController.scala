@@ -22,7 +22,7 @@ import forms.EmploymentRelatedBeneficiaryDescriptionFormProvider
 import javax.inject.Inject
 import models.core.pages.Description
 import navigation.Navigator
-import pages.register.beneficiaries.large.LargeBeneficiaryDescriptionPage
+import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.LargeBeneficiaryDescriptionPage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

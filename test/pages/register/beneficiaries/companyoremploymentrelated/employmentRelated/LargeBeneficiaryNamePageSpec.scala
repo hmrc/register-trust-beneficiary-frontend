@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.large
+package pages.register.beneficiaries.companyoremploymentrelated.employmentRelated
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.beneficiaries.{Beneficiaries, LargeBeneficiaries}
+import pages.behaviours.PageBehaviours
 
-case class LargeBeneficiaryUtrPage(index: Int) extends QuestionPage[String] {
+class LargeBeneficiaryNamePageSpec extends PageBehaviours {
 
-  override def path: JsPath = JsPath \ Beneficiaries \ LargeBeneficiaries \ index \ toString
+  "LargeBeneficiaryNamePage" must {
 
-  override def toString: String = "utr"
+    beRetrievable[String](LargeBeneficiaryNamePage(0))
+
+    beSettable[String](LargeBeneficiaryNamePage(0))
+
+    beRemovable[String](LargeBeneficiaryNamePage(0))
+  }
 }

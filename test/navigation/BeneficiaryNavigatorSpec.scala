@@ -39,6 +39,7 @@ import pages.register.beneficiaries._
 import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
 import pages.register.beneficiaries.charityortrust.{CharityOrTrustPage, trust}
 import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
+import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.LargeBeneficiaryNamePage
 import pages.register.beneficiaries.companyoremploymentrelated.{CompanyOrEmploymentRelatedPage, company}
 import pages.register.beneficiaries.individual._
 import pages.register.beneficiaries.other.DescriptionPage
@@ -246,7 +247,7 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
       "existing employment related beneficiary" must {
         val baseAnswers = emptyUserAnswers
-          .set(large.LargeBeneficiaryNamePage(0), "Name").success.value
+          .set(LargeBeneficiaryNamePage(0), "Name").success.value
           .set(LargeBeneficiaryStatus(0), InProgress).success.value
           .set(CompanyOrEmploymentRelatedPage, value = CompanyOrEmploymentRelatedToAdd.EmploymentRelated).success.value
 

@@ -31,8 +31,9 @@ import models.core.pages.{Description, FullName}
 import models.registration.pages.AddABeneficiary
 import pages.entitystatus._
 import pages.register.beneficiaries.charityortrust.{charity => charityPages, trust => trustPages}
+import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.{LargeBeneficiaryDescriptionPage, LargeBeneficiaryNamePage}
 import pages.register.beneficiaries.companyoremploymentrelated.{company => companyPages}
-import pages.register.beneficiaries.{AddABeneficiaryPage, classofbeneficiaries => classOfBeneficiariesPages, individual => individualPages, large => largePages, other => otherPages}
+import pages.register.beneficiaries.{AddABeneficiaryPage, classofbeneficiaries => classOfBeneficiariesPages, individual => individualPages, other => otherPages}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -128,7 +129,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
     .set(companyPages.NamePage(index), "Company Name").success.value
     .set(CompanyBeneficiaryStatus(index), Completed).success.value
 
-    .set(largePages.LargeBeneficiaryNamePage(index), "Large Name").success.value
+    .set(LargeBeneficiaryNamePage(index), "Large Name").success.value
     .set(LargeBeneficiaryStatus(index), Completed).success.value
 
     .set(otherPages.DescriptionPage(index), "Other Description").success.value
@@ -172,7 +173,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
   private def genLargeBeneficiaries(range: Int): UserAnswers = {
     (0 until range)
       .foldLeft(emptyUserAnswers)(
-        (ua,index) => ua.set(largePages.LargeBeneficiaryDescriptionPage(index), Description(s"Large Name $index", None, None, None, None)).success.value
+        (ua,index) => ua.set(LargeBeneficiaryDescriptionPage(index), Description(s"Large Name $index", None, None, None, None)).success.value
       )
   }
 

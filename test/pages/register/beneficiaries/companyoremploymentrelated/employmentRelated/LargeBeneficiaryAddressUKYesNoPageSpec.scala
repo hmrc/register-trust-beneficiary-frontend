@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.large
+package pages.register.beneficiaries.companyoremploymentrelated.employmentRelated
 
 import models.UserAnswers
 import models.core.pages.{InternationalAddress, UKAddress}

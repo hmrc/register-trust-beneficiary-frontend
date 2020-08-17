@@ -19,7 +19,7 @@ package navigation
 import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.{routes => rts}
 import models.ReadableUserAnswers
 import pages.Page
-import pages.register.beneficiaries.large._
+import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated._
 import play.api.mvc.Call
 
 class EmploymentRelatedBeneficiaryNavigator extends Navigator {

@@ -14,20 +14,16 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.large
+package pages.register.beneficiaries.companyoremploymentrelated.employmentRelated
 
 import models.core.pages.InternationalAddress
-import pages.behaviours.PageBehaviours
+import pages.QuestionPage
+import play.api.libs.json.JsPath
+import sections.beneficiaries.{Beneficiaries, LargeBeneficiaries}
 
-class LargeBeneficiaryAddressInternationalPageSpec extends PageBehaviours {
+case class LargeBeneficiaryAddressInternationalPage(index: Int) extends QuestionPage[InternationalAddress] {
 
-  "LargeBeneficiaryAddressInternationalPage" must {
+  override def path: JsPath = JsPath \ Beneficiaries \ LargeBeneficiaries \ index \ toString
 
-    beRetrievable[InternationalAddress](LargeBeneficiaryAddressInternationalPage(0))
-
-    beSettable[InternationalAddress](LargeBeneficiaryAddressInternationalPage(0))
-
-    beRemovable[InternationalAddress](LargeBeneficiaryAddressInternationalPage(0))
-  }
-
+  override def toString: String = "internationalAddress"
 }

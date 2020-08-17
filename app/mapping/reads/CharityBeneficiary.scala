@@ -16,17 +16,15 @@
 
 package mapping.reads
 
-import models.core.pages.Address
-import play.api.libs.json.{Format, Json}
-
+import models.core.pages.{InternationalAddress, UKAddress}
+import play.api.libs.json._
 
 final case class CharityBeneficiary(name: String,
                                     howMuchIncome: Option[Int],
-                                    address: Option[Address]
+                                    ukAddress : Option[UKAddress],
+                                    internationalAddress : Option[InternationalAddress]
                                    )
 
 object CharityBeneficiary {
   implicit val classFormat: Format[CharityBeneficiary] = Json.format[CharityBeneficiary]
 }
-
-

@@ -43,11 +43,11 @@ class CharityBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends M
     }
   }
 
-  private def identificationMap(charBen: CharityBeneficiary): Option[IdentificationOrgType] = {
-    val address = charBen.address
-    address match {
-      case Some(x) => Some(IdentificationOrgType(utr = None, address = addressMapper.build(x)))
-      case None => None
+  private def identificationMap(beneficiary: CharityBeneficiary): Option[IdentificationOrgType] = {
+    (beneficiary.ukAddress, beneficiary.internationalAddress) match {
+      case (None, None) => None
+      case (Some(address), _) => Some(IdentificationOrgType(None, addressMapper.build(address)))
+      case (_, Some(address)) => Some(IdentificationOrgType(None, addressMapper.build(address)))
     }
   }
 }
