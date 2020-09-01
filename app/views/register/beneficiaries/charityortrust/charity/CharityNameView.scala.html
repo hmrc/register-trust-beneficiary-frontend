@@ -24,7 +24,7 @@
 @(form: Form[_], draftId: String, index: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("charity.name.title")}"
+    title = s"${errorPrefix(form)}${messages("charity.name.title")}"
 ) {
 
     @formHelper(action = CharityNameController.onSubmit(index, draftId), 'autoComplete -> "on") {

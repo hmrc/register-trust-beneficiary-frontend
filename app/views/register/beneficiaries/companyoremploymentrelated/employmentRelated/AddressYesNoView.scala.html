@@ -24,7 +24,7 @@
 @(form: Form[_], name: String, index : Int, draftId: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("employmentRelatedBeneficiary.addressYesNo.title")}"
+    title = s"${errorPrefix(form)}${messages("employmentRelatedBeneficiary.addressYesNo.title")}"
 ) {
 
     @formHelper(action = AddressYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {

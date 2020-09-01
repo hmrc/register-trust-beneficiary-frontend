@@ -25,7 +25,7 @@
 @(form: Form[_], countryOptions: Seq[InputOption], draftId: String, index: Int, charityName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("charity.internationalAddress.title")}"
+    title = s"${errorPrefix(form)}${messages("charity.internationalAddress.title")}"
 ) {
 
     @formHelper(action = CharityInternationalAddressController.onSubmit(index, draftId), 'autoComplete -> "off") {

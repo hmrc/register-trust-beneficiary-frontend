@@ -18,7 +18,7 @@ package views.behaviours
 
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.ViewSpecBase
+import views.{ViewSpecBase, ViewUtils}
 
 trait ViewBehaviours extends ViewSpecBase {
 
