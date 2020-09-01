@@ -25,13 +25,7 @@
 
 @(form: Form[_], draftId: String, beneficiaryAdded : Boolean, options: List[RadioOption])(implicit request: Request[_], messages: Messages)
 
-@title = {
-    @if(beneficiaryAdded==true) {
-        @messages("whatTypeOfBeneficiary.next.title")
-    } else {
-        @messages("whatTypeOfBeneficiary.first.title")
-    }
-}
+@title = {@if(beneficiaryAdded){@messages("whatTypeOfBeneficiary.next.title")}else{@messages("whatTypeOfBeneficiary.first.title")}}
 
 @heading = {
     @if(beneficiaryAdded) {
@@ -42,7 +36,7 @@
 }
 
 @main_template(
-    title = s"${errorPrefix(form)} $title"
+    title = s"${errorPrefix(form)}$title"
     ) {
 
     @formHelper(action = WhatTypeOfBeneficiaryController.onSubmit(draftId), 'autoComplete -> "off") {

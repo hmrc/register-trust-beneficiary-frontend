@@ -26,7 +26,7 @@
 @(prefix : String, form: Form[_], index: Int, draftId: String, nameOrDescription : String, route : Call)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages(s"$prefix.title", nameOrDescription)}"
+    title = s"${errorPrefix(form)}${messages(s"$prefix.title", nameOrDescription)}"
     ) {
 
     @formHelper(action = route, 'autoComplete -> "off") {
