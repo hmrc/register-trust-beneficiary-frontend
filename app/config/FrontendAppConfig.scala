@@ -16,16 +16,17 @@
 
 package config
 
+import java.net.{URI, URLEncoder}
 import java.time.LocalDate
 
 import com.google.inject.{Inject, Singleton}
 import controllers.routes
 import play.api.Configuration
 import play.api.i18n.Lang
-import play.api.mvc.Call
+import play.api.mvc.{Call, Request}
 
 @Singleton
-class FrontendAppConfig @Inject() (configuration: Configuration) {
+class FrontendAppConfig @Inject() (val configuration: Configuration) {
 
   private val contactHost = configuration.get[String]("contact-frontend.host")
   private val contactFormServiceIdentifier = "trusts"
@@ -70,8 +71,6 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val locationCanonicalList: String = configuration.get[String]("location.canonical.list.all")
   lazy val locationCanonicalListNonUK: String = configuration.get[String]("location.canonical.list.nonUK")
 
-  lazy val accessibilityLinkUrl: String = configuration.get[String]("urls.accessibility")
-
   lazy val countdownLength: String = configuration.get[String]("timeout.countdown")
   lazy val timeoutLength: String = configuration.get[String]("timeout.length")
 
@@ -82,4 +81,11 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   def routeToSwitchLanguage: String => Call =
     (lang: String) => routes.LanguageSwitchController.switchToLanguage(lang)
+
+  private lazy val accessibilityBaseLinkUrl: String = configuration.get[String]("urls.accessibility")
+
+  def accessibilityLinkUrl(implicit request: Request[_]): String = {
+    val userAction = URLEncoder.encode(new URI(request.uri).getPath, "UTF-8")
+    s"$accessibilityBaseLinkUrl?userAction=$userAction"
+  }
 }

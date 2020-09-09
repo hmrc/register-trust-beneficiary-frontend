@@ -122,7 +122,7 @@ class CompanyOrEmploymentRelatedControllerSpec extends SpecBase with MockitoSuga
 
       status(result) mustEqual BAD_REQUEST
 
-      contentAsString(result) mustEqual view(boundForm, draftId)(fakeRequest, messages).toString
+      contentAsString(result) mustEqual view(boundForm, draftId)(request, messages).toString
 
       application.stop()
     }

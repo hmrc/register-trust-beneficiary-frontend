@@ -54,7 +54,7 @@ class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with ScalaCheck
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(messagesPrefix, form, index, fakeDraftId, "the individual beneficiary", formRoute)(fakeRequest, messages).toString
+        contentAsString(result) mustEqual view(messagesPrefix, form, index, fakeDraftId, "the individual beneficiary", formRoute)(request, messages).toString
 
         application.stop()
       }
@@ -77,7 +77,7 @@ class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with ScalaCheck
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(messagesPrefix, form, index, fakeDraftId, "First Last", formRoute)(fakeRequest, messages).toString
+        contentAsString(result) mustEqual view(messagesPrefix, form, index, fakeDraftId, "First Last", formRoute)(request, messages).toString
 
         application.stop()
       }
@@ -131,7 +131,7 @@ class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with ScalaCheck
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(messagesPrefix, boundForm, index, fakeDraftId, "First Last", formRoute)(fakeRequest, messages).toString
+        view(messagesPrefix, boundForm, index, fakeDraftId, "First Last", formRoute)(request, messages).toString
 
       application.stop()
     }
