@@ -79,7 +79,7 @@ class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(answer), countryOptions, name, index, draftId)(fakeRequest, messages).toString
+        view(form.fill(answer), countryOptions, name, index, draftId)(request, messages).toString
 
       application.stop()
     }
@@ -120,7 +120,7 @@ class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, countryOptions, name, index, draftId)(fakeRequest, messages).toString
+        view(boundForm, countryOptions, name, index, draftId)(request, messages).toString
 
        application.stop()
     }

@@ -54,7 +54,7 @@ class RemoveTrustBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(messagesPrefix, form, index, fakeDraftId, "the trust beneficiary", formRoute)(fakeRequest, messages).toString
+          view(messagesPrefix, form, index, fakeDraftId, "the trust beneficiary", formRoute)(request, messages).toString
 
         application.stop()
       }
@@ -77,7 +77,7 @@ class RemoveTrustBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(messagesPrefix, form, index, fakeDraftId, "Trust Ltd", formRoute)(fakeRequest, messages).toString
+        contentAsString(result) mustEqual view(messagesPrefix, form, index, fakeDraftId, "Trust Ltd", formRoute)(request, messages).toString
 
         application.stop()
       }
@@ -128,7 +128,7 @@ class RemoveTrustBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(messagesPrefix, boundForm, index, fakeDraftId, "Trust Ltd", formRoute)(fakeRequest, messages).toString
+        view(messagesPrefix, boundForm, index, fakeDraftId, "Trust Ltd", formRoute)(request, messages).toString
 
       application.stop()
     }

@@ -49,7 +49,7 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, draftId)(fakeRequest, messages).toString
+        view(form, draftId)(request, messages).toString
 
       application.stop()
     }
@@ -88,7 +88,7 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, draftId)(fakeRequest, messages).toString
+        view(boundForm, draftId)(request, messages).toString
 
       application.stop()
     }

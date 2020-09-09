@@ -55,7 +55,7 @@ class AmountDiscretionYesNoControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, draftId, index, charityName)(fakeRequest, messages).toString
+        view(form, draftId, index, charityName)(request, messages).toString
 
       application.stop()
     }
@@ -76,7 +76,7 @@ class AmountDiscretionYesNoControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), draftId, index, charityName)(fakeRequest, messages).toString
+        view(form.fill(true), draftId, index, charityName)(request, messages).toString
 
       application.stop()
     }
@@ -124,7 +124,7 @@ class AmountDiscretionYesNoControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, draftId, index, charityName)(fakeRequest, messages).toString
+        view(boundForm, draftId, index, charityName)(request, messages).toString
 
       application.stop()
     }

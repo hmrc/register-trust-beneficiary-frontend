@@ -53,7 +53,7 @@ class AddressYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, name, index)(fakeRequest, messages).toString
+        view(form, fakeDraftId, name, index)(request, messages).toString
 
       application.stop()
     }
@@ -74,7 +74,7 @@ class AddressYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), fakeDraftId, name, index)(fakeRequest, messages).toString
+        view(form.fill(true), fakeDraftId, name, index)(request, messages).toString
 
       application.stop()
     }
@@ -123,7 +123,7 @@ class AddressYesNoControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, name, index)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, name, index)(request, messages).toString
 
       application.stop()
     }

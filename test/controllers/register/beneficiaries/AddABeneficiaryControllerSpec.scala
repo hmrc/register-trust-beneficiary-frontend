@@ -234,7 +234,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form, fakeDraftId)(fakeRequest, messages).toString
+          view(form, fakeDraftId)(request, messages).toString
 
         application.stop()
       }
@@ -274,7 +274,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, fakeDraftId)(fakeRequest, messages).toString
+          view(boundForm, fakeDraftId)(request, messages).toString
 
         application.stop()
       }
@@ -296,7 +296,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form, fakeDraftId, Nil, beneficiariesComplete, "You have added 7 beneficiaries", Nil)(fakeRequest, messages).toString
+          view(form, fakeDraftId, Nil, beneficiariesComplete, "You have added 7 beneficiaries", Nil)(request, messages).toString
 
         application.stop()
       }
@@ -316,7 +316,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form, fakeDraftId, Nil, beneficiariesComplete, "You have added 7 beneficiaries", Nil)(fakeRequest, messages).toString
+          view(form, fakeDraftId, Nil, beneficiariesComplete, "You have added 7 beneficiaries", Nil)(request, messages).toString
 
         application.stop()
       }
@@ -356,7 +356,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, fakeDraftId, Nil, Nil, "Add a beneficiary", Nil)(fakeRequest, messages).toString
+          view(boundForm, fakeDraftId, Nil, Nil, "Add a beneficiary", Nil)(request, messages).toString
 
         application.stop()
       }
@@ -398,7 +398,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
           beneficiaryRows.inProgress,
           beneficiaryRows.complete,
           "You have added 175 beneficiaries"
-        )(fakeRequest, messages).toString
+        )(request, messages).toString
 
         content must include("You cannot enter another beneficiary as you have entered a maximum of 175.")
         content must include("If you have further beneficiaries to add, write to HMRC with their details.")

@@ -72,7 +72,7 @@ class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(answer), description, index, draftId)(fakeRequest, messages).toString
+        view(form.fill(answer), description, index, draftId)(request, messages).toString
 
       application.stop()
     }
@@ -115,7 +115,7 @@ class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, description, index, draftId)(fakeRequest, messages).toString
+        view(boundForm, description, index, draftId)(request, messages).toString
 
        application.stop()
     }

@@ -77,7 +77,7 @@ class AddressUKControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(UKAddress("line 1","line 2", Some("line 3"), Some("line 4"),"line 5")), fakeDraftId, name, index)(fakeRequest, messages).toString
+        view(form.fill(UKAddress("line 1","line 2", Some("line 3"), Some("line 4"),"line 5")), fakeDraftId, name, index)(request, messages).toString
 
       application.stop()
     }
@@ -126,7 +126,7 @@ class AddressUKControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, name, index)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, name, index)(request, messages).toString
 
       application.stop()
     }

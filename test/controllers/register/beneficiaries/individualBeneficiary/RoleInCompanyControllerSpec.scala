@@ -58,7 +58,7 @@ class RoleInCompanyControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, draftId, name, index)(fakeRequest, messages).toString
+        view(form, draftId, name, index)(request, messages).toString
 
       application.stop()
     }
@@ -80,7 +80,7 @@ class RoleInCompanyControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(Director), draftId, name, index)(fakeRequest, messages).toString
+        view(form.fill(Director), draftId, name, index)(request, messages).toString
 
       application.stop()
     }
@@ -115,7 +115,7 @@ class RoleInCompanyControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, draftId, name, index)(fakeRequest, messages).toString
+        view(boundForm, draftId, name, index)(request, messages).toString
 
       application.stop()
     }

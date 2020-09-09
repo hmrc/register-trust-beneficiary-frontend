@@ -56,7 +56,7 @@ class HowMuchIncomeControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, charityName)(fakeRequest, messages).toString
+        view(form, fakeDraftId, index, charityName)(request, messages).toString
 
       application.stop()
     }
@@ -77,7 +77,7 @@ class HowMuchIncomeControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), fakeDraftId, index, charityName)(fakeRequest, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, index, charityName)(request, messages).toString
 
       application.stop()
     }
@@ -125,7 +125,7 @@ class HowMuchIncomeControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, charityName)(fakeRequest, messages).toString
+        view(boundForm, fakeDraftId, index, charityName)(request, messages).toString
 
       application.stop()
     }

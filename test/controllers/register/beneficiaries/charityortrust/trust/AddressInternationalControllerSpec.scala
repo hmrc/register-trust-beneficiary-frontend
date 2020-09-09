@@ -92,7 +92,7 @@ class AddressInternationalControllerSpec extends SpecBase {
           countryOptions,
           index,
           fakeDraftId,
-          name)(fakeRequest, messages).toString
+          name)(request, messages).toString
 
       application.stop()
     }
@@ -142,7 +142,7 @@ class AddressInternationalControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, countryOptions, index, fakeDraftId, name.toString)(fakeRequest, messages).toString
+        view(boundForm, countryOptions, index, fakeDraftId, name.toString)(request, messages).toString
 
       application.stop()
     }

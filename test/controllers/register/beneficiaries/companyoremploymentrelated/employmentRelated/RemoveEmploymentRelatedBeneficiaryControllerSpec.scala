@@ -55,7 +55,7 @@ class RemoveEmploymentRelatedBeneficiaryControllerSpec extends SpecBase with Sca
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(messagesPrefix, form, index, fakeDraftId, "the employment related beneficiary", formRoute)(fakeRequest, messages).toString
+          view(messagesPrefix, form, index, fakeDraftId, "the employment related beneficiary", formRoute)(request, messages).toString
 
         application.stop()
       }
@@ -78,7 +78,7 @@ class RemoveEmploymentRelatedBeneficiaryControllerSpec extends SpecBase with Sca
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(messagesPrefix, form, index, fakeDraftId, "Employment Related", formRoute)(fakeRequest, messages).toString
+        contentAsString(result) mustEqual view(messagesPrefix, form, index, fakeDraftId, "Employment Related", formRoute)(request, messages).toString
 
         application.stop()
       }
@@ -129,7 +129,7 @@ class RemoveEmploymentRelatedBeneficiaryControllerSpec extends SpecBase with Sca
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(messagesPrefix, boundForm, index, fakeDraftId, "Employment related", formRoute)(fakeRequest, messages).toString
+        view(messagesPrefix, boundForm, index, fakeDraftId, "Employment related", formRoute)(request, messages).toString
 
       application.stop()
     }
