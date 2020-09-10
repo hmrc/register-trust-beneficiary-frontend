@@ -19,8 +19,8 @@ POST        /:draftId/:index/non-uk-address             controllers.register.ben
 GET         /:draftId/:index/description                controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.DescriptionController.onPageLoad(index: Int, draftId: String)
 POST        /:draftId/:index/description                controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.DescriptionController.onSubmit(index: Int, draftId: String)
 
-GET         /:draftId/:index//number-of-beneficiaries   controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.NumberOfBeneficiariesController.onPageLoad(index: Int, draftId: String)
-POST        /:draftId/:index//number-of-beneficiaries   controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.NumberOfBeneficiariesController.onSubmit(index: Int, draftId: String)
+GET         /:draftId/:index/number-of-beneficiaries   controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.NumberOfBeneficiariesController.onPageLoad(index: Int, draftId: String)
+POST        /:draftId/:index/number-of-beneficiaries   controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.NumberOfBeneficiariesController.onSubmit(index: Int, draftId: String)
 
 GET         /:draftId/:index/check-details              controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.CheckDetailsController.onPageLoad(index: Int, draftId: String)
 POST        /:draftId/:index/check-details              controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.CheckDetailsController.onSubmit(index: Int, draftId: String)
