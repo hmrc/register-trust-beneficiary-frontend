@@ -25,6 +25,6 @@ class CharityOrTrustFormProvider @Inject() extends Mappings {
 
   def apply(): Form[CharityOrTrust] =
     Form(
-      "value" -> enumerable[CharityOrTrust]("charityortrust.error.required")
+      "value" -> enumerable[CharityOrTrust]("charityOrTrust.error.required")
     )
 }
