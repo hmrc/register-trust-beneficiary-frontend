@@ -5,7 +5,6 @@ checkYourAnswers.guidance = Guidance for check your answers
 date.day = Day
 date.month = Month
 date.year = Year
-date.hidden =  in numbers
 
 error.browser.title.prefix = Error:
 error.boolean = Please give an answer
