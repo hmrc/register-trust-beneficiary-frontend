@@ -53,11 +53,12 @@ trait TabularDataViewBehaviours extends ViewSpecBase {
 
   def pageWithNoTabularData(view: HtmlFormat.Appendable) = {
 
-    "behave like a page with tabular data" when {
+    "behave like a page with no tabular data" when {
 
-      "not render a h3" in {
+      "render with no data list headings" in {
         val doc = asDocument(view)
-        assertElementNotPresent(doc, "h3")
+        assertNotRenderedById(doc, "data-list-heading--complete")
+        assertNotRenderedById(doc, "data-list-heading--inprogress")
       }
 
       "rendered with no data" in {
@@ -72,12 +73,6 @@ trait TabularDataViewBehaviours extends ViewSpecBase {
     "behave like a page with incomplete tabular data" should {
 
       "render a h2" in {
-        val doc = asDocument(view)
-        assertRenderedById(doc, "data-list-heading--inprogress--hidden")
-        assertElementHasClass(doc, "data-list-heading--inprogress--hidden", "visually-hidden")
-      }
-
-      "render a h3" in {
         val doc = asDocument(view)
         assertRenderedById(doc, "data-list-heading--inprogress")
       }
@@ -101,12 +96,6 @@ trait TabularDataViewBehaviours extends ViewSpecBase {
     "behave like a page with complete tabular data" should {
 
       "render a h2" in {
-        val doc = asDocument(view)
-        assertRenderedById(doc, "data-list-heading--complete--hidden")
-        assertElementHasClass(doc, "data-list-heading--complete--hidden", "visually-hidden")
-      }
-
-      "render a h3" in {
         val doc = asDocument(view)
         assertRenderedById(doc, "data-list-heading--complete")
       }
@@ -132,14 +121,6 @@ trait TabularDataViewBehaviours extends ViewSpecBase {
     "behave like a page with complete and incomplete tabular data" should {
 
       "render a h2" in {
-        val doc = asDocument(view)
-        assertRenderedById(doc, "data-list-heading--inprogress--hidden")
-        assertRenderedById(doc, "data-list-heading--complete--hidden")
-        assertElementHasClass(doc, "data-list-heading--inprogress--hidden", "visually-hidden")
-        assertElementHasClass(doc, "data-list-heading--complete--hidden", "visually-hidden")
-      }
-
-      "render a h3" in {
         val doc = asDocument(view)
         assertRenderedById(doc, "data-list-heading--inprogress")
         assertRenderedById(doc, "data-list-heading--complete")
