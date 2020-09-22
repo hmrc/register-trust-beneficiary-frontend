@@ -20,8 +20,8 @@ import config.FrontendAppConfig
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import javax.inject.Inject
+import models.Enumerable
 import models.registration.pages.AddABeneficiary.NoComplete
-import models.{Enumerable, Mode}
 import navigation.Navigator
 import pages.register.beneficiaries.{AddABeneficiaryPage, AddABeneficiaryYesNoPage}
 import play.api.Logger

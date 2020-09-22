@@ -29,8 +29,6 @@ import queries.{RemoveTrustBeneficiaryQuery, Settable}
 import repositories.RegistrationsRepository
 import views.html.RemoveIndexView
 
-import scala.concurrent.ExecutionContext
-
 class RemoveTrustBeneficiaryController @Inject()(
                                                   override val messagesApi: MessagesApi,
                                                   override val registrationsRepository: RegistrationsRepository,
@@ -38,7 +36,7 @@ class RemoveTrustBeneficiaryController @Inject()(
                                                   val formProvider: RemoveIndexFormProvider,
                                                   val controllerComponents: MessagesControllerComponents,
                                                   val removeView: RemoveIndexView
-                                                )(implicit ec: ExecutionContext) extends RemoveIndexController {
+                                                ) extends RemoveIndexController {
 
   override val messagesPrefix: String = "removeTrustBeneficiary"
 

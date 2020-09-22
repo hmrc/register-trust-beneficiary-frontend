@@ -20,7 +20,7 @@ import base.SpecBase
 import generators.Generators
 import mapping.Mapping
 import models.registration.pages.WhatTypeOfBeneficiary
-import org.scalatest.{FreeSpec, MustMatchers, OptionValues}
+import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.beneficiaries.WhatTypeOfBeneficiaryPage
 import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
 

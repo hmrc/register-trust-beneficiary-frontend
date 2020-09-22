@@ -18,7 +18,6 @@ package controllers.register.beneficiaries.charityortrust.trust
 
 import controllers.actions._
 import javax.inject.Inject
-import models.NormalMode
 import models.Status.Completed
 import navigation.Navigator
 import pages.entitystatus.TrustBeneficiaryStatus

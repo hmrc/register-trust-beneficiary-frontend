@@ -17,7 +17,6 @@
 package models.registration.pages
 
 import models.{Enumerable, WithName}
-import viewmodels.RadioOption
 
 sealed trait WhatTypeOfBeneficiary
 

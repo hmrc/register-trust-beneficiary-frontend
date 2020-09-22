@@ -19,7 +19,6 @@ package controllers.register.beneficiaries.charityortrust.charity
 import base.SpecBase
 import config.annotations.CharityBeneficiary
 import forms.UKAddressFormProvider
-import models.NormalMode
 import models.core.pages.UKAddress
 import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.charityortrust.charity.{CharityAddressUKPage, CharityNamePage}

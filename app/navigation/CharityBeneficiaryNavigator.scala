@@ -17,7 +17,7 @@
 package navigation
 
 import controllers.register.beneficiaries.charityortrust.charity.routes._
-import models.{NormalMode, ReadableUserAnswers}
+import models.ReadableUserAnswers
 import pages.Page
 import pages.register.beneficiaries.charityortrust.charity._
 import play.api.mvc.Call

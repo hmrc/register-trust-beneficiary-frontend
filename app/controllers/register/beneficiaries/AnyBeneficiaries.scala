@@ -17,7 +17,6 @@
 package controllers.register.beneficiaries
 
 import models.{Beneficiaries, ReadableUserAnswers}
-import play.api.libs.json.JsArray
 import sections.beneficiaries._
 
 trait AnyBeneficiaries {

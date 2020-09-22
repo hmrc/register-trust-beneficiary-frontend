@@ -19,7 +19,6 @@ package controllers.register.beneficiaries.charityortrust.charity
 import base.SpecBase
 import config.annotations.CharityBeneficiary
 import forms.YesNoFormProvider
-import models.NormalMode
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.charityortrust.charity.{AddressYesNoPage, CharityNamePage}

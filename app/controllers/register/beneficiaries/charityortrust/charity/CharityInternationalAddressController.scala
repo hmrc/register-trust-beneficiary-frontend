@@ -18,7 +18,6 @@ package controllers.register.beneficiaries.charityortrust.charity
 
 import config.annotations.CharityBeneficiary
 import controllers.actions._
-import controllers.actions.register._
 import controllers.actions.register.company.NameRequiredAction
 import forms.InternationalAddressFormProvider
 import javax.inject.Inject
@@ -26,7 +25,7 @@ import models.core.pages.InternationalAddress
 import navigation.Navigator
 import pages.register.beneficiaries.charityortrust.charity.{CharityInternationalAddressPage, CharityNamePage}
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController

@@ -22,7 +22,7 @@ import models.UserAnswers
 import pages.register.beneficiaries.charityortrust.charity._
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
-import sections.beneficiaries.{CharityBeneficiaries, IndividualBeneficiaries}
+import sections.beneficiaries.CharityBeneficiaries
 import utils.answers.CheckAnswersFormatters._
 import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}

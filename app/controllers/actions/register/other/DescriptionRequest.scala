@@ -17,7 +17,7 @@
 package controllers.actions.register.other
 
 import models.UserAnswers
-import models.requests.{DataRequest, RegistrationDataRequest}
+import models.requests.RegistrationDataRequest
 import play.api.mvc.WrappedRequest
 
 case class DescriptionRequest[T](request: RegistrationDataRequest[T], description: String) extends WrappedRequest[T](request){

@@ -17,17 +17,14 @@
 package utils
 
 import base.SpecBase
-import controllers.routes
+import controllers.register.beneficiaries.charityortrust.charity.{routes => charityRts}
 import models.Status.{Completed, InProgress}
 import models.UserAnswers
 import pages.entitystatus.CharityBeneficiaryStatus
 import pages.register.beneficiaries.charityortrust.charity._
 import viewmodels.{AddRow, AddToRows}
-import controllers.register.beneficiaries.charityortrust.charity.{routes => charityRts}
 
 class AddABeneficiaryViewHelperSpec extends SpecBase {
-
-  private lazy val featureUnavailableUrl: String = routes.FeatureNotAvailableController.onPageLoad().url
 
   private def changeInProgressCharityBeneficiaryRoute(index: Int): String = charityRts.CharityNameController.onPageLoad(index, draftId).url
   private def changeCompleteCharityBeneficiaryRoute(index: Int): String = charityRts.CharityAnswersController.onPageLoad(index, draftId).url

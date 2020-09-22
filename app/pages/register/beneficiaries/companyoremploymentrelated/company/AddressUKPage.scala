@@ -16,7 +16,7 @@
 
 package pages.register.beneficiaries.companyoremploymentrelated.company
 
-import models.core.pages.{Address, UKAddress}
+import models.core.pages.UKAddress
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.beneficiaries.{Beneficiaries, CompanyBeneficiaries}

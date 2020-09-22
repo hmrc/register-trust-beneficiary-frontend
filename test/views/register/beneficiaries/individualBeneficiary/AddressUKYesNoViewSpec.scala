@@ -17,7 +17,6 @@
 package views.register.beneficiaries.individualBeneficiary
 
 import forms.YesNoFormProvider
-import models.NormalMode
 import models.core.pages.FullName
 import play.api.data.Form
 import play.twirl.api.HtmlFormat

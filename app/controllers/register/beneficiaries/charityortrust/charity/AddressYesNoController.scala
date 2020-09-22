@@ -18,11 +18,9 @@ package controllers.register.beneficiaries.charityortrust.charity
 
 import config.annotations.CharityBeneficiary
 import controllers.actions._
-import controllers.actions.register._
 import controllers.actions.register.company.NameRequiredAction
 import forms.YesNoFormProvider
 import javax.inject.Inject
-import models._
 import navigation.Navigator
 import pages.register.beneficiaries.charityortrust.charity.{AddressYesNoPage, CharityNamePage}
 import play.api.data.Form

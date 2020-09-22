@@ -19,8 +19,6 @@ package utils.answers
 import javax.inject.Inject
 import models.UserAnswers
 import pages.register.beneficiaries._
-import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
-import pages.register.beneficiaries.charityortrust.charity.{AddressInTheUkYesNoPage, AmountDiscretionYesNoPage, CharityAddressUKPage, CharityInternationalAddressPage, CharityNamePage, HowMuchIncomePage}
 import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
 import pages.register.beneficiaries.individual._
 import play.api.i18n.Messages

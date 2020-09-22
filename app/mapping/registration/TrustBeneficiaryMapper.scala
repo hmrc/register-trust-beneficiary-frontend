@@ -18,10 +18,8 @@ package mapping.registration
 
 import javax.inject.Inject
 import mapping.Mapping
-import mapping.reads.{IndividualBeneficiary, TrustBeneficiary}
+import mapping.reads.TrustBeneficiary
 import models.UserAnswers
-import models.core.pages.Address
-import models.registration.pages.PassportOrIdCardDetails
 
 class TrustBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapping[List[BeneficiaryTrustType]] {
 
