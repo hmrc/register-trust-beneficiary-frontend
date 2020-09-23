@@ -19,7 +19,7 @@ package mapping.registration
 import javax.inject.Inject
 import mapping.Mapping
 import models.UserAnswers
-import org.slf4j.LoggerFactory
+import play.api.Logging
 
 class BeneficiariesMapper @Inject()(
                                      individualBeneficiaryMapper: IndividualBeneficiaryMapper,
@@ -29,9 +29,7 @@ class BeneficiariesMapper @Inject()(
                                      companyBeneficiaryMapper: CompanyBeneficiaryMapper,
                                      largeBeneficiaryMapper: LargeBeneficiaryMapper,
                                      otherBeneficiaryMapper: OtherBeneficiaryMapper
-                                   ) extends Mapping[BeneficiaryType] {
-  private val logger = LoggerFactory.getLogger(s"application.{getClass.getCanonicalName}")
-
+                                   ) extends Mapping[BeneficiaryType] with Logging {
   override def build(userAnswers: UserAnswers): Option[BeneficiaryType] = {
 
     val individuals = individualBeneficiaryMapper.build(userAnswers)

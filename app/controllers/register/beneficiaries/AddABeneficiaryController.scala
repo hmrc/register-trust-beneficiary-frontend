@@ -23,8 +23,8 @@ import javax.inject.Inject
 import models.Enumerable
 import models.registration.pages.AddABeneficiary.NoComplete
 import navigation.Navigator
-import org.slf4j.LoggerFactory
 import pages.register.beneficiaries.{AddABeneficiaryPage, AddABeneficiaryYesNoPage}
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi, MessagesProvider}
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
@@ -49,11 +49,9 @@ class AddABeneficiaryController @Inject()(
                                            yesNoView: AddABeneficiaryYesNoView,
                                            maxedOutView: MaxedOutBeneficiariesView,
                                            config: FrontendAppConfig
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController
+                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with Logging
 
   with I18nSupport with Enumerable.Implicits with AnyBeneficiaries {
-
-  private val logger = LoggerFactory.getLogger(s"application.{getClass.getCanonicalName}")
 
   private val addAnotherForm = addAnotherFormProvider()
 
