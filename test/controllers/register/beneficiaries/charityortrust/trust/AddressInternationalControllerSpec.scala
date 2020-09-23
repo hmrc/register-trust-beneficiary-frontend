@@ -17,16 +17,16 @@
 package controllers.register.beneficiaries.charityortrust.trust
 
 import base.SpecBase
-import config.annotations.{CompanyBeneficiary, TrustBeneficiary}
+import config.annotations.TrustBeneficiary
 import forms.InternationalAddressFormProvider
-import models.core.pages.InternationalAddress
 import models.UserAnswers
+import models.core.pages.InternationalAddress
 import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.charityortrust.trust.{AddressInternationalPage, NamePage}
 import play.api.Application
 import play.api.data.Form
 import play.api.inject.bind
-import play.api.mvc.{Call, Result}
+import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils._

@@ -17,7 +17,6 @@
 package views.register.beneficiaries.individualBeneficiary
 
 import forms.PassportOrIdCardFormProvider
-import models.NormalMode
 import models.core.pages.FullName
 import models.registration.pages.PassportOrIdCardDetails
 import play.api.data.Form

@@ -19,7 +19,7 @@ package controllers.actions.register.company
 import controllers.actions
 import controllers.actions.BeneficiaryNameRequest
 import javax.inject.Inject
-import models.requests.{DataRequest, RegistrationDataRequest}
+import models.requests.RegistrationDataRequest
 import pages.register.beneficiaries.companyoremploymentrelated.company.NamePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.ActionTransformer

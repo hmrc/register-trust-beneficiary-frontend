@@ -19,7 +19,7 @@ package pages.register.beneficiaries.charityortrust.trust
 import models.core.pages.InternationalAddress
 import pages.QuestionPage
 import play.api.libs.json.JsPath
-import sections.beneficiaries.{Beneficiaries, IndividualBeneficiaries, TrustBeneficiaries}
+import sections.beneficiaries.{Beneficiaries, TrustBeneficiaries}
 
 final case class AddressInternationalPage(index: Int) extends QuestionPage[InternationalAddress] {
 

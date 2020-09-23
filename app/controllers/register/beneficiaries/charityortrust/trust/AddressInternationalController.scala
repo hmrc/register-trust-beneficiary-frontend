@@ -17,17 +17,16 @@
 package controllers.register.beneficiaries.charityortrust.trust
 
 import config.annotations.TrustBeneficiary
-import controllers.actions.register.trust.NameRequiredAction
 import controllers.actions.StandardActionSets
+import controllers.actions.register.trust.NameRequiredAction
 import forms.InternationalAddressFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.beneficiaries.charityortrust.trust.{AddressInternationalPage, NamePage}
+import pages.register.beneficiaries.charityortrust.trust.AddressInternationalPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
-import sections.beneficiaries.IndividualBeneficiaries
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.countryOptions.CountryOptionsNonUK
 import views.html.register.beneficiaries.charityortrust.trust.AddressInternationalView

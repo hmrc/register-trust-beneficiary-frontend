@@ -16,7 +16,6 @@
 
 package base
 
-import config.annotations.TrustBeneficiary
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationDataRequiredActionImpl, RegistrationIdentifierAction}
 import controllers.actions.{FakeDraftIdRetrievalActionProvider, FakeIdentifyForRegistration}
 import models.{Status, UserAnswers}

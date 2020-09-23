@@ -16,13 +16,11 @@
 
 package mapping.registration
 
-import java.time.LocalDate
-
 import base.SpecBase
 import generators.Generators
-import models.core.pages.{FullName, InternationalAddress, UKAddress}
+import models.core.pages.{InternationalAddress, UKAddress}
 import org.scalatest.{MustMatchers, OptionValues}
-import pages.register.beneficiaries.companyoremploymentrelated.company.{AddressInternationalPage, AddressUKPage, AddressUKYesNoPage, AddressYesNoPage, IncomeYesNoPage, NamePage, IncomePage}
+import pages.register.beneficiaries.companyoremploymentrelated.company._
 
 class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {

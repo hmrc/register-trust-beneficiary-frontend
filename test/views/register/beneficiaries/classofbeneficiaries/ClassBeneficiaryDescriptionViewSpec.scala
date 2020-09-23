@@ -17,7 +17,6 @@
 package views.register.beneficiaries.classofbeneficiaries
 
 import forms.ClassBeneficiaryDescriptionFormProvider
-import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.StringViewBehaviours

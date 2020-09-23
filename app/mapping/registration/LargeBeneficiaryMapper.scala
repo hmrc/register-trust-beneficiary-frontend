@@ -21,8 +21,6 @@ import mapping.Mapping
 import mapping.reads.{LargeBeneficiaries, LargeBeneficiary}
 import models.UserAnswers
 import models.registration.pages.HowManyBeneficiaries
-import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.LargeBeneficiaryNumberOfBeneficiariesPage
-import play.api.libs.json.Reads
 
 class LargeBeneficiaryMapper @Inject()(nameMapper: NameMapper,
                                        addressMapper: AddressMapper) extends Mapping[List[LargeType]] {

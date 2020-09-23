@@ -21,7 +21,7 @@ import java.time.LocalDateTime
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock._
 import models.Status.InProgress
-import models.{RegistrationSubmission, SubmissionDraftData, SubmissionDraftResponse}
+import models.{RegistrationSubmission, SubmissionDraftResponse}
 import org.scalatest.{MustMatchers, OptionValues}
 import play.api.Application
 import play.api.http.Status
@@ -50,7 +50,6 @@ class SubmissionDraftConnectorSpec extends SpecBase with MustMatchers with Optio
   private val submissionsUrl = s"/trusts/register/submission-drafts"
   private val submissionUrl = s"$submissionsUrl/$testDraftId/$testSection"
   private val setSubmissionUrl = s"$submissionsUrl/$testDraftId/set/$testSection"
-  private val mainUrl = s"$submissionsUrl/$testDraftId/main"
 
   "SubmissionDraftConnector" when {
 

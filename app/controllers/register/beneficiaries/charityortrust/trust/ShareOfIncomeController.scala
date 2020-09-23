@@ -17,12 +17,12 @@
 package controllers.register.beneficiaries.charityortrust.trust
 
 import config.annotations.TrustBeneficiary
-import controllers.actions.register.trust.NameRequiredAction
 import controllers.actions.StandardActionSets
+import controllers.actions.register.trust.NameRequiredAction
 import forms.IncomePercentageFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.beneficiaries.charityortrust.trust.{NamePage, ShareOfIncomePage}
+import pages.register.beneficiaries.charityortrust.trust.ShareOfIncomePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

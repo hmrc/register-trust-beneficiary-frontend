@@ -19,8 +19,7 @@ package controllers.register.beneficiaries.companyoremploymentrelated
 import controllers.actions._
 import forms.CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider
 import javax.inject.Inject
-import models.CompanyOrEmploymentRelatedToAdd.{Company, EmploymentRelated}
-import models.{CompanyOrEmploymentRelatedToAdd, NormalMode}
+import models.CompanyOrEmploymentRelatedToAdd
 import navigation.Navigator
 import pages.register.beneficiaries.companyoremploymentrelated.CompanyOrEmploymentRelatedPage
 import play.api.data.Form

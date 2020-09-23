@@ -16,9 +16,7 @@
 
 package views.register.beneficiaries.companyoremploymentrelated.employmentRelated
 
-import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.routes
 import forms.EmploymentRelatedBeneficiaryDescriptionFormProvider
-import models.NormalMode
 import models.core.pages.Description
 import play.api.data.Form
 import play.twirl.api.HtmlFormat

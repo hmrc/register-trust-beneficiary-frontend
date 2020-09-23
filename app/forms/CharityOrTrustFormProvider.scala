@@ -18,7 +18,7 @@ package forms
 
 import forms.mappings.Mappings
 import javax.inject.Inject
-import models.registration.pages.{CharityOrTrust, WhatTypeOfBeneficiary}
+import models.registration.pages.CharityOrTrust
 import play.api.data.Form
 
 class CharityOrTrustFormProvider @Inject() extends Mappings {

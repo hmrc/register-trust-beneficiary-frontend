@@ -81,8 +81,7 @@ class AnswerRowConverter @Inject()() {
 
     def percentageQuestion(query: Gettable[Int],
                            labelKey: String,
-                           changeUrl: String)
-                          (implicit messages:Messages): Option[AnswerRow] = {
+                           changeUrl: String): Option[AnswerRow] = {
       userAnswers.get(query) map {x =>
         AnswerRow(
           s"$labelKey.checkYourAnswersLabel",
@@ -148,7 +147,7 @@ class AnswerRowConverter @Inject()() {
     def addressQuestion[T <: Address](query: Gettable[T],
                                       labelKey: String,
                                       changeUrl: String)
-                                     (implicit messages:Messages, reads: Reads[T]): Option[AnswerRow] = {
+                                     (implicit reads: Reads[T]): Option[AnswerRow] = {
       userAnswers.get(query) map { x =>
         AnswerRow(
           s"$labelKey.checkYourAnswersLabel",

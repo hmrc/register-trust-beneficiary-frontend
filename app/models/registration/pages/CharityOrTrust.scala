@@ -17,7 +17,6 @@
 package models.registration.pages
 
 import models.{Enumerable, WithName}
-import play.api.libs.json.Json
 import viewmodels.RadioOption
 
 sealed trait CharityOrTrust

@@ -20,7 +20,6 @@ import base.SpecBase
 import forms.CharityOrTrustFormProvider
 import models.registration.pages.CharityOrTrust
 import org.scalatestplus.mockito.MockitoSugar
-import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
 import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers._

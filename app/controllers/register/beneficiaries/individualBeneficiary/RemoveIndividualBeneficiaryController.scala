@@ -31,8 +31,6 @@ import queries.{RemoveIndividualBeneficiaryQuery, Settable}
 import repositories.RegistrationsRepository
 import views.html.RemoveIndexView
 
-import scala.concurrent.ExecutionContext
-
 class RemoveIndividualBeneficiaryController @Inject()(
                                                        override val messagesApi: MessagesApi,
                                                        override val registrationsRepository: RegistrationsRepository,
@@ -43,7 +41,7 @@ class RemoveIndividualBeneficiaryController @Inject()(
                                                        val controllerComponents: MessagesControllerComponents,
                                                        val removeView: RemoveIndexView,
                                                        require: RequiredAnswerActionProvider
-                                 )(implicit ec: ExecutionContext) extends RemoveIndexController {
+                                 ) extends RemoveIndexController {
 
   override val messagesPrefix : String = "removeIndividualBeneficiary"
 

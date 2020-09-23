@@ -17,7 +17,6 @@
 package views.register.beneficiaries
 
 import forms.YesNoFormProvider
-import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours

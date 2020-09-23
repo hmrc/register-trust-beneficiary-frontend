@@ -18,7 +18,6 @@ package navigation
 
 import base.SpecBase
 import controllers.register.beneficiaries.charityortrust.charity.routes._
-import models.NormalMode
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.beneficiaries.charityortrust.charity._
 

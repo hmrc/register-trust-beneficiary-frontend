@@ -16,7 +16,7 @@
 
 package mapping.reads
 
-import models.core.pages.{Address, FullName, InternationalAddress, UKAddress}
+import models.core.pages.{InternationalAddress, UKAddress}
 import play.api.libs.json.{Format, Json}
 
 final case class CompanyBeneficiary(name: String,
