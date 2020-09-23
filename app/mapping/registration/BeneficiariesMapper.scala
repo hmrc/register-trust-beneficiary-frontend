@@ -19,7 +19,7 @@ package mapping.registration
 import javax.inject.Inject
 import mapping.Mapping
 import models.UserAnswers
-import play.api.Logger
+import org.slf4j.LoggerFactory
 
 class BeneficiariesMapper @Inject()(
                                      individualBeneficiaryMapper: IndividualBeneficiaryMapper,
@@ -30,6 +30,7 @@ class BeneficiariesMapper @Inject()(
                                      largeBeneficiaryMapper: LargeBeneficiaryMapper,
                                      otherBeneficiaryMapper: OtherBeneficiaryMapper
                                    ) extends Mapping[BeneficiaryType] {
+  private val logger = LoggerFactory.getLogger(s"application.{getClass.getCanonicalName}")
 
   override def build(userAnswers: UserAnswers): Option[BeneficiaryType] = {
 
@@ -56,7 +57,7 @@ class BeneficiariesMapper @Inject()(
         )
       )
     } else {
-      Logger.info(s"[BeneficiariesMapper][build] no beneficiaries to map")
+      logger.info(s"[BeneficiariesMapper][build] no beneficiaries to map")
       None
     }
   }

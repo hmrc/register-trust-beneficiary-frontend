@@ -23,8 +23,8 @@ import javax.inject.Inject
 import models.Enumerable
 import models.registration.pages.AddABeneficiary.NoComplete
 import navigation.Navigator
+import org.slf4j.LoggerFactory
 import pages.register.beneficiaries.{AddABeneficiaryPage, AddABeneficiaryYesNoPage}
-import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi, MessagesProvider}
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
@@ -53,6 +53,8 @@ class AddABeneficiaryController @Inject()(
 
   with I18nSupport with Enumerable.Implicits with AnyBeneficiaries {
 
+  private val logger = LoggerFactory.getLogger(s"application.{getClass.getCanonicalName}")
+
   private val addAnotherForm = addAnotherFormProvider()
 
   private val yesNoForm = yesNoFormProvider.withPrefix("addABeneficiaryYesNo")
@@ -76,15 +78,15 @@ class AddABeneficiaryController @Inject()(
       val allBeneficiaries = beneficiaries(request.userAnswers)
 
       if (allBeneficiaries.nonMaxedOutOptions.isEmpty) {
-        Logger.info(s"[AddABeneficiaryController] ${request.internalId} has maxed out beneficiaries")
+        logger.info(s"[AddABeneficiaryController] ${request.internalId} has maxed out beneficiaries")
         Ok(maxedOutView(draftId, rows.inProgress, rows.complete, heading(rows.count)))
       } else {
         if(rows.count > 0) {
-          Logger.info(s"[AddABeneficiaryController] ${request.internalId} has not out beneficiaries")
+          logger.info(s"[AddABeneficiaryController] ${request.internalId} has not out beneficiaries")
           val listOfMaxed = allBeneficiaries.maxedOutOptions.map(_.messageKey)
           Ok(addAnotherView(addAnotherForm, draftId, rows.inProgress, rows.complete, heading(rows.count), listOfMaxed))
         } else {
-          Logger.info(s"[AddABeneficiaryController] ${request.internalId} has added no beneficiaries")
+          logger.info(s"[AddABeneficiaryController] ${request.internalId} has added no beneficiaries")
           Ok(yesNoView(yesNoForm, draftId))
         }
       }
