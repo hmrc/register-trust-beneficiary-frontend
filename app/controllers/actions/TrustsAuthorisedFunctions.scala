@@ -25,7 +25,7 @@ import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisationException, AuthorisedF
 
 class TrustsAuthorisedFunctions @Inject()(override val authConnector: AuthConnector,
                                           val config: FrontendAppConfig) extends AuthorisedFunctions {
-  private val logger = LoggerFactory.getLogger(s"application" + classOf[TrustsAuthorisedFunctions].getCanonicalName)
+  private val logger = LoggerFactory.getLogger(s"application.{getClass.getCanonicalName}")
 
   def recoverFromAuthorisation : PartialFunction[Throwable, Result] = {
     case _: NoActiveSession => redirectToLogin

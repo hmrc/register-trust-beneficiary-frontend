@@ -27,7 +27,7 @@ import play.api.data.Form
 import play.api.i18n._
 import play.api.mvc._
 import repositories.RegistrationsRepository
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.beneficiaries.charityortrust.charity.AddressInTheUkYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}

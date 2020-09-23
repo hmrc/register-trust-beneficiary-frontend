@@ -6,18 +6,18 @@ object AppDependencies {
   val compile: Seq[ModuleID] = Seq(
     play.sbt.PlayImport.ws,
     "uk.gov.hmrc"       %% "logback-json-logger"            % "4.6.0",
-    "uk.gov.hmrc"       %% "govuk-template"                 % "5.52.0-play-26",
-    "uk.gov.hmrc"       %% "play-health"                    % "3.14.0-play-26",
-    "uk.gov.hmrc"       %% "play-ui"                        % "8.8.0-play-26",
-    "uk.gov.hmrc"       %% "play-conditional-form-mapping"  % "1.2.0-play-26",
-    "uk.gov.hmrc"       %% "domain"                         % "5.9.0-play-26",
-    "uk.gov.hmrc"       %% "bootstrap-play-26"              % "1.4.0",
-    "uk.gov.hmrc"       %% "play-whitelist-filter"          % "3.1.0-play-26"
+    "uk.gov.hmrc"       %% "govuk-template"                 % "5.55.0-play-27",
+    "uk.gov.hmrc"       %% "play-health"                    % "3.15.0-play-27",
+    "uk.gov.hmrc"       %% "play-ui"                        % "8.12.0-play-27",
+    "uk.gov.hmrc"       %% "play-conditional-form-mapping"  % "1.3.0-play-26",
+    "uk.gov.hmrc"       %% "domain"                         % "5.10.0-play-27",
+    "uk.gov.hmrc"       %% "bootstrap-frontend-play-27"     % "2.25.0",
+    "uk.gov.hmrc"       %% "play-whitelist-filter"          % "3.4.0-play-27"
   )
 
   val test: Seq[ModuleID] = Seq(
     "org.scalatest"            %% "scalatest"             % "3.0.7",
-    "org.scalatestplus.play"   %% "scalatestplus-play"    % "3.1.2",
+    "org.scalatestplus.play"   %% "scalatestplus-play"    % "4.0.0",
     "org.pegdown"              %  "pegdown"               % "1.6.0",
     "org.jsoup"                %  "jsoup"                 % "1.10.3",
     "com.typesafe.play"        %% "play-test"             % PlayVersion.current,

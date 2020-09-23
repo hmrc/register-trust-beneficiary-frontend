@@ -21,7 +21,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.play.bootstrap.config.AuthRedirects
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import scala.concurrent.Future
 
@@ -29,7 +29,7 @@ import scala.concurrent.Future
 class SessionTimeoutController @Inject()(val appConfig: FrontendAppConfig,
                                          val config: Configuration,
                                          val env: Environment,
-                                         mcc: MessagesControllerComponents) extends FrontendController(mcc) with AuthRedirects {
+                                         val controllerComponents: MessagesControllerComponents) extends FrontendBaseController with AuthRedirects {
 
 
   val keepAlive: Action[AnyContent] = Action.async { implicit request =>
