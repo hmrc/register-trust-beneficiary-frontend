@@ -19,7 +19,7 @@ package controllers.actions
 import com.google.inject.Inject
 import config.FrontendAppConfig
 import models.requests.IdentifierRequest
-import org.slf4j.LoggerFactory
+import play.api.Logging
 import play.api.mvc.Results._
 import play.api.mvc.{Request, Result, _}
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Organisation}
@@ -34,9 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AffinityGroupIdentifierAction[A] @Inject()(action: Action[A],
                                                  trustsAuthFunctions: TrustsAuthorisedFunctions,
                                                  config: FrontendAppConfig
-                                                ) extends Action[A]  {
-  private val logger = LoggerFactory.getLogger(s"application.{getClass.getCanonicalName}")
-
+                                                ) extends Action[A] with Logging  {
   private def authoriseAgent(request : Request[A],
                              enrolments : Enrolments,
                              internalId : String,
