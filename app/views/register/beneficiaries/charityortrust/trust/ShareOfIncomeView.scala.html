@@ -33,12 +33,11 @@
 
         @components.error_summary(form.errors)
 
-        @components.input_text(
+        @components.input_number(
             field = form("value"),
             label = messages("trustBeneficiaryShareOfIncome.heading", name),
-            labelAsHeading = true,
             hint = Some(messages("trustBeneficiaryShareOfIncome.hint")),
-            labelClass=Some("heading-large")
+            symbol = Some("percentage")
         )
 
         @components.submit_button()
