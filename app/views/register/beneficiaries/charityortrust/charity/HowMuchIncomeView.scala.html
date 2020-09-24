@@ -33,13 +33,11 @@
 
         @components.error_summary(form.errors)
 
-        @components.input_text(
-          field = form("value"),
-          label = messages("charity.shareOfIncome.heading", charityName),
-          symbol = Some("percentage"),
-          labelClass = Some("heading-large"),
-          labelAsHeading = true,
-          hint = Some(messages("charity.shareOfIncome.hint"))
+        @components.input_number(
+            field = form("value"),
+            label = messages("charity.shareOfIncome.heading", charityName),
+            hint = Some(messages("charity.shareOfIncome.hint")),
+            symbol = Some("percentage")
         )
 
         @components.submit_button()

@@ -26,7 +26,7 @@
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("individualBeneficiaryIncome.title")}"
-    ) {
+) {
 
     @formHelper(action = IncomeController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
@@ -34,13 +34,11 @@
 
         @components.error_summary(form.errors)
 
-        @components.input_text(
+        @components.input_number(
             field = form("value"),
             label = messages("individualBeneficiaryIncome.heading", name.toString),
-            labelClass=Some("heading-large"),
-            labelAsHeading = true,
             hint = Some(messages(s"individualBeneficiaryIncome.hint")),
-            inputMode = Some("numeric")
+            symbol = Some("percentage")
         )
 
         @components.submit_button()
