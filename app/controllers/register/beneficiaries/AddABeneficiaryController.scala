@@ -24,12 +24,12 @@ import models.Enumerable
 import models.registration.pages.AddABeneficiary.NoComplete
 import navigation.Navigator
 import pages.register.beneficiaries.{AddABeneficiaryPage, AddABeneficiaryYesNoPage}
-import play.api.Logger
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi, MessagesProvider}
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import repositories.RegistrationsRepository
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.AddABeneficiaryViewHelper
 import views.html.register.beneficiaries.{AddABeneficiaryView, AddABeneficiaryYesNoView, MaxedOutBeneficiariesView}
 
@@ -49,7 +49,7 @@ class AddABeneficiaryController @Inject()(
                                            yesNoView: AddABeneficiaryYesNoView,
                                            maxedOutView: MaxedOutBeneficiariesView,
                                            config: FrontendAppConfig
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController
+                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with Logging
 
   with I18nSupport with Enumerable.Implicits with AnyBeneficiaries {
 
@@ -76,15 +76,15 @@ class AddABeneficiaryController @Inject()(
       val allBeneficiaries = beneficiaries(request.userAnswers)
 
       if (allBeneficiaries.nonMaxedOutOptions.isEmpty) {
-        Logger.info(s"[AddABeneficiaryController] ${request.internalId} has maxed out beneficiaries")
+        logger.info(s"[AddABeneficiaryController] ${request.internalId} has maxed out beneficiaries")
         Ok(maxedOutView(draftId, rows.inProgress, rows.complete, heading(rows.count)))
       } else {
         if(rows.count > 0) {
-          Logger.info(s"[AddABeneficiaryController] ${request.internalId} has not out beneficiaries")
+          logger.info(s"[AddABeneficiaryController] ${request.internalId} has not out beneficiaries")
           val listOfMaxed = allBeneficiaries.maxedOutOptions.map(_.messageKey)
           Ok(addAnotherView(addAnotherForm, draftId, rows.inProgress, rows.complete, heading(rows.count), listOfMaxed))
         } else {
-          Logger.info(s"[AddABeneficiaryController] ${request.internalId} has added no beneficiaries")
+          logger.info(s"[AddABeneficiaryController] ${request.internalId} has added no beneficiaries")
           Ok(yesNoView(yesNoForm, draftId))
         }
       }

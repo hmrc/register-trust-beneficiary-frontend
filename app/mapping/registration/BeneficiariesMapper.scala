@@ -19,7 +19,7 @@ package mapping.registration
 import javax.inject.Inject
 import mapping.Mapping
 import models.UserAnswers
-import play.api.Logger
+import play.api.Logging
 
 class BeneficiariesMapper @Inject()(
                                      individualBeneficiaryMapper: IndividualBeneficiaryMapper,
@@ -29,8 +29,7 @@ class BeneficiariesMapper @Inject()(
                                      companyBeneficiaryMapper: CompanyBeneficiaryMapper,
                                      largeBeneficiaryMapper: LargeBeneficiaryMapper,
                                      otherBeneficiaryMapper: OtherBeneficiaryMapper
-                                   ) extends Mapping[BeneficiaryType] {
-
+                                   ) extends Mapping[BeneficiaryType] with Logging {
   override def build(userAnswers: UserAnswers): Option[BeneficiaryType] = {
 
     val individuals = individualBeneficiaryMapper.build(userAnswers)
@@ -56,7 +55,7 @@ class BeneficiariesMapper @Inject()(
         )
       )
     } else {
-      Logger.info(s"[BeneficiariesMapper][build] no beneficiaries to map")
+      logger.info(s"[BeneficiariesMapper][build] no beneficiaries to map")
       None
     }
   }

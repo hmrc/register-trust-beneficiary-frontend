@@ -16,7 +16,7 @@
 
 package models
 
-import play.api.Logger
+import play.api.Logging
 import play.api.libs.json._
 import queries.{Gettable, Settable}
 
@@ -42,7 +42,7 @@ final case class UserAnswers(
                               draftId: String,
                               data: JsObject = Json.obj(),
                               internalAuthId :String
-                            ) extends ReadableUserAnswers {
+                            ) extends ReadableUserAnswers with Logging {
 
   def set[A](page: Settable[A], value: A)(implicit writes: Writes[A]): Try[UserAnswers] = {
 
@@ -51,7 +51,7 @@ final case class UserAnswers(
         Success(jsValue)
       case JsError(errors) =>
         val errorPaths = errors.collectFirst{ case (path, e) => s"$path $e"}
-        Logger.warn(s"[UserAnswers] unable to set path ${page.path} due to errors $errorPaths")
+        logger.warn(s"[UserAnswers] unable to set path ${page.path} due to errors $errorPaths")
         Failure(JsResultException(errors))
     }
 

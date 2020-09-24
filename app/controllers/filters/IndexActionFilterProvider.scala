@@ -19,7 +19,7 @@ package controllers.filters
 import com.google.inject.Inject
 import handlers.ErrorHandler
 import models.requests.RegistrationDataRequest
-import play.api.Logger
+import play.api.Logging
 import play.api.http.Status
 import play.api.libs.json.Reads
 import play.api.mvc.{ActionFilter, Result}
@@ -29,18 +29,18 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class IndexActionFilter[T](index : Int, entity : Gettable[List[T]], errorHandler : ErrorHandler)
                           (implicit val reads : Reads[T], val executionContext: ExecutionContext)
-  extends ActionFilter[RegistrationDataRequest] {
+  extends ActionFilter[RegistrationDataRequest] with Logging {
 
   override protected def filter[A](request: RegistrationDataRequest[A]): Future[Option[Result]] = {
 
     lazy val entities = request.userAnswers.get(entity).getOrElse(List.empty)
 
-    Logger.info(s"[IndexActionFilter] Validating index on ${entity.path} for entities ${entities.size}")
+    logger.info(s"[IndexActionFilter] Validating index on ${entity.path} for entities ${entities.size}")
 
     if (index >= 0 && index <= entities.size) {
       Future.successful(None)
     } else {
-      Logger.info(s"[IndexActionFilter] Out of bounds index for entity ${entity.path} index $index")
+      logger.info(s"[IndexActionFilter] Out of bounds index for entity ${entity.path} index $index")
       errorHandler.onClientError(request, Status.NOT_FOUND).map(Some(_))
     }
 
