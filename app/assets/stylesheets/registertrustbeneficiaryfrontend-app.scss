@@ -123,6 +123,38 @@ $error-colour: #d4351c;
     color: #6f777b;
 }
 
+.govuk-visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    clip: rect(0 0 0 0) !important;
+    -webkit-clip-path: inset(50%) !important;
+    clip-path: inset(50%) !important;
+    border: 0 !important;
+    white-space: nowrap !important;
+}
+
+.hmrc-page-heading {
+    display: table;
+    width: 100%;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 8px;
+    clear: both;
+    table-layout: fixed;
+}
+
+.hmrc-page-heading .hmrc-caption-xl {
+    display: table-header-group;
+}
+
+.hmrc-page-heading .govuk-heading-xl {
+    margin-bottom: 0;
+}
+
 @media print {
   .govuk-caption-xl {
     font-family: sans-serif;
