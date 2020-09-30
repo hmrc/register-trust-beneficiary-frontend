@@ -20,7 +20,7 @@ import base.SpecBase
 import config.FrontendAppConfig
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
-import play.api.mvc.{Action, AnyContent, Results}
+import play.api.mvc.{Action, AnyContent, DefaultActionBuilder, Results}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
@@ -33,7 +33,8 @@ class AffinityGroupIdentifierActionSpec extends SpecBase {
 
   val mockAuthConnector: AuthConnector = mock[AuthConnector]
   val appConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
-  val fakeAction: Action[AnyContent] = Action { _ => Results.Ok }
+  val actionBuilder: DefaultActionBuilder = app.injector.instanceOf[DefaultActionBuilder]
+  val fakeAction: Action[AnyContent] = actionBuilder { _ => Results.Ok }
 
   val utr = "0987654321"
 
