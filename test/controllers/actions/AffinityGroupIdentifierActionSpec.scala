@@ -18,7 +18,6 @@ package controllers.actions
 
 import base.SpecBase
 import config.FrontendAppConfig
-import javax.inject.Inject
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
 import play.api.mvc.{Action, AnyContent, DefaultActionBuilder, Results}
@@ -28,12 +27,13 @@ import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 
 import scala.concurrent.Future
 
-class AffinityGroupIdentifierActionSpec @Inject()(actionBuilder: DefaultActionBuilder) extends SpecBase {
+class AffinityGroupIdentifierActionSpec extends SpecBase {
 
   type RetrievalType = Option[String] ~ Option[AffinityGroup] ~ Enrolments
 
   val mockAuthConnector: AuthConnector = mock[AuthConnector]
   val appConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
+  val actionBuilder: DefaultActionBuilder = app.injector.instanceOf[DefaultActionBuilder]
   val fakeAction: Action[AnyContent] = actionBuilder { _ => Results.Ok }
 
   val utr = "0987654321"
