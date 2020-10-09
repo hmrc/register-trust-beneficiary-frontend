@@ -344,10 +344,10 @@ trustBeneficiaryDiscretionYesNo.heading = Do the trustees have discretion over h
 trustBeneficiaryDiscretionYesNo.hint = See the trust deed for details.
 trustBeneficiaryDiscretionYesNo.error.required = Select yes if the trustees have discretion over how much income the trust beneficiary may get
 
-trustBeneficiaryShareOfIncome.title = What percentage of the trust’s assets is the trust beneficiary entitled to?
-trustBeneficiaryShareOfIncome.heading = What percentage of the trust’s assets is {0} entitled to?
+trustBeneficiaryShareOfIncome.title = What percentage of the trust’s income is the trust beneficiary entitled to?
+trustBeneficiaryShareOfIncome.heading = What percentage of the trust’s income is {0} entitled to?
 trustBeneficiaryShareOfIncome.hint = Round this down to a whole number.
-trustBeneficiaryShareOfIncome.error.required = Enter what percentage of the trust’s assets the trust beneficiary is entitled to
+trustBeneficiaryShareOfIncome.error.required = Enter what percentage of the trust’s income the trust beneficiary is entitled to
 trustBeneficiaryShareOfIncome.error.integer = The percentage of the trust’s assets the trust beneficiary is entitled to must be a whole number
 trustBeneficiaryShareOfIncome.error.non_numeric = The percentage of the trust’s assets the trust beneficiary is entitled to must be a whole number
 trustBeneficiaryShareOfIncome.error.less_than_100 = The percentage of the trust’s assets the trust beneficiary is entitled to must be 100 or less
@@ -370,7 +370,7 @@ trustBeneficiary.checkDetails.utr.p3 = When asked for the date {0} was added or 
 
 otherBeneficiaryDescription.checkYourAnswersLabel = What is the description of the beneficiary?
 otherBeneficiaryShareOfIncomeYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
-otherBeneficiaryShareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
+otherBeneficiaryShareOfIncome.checkYourAnswersLabel = What percentage of the trust’s income is {0} entitled to?
 otherBeneficiaryAddressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
 otherBeneficiaryAddressUKYesNo.checkYourAnswersLabel = Is {0}’s address in the UK?
 otherBeneficiaryAddress.checkYourAnswersLabel = What is {0}’s address?
@@ -545,12 +545,12 @@ companyBeneficiary.discretionYesNo.checkYourAnswersLabel = Do the trustees have 
 companyBeneficiary.discretionYesNo.hint = See the trust deed for details.
 companyBeneficiary.discretionYesNo.error.required = Select yes if the trustees have discretion over how much income the company beneficiary may get
 
-companyBeneficiary.shareOfIncome.title = What percentage of the trust’s assets is the company beneficiary entitled to?
-companyBeneficiary.shareOfIncome.heading = What percentage of the trust’s assets is {0} entitled to?
-companyBeneficiary.shareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
+companyBeneficiary.shareOfIncome.title = What percentage of the trust’s income is the company beneficiary entitled to?
+companyBeneficiary.shareOfIncome.heading = What percentage of the trust’s income is {0} entitled to?
+companyBeneficiary.shareOfIncome.checkYourAnswersLabel = What percentage of the trust’s income is {0} entitled to?
 companyBeneficiary.shareOfIncome.hint = Round this down to a whole number.
 
-companyBeneficiary.shareOfIncome.error.required = Enter what percentage of the trust’s assets the company beneficiary is entitled to
+companyBeneficiary.shareOfIncome.error.required = Enter what percentage of the trust’s income the company beneficiary is entitled to
 companyBeneficiary.shareOfIncome.error.integer = The percentage of the trust’s assets the company beneficiary is entitled to must be a whole number
 companyBeneficiary.shareOfIncome.error.non_numeric = The percentage of the trust’s assets the company beneficiary is entitled to must be a whole number
 companyBeneficiary.shareOfIncome.error.less_than_100 = The percentage of the trust’s assets the company beneficiary is entitled to must be 100 or less
