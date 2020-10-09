@@ -133,7 +133,7 @@ emailAddress.checkYourAnswersLabel = What is {0}’s email address?
 
 charityBeneficiaryName.checkYourAnswersLabel = What is the name of the charity?
 charityBeneficiaryShareOfIncomeYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
-charityBeneficiaryShareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
+charityBeneficiaryShareOfIncome.checkYourAnswersLabel = What percentage of the trust’s income is {0} entitled to?
 charityBeneficiaryAddressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
 charityBeneficiaryAddressUKYesNo.checkYourAnswersLabel = Is {0}’s address in the UK?
 charityBeneficiaryAddress.checkYourAnswersLabel = What is {0}’s address?
@@ -141,7 +141,7 @@ charityBeneficiaryUtr.checkYourAnswersLabel = What is {0}’s Unique Taxpayer Re
 
 largeBeneficiaryName.checkYourAnswersLabel = What is the business’s name?
 largeBeneficiaryShareOfIncomeYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
-largeBeneficiaryShareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
+largeBeneficiaryShareOfIncome.checkYourAnswersLabel = What percentage of the trust’s income is {0} entitled to?
 largeBeneficiaryAddressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
 largeBeneficiaryAddressUKYesNo.checkYourAnswersLabel = Is {0}’s address in the UK?
 largeBeneficiaryAddress.checkYourAnswersLabel = What is {0}’s address?
@@ -195,14 +195,14 @@ individualBeneficiaryIncomeYesNo.checkYourAnswersLabel = Do the trustees have di
 individualBeneficiaryIncomeYesNo.hint = See the trust deed for details.
 individualBeneficiaryIncomeYesNo.error.required = Select yes if the trustees have discretion over how much income the individual beneficiary may get
 
-individualBeneficiaryIncome.title = What percentage of the trust’s assets is the individual beneficiary entitled to?
-individualBeneficiaryIncome.heading = What percentage of the trust’s assets is {0} entitled to?
-individualBeneficiaryIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
+individualBeneficiaryIncome.title = What percentage of the trust’s income is the individual beneficiary entitled to?
+individualBeneficiaryIncome.heading = What percentage of the trust’s income is {0} entitled to?
+individualBeneficiaryIncome.checkYourAnswersLabel = What percentage of the trust’s income is {0} entitled to?
 individualBeneficiaryIncome.hint = Round this down to a whole number.
-individualBeneficiaryIncome.error.required = Enter what percentage of the trust’s assets the beneficiary is entitled to
-individualBeneficiaryIncome.error.integer = The percentage of the trust’s assets the beneficiary is entitled to must be a whole number
-individualBeneficiaryIncome.error.non_numeric = The percentage of the trust’s assets the beneficiary is entitled to must be a whole number
-individualBeneficiaryIncome.error.less_than_100 = The percentage of the trust’s assets the beneficiary is entitled to must be 100 or less
+individualBeneficiaryIncome.error.required = Enter what percentage of the trust’s income the beneficiary is entitled to
+individualBeneficiaryIncome.error.integer = The percentage of the trust’s income the beneficiary is entitled to must be a whole number
+individualBeneficiaryIncome.error.non_numeric = The percentage of the trust’s income the beneficiary is entitled to must be a whole number
+individualBeneficiaryIncome.error.less_than_100 = The percentage of the trust’s income the beneficiary is entitled to must be 100 or less
 
 individualBeneficiaryNationalInsuranceYesNo.title = Do you know the individual beneficiary’s National Insurance number?
 individualBeneficiaryNationalInsuranceYesNo.heading = Do you know {0}’s National Insurance number?
@@ -327,7 +327,7 @@ trustBeneficiaryAnswers.heading = Check trust beneficiary details
 
 trustBeneficiaryName.checkYourAnswersLabel = What is the name of the trust?
 trustBeneficiaryDiscretionYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
-trustBeneficiaryShareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
+trustBeneficiaryShareOfIncome.checkYourAnswersLabel = What percentage of the trust’s income is {0} entitled to?
 trustBeneficiaryAddressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
 trustBeneficiaryAddressUKYesNo.checkYourAnswersLabel = Is {0}’s address in the UK?
 trustBeneficiaryAddress.checkYourAnswersLabel = What is {0}’s address?
@@ -344,13 +344,13 @@ trustBeneficiaryDiscretionYesNo.heading = Do the trustees have discretion over h
 trustBeneficiaryDiscretionYesNo.hint = See the trust deed for details.
 trustBeneficiaryDiscretionYesNo.error.required = Select yes if the trustees have discretion over how much income the trust beneficiary may get
 
-trustBeneficiaryShareOfIncome.title = What percentage of the trust’s assets is the trust beneficiary entitled to?
-trustBeneficiaryShareOfIncome.heading = What percentage of the trust’s assets is {0} entitled to?
+trustBeneficiaryShareOfIncome.title = What percentage of the trust’s income is the trust beneficiary entitled to?
+trustBeneficiaryShareOfIncome.heading = What percentage of the trust’s income is {0} entitled to?
 trustBeneficiaryShareOfIncome.hint = Round this down to a whole number.
-trustBeneficiaryShareOfIncome.error.required = Enter what percentage of the trust’s assets the trust beneficiary is entitled to
-trustBeneficiaryShareOfIncome.error.integer = The percentage of the trust’s assets the trust beneficiary is entitled to must be a whole number
-trustBeneficiaryShareOfIncome.error.non_numeric = The percentage of the trust’s assets the trust beneficiary is entitled to must be a whole number
-trustBeneficiaryShareOfIncome.error.less_than_100 = The percentage of the trust’s assets the trust beneficiary is entitled to must be 100 or less
+trustBeneficiaryShareOfIncome.error.required = Enter what percentage of the trust’s income the trust beneficiary is entitled to
+trustBeneficiaryShareOfIncome.error.integer = The percentage of the trust’s income the trust beneficiary is entitled to must be a whole number
+trustBeneficiaryShareOfIncome.error.non_numeric = The percentage of the trust’s income the trust beneficiary is entitled to must be a whole number
+trustBeneficiaryShareOfIncome.error.less_than_100 = The percentage of the trust’s income the trust beneficiary is entitled to must be 100 or less
 
 trustBeneficiaryAddressYesNo.title = Do you know the trust beneficiary’s address?
 trustBeneficiaryAddressYesNo.heading = Do you know {0}’s address?
@@ -370,7 +370,7 @@ trustBeneficiary.checkDetails.utr.p3 = When asked for the date {0} was added or 
 
 otherBeneficiaryDescription.checkYourAnswersLabel = What is the description of the beneficiary?
 otherBeneficiaryShareOfIncomeYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
-otherBeneficiaryShareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
+otherBeneficiaryShareOfIncome.checkYourAnswersLabel = What percentage of the trust’s income is {0} entitled to?
 otherBeneficiaryAddressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
 otherBeneficiaryAddressUKYesNo.checkYourAnswersLabel = Is {0}’s address in the UK?
 otherBeneficiaryAddress.checkYourAnswersLabel = What is {0}’s address?
@@ -413,7 +413,7 @@ classBeneficiaryDescription.error.invalid = The description of the class in the 
 classBeneficiaryDescription.hint = This must be 56 characters or less. For example, future grandchildren and future great-grandchildren.
 
 classBeneficiaryShareOfIncomeYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
-classBeneficiaryShareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
+classBeneficiaryShareOfIncome.checkYourAnswersLabel = What percentage of the trust’s income is {0} entitled to?
 
 removeClassOfBeneficiary.title = Are you sure you want to remove the class of beneficiaries?
 removeClassOfBeneficiary.heading = Are you sure you want to remove {0}?
@@ -487,13 +487,13 @@ charity.discretionYesNo.checkYourAnswersLabel = Do the trustees have discretion 
 charity.discretionYesNo.error.required = Select yes if the trustees have discretion over how much income the charity beneficiary may get
 charity.discretionYesNo.hint = See the trust deed for details.
 
-charity.shareOfIncome.title = What percentage of the trust’s assets is the charity beneficiary entitled to?
-charity.shareOfIncome.heading = What percentage of the trust’s assets is {0} entitled to?
-charity.shareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
-charity.shareOfIncome.error.required = Enter what percentage of the trust’s assets the charity beneficiary is entitled to
-charity.shareOfIncome.error.less_than_100 = The percentage of the trust’s assets the beneficiary is entitled to must be 100 or less
-charity.shareOfIncome.error.integer = The percentage of the trust’s assets the beneficiary is entitled to must be a whole number
-charity.shareOfIncome.error.non_numeric = The percentage of the trust’s assets the beneficiary is entitled to must be a whole number
+charity.shareOfIncome.title = What percentage of the trust’s income is the charity beneficiary entitled to?
+charity.shareOfIncome.heading = What percentage of the trust’s income is {0} entitled to?
+charity.shareOfIncome.checkYourAnswersLabel = What percentage of the trust’s income is {0} entitled to?
+charity.shareOfIncome.error.required = Enter what percentage of the trust’s income the charity beneficiary is entitled to
+charity.shareOfIncome.error.less_than_100 = The percentage of the trust’s income the beneficiary is entitled to must be 100 or less
+charity.shareOfIncome.error.integer = The percentage of the trust’s income the beneficiary is entitled to must be a whole number
+charity.shareOfIncome.error.non_numeric = The percentage of the trust’s income the beneficiary is entitled to must be a whole number
 charity.shareOfIncome.hint = Amount must be rounded down to the nearest whole number, like 33.
 
 charity.addressYesNo.title = Do you know the charity beneficiary’s address?
@@ -545,15 +545,15 @@ companyBeneficiary.discretionYesNo.checkYourAnswersLabel = Do the trustees have 
 companyBeneficiary.discretionYesNo.hint = See the trust deed for details.
 companyBeneficiary.discretionYesNo.error.required = Select yes if the trustees have discretion over how much income the company beneficiary may get
 
-companyBeneficiary.shareOfIncome.title = What percentage of the trust’s assets is the company beneficiary entitled to?
-companyBeneficiary.shareOfIncome.heading = What percentage of the trust’s assets is {0} entitled to?
-companyBeneficiary.shareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
+companyBeneficiary.shareOfIncome.title = What percentage of the trust’s income is the company beneficiary entitled to?
+companyBeneficiary.shareOfIncome.heading = What percentage of the trust’s income is {0} entitled to?
+companyBeneficiary.shareOfIncome.checkYourAnswersLabel = What percentage of the trust’s income is {0} entitled to?
 companyBeneficiary.shareOfIncome.hint = Round this down to a whole number.
 
-companyBeneficiary.shareOfIncome.error.required = Enter what percentage of the trust’s assets the company beneficiary is entitled to
-companyBeneficiary.shareOfIncome.error.integer = The percentage of the trust’s assets the company beneficiary is entitled to must be a whole number
-companyBeneficiary.shareOfIncome.error.non_numeric = The percentage of the trust’s assets the company beneficiary is entitled to must be a whole number
-companyBeneficiary.shareOfIncome.error.less_than_100 = The percentage of the trust’s assets the company beneficiary is entitled to must be 100 or less
+companyBeneficiary.shareOfIncome.error.required = Enter what percentage of the trust’s income the company beneficiary is entitled to
+companyBeneficiary.shareOfIncome.error.integer = The percentage of the trust’s income the company beneficiary is entitled to must be a whole number
+companyBeneficiary.shareOfIncome.error.non_numeric = The percentage of the trust’s income the company beneficiary is entitled to must be a whole number
+companyBeneficiary.shareOfIncome.error.less_than_100 = The percentage of the trust’s income the company beneficiary is entitled to must be 100 or less
 
 companyBeneficiary.addressYesNo.title = Do you know the company beneficiary’s address?
 companyBeneficiary.addressYesNo.heading = Do you know {0}’s address?
@@ -641,14 +641,14 @@ otherBeneficiary.discretionYesNo.checkYourAnswersLabel = Do the trustees have di
 otherBeneficiary.discretionYesNo.hint = See the trust deed for details.
 otherBeneficiary.discretionYesNo.error.required = Select yes if the trustees have discretion over how much income the other beneficiary may get
 
-otherBeneficiary.shareOfIncome.title = What percentage of the trust’s assets is the other beneficiary entitled to?
-otherBeneficiary.shareOfIncome.heading = What percentage of the trust’s assets is {0} entitled to?
-otherBeneficiary.shareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
+otherBeneficiary.shareOfIncome.title = What percentage of the trust’s income is the other beneficiary entitled to?
+otherBeneficiary.shareOfIncome.heading = What percentage of the trust’s income is {0} entitled to?
+otherBeneficiary.shareOfIncome.checkYourAnswersLabel = What percentage of the trust’s income is {0} entitled to?
 otherBeneficiary.shareOfIncome.hint = Round this down to a whole number.
-otherBeneficiary.shareOfIncome.error.required = Enter what percentage of the trust’s assets the other beneficiary is entitled to
-otherBeneficiary.shareOfIncome.error.integer = The percentage of the trust’s assets the other beneficiary is entitled to must be a whole number
-otherBeneficiary.shareOfIncome.error.non_numeric = The percentage of the trust’s assets the other beneficiary is entitled to must be a whole number
-otherBeneficiary.shareOfIncome.error.less_than_100 = The percentage of the trust’s assets the other beneficiary is entitled to must be 100 or less
+otherBeneficiary.shareOfIncome.error.required = Enter what percentage of the trust’s income the other beneficiary is entitled to
+otherBeneficiary.shareOfIncome.error.integer = The percentage of the trust’s income the other beneficiary is entitled to must be a whole number
+otherBeneficiary.shareOfIncome.error.non_numeric = The percentage of the trust’s income the other beneficiary is entitled to must be a whole number
+otherBeneficiary.shareOfIncome.error.less_than_100 = The percentage of the trust’s income the other beneficiary is entitled to must be 100 or less
 
 otherBeneficiary.addressYesNo.title = Do you know the other beneficiary’s address?
 otherBeneficiary.addressYesNo.heading = Do you know {0}’s address?
