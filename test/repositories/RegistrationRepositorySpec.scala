@@ -85,13 +85,13 @@ class RegistrationRepositorySpec extends SpecBase with MustMatchers with Mockito
 
         when(mockConnector.getDraftSection(any(), any())(any(), any())).thenReturn(Future.successful(response))
 
-        val result = Await.result(repository.getMainAnswers(draftId), Duration.Inf)
+        val result = Await.result(repository.getSettlorsAnswers(draftId), Duration.Inf)
 
         val expectedAnswers = Json.obj("someField" -> "someValue")
         val expectedUserAnswers = ReadOnlyUserAnswers(expectedAnswers)
 
         result mustBe Some(expectedUserAnswers)
-        verify(mockConnector).getDraftSection(draftId, "main")(hc, executionContext)
+        verify(mockConnector).getDraftSection(draftId, "settlors")(hc, executionContext)
       }
 
     }

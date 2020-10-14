@@ -69,9 +69,9 @@ class NameController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(NamePage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-            mainAnswers <- registrationsRepository.getMainAnswers(draftId)
+            settlorsAnswers <- registrationsRepository.getSettlorsAnswers(draftId)
           } yield {
-            Redirect(navigator.nextPage(NamePage(index), draftId, mainAnswers getOrElse updatedAnswers))
+            Redirect(navigator.nextPage(NamePage(index), draftId, settlorsAnswers getOrElse updatedAnswers))
           }
         }
       )

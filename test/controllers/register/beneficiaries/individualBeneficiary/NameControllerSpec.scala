@@ -86,7 +86,7 @@ class NameControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" when {
       "using main answers" in {
 
-        when(registrationsRepository.getMainAnswers(any())(any()))
+        when(registrationsRepository.getSettlorsAnswers(any())(any()))
           .thenReturn(Future.successful(Some(ReadOnlyUserAnswers(Json.obj()))))
 
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
@@ -108,7 +108,7 @@ class NameControllerSpec extends SpecBase {
       }
       "using section answers" in {
 
-        when(registrationsRepository.getMainAnswers(any())(any()))
+        when(registrationsRepository.getSettlorsAnswers(any())(any()))
           .thenReturn(Future.successful(None))
 
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
