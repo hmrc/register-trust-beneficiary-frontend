@@ -12,11 +12,14 @@
 @import 'conditionals';
 @import 'colours/_palette';
 
+// Autocomplete country lookup
+@import 'location-autocomplete.min';
+@import 'patterns/autocomplete';
+
 // WCGA 2.1 https://design-system.service.gov.uk/styles/colour/
 @import 'govuk-colours-override';
 
 @import 'partials/_focus';
-@import 'location-autocomplete.min';
 @import 'patterns/add-to-a-list';
 @import 'patterns/symbol-input';
 
