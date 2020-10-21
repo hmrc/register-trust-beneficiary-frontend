@@ -33,7 +33,7 @@ class DefaultRegistrationsRepository @Inject()(submissionDraftConnector: Submiss
                                         )(implicit ec: ExecutionContext) extends RegistrationsRepository {
 
   private val userAnswersSection = config.repositoryKey
-  private val mainAnswersSection = "main"
+  private val settlorsAnswersSection = "settlors"
 
   override def set(userAnswers: UserAnswers)(implicit hc: HeaderCarrier, messages: Messages): Future[Boolean] = {
     submissionDraftConnector.setDraftSectionSet(
@@ -55,8 +55,8 @@ class DefaultRegistrationsRepository @Inject()(submissionDraftConnector: Submiss
     }
   }
 
-  override def getMainAnswers(draftId: String)(implicit hc: HeaderCarrier): Future[Option[ReadOnlyUserAnswers]] = {
-    submissionDraftConnector.getDraftSection(draftId, mainAnswersSection).map {
+  override def getSettlorsAnswers(draftId: String)(implicit hc: HeaderCarrier): Future[Option[ReadOnlyUserAnswers]] = {
+    submissionDraftConnector.getDraftSection(draftId, settlorsAnswersSection).map {
       response =>
         response.data.validate[ReadOnlyUserAnswers] match {
           case JsSuccess(userAnswers, _) => Some(userAnswers)
@@ -72,5 +72,5 @@ trait RegistrationsRepository {
 
   def get(draftId: String)(implicit hc: HeaderCarrier): Future[Option[UserAnswers]]
 
-  def getMainAnswers(draftId: String)(implicit hc: HeaderCarrier): Future[Option[ReadOnlyUserAnswers]]
+  def getSettlorsAnswers(draftId: String)(implicit hc: HeaderCarrier): Future[Option[ReadOnlyUserAnswers]]
 }

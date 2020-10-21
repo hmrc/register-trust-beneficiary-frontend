@@ -86,7 +86,7 @@ class CharityNameControllerSpec extends SpecBase with MockitoSugar {
 
     "redirect to the next page when valid data is submitted" in {
 
-      when(registrationsRepository.getMainAnswers(any())(any()))
+      when(registrationsRepository.getSettlorsAnswers(any())(any()))
         .thenReturn(Future.successful(Some(ReadOnlyUserAnswers(Json.obj()))))
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
