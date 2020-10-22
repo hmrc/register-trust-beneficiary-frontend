@@ -55,7 +55,7 @@ class BeneficiariesMapper @Inject()(
         )
       )
     } else {
-      logger.info(s"[BeneficiariesMapper][build] no beneficiaries to map")
+      logger.info(s"[build] no beneficiaries to map")
       None
     }
   }
