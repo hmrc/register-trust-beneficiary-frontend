@@ -76,15 +76,15 @@ class AddABeneficiaryController @Inject()(
       val allBeneficiaries = beneficiaries(request.userAnswers)
 
       if (allBeneficiaries.nonMaxedOutOptions.isEmpty) {
-        logger.info(s"[AddABeneficiaryController] ${request.internalId} has maxed out beneficiaries")
+        logger.info(s"[AddABeneficiaryController][Session ID: ${request.sessionId}] ${request.internalId} has maxed out beneficiaries")
         Ok(maxedOutView(draftId, rows.inProgress, rows.complete, heading(rows.count)))
       } else {
         if(rows.count > 0) {
-          logger.info(s"[AddABeneficiaryController] ${request.internalId} has not out beneficiaries")
+          logger.info(s"[AddABeneficiaryController][Session ID: ${request.sessionId}] ${request.internalId} has not maxed out beneficiaries")
           val listOfMaxed = allBeneficiaries.maxedOutOptions.map(_.messageKey)
           Ok(addAnotherView(addAnotherForm, draftId, rows.inProgress, rows.complete, heading(rows.count), listOfMaxed))
         } else {
-          logger.info(s"[AddABeneficiaryController] ${request.internalId} has added no beneficiaries")
+          logger.info(s"[AddABeneficiaryController][Session ID: ${request.sessionId}] ${request.internalId} has added no beneficiaries")
           Ok(yesNoView(yesNoForm, draftId))
         }
       }
