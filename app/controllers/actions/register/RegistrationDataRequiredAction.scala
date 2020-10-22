@@ -20,7 +20,6 @@ import javax.inject.Inject
 import models.requests.{OptionalRegistrationDataRequest, RegistrationDataRequest}
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
-import utils.Session
 
 import scala.concurrent.{ExecutionContext, Future}
 
