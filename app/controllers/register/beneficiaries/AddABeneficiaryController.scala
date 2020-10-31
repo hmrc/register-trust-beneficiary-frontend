@@ -20,15 +20,21 @@ import config.FrontendAppConfig
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import javax.inject.Inject
-import models.Enumerable
+import models.Status.InProgress
 import models.registration.pages.AddABeneficiary.NoComplete
+import models.registration.pages.KindOfTrust.Employees
+import models.{Enumerable, ReadOnlyUserAnswers, UserAnswers}
 import navigation.Navigator
+import pages.entitystatus.IndividualBeneficiaryStatus
+import pages.register.KindOfTrustPage
+import pages.register.beneficiaries.individual.RoleInCompanyPage
 import pages.register.beneficiaries.{AddABeneficiaryPage, AddABeneficiaryYesNoPage}
 import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi, MessagesProvider}
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import repositories.RegistrationsRepository
+import sections.beneficiaries.IndividualBeneficiaries
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.AddABeneficiaryViewHelper
 import views.html.register.beneficiaries.{AddABeneficiaryView, AddABeneficiaryYesNoView, MaxedOutBeneficiariesView}
@@ -49,7 +55,7 @@ class AddABeneficiaryController @Inject()(
                                            yesNoView: AddABeneficiaryYesNoView,
                                            maxedOutView: MaxedOutBeneficiariesView,
                                            config: FrontendAppConfig
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with Logging
+                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with Logging
 
   with I18nSupport with Enumerable.Implicits with AnyBeneficiaries {
 
@@ -68,24 +74,53 @@ class AddABeneficiaryController @Inject()(
     }
   }
 
-  def onPageLoad(draftId: String): Action[AnyContent] = routes(draftId) {
+  def onPageLoad(draftId: String): Action[AnyContent] = routes(draftId).async {
     implicit request =>
 
-      val rows = new AddABeneficiaryViewHelper(request.userAnswers, draftId).rows
+      def updateUserAnswers(initialAnswers: UserAnswers): Future[UserAnswers] = {
 
-      val allBeneficiaries = beneficiaries(request.userAnswers)
+        def setIndividualBeneficiaryStatuses(readOnly: Option[ReadOnlyUserAnswers]): UserAnswers = {
+          readOnly match {
+            case Some(settlorsAnswers) =>
+              val isTrustForEmployeesOfCompany = settlorsAnswers.get(KindOfTrustPage).contains(Employees)
+              initialAnswers.get(IndividualBeneficiaries).toList.flatten.zipWithIndex
+                .foldLeft(initialAnswers)((ua, x) => {
+                  val index = x._2
+                  if (ua.get(RoleInCompanyPage(index)).isEmpty && isTrustForEmployeesOfCompany) {
+                    ua.set(IndividualBeneficiaryStatus(index), InProgress).getOrElse(ua)
+                  } else {
+                    ua
+                  }
+                })
+            case _ =>
+              initialAnswers
+          }
+        }
 
-      if (allBeneficiaries.nonMaxedOutOptions.isEmpty) {
-        logger.info(s"[AddABeneficiaryController][Session ID: ${request.sessionId}] ${request.internalId} has maxed out beneficiaries")
-        Ok(maxedOutView(draftId, rows.inProgress, rows.complete, heading(rows.count)))
-      } else {
-        if(rows.count > 0) {
-          logger.info(s"[AddABeneficiaryController][Session ID: ${request.sessionId}] ${request.internalId} has not maxed out beneficiaries")
-          val listOfMaxed = allBeneficiaries.maxedOutOptions.map(_.messageKey)
-          Ok(addAnotherView(addAnotherForm, draftId, rows.inProgress, rows.complete, heading(rows.count), listOfMaxed))
+        for {
+          settlorsAnswers <- registrationsRepository.getSettlorsAnswers(draftId)
+          updatedAnswers = setIndividualBeneficiaryStatuses(settlorsAnswers)
+          _ <- registrationsRepository.set(updatedAnswers)
+        } yield updatedAnswers
+      }
+
+      updateUserAnswers(request.userAnswers) map { userAnswers =>
+        val rows = new AddABeneficiaryViewHelper(userAnswers, draftId).rows
+
+        val allBeneficiaries = beneficiaries(userAnswers)
+
+        if (allBeneficiaries.nonMaxedOutOptions.isEmpty) {
+          logger.info(s"[AddABeneficiaryController][Session ID: ${request.sessionId}] ${request.internalId} has maxed out beneficiaries")
+          Ok(maxedOutView(draftId, rows.inProgress, rows.complete, heading(rows.count)))
         } else {
-          logger.info(s"[AddABeneficiaryController][Session ID: ${request.sessionId}] ${request.internalId} has added no beneficiaries")
-          Ok(yesNoView(yesNoForm, draftId))
+          if(rows.count > 0) {
+            logger.info(s"[AddABeneficiaryController][Session ID: ${request.sessionId}] ${request.internalId} has not maxed out beneficiaries")
+            val listOfMaxed = allBeneficiaries.maxedOutOptions.map(_.messageKey)
+            Ok(addAnotherView(addAnotherForm, draftId, rows.inProgress, rows.complete, heading(rows.count), listOfMaxed))
+          } else {
+            logger.info(s"[AddABeneficiaryController][Session ID: ${request.sessionId}] ${request.internalId} has added no beneficiaries")
+            Ok(yesNoView(yesNoForm, draftId))
+          }
         }
       }
   }
