@@ -26,10 +26,15 @@ import controllers.register.beneficiaries.individualBeneficiary.{routes => indiv
 import controllers.register.beneficiaries.other.{routes => otherRoutes}
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import models.Status.Completed
-import models.UserAnswers
 import models.core.pages.{Description, FullName}
 import models.registration.pages.AddABeneficiary
+import models.registration.pages.KindOfTrust._
+import models.registration.pages.RoleInCompany.Employee
+import models.{ReadOnlyUserAnswers, UserAnswers}
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
 import pages.entitystatus._
+import pages.register.KindOfTrustPage
 import pages.register.beneficiaries.charityortrust.{charity => charityPages, trust => trustPages}
 import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.{LargeBeneficiaryDescriptionPage, LargeBeneficiaryNamePage}
 import pages.register.beneficiaries.companyoremploymentrelated.{company => companyPages}
@@ -40,6 +45,8 @@ import play.api.test.Helpers._
 import utils.AddABeneficiaryViewHelper
 import viewmodels.AddRow
 import views.html.register.beneficiaries.{AddABeneficiaryView, AddABeneficiaryYesNoView, MaxedOutBeneficiariesView}
+
+import scala.concurrent.Future
 
 class AddABeneficiaryControllerSpec extends SpecBase {
 
@@ -223,6 +230,12 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
       "return OK and the correct view for a GET" in {
 
+        val settlorsAnswers: ReadOnlyUserAnswers = ReadOnlyUserAnswers(
+          emptyUserAnswers.set(KindOfTrustPage, Intervivos).success.value.data
+        )
+
+        when(registrationsRepository.getSettlorsAnswers(any())(any())).thenReturn(Future.successful(Some(settlorsAnswers)))
+
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
         val request = FakeRequest(GET, addABeneficiaryRoute)
@@ -285,6 +298,12 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
       "return OK and the correct view for a GET" in {
 
+        val settlorsAnswers: ReadOnlyUserAnswers = ReadOnlyUserAnswers(
+          emptyUserAnswers.set(KindOfTrustPage, Intervivos).success.value.data
+        )
+
+        when(registrationsRepository.getSettlorsAnswers(any())(any())).thenReturn(Future.successful(Some(settlorsAnswers)))
+
         val application = applicationBuilder(userAnswers = Some(userAnswersWithBeneficiariesComplete)).build()
 
         val request = FakeRequest(GET, addABeneficiaryRoute)
@@ -302,6 +321,13 @@ class AddABeneficiaryControllerSpec extends SpecBase {
       }
 
       "populate the view without value on a GET when the question has previously been answered" in {
+
+        val settlorsAnswers: ReadOnlyUserAnswers = ReadOnlyUserAnswers(
+          emptyUserAnswers.set(KindOfTrustPage, Intervivos).success.value.data
+        )
+
+        when(registrationsRepository.getSettlorsAnswers(any())(any())).thenReturn(Future.successful(Some(settlorsAnswers)))
+
         val userAnswers = userAnswersWithBeneficiariesComplete.
           set(AddABeneficiaryPage, AddABeneficiary.YesNow).success.value
 
@@ -319,6 +345,110 @@ class AddABeneficiaryControllerSpec extends SpecBase {
           view(form, fakeDraftId, Nil, beneficiariesComplete, "You have added 7 beneficiaries", Nil)(request, messages).toString
 
         application.stop()
+      }
+
+      "set individual beneficiary status to in progress" when {
+        "Employees kind of trust" when {
+          "role in company not previously answered" in {
+            val settlorsAnswers: ReadOnlyUserAnswers = ReadOnlyUserAnswers(
+              emptyUserAnswers.set(KindOfTrustPage, Employees).success.value.data
+            )
+
+            when(registrationsRepository.getSettlorsAnswers(any())(any())).thenReturn(Future.successful(Some(settlorsAnswers)))
+
+            val userAnswers = emptyUserAnswers
+              .set(individualPages.NamePage(0), FullName("Joe", None, "Bloggs")).success.value
+              .set(individualPages.DateOfBirthYesNoPage(0), false).success.value
+              .set(individualPages.IncomeYesNoPage(0), true).success.value
+              .set(individualPages.NationalInsuranceYesNoPage(0), false).success.value
+              .set(individualPages.AddressYesNoPage(0), false).success.value
+              .set(individualPages.VulnerableYesNoPage(0), false).success.value
+              .set(IndividualBeneficiaryStatus(0), Completed).success.value
+
+            val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+            val request = FakeRequest(GET, addABeneficiaryRoute)
+
+            val result = route(application, request).value
+
+            val view = application.injector.instanceOf[AddABeneficiaryView]
+
+            status(result) mustEqual OK
+
+            lazy val inProgressRows = List(
+              AddRow(
+                name = "Joe Bloggs",
+                typeLabel = "Named individual",
+                changeUrl = individualRoutes.NameController.onPageLoad(0, fakeDraftId).url,
+                removeUrl = individualRoutes.RemoveIndividualBeneficiaryController.onPageLoad(0, fakeDraftId).url
+              )
+            )
+
+            contentAsString(result) mustEqual
+              view(form, fakeDraftId, inProgressRows, Nil, "Add a beneficiary", Nil)(request, messages).toString
+
+            application.stop()
+          }
+
+          "role in company previously answered for some but not others" in {
+            val settlorsAnswers: ReadOnlyUserAnswers = ReadOnlyUserAnswers(
+              emptyUserAnswers.set(KindOfTrustPage, Employees).success.value.data
+            )
+
+            when(registrationsRepository.getSettlorsAnswers(any())(any())).thenReturn(Future.successful(Some(settlorsAnswers)))
+
+            val userAnswers = emptyUserAnswers
+              .set(individualPages.NamePage(0), FullName("Joe", None, "Bloggs")).success.value
+              .set(individualPages.DateOfBirthYesNoPage(0), false).success.value
+              .set(individualPages.IncomeYesNoPage(0), true).success.value
+              .set(individualPages.NationalInsuranceYesNoPage(0), false).success.value
+              .set(individualPages.AddressYesNoPage(0), false).success.value
+              .set(individualPages.VulnerableYesNoPage(0), false).success.value
+              .set(IndividualBeneficiaryStatus(0), Completed).success.value
+
+              .set(individualPages.NamePage(1), FullName("John", None, "Doe")).success.value
+              .set(individualPages.RoleInCompanyPage(1), Employee).success.value
+              .set(individualPages.DateOfBirthYesNoPage(1), false).success.value
+              .set(individualPages.IncomeYesNoPage(1), true).success.value
+              .set(individualPages.NationalInsuranceYesNoPage(1), false).success.value
+              .set(individualPages.AddressYesNoPage(1), false).success.value
+              .set(individualPages.VulnerableYesNoPage(1), false).success.value
+              .set(IndividualBeneficiaryStatus(1), Completed).success.value
+
+            val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+            val request = FakeRequest(GET, addABeneficiaryRoute)
+
+            val result = route(application, request).value
+
+            val view = application.injector.instanceOf[AddABeneficiaryView]
+
+            status(result) mustEqual OK
+
+            lazy val inProgressRows = List(
+              AddRow(
+                name = "Joe Bloggs",
+                typeLabel = "Named individual",
+                changeUrl = individualRoutes.NameController.onPageLoad(0, fakeDraftId).url,
+                removeUrl = individualRoutes.RemoveIndividualBeneficiaryController.onPageLoad(0, fakeDraftId).url
+              )
+            )
+
+            lazy val completeRows = List(
+              AddRow(
+                name = "John Doe",
+                typeLabel = "Named individual",
+                changeUrl = individualRoutes.AnswersController.onPageLoad(1, fakeDraftId).url,
+                removeUrl = individualRoutes.RemoveIndividualBeneficiaryController.onPageLoad(1, fakeDraftId).url
+              )
+            )
+
+            contentAsString(result) mustEqual
+              view(form, fakeDraftId, inProgressRows, completeRows, "You have added 2 beneficiaries", Nil)(request, messages).toString
+
+            application.stop()
+          }
+        }
       }
 
       "redirect to the next page when valid data is submitted" in {
