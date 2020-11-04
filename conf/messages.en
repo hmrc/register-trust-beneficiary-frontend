@@ -212,7 +212,6 @@ individualBeneficiaryNationalInsuranceYesNo.error.required = Select yes if you k
 individualBeneficiaryNationalInsuranceNumber.title = What is the individual beneficiary’s National Insurance number?
 individualBeneficiaryNationalInsuranceNumber.heading = What is {0}’s National Insurance number?
 individualBeneficiaryNationalInsuranceNumber.hint = It is on their National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’.
-individualBeneficiaryNationalInsuranceNumber.hint.reader = It is on their National Insurance card, benefit letter, payslip or P60. For example, Q Q 1 2 3 4 5 6 C.
 individualBeneficiaryNationalInsuranceNumber.checkYourAnswersLabel = What is {0}’s National Insurance number?
 individualBeneficiaryNationalInsuranceNumber.error.required = Enter the individual beneficiary’s National Insurance number
 individualBeneficiaryNationalInsuranceNumber.error.length = Individual beneficiary’s National Insurance number must be 9 characters or less
