@@ -21,7 +21,6 @@
     legend: String,
     legendClass: String = "",
     hint: Option[String] = None,
-    readerHint: Option[String] = None,
     link : Option[Link] = None,
     legendAsHeading: Boolean = false,
     extraText: Option[String] = None
@@ -43,7 +42,7 @@
         @if(extraText.nonEmpty){
             <p>@extraText</p>
         }
-        @form_hint(hint = hint, readerHint = readerHint, link = link)
+        @form_hint(hint = hint, link = link)
         @field.errors.map { error =>
             <span class="error-message" id="error-message-@{field.id}-input">
                 <span class="visually-hidden">@messages("site.error")</span> @messages(error.message, error.args: _*)
