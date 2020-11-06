@@ -67,7 +67,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
 
           individuals mustBe defined
           individuals.value.head mustBe IndividualDetailsType(
-            name = NameType("first name", None, "last name"),
+            name = FullName("first name", None, "last name"),
             dateOfBirth = Some(dateOfBirth),
             vulnerableBeneficiary = true,
             beneficiaryType = None,
@@ -92,7 +92,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
 
           individuals mustBe defined
           individuals.value.head mustBe IndividualDetailsType(
-            name = NameType("first name", None, "last name"),
+            name = FullName("first name", None, "last name"),
             dateOfBirth = Some(dateOfBirth),
             vulnerableBeneficiary = true,
             beneficiaryType = Some(Director.toString),
@@ -120,7 +120,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
 
           individuals mustBe defined
           individuals.value.head mustBe IndividualDetailsType(
-            name = NameType("first name", None, "last name"),
+            name = FullName("first name", None, "last name"),
             dateOfBirth = Some(dateOfBirth),
             vulnerableBeneficiary = false,
             beneficiaryType = None,
@@ -150,7 +150,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
 
           individuals mustBe defined
           individuals.value.head mustBe IndividualDetailsType(
-            name = NameType("first name", None, "last name"),
+            name = FullName("first name", None, "last name"),
             dateOfBirth = None,
             vulnerableBeneficiary = false,
             beneficiaryType = None,
@@ -176,7 +176,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
 
           individuals mustBe defined
           individuals.value.head mustBe IndividualDetailsType(
-            name = NameType("first name", None, "last name"),
+            name = FullName("first name", None, "last name"),
             dateOfBirth = None,
             vulnerableBeneficiary = false,
             beneficiaryType = None,
@@ -206,7 +206,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
 
           individuals mustBe defined
           individuals.value.head mustBe IndividualDetailsType(
-            name = NameType("first name", None, "last name"),
+            name = FullName("first name", None, "last name"),
             dateOfBirth = None,
             vulnerableBeneficiary = false,
             beneficiaryType = None,
@@ -252,7 +252,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
         individuals.value mustBe
           List(
             IndividualDetailsType(
-              name = NameType("first name", None, "last name"),
+              name = FullName("first name", None, "last name"),
               dateOfBirth = Some(dateOfBirth),
               vulnerableBeneficiary = true,
               beneficiaryType = None,
@@ -266,7 +266,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
               )),
 
             IndividualDetailsType(
-              name = NameType("first name", None, "last name"),
+              name = FullName("first name", None, "last name"),
               dateOfBirth = Some(dateOfBirth),
               vulnerableBeneficiary = false,
               beneficiaryType = None,

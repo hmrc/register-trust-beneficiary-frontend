@@ -22,8 +22,7 @@ import mapping.reads.{LargeBeneficiaries, LargeBeneficiary}
 import models.UserAnswers
 import models.registration.pages.HowManyBeneficiaries
 
-class LargeBeneficiaryMapper @Inject()(nameMapper: NameMapper,
-                                       addressMapper: AddressMapper) extends Mapping[List[LargeType]] {
+class LargeBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapping[List[LargeType]] {
   override def build(userAnswers: UserAnswers): Option[List[LargeType]] = {
 
     val beneficiaries: List[LargeBeneficiary] =
@@ -37,14 +36,14 @@ class LargeBeneficiaryMapper @Inject()(nameMapper: NameMapper,
             LargeType(
               organisationName = beneficiary.name,
               description = beneficiary.description.description,
-              description1 = beneficiary.description.description1 map(_.toString),
-              description2 = beneficiary.description.description2 map(_.toString),
-              description3 = beneficiary.description.description3 map(_.toString),
-              description4 = beneficiary.description.description4 map(_.toString),
+              description1 = beneficiary.description.description1,
+              description2 = beneficiary.description.description2,
+              description3 = beneficiary.description.description3,
+              description4 = beneficiary.description.description4,
               numberOfBeneficiary = convertNumberOfBeneficiaries(beneficiary.numberOfBeneficiaries),
               identification = buildIdentification(beneficiary),
               beneficiaryDiscretion = beneficiary.discretionYesNo,
-              beneficiaryShareOfIncome = beneficiary.shareOfIncome map(_.toString)
+              beneficiaryShareOfIncome = beneficiary.shareOfIncome
             )
           }
         )
