@@ -73,9 +73,9 @@ class SubmissionSetFactory @Inject()(
         classOfBeneficiariesHelper.classOfBeneficiaries,
         charityBeneficiariesHelper.charityBeneficiaries,
         trustBeneficiariesHelper.trustBeneficiaries,
-        companyBeneficiaryAnswersHelper.companyBeneficiaries(userAnswers, canEdit = false),
-        largeBeneficiaryAnswersHelper.employmentRelatedBeneficiaries(userAnswers, canEdit = false),
-        otherBeneficiaryAnswersHelper.otherBeneficiaries(userAnswers, canEdit = false)
+        companyBeneficiaryAnswersHelper.companyBeneficiaries(userAnswers),
+        largeBeneficiaryAnswersHelper.employmentRelatedBeneficiaries(userAnswers),
+        otherBeneficiaryAnswersHelper.otherBeneficiaries(userAnswers)
       ).flatten.flatten
 
       val updatedFirstSection = AnswerSection(

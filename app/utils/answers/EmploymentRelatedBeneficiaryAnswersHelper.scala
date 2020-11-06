@@ -25,8 +25,7 @@ import viewmodels.AnswerSection
 
 class EmploymentRelatedBeneficiaryAnswersHelper @Inject()(employmentRelatedBeneficiaryPrintHelper: EmploymentRelatedBeneficiaryPrintHelper) {
 
-  def employmentRelatedBeneficiaries(userAnswers: UserAnswers,
-                           canEdit: Boolean)(implicit messages: Messages): Option[Seq[AnswerSection]] = {
+  def employmentRelatedBeneficiaries(userAnswers: UserAnswers)(implicit messages: Messages): Option[Seq[AnswerSection]] = {
     for {
       beneficiaries <- userAnswers.get(LargeBeneficiaries)
       indexed = beneficiaries.zipWithIndex
