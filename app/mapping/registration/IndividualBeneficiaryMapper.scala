@@ -22,8 +22,7 @@ import mapping.reads.IndividualBeneficiary
 import models.UserAnswers
 import models.registration.pages.PassportOrIdCardDetails
 
-class IndividualBeneficiaryMapper @Inject()(nameMapper: NameMapper,
-                                            addressMapper: AddressMapper) extends Mapping[List[IndividualDetailsType]] {
+class IndividualBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapping[List[IndividualDetailsType]] {
   override def build(userAnswers: UserAnswers): Option[List[IndividualDetailsType]] = {
 
     val individualBeneficiaries : List[mapping.reads.IndividualBeneficiary] =
@@ -35,7 +34,7 @@ class IndividualBeneficiaryMapper @Inject()(nameMapper: NameMapper,
         Some(
           list.map { indBen =>
             IndividualDetailsType(
-              name = nameMapper.build(indBen.name),
+              name = indBen.name,
               dateOfBirth = indBen.dateOfBirth,
               vulnerableBeneficiary = indBen.vulnerableYesNo,
               beneficiaryType = indBen.roleInCompany.map(_.toString),

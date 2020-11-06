@@ -18,12 +18,12 @@ package mapping.registration
 
 import java.time.LocalDate
 
+import models.core.pages.FullName
 import play.api.libs.json._
 
 /**
   * Trust Registration API Schema - definitions models below
   */
-
 
 case class BeneficiaryType(individualDetails: Option[List[IndividualDetailsType]],
                            company: Option[List[CompanyType]],
@@ -37,7 +37,7 @@ object BeneficiaryType {
   implicit val beneficiaryTypeFormat: Format[BeneficiaryType] = Json.format[BeneficiaryType]
 }
 
-case class IndividualDetailsType(name: NameType,
+case class IndividualDetailsType(name: FullName,
                                  dateOfBirth: Option[LocalDate],
                                  vulnerableBeneficiary: Boolean,
                                  beneficiaryType: Option[String],
@@ -145,15 +145,6 @@ case class PassportType(number: String,
 object PassportType {
 
   implicit val passportTypeFormat: Format[PassportType] = Json.format[PassportType]
-}
-
-
-case class NameType(firstName: String,
-                    middleName: Option[String],
-                    lastName: String)
-
-object NameType {
-  implicit val nameTypeFormat: Format[NameType] = Json.format[NameType]
 }
 
 case class AddressType(line1: String,

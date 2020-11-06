@@ -30,8 +30,7 @@ class OtherBeneficiaryAnswersHelper @Inject()(answerRowConverter: AnswerRowConve
                                               countryOptions: CountryOptions
                                  ) {
 
-  def otherBeneficiaries(userAnswers: UserAnswers,
-                           canEdit: Boolean)(implicit messages: Messages): Option[Seq[AnswerSection]] = {
+  def otherBeneficiaries(userAnswers: UserAnswers)(implicit messages: Messages): Option[Seq[AnswerSection]] = {
     for {
       beneficiaries <- userAnswers.get(OtherBeneficiaries)
       indexed = beneficiaries.zipWithIndex

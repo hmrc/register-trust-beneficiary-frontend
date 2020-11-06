@@ -21,8 +21,7 @@ import mapping.Mapping
 import mapping.reads.{CompanyBeneficiaries, CompanyBeneficiary}
 import models.UserAnswers
 
-class CompanyBeneficiaryMapper @Inject()(nameMapper: NameMapper,
-                                         addressMapper: AddressMapper) extends Mapping[List[CompanyType]] {
+class CompanyBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapping[List[CompanyType]] {
   override def build(userAnswers: UserAnswers): Option[List[CompanyType]] = {
 
     val beneficiaries: List[CompanyBeneficiary] =
