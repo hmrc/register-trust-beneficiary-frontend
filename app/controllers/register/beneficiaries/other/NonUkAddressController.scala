@@ -55,7 +55,7 @@ class NonUkAddressController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, countryOptions.options, request.description, index, draftId))
+      Ok(view(preparedForm, countryOptions.options(request.lang(messagesApi)), request.description, index, draftId))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
@@ -64,7 +64,7 @@ class NonUkAddressController @Inject()(
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, request.description, index, draftId))),
+          Future.successful(BadRequest(view(formWithErrors, countryOptions.options(request.lang(messagesApi)), request.description, index, draftId))),
 
         value =>
           for {

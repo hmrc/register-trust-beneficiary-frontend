@@ -20,6 +20,7 @@ import com.typesafe.config.ConfigException
 import config.FrontendAppConfig
 import javax.inject.{Inject, Singleton}
 import play.api.Environment
+import play.api.i18n.Lang
 import play.api.libs.json.Json
 import utils.InputOption
 
@@ -27,7 +28,25 @@ import utils.InputOption
 @Singleton
 class CountryOptions @Inject()(environment: Environment, config: FrontendAppConfig) {
 
-  def options: Seq[InputOption] = CountryOptions.getCountries(environment, config.locationCanonicalList)
+  protected def file(lang: Lang, includeUK: Boolean): String = {
+    if (includeUK) {
+      if (lang.satisfies(Lang("cy"))) {
+        config.Counties.CY.locationCanonicalList
+      } else {
+        config.Counties.EN.locationCanonicalList
+      }
+    } else {
+      if (lang.satisfies(Lang("cy"))) {
+        config.Counties.CY.locationCanonicalListNonUK
+      } else {
+        config.Counties.EN.locationCanonicalListNonUK
+      }
+    }
+  }
+
+  def options(lang: Lang): Seq[InputOption] = {
+    CountryOptions.getCountries(environment, file(lang, includeUK = true))
+  }
 
 }
 

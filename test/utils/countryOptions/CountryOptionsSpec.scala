@@ -19,6 +19,7 @@ package utils.countryOptions
 import base.SpecBase
 import com.typesafe.config.ConfigException
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n.Lang
 import utils.InputOption
 
 class CountryOptionsSpec extends SpecBase with MockitoSugar {
@@ -29,12 +30,12 @@ class CountryOptionsSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder()
         .configure(Map(
-          "location.canonical.list.all" -> "countries-canonical-list-test.json"
+          "location.canonical.list.en.all" -> "countries-canonical-list-test.json"
         ))
         .build()
 
         val countryOption: CountryOptions = application.injector.instanceOf[CountryOptions]
-        countryOption.options mustEqual Seq(InputOption("SP", "Spain"), InputOption("GB", "United Kingdom"))
+        countryOption.options(Lang("en")) mustEqual Seq(InputOption("SP", "Spain"), InputOption("GB", "United Kingdom"))
 
       application.stop()
     }
@@ -43,12 +44,12 @@ class CountryOptionsSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder()
         .configure(Map(
-          "location.canonical.list.all" -> "countries-canonical-test.json"
+          "location.canonical.list.en.all" -> "countries-canonical-test.json"
         ))
         .build()
 
       an[ConfigException.BadValue] shouldBe thrownBy {
-        application.injector.instanceOf[CountryOptions].options
+        application.injector.instanceOf[CountryOptions].options(Lang("en"))
       }
 
       application.stop()

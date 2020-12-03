@@ -19,6 +19,7 @@ package views.register.beneficiaries.companyoremploymentrelated.company
 import forms.InternationalAddressFormProvider
 import models.core.pages.InternationalAddress
 import play.api.data.Form
+import play.api.i18n.Lang
 import play.twirl.api.HtmlFormat
 import utils.InputOption
 import utils.countryOptions.CountryOptionsNonUK
@@ -37,7 +38,7 @@ class NonUkAddressViewSpec extends NonUkAddressViewBehaviours {
 
     val view = viewFor[NonUkAddressView](Some(emptyUserAnswers))
 
-    val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+    val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options(Lang("en"))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, countryOptions, name, index, draftId)(fakeRequest, messages)

@@ -68,8 +68,16 @@ class FrontendAppConfig @Inject() (val configuration: Configuration) {
   lazy val minDate: LocalDate = getDate("minimum")
   lazy val maxPassportDate: LocalDate = getDate("maximumPassport")
 
-  lazy val locationCanonicalList: String = configuration.get[String]("location.canonical.list.all")
-  lazy val locationCanonicalListNonUK: String = configuration.get[String]("location.canonical.list.nonUK")
+  object Counties {
+    object EN {
+      lazy val locationCanonicalList: String = configuration.get[String]("location.canonical.list.en.all")
+      lazy val locationCanonicalListNonUK: String = configuration.get[String]("location.canonical.list.en.nonUK")
+    }
+    object CY {
+      lazy val locationCanonicalList: String = configuration.get[String]("location.canonical.list.cy.all")
+      lazy val locationCanonicalListNonUK: String = configuration.get[String]("location.canonical.list.cy.nonUK")
+    }
+  }
 
   lazy val countdownLength: String = configuration.get[String]("timeout.countdown")
   lazy val timeoutLength: String = configuration.get[String]("timeout.length")

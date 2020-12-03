@@ -19,6 +19,7 @@ package views.register.beneficiaries.charityortrust.charity
 import controllers.register.beneficiaries.charityortrust.charity.routes
 import forms.InternationalAddressFormProvider
 import play.api.data.Form
+import play.api.i18n.Lang
 import play.twirl.api.HtmlFormat
 import utils.InputOption
 import utils.countryOptions.CountryOptionsNonUK
@@ -38,7 +39,7 @@ class CharityInternationalAddressViewSpec extends InternationalAddressViewBehavi
 
     val view = viewFor[CharityInternationalAddressView](Some(emptyUserAnswers))
 
-    val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+    val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options(Lang("en"))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, countryOptions, fakeDraftId, index, charityName)(fakeRequest, messages)

@@ -25,6 +25,7 @@ import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.individual.{AddressInternationalPage, NamePage}
 import play.api.Application
 import play.api.data.Form
+import play.api.i18n.Lang
 import play.api.inject.bind
 import play.api.mvc.Result
 import play.api.test.FakeRequest
@@ -58,7 +59,7 @@ class AddressInternationalControllerSpec extends SpecBase {
 
       val result: Future[Result] = route(application, request).value
 
-      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options(Lang("en"))
 
       status(result) mustEqual OK
 
@@ -81,7 +82,7 @@ class AddressInternationalControllerSpec extends SpecBase {
 
       val result = route(application, request).value
 
-      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options(Lang("en"))
 
       status(result) mustEqual OK
 
@@ -136,7 +137,7 @@ class AddressInternationalControllerSpec extends SpecBase {
 
       val result = route(application, request).value
 
-      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options(Lang("en"))
 
       status(result) mustEqual BAD_REQUEST
 

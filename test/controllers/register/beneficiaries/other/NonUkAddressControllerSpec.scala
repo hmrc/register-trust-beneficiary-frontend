@@ -23,6 +23,7 @@ import models.core.pages.InternationalAddress
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.other.{AddressInternationalPage, DescriptionPage}
+import play.api.i18n.Lang
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -38,7 +39,7 @@ class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
   private val nonUkAddressRoute = routes.NonUkAddressController.onPageLoad(index, draftId).url
   private val description = "Other"
   private val answer = InternationalAddress("Line 1", "Line 2", None, "DE")
-  private val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+  private val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options(Lang("en"))
 
   private val baseAnswers = emptyUserAnswers.set(DescriptionPage(index), description).success.value
 

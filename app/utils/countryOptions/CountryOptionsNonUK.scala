@@ -20,6 +20,7 @@ import com.google.inject.Inject
 import config.FrontendAppConfig
 import javax.inject.Singleton
 import play.api.Environment
+import play.api.i18n.Lang
 import utils.InputOption
 
 @Singleton
@@ -27,5 +28,6 @@ class CountryOptionsNonUK @Inject()(
                                         environment: Environment,
                                         config: FrontendAppConfig
                                       ) extends CountryOptions(environment, config) {
-  override def options: Seq[InputOption] = CountryOptions.getCountries(environment, config.locationCanonicalListNonUK)
+  override def options(lang: Lang): Seq[InputOption] =
+    CountryOptions.getCountries(environment, file(lang, includeUK = false))
 }

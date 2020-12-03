@@ -23,7 +23,7 @@ import models.core.pages.{Address, Description, FullName, InternationalAddress, 
 import models.registration.pages.{HowManyBeneficiaries, PassportOrIdCardDetails}
 import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
 import pages.register.beneficiaries.individual.NamePage
-import play.api.i18n.Messages
+import play.api.i18n.{Lang, Messages}
 import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.domain.Nino
 import utils.countryOptions.CountryOptions
@@ -47,7 +47,10 @@ object CheckAnswersFormatters {
   def formatNino(nino: String): String = Nino(nino).formatted
 
   def country(code: String, countryOptions: CountryOptions): String =
-    countryOptions.options.find(_.value.equals(code)).map(_.label).getOrElse("")
+    countryOptions.options(Lang("en")) // TODO CHANGE THIS TO RESPECT REQUEST
+      .find(_.value.equals(code))
+      .map(_.label)
+      .getOrElse("")
 
   def currency(value: String): Html = escape(s"£$value")
 
