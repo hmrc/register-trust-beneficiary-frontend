@@ -29,7 +29,7 @@ class CountryOptionsSpec extends SpecBase with MockitoSugar {
 
     "build correctly the English InputOptions with all country list and country code" in {
 
-      val application = new GuiceApplicationBuilder()
+      val application = applicationBuilder()
         .configure(Map(
           "location.canonical.list.all" -> "countries-canonical-list-test.json"
         ))
@@ -46,7 +46,7 @@ class CountryOptionsSpec extends SpecBase with MockitoSugar {
 
     "build correctly the Welsh InputOptions with all country list and country code" in {
 
-      val application = new GuiceApplicationBuilder()
+      val application = applicationBuilder()
         .configure(Map(
           "location.canonical.list.allCY" -> "countries-canonical-list-test-cy.json"
         ))
