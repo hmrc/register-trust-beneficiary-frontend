@@ -28,6 +28,10 @@ import play.api.mvc.{Call, Request}
 @Singleton
 class FrontendAppConfig @Inject() (val configuration: Configuration) {
 
+  final val ENGLISH = "en"
+  final val WELSH = "cy"
+  final val UK_COUNTRY_CODE = "GB"
+
   private val contactHost = configuration.get[String]("contact-frontend.host")
   private val contactFormServiceIdentifier = "trusts"
 
@@ -69,14 +73,14 @@ class FrontendAppConfig @Inject() (val configuration: Configuration) {
   lazy val maxPassportDate: LocalDate = getDate("maximumPassport")
 
   lazy val locationCanonicalList: String = configuration.get[String]("location.canonical.list.all")
-  lazy val locationCanonicalListNonUK: String = configuration.get[String]("location.canonical.list.nonUK")
+  lazy val locationCanonicalListCY: String = configuration.get[String]("location.canonical.list.allCY")
 
   lazy val countdownLength: String = configuration.get[String]("timeout.countdown")
   lazy val timeoutLength: String = configuration.get[String]("timeout.length")
 
   def languageMap: Map[String, Lang] = Map(
-    "english" -> Lang("en"),
-    "cymraeg" -> Lang("cy")
+    "english" -> Lang(ENGLISH),
+    "cymraeg" -> Lang(WELSH)
   )
 
   def routeToSwitchLanguage: String => Call =
