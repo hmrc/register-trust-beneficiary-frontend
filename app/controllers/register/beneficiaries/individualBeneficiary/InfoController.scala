@@ -21,7 +21,7 @@ import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.register.beneficiaries.individualBeneficiary.InfoView
+import views.html.register.beneficiaries.individualBeneficiary._
 
 class InfoController @Inject()(
                                 override val messagesApi: MessagesApi,
@@ -29,11 +29,12 @@ class InfoController @Inject()(
                                 getData: DraftIdRetrievalActionProvider,
                                 requireData: RegistrationDataRequiredAction,
                                 val controllerComponents: MessagesControllerComponents,
-                                view: InfoView
+                                view: InfoView,
+                                viewNonTaxable: nonTaxable.InfoView
                               ) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(draftId: String): Action[AnyContent] = (identify andThen getData(draftId) andThen requireData) {
     implicit request =>
-      Ok(view(draftId))
+      Ok(view(draftId))  //TODO display info view for non taxable trusts
   }
 }

@@ -313,6 +313,40 @@ individualBeneficiaryInfo.paragraph7 = Do not include named or specific employee
 individualBeneficiaryInfo.subheading5 = Other beneficiaries
 individualBeneficiaryInfo.paragraph8 = You need to give a short description for beneficiaries that do not fall into the other beneficiary types. For example, pets.
 
+individualBeneficiaryInfo.nonTaxable.title = Information you need to register a beneficiary
+individualBeneficiaryInfo.nonTaxable.heading = Information you need to register a beneficiary
+individualBeneficiaryInfo.nonTaxable.caption = Beneficiaries
+individualBeneficiaryInfo.nonTaxable.caption.hidden = This section is
+individualBeneficiaryInfo.nonTaxable.subheading1 = Beneficiaries that are an Individual
+individualBeneficiaryInfo.nonTaxable.paragraph1 = For individuals named in the trust deed, tell us their name. If you know more details, tell us their:
+individualBeneficiaryInfo.nonTaxable.bulletpoint1 = date of birth
+individualBeneficiaryInfo.nonTaxable.bulletpoint2 = country of nationality
+individualBeneficiaryInfo.nonTaxable.bulletpoint3 = country of residence
+individualBeneficiaryInfo.nonTaxable.paragraph2 = If the trust is for the employees of a business, tell us their roles in the business. For example, a director or other named employee.
+individualBeneficiaryInfo.nonTaxable.paragraph3 = You also need to tell us if any of the beneficiaries are legally incapable at the time of registration. This is when the individual does not have mental capacity if they cannot understand information and make decisions about the trust due to a mental illness, learning disability, dementia or related condition, or they cannot communicate.
+individualBeneficiaryInfo.nonTaxable.subheading2 = Class of beneficiaries
+individualBeneficiaryInfo.nonTaxable.paragraph4 = You need to give a short description for individual beneficiaries that cannot be identified. For example, children not born yet, future grandchildren and great grandchildren.
+individualBeneficiaryInfo.nonTaxable.subheading3 = Beneficiaries that are a charity or trust
+individualBeneficiaryInfo.nonTaxable.paragraph5 = Tell us their name. If you know more details, tell us their country of residence.
+individualBeneficiaryInfo.nonTaxable.subheading4 = Beneficiaries that are a company or employment related
+individualBeneficiaryInfo.nonTaxable.paragraph6 = For companies or employees named in the trust deed, tell us the name of the company or employment-related trust. If you know more details, tell us their:
+individualBeneficiaryInfo.nonTaxable.bulletpoint4 = country of residence
+individualBeneficiaryInfo.nonTaxable.bulletpoint5 = how many beneficiaries there are
+individualBeneficiaryInfo.nonTaxable.bulletpoint6 = a short description of the beneficiaries: for example, employees and their children, spouses or widows
+individualBeneficiaryInfo.nonTaxable.paragraph7 = Do not include named or specific employees such as directors. They must be listed as individual beneficiaries.
+individualBeneficiaryInfo.nonTaxable.paragraph8 = Tell us whether the trustees can decide how much income the business or employment trust can get.
+
+individualBeneficiaryInfo.nonTaxable.details = What we mean by country of residence
+individualBeneficiaryInfo.nonTaxable.details.subheading1 = Individual
+individualBeneficiaryInfo.nonTaxable.details.paragraph1 = This is usually the country where the beneficiary lives and works most of the time during the tax year. You can check the status of their residency through the Statutory Residence Test (SRT).
+individualBeneficiaryInfo.nonTaxable.details.subheading2 = Company or charity
+individualBeneficiaryInfo.nonTaxable.details.paragraph2 = This is usually where the company or charity is registered (incorporated). For example, the company has UK residency if it is registered with Companies House.
+individualBeneficiaryInfo.nonTaxable.details.subheading3 = Trust
+individualBeneficiaryInfo.nonTaxable.details.paragraph3 = This is usually based on the residency of the trustees and settlors within that trust.
+
+individualBeneficiaryInfo.nonTaxable.subheading5 = Other beneficiaries
+individualBeneficiaryInfo.nonTaxable.paragraph9 = You need to give a short description for beneficiaries that do not fall into the other beneficiary types. For example, pets. If you know, tell us their country of residence.
+
 individualBeneficiaryAnswers.title = Check beneficiary details
 individualBeneficiaryAnswers.heading = Check beneficiary details
 
