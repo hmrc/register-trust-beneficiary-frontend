@@ -557,6 +557,7 @@ charity.nonTaxable.countryOfResidenceYesNo.title = Do you know the charity benef
 charity.nonTaxable.countryOfResidenceYesNo.heading = Do you know {0}’s country of residence?
 charity.nonTaxable.countryOfResidenceYesNo.checkYourAnswersLabel = Do you know {0}’s country of residence?
 charity.nonTaxable.countryOfResidenceYesNo.error.required = Select yes if you know the charity beneficiary’s country of residence
+charity.nonTaxable.countryOfResidenceYesNo.hint = The country of residence is usually where the charity is registered.
 
 # COMPANY OR EMPLOYMENT RELATED
 
