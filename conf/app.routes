@@ -162,3 +162,6 @@ POST       /:draftId/trust/:index/remove                                        
 
 GET        /:draftId/charity/:index/has-country-of-residence                          controllers.register.beneficiaries.charityortrust.charity.nonTaxable.CountryOfResidenceYesNoController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/charity/:index/has-country-of-residence                          controllers.register.beneficiaries.charityortrust.charity.nonTaxable.CountryOfResidenceYesNoController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/charity/:index/uk-residence                                      controllers.register.beneficiaries.charityortrust.charity.nonTaxable.CountryOfResidenceInTheUkYesNoController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/charity/:index/uk-residence                                      controllers.register.beneficiaries.charityortrust.charity.nonTaxable.CountryOfResidenceInTheUkYesNoController.onSubmit(index: Int, draftId: String)

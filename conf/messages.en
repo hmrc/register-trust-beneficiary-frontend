@@ -559,6 +559,11 @@ charity.nonTaxable.countryOfResidenceYesNo.checkYourAnswersLabel = Do you know {
 charity.nonTaxable.countryOfResidenceYesNo.error.required = Select yes if you know the charity beneficiary’s country of residence
 charity.nonTaxable.countryOfResidenceYesNo.hint = The country of residence is usually where the charity is registered.
 
+charity.nonTaxable.countryOfResidenceInTheUkYesNo.title = Does charity beneficiary have UK residency?
+charity.nonTaxable.countryOfResidenceInTheUkYesNo.heading = Does {0} have UK residency?
+charity.nonTaxable.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel =  Does {0} have UK residency?
+charity.nonTaxable.countryOfResidenceInTheUkYesNo.error.required = Select yes if the charity beneficiary has UK residency
+
 # COMPANY OR EMPLOYMENT RELATED
 
 companyOrEmploymentRelated.title = Is the beneficiary a company or the employees and/or their families?
