@@ -18,7 +18,6 @@ package pages.register.beneficiaries.charityortrust.charity.nonTaxable
 
 import models.UserAnswers
 import pages.QuestionPage
-import pages.register.beneficiaries.charityortrust.charity.{AddressInTheUkYesNoPage, CharityAddressUKPage, CharityInternationalAddressPage}
 import play.api.libs.json.JsPath
 import sections.beneficiaries.{Beneficiaries, CharityBeneficiaries}
 
@@ -32,9 +31,8 @@ final case class CountryOfResidenceYesNoPage(index : Int) extends QuestionPage[B
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(false) => userAnswers.remove(AddressInTheUkYesNoPage(index))
-        .flatMap(_.remove(CharityAddressUKPage(index))) //TODO remove CountryOfResidenceAddressUKPage
-        .flatMap(_.remove(CharityInternationalAddressPage(index))) //TODO remove CountryOfResidenceInternationalAddressPage
+      case Some(false) => userAnswers.remove(CountryOfResidenceInTheUkYesNoPage(index))
+        .flatMap(_.remove(CountryOfResidencePage(index)))
       case _ => super.cleanup(value, userAnswers)
     }
 }
