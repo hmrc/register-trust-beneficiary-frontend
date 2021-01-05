@@ -26,6 +26,9 @@ import controllers.register.beneficiaries.other
 class OtherBeneficiaryNavigator @Inject()() extends Navigator {
 
   override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call =
+    nextPage(page, draftId, false, userAnswers)
+
+  override def nextPage(page: Page, draftId: String, fiveMldDiscretion: Boolean, userAnswers: ReadableUserAnswers): Call =
     routes(draftId)(page)(userAnswers)
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, Call] =

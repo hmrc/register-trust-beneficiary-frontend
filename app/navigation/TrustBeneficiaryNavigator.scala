@@ -29,10 +29,13 @@ import services.FeatureFlagService
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext}
 
-class TrustBeneficiaryNavigator @Inject()(featureFlagService: FeatureFlagService)(implicit ec: ExecutionContext) extends Navigator {
+class TrustBeneficiaryNavigator @Inject()()(implicit ec: ExecutionContext) extends Navigator {
 
   override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call =
-    routes(draftId)(page)(userAnswers)
+    nextPage(page, draftId, false, userAnswers)
+
+  override def nextPage(page: Page, draftId: String, fiveMldDiscretion: Boolean, userAnswers: ReadableUserAnswers): Call =
+    routes(draftId, fiveMldDiscretion)(page)(userAnswers)
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, Call] = {
     case NamePage(index) => rts.DiscretionYesNoController.onPageLoad(index, draftId)
@@ -42,9 +45,9 @@ class TrustBeneficiaryNavigator @Inject()(featureFlagService: FeatureFlagService
     case CountryOfResidencePage(index) => rts.AddressYesNoController.onPageLoad(index, draftId)
   }
 
-  private def yesNoNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
+  private def yesNoNavigation(draftId: String, fiveMldDiscretion: Boolean): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case DiscretionYesNoPage(index) => ua =>
-      yesNoNav(ua, DiscretionYesNoPage(index), fiveMldDiscretionYesNo(draftId, index), rts.ShareOfIncomeController.onPageLoad(index, draftId))
+      yesNoNav(ua, DiscretionYesNoPage(index), fiveMldDiscretionYesNo(draftId, index, fiveMldDiscretion), rts.ShareOfIncomeController.onPageLoad(index, draftId))
     case AddressUKYesNoPage(index) => ua =>
       yesNoNav(ua, AddressUKYesNoPage(index), rts.AddressUKController.onPageLoad(index, draftId), rts.AddressInternationalController.onPageLoad(index, draftId))
     case AddressYesNoPage(index) => ua =>
@@ -69,15 +72,15 @@ class TrustBeneficiaryNavigator @Inject()(featureFlagService: FeatureFlagService
       )
   }
 
-  private def fiveMldDiscretionYesNo(draftId: String, index: Int): Call = {
-    Await.result(featureFlagService.is5mldEnabled().map {
+  private def fiveMldDiscretionYesNo(draftId: String, index: Int, fiveMldDiscretion: Boolean): Call = {
+    fiveMldDiscretion match {
       case true => nonTaxRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
       case false => rts.AddressYesNoController.onPageLoad(index, draftId)
-    }, Duration.Inf)
+    }
   }
 
-  def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] =
+  def routes(draftId: String, fiveMldDiscretion: Boolean): PartialFunction[Page, ReadableUserAnswers => Call] =
     simpleNavigation(draftId) andThen (c => (_: ReadableUserAnswers) => c) orElse
-      yesNoNavigation(draftId)
+      yesNoNavigation(draftId, fiveMldDiscretion)
 
 }

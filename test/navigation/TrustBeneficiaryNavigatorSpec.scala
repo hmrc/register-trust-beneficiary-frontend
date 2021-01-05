@@ -27,11 +27,7 @@ import scala.concurrent.Future
 
 class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks  {
 
-  val mockFeatureFlgService = mock[FeatureFlagService]
-
-  when(mockFeatureFlgService.is5mldEnabled()).thenReturn(Future.successful(false))
-  
-  val navigator = new TrustBeneficiaryNavigator(mockFeatureFlgService)
+  val navigator = new TrustBeneficiaryNavigator()
 
   val index = 0
 
