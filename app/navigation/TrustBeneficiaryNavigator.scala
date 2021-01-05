@@ -16,13 +16,20 @@
 
 package navigation
 
+import com.google.inject.Inject
+import controllers.register.beneficiaries.charityortrust.trust.nonTaxable.{routes => nonTaxRts}
 import controllers.register.beneficiaries.charityortrust.trust.{routes => rts}
 import models.ReadableUserAnswers
 import pages.Page
 import pages.register.beneficiaries.charityortrust.trust._
+import pages.register.beneficiaries.charityortrust.trust.nonTaxable.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import play.api.mvc.Call
+import services.FeatureFlagService
 
-class TrustBeneficiaryNavigator extends Navigator {
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, ExecutionContext}
+
+class TrustBeneficiaryNavigator @Inject()(featureFlagService: FeatureFlagService)(implicit ec: ExecutionContext) extends Navigator {
 
   override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call =
     routes(draftId)(page)(userAnswers)
@@ -32,11 +39,12 @@ class TrustBeneficiaryNavigator extends Navigator {
     case ShareOfIncomePage(index) => rts.AddressYesNoController.onPageLoad(index, draftId)
     case AddressUKPage(index) => rts.AnswersController.onPageLoad(index, draftId)
     case AddressInternationalPage(index) => rts.AnswersController.onPageLoad(index, draftId)
+    case CountryOfResidencePage(index) => rts.AddressYesNoController.onPageLoad(index, draftId)
   }
 
   private def yesNoNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case DiscretionYesNoPage(index) => ua =>
-      yesNoNav(ua, DiscretionYesNoPage(index), rts.AddressYesNoController.onPageLoad(index, draftId), rts.ShareOfIncomeController.onPageLoad(index, draftId))
+      yesNoNav(ua, DiscretionYesNoPage(index), fiveMldDiscretionYesNo(draftId, index), rts.ShareOfIncomeController.onPageLoad(index, draftId))
     case AddressUKYesNoPage(index) => ua =>
       yesNoNav(ua, AddressUKYesNoPage(index), rts.AddressUKController.onPageLoad(index, draftId), rts.AddressInternationalController.onPageLoad(index, draftId))
     case AddressYesNoPage(index) => ua =>
@@ -45,6 +53,27 @@ class TrustBeneficiaryNavigator extends Navigator {
         AddressYesNoPage(index), rts.AddressUKYesNoController.onPageLoad(index, draftId),
         rts.AnswersController.onPageLoad(index, draftId)
       ))
+    case CountryOfResidenceYesNoPage(index) => ua =>
+      yesNoNav(
+        ua,
+        CountryOfResidenceYesNoPage(index),
+        nonTaxRts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId),
+        rts.AddressYesNoController.onPageLoad(index, draftId)
+      )
+    case CountryOfResidenceInTheUkYesNoPage(index) => ua =>
+      yesNoNav(
+        ua,
+        CountryOfResidenceInTheUkYesNoPage(index),
+        rts.AddressYesNoController.onPageLoad(index, draftId),
+        nonTaxRts.CountryOfResidenceController.onPageLoad(index, draftId)
+      )
+  }
+
+  private def fiveMldDiscretionYesNo(draftId: String, index: Int): Call = {
+    Await.result(featureFlagService.is5mldEnabled().map {
+      case true => nonTaxRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
+      case false => rts.AddressYesNoController.onPageLoad(index, draftId)
+    }, Duration.Inf)
   }
 
   def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] =

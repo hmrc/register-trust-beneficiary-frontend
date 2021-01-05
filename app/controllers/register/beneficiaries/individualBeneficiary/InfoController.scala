@@ -17,24 +17,34 @@
 package controllers.register.beneficiaries.individualBeneficiary
 
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.beneficiaries.individualBeneficiary._
+
+import javax.inject.Inject
+import scala.concurrent.ExecutionContext
 
 class InfoController @Inject()(
                                 override val messagesApi: MessagesApi,
                                 identify: RegistrationIdentifierAction,
                                 getData: DraftIdRetrievalActionProvider,
                                 requireData: RegistrationDataRequiredAction,
+                                featureFlagService: FeatureFlagService,
                                 val controllerComponents: MessagesControllerComponents,
                                 view: InfoView,
                                 viewNonTaxable: nonTaxable.InfoView
-                              ) extends FrontendBaseController with I18nSupport {
+                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(draftId: String): Action[AnyContent] = (identify andThen getData(draftId) andThen requireData) {
+  def onPageLoad(draftId: String): Action[AnyContent] = (identify andThen getData(draftId) andThen requireData).async {
     implicit request =>
-      Ok(view(draftId))  //TODO display info view for non taxable trusts
+      featureFlagService.is5mldEnabled().map {
+        case true =>
+          Ok(viewNonTaxable(draftId))
+        case _ =>
+          Ok(view(draftId))
+      }
+
   }
 }

@@ -19,7 +19,6 @@ package pages.register.beneficiaries.charityortrust.trust.nonTaxable
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-import pages.register.beneficiaries.charityortrust.trust.AddressUKYesNoPage
 
 class CountryOfResidenceYesNoPageSpec extends PageBehaviours {
 
