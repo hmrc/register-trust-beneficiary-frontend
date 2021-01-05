@@ -16,23 +16,14 @@
 
 package pages.register.beneficiaries.charityortrust.trust.nonTaxable
 
-import models.UserAnswers
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.beneficiaries.{Beneficiaries, TrustBeneficiaries}
 
-import scala.util.Try
-
-final case class CountryOfResidenceYesNoPage(index : Int) extends QuestionPage[Boolean] {
+final case class CountryOfResidencePage(index : Int) extends QuestionPage[String] {
 
   override def path: JsPath = JsPath \ Beneficiaries \ TrustBeneficiaries \ index \ toString
 
-  override def toString: String = "countryOfResidenceYesNo"
+  override def toString: String = "countryOfResidence"
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
-      case Some(false) => userAnswers.remove(CountryOfResidenceInTheUkYesNoPage(index))
-        .flatMap(_.remove(CountryOfResidencePage(index)))
-      case _ => super.cleanup(value, userAnswers)
-    }
 }

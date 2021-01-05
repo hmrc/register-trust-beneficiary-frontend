@@ -16,22 +16,17 @@
 
 package pages.register.beneficiaries.charityortrust.trust.nonTaxable
 
-import models.UserAnswers
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.beneficiaries.{Beneficiaries, TrustBeneficiaries}
+import pages.behaviours.PageBehaviours
 
-import scala.util.Try
+class CountryOfResidencePageSpec extends PageBehaviours {
 
-final case class CountryOfResidenceInTheUkYesNoPage(index : Int) extends QuestionPage[Boolean] {
+  "CountryOfResidencePage" must {
 
-  override def path: JsPath = JsPath \ Beneficiaries \ TrustBeneficiaries \ index \ toString
+    beRetrievable[String](CountryOfResidencePage(0))
 
-  override def toString: String = "countryOfResidenceInTheUkYesNo"
+    beSettable[String](CountryOfResidencePage(0))
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
-      case Some(true) => userAnswers.set(CountryOfResidencePage(index), "GB")
-      case _ => super.cleanup(value, userAnswers)
-    }
+    beRemovable[String](CountryOfResidencePage(0))
+  }
+
 }

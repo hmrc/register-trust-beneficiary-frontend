@@ -16,13 +16,11 @@
 
 package pages.register.beneficiaries.charityortrust.trust.nonTaxable
 
-import models.core.pages.{InternationalAddress, UKAddress}
+import models.UserAnswers
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
 class CountryOfResidenceInTheUkYesNoPageSpec extends PageBehaviours {
-
-  private val ukAddress: UKAddress = UKAddress("Line 1", "Line 2", None, None, "POSTCODE")
-  private val internationalAddress: InternationalAddress = InternationalAddress("Line 1", "Line 2", None, "COUNTRY")
 
   "CountryOfResidenceInTheUkYesNoPage" must {
 
@@ -32,54 +30,29 @@ class CountryOfResidenceInTheUkYesNoPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](CountryOfResidenceInTheUkYesNoPage(0))
 
-//    "implement cleanup logic when decision changed" when {  // TODO
-//
-//      "YES selected" in {
-//        forAll(arbitrary[UserAnswers]) {
-//          userAnswers =>
-//            val result: UserAnswers = userAnswers
-//              .set(CharityInternationalAddressPage(0), internationalAddress).success.value
-//              .set(CountryOfResidenceInTheUkYesNoPage(0), true).success.value
-//
-//            result.get(CharityInternationalAddressPage(0)) mustNot be(defined)
-//        }
-//      }
-//
-//      "NO selected" in {
-//        forAll(arbitrary[UserAnswers]) {
-//          userAnswers =>
-//            val result: UserAnswers = userAnswers
-//              .set(CharityAddressUKPage(0), ukAddress).success.value
-//              .set(CountryOfResidenceInTheUkYesNoPage(0), false).success.value
-//
-//            result.get(CharityAddressUKPage(0)) mustNot be(defined)
-//        }
-//      }
-//    }
+    "Yes selected - set CountryOfResidencePage to 'GB' " in {
+      forAll(arbitrary[UserAnswers]) {
+        initial =>
+          val answers: UserAnswers = initial.set(CountryOfResidenceYesNoPage(0), true).success.value
+            .set(CountryOfResidencePage(0), "ES").success.value
 
-//    "not implement cleanup logic when decision unchanged" when {  // TODO
-//
-//      "YES selected" in {
-//        forAll(arbitrary[UserAnswers]) {
-//          userAnswers =>
-//            val result: UserAnswers = userAnswers
-//              .set(CharityAddressUKPage(0), ukAddress).success.value
-//              .set(CountryOfResidenceInTheUkYesNoPage(0), true).success.value
-//
-//            result.get(CharityAddressUKPage(0)).get mustBe ukAddress
-//        }
-//      }
-//
-//      "NO selected" in {
-//        forAll(arbitrary[UserAnswers]) {
-//          userAnswers =>
-//            val result: UserAnswers = userAnswers
-//              .set(CharityInternationalAddressPage(0), internationalAddress).success.value
-//              .set(CountryOfResidenceInTheUkYesNoPage(0), false).success.value
-//
-//            result.get(CharityInternationalAddressPage(0)).get mustBe internationalAddress
-//        }
-//      }
-//    }
+          val result = answers.set(CountryOfResidenceInTheUkYesNoPage(0), true).success.value
+
+          result.get(CountryOfResidencePage(0)).get mustBe "GB"
+      }
+    }
+
+    "No selected" in {
+      forAll(arbitrary[UserAnswers]) {
+        initial =>
+          val answers: UserAnswers = initial.set(CountryOfResidenceYesNoPage(0), true).success.value
+            .set(CountryOfResidencePage(0), "ES").success.value
+
+          val result = answers.set(CountryOfResidenceInTheUkYesNoPage(0), false).success.value
+
+          result.get(CountryOfResidencePage(0)).get mustBe "ES"
+      }
+    }
+
   }
 }

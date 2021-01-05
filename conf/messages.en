@@ -412,6 +412,13 @@ trust.nonTaxable.countryOfResidenceInTheUkYesNo.heading = Does {0} have UK resid
 trust.nonTaxable.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel =  Does {0} have UK residency?
 trust.nonTaxable.countryOfResidenceInTheUkYesNo.error.required = Select yes if the trust beneficiary has UK residency
 
+trust.nonTaxable.countryOfResidence.title = What is the trust beneficiary’s country of residence?
+trust.nonTaxable.countryOfResidence.heading = What is {0}’s country of residence?
+trust.nonTaxable.countryOfResidence.checkYourAnswersLabel = What is {0}’s country of residence?
+trust.nonTaxable.countryOfResidence.error.required = Enter a country
+trust.nonTaxable.countryOfResidence.error.length = The country of residence must be 100 characters or less
+trust.nonTaxable.countryOfResidence.error.invalidCharacters = The country of residence must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
+
 otherBeneficiaryDescription.checkYourAnswersLabel = What is the description of the beneficiary?
 otherBeneficiaryShareOfIncomeYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
 otherBeneficiaryShareOfIncome.checkYourAnswersLabel = What percentage of the trust’s income is {0} entitled to?
