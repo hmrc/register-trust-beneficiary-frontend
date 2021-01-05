@@ -20,10 +20,18 @@ import base.SpecBase
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.beneficiaries.charityortrust.trust._
 import controllers.register.beneficiaries.charityortrust.trust.routes._
+import org.mockito.Mockito.when
+import services.FeatureFlagService
+
+import scala.concurrent.Future
 
 class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks  {
 
-  val navigator = new TrustBeneficiaryNavigator
+  val mockFeatureFlgService = mock[FeatureFlagService]
+
+  when(mockFeatureFlgService.is5mldEnabled()).thenReturn(Future.successful(false))
+  
+  val navigator = new TrustBeneficiaryNavigator(mockFeatureFlgService)
 
   val index = 0
 

@@ -17,9 +17,15 @@
 package controllers.register.beneficiaries.individualBeneficiary
 
 import base.SpecBase
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.FeatureFlagService
 import views.html.register.beneficiaries.individualBeneficiary.InfoView
+
+import scala.concurrent.Future
 
 class InfoControllerSpec extends SpecBase {
 
@@ -27,7 +33,14 @@ class InfoControllerSpec extends SpecBase {
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      lazy val mockFeatureFlagService = mock[FeatureFlagService]
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+        bind[FeatureFlagService].toInstance(mockFeatureFlagService)
+        ).build()
+
+      when(mockFeatureFlagService.is5mldEnabled()(any())).thenReturn(Future.successful(false))
 
       val request = FakeRequest(GET, routes.InfoController.onPageLoad(fakeDraftId).url)
 
