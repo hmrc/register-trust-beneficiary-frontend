@@ -170,7 +170,7 @@ class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
       "ShareOfIncome page -> CountryOfResidence Yes No page" in {
         when(mockFeatureFlgService.is5mldEnabled()(any())).thenReturn(Future.successful(true))
-        
+
         navigator.nextPage(ShareOfIncomePage(index), draftId, emptyUserAnswers)
           .mustBe(ntRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
       }
