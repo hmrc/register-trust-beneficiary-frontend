@@ -24,6 +24,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.FeatureFlagService
 import views.html.register.beneficiaries.individualBeneficiary.InfoView
+import views.html.register.beneficiaries.individualBeneficiary.nonTaxable.{InfoView => NonTaxableInfoView}
 
 import scala.concurrent.Future
 
@@ -31,7 +32,7 @@ class InfoControllerSpec extends SpecBase {
 
   "IndividualBeneficiaryInfo Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK and the correct view for a GET with 5mld disabled" in {
 
       lazy val mockFeatureFlagService = mock[FeatureFlagService]
 
@@ -47,6 +48,31 @@ class InfoControllerSpec extends SpecBase {
       val result = route(application, request).value
 
       val view = application.injector.instanceOf[InfoView]
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(fakeDraftId)(request, messages).toString
+
+      application.stop()
+    }
+
+    "return OK and the correct view for a GET with 5mld enabled" in {
+
+      lazy val mockFeatureFlagService = mock[FeatureFlagService]
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[FeatureFlagService].toInstance(mockFeatureFlagService)
+        ).build()
+
+      when(mockFeatureFlagService.is5mldEnabled()(any())).thenReturn(Future.successful(true))
+
+      val request = FakeRequest(GET, routes.InfoController.onPageLoad(fakeDraftId).url)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[NonTaxableInfoView]
 
       status(result) mustEqual OK
 
