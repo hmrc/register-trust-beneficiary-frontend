@@ -18,7 +18,6 @@ package pages.register.beneficiaries.charityortrust.charity.nonTaxable
 
 import models.UserAnswers
 import pages.QuestionPage
-import pages.register.beneficiaries.charityortrust.charity.CharityInternationalAddressPage
 import play.api.libs.json.JsPath
 import sections.beneficiaries.{Beneficiaries, CharityBeneficiaries}
 
@@ -32,7 +31,7 @@ final case class CountryOfResidenceInTheUkYesNoPage(index : Int) extends Questio
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(true) => userAnswers.remove(CharityInternationalAddressPage(index)) // TODO
+      case Some(true) => userAnswers.set(CountryOfResidencePage(index), "GB")
       case _ => super.cleanup(value, userAnswers)
     }
 }
