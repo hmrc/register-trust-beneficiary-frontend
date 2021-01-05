@@ -27,7 +27,7 @@ import play.api.mvc.Call
 import services.FeatureFlagService
 
 import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, ExecutionContext}
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 class TrustBeneficiaryNavigator @Inject()(featureFlagService: FeatureFlagService)(implicit ec: ExecutionContext) extends Navigator {
 
@@ -36,7 +36,7 @@ class TrustBeneficiaryNavigator @Inject()(featureFlagService: FeatureFlagService
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, Call] = {
     case NamePage(index) => rts.DiscretionYesNoController.onPageLoad(index, draftId)
-    case ShareOfIncomePage(index) => rts.AddressYesNoController.onPageLoad(index, draftId)
+    case ShareOfIncomePage(index) => fiveMldYesNo(draftId, index)
     case AddressUKPage(index) => rts.AnswersController.onPageLoad(index, draftId)
     case AddressInternationalPage(index) => rts.AnswersController.onPageLoad(index, draftId)
     case CountryOfResidencePage(index) => rts.AddressYesNoController.onPageLoad(index, draftId)
@@ -44,7 +44,7 @@ class TrustBeneficiaryNavigator @Inject()(featureFlagService: FeatureFlagService
 
   private def yesNoNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case DiscretionYesNoPage(index) => ua =>
-      yesNoNav(ua, DiscretionYesNoPage(index), fiveMldDiscretionYesNo(draftId, index), rts.ShareOfIncomeController.onPageLoad(index, draftId))
+      yesNoNav(ua, DiscretionYesNoPage(index), fiveMldYesNo(draftId, index), rts.ShareOfIncomeController.onPageLoad(index, draftId))
     case AddressUKYesNoPage(index) => ua =>
       yesNoNav(ua, AddressUKYesNoPage(index), rts.AddressUKController.onPageLoad(index, draftId), rts.AddressInternationalController.onPageLoad(index, draftId))
     case AddressYesNoPage(index) => ua =>
@@ -69,7 +69,7 @@ class TrustBeneficiaryNavigator @Inject()(featureFlagService: FeatureFlagService
       )
   }
 
-  private def fiveMldDiscretionYesNo(draftId: String, index: Int): Call = {
+  private def fiveMldYesNo(draftId: String, index: Int): Call = {
     Await.result(featureFlagService.is5mldEnabled().map {
       case true => nonTaxRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
       case false => rts.AddressYesNoController.onPageLoad(index, draftId)
