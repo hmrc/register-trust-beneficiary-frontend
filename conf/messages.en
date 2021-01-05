@@ -401,6 +401,24 @@ trustBeneficiary.checkDetails.utr.p1 = Some of the information we ask about trus
 trustBeneficiary.checkDetails.utr.p2 = If you need to update {0}’s details, you will need to remove them, then add them as a new beneficiary.
 trustBeneficiary.checkDetails.utr.p3 = When asked for the date {0} was added or removed from the trust use today’s date.
 
+trust.nonTaxable.countryOfResidenceYesNo.title = Do you know the trust beneficiary’s country of residence?
+trust.nonTaxable.countryOfResidenceYesNo.heading = Do you know {0}’s country of residence?
+trust.nonTaxable.countryOfResidenceYesNo.checkYourAnswersLabel = Do you know {0}’s country of residence?
+trust.nonTaxable.countryOfResidenceYesNo.error.required = Select yes if you know the trust beneficiary’s country of residence
+trust.nonTaxable.countryOfResidenceYesNo.hint = The country of residence is usually where the trust is registered.
+
+trust.nonTaxable.countryOfResidenceInTheUkYesNo.title = Does trust beneficiary have UK residency?
+trust.nonTaxable.countryOfResidenceInTheUkYesNo.heading = Does {0} have UK residency?
+trust.nonTaxable.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel =  Does {0} have UK residency?
+trust.nonTaxable.countryOfResidenceInTheUkYesNo.error.required = Select yes if the trust beneficiary has UK residency
+
+trust.nonTaxable.countryOfResidence.title = What is the trust beneficiary’s country of residence?
+trust.nonTaxable.countryOfResidence.heading = What is {0}’s country of residence?
+trust.nonTaxable.countryOfResidence.checkYourAnswersLabel = What is {0}’s country of residence?
+trust.nonTaxable.countryOfResidence.error.required = Enter a country
+trust.nonTaxable.countryOfResidence.error.length = The country of residence must be 100 characters or less
+trust.nonTaxable.countryOfResidence.error.invalidCharacters = The country of residence must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
+
 otherBeneficiaryDescription.checkYourAnswersLabel = What is the description of the beneficiary?
 otherBeneficiaryShareOfIncomeYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
 otherBeneficiaryShareOfIncome.checkYourAnswersLabel = What percentage of the trust’s income is {0} entitled to?
