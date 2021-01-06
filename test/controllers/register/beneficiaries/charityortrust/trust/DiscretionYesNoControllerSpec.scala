@@ -22,15 +22,22 @@ import forms.YesNoFormProvider
 import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.charityortrust.trust.{DiscretionYesNoPage, NamePage}
 import play.api.inject.bind
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.FeatureFlagService
 import views.html.register.beneficiaries.charityortrust.trust.DiscretionYesNoView
+
+import scala.concurrent.Future
 
 class DiscretionYesNoControllerSpec extends SpecBase {
 
   val formProvider = new YesNoFormProvider()
   val form = formProvider.withPrefix("trustBeneficiaryDiscretionYesNo")
   val index: Int = 0
+
+  val mockFeatureFlagService = mock[FeatureFlagService]
 
   val name = "Name"
 
@@ -85,9 +92,13 @@ class DiscretionYesNoControllerSpec extends SpecBase {
       val userAnswers = emptyUserAnswers.set(NamePage(index),
         name).success.value
 
+      when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
+        .thenReturn(Future.successful(true))
+
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
+            bind[FeatureFlagService].toInstance(mockFeatureFlagService),
             bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(new FakeNavigator)
           ).build()
 
