@@ -32,15 +32,13 @@ class CharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
 
   val mockFeatureFlgService: FeatureFlagService = mock[FeatureFlagService]
 
-  val navigator = new CharityBeneficiaryNavigator(mockFeatureFlgService)
+  val navigator = new CharityBeneficiaryNavigator()
 
   val index = 0
 
   "Charity beneficiary navigator" must {
 
     "a 4mld trust" must {
-
-      when(mockFeatureFlgService.is5mldEnabled()(any())).thenReturn(Future.successful(false))
 
       "Name page -> Discretion yes no page" in {
         navigator.nextPage(CharityNamePage(index), fakeDraftId, emptyUserAnswers)
@@ -116,12 +114,12 @@ class CharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
     "a 5mld trust" must {
 
       "Discretion yes no page -> Yes -> Address yes no page" in {
-        when(mockFeatureFlgService.is5mldEnabled()(any())).thenReturn(Future.successful(true))
+        when(mockFeatureFlgService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(true))
 
         val answers = emptyUserAnswers
           .set(AmountDiscretionYesNoPage(index), true).success.value
 
-        navigator.nextPage(AmountDiscretionYesNoPage(index), fakeDraftId, answers)
+        navigator.nextPage(AmountDiscretionYesNoPage(index), fakeDraftId, fiveMldEnabled = true, answers)
           .mustBe(ntRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
       }
 
@@ -129,7 +127,7 @@ class CharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
         val answers = emptyUserAnswers
           .set(CountryOfResidenceYesNoPage(index), false).success.value
 
-        navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, answers)
+        navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, fiveMldEnabled = true, answers)
           .mustBe(rts.AddressYesNoController.onPageLoad(index, draftId))
       }
 
@@ -137,7 +135,7 @@ class CharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
         val answers = emptyUserAnswers
           .set(CountryOfResidenceYesNoPage(index), true).success.value
 
-        navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, answers)
+        navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, fiveMldEnabled = true, answers)
           .mustBe(ntRts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId))
       }
 
@@ -146,7 +144,7 @@ class CharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
         val answers = emptyUserAnswers
           .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
 
-        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, answers)
+        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, fiveMldEnabled = true, answers)
           .mustBe(rts.AddressYesNoController.onPageLoad(index, draftId))
       }
 
@@ -154,7 +152,7 @@ class CharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
         val answers = emptyUserAnswers
           .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
 
-        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, answers)
+        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, fiveMldEnabled = true, answers)
           .mustBe(ntRts.CountryOfResidenceController.onPageLoad(index, draftId))
       }
 
@@ -164,9 +162,8 @@ class CharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
       }
 
       "How much income page -> CountryOfResidence Yes No page" in {
-        when(mockFeatureFlgService.is5mldEnabled()(any())).thenReturn(Future.successful(true))
 
-        navigator.nextPage(HowMuchIncomePage(index), draftId, emptyUserAnswers)
+        navigator.nextPage(HowMuchIncomePage(index), draftId, fiveMldEnabled = true, emptyUserAnswers)
           .mustBe(ntRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
       }
     }

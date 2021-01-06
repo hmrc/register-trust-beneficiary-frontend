@@ -34,7 +34,7 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase with MockitoSugar {
   val formProvider = new YesNoFormProvider()
   val form: Form[Boolean] = formProvider.withPrefix("charity.nonTaxable.countryOfResidenceYesNo")
   val index: Int = 0
-  val charityName = "Test"
+  val charityName = "Name"
 
   lazy val countryOfResidenceYesNo: String = routes.CountryOfResidenceYesNoController.onPageLoad(index, draftId).url
 

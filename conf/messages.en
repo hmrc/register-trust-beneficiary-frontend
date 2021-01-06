@@ -401,6 +401,8 @@ trustBeneficiary.checkDetails.utr.p1 = Some of the information we ask about trus
 trustBeneficiary.checkDetails.utr.p2 = If you need to update {0}’s details, you will need to remove them, then add them as a new beneficiary.
 trustBeneficiary.checkDetails.utr.p3 = When asked for the date {0} was added or removed from the trust use today’s date.
 
+trustBeneficiary.name.default = Name
+
 trust.nonTaxable.countryOfResidenceYesNo.title = Do you know the trust beneficiary’s country of residence?
 trust.nonTaxable.countryOfResidenceYesNo.heading = Do you know {0}’s country of residence?
 trust.nonTaxable.countryOfResidenceYesNo.checkYourAnswersLabel = Do you know {0}’s country of residence?

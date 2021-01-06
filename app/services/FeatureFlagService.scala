@@ -24,9 +24,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class FeatureFlagService @Inject()(trustStoreConnector: TrustsStoreConnector) {
 
-  def is5mldEnabled()(implicit ec: ExecutionContext): Future[Boolean] = {
-
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+  def is5mldEnabled()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Boolean] = {
 
     trustStoreConnector.getFeatureFlag().map {
       case Some(flag) =>

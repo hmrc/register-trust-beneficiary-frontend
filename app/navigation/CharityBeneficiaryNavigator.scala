@@ -16,7 +16,6 @@
 
 package navigation
 
-import com.google.inject.Inject
 import controllers.register.beneficiaries.charityortrust.charity.nonTaxable.{routes => nonTaxRts}
 import controllers.register.beneficiaries.charityortrust.charity.{routes => rts}
 import models.ReadableUserAnswers
@@ -24,26 +23,26 @@ import pages.Page
 import pages.register.beneficiaries.charityortrust.charity._
 import pages.register.beneficiaries.charityortrust.charity.nonTaxable.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import play.api.mvc.Call
-import services.FeatureFlagService
 
-import scala.concurrent.{Await, ExecutionContext}
-import scala.concurrent.duration.Duration
+class CharityBeneficiaryNavigator extends Navigator {
 
-class CharityBeneficiaryNavigator @Inject()(featureFlagService: FeatureFlagService)(implicit ec: ExecutionContext) extends Navigator {
+  override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call =
+    nextPage(page, draftId, fiveMldEnabled = false, userAnswers)
 
-  override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call = routes(draftId)(page)(userAnswers)
+  override def nextPage(page: Page, draftId: String, fiveMldEnabled: Boolean, userAnswers: ReadableUserAnswers): Call =
+    routes(draftId, fiveMldEnabled)(page)(userAnswers)
 
-  private def simpleNavigation(draftId: String): PartialFunction[Page, Call] = {
+  private def simpleNavigation(draftId: String, fiveMldEnabled: Boolean): PartialFunction[Page, Call] = {
     case CharityNamePage(index) => rts.AmountDiscretionYesNoController.onPageLoad(index, draftId)
-    case HowMuchIncomePage(index) => fiveMldYesNo(draftId, index)
+    case HowMuchIncomePage(index) => fiveMldYesNo(draftId, index, fiveMldEnabled)
     case CharityAddressUKPage(index) => rts.CharityAnswersController.onPageLoad(index, draftId)
     case CharityInternationalAddressPage(index) => rts.CharityAnswersController.onPageLoad(index, draftId)
     case CountryOfResidencePage(index) => rts.AddressYesNoController.onPageLoad(index, draftId)
   }
 
-  private def conditionalNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
+  private def conditionalNavigation(draftId: String, fiveMldEnabled: Boolean): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case AmountDiscretionYesNoPage(index) => ua =>
-      yesNoNav(ua, AmountDiscretionYesNoPage(index), fiveMldYesNo(draftId, index), rts.HowMuchIncomeController.onPageLoad(index, draftId))
+      yesNoNav(ua, AmountDiscretionYesNoPage(index), fiveMldYesNo(draftId, index, fiveMldEnabled), rts.HowMuchIncomeController.onPageLoad(index, draftId))
     case AddressYesNoPage(index) => ua =>
       yesNoNav(
         ua,
@@ -74,14 +73,15 @@ class CharityBeneficiaryNavigator @Inject()(featureFlagService: FeatureFlagServi
       )
   }
 
-  private def fiveMldYesNo(draftId: String, index: Int): Call = {
-    Await.result(featureFlagService.is5mldEnabled().map {
-      case true => nonTaxRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
-      case false => rts.AddressYesNoController.onPageLoad(index, draftId)
-    }, Duration.Inf)
+  private def fiveMldYesNo(draftId: String, index: Int, fiveMldEnabled: Boolean): Call = {
+    if (fiveMldEnabled) {
+      nonTaxRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
+    } else {
+      rts.AddressYesNoController.onPageLoad(index, draftId)
+    }
   }
 
-  private def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] =
-    simpleNavigation(draftId) andThen (c => (_:ReadableUserAnswers) => c) orElse
-      conditionalNavigation(draftId)
+  private def routes(draftId: String, fiveMldEnabled: Boolean): PartialFunction[Page, ReadableUserAnswers => Call] =
+    simpleNavigation(draftId, fiveMldEnabled) andThen (c => (_:ReadableUserAnswers) => c) orElse
+      conditionalNavigation(draftId, fiveMldEnabled)
 }

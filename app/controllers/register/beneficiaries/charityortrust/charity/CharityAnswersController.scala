@@ -17,7 +17,7 @@
 package controllers.register.beneficiaries.charityortrust.charity
 
 import controllers.actions._
-import controllers.actions.register.company.NameRequiredAction
+import controllers.actions.register.trust.NameRequiredAction
 import javax.inject.Inject
 import models.Status.Completed
 import pages.entitystatus.CharityBeneficiaryStatus

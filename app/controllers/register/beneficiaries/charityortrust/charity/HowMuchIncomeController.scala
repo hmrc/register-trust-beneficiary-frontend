@@ -18,7 +18,7 @@ package controllers.register.beneficiaries.charityortrust.charity
 
 import config.annotations.CharityBeneficiary
 import controllers.actions.StandardActionSets
-import controllers.actions.register.company.NameRequiredAction
+import controllers.actions.register.trust.NameRequiredAction
 import forms.IncomePercentageFormProvider
 import javax.inject.Inject
 import navigation.Navigator
@@ -27,6 +27,7 @@ import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
+import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.beneficiaries.charityortrust.charity.HowMuchIncomeView
 
@@ -36,6 +37,7 @@ class HowMuchIncomeController @Inject()(
                                          val controllerComponents: MessagesControllerComponents,
                                          repository: RegistrationsRepository,
                                          @CharityBeneficiary navigator: Navigator,
+                                         featureFlagService: FeatureFlagService,
                                          standardActionSets: StandardActionSets,
                                          nameAction: NameRequiredAction,
                                          formProvider: IncomePercentageFormProvider,
@@ -71,8 +73,9 @@ class HowMuchIncomeController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(HowMuchIncomePage(index), value))
+            is5mld         <- featureFlagService.is5mldEnabled()
             _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(HowMuchIncomePage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(HowMuchIncomePage(index), draftId, is5mld, updatedAnswers))
         }
       )
   }

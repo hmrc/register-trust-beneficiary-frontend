@@ -18,11 +18,10 @@ package controllers.register.beneficiaries.charityortrust.charity.nonTaxable
 
 import config.annotations.CharityBeneficiary
 import controllers.actions.StandardActionSets
-import controllers.actions.register.company.NameRequiredAction
+import controllers.actions.register.trust.NameRequiredAction
 import forms.CountryFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
 import pages.register.beneficiaries.charityortrust.charity.nonTaxable.CountryOfResidencePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -47,32 +46,27 @@ class CountryOfResidenceController @Inject()(
                                                      val countryOptions: CountryOptionsNonUK
                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private def actions(draftId: String) = standardActions.identifiedUserWithData(draftId)
-
   private val form: Form[String] = formProvider.withPrefix("charity.nonTaxable.countryOfResidence")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
     implicit request =>
 
-      val charityName = request.userAnswers.get(CharityNamePage(index)).get
-
       val preparedForm = request.userAnswers.get(CountryOfResidencePage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, countryOptions.options, draftId, index, charityName))
+      Ok(view(preparedForm, countryOptions.options, draftId, index, request.beneficiaryName))
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(draftId).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] =
+    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
     implicit request =>
-
-      val charityName = request.userAnswers.get(CharityNamePage(index)).get
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, index, charityName))),
+          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, index, request.beneficiaryName))),
 
         value => {
           for {
