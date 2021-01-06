@@ -41,7 +41,7 @@ class InfoControllerSpec extends SpecBase {
         bind[FeatureFlagService].toInstance(mockFeatureFlagService)
         ).build()
 
-      when(mockFeatureFlagService.is5mldEnabled()(any())).thenReturn(Future.successful(false))
+      when(mockFeatureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
 
       val request = FakeRequest(GET, routes.InfoController.onPageLoad(fakeDraftId).url)
 
@@ -66,7 +66,7 @@ class InfoControllerSpec extends SpecBase {
           bind[FeatureFlagService].toInstance(mockFeatureFlagService)
         ).build()
 
-      when(mockFeatureFlagService.is5mldEnabled()(any())).thenReturn(Future.successful(true))
+      when(mockFeatureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(true))
 
       val request = FakeRequest(GET, routes.InfoController.onPageLoad(fakeDraftId).url)
 

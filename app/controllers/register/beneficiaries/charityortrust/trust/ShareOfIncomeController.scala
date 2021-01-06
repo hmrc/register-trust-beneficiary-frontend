@@ -20,6 +20,7 @@ import config.annotations.TrustBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.register.trust.NameRequiredAction
 import forms.IncomePercentageFormProvider
+
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.beneficiaries.charityortrust.trust.ShareOfIncomePage
@@ -27,6 +28,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
+import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.beneficiaries.charityortrust.trust.ShareOfIncomeView
 
@@ -38,6 +40,7 @@ class ShareOfIncomeController @Inject()(
                                          override val controllerComponents: MessagesControllerComponents,
                                          @TrustBeneficiary navigator: Navigator,
                                          standardActionSets: StandardActionSets,
+                                         featureFlagService: FeatureFlagService,
                                          nameAction: NameRequiredAction,
                                          formProvider: IncomePercentageFormProvider,
                                          view: ShareOfIncomeView
@@ -67,8 +70,9 @@ class ShareOfIncomeController @Inject()(
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ShareOfIncomePage(index), value))
+            is5mld <- featureFlagService.is5mldEnabled()
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ShareOfIncomePage(index),  draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(ShareOfIncomePage(index),  draftId, is5mld, updatedAnswers))
       )
   }
 }

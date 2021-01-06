@@ -18,10 +18,9 @@ package controllers.register.beneficiaries.charityortrust.trust.nonTaxable
 
 import config.annotations.TrustBeneficiary
 import controllers.actions._
-import controllers.actions.register.company.NameRequiredAction
+import controllers.actions.register.trust.NameRequiredAction
 import forms.YesNoFormProvider
 import navigation.Navigator
-import pages.register.beneficiaries.charityortrust.trust.NamePage
 import pages.register.beneficiaries.charityortrust.trust.nonTaxable.CountryOfResidenceYesNoPage
 import play.api.data.Form
 import play.api.i18n._
@@ -49,25 +48,21 @@ class CountryOfResidenceYesNoController @Inject()(
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
       implicit request =>
 
-        val trustName = request.userAnswers.get(NamePage(index)).get
-
         val preparedForm = request.userAnswers.get(CountryOfResidenceYesNoPage(index)) match {
           case None => form
           case Some(value) => form.fill(value)
         }
 
-        Ok(view(preparedForm, draftId, index, trustName))
+        Ok(view(preparedForm, draftId, index, request.beneficiaryName))
     }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
       implicit request =>
 
-        val trustName = request.userAnswers.get(NamePage(index)).get
-
         form.bindFromRequest().fold(
           formWithErrors =>
-            Future.successful(BadRequest(view(formWithErrors, draftId, index, trustName))),
+            Future.successful(BadRequest(view(formWithErrors, draftId, index, request.beneficiaryName))),
 
           value =>
             for {

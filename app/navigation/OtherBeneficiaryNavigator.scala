@@ -16,16 +16,20 @@
 
 package navigation
 
-import javax.inject.Inject
-import models.ReadableUserAnswers
-import pages.register.beneficiaries.other._
-import pages.Page
-import play.api.mvc.Call
 import controllers.register.beneficiaries.other
+import models.ReadableUserAnswers
+import pages.Page
+import pages.register.beneficiaries.other._
+import play.api.mvc.Call
+
+import javax.inject.Inject
 
 class OtherBeneficiaryNavigator @Inject()() extends Navigator {
 
   override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call =
+    nextPage(page, draftId, fiveMldEnabled = false, userAnswers)
+
+  override def nextPage(page: Page, draftId: String, fiveMldEnabled: Boolean, userAnswers: ReadableUserAnswers): Call =
     routes(draftId)(page)(userAnswers)
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, Call] =
