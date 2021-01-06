@@ -53,7 +53,8 @@ object IndividualDetailsType {
 case class BeneficiaryTrustType(organisationName: String,
                                 beneficiaryDiscretion: Option[Boolean],
                                 beneficiaryShareOfIncome: Option[String],
-                                identification: Option[IdentificationOrgType])
+                                identification: Option[IdentificationOrgType],
+                                countryOfResidence: Option[String])
 
 object BeneficiaryTrustType {
   implicit val beneficiaryTrustTypeFormat: Format[BeneficiaryTrustType] = Json.format[BeneficiaryTrustType]
