@@ -18,8 +18,11 @@ package navigation
 
 import base.SpecBase
 import controllers.register.beneficiaries.charityortrust.charity.routes._
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import controllers.register.beneficiaries.charityortrust.charity.nonTaxable.routes._
 import pages.register.beneficiaries.charityortrust.charity._
+import pages.register.beneficiaries.charityortrust.charity.nonTaxable._
+
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 class CharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks {
 
@@ -116,6 +119,62 @@ class CharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
     "International address page -> Check answers page" in {
       navigator.nextPage(CharityInternationalAddressPage(index), fakeDraftId, emptyUserAnswers)
         .mustBe(CharityAnswersController.onPageLoad(index, fakeDraftId))
+    }
+
+    "a 5mld trust" must {
+
+      "Discretion yes no page -> Yes -> CountryOfResidence Yes No page" in {
+
+        val answers = emptyUserAnswers
+          .set(AmountDiscretionYesNoPage(index), true).success.value
+
+        navigator.nextPage(AmountDiscretionYesNoPage(index), draftId, true, answers)
+          .mustBe(CountryOfResidenceYesNoController.onPageLoad(index, draftId))
+      }
+
+      "CountryOfResidence yes no page -> No -> Address yes no page" in {
+        val answers = emptyUserAnswers
+          .set(CountryOfResidenceYesNoPage(index), false).success.value
+
+        navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, true, answers)
+          .mustBe(AddressYesNoController.onPageLoad(index, draftId))
+      }
+
+      "CountryOfResidence yes no page -> Yes -> CountryOfResidence Uk yes no page" in {
+        val answers = emptyUserAnswers
+          .set(CountryOfResidenceYesNoPage(index), true).success.value
+
+        navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, true, answers)
+          .mustBe(CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId))
+      }
+
+
+      "CountryOfResidence Uk yes no page -> Yes -> Address yes no page" in {
+        val answers = emptyUserAnswers
+          .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
+
+        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, true, answers)
+          .mustBe(AddressYesNoController.onPageLoad(index, draftId))
+      }
+
+      "CountryOfResidence Uk yes no page -> No -> Address yes no page" in {
+        val answers = emptyUserAnswers
+          .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+
+        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, true, answers)
+          .mustBe(CountryOfResidenceController.onPageLoad(index, draftId))
+      }
+
+      "CountryOfResidence page -> Address yes no page" in {
+        navigator.nextPage(CountryOfResidencePage(index), draftId, true, emptyUserAnswers)
+          .mustBe(AddressYesNoController.onPageLoad(index, draftId))
+      }
+
+      "ShareOfIncome page -> CountryOfResidence Yes No page" in {
+
+        navigator.nextPage(HowMuchIncomePage(index), draftId, true, emptyUserAnswers)
+          .mustBe(CountryOfResidenceYesNoController.onPageLoad(index, draftId))
+      }
     }
   }
 }
