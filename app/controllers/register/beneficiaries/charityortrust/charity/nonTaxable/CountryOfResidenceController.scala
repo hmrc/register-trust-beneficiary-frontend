@@ -16,6 +16,7 @@
 
 package controllers.register.beneficiaries.charityortrust.charity.nonTaxable
 
+import config.annotations.CharityBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.register.company.NameRequiredAction
 import forms.CountryFormProvider
@@ -36,7 +37,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class CountryOfResidenceController @Inject()(
                                                      override val messagesApi: MessagesApi,
                                                      registrationsRepository: RegistrationsRepository,
-                                                     navigator: Navigator,
+                                                     @CharityBeneficiary navigator: Navigator,
                                                      standardActionSets: StandardActionSets,
                                                      nameAction: NameRequiredAction,
                                                      formProvider: CountryFormProvider,
