@@ -20,13 +20,18 @@ import base.SpecBase
 import config.annotations.CharityBeneficiary
 import forms.IncomePercentageFormProvider
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.charityortrust.charity.{CharityNamePage, HowMuchIncomePage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
+import services.FeatureFlagService
 import views.html.register.beneficiaries.charityortrust.charity.HowMuchIncomeView
+
+import scala.concurrent.Future
 
 class HowMuchIncomeControllerSpec extends SpecBase with MockitoSugar {
 
@@ -37,6 +42,8 @@ class HowMuchIncomeControllerSpec extends SpecBase with MockitoSugar {
   val validAnswer: Int = 60
 
   lazy val howMuchIncomeRoute: String = routes.HowMuchIncomeController.onPageLoad(index, fakeDraftId).url
+
+  val mockFeatureFlagService = mock[FeatureFlagService]
 
   "HowMuchIncome Controller" must {
 
@@ -87,10 +94,14 @@ class HowMuchIncomeControllerSpec extends SpecBase with MockitoSugar {
       val userAnswers = emptyUserAnswers
         .set(CharityNamePage(index), "Test").success.value
 
+      when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
+        .thenReturn(Future.successful(true))
+
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[CharityBeneficiary]).toInstance(new FakeNavigator)
+            bind[Navigator].qualifiedWith(classOf[CharityBeneficiary]).toInstance(new FakeNavigator),
+            bind[FeatureFlagService].toInstance(mockFeatureFlagService)
           ).build()
 
       val request =

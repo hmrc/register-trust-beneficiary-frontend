@@ -20,14 +20,19 @@ import base.SpecBase
 import config.annotations.CompanyBeneficiary
 import forms.IncomePercentageFormProvider
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.register.beneficiaries.companyoremploymentrelated.company.{NamePage, IncomePage}
+import pages.register.beneficiaries.companyoremploymentrelated.company.{IncomePage, NamePage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.FeatureFlagService
 import views.html.register.beneficiaries.companyoremploymentrelated.company.ShareOfIncomeView
+
+import scala.concurrent.Future
 
 class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
 
@@ -39,6 +44,8 @@ class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
   private val answer = 50
 
   val baseAnswers = emptyUserAnswers.set(NamePage(index), name).success.value
+
+  val mockFeatureFlagService = mock[FeatureFlagService]
 
   "ShareOfIncome Controller" must {
 
@@ -82,10 +89,14 @@ class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
 
     "redirect to the next page when valid data is submitted" in {
 
+      when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
+        .thenReturn(Future.successful(true))
+
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[CompanyBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
+            bind[Navigator].qualifiedWith(classOf[CompanyBeneficiary]).toInstance(new FakeNavigator(onwardRoute)),
+            bind[FeatureFlagService].toInstance(mockFeatureFlagService)
           ).build()
 
       val request =
