@@ -17,10 +17,10 @@
 package navigation
 
 import base.SpecBase
+import controllers.register.beneficiaries.charityortrust.trust.nonTaxable.{routes => ntRts}
+import controllers.register.beneficiaries.charityortrust.trust.{routes => rts}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.beneficiaries.charityortrust.trust._
-import controllers.register.beneficiaries.charityortrust.trust.{routes => rts}
-import controllers.register.beneficiaries.charityortrust.trust.nonTaxable.{routes => ntRts}
 import pages.register.beneficiaries.charityortrust.trust.nonTaxable.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 
 class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks {
@@ -112,7 +112,6 @@ class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
     "a 5mld trust" must {
 
       "Discretion yes no page -> Yes -> CountryOfResidence Yes No page" in {
-
         val answers = emptyUserAnswers
           .set(DiscretionYesNoPage(index), true).success.value
 
@@ -159,7 +158,6 @@ class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
       }
 
       "ShareOfIncome page -> CountryOfResidence Yes No page" in {
-
         navigator.nextPage(ShareOfIncomePage(index), draftId, fiveMldEnabled = true, emptyUserAnswers)
           .mustBe(ntRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
       }

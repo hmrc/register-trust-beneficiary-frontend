@@ -19,6 +19,7 @@ package controllers.register.beneficiaries.charityortrust.trust
 import base.SpecBase
 import models.core.pages.UKAddress
 import pages.register.beneficiaries.charityortrust.trust._
+import pages.register.beneficiaries.charityortrust.trust.nonTaxable.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils.answers.TrustBeneficiaryAnswersHelper
@@ -39,6 +40,9 @@ class AnswersControllerSpec extends SpecBase {
           .set(NamePage(index), "Trust Name").success.value
           .set(DiscretionYesNoPage(index),true).success.value
           .set(ShareOfIncomePage(index),100).success.value
+          .set(CountryOfResidenceYesNoPage(index), true).success.value
+          .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+          .set(CountryOfResidencePage(index), "ES").success.value
           .set(AddressYesNoPage(index),true).success.value
           .set(AddressUKYesNoPage(index),true).success.value
           .set(AddressUKPage(index),UKAddress("Line1", "Line2", None, None, "NE62RT")).success.value
@@ -53,6 +57,9 @@ class AnswersControllerSpec extends SpecBase {
             checkYourAnswersHelper.trustBeneficiaryName(index).value,
             checkYourAnswersHelper.trustBeneficiaryDiscretionYesNo(index).value,
             checkYourAnswersHelper.trustBeneficiaryShareOfIncome(index).value,
+            checkYourAnswersHelper.trustBeneficiaryCountryOfResidenceYesNo(index).value,
+            checkYourAnswersHelper.trustBeneficiaryCountryOfResidenceInTheUkYesNo(index).value,
+            checkYourAnswersHelper.trustBeneficiaryCountryOfResidence(index).value,
             checkYourAnswersHelper.trustBeneficiaryAddressYesNo(index).value,
             checkYourAnswersHelper.trustBeneficiaryAddressUKYesNo(index).value,
             checkYourAnswersHelper.trustBeneficiaryAddressUK(index).value

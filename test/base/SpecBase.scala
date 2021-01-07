@@ -30,6 +30,7 @@ import play.api.libs.json.Json
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.auth.core.AffinityGroup.Organisation
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, Enrolments}
+import uk.gov.hmrc.http.HeaderCarrier
 
 trait SpecBase extends PlaySpec
   with GuiceOneAppPerSuite
@@ -45,6 +46,8 @@ trait SpecBase extends PlaySpec
   lazy val draftId: String = "draftId"
   lazy val userInternalId: String = "internalId"
   lazy val fakeDraftId: String = draftId
+
+  implicit val hc = HeaderCarrier()
 
   def emptyUserAnswers: UserAnswers = UserAnswers(draftId, Json.obj(), internalAuthId = userInternalId)
 

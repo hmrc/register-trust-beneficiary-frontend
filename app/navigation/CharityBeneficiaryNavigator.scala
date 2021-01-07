@@ -16,12 +16,12 @@
 
 package navigation
 
-import controllers.register.beneficiaries.charityortrust.charity.nonTaxable.{routes => nonTaxRts}
-import controllers.register.beneficiaries.charityortrust.charity.{routes => rts}
+import controllers.register.beneficiaries.charityortrust.charity.routes._
+import controllers.register.beneficiaries.charityortrust.charity.nonTaxable.routes._
 import models.ReadableUserAnswers
 import pages.Page
 import pages.register.beneficiaries.charityortrust.charity._
-import pages.register.beneficiaries.charityortrust.charity.nonTaxable.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
+import pages.register.beneficiaries.charityortrust.charity.nonTaxable._
 import play.api.mvc.Call
 
 class CharityBeneficiaryNavigator extends Navigator {
@@ -32,56 +32,61 @@ class CharityBeneficiaryNavigator extends Navigator {
   override def nextPage(page: Page, draftId: String, fiveMldEnabled: Boolean, userAnswers: ReadableUserAnswers): Call =
     routes(draftId, fiveMldEnabled)(page)(userAnswers)
 
-  private def simpleNavigation(draftId: String, fiveMldEnabled: Boolean): PartialFunction[Page, Call] = {
-    case CharityNamePage(index) => rts.AmountDiscretionYesNoController.onPageLoad(index, draftId)
-    case HowMuchIncomePage(index) => fiveMldYesNo(draftId, index, fiveMldEnabled)
-    case CharityAddressUKPage(index) => rts.CharityAnswersController.onPageLoad(index, draftId)
-    case CharityInternationalAddressPage(index) => rts.CharityAnswersController.onPageLoad(index, draftId)
-    case CountryOfResidencePage(index) => rts.AddressYesNoController.onPageLoad(index, draftId)
+  private def simpleNavigation(draftId: String, fiveMld: Boolean): PartialFunction[Page, Call] = {
+    case CharityNamePage(index) => AmountDiscretionYesNoController.onPageLoad(index, draftId)
+    case HowMuchIncomePage(index) => fiveMldYesNo(draftId, index, fiveMld)
+    case CharityAddressUKPage(index) => CharityAnswersController.onPageLoad(index, draftId)
+    case CharityInternationalAddressPage(index) => CharityAnswersController.onPageLoad(index, draftId)
+    case CountryOfResidencePage(index) => AddressYesNoController.onPageLoad(index, draftId)
   }
 
-  private def conditionalNavigation(draftId: String, fiveMldEnabled: Boolean): PartialFunction[Page, ReadableUserAnswers => Call] = {
+  private def yesNoNavigation(draftId: String, fiveMld: Boolean): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case AmountDiscretionYesNoPage(index) => ua =>
-      yesNoNav(ua, AmountDiscretionYesNoPage(index), fiveMldYesNo(draftId, index, fiveMldEnabled), rts.HowMuchIncomeController.onPageLoad(index, draftId))
+      yesNoNav(
+        ua,
+        AmountDiscretionYesNoPage(index),
+        fiveMldYesNo(draftId, index, fiveMld),
+        HowMuchIncomeController.onPageLoad(index, draftId)
+      )
     case AddressYesNoPage(index) => ua =>
       yesNoNav(
         ua,
         AddressYesNoPage(index),
-        rts.AddressInTheUkYesNoController.onPageLoad(index, draftId),
-        rts.CharityAnswersController.onPageLoad(index, draftId)
+        AddressInTheUkYesNoController.onPageLoad(index, draftId),
+        CharityAnswersController.onPageLoad(index, draftId)
       )
     case AddressInTheUkYesNoPage(index) => ua =>
       yesNoNav(
         ua,
         AddressInTheUkYesNoPage(index),
-        rts.CharityAddressUKController.onPageLoad(index, draftId),
-        rts.CharityInternationalAddressController.onPageLoad(index, draftId)
+        CharityAddressUKController.onPageLoad(index, draftId),
+        CharityInternationalAddressController.onPageLoad(index, draftId)
       )
     case CountryOfResidenceYesNoPage(index) => ua =>
       yesNoNav(
         ua,
         CountryOfResidenceYesNoPage(index),
-        nonTaxRts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId),
-        rts.AddressYesNoController.onPageLoad(index, draftId)
+        CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId),
+        AddressYesNoController.onPageLoad(index, draftId)
       )
     case CountryOfResidenceInTheUkYesNoPage(index) => ua =>
       yesNoNav(
         ua,
         CountryOfResidenceInTheUkYesNoPage(index),
-        rts.AddressYesNoController.onPageLoad(index, draftId),
-        nonTaxRts.CountryOfResidenceController.onPageLoad(index, draftId)
+        AddressYesNoController.onPageLoad(index, draftId),
+        CountryOfResidenceController.onPageLoad(index, draftId)
       )
   }
 
-  private def fiveMldYesNo(draftId: String, index: Int, fiveMldEnabled: Boolean): Call = {
-    if (fiveMldEnabled) {
-      nonTaxRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
+  private def fiveMldYesNo(draftId: String, index: Int, fiveMld: Boolean): Call = {
+    if (fiveMld) {
+      CountryOfResidenceYesNoController.onPageLoad(index, draftId)
     } else {
-      rts.AddressYesNoController.onPageLoad(index, draftId)
+      AddressYesNoController.onPageLoad(index, draftId)
     }
   }
 
-  private def routes(draftId: String, fiveMldEnabled: Boolean): PartialFunction[Page, ReadableUserAnswers => Call] =
-    simpleNavigation(draftId, fiveMldEnabled) andThen (c => (_:ReadableUserAnswers) => c) orElse
-      conditionalNavigation(draftId, fiveMldEnabled)
+  def routes(draftId: String, fiveMld: Boolean): PartialFunction[Page, ReadableUserAnswers => Call] =
+    simpleNavigation(draftId, fiveMld) andThen (c => (_: ReadableUserAnswers) => c) orElse yesNoNavigation(draftId, fiveMld)
+
 }
