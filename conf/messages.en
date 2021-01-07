@@ -591,6 +591,8 @@ charity.nonTaxable.countryOfResidence.error.required = Enter a country
 charity.nonTaxable.countryOfResidence.error.length = The country of residence must be 100 characters or less
 charity.nonTaxable.countryOfResidence.error.invalidCharacters = The country of residence must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
 
+charityBeneficiary.name.default = Name
+
 # COMPANY OR EMPLOYMENT RELATED
 
 companyOrEmploymentRelated.title = Is the beneficiary a company or the employees and/or their families?
