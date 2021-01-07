@@ -14,22 +14,12 @@
  * limitations under the License.
  */
 
-package connectors
+package models
 
-import config.FrontendAppConfig
-import models.FeatureResponse
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import play.api.libs.json.{Format, Json}
 
-import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+case class FeatureResponse(name: String, isEnabled: Boolean)
 
-class TrustsStoreConnector @Inject()(http: HttpClient, config : FrontendAppConfig) {
-
-  private def featureUrl(feature: String): String = s"${config.trustsStoreUrl}/trusts-store/features/$feature"
-
-  def getFeature(feature: String)(implicit hc : HeaderCarrier, ec : ExecutionContext): Future[FeatureResponse] = {
-    http.GET[FeatureResponse](featureUrl(feature))
-  }
-
+object FeatureResponse {
+  implicit val format: Format[FeatureResponse] = Json.format[FeatureResponse]
 }
-
