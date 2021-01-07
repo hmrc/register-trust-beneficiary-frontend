@@ -22,6 +22,7 @@ import mapping.Mapping
 import models.core.pages.{InternationalAddress, UKAddress}
 import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.beneficiaries.charityortrust.charity._
+import pages.register.beneficiaries.charityortrust.charity.nonTaxable.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 
 class CharityBeneficiaryMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {
@@ -46,8 +47,9 @@ class CharityBeneficiaryMapperSpec extends SpecBase with MustMatchers
 
       "must be able to create a beneficiary of type Charity" when {
 
+        val index = 0
+
         "no address" in {
-          val index = 0
           val userAnswers = emptyUserAnswers
             .set(CharityNamePage(index), name).success.value
             .set(AmountDiscretionYesNoPage(index), true).success.value
@@ -57,11 +59,57 @@ class CharityBeneficiaryMapperSpec extends SpecBase with MustMatchers
             organisationName = name,
             beneficiaryDiscretion = Some(true),
             beneficiaryShareOfIncome = None,
-            identification = None
+            identification = None,
+            countryOfResidence = None
           )
         }
 
-        "UK address" in {
+        "Country of residence is set to the UK in 5mld mode" in {
+          val userAnswers =
+            emptyUserAnswers
+              .set(CharityNamePage(index), name).success.value
+              .set(AmountDiscretionYesNoPage(index), false).success.value
+              .set(HowMuchIncomePage(index),60).success.value
+              .set(CountryOfResidenceYesNoPage(index), true).success.value
+              .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
+              .set(AddressYesNoPage(index), false).success.value
+
+          val charities = charityBeneficiaryMapper.build(userAnswers)
+
+          charities mustBe defined
+          charities.value.head mustBe CharityType(
+            organisationName = "Charity Name",
+            beneficiaryDiscretion = Some(false),
+            beneficiaryShareOfIncome = Some("60"),
+            identification = None,
+            countryOfResidence = Some("GB")
+          )
+        }
+
+        "Country of residence is set to outside the UK in 5mld mode" in {
+          val userAnswers =
+            emptyUserAnswers
+              .set(CharityNamePage(index), "Charity Name").success.value
+              .set(AmountDiscretionYesNoPage(index), false).success.value
+              .set(HowMuchIncomePage(index), 100).success.value
+              .set(CountryOfResidenceYesNoPage(index), true).success.value
+              .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+              .set(CountryOfResidencePage(index), "FR").success.value
+              .set(AddressYesNoPage(index), false).success.value
+
+          val charities = charityBeneficiaryMapper.build(userAnswers)
+
+          charities mustBe defined
+          charities.value.head mustBe CharityType(
+            organisationName = "Charity Name",
+            beneficiaryDiscretion = Some(false),
+            beneficiaryShareOfIncome = Some("100"),
+            identification = None,
+            countryOfResidence = Some("FR")
+          )
+        }
+
+      "UK address" in {
           val index = 0
           val userAnswers = emptyUserAnswers
             .set(CharityNamePage(index), name).success.value
@@ -79,8 +127,9 @@ class CharityBeneficiaryMapperSpec extends SpecBase with MustMatchers
               address = Some(
                 AddressType(ukAddress.line1, ukAddress.line2, ukAddress.line3, ukAddress.line4, Some(ukAddress.postcode), "GB")
               )
-            ))
-          )
+            )),
+            countryOfResidence = None
+            )
         }
 
         "international address" in {
@@ -101,7 +150,8 @@ class CharityBeneficiaryMapperSpec extends SpecBase with MustMatchers
               address = Some(
                 AddressType(internationalAddress.line1, internationalAddress.line2, internationalAddress.line3, None, None, internationalAddress.country)
               )
-            ))
+            )),
+            countryOfResidence = None
           )
         }
       }
@@ -127,13 +177,15 @@ class CharityBeneficiaryMapperSpec extends SpecBase with MustMatchers
             organisationName = name1,
             beneficiaryDiscretion = Some(true),
             beneficiaryShareOfIncome = None,
-            identification = None
+            identification = None,
+            countryOfResidence = None
           ),
           CharityType(
             organisationName = name2,
             beneficiaryDiscretion = Some(true),
             beneficiaryShareOfIncome = None,
-            identification = None
+            identification = None,
+            countryOfResidence = None
           )
         )
       }

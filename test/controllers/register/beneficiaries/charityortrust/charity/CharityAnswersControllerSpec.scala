@@ -20,6 +20,7 @@ import base.SpecBase
 import models.core.pages.UKAddress
 import models.registration.pages.CharityOrTrust.Charity
 import pages.register.beneficiaries.charityortrust._
+import pages.register.beneficiaries.charityortrust.charity.nonTaxable.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import pages.register.beneficiaries.charityortrust.charity.{AddressInTheUkYesNoPage, AddressYesNoPage, AmountDiscretionYesNoPage, CharityAddressUKPage, CharityNamePage, HowMuchIncomePage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -42,6 +43,9 @@ class CharityAnswersControllerSpec extends SpecBase {
           .set(CharityNamePage(index),"Test").success.value
           .set(AmountDiscretionYesNoPage(index), false).success.value
           .set(HowMuchIncomePage(index),60).success.value
+          .set(CountryOfResidenceYesNoPage(index), true).success.value
+          .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+          .set(CountryOfResidencePage(index), "ES").success.value
           .set(AddressYesNoPage(index),true).success.value
           .set(AddressInTheUkYesNoPage(index),true).success.value
           .set(CharityAddressUKPage(index),UKAddress("Test 1","Test 2", None, None, "AB11AB")).success.value
@@ -56,6 +60,9 @@ class CharityAnswersControllerSpec extends SpecBase {
             checkYourAnswersHelper.charityName(index).value,
             checkYourAnswersHelper.amountDiscretionYesNo(index).value,
             checkYourAnswersHelper.howMuchIncome(index).value,
+            checkYourAnswersHelper.countryOfResidenceYesNo(index).value,
+            checkYourAnswersHelper.countryOfResidenceInUkYesNo(index).value,
+            checkYourAnswersHelper.countryOfResidence(index).value,
             checkYourAnswersHelper.addressYesNo(index).value,
             checkYourAnswersHelper.addressInTheUkYesNo(index).value,
             checkYourAnswersHelper.charityAddressUK(index).value

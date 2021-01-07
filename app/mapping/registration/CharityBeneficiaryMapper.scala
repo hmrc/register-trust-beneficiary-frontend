@@ -37,7 +37,8 @@ class CharityBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends M
               organisationName = charBen.name,
               beneficiaryDiscretion = Some(charBen.howMuchIncome.isEmpty),
               beneficiaryShareOfIncome = charBen.howMuchIncome.map(_.toString),
-              identification = identificationMap(charBen))
+              identification = identificationMap(charBen),
+              countryOfResidence = charBen.countryOfResidence)
           }
         )
     }
