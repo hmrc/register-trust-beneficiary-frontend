@@ -19,9 +19,10 @@ package mapping.registration
 import base.SpecBase
 import generators.Generators
 import mapping._
-import models.core.pages.{UKAddress,InternationalAddress}
+import models.core.pages.{InternationalAddress, UKAddress}
 import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.beneficiaries.charityortrust.trust._
+import pages.register.beneficiaries.charityortrust.trust.nonTaxable.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 
 class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {
@@ -61,7 +62,53 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
             organisationName = "Trust Name",
             beneficiaryDiscretion = Some(false),
             beneficiaryShareOfIncome = Some("100"),
-            identification = None
+            identification = None,
+            countryOfResidence = None
+          )
+        }
+
+        "Country of residence is set to the UK in 5mld mode" in {
+          val userAnswers =
+            emptyUserAnswers
+              .set(NamePage(index), "Trust Name").success.value
+              .set(DiscretionYesNoPage(index), false).success.value
+              .set(ShareOfIncomePage(index), 100).success.value
+              .set(CountryOfResidenceYesNoPage(index), true).success.value
+              .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
+              .set(AddressYesNoPage(index), false).success.value
+
+          val trusts = trustBeneficiariesMapper.build(userAnswers)
+
+          trusts mustBe defined
+          trusts.value.head mustBe BeneficiaryTrustType(
+            organisationName = "Trust Name",
+            beneficiaryDiscretion = Some(false),
+            beneficiaryShareOfIncome = Some("100"),
+            identification = None,
+            countryOfResidence = Some("GB")
+          )
+        }
+
+        "Country of residence is set to outside the UK in 5mld mode" in {
+          val userAnswers =
+            emptyUserAnswers
+              .set(NamePage(index), "Trust Name").success.value
+              .set(DiscretionYesNoPage(index), false).success.value
+              .set(ShareOfIncomePage(index), 100).success.value
+              .set(CountryOfResidenceYesNoPage(index), true).success.value
+              .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+              .set(CountryOfResidencePage(index), "FR").success.value
+              .set(AddressYesNoPage(index), false).success.value
+
+          val trusts = trustBeneficiariesMapper.build(userAnswers)
+
+          trusts mustBe defined
+          trusts.value.head mustBe BeneficiaryTrustType(
+            organisationName = "Trust Name",
+            beneficiaryDiscretion = Some(false),
+            beneficiaryShareOfIncome = Some("100"),
+            identification = None,
+            countryOfResidence = Some("FR")
           )
         }
 
@@ -88,7 +135,8 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
                 AddressType("Line1", "Line2", None, Some("Newcastle"), Some("NE62RT"), "GB")
               )
             )
-          ))
+          ),
+            countryOfResidence = None)
         }
 
         "International Address is set" in {
@@ -114,7 +162,8 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
                 AddressType("Line1", "Line2", Some("Paris"), None, None, "FR")
               )
             )
-          ))
+          ),
+            countryOfResidence = None)
         }
 
       }
@@ -152,7 +201,8 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
                   AddressType("Line1", "Line2", None, Some("Newcastle"), Some("NE62RT"), "GB")
                 )
               )
-            )),
+            ),
+              countryOfResidence = None),
             BeneficiaryTrustType(
               organisationName = "Trust Name",
               beneficiaryDiscretion = Some(true),
@@ -163,7 +213,8 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
                   AddressType("Line1", "Line2", Some("Paris"), None, None, "FR")
                 )
               )
-            ))
+            ),
+              countryOfResidence = None)
           )
       }
 

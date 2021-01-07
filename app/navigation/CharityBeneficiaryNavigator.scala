@@ -27,10 +27,10 @@ import play.api.mvc.Call
 class CharityBeneficiaryNavigator extends Navigator {
 
   override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call =
-    nextPage(page, draftId, false, userAnswers)
+    nextPage(page, draftId, fiveMldEnabled = false, userAnswers)
 
-  override def nextPage(page: Page, draftId: String, fiveMldDiscretion: Boolean, userAnswers: ReadableUserAnswers): Call =
-    routes(draftId, fiveMldDiscretion)(page)(userAnswers)
+  override def nextPage(page: Page, draftId: String, fiveMldEnabled: Boolean, userAnswers: ReadableUserAnswers): Call =
+    routes(draftId, fiveMldEnabled)(page)(userAnswers)
 
   private def simpleNavigation(draftId: String, fiveMld: Boolean): PartialFunction[Page, Call] = {
     case CharityNamePage(index) => AmountDiscretionYesNoController.onPageLoad(index, draftId)

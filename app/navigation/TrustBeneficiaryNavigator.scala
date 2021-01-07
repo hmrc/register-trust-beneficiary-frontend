@@ -16,7 +16,6 @@
 
 package navigation
 
-import com.google.inject.Inject
 import controllers.register.beneficiaries.charityortrust.trust.nonTaxable.{routes => nonTaxRts}
 import controllers.register.beneficiaries.charityortrust.trust.{routes => rts}
 import models.ReadableUserAnswers
@@ -25,30 +24,25 @@ import pages.register.beneficiaries.charityortrust.trust._
 import pages.register.beneficiaries.charityortrust.trust.nonTaxable.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import play.api.mvc.Call
 
-class TrustBeneficiaryNavigator @Inject()() extends Navigator {
+class TrustBeneficiaryNavigator extends Navigator {
 
   override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call =
-    nextPage(page, draftId, false, userAnswers)
+    nextPage(page, draftId, fiveMldEnabled = false, userAnswers)
 
-  override def nextPage(page: Page, draftId: String, fiveMld: Boolean, userAnswers: ReadableUserAnswers): Call =
-    routes(draftId, fiveMld)(page)(userAnswers)
+  override def nextPage(page: Page, draftId: String, fiveMldEnabled: Boolean, userAnswers: ReadableUserAnswers): Call =
+    routes(draftId, fiveMldEnabled)(page)(userAnswers)
 
-  private def simpleNavigation(draftId: String, fiveMld: Boolean): PartialFunction[Page, Call] = {
+  private def simpleNavigation(draftId: String, fiveMldEnabled: Boolean): PartialFunction[Page, Call] = {
     case NamePage(index) => rts.DiscretionYesNoController.onPageLoad(index, draftId)
-    case ShareOfIncomePage(index) => fiveMldYesNo(draftId, index, fiveMld)
+    case ShareOfIncomePage(index) => fiveMldYesNo(draftId, index, fiveMldEnabled)
     case AddressUKPage(index) => rts.AnswersController.onPageLoad(index, draftId)
     case AddressInternationalPage(index) => rts.AnswersController.onPageLoad(index, draftId)
     case CountryOfResidencePage(index) => rts.AddressYesNoController.onPageLoad(index, draftId)
   }
 
-  private def yesNoNavigation(draftId: String, fiveMld: Boolean): PartialFunction[Page, ReadableUserAnswers => Call] = {
+  private def yesNoNavigation(draftId: String, fiveMldEnabled: Boolean): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case DiscretionYesNoPage(index) => ua =>
-      yesNoNav(
-        ua,
-        DiscretionYesNoPage(index),
-        fiveMldYesNo(draftId, index, fiveMld),
-        rts.ShareOfIncomeController.onPageLoad(index, draftId)
-      )
+      yesNoNav(ua, DiscretionYesNoPage(index), fiveMldYesNo(draftId, index, fiveMldEnabled), rts.ShareOfIncomeController.onPageLoad(index, draftId))
     case AddressUKYesNoPage(index) => ua =>
       yesNoNav(
         ua,
@@ -57,13 +51,10 @@ class TrustBeneficiaryNavigator @Inject()() extends Navigator {
         rts.AddressInternationalController.onPageLoad(index, draftId)
       )
     case AddressYesNoPage(index) => ua =>
-      yesNoNav(
+      yesNoNav(ua, AddressYesNoPage(index), rts.AddressUKYesNoController.onPageLoad(index, draftId), yesNoNav(
         ua,
         AddressYesNoPage(index), rts.AddressUKYesNoController.onPageLoad(index, draftId),
-        yesNoNav(
-          ua,
-          AddressYesNoPage(index), rts.AddressUKYesNoController.onPageLoad(index, draftId),
-          rts.AnswersController.onPageLoad(index, draftId)
+        rts.AnswersController.onPageLoad(index, draftId)
       ))
     case CountryOfResidenceYesNoPage(index) => ua =>
       yesNoNav(

@@ -17,11 +17,14 @@
 package utils.answers
 
 import controllers.register.beneficiaries.charityortrust.trust.routes
+import controllers.register.beneficiaries.charityortrust.trust.nonTaxable.{routes => ntRoutes}
+
 import javax.inject.Inject
 import models.UserAnswers
 import pages.register.beneficiaries.charityortrust.trust._
+import pages.register.beneficiaries.charityortrust.trust.nonTaxable.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import play.api.i18n.Messages
-import play.twirl.api.HtmlFormat
+import play.twirl.api.{Html, HtmlFormat}
 import sections.beneficiaries.TrustBeneficiaries
 import utils.answers.CheckAnswersFormatters._
 import utils.countryOptions.CountryOptions
@@ -59,6 +62,9 @@ class TrustBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
       trustBeneficiaryName(index),
       trustBeneficiaryDiscretionYesNo(index),
       trustBeneficiaryShareOfIncome(index),
+      trustBeneficiaryCountryOfResidenceYesNo(index),
+      trustBeneficiaryCountryOfResidenceInTheUkYesNo(index),
+      trustBeneficiaryCountryOfResidence(index),
       trustBeneficiaryAddressYesNo(index),
       trustBeneficiaryAddressUKYesNo(index),
       trustBeneficiaryAddressUK(index),
@@ -142,4 +148,38 @@ class TrustBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
       )
   }
 
+  def trustBeneficiaryCountryOfResidenceYesNo(index: Int): Option[AnswerRow] = userAnswers.get(CountryOfResidenceYesNoPage(index)) map {
+    x =>
+      AnswerRow(
+        "trust.nonTaxable.countryOfResidenceYesNo.checkYourAnswersLabel",
+        yesOrNo(x),
+        Some(ntRoutes.CountryOfResidenceYesNoController.onPageLoad(index, draftId).url),
+        trustBeneficiaryName(index, userAnswers),
+        canEdit = canEdit
+      )
+  }
+
+  def trustBeneficiaryCountryOfResidenceInTheUkYesNo(index: Int): Option[AnswerRow] = userAnswers.get(CountryOfResidenceInTheUkYesNoPage(index)) map {
+    x =>
+      AnswerRow(
+        "trust.nonTaxable.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel",
+        yesOrNo(x),
+        Some(ntRoutes.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId).url),
+        trustBeneficiaryName(index, userAnswers),
+        canEdit = canEdit
+      )
+  }
+
+  def trustBeneficiaryCountryOfResidence(index: Int): Option[AnswerRow] = userAnswers.get(CountryOfResidenceInTheUkYesNoPage(index)) flatMap {
+    case false => userAnswers.get(CountryOfResidencePage(index)) map {
+      x =>
+        AnswerRow(
+          "trust.nonTaxable.countryOfResidence.checkYourAnswersLabel",
+          HtmlFormat.escape(country(x, countryOptions)),
+          Some(ntRoutes.CountryOfResidenceController.onPageLoad(index, draftId).url),
+          canEdit = canEdit
+        )
+    }
+    case _ => None
+  }
 }

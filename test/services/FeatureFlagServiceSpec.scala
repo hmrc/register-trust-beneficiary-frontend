@@ -22,6 +22,7 @@ import models.FeatureFlag.{Disabled, Enabled}
 import models.FeatureFlagName.MLD5
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
+import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
@@ -32,6 +33,8 @@ class FeatureFlagServiceSpec extends SpecBase {
     val mockConnector = mock[TrustsStoreConnector]
 
     val featureFlagService = new FeatureFlagService(mockConnector)
+
+    implicit val hc: HeaderCarrier = HeaderCarrier()
 
     "return true when 5mld is enabled" in {
 

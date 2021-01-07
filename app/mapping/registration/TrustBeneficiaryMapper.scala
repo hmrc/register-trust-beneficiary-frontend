@@ -37,7 +37,8 @@ class TrustBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Map
               organisationName = trustBen.name,
               beneficiaryDiscretion = Some(trustBen.discretionYesNo),
               beneficiaryShareOfIncome = trustBen.shareOfIncome.map(_.toString),
-              identification = identificationMap(trustBen)
+              identification = identificationMap(trustBen),
+              countryOfResidence = trustBen.countryOfResidence
             )
           }
         )

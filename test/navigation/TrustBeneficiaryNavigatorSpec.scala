@@ -17,10 +17,10 @@
 package navigation
 
 import base.SpecBase
+import controllers.register.beneficiaries.charityortrust.trust.nonTaxable.{routes => ntRts}
+import controllers.register.beneficiaries.charityortrust.trust.{routes => rts}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.beneficiaries.charityortrust.trust._
-import controllers.register.beneficiaries.charityortrust.trust.{routes => rts}
-import controllers.register.beneficiaries.charityortrust.trust.nonTaxable.{routes => ntRts}
 import pages.register.beneficiaries.charityortrust.trust.nonTaxable.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 
 class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks {
@@ -112,11 +112,10 @@ class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
     "a 5mld trust" must {
 
       "Discretion yes no page -> Yes -> CountryOfResidence Yes No page" in {
-
         val answers = emptyUserAnswers
           .set(DiscretionYesNoPage(index), true).success.value
 
-        navigator.nextPage(DiscretionYesNoPage(index), draftId, true, answers)
+        navigator.nextPage(DiscretionYesNoPage(index), draftId, fiveMldEnabled = true, answers)
           .mustBe(ntRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
       }
 
@@ -124,7 +123,7 @@ class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
         val answers = emptyUserAnswers
           .set(CountryOfResidenceYesNoPage(index), false).success.value
 
-        navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, true, answers)
+        navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, fiveMldEnabled = true, answers)
           .mustBe(rts.AddressYesNoController.onPageLoad(index, draftId))
       }
 
@@ -132,7 +131,7 @@ class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
         val answers = emptyUserAnswers
           .set(CountryOfResidenceYesNoPage(index), true).success.value
 
-        navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, true, answers)
+        navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, fiveMldEnabled = true, answers)
           .mustBe(ntRts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId))
       }
 
@@ -141,7 +140,7 @@ class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
         val answers = emptyUserAnswers
           .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
 
-        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, true, answers)
+        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, fiveMldEnabled = true, answers)
           .mustBe(rts.AddressYesNoController.onPageLoad(index, draftId))
       }
 
@@ -149,18 +148,17 @@ class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
         val answers = emptyUserAnswers
           .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
 
-        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, true, answers)
+        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, fiveMldEnabled = true, answers)
           .mustBe(ntRts.CountryOfResidenceController.onPageLoad(index, draftId))
       }
 
       "CountryOfResidence page -> Address yes no page" in {
-        navigator.nextPage(CountryOfResidencePage(index), draftId, true, emptyUserAnswers)
+        navigator.nextPage(CountryOfResidencePage(index), draftId, fiveMldEnabled = true, emptyUserAnswers)
           .mustBe(rts.AddressYesNoController.onPageLoad(index, draftId))
       }
 
       "ShareOfIncome page -> CountryOfResidence Yes No page" in {
-
-        navigator.nextPage(ShareOfIncomePage(index), draftId, true, emptyUserAnswers)
+        navigator.nextPage(ShareOfIncomePage(index), draftId, fiveMldEnabled = true, emptyUserAnswers)
           .mustBe(ntRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
       }
     }

@@ -24,9 +24,9 @@ import play.api.mvc.Call
 class ClassOfBeneficiariesNavigator extends Navigator {
 
   override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call =
-    nextPage(page, draftId, false, userAnswers)
+    nextPage(page, draftId, fiveMldEnabled = false, userAnswers)
 
-  override def nextPage(page: Page, draftId: String, fiveMldDiscretion: Boolean, userAnswers: ReadableUserAnswers): Call =
+  override def nextPage(page: Page, draftId: String, fiveMldEnabled: Boolean, userAnswers: ReadableUserAnswers): Call =
     routes(draftId)(page)(userAnswers)
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, Call] = {
