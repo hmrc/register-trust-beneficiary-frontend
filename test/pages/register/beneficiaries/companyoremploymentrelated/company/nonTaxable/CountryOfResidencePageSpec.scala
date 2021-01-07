@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-package navigation
+package pages.register.beneficiaries.companyoremploymentrelated.company.nonTaxable
 
-import models.ReadableUserAnswers
-import pages._
-import play.api.mvc.Call
+import pages.behaviours.PageBehaviours
 
-class FakeNavigator(val desiredRoute: Call = Call("GET", "/foo")) extends Navigator {
-  override def nextPage(page: Page, fakeDraftId: String, userAnswers: ReadableUserAnswers): Call = desiredRoute
-  override def nextPage(page: Page, fakeDraftId: String, fiveMldDiscretionYesNo: Boolean, userAnswers: ReadableUserAnswers): Call = desiredRoute
+class CountryOfResidencePageSpec extends PageBehaviours {
+
+  "CountryOfResidencePage" must {
+
+    beRetrievable[String](CountryOfResidencePage(0))
+
+    beSettable[String](CountryOfResidencePage(0))
+
+    beRemovable[String](CountryOfResidencePage(0))
+  }
+
 }
-

@@ -20,6 +20,7 @@ import config.annotations.CompanyBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.register.company.NameRequiredAction
 import forms.YesNoFormProvider
+
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.beneficiaries.companyoremploymentrelated.company.IncomeYesNoPage
@@ -27,6 +28,7 @@ import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
+import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.beneficiaries.companyoremploymentrelated.company.DiscretionYesNoView
 
@@ -36,6 +38,7 @@ class DiscretionYesNoController @Inject()(
                                            val controllerComponents: MessagesControllerComponents,
                                            standardActionSets: StandardActionSets,
                                            formProvider: YesNoFormProvider,
+                                           featureFlagService: FeatureFlagService,
                                            view: DiscretionYesNoView,
                                            repository: RegistrationsRepository,
                                            @CompanyBeneficiary navigator: Navigator,
@@ -67,8 +70,9 @@ class DiscretionYesNoController @Inject()(
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(IncomeYesNoPage(index), value))
+            is5mld         <- featureFlagService.is5mldEnabled()
             _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(IncomeYesNoPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(IncomeYesNoPage(index), draftId, is5mld, updatedAnswers))
       )
   }
 }

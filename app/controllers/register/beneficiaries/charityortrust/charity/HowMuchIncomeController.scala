@@ -20,6 +20,7 @@ import config.annotations.CharityBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.register.company.NameRequiredAction
 import forms.IncomePercentageFormProvider
+
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.beneficiaries.charityortrust.charity.{CharityNamePage, HowMuchIncomePage}
@@ -27,6 +28,7 @@ import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
+import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.beneficiaries.charityortrust.charity.HowMuchIncomeView
 
@@ -38,6 +40,7 @@ class HowMuchIncomeController @Inject()(
                                          @CharityBeneficiary navigator: Navigator,
                                          standardActionSets: StandardActionSets,
                                          nameAction: NameRequiredAction,
+                                         featureFlagService: FeatureFlagService,
                                          formProvider: IncomePercentageFormProvider,
                                          view: HowMuchIncomeView)
                                        (implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
@@ -71,8 +74,9 @@ class HowMuchIncomeController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(HowMuchIncomePage(index), value))
+            is5mld         <- featureFlagService.is5mldEnabled()
             _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(HowMuchIncomePage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(HowMuchIncomePage(index), draftId, is5mld, updatedAnswers))
         }
       )
   }

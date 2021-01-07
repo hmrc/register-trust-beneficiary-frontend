@@ -30,18 +30,19 @@ import scala.concurrent.Future
 
 class InfoControllerSpec extends SpecBase {
 
+  lazy val mockFeatureFlagService = mock[FeatureFlagService]
+
   "IndividualBeneficiaryInfo Controller" must {
 
     "return OK and the correct view for a GET with 5mld disabled" in {
 
-      lazy val mockFeatureFlagService = mock[FeatureFlagService]
+      when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
+        .thenReturn(Future.successful(false))
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
         bind[FeatureFlagService].toInstance(mockFeatureFlagService)
         ).build()
-
-      when(mockFeatureFlagService.is5mldEnabled()(any())).thenReturn(Future.successful(false))
 
       val request = FakeRequest(GET, routes.InfoController.onPageLoad(fakeDraftId).url)
 
@@ -59,14 +60,13 @@ class InfoControllerSpec extends SpecBase {
 
     "return OK and the correct view for a GET with 5mld enabled" in {
 
-      lazy val mockFeatureFlagService = mock[FeatureFlagService]
+      when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
+        .thenReturn(Future.successful(true))
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
           bind[FeatureFlagService].toInstance(mockFeatureFlagService)
         ).build()
-
-      when(mockFeatureFlagService.is5mldEnabled()(any())).thenReturn(Future.successful(true))
 
       val request = FakeRequest(GET, routes.InfoController.onPageLoad(fakeDraftId).url)
 
