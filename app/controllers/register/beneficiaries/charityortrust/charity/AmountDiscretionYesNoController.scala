@@ -18,7 +18,7 @@ package controllers.register.beneficiaries.charityortrust.charity
 
 import config.annotations.CharityBeneficiary
 import controllers.actions.StandardActionSets
-import controllers.actions.register.company.NameRequiredAction
+import controllers.actions.register.charity.NameRequiredAction
 import forms.YesNoFormProvider
 
 import javax.inject.Inject
@@ -38,8 +38,8 @@ class AmountDiscretionYesNoController @Inject()(
                                                  val controllerComponents: MessagesControllerComponents,
                                                  repository: RegistrationsRepository,
                                                  @CharityBeneficiary navigator: Navigator,
-                                                 standardActionSets: StandardActionSets,
                                                  featureFlagService: FeatureFlagService,
+                                                 standardActionSets: StandardActionSets,
                                                  nameAction: NameRequiredAction,
                                                  formProvider: YesNoFormProvider,
                                                  view: AmountDiscretionYesNoView

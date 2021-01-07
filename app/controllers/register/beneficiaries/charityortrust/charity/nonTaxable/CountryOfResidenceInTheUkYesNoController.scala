@@ -18,12 +18,11 @@ package controllers.register.beneficiaries.charityortrust.charity.nonTaxable
 
 import config.annotations.CharityBeneficiary
 import controllers.actions._
-import controllers.actions.register.company.NameRequiredAction
+import controllers.actions.register.charity.NameRequiredAction
 import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.beneficiaries.charityortrust.charity.nonTaxable.CountryOfResidenceInTheUkYesNoPage
-import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
 import play.api.data.Form
 import play.api.i18n._
 import play.api.mvc._
@@ -49,25 +48,21 @@ class CountryOfResidenceInTheUkYesNoController @Inject()(
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
     implicit request =>
 
-      val charityName = request.userAnswers.get(CharityNamePage(index)).get
-
       val preparedForm = request.userAnswers.get(CountryOfResidenceInTheUkYesNoPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm,  draftId , index, charityName))
+      Ok(view(preparedForm,  draftId , index, request.beneficiaryName))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
     implicit request =>
 
-      val charityName = request.userAnswers.get(CharityNamePage(index)).get
-
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, draftId , index, charityName))),
+          Future.successful(BadRequest(view(formWithErrors, draftId , index, request.beneficiaryName))),
 
         value =>
           for {
