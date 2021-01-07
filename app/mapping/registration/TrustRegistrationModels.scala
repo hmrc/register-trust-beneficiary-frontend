@@ -76,7 +76,8 @@ object Identification {
 case class CharityType(organisationName: String,
                        beneficiaryDiscretion: Option[Boolean],
                        beneficiaryShareOfIncome: Option[String],
-                       identification: Option[IdentificationOrgType])
+                       identification: Option[IdentificationOrgType],
+                       countryOfResidence: Option[String])
 
 object CharityType {
   implicit val charityTypeFormat: Format[CharityType] = Json.format[CharityType]
