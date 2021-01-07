@@ -606,6 +606,9 @@ isTheBeneficiaryACompanyOrEmploymentRelated.employmentRelated = Employees and/or
 
 # COMPANY
 
+companyBeneficiary.name.default = Name
+
+
 companyBeneficiary.name.title = What is the company’s name?
 companyBeneficiary.name.heading = What is the company’s name?
 companyBeneficiary.name.checkYourAnswersLabel = What is the company’s name?

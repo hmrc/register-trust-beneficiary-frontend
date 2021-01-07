@@ -21,9 +21,9 @@ import generators.Generators
 import models.core.pages.{InternationalAddress, UKAddress}
 import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.beneficiaries.companyoremploymentrelated.company._
+import pages.register.beneficiaries.companyoremploymentrelated.company.nonTaxable._
 
-class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers
-  with OptionValues with Generators {
+class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers with OptionValues with Generators {
 
   private val mapper = injector.instanceOf[CompanyBeneficiaryMapper]
   private val index0 = 0
@@ -59,7 +59,8 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers
             organisationName = "Company Name",
             beneficiaryDiscretion = Some(true),
             beneficiaryShareOfIncome = None,
-            identification = None
+            identification = None,
+            countryOfResidence = None
           )
         }
 
@@ -78,7 +79,8 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers
             organisationName = "Company Name",
             beneficiaryDiscretion = Some(false),
             beneficiaryShareOfIncome = Some("42"),
-            identification = None
+            identification = None,
+            countryOfResidence = None
           )
         }
 
@@ -104,8 +106,8 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers
               None,
               address = Some(
                 AddressType("Line1", "Line2", Some("Line3"), Some("Newcastle"), Some("NE62RT"), "GB")
-              )
-            ))
+              ))),
+            countryOfResidence = None
           )
         }
         "International Address is set" in {
@@ -130,7 +132,8 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers
               address = Some(
                 AddressType("Line1", "Line2", Some("Line3"), None, None, "US")
               )
-            ))
+            )),
+            countryOfResidence = None
           )
         }
 
@@ -159,7 +162,8 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers
               organisationName = "Company 1",
               beneficiaryDiscretion = Some(false),
               beneficiaryShareOfIncome = Some("100"),
-              identification = None),
+              identification = None,
+              countryOfResidence = None),
 
             CompanyType(
               organisationName = "Company 2",
@@ -170,9 +174,56 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers
                   None,
                   address = Some(
                     AddressType("line1", "line2", None, None, Some("NE62RT"), "GB")
-                  ))
-              ))
+                  ))),
+              countryOfResidence = None
+            )
           )
+      }
+
+
+      "Country of residence is set to the UK in 5mld mode" in {
+        val userAnswers =
+          emptyUserAnswers
+            .set(NamePage(index0), "Company Name").success.value
+            .set(IncomeYesNoPage(index0), false).success.value
+            .set(IncomePage(index0),60).success.value
+            .set(CountryOfResidenceYesNoPage(index0), true).success.value
+            .set(CountryOfResidenceInTheUkYesNoPage(index0), true).success.value
+            .set(AddressYesNoPage(index0), false).success.value
+
+        val company = mapper.build(userAnswers)
+
+        company mustBe defined
+        company.value.head mustBe CompanyType(
+          organisationName = "Company Name",
+          beneficiaryDiscretion = Some(false),
+          beneficiaryShareOfIncome = Some("60"),
+          identification = None,
+          countryOfResidence = Some("GB")
+        )
+      }
+
+      "Country of residence is set to outside the UK in 5mld mode" in {
+        val userAnswers =
+          emptyUserAnswers
+            .set(NamePage(index0), "Company Name").success.value
+            .set(IncomeYesNoPage(index0), false).success.value
+            .set(IncomePage(index0), 100).success.value
+            .set(CountryOfResidenceYesNoPage(index0), true).success.value
+            .set(CountryOfResidenceInTheUkYesNoPage(index0), false).success.value
+            .set(CountryOfResidencePage(index0), "FR").success.value
+            .set(AddressYesNoPage(index0), false).success.value
+
+        val company = mapper.build(userAnswers)
+
+        company mustBe defined
+        company.value.head mustBe CompanyType(
+          organisationName = "Company Name",
+          beneficiaryDiscretion = Some(false),
+          beneficiaryShareOfIncome = Some("100"),
+          identification = None,
+          countryOfResidence = Some("FR")
+        )
       }
 
       "must not be able to create IndividualDetailsType when incomplete data " in {

@@ -18,15 +18,16 @@ package utils.print
 
 import com.google.inject.Inject
 import controllers.register.beneficiaries.companyoremploymentrelated.company.routes._
+import controllers.register.beneficiaries.companyoremploymentrelated.company.nonTaxable.routes._
 import models.UserAnswers
 import pages.register.beneficiaries.companyoremploymentrelated.company._
+import pages.register.beneficiaries.companyoremploymentrelated.company.nonTaxable._
 import play.api.i18n.Messages
 import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
 
 class CompanyBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter,
-                                              countryOptions: CountryOptions
-                                 ) {
+                                              countryOptions: CountryOptions) {
 
   def printSection(userAnswers: UserAnswers, name: String, index: Int, draftId: String)(implicit messages: Messages): AnswerSection = {
     AnswerSection(
@@ -50,10 +51,14 @@ class CompanyBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConve
       bound.stringQuestion(NamePage(index), "companyBeneficiary.name", NameController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(IncomeYesNoPage(index), "companyBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad(index, draftId).url),
       bound.percentageQuestion(IncomePage(index), "companyBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad(index, draftId).url),
+      bound.yesNoQuestion(CountryOfResidenceYesNoPage(index), "companyBeneficiary.nonTaxable.countryOfResidenceYesNo", CountryOfResidenceYesNoController.onPageLoad(index, draftId).url),
+      bound.yesNoQuestion(CountryOfResidenceInTheUkYesNoPage(index), "companyBeneficiary.nonTaxable.countryOfResidenceInTheUkYesNo", CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId).url),
+      bound.stringQuestion(CountryOfResidencePage(index), "companyBeneficiary.nonTaxable.countryOfResidence", CountryOfResidenceController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(AddressYesNoPage(index), "companyBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(AddressUKYesNoPage(index), "companyBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(index, draftId).url),
       bound.addressQuestion(AddressUKPage(index), "companyBeneficiary.ukAddress", UkAddressController.onPageLoad(index, draftId).url),
       bound.addressQuestion(AddressInternationalPage(index), "companyBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad(index, draftId).url)
     ).flatten
+
   }
 }
