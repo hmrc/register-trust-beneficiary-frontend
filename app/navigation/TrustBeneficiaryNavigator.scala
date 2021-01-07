@@ -44,7 +44,12 @@ class TrustBeneficiaryNavigator extends Navigator {
     case DiscretionYesNoPage(index) => ua =>
       yesNoNav(ua, DiscretionYesNoPage(index), fiveMldYesNo(draftId, index, fiveMldEnabled), rts.ShareOfIncomeController.onPageLoad(index, draftId))
     case AddressUKYesNoPage(index) => ua =>
-      yesNoNav(ua, AddressUKYesNoPage(index), rts.AddressUKController.onPageLoad(index, draftId), rts.AddressInternationalController.onPageLoad(index, draftId))
+      yesNoNav(
+        ua,
+        AddressUKYesNoPage(index),
+        rts.AddressUKController.onPageLoad(index, draftId),
+        rts.AddressInternationalController.onPageLoad(index, draftId)
+      )
     case AddressYesNoPage(index) => ua =>
       yesNoNav(ua, AddressYesNoPage(index), rts.AddressUKYesNoController.onPageLoad(index, draftId), yesNoNav(
         ua,
@@ -67,16 +72,15 @@ class TrustBeneficiaryNavigator extends Navigator {
       )
   }
 
-  private def fiveMldYesNo(draftId: String, index: Int, fiveMldEnabled: Boolean): Call = {
-    if (fiveMldEnabled) {
+  private def fiveMldYesNo(draftId: String, index: Int, fiveMld: Boolean): Call = {
+    if (fiveMld) {
       nonTaxRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
     } else {
       rts.AddressYesNoController.onPageLoad(index, draftId)
     }
   }
 
-  def routes(draftId: String, fiveMldEnabled: Boolean): PartialFunction[Page, ReadableUserAnswers => Call] =
-    simpleNavigation(draftId, fiveMldEnabled) andThen (c => (_: ReadableUserAnswers) => c) orElse
-      yesNoNavigation(draftId, fiveMldEnabled)
+  def routes(draftId: String, fiveMld: Boolean): PartialFunction[Page, ReadableUserAnswers => Call] =
+    simpleNavigation(draftId, fiveMld) andThen (c => (_: ReadableUserAnswers) => c) orElse yesNoNavigation(draftId, fiveMld)
 
 }

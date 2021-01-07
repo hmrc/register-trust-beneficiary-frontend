@@ -65,7 +65,6 @@ class ShareOfIncomeController @Inject()(
       form.bindFromRequest().fold(
         formWithErrors => {
           Future.successful(BadRequest(view(formWithErrors,  draftId, request.beneficiaryName, index)))
-
         },
         value =>
           for {

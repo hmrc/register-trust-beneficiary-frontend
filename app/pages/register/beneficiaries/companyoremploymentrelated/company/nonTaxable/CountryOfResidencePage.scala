@@ -14,22 +14,16 @@
  * limitations under the License.
  */
 
-package services
+package pages.register.beneficiaries.companyoremploymentrelated.company.nonTaxable
 
-import com.google.inject.Inject
-import connectors.TrustsStoreConnector
-import uk.gov.hmrc.http.HeaderCarrier
+import pages.QuestionPage
+import play.api.libs.json.JsPath
+import sections.beneficiaries.{Beneficiaries, CompanyBeneficiaries}
 
-import scala.concurrent.{ExecutionContext, Future}
+final case class CountryOfResidencePage(index : Int) extends QuestionPage[String] {
 
-class FeatureFlagService @Inject()(trustStoreConnector: TrustsStoreConnector) {
+  override def path: JsPath = JsPath \ Beneficiaries \ CompanyBeneficiaries \ index \ toString
 
-  def is5mldEnabled()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Boolean] = {
-    trustStoreConnector.getFeatureFlag().map {
-      case Some(flag) =>
-        flag.isEnabled
-      case _ =>
-        false
-    }
-  }
+  override def toString: String = "countryOfResidence"
+
 }

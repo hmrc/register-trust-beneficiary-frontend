@@ -14,22 +14,19 @@
  * limitations under the License.
  */
 
-package services
+package pages.register.beneficiaries.companyoremploymentrelated.company.nonTaxable
 
-import com.google.inject.Inject
-import connectors.TrustsStoreConnector
-import uk.gov.hmrc.http.HeaderCarrier
+import pages.behaviours.PageBehaviours
 
-import scala.concurrent.{ExecutionContext, Future}
+class CountryOfResidencePageSpec extends PageBehaviours {
 
-class FeatureFlagService @Inject()(trustStoreConnector: TrustsStoreConnector) {
+  "CountryOfResidencePage" must {
 
-  def is5mldEnabled()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Boolean] = {
-    trustStoreConnector.getFeatureFlag().map {
-      case Some(flag) =>
-        flag.isEnabled
-      case _ =>
-        false
-    }
+    beRetrievable[String](CountryOfResidencePage(0))
+
+    beSettable[String](CountryOfResidencePage(0))
+
+    beRemovable[String](CountryOfResidencePage(0))
   }
+
 }

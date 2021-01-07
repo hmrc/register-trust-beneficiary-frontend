@@ -14,97 +14,93 @@
  * limitations under the License.
  */
 
-package controllers.register.beneficiaries.charityortrust.trust
+package controllers.register.beneficiaries.companyoremploymentrelated.company.nonTaxable
 
 import base.SpecBase
 import config.annotations.TrustBeneficiary
-import forms.YesNoFormProvider
+import forms.CountryFormProvider
 import navigation.{FakeNavigator, Navigator}
-import pages.register.beneficiaries.charityortrust.trust.{DiscretionYesNoPage, NamePage}
+import org.scalatestplus.mockito.MockitoSugar
+import pages.register.beneficiaries.companyoremploymentrelated.company.NamePage
+import pages.register.beneficiaries.companyoremploymentrelated.company.nonTaxable.CountryOfResidencePage
+import play.api.data.Form
 import play.api.inject.bind
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.FeatureFlagService
-import views.html.register.beneficiaries.charityortrust.trust.DiscretionYesNoView
+import utils.InputOption
+import utils.countryOptions.CountryOptionsNonUK
+import views.html.register.beneficiaries.companyoremploymentrelated.company.nonTaxable.CountryOfResidenceView
 
-import scala.concurrent.Future
+class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
 
-class DiscretionYesNoControllerSpec extends SpecBase {
-
-  val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix("trustBeneficiaryDiscretionYesNo")
+  val formProvider = new CountryFormProvider()
+  val form: Form[String] = formProvider.withPrefix("companyBeneficiary.nonTaxable.countryOfResidence")
   val index: Int = 0
+  val trustName = "Test"
 
-  val mockFeatureFlagService = mock[FeatureFlagService]
+  lazy val countryOfResidence: String = routes.CountryOfResidenceController.onPageLoad(index, draftId).url
 
-  val name = "Name"
-
-  lazy val trustBeneficiaryDiscretionYesNoRoute = routes.DiscretionYesNoController.onPageLoad(index, fakeDraftId).url
-
-  "DiscretionYesNo Controller" must {
+  "CountryOfResidence Controller" must {
 
     "return OK and the correct view for a GET" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index),
-        name).success.value
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(index), trustName).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trustBeneficiaryDiscretionYesNoRoute)
+      val request = FakeRequest(GET, countryOfResidence)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[DiscretionYesNoView]
+      val view = application.injector.instanceOf[CountryOfResidenceView]
+
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, name, index)(request, messages).toString
+        view(form, countryOptions, draftId, index, trustName)(request, messages).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(DiscretionYesNoPage(index), true).success.value
-        .set(NamePage(index),name).success.value
+      val userAnswers = emptyUserAnswers.set(NamePage(index), trustName).success.value
+        .set(CountryOfResidencePage(index), "Spain").success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trustBeneficiaryDiscretionYesNoRoute)
+      val request = FakeRequest(GET, countryOfResidence)
 
-      val view = application.injector.instanceOf[DiscretionYesNoView]
+      val view = application.injector.instanceOf[CountryOfResidenceView]
+
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), fakeDraftId, name, index)(request, messages).toString
+        view(form.fill("Spain"), countryOptions, draftId, index, trustName)(request, messages).toString
 
       application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index),
-        name).success.value
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(index), trustName).success.value
 
-      when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
-        .thenReturn(Future.successful(true))
-
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers))
-          .overrides(
-            bind[FeatureFlagService].toInstance(mockFeatureFlagService),
-            bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(
+          bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(new FakeNavigator)
+        ).build()
 
       val request =
-        FakeRequest(POST, trustBeneficiaryDiscretionYesNoRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+        FakeRequest(POST, countryOfResidence)
+          .withFormUrlEncodedBody(("value", "ES"))
 
       val result = route(application, request).value
 
@@ -117,25 +113,27 @@ class DiscretionYesNoControllerSpec extends SpecBase {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index),
-        name).success.value
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(index), trustName).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, trustBeneficiaryDiscretionYesNoRoute)
+        FakeRequest(POST, countryOfResidence)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[DiscretionYesNoView]
+      val view = application.injector.instanceOf[CountryOfResidenceView]
+
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
 
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, name, index)(request, messages).toString
+        view(boundForm, countryOptions, draftId, index, trustName)(request, messages).toString
 
       application.stop()
     }
@@ -144,7 +142,7 @@ class DiscretionYesNoControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, trustBeneficiaryDiscretionYesNoRoute)
+      val request = FakeRequest(GET, countryOfResidence)
 
       val result = route(application, request).value
 
@@ -160,8 +158,8 @@ class DiscretionYesNoControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, trustBeneficiaryDiscretionYesNoRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+        FakeRequest(POST, countryOfResidence)
+          .withFormUrlEncodedBody(("value", "ES"))
 
       val result = route(application, request).value
 
@@ -171,6 +169,6 @@ class DiscretionYesNoControllerSpec extends SpecBase {
 
       application.stop()
     }
-
   }
 }
+

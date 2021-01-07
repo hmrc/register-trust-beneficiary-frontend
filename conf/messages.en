@@ -639,6 +639,25 @@ companyBeneficiary.ukAddress.checkYourAnswersLabel = What is {0}’s address?
 
 companyBeneficiary.nonUkAddress.checkYourAnswersLabel = What is {0}’s address?
 
+companyBeneficiary.nonTaxable.countryOfResidenceYesNo.title = Do you know the company beneficiary’s country of residence?
+companyBeneficiary.nonTaxable.countryOfResidenceYesNo.heading = Do you know {0}’s country of residence?
+companyBeneficiary.nonTaxable.countryOfResidenceYesNo.checkYourAnswersLabel = Do you know {0}’s country of residence?
+companyBeneficiary.nonTaxable.countryOfResidenceYesNo.error.required = Select yes if you know the company beneficiary’s country of residence
+companyBeneficiary.nonTaxable.countryOfResidenceYesNo.hint = The country of residence is usually where the company is registered.
+
+companyBeneficiary.nonTaxable.countryOfResidenceInTheUkYesNo.title = Does company beneficiary have UK residency?
+companyBeneficiary.nonTaxable.countryOfResidenceInTheUkYesNo.heading = Does {0} have UK residency?
+companyBeneficiary.nonTaxable.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel =  Does {0} have UK residency?
+companyBeneficiary.nonTaxable.countryOfResidenceInTheUkYesNo.error.required = Select yes if the company beneficiary has UK residency
+
+companyBeneficiary.nonTaxable.countryOfResidence.title = What is the company beneficiary’s country of residence?
+companyBeneficiary.nonTaxable.countryOfResidence.heading = What is {0}’s country of residence?
+companyBeneficiary.nonTaxable.countryOfResidence.checkYourAnswersLabel = What is {0}’s country of residence?
+companyBeneficiary.nonTaxable.countryOfResidence.error.required = Enter a country
+companyBeneficiary.nonTaxable.countryOfResidence.error.length = The country of residence must be 100 characters or less
+companyBeneficiary.nonTaxable.countryOfResidence.error.invalidCharacters = The country of residence must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
+
+
 companyBeneficiary.checkDetails.title = Check company beneficiary details
 companyBeneficiary.checkDetails.heading = Check company beneficiary details
 

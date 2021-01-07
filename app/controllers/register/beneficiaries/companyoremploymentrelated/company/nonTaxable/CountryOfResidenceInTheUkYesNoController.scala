@@ -14,27 +14,28 @@
  * limitations under the License.
  */
 
-package controllers.register.beneficiaries.charityortrust.trust.nonTaxable
+package controllers.register.beneficiaries.companyoremploymentrelated.company.nonTaxable
 
-import config.annotations.TrustBeneficiary
+import config.annotations.CompanyBeneficiary
 import controllers.actions._
-import controllers.actions.register.trust.NameRequiredAction
+import controllers.actions.register.company.NameRequiredAction
 import forms.YesNoFormProvider
 import navigation.Navigator
-import pages.register.beneficiaries.charityortrust.trust.nonTaxable.CountryOfResidenceInTheUkYesNoPage
+import pages.register.beneficiaries.companyoremploymentrelated.company.NamePage
+import pages.register.beneficiaries.companyoremploymentrelated.company.nonTaxable.CountryOfResidenceInTheUkYesNoPage
 import play.api.data.Form
 import play.api.i18n._
 import play.api.mvc._
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.register.beneficiaries.charityortrust.trust.nonTaxable.CountryOfResidenceInTheUkYesNoView
+import views.html.register.beneficiaries.companyoremploymentrelated.company.nonTaxable.CountryOfResidenceInTheUkYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CountryOfResidenceInTheUkYesNoController @Inject()(
                                                val controllerComponents: MessagesControllerComponents,
-                                               @TrustBeneficiary navigator: Navigator,
+                                               @CompanyBeneficiary navigator: Navigator,
                                                standardActionSets: StandardActionSets,
                                                formProvider: YesNoFormProvider,
                                                view: CountryOfResidenceInTheUkYesNoView,
@@ -42,27 +43,31 @@ class CountryOfResidenceInTheUkYesNoController @Inject()(
                                                nameAction: NameRequiredAction
                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form: Form[Boolean] = formProvider.withPrefix("trust.nonTaxable.countryOfResidenceInTheUkYesNo")
+  private val form: Form[Boolean] = formProvider.withPrefix("companyBeneficiary.nonTaxable.countryOfResidenceInTheUkYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
     implicit request =>
+
+      val trustName = request.userAnswers.get(NamePage(index)).get
 
       val preparedForm = request.userAnswers.get(CountryOfResidenceInTheUkYesNoPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm,  draftId , index, request.beneficiaryName))
+      Ok(view(preparedForm,  draftId , index, trustName))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
     implicit request =>
 
+      val trustName = request.userAnswers.get(NamePage(index)).get
+
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, draftId , index, request.beneficiaryName))),
+          Future.successful(BadRequest(view(formWithErrors, draftId , index, trustName))),
 
         value =>
           for {

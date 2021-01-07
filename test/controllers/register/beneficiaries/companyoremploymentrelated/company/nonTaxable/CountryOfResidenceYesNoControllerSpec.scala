@@ -14,96 +14,87 @@
  * limitations under the License.
  */
 
-package controllers.register.beneficiaries.charityortrust.trust
+package controllers.register.beneficiaries.companyoremploymentrelated.company.nonTaxable
 
 import base.SpecBase
-import config.annotations.TrustBeneficiary
+import config.annotations.CompanyBeneficiary
 import forms.YesNoFormProvider
 import navigation.{FakeNavigator, Navigator}
-import pages.register.beneficiaries.charityortrust.trust.{DiscretionYesNoPage, NamePage}
+import org.scalatestplus.mockito.MockitoSugar
+import pages.register.beneficiaries.companyoremploymentrelated.company.NamePage
+import pages.register.beneficiaries.companyoremploymentrelated.company.nonTaxable.CountryOfResidenceYesNoPage
+import play.api.data.Form
 import play.api.inject.bind
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.FeatureFlagService
-import views.html.register.beneficiaries.charityortrust.trust.DiscretionYesNoView
+import views.html.register.beneficiaries.companyoremploymentrelated.company.nonTaxable.CountryOfResidenceYesNoView
 
-import scala.concurrent.Future
-
-class DiscretionYesNoControllerSpec extends SpecBase {
+class CountryOfResidenceYesNoControllerSpec extends SpecBase with MockitoSugar {
 
   val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix("trustBeneficiaryDiscretionYesNo")
+  val form: Form[Boolean] = formProvider.withPrefix("companyBeneficiary.nonTaxable.countryOfResidenceYesNo")
   val index: Int = 0
+  val trustName = "Test"
 
-  val mockFeatureFlagService = mock[FeatureFlagService]
+  lazy val countryOfResidenceYesNo: String = routes.CountryOfResidenceYesNoController.onPageLoad(index, draftId).url
 
-  val name = "Name"
-
-  lazy val trustBeneficiaryDiscretionYesNoRoute = routes.DiscretionYesNoController.onPageLoad(index, fakeDraftId).url
-
-  "DiscretionYesNo Controller" must {
+  "CountryOfResidenceYesNo Controller" must {
 
     "return OK and the correct view for a GET" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index),
-        name).success.value
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(index), trustName).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trustBeneficiaryDiscretionYesNoRoute)
+      val request = FakeRequest(GET, countryOfResidenceYesNo)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[DiscretionYesNoView]
+      val view = application.injector.instanceOf[CountryOfResidenceYesNoView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, name, index)(request, messages).toString
+        view(form, draftId, index, trustName)(request, messages).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(DiscretionYesNoPage(index), true).success.value
-        .set(NamePage(index),name).success.value
+      val userAnswers = emptyUserAnswers.set(NamePage(index), trustName).success.value
+        .set(CountryOfResidenceYesNoPage(index), true).success.value
+
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, trustBeneficiaryDiscretionYesNoRoute)
+      val request = FakeRequest(GET, countryOfResidenceYesNo)
 
-      val view = application.injector.instanceOf[DiscretionYesNoView]
+      val view = application.injector.instanceOf[CountryOfResidenceYesNoView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), fakeDraftId, name, index)(request, messages).toString
+        view(form.fill(true), draftId, index, trustName)(request, messages).toString
 
       application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index),
-        name).success.value
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(index), trustName).success.value
 
-      when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
-        .thenReturn(Future.successful(true))
-
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers))
-          .overrides(
-            bind[FeatureFlagService].toInstance(mockFeatureFlagService),
-            bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(
+          bind[Navigator].qualifiedWith(classOf[CompanyBeneficiary]).toInstance(new FakeNavigator)
+        ).build()
 
       val request =
-        FakeRequest(POST, trustBeneficiaryDiscretionYesNoRoute)
+        FakeRequest(POST, countryOfResidenceYesNo)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -117,25 +108,25 @@ class DiscretionYesNoControllerSpec extends SpecBase {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index),
-        name).success.value
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(index), trustName).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, trustBeneficiaryDiscretionYesNoRoute)
+        FakeRequest(POST, countryOfResidenceYesNo)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[DiscretionYesNoView]
+      val view = application.injector.instanceOf[CountryOfResidenceYesNoView]
 
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, name, index)(request, messages).toString
+        view(boundForm, draftId, index, trustName)(request, messages).toString
 
       application.stop()
     }
@@ -144,7 +135,7 @@ class DiscretionYesNoControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, trustBeneficiaryDiscretionYesNoRoute)
+      val request = FakeRequest(GET, countryOfResidenceYesNo)
 
       val result = route(application, request).value
 
@@ -160,7 +151,7 @@ class DiscretionYesNoControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, trustBeneficiaryDiscretionYesNoRoute)
+        FakeRequest(POST, countryOfResidenceYesNo)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -171,6 +162,6 @@ class DiscretionYesNoControllerSpec extends SpecBase {
 
       application.stop()
     }
-
   }
 }
+

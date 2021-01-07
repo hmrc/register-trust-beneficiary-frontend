@@ -17,9 +17,11 @@
 package navigation
 
 import controllers.register.beneficiaries.charityortrust.charity.routes._
+import controllers.register.beneficiaries.charityortrust.charity.nonTaxable.routes._
 import models.ReadableUserAnswers
 import pages.Page
 import pages.register.beneficiaries.charityortrust.charity._
+import pages.register.beneficiaries.charityortrust.charity.nonTaxable._
 import play.api.mvc.Call
 
 class CharityBeneficiaryNavigator extends Navigator {
@@ -28,21 +30,22 @@ class CharityBeneficiaryNavigator extends Navigator {
     nextPage(page, draftId, fiveMldEnabled = false, userAnswers)
 
   override def nextPage(page: Page, draftId: String, fiveMldEnabled: Boolean, userAnswers: ReadableUserAnswers): Call =
-    routes(draftId)(page)(userAnswers)
+    routes(draftId, fiveMldEnabled)(page)(userAnswers)
 
-  private def simpleNavigation(draftId: String): PartialFunction[Page, Call] = {
+  private def simpleNavigation(draftId: String, fiveMld: Boolean): PartialFunction[Page, Call] = {
     case CharityNamePage(index) => AmountDiscretionYesNoController.onPageLoad(index, draftId)
-    case HowMuchIncomePage(index) => AddressYesNoController.onPageLoad(index, draftId)
+    case HowMuchIncomePage(index) => fiveMldYesNo(draftId, index, fiveMld)
     case CharityAddressUKPage(index) => CharityAnswersController.onPageLoad(index, draftId)
     case CharityInternationalAddressPage(index) => CharityAnswersController.onPageLoad(index, draftId)
+    case CountryOfResidencePage(index) => AddressYesNoController.onPageLoad(index, draftId)
   }
 
-  private def conditionalNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
+  private def yesNoNavigation(draftId: String, fiveMld: Boolean): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case AmountDiscretionYesNoPage(index) => ua =>
       yesNoNav(
         ua,
         AmountDiscretionYesNoPage(index),
-        AddressYesNoController.onPageLoad(index, draftId),
+        fiveMldYesNo(draftId, index, fiveMld),
         HowMuchIncomeController.onPageLoad(index, draftId)
       )
     case AddressYesNoPage(index) => ua =>
@@ -59,9 +62,31 @@ class CharityBeneficiaryNavigator extends Navigator {
         CharityAddressUKController.onPageLoad(index, draftId),
         CharityInternationalAddressController.onPageLoad(index, draftId)
       )
+    case CountryOfResidenceYesNoPage(index) => ua =>
+      yesNoNav(
+        ua,
+        CountryOfResidenceYesNoPage(index),
+        CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId),
+        AddressYesNoController.onPageLoad(index, draftId)
+      )
+    case CountryOfResidenceInTheUkYesNoPage(index) => ua =>
+      yesNoNav(
+        ua,
+        CountryOfResidenceInTheUkYesNoPage(index),
+        AddressYesNoController.onPageLoad(index, draftId),
+        CountryOfResidenceController.onPageLoad(index, draftId)
+      )
   }
 
-  private def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] =
-    simpleNavigation(draftId) andThen (c => (_:ReadableUserAnswers) => c) orElse
-      conditionalNavigation(draftId)
+  private def fiveMldYesNo(draftId: String, index: Int, fiveMld: Boolean): Call = {
+    if (fiveMld) {
+      CountryOfResidenceYesNoController.onPageLoad(index, draftId)
+    } else {
+      AddressYesNoController.onPageLoad(index, draftId)
+    }
+  }
+
+  def routes(draftId: String, fiveMld: Boolean): PartialFunction[Page, ReadableUserAnswers => Call] =
+    simpleNavigation(draftId, fiveMld) andThen (c => (_: ReadableUserAnswers) => c) orElse yesNoNavigation(draftId, fiveMld)
+
 }

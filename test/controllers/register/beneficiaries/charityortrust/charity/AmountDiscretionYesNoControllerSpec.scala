@@ -20,13 +20,18 @@ import base.SpecBase
 import config.annotations.CharityBeneficiary
 import forms.YesNoFormProvider
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.charityortrust.charity.{AmountDiscretionYesNoPage, CharityNamePage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.FeatureFlagService
 import views.html.register.beneficiaries.charityortrust.charity.AmountDiscretionYesNoView
+
+import scala.concurrent.Future
 
 class AmountDiscretionYesNoControllerSpec extends SpecBase with MockitoSugar {
 
@@ -34,6 +39,8 @@ class AmountDiscretionYesNoControllerSpec extends SpecBase with MockitoSugar {
   val form: Form[Boolean] = formProvider.withPrefix("charity.discretionYesNo")
   val index: Int = 0
   val charityName = "Test"
+
+  val mockFeatureFlagService = mock[FeatureFlagService]
 
   lazy val amountDiscretionYesNo: String = routes.AmountDiscretionYesNoController.onPageLoad(index, draftId).url
 
@@ -86,9 +93,13 @@ class AmountDiscretionYesNoControllerSpec extends SpecBase with MockitoSugar {
       val userAnswers = emptyUserAnswers
         .set(CharityNamePage(index), "Test").success.value
 
+      when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
+        .thenReturn(Future.successful(true))
+
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
-          bind[Navigator].qualifiedWith(classOf[CharityBeneficiary]).toInstance(new FakeNavigator)
+          bind[Navigator].qualifiedWith(classOf[CharityBeneficiary]).toInstance(new FakeNavigator),
+          bind[FeatureFlagService].toInstance(mockFeatureFlagService)
         ).build()
 
       val request =
