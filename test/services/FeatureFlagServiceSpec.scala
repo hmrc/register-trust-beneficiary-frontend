@@ -18,8 +18,7 @@ package services
 
 import base.SpecBase
 import connectors.TrustsStoreConnector
-import models.FeatureFlag.{Disabled, Enabled}
-import models.FeatureFlagName.MLD5
+import models.FeatureResponse
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import uk.gov.hmrc.http.HeaderCarrier
@@ -38,7 +37,7 @@ class FeatureFlagServiceSpec extends SpecBase {
 
     "return true when 5mld is enabled" in {
 
-      when(mockConnector.getFeatureFlag()(any(), any())).thenReturn(Future.successful(Some(Enabled(MLD5))))
+      when(mockConnector.getFeature(any())(any(), any())).thenReturn(Future.successful(FeatureResponse("5mld", isEnabled = true)))
 
       val result = featureFlagService.is5mldEnabled()
 
@@ -49,7 +48,7 @@ class FeatureFlagServiceSpec extends SpecBase {
 
     "return false when 5mld is disabled" in {
 
-      when(mockConnector.getFeatureFlag()(any(), any())).thenReturn(Future.successful(Some(Disabled(MLD5))))
+      when(mockConnector.getFeature(any())(any(), any())).thenReturn(Future.successful(FeatureResponse("5mld", isEnabled = false)))
 
       val result = featureFlagService.is5mldEnabled()
 

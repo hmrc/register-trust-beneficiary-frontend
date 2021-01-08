@@ -18,9 +18,7 @@ package connectors
 
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock._
-import models.FeatureFlag.Enabled
-import models.FeatureFlagName.MLD5
-import models.{FeatureFlag, FeatureFlagName}
+import models.FeatureResponse
 import org.scalatest.{MustMatchers, OptionValues}
 import play.api.Application
 import play.api.http.Status
@@ -54,14 +52,14 @@ class TrustsStoreConnectorSpec extends SpecBase with MustMatchers with OptionVal
                 .withStatus(Status.OK)
                 .withBody(
                   Json.stringify(
-                  Json.toJson(FeatureFlag(FeatureFlagName.MLD5, enabled = true))
+                  Json.toJson(FeatureResponse("5mld", isEnabled = true))
                   )
                 )
             )
         )
 
-        val result = Await.result(connector.getFeatureFlag(), Duration.Inf)
-        result mustBe Some(Enabled(MLD5))
+        val result = Await.result(connector.getFeature("5mld"), Duration.Inf)
+        result mustBe FeatureResponse("5mld", isEnabled = true)
       }
 
     "return a feature flag of false if 5mld is not enabled" in {
@@ -73,14 +71,14 @@ class TrustsStoreConnectorSpec extends SpecBase with MustMatchers with OptionVal
               .withStatus(Status.OK)
               .withBody(
                 Json.stringify(
-                  Json.toJson(FeatureFlag(FeatureFlagName.MLD5, enabled = false))
+                  Json.toJson(FeatureResponse("5mld", isEnabled = false))
                 )
               )
           )
       )
 
-      val result = Await.result(connector.getFeatureFlag(), Duration.Inf)
-      result mustBe Some(FeatureFlag(FeatureFlagName.MLD5, enabled = false))
+      val result = Await.result(connector.getFeature("5mld"), Duration.Inf)
+      result mustBe FeatureResponse("5mld", isEnabled = false)
     }
   }
 }

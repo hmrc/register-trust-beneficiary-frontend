@@ -51,7 +51,7 @@ class FrontendAppConfig @Inject() (val configuration: Configuration) {
 
   lazy val trustsUrl: String = configuration.get[Service]("microservice.services.trusts").baseUrl
 
-  lazy val trustsStoreUrl: String = configuration.get[Service]("microservice.services.trusts-store").baseUrl + "/trusts-store/features/5mld"
+  lazy val trustsStoreUrl: String = configuration.get[Service]("microservice.services.trusts-store").baseUrl
 
   lazy val registrationStartUrl: String = configuration.get[String]("urls.registrationStart")
   lazy val registrationProgressUrlTemplate: String = configuration.get[String]("urls.registrationProgress")
