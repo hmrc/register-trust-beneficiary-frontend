@@ -21,6 +21,7 @@ import play.api.libs.json.{Format, Json}
 
 final case class CompanyBeneficiary(name: String,
                                     ukAddress : Option[UKAddress],
+                                    countryOfResidence: Option[String],
                                     internationalAddress : Option[InternationalAddress],
                                     income: Option[Int],
                                     incomeYesNo: Boolean

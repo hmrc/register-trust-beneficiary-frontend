@@ -18,7 +18,7 @@ package controllers.register.beneficiaries.charityortrust.charity
 
 import config.annotations.CharityBeneficiary
 import controllers.actions._
-import controllers.actions.register.company.NameRequiredAction
+import controllers.actions.register.charity.NameRequiredAction
 import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator

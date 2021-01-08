@@ -36,8 +36,8 @@ class CompanyBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends M
               organisationName = beneficiary.name,
               beneficiaryDiscretion = Some(beneficiary.incomeYesNo),
               beneficiaryShareOfIncome = beneficiary.income map(_.toString),
-              identification = buildIdentification(beneficiary)
-            )
+              identification = buildIdentification(beneficiary),
+              countryOfResidence = beneficiary.countryOfResidence)
           }
         )
     }

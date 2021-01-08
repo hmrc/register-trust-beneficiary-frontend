@@ -21,6 +21,7 @@ import play.api.libs.json._
 
 final case class CharityBeneficiary(name: String,
                                     howMuchIncome: Option[Int],
+                                    countryOfResidence: Option[String],
                                     ukAddress : Option[UKAddress],
                                     internationalAddress : Option[InternationalAddress]
                                    )

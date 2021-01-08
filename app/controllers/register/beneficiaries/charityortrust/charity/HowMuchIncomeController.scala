@@ -18,7 +18,7 @@ package controllers.register.beneficiaries.charityortrust.charity
 
 import config.annotations.CharityBeneficiary
 import controllers.actions.StandardActionSets
-import controllers.actions.register.company.NameRequiredAction
+import controllers.actions.register.charity.NameRequiredAction
 import forms.IncomePercentageFormProvider
 
 import javax.inject.Inject
@@ -38,9 +38,9 @@ class HowMuchIncomeController @Inject()(
                                          val controllerComponents: MessagesControllerComponents,
                                          repository: RegistrationsRepository,
                                          @CharityBeneficiary navigator: Navigator,
+                                         featureFlagService: FeatureFlagService,
                                          standardActionSets: StandardActionSets,
                                          nameAction: NameRequiredAction,
-                                         featureFlagService: FeatureFlagService,
                                          formProvider: IncomePercentageFormProvider,
                                          view: HowMuchIncomeView)
                                        (implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {

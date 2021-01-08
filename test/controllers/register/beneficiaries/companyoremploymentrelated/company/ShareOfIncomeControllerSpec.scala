@@ -38,7 +38,7 @@ class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
 
   private val index = 0
   private val form: Form[Int] = new IncomePercentageFormProvider().withPrefix("companyBeneficiary.shareOfIncome")
-  private val shareOfIncomeRoute: String = routes.ShareOfIncomeController.onPageLoad(index, draftId).url
+  private lazy val shareOfIncomeRoute: String = routes.ShareOfIncomeController.onPageLoad(index, draftId).url
   private val name: String = "Company"
   private val onwardRoute = Call("GET", "/foo")
   private val answer = 50
