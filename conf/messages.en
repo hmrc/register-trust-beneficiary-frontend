@@ -411,7 +411,7 @@ trust.nonTaxable.countryOfResidenceYesNo.hint = The trust’s country of residen
 
 trust.nonTaxable.countryOfResidenceInTheUkYesNo.title = Does trust beneficiary have UK residency?
 trust.nonTaxable.countryOfResidenceInTheUkYesNo.heading = Does {0} have UK residency?
-trust.nonTaxable.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel =  Does {0} have UK residency?
+trust.nonTaxable.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = Does {0} have UK residency?
 trust.nonTaxable.countryOfResidenceInTheUkYesNo.error.required = Select yes if the trust beneficiary has UK residency
 
 trust.nonTaxable.countryOfResidence.title = What is the trust beneficiary’s country of residence?
@@ -581,7 +581,7 @@ charity.nonTaxable.countryOfResidenceYesNo.hint = The country of residence is us
 
 charity.nonTaxable.countryOfResidenceInTheUkYesNo.title = Does charity beneficiary have UK residency?
 charity.nonTaxable.countryOfResidenceInTheUkYesNo.heading = Does {0} have UK residency?
-charity.nonTaxable.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel =  Does {0} have UK residency?
+charity.nonTaxable.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = Does {0} have UK residency?
 charity.nonTaxable.countryOfResidenceInTheUkYesNo.error.required = Select yes if the charity beneficiary has UK residency
 
 charity.nonTaxable.countryOfResidence.title = What is the charity beneficiary’s country of residence?
@@ -654,7 +654,7 @@ companyBeneficiary.nonTaxable.countryOfResidenceYesNo.hint = The country of resi
 
 companyBeneficiary.nonTaxable.countryOfResidenceInTheUkYesNo.title = Does company beneficiary have UK residency?
 companyBeneficiary.nonTaxable.countryOfResidenceInTheUkYesNo.heading = Does {0} have UK residency?
-companyBeneficiary.nonTaxable.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel =  Does {0} have UK residency?
+companyBeneficiary.nonTaxable.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = Does {0} have UK residency?
 companyBeneficiary.nonTaxable.countryOfResidenceInTheUkYesNo.error.required = Select yes if the company beneficiary has UK residency
 
 companyBeneficiary.nonTaxable.countryOfResidence.title = What is the company beneficiary’s country of residence?

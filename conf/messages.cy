@@ -16,7 +16,7 @@ trust.nonTaxable.countryOfResidenceYesNo.hint =
 
 trust.nonTaxable.countryOfResidenceInTheUkYesNo.title =
 trust.nonTaxable.countryOfResidenceInTheUkYesNo.heading = A yw {0} yn breswyl yn y DU?
-trust.nonTaxable.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel =  A yw {0} yn breswyl yn y DU?
+trust.nonTaxable.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = A yw {0} yn breswyl yn y DU?
 trust.nonTaxable.countryOfResidenceInTheUkYesNo.error.required =
 
 trust.nonTaxable.countryOfResidence.title =
@@ -34,7 +34,7 @@ charity.nonTaxable.countryOfResidenceYesNo.hint = Y wlad breswyl fel arfer yw’
 
 #charity.nonTaxable.countryOfResidenceInTheUkYesNo.title =
 charity.nonTaxable.countryOfResidenceInTheUkYesNo.heading = A yw {0} yn breswyl yn y DU?
-charity.nonTaxable.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel =  A yw {0} yn breswyl yn y DU?
+charity.nonTaxable.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = A yw {0} yn breswyl yn y DU?
 #charity.nonTaxable.countryOfResidenceInTheUkYesNo.error.required =
 
 #charity.nonTaxable.countryOfResidence.title =
