@@ -120,7 +120,7 @@ class TrustBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
     x =>
       AnswerRow(
         "trustBeneficiaryShareOfIncome.checkYourAnswersLabel",
-        HtmlFormat.escape(x.toString),
+        percentage(x.toString),
         Some(routes.ShareOfIncomeController.onPageLoad(index, draftId).url),
         trustBeneficiaryName(index, userAnswers),
         canEdit = canEdit

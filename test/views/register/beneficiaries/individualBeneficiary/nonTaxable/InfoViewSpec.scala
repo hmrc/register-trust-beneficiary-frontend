@@ -22,6 +22,7 @@ import views.html.register.beneficiaries.individualBeneficiary.nonTaxable.InfoVi
 
 class InfoViewSpec extends ViewBehaviours {
 
+
   "IndividualBeneficiaryInfo NonTaxable view" must {
 
     val view = viewFor[InfoView](Some(emptyUserAnswers))
