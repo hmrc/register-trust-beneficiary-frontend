@@ -101,6 +101,8 @@ site.address.international.line2 = Address line 2
 site.address.international.line3 = Address line 3 (optional)
 site.address.international.country = Country
 
+site.address.country.select = Select a country
+
 internationalAddress.error.line1.required = Enter address line 1
 internationalAddress.error.line2.required = Enter address line 2
 internationalAddress.error.country.required = Select a country
