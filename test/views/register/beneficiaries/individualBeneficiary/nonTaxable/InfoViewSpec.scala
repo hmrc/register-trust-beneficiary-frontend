@@ -29,7 +29,7 @@ class InfoViewSpec extends ViewBehaviours {
 
     val applyView = view.apply(fakeDraftId)(fakeRequest, messages)
 
-    behave like normalPage(applyView, "individualBeneficiaryInfo.nonTaxable",
+    behave like normalPageTitleWithCaption(applyView, "individualBeneficiaryInfo.nonTaxable",
       "caption",
       "subheading1",
       "paragraph1",

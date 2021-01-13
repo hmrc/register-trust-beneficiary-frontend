@@ -28,7 +28,7 @@ class InfoViewSpec extends ViewBehaviours {
 
     val applyView = view.apply(fakeDraftId)(fakeRequest, messages)
 
-    behave like normalPage(applyView, "individualBeneficiaryInfo",
+    behave like normalPageTitleWithCaption(applyView, "individualBeneficiaryInfo",
       "caption",
       "subheading1",
       "paragraph1",
