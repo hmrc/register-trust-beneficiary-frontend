@@ -17,7 +17,6 @@
 package utils.print
 
 import java.time.LocalDate
-
 import com.google.inject.Inject
 import models.UserAnswers
 import models.core.pages.{Address, Description, FullName}
@@ -76,6 +75,23 @@ class AnswerRowConverter @Inject()() {
           Some(changeUrl),
           name
         )
+      }
+    }
+
+    def countryQuestion(ukResidentQuery: Gettable[Boolean],
+                        query: Gettable[String],
+                        labelKey: String,
+                        changeUrl: String): Option[AnswerRow] = {
+      userAnswers.get(ukResidentQuery) flatMap {
+        case false => userAnswers.get(query) map { x =>
+          AnswerRow(
+            s"$labelKey.checkYourAnswersLabel",
+            HtmlFormat.escape(country(x, countryOptions)),
+            Some(changeUrl),
+            name
+          )
+        }
+        case _ => None
       }
     }
 
