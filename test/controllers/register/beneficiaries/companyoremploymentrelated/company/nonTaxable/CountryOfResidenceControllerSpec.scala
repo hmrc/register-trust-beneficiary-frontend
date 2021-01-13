@@ -17,7 +17,7 @@
 package controllers.register.beneficiaries.companyoremploymentrelated.company.nonTaxable
 
 import base.SpecBase
-import config.annotations.TrustBeneficiary
+import config.annotations.CompanyBeneficiary
 import forms.CountryFormProvider
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
@@ -36,7 +36,7 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
   val formProvider = new CountryFormProvider()
   val form: Form[String] = formProvider.withPrefix("companyBeneficiary.nonTaxable.countryOfResidence")
   val index: Int = 0
-  val trustName = "Test"
+  val companyName = "Test"
 
   lazy val countryOfResidence: String = routes.CountryOfResidenceController.onPageLoad(index, draftId).url
 
@@ -45,7 +45,7 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), trustName).success.value
+        .set(NamePage(index), companyName).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -60,14 +60,14 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, countryOptions, draftId, index, trustName)(request, messages).toString
+        view(form, countryOptions, draftId, index, companyName)(request, messages).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index), trustName).success.value
+      val userAnswers = emptyUserAnswers.set(NamePage(index), companyName).success.value
         .set(CountryOfResidencePage(index), "Spain").success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -83,7 +83,7 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill("Spain"), countryOptions, draftId, index, trustName)(request, messages).toString
+        view(form.fill("Spain"), countryOptions, draftId, index, companyName)(request, messages).toString
 
       application.stop()
     }
@@ -91,11 +91,11 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), trustName).success.value
+        .set(NamePage(index), companyName).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
-          bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(new FakeNavigator)
+          bind[Navigator].qualifiedWith(classOf[CompanyBeneficiary]).toInstance(new FakeNavigator)
         ).build()
 
       val request =
@@ -114,7 +114,7 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), trustName).success.value
+        .set(NamePage(index), companyName).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -133,7 +133,7 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, countryOptions, draftId, index, trustName)(request, messages).toString
+        view(boundForm, countryOptions, draftId, index, companyName)(request, messages).toString
 
       application.stop()
     }

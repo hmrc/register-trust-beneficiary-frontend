@@ -53,7 +53,7 @@ class CompanyBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConve
       bound.percentageQuestion(IncomePage(index), "companyBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(CountryOfResidenceYesNoPage(index), "companyBeneficiary.nonTaxable.countryOfResidenceYesNo", CountryOfResidenceYesNoController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(CountryOfResidenceInTheUkYesNoPage(index), "companyBeneficiary.nonTaxable.countryOfResidenceInTheUkYesNo", CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId).url),
-      bound.stringQuestion(CountryOfResidencePage(index), "companyBeneficiary.nonTaxable.countryOfResidence", CountryOfResidenceController.onPageLoad(index, draftId).url),
+      bound.countryQuestion(CountryOfResidenceInTheUkYesNoPage(index), CountryOfResidencePage(index), "companyBeneficiary.nonTaxable.countryOfResidence", CountryOfResidenceController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(AddressYesNoPage(index), "companyBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(AddressUKYesNoPage(index), "companyBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(index, draftId).url),
       bound.addressQuestion(AddressUKPage(index), "companyBeneficiary.ukAddress", UkAddressController.onPageLoad(index, draftId).url),
