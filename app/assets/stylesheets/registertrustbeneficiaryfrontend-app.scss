@@ -255,6 +255,10 @@ $error-colour: #d4351c;
     cursor: pointer;
 }
 
+.govuk-details__summary-text {
+    text-decoration: underline;
+}
+
 .govuk-details__text {
     padding: 15px;
     padding-left: 20px;
