@@ -22,9 +22,10 @@ error.required = Please enter a value
 error.summary.title = There is a problem
 error.postcodeInvalid = Enter a real postcode
 
-session_expired.title = For your security, this service has been reset
-session_expired.heading = For your security, this service has been reset
-session_expired.guidance = The details you have given have been deleted because you did not continue the service for 15 minutes.
+session_expired.title = For your security, we signed you out
+session_expired.heading = For your security, we signed you out
+session_expired.guidance = This is because you have been inactive on the service for 15 minutes.
+session_expired.guidance.2 = You will need to sign in to continue registering the trust.
 
 site.back = Back
 site.delete = Remove
@@ -46,9 +47,9 @@ site.address = Address
 site.sign_out = Sign out
 
 #timeout dialog
-timeout.title=Your application will time out soon
-timeout.message=We will reset your application if you do not respond in
-timeout.keep-alive-button=Continue application
+timeout.title= Your application will time out soon
+timeout.message= We will sign you out if you do not respond in
+timeout.keep-alive-button= Continue application
 
 answerPage.section.beneficiaries.heading = Beneficiaries
 answerPage.section.individualBeneficiary.subheading = Individual beneficiary {0}
