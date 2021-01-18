@@ -21,7 +21,7 @@ import play.api.libs.json.{Format, Json}
 
 
 final case class TrustBeneficiary(name: String,
-                                  discretionYesNo: Boolean,
+                                  discretionYesNo: Option[Boolean],
                                   shareOfIncome: Option[Int],
                                   countryOfResidence: Option[String],
                                   ukAddress : Option[UKAddress],

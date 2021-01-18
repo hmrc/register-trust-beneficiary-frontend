@@ -17,6 +17,7 @@
 package controllers.register.beneficiaries.charityortrust.trust.nonTaxable
 
 import config.annotations.TrustBeneficiary
+import connectors.SubmissionDraftConnector
 import controllers.actions.StandardActionSets
 import controllers.actions.register.trust.NameRequiredAction
 import forms.CountryFormProvider
@@ -26,6 +27,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
+import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.countryOptions.CountryOptionsNonUK
 import views.html.register.beneficiaries.charityortrust.trust.nonTaxable.CountryOfResidenceView
@@ -40,6 +42,7 @@ class CountryOfResidenceController @Inject()(
                                               standardActionSets: StandardActionSets,
                                               nameAction: NameRequiredAction,
                                               formProvider: CountryFormProvider,
+                                              submissionDraftConnector: SubmissionDraftConnector,
                                               val controllerComponents: MessagesControllerComponents,
                                               view: CountryOfResidenceView,
                                               val countryOptions: CountryOptionsNonUK
@@ -70,8 +73,9 @@ class CountryOfResidenceController @Inject()(
           value => {
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfResidencePage(index), value))
+              isTaxable      <- submissionDraftConnector.getIsTrustTaxable(draftId)
               _              <- registrationsRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(CountryOfResidencePage(index), draftId, updatedAnswers))
+            } yield Redirect(navigator.nextPage(CountryOfResidencePage(index), draftId, fiveMldEnabled = true, isTaxable, updatedAnswers))
           }
         )
     }

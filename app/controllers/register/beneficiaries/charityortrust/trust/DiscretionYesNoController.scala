@@ -71,7 +71,7 @@ class DiscretionYesNoController @Inject()(
             updatedAnswers <- Future.fromTry(request.userAnswers.set(DiscretionYesNoPage(index), value))
             is5mld <- featureFlagService.is5mldEnabled()
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(DiscretionYesNoPage(index),  draftId, is5mld, updatedAnswers))
+          } yield Redirect(navigator.nextPage(DiscretionYesNoPage(index),  draftId, is5mld, trustTaxable = true, updatedAnswers))
       )
   }
 }

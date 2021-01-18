@@ -35,7 +35,7 @@ class TrustBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Map
           list.map { trustBen =>
             BeneficiaryTrustType(
               organisationName = trustBen.name,
-              beneficiaryDiscretion = Some(trustBen.discretionYesNo),
+              beneficiaryDiscretion = trustBen.discretionYesNo,
               beneficiaryShareOfIncome = trustBen.shareOfIncome.map(_.toString),
               identification = identificationMap(trustBen),
               countryOfResidence = trustBen.countryOfResidence

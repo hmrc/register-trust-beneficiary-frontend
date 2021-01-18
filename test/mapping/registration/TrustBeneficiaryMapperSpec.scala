@@ -30,6 +30,7 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
   private val trustBeneficiariesMapper: Mapping[List[BeneficiaryTrustType]] = injector.instanceOf[TrustBeneficiaryMapper]
   private val index = 0
   private val index1 = 1
+  private val trustName = "Trust Name"
 
   "TrustBeneficiariesMapper" when {
 
@@ -50,7 +51,7 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
         "Share In Income is set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(NamePage(index), "Trust Name").success.value
+              .set(NamePage(index), trustName).success.value
               .set(DiscretionYesNoPage(index), false).success.value
               .set(ShareOfIncomePage(index), 100).success.value
               .set(AddressYesNoPage(index), false).success.value
@@ -59,7 +60,7 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
 
           trusts mustBe defined
           trusts.value.head mustBe BeneficiaryTrustType(
-            organisationName = "Trust Name",
+            organisationName = trustName,
             beneficiaryDiscretion = Some(false),
             beneficiaryShareOfIncome = Some("100"),
             identification = None,
@@ -70,7 +71,7 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
         "Country of residence is set to the UK in 5mld mode" in {
           val userAnswers =
             emptyUserAnswers
-              .set(NamePage(index), "Trust Name").success.value
+              .set(NamePage(index), trustName).success.value
               .set(DiscretionYesNoPage(index), false).success.value
               .set(ShareOfIncomePage(index), 100).success.value
               .set(CountryOfResidenceYesNoPage(index), true).success.value
@@ -81,7 +82,7 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
 
           trusts mustBe defined
           trusts.value.head mustBe BeneficiaryTrustType(
-            organisationName = "Trust Name",
+            organisationName = trustName,
             beneficiaryDiscretion = Some(false),
             beneficiaryShareOfIncome = Some("100"),
             identification = None,
@@ -92,7 +93,7 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
         "Country of residence is set to outside the UK in 5mld mode" in {
           val userAnswers =
             emptyUserAnswers
-              .set(NamePage(index), "Trust Name").success.value
+              .set(NamePage(index), trustName).success.value
               .set(DiscretionYesNoPage(index), false).success.value
               .set(ShareOfIncomePage(index), 100).success.value
               .set(CountryOfResidenceYesNoPage(index), true).success.value
@@ -104,7 +105,7 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
 
           trusts mustBe defined
           trusts.value.head mustBe BeneficiaryTrustType(
-            organisationName = "Trust Name",
+            organisationName = trustName,
             beneficiaryDiscretion = Some(false),
             beneficiaryShareOfIncome = Some("100"),
             identification = None,
@@ -115,7 +116,7 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
         "UK Address is set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(NamePage(index), "Trust Name").success.value
+              .set(NamePage(index), trustName).success.value
               .set(DiscretionYesNoPage(index), true).success.value
               .set(AddressYesNoPage(index), true).success.value
               .set(AddressUKYesNoPage(index), true).success.value
@@ -126,7 +127,7 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
 
           trusts mustBe defined
           trusts.value.head mustBe BeneficiaryTrustType(
-            organisationName = "Trust Name",
+            organisationName = trustName,
             beneficiaryDiscretion = Some(true),
             beneficiaryShareOfIncome = None,
             identification = Some(IdentificationOrgType(
@@ -142,7 +143,7 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
         "International Address is set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(NamePage(index), "Trust Name").success.value
+              .set(NamePage(index), trustName).success.value
               .set(DiscretionYesNoPage(index), true).success.value
               .set(AddressYesNoPage(index), true).success.value
               .set(AddressUKYesNoPage(index), false).success.value
@@ -153,7 +154,7 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
 
           trusts mustBe defined
           trusts.value.head mustBe BeneficiaryTrustType(
-            organisationName = "Trust Name",
+            organisationName = trustName,
             beneficiaryDiscretion = Some(true),
             beneficiaryShareOfIncome = None,
             identification = Some(IdentificationOrgType(
@@ -171,14 +172,14 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
       "must be able to create multiple BeneficiaryTrustType" in {
         val userAnswers =
           emptyUserAnswers
-            .set(NamePage(index), "Trust Name").success.value
+            .set(NamePage(index), trustName).success.value
             .set(DiscretionYesNoPage(index), true).success.value
             .set(AddressYesNoPage(index), true).success.value
             .set(AddressUKYesNoPage(index), true).success.value
             .set(AddressUKPage(index),
               UKAddress("Line1", "Line2", None, Some("Newcastle"), "NE62RT")).success.value
 
-            .set(NamePage(index1), "Trust Name").success.value
+            .set(NamePage(index1), trustName).success.value
             .set(DiscretionYesNoPage(index1), true).success.value
             .set(AddressYesNoPage(index1), true).success.value
             .set(AddressUKYesNoPage(index1), false).success.value
@@ -192,7 +193,7 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
         individuals.value mustBe
           List(
             BeneficiaryTrustType(
-              organisationName = "Trust Name",
+              organisationName = trustName,
               beneficiaryDiscretion = Some(true),
               beneficiaryShareOfIncome = None,
               identification = Some(IdentificationOrgType(
@@ -204,7 +205,7 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
             ),
               countryOfResidence = None),
             BeneficiaryTrustType(
-              organisationName = "Trust Name",
+              organisationName = trustName,
               beneficiaryDiscretion = Some(true),
               beneficiaryShareOfIncome = None,
               identification = Some(IdentificationOrgType(
@@ -218,10 +219,41 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
           )
       }
 
+      "must be able to create BeneficiaryTrustType with minimum NonTaxable data" in {
+        val userAnswers =
+          emptyUserAnswers
+            .set(NamePage(index), trustName).success.value
+
+        val trusts = trustBeneficiariesMapper.build(userAnswers)
+
+        trusts.value.head mustBe BeneficiaryTrustType(
+          organisationName = trustName,
+          beneficiaryDiscretion = None,
+          beneficiaryShareOfIncome = None,
+          identification = None,
+          countryOfResidence = None)
+      }
+
+      "must be able to create BeneficiaryTrustType with full NonTaxable data" in {
+        val userAnswers =
+          emptyUserAnswers
+            .set(NamePage(index), trustName).success.value
+            .set(CountryOfResidencePage(index), "GB").success.value
+
+        val trusts = trustBeneficiariesMapper.build(userAnswers)
+
+        trusts.value.head mustBe BeneficiaryTrustType(
+          organisationName = trustName,
+          beneficiaryDiscretion = None,
+          beneficiaryShareOfIncome = None,
+          identification = None,
+          countryOfResidence = Some("GB"))
+      }
+
       "must not be able to create BeneficiaryTrustType when incomplete data " in {
         val userAnswers =
           emptyUserAnswers
-            .set(NamePage(index), "Name").success.value
+            .set(DiscretionYesNoPage(index), true).success.value
 
         trustBeneficiariesMapper.build(userAnswers) mustNot be(defined)
       }

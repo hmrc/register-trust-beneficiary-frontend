@@ -37,4 +37,8 @@ class SubmissionDraftConnector @Inject()(http: HttpClient, config : FrontendAppC
   def getDraftSection(draftId: String, section: String)(implicit hc: HeaderCarrier, ec : ExecutionContext): Future[SubmissionDraftResponse] = {
     http.GET[SubmissionDraftResponse](s"$submissionsBaseUrl/$draftId/$section")
   }
+
+  def getIsTrustTaxable(draftId: String)(implicit hc: HeaderCarrier, ec : ExecutionContext): Future[Boolean] = {
+    http.GET[Boolean](s"$submissionsBaseUrl/$draftId/is-trust-taxable")
+  }
 }

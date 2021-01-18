@@ -76,7 +76,7 @@ class HowMuchIncomeController @Inject()(
             updatedAnswers <- Future.fromTry(request.userAnswers.set(HowMuchIncomePage(index), value))
             is5mld         <- featureFlagService.is5mldEnabled()
             _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(HowMuchIncomePage(index), draftId, is5mld, updatedAnswers))
+          } yield Redirect(navigator.nextPage(HowMuchIncomePage(index), draftId, is5mld, trustTaxable = true, updatedAnswers))
         }
       )
   }

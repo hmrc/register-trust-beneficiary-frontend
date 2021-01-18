@@ -109,57 +109,109 @@ class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
       }
     }
 
-    "a 5mld trust" must {
+    "a 5mld trust" when {
 
-      "Discretion yes no page -> Yes -> CountryOfResidence Yes No page" in {
-        val answers = emptyUserAnswers
-          .set(DiscretionYesNoPage(index), true).success.value
+      "a taxable trust" must {
 
-        navigator.nextPage(DiscretionYesNoPage(index), draftId, fiveMldEnabled = true, answers)
-          .mustBe(ntRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
+        "Discretion yes no page -> Yes -> CountryOfResidence Yes No page" in {
+          val answers = emptyUserAnswers
+            .set(DiscretionYesNoPage(index), true).success.value
+
+          navigator.nextPage(DiscretionYesNoPage(index), draftId, fiveMldEnabled = true, trustTaxable = true, answers)
+            .mustBe(ntRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
+        }
+
+        "CountryOfResidence yes no page -> No -> Address yes no page" in {
+          val answers = emptyUserAnswers
+            .set(CountryOfResidenceYesNoPage(index), false).success.value
+
+          navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, fiveMldEnabled = true, trustTaxable = true, answers)
+            .mustBe(rts.AddressYesNoController.onPageLoad(index, draftId))
+        }
+
+        "CountryOfResidence yes no page -> Yes -> CountryOfResidence Uk yes no page" in {
+          val answers = emptyUserAnswers
+            .set(CountryOfResidenceYesNoPage(index), true).success.value
+
+          navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, fiveMldEnabled = true, trustTaxable = true, answers)
+            .mustBe(ntRts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId))
+        }
+
+
+        "CountryOfResidence Uk yes no page -> Yes -> Address yes no page" in {
+          val answers = emptyUserAnswers
+            .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
+
+          navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, fiveMldEnabled = true, trustTaxable = true, answers)
+            .mustBe(rts.AddressYesNoController.onPageLoad(index, draftId))
+        }
+
+        "CountryOfResidence Uk yes no page -> No -> CountryOfResidence page" in {
+          val answers = emptyUserAnswers
+            .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+
+          navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, fiveMldEnabled = true, trustTaxable = true, answers)
+            .mustBe(ntRts.CountryOfResidenceController.onPageLoad(index, draftId))
+        }
+
+        "CountryOfResidence page -> Address yes no page" in {
+          navigator.nextPage(CountryOfResidencePage(index), draftId, fiveMldEnabled = true, trustTaxable = true, emptyUserAnswers)
+            .mustBe(rts.AddressYesNoController.onPageLoad(index, draftId))
+        }
+
+        "ShareOfIncome page -> CountryOfResidence Yes No page" in {
+          navigator.nextPage(ShareOfIncomePage(index), draftId, fiveMldEnabled = true, trustTaxable = true, emptyUserAnswers)
+            .mustBe(ntRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
+        }
       }
 
-      "CountryOfResidence yes no page -> No -> Address yes no page" in {
-        val answers = emptyUserAnswers
-          .set(CountryOfResidenceYesNoPage(index), false).success.value
+      "a non taxable trust" must {
 
-        navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, fiveMldEnabled = true, answers)
-          .mustBe(rts.AddressYesNoController.onPageLoad(index, draftId))
-      }
+        "Name page -> CountryOfResidence Yes No page" in {
+          val answers = emptyUserAnswers
+            .set(NamePage(index), "Trust Name").success.value
 
-      "CountryOfResidence yes no page -> Yes -> CountryOfResidence Uk yes no page" in {
-        val answers = emptyUserAnswers
-          .set(CountryOfResidenceYesNoPage(index), true).success.value
+          navigator.nextPage(NamePage(index), draftId, fiveMldEnabled = true, trustTaxable = false, answers)
+            .mustBe(ntRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
+        }
 
-        navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, fiveMldEnabled = true, answers)
-          .mustBe(ntRts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId))
-      }
+        "CountryOfResidence yes no page -> No -> Check your answers page" in {
+          val answers = emptyUserAnswers
+            .set(CountryOfResidenceYesNoPage(index), false).success.value
+
+          navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, fiveMldEnabled = true, trustTaxable = false, answers)
+            .mustBe(rts.AnswersController.onPageLoad(index, draftId))
+        }
+
+        "CountryOfResidence yes no page -> Yes -> CountryOfResidence Uk yes no page" in {
+          val answers = emptyUserAnswers
+            .set(CountryOfResidenceYesNoPage(index), true).success.value
+
+          navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, fiveMldEnabled = true, trustTaxable = false, answers)
+            .mustBe(ntRts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId))
+        }
 
 
-      "CountryOfResidence Uk yes no page -> Yes -> Address yes no page" in {
-        val answers = emptyUserAnswers
-          .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
+        "CountryOfResidence Uk yes no page -> Yes -> Check your answers page" in {
+          val answers = emptyUserAnswers
+            .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
 
-        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, fiveMldEnabled = true, answers)
-          .mustBe(rts.AddressYesNoController.onPageLoad(index, draftId))
-      }
+          navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, fiveMldEnabled = true, trustTaxable = false, answers)
+            .mustBe(rts.AnswersController.onPageLoad(index, draftId))
+        }
 
-      "CountryOfResidence Uk yes no page -> No -> Address yes no page" in {
-        val answers = emptyUserAnswers
-          .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+        "CountryOfResidence Uk yes no page -> No -> CountryOfResidence page" in {
+          val answers = emptyUserAnswers
+            .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
 
-        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, fiveMldEnabled = true, answers)
-          .mustBe(ntRts.CountryOfResidenceController.onPageLoad(index, draftId))
-      }
+          navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, fiveMldEnabled = true, trustTaxable = true, answers)
+            .mustBe(ntRts.CountryOfResidenceController.onPageLoad(index, draftId))
+        }
 
-      "CountryOfResidence page -> Address yes no page" in {
-        navigator.nextPage(CountryOfResidencePage(index), draftId, fiveMldEnabled = true, emptyUserAnswers)
-          .mustBe(rts.AddressYesNoController.onPageLoad(index, draftId))
-      }
-
-      "ShareOfIncome page -> CountryOfResidence Yes No page" in {
-        navigator.nextPage(ShareOfIncomePage(index), draftId, fiveMldEnabled = true, emptyUserAnswers)
-          .mustBe(ntRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
+        "CountryOfResidence page -> Check your answers page" in {
+          navigator.nextPage(CountryOfResidencePage(index), draftId, fiveMldEnabled = true, trustTaxable = false, emptyUserAnswers)
+            .mustBe(rts.AnswersController.onPageLoad(index, draftId))
+        }
       }
     }
   }

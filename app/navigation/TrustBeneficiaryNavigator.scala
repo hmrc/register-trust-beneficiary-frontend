@@ -27,20 +27,25 @@ import play.api.mvc.Call
 class TrustBeneficiaryNavigator extends Navigator {
 
   override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call =
-    nextPage(page, draftId, fiveMldEnabled = false, userAnswers)
+    nextPage(page, draftId, fiveMldEnabled = false, trustTaxable = true, userAnswers)
 
-  override def nextPage(page: Page, draftId: String, fiveMldEnabled: Boolean, userAnswers: ReadableUserAnswers): Call =
-    routes(draftId, fiveMldEnabled)(page)(userAnswers)
+  override def nextPage(page: Page, draftId: String, fiveMldEnabled: Boolean, trustTaxable: Boolean, userAnswers: ReadableUserAnswers): Call =
+    routes(draftId, fiveMldEnabled, trustTaxable)(page)(userAnswers)
 
-  private def simpleNavigation(draftId: String, fiveMldEnabled: Boolean): PartialFunction[Page, Call] = {
-    case NamePage(index) => rts.DiscretionYesNoController.onPageLoad(index, draftId)
-    case ShareOfIncomePage(index) => fiveMldYesNo(draftId, index, fiveMldEnabled)
-    case AddressUKPage(index) => rts.AnswersController.onPageLoad(index, draftId)
-    case AddressInternationalPage(index) => rts.AnswersController.onPageLoad(index, draftId)
-    case CountryOfResidencePage(index) => rts.AddressYesNoController.onPageLoad(index, draftId)
+  private def simpleNavigation(draftId: String, fiveMldEnabled: Boolean, trustTaxable: Boolean): PartialFunction[Page, Call] = {
+    if (fiveMldEnabled && !trustTaxable) {
+      case NamePage(index) => nonTaxRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
+      case CountryOfResidencePage(index) => rts.AnswersController.onPageLoad(index, draftId)
+    } else {
+      case NamePage(index) => rts.DiscretionYesNoController.onPageLoad(index, draftId)
+      case ShareOfIncomePage(index) => fiveMldYesNo(draftId, index, fiveMldEnabled)
+      case AddressUKPage(index) => rts.AnswersController.onPageLoad(index, draftId)
+      case AddressInternationalPage(index) => rts.AnswersController.onPageLoad(index, draftId)
+      case CountryOfResidencePage(index) => rts.AddressYesNoController.onPageLoad(index, draftId)
+    }
   }
 
-  private def yesNoNavigation(draftId: String, fiveMldEnabled: Boolean): PartialFunction[Page, ReadableUserAnswers => Call] = {
+  private def yesNoNavigation(draftId: String, fiveMldEnabled: Boolean, trustTaxable: Boolean): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case DiscretionYesNoPage(index) => ua =>
       yesNoNav(ua, DiscretionYesNoPage(index), fiveMldYesNo(draftId, index, fiveMldEnabled), rts.ShareOfIncomeController.onPageLoad(index, draftId))
     case AddressUKYesNoPage(index) => ua =>
@@ -61,13 +66,13 @@ class TrustBeneficiaryNavigator extends Navigator {
         ua,
         CountryOfResidenceYesNoPage(index),
         nonTaxRts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId),
-        rts.AddressYesNoController.onPageLoad(index, draftId)
+        trustTaxableYesNo(draftId, index, fiveMldEnabled, trustTaxable)
       )
     case CountryOfResidenceInTheUkYesNoPage(index) => ua =>
       yesNoNav(
         ua,
         CountryOfResidenceInTheUkYesNoPage(index),
-        rts.AddressYesNoController.onPageLoad(index, draftId),
+        trustTaxableYesNo(draftId, index, fiveMldEnabled, trustTaxable),
         nonTaxRts.CountryOfResidenceController.onPageLoad(index, draftId)
       )
   }
@@ -80,7 +85,15 @@ class TrustBeneficiaryNavigator extends Navigator {
     }
   }
 
-  def routes(draftId: String, fiveMld: Boolean): PartialFunction[Page, ReadableUserAnswers => Call] =
-    simpleNavigation(draftId, fiveMld) andThen (c => (_: ReadableUserAnswers) => c) orElse yesNoNavigation(draftId, fiveMld)
+  private def trustTaxableYesNo(draftId: String, index: Int, fiveMld: Boolean, trustTaxable: Boolean): Call = {
+    if (fiveMld && !trustTaxable) {
+      rts.AnswersController.onPageLoad(index, draftId)
+    } else {
+      rts.AddressYesNoController.onPageLoad(index, draftId)
+    }
+  }
+
+  def routes(draftId: String, fiveMld: Boolean, trustTaxable: Boolean): PartialFunction[Page, ReadableUserAnswers => Call] =
+    simpleNavigation(draftId, fiveMld, trustTaxable) andThen (c => (_: ReadableUserAnswers) => c) orElse yesNoNavigation(draftId, fiveMld, trustTaxable)
 
 }

@@ -22,6 +22,6 @@ import play.api.mvc.Call
 
 class FakeNavigator(val desiredRoute: Call = Call("GET", "/foo")) extends Navigator {
   override def nextPage(page: Page, fakeDraftId: String, userAnswers: ReadableUserAnswers): Call = desiredRoute
-  override def nextPage(page: Page, fakeDraftId: String, fiveMldDiscretionYesNo: Boolean, userAnswers: ReadableUserAnswers): Call = desiredRoute
+  override def nextPage(page: Page, fakeDraftId: String, fiveMldEnabled: Boolean, trustTaxable: Boolean, userAnswers: ReadableUserAnswers): Call = desiredRoute
 }
 
