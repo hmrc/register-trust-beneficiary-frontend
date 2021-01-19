@@ -16,19 +16,19 @@
 
 package utils.answers
 
-import controllers.register.beneficiaries.charityortrust.trust.routes
 import controllers.register.beneficiaries.charityortrust.trust.nonTaxable.{routes => ntRoutes}
-
-import javax.inject.Inject
+import controllers.register.beneficiaries.charityortrust.trust.routes
 import models.UserAnswers
 import pages.register.beneficiaries.charityortrust.trust._
 import pages.register.beneficiaries.charityortrust.trust.nonTaxable.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import play.api.i18n.Messages
-import play.twirl.api.{Html, HtmlFormat}
+import play.twirl.api.HtmlFormat
 import sections.beneficiaries.TrustBeneficiaries
 import utils.answers.CheckAnswersFormatters._
 import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
+
+import javax.inject.Inject
 
 class TrustBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
                                              (userAnswers: UserAnswers,

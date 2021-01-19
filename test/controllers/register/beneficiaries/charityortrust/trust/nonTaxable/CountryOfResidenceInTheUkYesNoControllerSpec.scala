@@ -95,7 +95,7 @@ class CountryOfResidenceInTheUkYesNoControllerSpec extends SpecBase with Mockito
 
       val mockSubmissionDraftConnector = mock[SubmissionDraftConnector]
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
           bind[SubmissionDraftConnector].toInstance(mockSubmissionDraftConnector),
           bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(new FakeNavigator)

@@ -27,6 +27,7 @@ import pages.register.beneficiaries.charityortrust.trust.NamePage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.FeatureFlagService
 import views.html.register.beneficiaries.charityortrust.trust.NameView
 
 import scala.concurrent.Future
@@ -84,14 +85,17 @@ class NameControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       val mockSubmissionDraftConnector = mock[SubmissionDraftConnector]
+      val mockFeatureFlagService = mock[FeatureFlagService]
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
+          bind[FeatureFlagService].toInstance(mockFeatureFlagService),
           bind[SubmissionDraftConnector].toInstance(mockSubmissionDraftConnector),
           bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(new FakeNavigator)
         ).build()
 
       when(mockSubmissionDraftConnector.getIsTrustTaxable(any())(any(), any())).thenReturn(Future.successful(true))
+      when(mockFeatureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
 
         val request =
           FakeRequest(POST, trustBeneficiaryNameRoute)
