@@ -72,7 +72,7 @@ class ShareOfIncomeController @Inject()(
             updatedAnswers <- Future.fromTry(request.userAnswers.set(IncomePage(index), value))
             is5mld         <- featureFlagService.is5mldEnabled()
             _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(IncomePage(index), draftId, is5mld, updatedAnswers))
+          } yield Redirect(navigator.nextPage(IncomePage(index), draftId, is5mld, trustTaxable = true, updatedAnswers))
       )
   }
 }

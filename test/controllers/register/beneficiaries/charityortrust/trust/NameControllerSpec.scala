@@ -18,13 +18,18 @@ package controllers.register.beneficiaries.charityortrust.trust
 
 import base.SpecBase
 import config.annotations.TrustBeneficiary
+import connectors.SubmissionDraftConnector
 import forms.StringFormProvider
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
 import pages.register.beneficiaries.charityortrust.trust.NamePage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.charityortrust.trust.NameView
+
+import scala.concurrent.Future
 
 class NameControllerSpec extends SpecBase {
 
@@ -78,10 +83,15 @@ class NameControllerSpec extends SpecBase {
 
     "redirect to the next page when valid data is submitted" in {
 
+      val mockSubmissionDraftConnector = mock[SubmissionDraftConnector]
+
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
+          bind[SubmissionDraftConnector].toInstance(mockSubmissionDraftConnector),
           bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(new FakeNavigator)
         ).build()
+
+      when(mockSubmissionDraftConnector.getIsTrustTaxable(any())(any(), any())).thenReturn(Future.successful(true))
 
         val request =
           FakeRequest(POST, trustBeneficiaryNameRoute)

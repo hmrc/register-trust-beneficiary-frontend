@@ -17,6 +17,7 @@
 package controllers.register.beneficiaries.charityortrust.trust.nonTaxable
 
 import config.annotations.TrustBeneficiary
+import connectors.SubmissionDraftConnector
 import controllers.actions._
 import controllers.actions.register.trust.NameRequiredAction
 import forms.YesNoFormProvider
@@ -39,6 +40,7 @@ class CountryOfResidenceYesNoController @Inject()(
                                                    standardActionSets: StandardActionSets,
                                                    nameAction: NameRequiredAction,
                                                    formProvider: YesNoFormProvider,
+                                                   submissionDraftConnector: SubmissionDraftConnector,
                                                    view: CountryOfResidenceYesNoView
                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
@@ -67,8 +69,9 @@ class CountryOfResidenceYesNoController @Inject()(
           value =>
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfResidenceYesNoPage(index), value))
+              isTaxable      <- submissionDraftConnector.getIsTrustTaxable(draftId)
               _              <- repository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, updatedAnswers))
+            } yield Redirect(navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, fiveMldEnabled = true, isTaxable, updatedAnswers))
         )
     }
 }
