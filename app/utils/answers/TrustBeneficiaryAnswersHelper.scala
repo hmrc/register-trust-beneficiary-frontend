@@ -177,6 +177,7 @@ class TrustBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
           "trust.nonTaxable.countryOfResidence.checkYourAnswersLabel",
           HtmlFormat.escape(country(x, countryOptions)),
           Some(ntRoutes.CountryOfResidenceController.onPageLoad(index, draftId).url),
+          trustBeneficiaryName(index, userAnswers),
           canEdit = canEdit
         )
     }
