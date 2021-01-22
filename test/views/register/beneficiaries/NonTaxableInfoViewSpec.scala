@@ -14,29 +14,27 @@
  * limitations under the License.
  */
 
-package views.register.beneficiaries.individualBeneficiary
+package views.register.beneficiaries
 
 import controllers.register.beneficiaries.routes
 import views.behaviours.ViewBehaviours
-import views.html.register.beneficiaries.individualBeneficiary.InfoView
+import views.html.register.beneficiaries.NonTaxableInfoView
 
-class InfoViewSpec extends ViewBehaviours {
+class NonTaxableInfoViewSpec extends ViewBehaviours {
 
-  "IndividualBeneficiaryInfo view" must {
+  "IndividualBeneficiaryInfo NonTaxable view" must {
 
-    val view = viewFor[InfoView](Some(emptyUserAnswers))
+    val view = viewFor[NonTaxableInfoView](Some(emptyUserAnswers))
 
     val applyView = view.apply(fakeDraftId)(fakeRequest, messages)
 
-    behave like normalPageTitleWithCaption(applyView, "individualBeneficiaryInfo",
+    behave like normalPageTitleWithCaption(applyView, "individualBeneficiaryInfo.nonTaxable",
       "caption",
       "subheading1",
       "paragraph1",
       "bulletpoint1",
       "bulletpoint2",
       "bulletpoint3",
-      "bulletpoint4",
-      "bulletpoint5",
       "paragraph2",
       "paragraph3",
       "subheading2",
@@ -45,12 +43,20 @@ class InfoViewSpec extends ViewBehaviours {
       "paragraph5",
       "subheading4",
       "paragraph6",
+      "bulletpoint4",
+      "bulletpoint5",
       "bulletpoint6",
-      "bulletpoint7",
-      "bulletpoint8",
       "paragraph7",
+      "paragraph8",
+      "details",
+      "details.subheading1",
+      "details.paragraph1",
+      "details.subheading2",
+      "details.paragraph2",
+      "details.subheading3",
+      "details.paragraph3",
       "subheading5",
-      "paragraph8"
+      "paragraph9"
     )
 
     behave like pageWithBackLink(applyView)

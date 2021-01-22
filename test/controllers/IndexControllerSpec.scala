@@ -86,7 +86,7 @@ class IndexControllerSpec extends SpecBase {
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).get mustBe controllers.register.beneficiaries.individualBeneficiary.routes.InfoController.onPageLoad(fakeDraftId).url
+        redirectLocation(result).get mustBe controllers.register.beneficiaries.routes.InfoController.onPageLoad(fakeDraftId).url
 
         application.stop()
       }

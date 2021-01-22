@@ -24,6 +24,10 @@ POST       /:draftId/add                                                        
 POST       /:draftId/add-another                                                      controllers.register.beneficiaries.AddABeneficiaryController.submitAnother(draftId: String)
 POST       /complete                                                                  controllers.register.beneficiaries.AddABeneficiaryController.submitComplete(draftId: String)
 
+GET        /:draftId/information-you-need                                             controllers.register.beneficiaries.InfoController.onPageLoad(draftId: String)
+
+# individual
+
 GET        /:draftId/individual/:index/name                                           controllers.register.beneficiaries.individualBeneficiary.NameController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/individual/:index/name                                           controllers.register.beneficiaries.individualBeneficiary.NameController.onSubmit(index: Int, draftId: String)
 
@@ -74,8 +78,6 @@ POST       /:draftId/individual/:index/passport                                 
 
 GET        /:draftId/individual/:index/passport-yes-no                                controllers.register.beneficiaries.individualBeneficiary.PassportDetailsYesNoController.onPageLoad( index: Int, draftId: String)
 POST       /:draftId/individual/:index/passport-yes-no                                controllers.register.beneficiaries.individualBeneficiary.PassportDetailsYesNoController.onSubmit( index: Int, draftId: String)
-
-GET        /:draftId/information-you-need                                             controllers.register.beneficiaries.individualBeneficiary.InfoController.onPageLoad(draftId: String)
 
 GET        /:draftId/individual/:index/check-answers                                  controllers.register.beneficiaries.individualBeneficiary.AnswersController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/individual/:index/check-answers                                  controllers.register.beneficiaries.individualBeneficiary.AnswersController.onSubmit(index: Int, draftId: String)

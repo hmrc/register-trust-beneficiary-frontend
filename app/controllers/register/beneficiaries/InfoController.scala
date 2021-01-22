@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package controllers.register.beneficiaries.individualBeneficiary
+package controllers.register.beneficiaries
 
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.register.beneficiaries.individualBeneficiary._
+import views.html.register.beneficiaries._
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
@@ -33,8 +33,8 @@ class InfoController @Inject()(
                                 requireData: RegistrationDataRequiredAction,
                                 featureFlagService: FeatureFlagService,
                                 val controllerComponents: MessagesControllerComponents,
-                                view: InfoView,
-                                viewNonTaxable: nonTaxable.InfoView
+                                view: TaxableInfoView,
+                                viewNonTaxable: NonTaxableInfoView
                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(draftId: String): Action[AnyContent] = (identify andThen getData(draftId) andThen requireData).async {

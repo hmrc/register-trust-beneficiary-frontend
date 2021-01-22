@@ -45,7 +45,7 @@ class IndexController @Inject()(
         if (isAnyBeneficiaryAdded(userAnswers)) {
           Redirect(controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId))
         } else {
-          Redirect(controllers.register.beneficiaries.individualBeneficiary.routes.InfoController.onPageLoad(draftId))
+          Redirect(controllers.register.beneficiaries.routes.InfoController.onPageLoad(draftId))
         }
       }
     }

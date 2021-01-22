@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.register.beneficiaries.individualBeneficiary
+package controllers.register.beneficiaries
 
 import base.SpecBase
 import org.mockito.Matchers.any
@@ -23,8 +23,7 @@ import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.FeatureFlagService
-import views.html.register.beneficiaries.individualBeneficiary.InfoView
-import views.html.register.beneficiaries.individualBeneficiary.nonTaxable.{InfoView => NonTaxableInfoView}
+import views.html.register.beneficiaries.{NonTaxableInfoView, TaxableInfoView}
 
 import scala.concurrent.Future
 
@@ -32,7 +31,7 @@ class InfoControllerSpec extends SpecBase {
 
   lazy val mockFeatureFlagService = mock[FeatureFlagService]
 
-  "IndividualBeneficiaryInfo Controller" must {
+  "Info Controller" must {
 
     "return OK and the correct view for a GET with 5mld disabled" in {
 
@@ -48,7 +47,7 @@ class InfoControllerSpec extends SpecBase {
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[InfoView]
+      val view = application.injector.instanceOf[TaxableInfoView]
 
       status(result) mustEqual OK
 
