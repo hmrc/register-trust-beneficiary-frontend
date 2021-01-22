@@ -21,34 +21,27 @@ import config.annotations.TrustBeneficiary
 import forms.YesNoFormProvider
 import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.charityortrust.trust.{DiscretionYesNoPage, NamePage}
+import play.api.data.Form
 import play.api.inject.bind
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.FeatureFlagService
 import views.html.register.beneficiaries.charityortrust.trust.DiscretionYesNoView
-
-import scala.concurrent.Future
 
 class DiscretionYesNoControllerSpec extends SpecBase {
 
   val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix("trustBeneficiaryDiscretionYesNo")
+  val form: Form[Boolean] = formProvider.withPrefix("trustBeneficiaryDiscretionYesNo")
   val index: Int = 0
-
-  val mockFeatureFlagService = mock[FeatureFlagService]
 
   val name = "Name"
 
-  lazy val trustBeneficiaryDiscretionYesNoRoute = routes.DiscretionYesNoController.onPageLoad(index, fakeDraftId).url
+  lazy val trustBeneficiaryDiscretionYesNoRoute: String = routes.DiscretionYesNoController.onPageLoad(index, fakeDraftId).url
 
   "DiscretionYesNo Controller" must {
 
     "return OK and the correct view for a GET" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index),
-        name).success.value
+      val userAnswers = emptyUserAnswers.set(NamePage(index), name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -68,8 +61,9 @@ class DiscretionYesNoControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(DiscretionYesNoPage(index), true).success.value
-        .set(NamePage(index),name).success.value
+      val userAnswers = emptyUserAnswers
+        .set(DiscretionYesNoPage(index), true).success.value
+        .set(NamePage(index), name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -89,16 +83,11 @@ class DiscretionYesNoControllerSpec extends SpecBase {
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index),
-        name).success.value
-
-      when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
-        .thenReturn(Future.successful(true))
+      val userAnswers = emptyUserAnswers.set(NamePage(index), name).success.value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
-            bind[FeatureFlagService].toInstance(mockFeatureFlagService),
             bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(new FakeNavigator)
           ).build()
 

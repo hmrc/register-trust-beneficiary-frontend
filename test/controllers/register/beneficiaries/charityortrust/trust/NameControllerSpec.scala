@@ -18,28 +18,23 @@ package controllers.register.beneficiaries.charityortrust.trust
 
 import base.SpecBase
 import config.annotations.TrustBeneficiary
-import connectors.SubmissionDraftConnector
 import forms.StringFormProvider
 import navigation.{FakeNavigator, Navigator}
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
 import pages.register.beneficiaries.charityortrust.trust.NamePage
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.FeatureFlagService
 import views.html.register.beneficiaries.charityortrust.trust.NameView
-
-import scala.concurrent.Future
 
 class NameControllerSpec extends SpecBase {
 
   val formProvider = new StringFormProvider()
-  val form = formProvider.withPrefix("trustBeneficiaryName", 105)
+  val form: Form[String] = formProvider.withPrefix("trustBeneficiaryName", 105)
   val name = "Name"
   val index: Int = 0
 
-  lazy val trustBeneficiaryNameRoute = routes.NameController.onPageLoad(index, fakeDraftId).url
+  lazy val trustBeneficiaryNameRoute: String = routes.NameController.onPageLoad(index, fakeDraftId).url
 
   "TrustBeneficiaryName Controller" must {
 
@@ -84,18 +79,10 @@ class NameControllerSpec extends SpecBase {
 
     "redirect to the next page when valid data is submitted" in {
 
-      val mockSubmissionDraftConnector = mock[SubmissionDraftConnector]
-      val mockFeatureFlagService = mock[FeatureFlagService]
-
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
-          bind[FeatureFlagService].toInstance(mockFeatureFlagService),
-          bind[SubmissionDraftConnector].toInstance(mockSubmissionDraftConnector),
           bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(new FakeNavigator)
         ).build()
-
-      when(mockSubmissionDraftConnector.getIsTrustTaxable(any())(any(), any())).thenReturn(Future.successful(true))
-      when(mockFeatureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
 
         val request =
           FakeRequest(POST, trustBeneficiaryNameRoute)

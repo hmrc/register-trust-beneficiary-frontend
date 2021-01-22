@@ -18,11 +18,8 @@ package controllers.register.beneficiaries.charityortrust.trust.nonTaxable
 
 import base.SpecBase
 import config.annotations.TrustBeneficiary
-import connectors.SubmissionDraftConnector
 import forms.YesNoFormProvider
 import navigation.{FakeNavigator, Navigator}
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.charityortrust.trust.NamePage
 import pages.register.beneficiaries.charityortrust.trust.nonTaxable.CountryOfResidenceYesNoPage
@@ -31,8 +28,6 @@ import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.charityortrust.trust.nonTaxable.CountryOfResidenceYesNoView
-
-import scala.concurrent.Future
 
 class CountryOfResidenceYesNoControllerSpec extends SpecBase with MockitoSugar {
 
@@ -93,15 +88,10 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase with MockitoSugar {
       val userAnswers = emptyUserAnswers
         .set(NamePage(index), trustName).success.value
 
-      val mockSubmissionDraftConnector = mock[SubmissionDraftConnector]
-
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
-          bind[SubmissionDraftConnector].toInstance(mockSubmissionDraftConnector),
           bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(new FakeNavigator)
         ).build()
-
-      when(mockSubmissionDraftConnector.getIsTrustTaxable(any())(any(), any())).thenReturn(Future.successful(true))
 
       val request =
         FakeRequest(POST, countryOfResidenceYesNo)

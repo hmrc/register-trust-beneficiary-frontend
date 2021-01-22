@@ -19,30 +19,25 @@ package controllers.register.beneficiaries.charityortrust.trust
 import base.SpecBase
 import config.annotations.TrustBeneficiary
 import forms.IncomePercentageFormProvider
+import models.UserAnswers
 import navigation.{FakeNavigator, Navigator}
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
 import pages.register.beneficiaries.charityortrust.trust.{NamePage, ShareOfIncomePage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.FeatureFlagService
 import views.html.register.beneficiaries.charityortrust.trust.ShareOfIncomeView
-
-import scala.concurrent.Future
 
 class ShareOfIncomeControllerSpec extends SpecBase {
 
   val formProvider = new IncomePercentageFormProvider()
-  val form = formProvider.withPrefix("trustBeneficiaryShareOfIncome")
+  val form: Form[Int] = formProvider.withPrefix("trustBeneficiaryShareOfIncome")
   val name = "Name"
   val index: Int = 0
-  val userAnswers = emptyUserAnswers
+  val userAnswers: UserAnswers = emptyUserAnswers
     .set(NamePage(index), name).success.value
 
-  val mockFeatureFlagService = mock[FeatureFlagService]
-
-  lazy val shareOfIncomeRoute = routes.ShareOfIncomeController.onPageLoad(index, fakeDraftId).url
+  lazy val shareOfIncomeRoute: String = routes.ShareOfIncomeController.onPageLoad(index, fakeDraftId).url
 
   "ShareOfIncome Controller" must {
 
@@ -87,13 +82,9 @@ class ShareOfIncomeControllerSpec extends SpecBase {
 
     "redirect to the next page when valid data is submitted" in {
 
-      when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
-        .thenReturn(Future.successful(true))
-
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
-            bind[FeatureFlagService].toInstance(mockFeatureFlagService),
             bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(new FakeNavigator)
           ).build()
 
