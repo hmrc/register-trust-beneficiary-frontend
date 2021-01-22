@@ -19,32 +19,27 @@ package controllers.register.beneficiaries
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.beneficiaries._
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext
 
 class InfoController @Inject()(
                                 override val messagesApi: MessagesApi,
                                 identify: RegistrationIdentifierAction,
                                 getData: DraftIdRetrievalActionProvider,
                                 requireData: RegistrationDataRequiredAction,
-                                featureFlagService: FeatureFlagService,
                                 val controllerComponents: MessagesControllerComponents,
                                 view: TaxableInfoView,
                                 viewNonTaxable: NonTaxableInfoView
-                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                              ) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(draftId: String): Action[AnyContent] = (identify andThen getData(draftId) andThen requireData).async {
+  def onPageLoad(draftId: String): Action[AnyContent] = (identify andThen getData(draftId) andThen requireData) {
     implicit request =>
-      featureFlagService.is5mldEnabled().map {
-        case true =>
-          Ok(viewNonTaxable(draftId))
-        case _ =>
-          Ok(view(draftId))
+      if (request.userAnswers.is5mldEnabled) {
+        Ok(viewNonTaxable(draftId))
+      } else {
+        Ok(view(draftId))
       }
-
   }
 }
