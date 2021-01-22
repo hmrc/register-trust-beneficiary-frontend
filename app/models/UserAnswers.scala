@@ -24,6 +24,9 @@ import scala.util.{Failure, Success, Try}
 
 trait ReadableUserAnswers {
   val data: JsObject
+  val is5mldEnabled: Boolean = false
+  val isTaxable: Boolean = true
+
   def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] = {
     Reads.at(page.path).reads(data) match {
       case JsSuccess(value, _) => Some(value)
@@ -41,8 +44,8 @@ object ReadOnlyUserAnswers {
 final case class UserAnswers(draftId: String,
                              data: JsObject = Json.obj(),
                              internalAuthId :String,
-                             is5mldEnabled: Boolean = false,
-                             isTaxable: Boolean = false) extends ReadableUserAnswers with Logging {
+                             override val is5mldEnabled: Boolean = false,
+                             override val isTaxable: Boolean = true) extends ReadableUserAnswers with Logging {
 
   def set[A](page: Settable[A], value: A)(implicit writes: Writes[A]): Try[UserAnswers] = {
 

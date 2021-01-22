@@ -20,18 +20,16 @@ import config.annotations.TrustBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.register.trust.NameRequiredAction
 import forms.IncomePercentageFormProvider
-
-import javax.inject.Inject
 import navigation.Navigator
 import pages.register.beneficiaries.charityortrust.trust.ShareOfIncomePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
-import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.beneficiaries.charityortrust.trust.ShareOfIncomeView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ShareOfIncomeController @Inject()(
@@ -40,13 +38,12 @@ class ShareOfIncomeController @Inject()(
                                          override val controllerComponents: MessagesControllerComponents,
                                          @TrustBeneficiary navigator: Navigator,
                                          standardActionSets: StandardActionSets,
-                                         featureFlagService: FeatureFlagService,
                                          nameAction: NameRequiredAction,
                                          formProvider: IncomePercentageFormProvider,
                                          view: ShareOfIncomeView
                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[Int] = formProvider.withPrefix("trustBeneficiaryShareOfIncome")
+  private val form: Form[Int] = formProvider.withPrefix("trustBeneficiaryShareOfIncome")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
     implicit request =>
@@ -64,14 +61,13 @@ class ShareOfIncomeController @Inject()(
 
       form.bindFromRequest().fold(
         formWithErrors => {
-          Future.successful(BadRequest(view(formWithErrors,  draftId, request.beneficiaryName, index)))
+          Future.successful(BadRequest(view(formWithErrors, draftId, request.beneficiaryName, index)))
         },
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ShareOfIncomePage(index), value))
-            is5mld <- featureFlagService.is5mldEnabled()
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ShareOfIncomePage(index),  draftId, is5mld, trustTaxable = true, updatedAnswers))
+          } yield Redirect(navigator.nextPage(ShareOfIncomePage(index), draftId, updatedAnswers))
       )
   }
 }

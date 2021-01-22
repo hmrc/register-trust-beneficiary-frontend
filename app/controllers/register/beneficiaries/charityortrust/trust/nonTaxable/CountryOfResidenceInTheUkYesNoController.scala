@@ -17,7 +17,6 @@
 package controllers.register.beneficiaries.charityortrust.trust.nonTaxable
 
 import config.annotations.TrustBeneficiary
-import connectors.SubmissionDraftConnector
 import controllers.actions._
 import controllers.actions.register.trust.NameRequiredAction
 import forms.YesNoFormProvider
@@ -34,44 +33,42 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CountryOfResidenceInTheUkYesNoController @Inject()(
-                                               val controllerComponents: MessagesControllerComponents,
-                                               @TrustBeneficiary navigator: Navigator,
-                                               standardActionSets: StandardActionSets,
-                                               formProvider: YesNoFormProvider,
-                                               submissionDraftConnector: SubmissionDraftConnector,
-                                               view: CountryOfResidenceInTheUkYesNoView,
-                                               repository: RegistrationsRepository,
-                                               nameAction: NameRequiredAction
-                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                          val controllerComponents: MessagesControllerComponents,
+                                                          @TrustBeneficiary navigator: Navigator,
+                                                          standardActionSets: StandardActionSets,
+                                                          formProvider: YesNoFormProvider,
+                                                          view: CountryOfResidenceInTheUkYesNoView,
+                                                          repository: RegistrationsRepository,
+                                                          nameAction: NameRequiredAction
+                                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form: Form[Boolean] = formProvider.withPrefix("trust.nonTaxable.countryOfResidenceInTheUkYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
-    implicit request =>
+      implicit request =>
 
-      val preparedForm = request.userAnswers.get(CountryOfResidenceInTheUkYesNoPage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
+        val preparedForm = request.userAnswers.get(CountryOfResidenceInTheUkYesNoPage(index)) match {
+          case None => form
+          case Some(value) => form.fill(value)
+        }
 
-      Ok(view(preparedForm,  draftId , index, request.beneficiaryName))
-  }
+        Ok(view(preparedForm,  draftId , index, request.beneficiaryName))
+    }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
-    implicit request =>
+      implicit request =>
 
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, draftId , index, request.beneficiaryName))),
+        form.bindFromRequest().fold(
+          formWithErrors =>
+            Future.successful(BadRequest(view(formWithErrors, draftId , index, request.beneficiaryName))),
 
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfResidenceInTheUkYesNoPage(index), value))
-            isTaxable      <- submissionDraftConnector.getIsTrustTaxable(draftId)
-            _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, fiveMldEnabled = true, isTaxable, updatedAnswers))
-      )
-  }
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfResidenceInTheUkYesNoPage(index), value))
+              _              <- repository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, updatedAnswers))
+        )
+    }
 }

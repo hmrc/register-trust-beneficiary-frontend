@@ -20,18 +20,16 @@ import config.annotations.TrustBeneficiary
 import connectors.SubmissionDraftConnector
 import controllers.actions.StandardActionSets
 import forms.StringFormProvider
-
-import javax.inject.Inject
 import navigation.Navigator
 import pages.register.beneficiaries.charityortrust.trust.NamePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
-import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.beneficiaries.charityortrust.trust.NameView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class NameController @Inject()(
@@ -41,7 +39,6 @@ class NameController @Inject()(
                                 @TrustBeneficiary navigator: Navigator,
                                 formProvider: StringFormProvider,
                                 standardActionSets: StandardActionSets,
-                                featureFlagService: FeatureFlagService,
                                 submissionDraftConnector: SubmissionDraftConnector,
                                 view: NameView
                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
@@ -66,15 +63,13 @@ class NameController @Inject()(
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors,  draftId, index))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index))),
 
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(NamePage(index), value))
-            is5mld         <- featureFlagService.is5mldEnabled()
-            isTaxable      <- submissionDraftConnector.getIsTrustTaxable(draftId)
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(NamePage(index),  draftId, is5mld, isTaxable, updatedAnswers))
+          } yield Redirect(navigator.nextPage(NamePage(index), draftId, updatedAnswers))
       )
   }
 }
