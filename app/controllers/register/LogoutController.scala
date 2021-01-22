@@ -18,13 +18,45 @@ package controllers.register
 
 import com.google.inject.{Inject, Singleton}
 import config.FrontendAppConfig
+import controllers.actions.register.RegistrationIdentifierAction
+import play.api.Logger.logger
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.HeaderCarrierConverter
+import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.Session
+
+import java.util.concurrent.Executor
+import scala.concurrent.ExecutionContext
 
 @Singleton
-class LogoutController @Inject()(appConfig: FrontendAppConfig, val controllerComponents: MessagesControllerComponents) extends FrontendBaseController {
+class LogoutController @Inject()(
+                                  appConfig: FrontendAppConfig,
+                                  val controllerComponents: MessagesControllerComponents,
+                                  identify: RegistrationIdentifierAction,
+                                  auditConnector: AuditConnector
+                                )(implicit val ec: ExecutionContext) extends FrontendBaseController {
 
-  def logout: Action[AnyContent] = Action {
-    _ => Redirect(appConfig.logoutUrl).withNewSession
+  def logout: Action[AnyContent] = identify { request =>
+
+    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
+
+    logger.info(s"[Session ID: ${utils.Session.id(hc)}] user signed out from the service, asking for feedback")
+
+    val auditData = Map(
+      "sessionId" -> Session.id(hc),
+      "event" -> "signout",
+      "service" -> "register-beneficiaries-frontend",
+      "userGroup" -> request.affinityGroup.toString
+    )
+
+    auditConnector.sendExplicitAudit(
+      "trusts",
+      auditData
+    )
+
+    Redirect(appConfig.logoutUrl).withSession(session = ("feedbackId", Session.id(hc)))
+
   }
 }
