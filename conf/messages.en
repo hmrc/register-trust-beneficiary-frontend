@@ -45,6 +45,7 @@ site.warning = Warning
 site.error = Error:
 site.address = Address
 site.sign_out = Sign out
+site.sign_in = Sign in
 
 #timeout dialog
 timeout.title= Your application will time out soon
