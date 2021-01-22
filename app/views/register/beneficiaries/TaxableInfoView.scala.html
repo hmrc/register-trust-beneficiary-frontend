@@ -23,18 +23,18 @@
 @(draftId: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("individualBeneficiaryInfo.title")
+    title = messages("beneficiaryInfo.title")
     ) {
 
     @components.back_link()
 
-    @components.heading_with_caption("individualBeneficiaryInfo")
+    @components.heading_with_caption("beneficiaryInfo")
 
-    <h2>@messages("individualBeneficiaryInfo.subheading1")</h2>
+    <h2>@messages("beneficiaryInfo.subheading1")</h2>
 
-    <p>@messages("individualBeneficiaryInfo.paragraph1")</p>
+    <p>@messages("beneficiaryInfo.paragraph1")</p>
 
-    @components.bullet_list("individualBeneficiaryInfo",
+    @components.bullet_list("beneficiaryInfo",
         List(
             "bulletpoint1",
             "bulletpoint2",
@@ -44,23 +44,23 @@
         )
     )
 
-    <p>@messages("individualBeneficiaryInfo.paragraph2")</p>
+    <p>@messages("beneficiaryInfo.paragraph2")</p>
 
-    <p>@messages("individualBeneficiaryInfo.paragraph3")</p>
+    <p>@messages("beneficiaryInfo.paragraph3")</p>
 
-    <h2>@messages("individualBeneficiaryInfo.subheading2")</h2>
+    <h2>@messages("beneficiaryInfo.subheading2")</h2>
 
-    <p>@messages("individualBeneficiaryInfo.paragraph4")</p>
+    <p>@messages("beneficiaryInfo.paragraph4")</p>
 
-    <h2>@messages("individualBeneficiaryInfo.subheading3")</h2>
+    <h2>@messages("beneficiaryInfo.subheading3")</h2>
 
-    <p>@messages("individualBeneficiaryInfo.paragraph5")</p>
+    <p>@messages("beneficiaryInfo.paragraph5")</p>
 
-    <h2>@messages("individualBeneficiaryInfo.subheading4")</h2>
+    <h2>@messages("beneficiaryInfo.subheading4")</h2>
 
-    <p>@messages("individualBeneficiaryInfo.paragraph6")</p>
+    <p>@messages("beneficiaryInfo.paragraph6")</p>
 
-    @components.bullet_list("individualBeneficiaryInfo",
+    @components.bullet_list("beneficiaryInfo",
         List(
             "bulletpoint6",
             "bulletpoint7",
@@ -68,11 +68,11 @@
         )
     )
 
-    <p>@messages("individualBeneficiaryInfo.paragraph7")</p>
+    <p>@messages("beneficiaryInfo.paragraph7")</p>
 
-    <h2>@messages("individualBeneficiaryInfo.subheading5")</h2>
+    <h2>@messages("beneficiaryInfo.subheading5")</h2>
 
-    <p>@messages("individualBeneficiaryInfo.paragraph8")</p>
+    <p>@messages("beneficiaryInfo.paragraph8")</p>
 
     @components.button_link(messages("site.onlyContinue"), WhatTypeOfBeneficiaryController.onPageLoad(draftId).url)
 

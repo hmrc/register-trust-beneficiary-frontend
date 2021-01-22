@@ -22,13 +22,13 @@ import views.html.register.beneficiaries.TaxableInfoView
 
 class TaxableInfoViewSpec extends ViewBehaviours {
 
-  "IndividualBeneficiaryInfo view" must {
+  "TaxableInfo view" must {
 
     val view = viewFor[TaxableInfoView](Some(emptyUserAnswers))
 
     val applyView = view.apply(fakeDraftId)(fakeRequest, messages)
 
-    behave like normalPageTitleWithCaption(applyView, "individualBeneficiaryInfo",
+    behave like normalPageTitleWithCaption(applyView, "beneficiaryInfo",
       "caption",
       "subheading1",
       "paragraph1",
