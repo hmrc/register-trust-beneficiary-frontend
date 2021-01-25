@@ -41,24 +41,27 @@ class OtherBeneficiaryNavigator @Inject()() extends Navigator {
   }
 
   private def yesNoNavigation(draftId: String) : PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case IncomeDiscretionYesNoPage(index) => ua =>
+    case page @ IncomeDiscretionYesNoPage(index) => ua =>
       yesNoNav(
-        ua,
-        IncomeDiscretionYesNoPage(index),
-        other.routes.AddressYesNoController.onPageLoad(index, draftId),
-        other.routes.ShareOfIncomeController.onPageLoad(index, draftId))
-    case AddressYesNoPage(index) => ua =>
+        ua = ua,
+        fromPage = page,
+        yesCall = other.routes.AddressYesNoController.onPageLoad(index, draftId),
+        noCall = other.routes.ShareOfIncomeController.onPageLoad(index, draftId)
+      )
+    case page @ AddressYesNoPage(index) => ua =>
       yesNoNav(
-        ua,
-        AddressYesNoPage(index),
-        other.routes.AddressUkYesNoController.onPageLoad(index, draftId),
-        other.routes.CheckDetailsController.onPageLoad(index, draftId))
-    case AddressUKYesNoPage(index) => ua =>
+        ua = ua,
+        fromPage = page,
+        yesCall = other.routes.AddressUkYesNoController.onPageLoad(index, draftId),
+        noCall = other.routes.CheckDetailsController.onPageLoad(index, draftId)
+      )
+    case page @ AddressUKYesNoPage(index) => ua =>
       yesNoNav(
-        ua,
-        AddressUKYesNoPage(index),
-        other.routes.UkAddressController.onPageLoad(index, draftId),
-        other.routes.NonUkAddressController.onPageLoad(index, draftId))
+        ua = ua,
+        fromPage = page,
+        yesCall = other.routes.UkAddressController.onPageLoad(index, draftId),
+        noCall = other.routes.NonUkAddressController.onPageLoad(index, draftId)
+      )
   }
 
 }

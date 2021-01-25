@@ -42,37 +42,37 @@ class CompanyBeneficiaryNavigator extends Navigator {
   }
 
   private def yesNoNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case IncomeYesNoPage(index) => ua =>
+    case page @ IncomeYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
-        fromPage = IncomeYesNoPage(index),
+        fromPage = page,
         yesCall = navigateAwayFromShareOfIncomeQuestions(draftId, index, ua.is5mldEnabled),
         noCall = rts.ShareOfIncomeController.onPageLoad(index, draftId)
       )
-    case AddressYesNoPage(index) => ua =>
+    case page @ AddressYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
-        fromPage = AddressYesNoPage(index),
+        fromPage = page,
         yesCall = rts.AddressUkYesNoController.onPageLoad(index, draftId),
         noCall = rts.CheckDetailsController.onPageLoad(index, draftId))
-    case AddressUKYesNoPage(index) => ua =>
+    case page @ AddressUKYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
-        fromPage = AddressUKYesNoPage(index),
+        fromPage = page,
         yesCall = rts.UkAddressController.onPageLoad(index, draftId),
         noCall = rts.NonUkAddressController.onPageLoad(index, draftId)
       )
-    case CountryOfResidenceYesNoPage(index) => ua =>
+    case page @ CountryOfResidenceYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
-        fromPage = CountryOfResidenceYesNoPage(index),
+        fromPage = page,
         yesCall = ntrts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId),
         noCall = rts.AddressYesNoController.onPageLoad(index, draftId)
       )
-    case CountryOfResidenceInTheUkYesNoPage(index) => ua =>
+    case page @ CountryOfResidenceInTheUkYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
-        fromPage = CountryOfResidenceInTheUkYesNoPage(index),
+        fromPage = page,
         yesCall = rts.AddressYesNoController.onPageLoad(index, draftId),
         noCall = ntrts.CountryOfResidenceController.onPageLoad(index, draftId)
       )

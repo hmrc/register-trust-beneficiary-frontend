@@ -41,38 +41,38 @@ class CharityBeneficiaryNavigator extends Navigator {
   }
 
   private def yesNoNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case AmountDiscretionYesNoPage(index) => ua =>
+    case page @ AmountDiscretionYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
-        fromPage = AmountDiscretionYesNoPage(index),
+        fromPage = page,
         yesCall = navigateAwayFromShareOfIncomeQuestions(draftId, index, ua.is5mldEnabled),
         noCall = HowMuchIncomeController.onPageLoad(index, draftId)
       )
-    case AddressYesNoPage(index) => ua =>
+    case page @ AddressYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
-        fromPage = AddressYesNoPage(index),
+        fromPage = page,
         yesCall = AddressInTheUkYesNoController.onPageLoad(index, draftId),
         noCall = CharityAnswersController.onPageLoad(index, draftId)
       )
-    case AddressInTheUkYesNoPage(index) => ua =>
+    case page @ AddressInTheUkYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
-        fromPage = AddressInTheUkYesNoPage(index),
+        fromPage = page,
         yesCall = CharityAddressUKController.onPageLoad(index, draftId),
         noCall = CharityInternationalAddressController.onPageLoad(index, draftId)
       )
-    case CountryOfResidenceYesNoPage(index) => ua =>
+    case page @ CountryOfResidenceYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
-        fromPage = CountryOfResidenceYesNoPage(index),
+        fromPage = page,
         yesCall = CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId),
         noCall = AddressYesNoController.onPageLoad(index, draftId)
       )
-    case CountryOfResidenceInTheUkYesNoPage(index) => ua =>
+    case page @ CountryOfResidenceInTheUkYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
-        fromPage = CountryOfResidenceInTheUkYesNoPage(index),
+        fromPage = page,
         yesCall = AddressYesNoController.onPageLoad(index, draftId),
         noCall = CountryOfResidenceController.onPageLoad(index, draftId)
       )

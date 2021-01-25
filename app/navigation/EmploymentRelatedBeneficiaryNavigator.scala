@@ -41,17 +41,17 @@ class EmploymentRelatedBeneficiaryNavigator extends Navigator {
   }
 
   private def yesNoNavigation(draftId: String) : PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case LargeBeneficiaryAddressYesNoPage(index) => ua =>
+    case page @ LargeBeneficiaryAddressYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
-        fromPage = LargeBeneficiaryAddressYesNoPage(index),
+        fromPage = page,
         yesCall = rts.AddressUkYesNoController.onPageLoad(index, draftId),
         noCall = rts.DescriptionController.onPageLoad(index, draftId)
       )
-    case LargeBeneficiaryAddressUKYesNoPage(index) => ua =>
+    case page @ LargeBeneficiaryAddressUKYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
-        fromPage = LargeBeneficiaryAddressUKYesNoPage(index),
+        fromPage = page,
         yesCall = rts.UkAddressController.onPageLoad(index, draftId),
         noCall = rts.NonUkAddressController.onPageLoad(index, draftId)
       )

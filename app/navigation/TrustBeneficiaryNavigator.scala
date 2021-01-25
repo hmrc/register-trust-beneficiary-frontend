@@ -52,44 +52,44 @@ class TrustBeneficiaryNavigator extends Navigator {
   }
 
   private def yesNoNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case DiscretionYesNoPage(index) => ua =>
+    case page @ DiscretionYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
-        fromPage = DiscretionYesNoPage(index),
+        fromPage = page,
         yesCall = navigateAwayFromShareOfIncomeQuestions(draftId, index, ua.is5mldEnabled),
         noCall = rts.ShareOfIncomeController.onPageLoad(index, draftId)
       )
-    case AddressUKYesNoPage(index) => ua =>
+    case page @ AddressUKYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
-        fromPage = AddressUKYesNoPage(index),
+        fromPage = page,
         yesCall = rts.AddressUKController.onPageLoad(index, draftId),
         noCall = rts.AddressInternationalController.onPageLoad(index, draftId)
       )
-    case AddressYesNoPage(index) => ua =>
+    case page @ AddressYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
-        fromPage = AddressYesNoPage(index),
+        fromPage = page,
         yesCall = rts.AddressUKYesNoController.onPageLoad(index, draftId),
         noCall = yesNoNav(
           ua = ua,
-          fromPage = AddressYesNoPage(index),
+          fromPage = page,
           yesCall = rts.AddressUKYesNoController.onPageLoad(index, draftId),
           noCall = rts.AnswersController.onPageLoad(index, draftId)
         )
       )
-    case CountryOfResidenceYesNoPage(index) => ua =>
+    case page @ CountryOfResidenceYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
-        fromPage = CountryOfResidenceYesNoPage(index),
+        fromPage = page,
         yesCall = nonTaxRts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId),
-        noCall = trustTaxableYesNo(draftId, index)(ua)
+        noCall = navigateToAnswersOrAddressQuestions(draftId, index)(ua)
       )
-    case CountryOfResidenceInTheUkYesNoPage(index) => ua =>
+    case page @ CountryOfResidenceInTheUkYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
-        fromPage = CountryOfResidenceInTheUkYesNoPage(index),
-        yesCall = trustTaxableYesNo(draftId, index)(ua),
+        fromPage = page,
+        yesCall = navigateToAnswersOrAddressQuestions(draftId, index)(ua),
         noCall = nonTaxRts.CountryOfResidenceController.onPageLoad(index, draftId)
       )
   }
@@ -102,7 +102,7 @@ class TrustBeneficiaryNavigator extends Navigator {
     }
   }
 
-  private def trustTaxableYesNo(draftId: String, index: Int): PartialFunction[ReadableUserAnswers, Call] = {
+  private def navigateToAnswersOrAddressQuestions(draftId: String, index: Int): PartialFunction[ReadableUserAnswers, Call] = {
     case ua =>
       if (is5mldNonTaxable(ua)) {
         rts.AnswersController.onPageLoad(index, draftId)
