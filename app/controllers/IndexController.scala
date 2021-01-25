@@ -40,7 +40,7 @@ class IndexController @Inject()(
 
   def onPageLoad(draftId: String): Action[AnyContent] = identify.async { implicit request =>
 
-    def redirect(userAnswers: UserAnswers, draftId: String): Future[Result] = {
+    def redirect(userAnswers: UserAnswers): Future[Result] = {
       repository.set(userAnswers) map { _ =>
         if (isAnyBeneficiaryAdded(userAnswers)) {
           Redirect(controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId))
@@ -56,16 +56,10 @@ class IndexController @Inject()(
           isTaxable =>
             repository.get(draftId) flatMap {
               case Some(userAnswers) =>
-                redirect(
-                  userAnswers.copy(is5mldEnabled = is5mldEnabled, isTaxable = isTaxable),
-                  draftId
-                )
+                redirect(userAnswers.copy(is5mldEnabled = is5mldEnabled, isTaxable = isTaxable))
               case _ =>
                 val userAnswers = UserAnswers(draftId, Json.obj(), request.identifier, is5mldEnabled, isTaxable)
-                redirect(
-                  userAnswers,
-                  draftId
-                )
+                redirect(userAnswers)
             }
         }
     }
