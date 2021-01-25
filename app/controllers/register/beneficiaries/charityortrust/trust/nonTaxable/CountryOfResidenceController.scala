@@ -17,7 +17,6 @@
 package controllers.register.beneficiaries.charityortrust.trust.nonTaxable
 
 import config.annotations.TrustBeneficiary
-import connectors.SubmissionDraftConnector
 import controllers.actions.StandardActionSets
 import controllers.actions.register.trust.NameRequiredAction
 import forms.CountryFormProvider
@@ -41,7 +40,6 @@ class CountryOfResidenceController @Inject()(
                                               standardActionSets: StandardActionSets,
                                               nameAction: NameRequiredAction,
                                               formProvider: CountryFormProvider,
-                                              submissionDraftConnector: SubmissionDraftConnector,
                                               val controllerComponents: MessagesControllerComponents,
                                               view: CountryOfResidenceView,
                                               val countryOptions: CountryOptionsNonUK
@@ -72,9 +70,8 @@ class CountryOfResidenceController @Inject()(
           value => {
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfResidencePage(index), value))
-              isTaxable      <- submissionDraftConnector.getIsTrustTaxable(draftId)
               _              <- registrationsRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(CountryOfResidencePage(index), draftId, fiveMldEnabled = true, isTaxable, updatedAnswers))
+            } yield Redirect(navigator.nextPage(CountryOfResidencePage(index), draftId, updatedAnswers))
           }
         )
     }

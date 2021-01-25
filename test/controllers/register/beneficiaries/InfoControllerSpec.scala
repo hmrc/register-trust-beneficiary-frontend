@@ -14,41 +14,28 @@
  * limitations under the License.
  */
 
-package controllers.register.beneficiaries.individualBeneficiary
+package controllers.register.beneficiaries
 
 import base.SpecBase
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
-import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.FeatureFlagService
-import views.html.register.beneficiaries.individualBeneficiary.InfoView
-import views.html.register.beneficiaries.individualBeneficiary.nonTaxable.{InfoView => NonTaxableInfoView}
-
-import scala.concurrent.Future
+import views.html.register.beneficiaries.{NonTaxableInfoView, TaxableInfoView}
 
 class InfoControllerSpec extends SpecBase {
 
-  lazy val mockFeatureFlagService = mock[FeatureFlagService]
-
-  "IndividualBeneficiaryInfo Controller" must {
+  "Info Controller" must {
 
     "return OK and the correct view for a GET with 5mld disabled" in {
 
-      when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
-        .thenReturn(Future.successful(false))
+      val userAnswers = emptyUserAnswers.copy(is5mldEnabled = false)
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(
-        bind[FeatureFlagService].toInstance(mockFeatureFlagService)
-        ).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request = FakeRequest(GET, routes.InfoController.onPageLoad(fakeDraftId).url)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[InfoView]
+      val view = application.injector.instanceOf[TaxableInfoView]
 
       status(result) mustEqual OK
 
@@ -60,13 +47,9 @@ class InfoControllerSpec extends SpecBase {
 
     "return OK and the correct view for a GET with 5mld enabled" in {
 
-      when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
-        .thenReturn(Future.successful(true))
+      val userAnswers = emptyUserAnswers.copy(is5mldEnabled = true)
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(
-          bind[FeatureFlagService].toInstance(mockFeatureFlagService)
-        ).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request = FakeRequest(GET, routes.InfoController.onPageLoad(fakeDraftId).url)
 

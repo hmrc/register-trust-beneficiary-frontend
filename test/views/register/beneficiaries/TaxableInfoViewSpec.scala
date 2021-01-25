@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package views.register.beneficiaries.individualBeneficiary
+package views.register.beneficiaries
 
 import controllers.register.beneficiaries.routes
 import views.behaviours.ViewBehaviours
-import views.html.register.beneficiaries.individualBeneficiary.InfoView
+import views.html.register.beneficiaries.TaxableInfoView
 
-class InfoViewSpec extends ViewBehaviours {
+class TaxableInfoViewSpec extends ViewBehaviours {
 
-  "IndividualBeneficiaryInfo view" must {
+  "TaxableInfo view" must {
 
-    val view = viewFor[InfoView](Some(emptyUserAnswers))
+    val view = viewFor[TaxableInfoView](Some(emptyUserAnswers))
 
     val applyView = view.apply(fakeDraftId)(fakeRequest, messages)
 
-    behave like normalPageTitleWithCaption(applyView, "individualBeneficiaryInfo",
+    behave like normalPageTitleWithCaption(applyView, "beneficiaryInfo",
       "caption",
       "subheading1",
       "paragraph1",

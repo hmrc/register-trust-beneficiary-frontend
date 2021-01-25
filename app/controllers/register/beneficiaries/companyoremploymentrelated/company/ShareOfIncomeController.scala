@@ -20,59 +20,55 @@ import config.annotations.CompanyBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.register.company.NameRequiredAction
 import forms.IncomePercentageFormProvider
-
-import javax.inject.Inject
 import navigation.Navigator
 import pages.register.beneficiaries.companyoremploymentrelated.company.IncomePage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
-import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.beneficiaries.companyoremploymentrelated.company.ShareOfIncomeView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ShareOfIncomeController @Inject()(
                                          val controllerComponents: MessagesControllerComponents,
                                          standardActionSets: StandardActionSets,
                                          formProvider: IncomePercentageFormProvider,
-                                         featureFlagService: FeatureFlagService,
                                          view: ShareOfIncomeView,
                                          repository: RegistrationsRepository,
                                          @CompanyBeneficiary navigator: Navigator,
                                          nameAction: NameRequiredAction
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[Int] = formProvider.withPrefix("companyBeneficiary.shareOfIncome")
+  private val form: Form[Int] = formProvider.withPrefix("companyBeneficiary.shareOfIncome")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
-    implicit request =>
+      implicit request =>
 
-      val preparedForm = request.userAnswers.get(IncomePage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
+        val preparedForm = request.userAnswers.get(IncomePage(index)) match {
+          case None => form
+          case Some(value) => form.fill(value)
+        }
 
-      Ok(view(preparedForm, request.beneficiaryName, index, draftId))
-  }
+        Ok(view(preparedForm, request.beneficiaryName, index, draftId))
+    }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
-    implicit request =>
+      implicit request =>
 
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, request.beneficiaryName, index, draftId))),
+        form.bindFromRequest().fold(
+          formWithErrors =>
+            Future.successful(BadRequest(view(formWithErrors, request.beneficiaryName, index, draftId))),
 
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(IncomePage(index), value))
-            is5mld         <- featureFlagService.is5mldEnabled()
-            _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(IncomePage(index), draftId, is5mld, trustTaxable = true, updatedAnswers))
-      )
-  }
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(IncomePage(index), value))
+              _              <- repository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(IncomePage(index), draftId, updatedAnswers))
+        )
+    }
 }

@@ -16,45 +16,52 @@
 
 package controllers
 
+import connectors.SubmissionDraftConnector
 import controllers.actions.register.RegistrationIdentifierAction
 import controllers.register.beneficiaries.AnyBeneficiaries
-import javax.inject.Inject
 import models.UserAnswers
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Json
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.RegistrationsRepository
+import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class IndexController @Inject()(
                                  val controllerComponents: MessagesControllerComponents,
                                  repository: RegistrationsRepository,
-                                 identify: RegistrationIdentifierAction
-                               ) extends FrontendBaseController with I18nSupport with AnyBeneficiaries {
-
-  implicit val executionContext: ExecutionContext =
-    scala.concurrent.ExecutionContext.Implicits.global
+                                 identify: RegistrationIdentifierAction,
+                                 featureFlagService: FeatureFlagService,
+                                 submissionDraftConnector: SubmissionDraftConnector
+                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with AnyBeneficiaries {
 
   def onPageLoad(draftId: String): Action[AnyContent] = identify.async { implicit request =>
 
-    repository.get(draftId) flatMap {
-      case Some(userAnswers) =>
-        Future.successful(redirect(userAnswers, draftId))
-      case _ =>
-        val userAnswers = UserAnswers(draftId, Json.obj(), request.identifier)
-        repository.set(userAnswers) map {
-          _ => redirect(userAnswers, draftId)
+    def redirect(userAnswers: UserAnswers): Future[Result] = {
+      repository.set(userAnswers) map { _ =>
+        if (isAnyBeneficiaryAdded(userAnswers)) {
+          Redirect(controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId))
+        } else {
+          Redirect(controllers.register.beneficiaries.routes.InfoController.onPageLoad(draftId))
         }
+      }
     }
-  }
 
-  private def redirect(userAnswers: UserAnswers, draftId: String) = {
-    if (isAnyBeneficiaryAdded(userAnswers)) {
-      Redirect(controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId))
-    } else {
-      Redirect(controllers.register.beneficiaries.individualBeneficiary.routes.InfoController.onPageLoad(draftId))
+    featureFlagService.is5mldEnabled() flatMap {
+      is5mldEnabled =>
+        submissionDraftConnector.getIsTrustTaxable(draftId) flatMap {
+          isTaxable =>
+            repository.get(draftId) flatMap {
+              case Some(userAnswers) =>
+                redirect(userAnswers.copy(is5mldEnabled = is5mldEnabled, isTaxable = isTaxable))
+              case _ =>
+                val userAnswers = UserAnswers(draftId, Json.obj(), request.identifier, is5mldEnabled, isTaxable)
+                redirect(userAnswers)
+            }
+        }
     }
   }
 }

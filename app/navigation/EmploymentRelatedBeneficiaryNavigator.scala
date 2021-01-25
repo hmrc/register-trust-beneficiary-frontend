@@ -25,10 +25,12 @@ import play.api.mvc.Call
 class EmploymentRelatedBeneficiaryNavigator extends Navigator {
 
   override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call =
-    nextPage(page, draftId, fiveMldEnabled = false, trustTaxable = true, userAnswers)
-
-  override def nextPage(page: Page, draftId: String, fiveMldEnabled: Boolean, trustTaxable: Boolean, userAnswers: ReadableUserAnswers): Call =
     routes(draftId)(page)(userAnswers)
+
+  private def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
+    simpleNavigation(draftId) andThen (c => (_:ReadableUserAnswers) => c) orElse
+      yesNoNavigation(draftId)
+  }
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, Call] = {
     case LargeBeneficiaryNamePage(index) => rts.AddressYesNoController.onPageLoad(index, draftId)
@@ -39,23 +41,20 @@ class EmploymentRelatedBeneficiaryNavigator extends Navigator {
   }
 
   private def yesNoNavigation(draftId: String) : PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case LargeBeneficiaryAddressYesNoPage(index) => ua =>
+    case page @ LargeBeneficiaryAddressYesNoPage(index) => ua =>
       yesNoNav(
-        ua,
-        LargeBeneficiaryAddressYesNoPage(index),
-        rts.AddressUkYesNoController.onPageLoad(index, draftId),
-        rts.DescriptionController.onPageLoad(index, draftId))
-    case LargeBeneficiaryAddressUKYesNoPage(index) => ua =>
+        ua = ua,
+        fromPage = page,
+        yesCall = rts.AddressUkYesNoController.onPageLoad(index, draftId),
+        noCall = rts.DescriptionController.onPageLoad(index, draftId)
+      )
+    case page @ LargeBeneficiaryAddressUKYesNoPage(index) => ua =>
       yesNoNav(
-        ua,
-        LargeBeneficiaryAddressUKYesNoPage(index),
-        rts.UkAddressController.onPageLoad(index, draftId),
-        rts.NonUkAddressController.onPageLoad(index, draftId))
-  }
-
-  private def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    simpleNavigation(draftId) andThen (c => (_:ReadableUserAnswers) => c) orElse
-      yesNoNavigation(draftId)
+        ua = ua,
+        fromPage = page,
+        yesCall = rts.UkAddressController.onPageLoad(index, draftId),
+        noCall = rts.NonUkAddressController.onPageLoad(index, draftId)
+      )
   }
 
 }

@@ -26,6 +26,7 @@ import controllers.register.beneficiaries.companyoremploymentrelated.employmentR
 import controllers.register.beneficiaries.companyoremploymentrelated.{routes => companyOrEmploymentRelatedRoutes}
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRts}
 import controllers.register.beneficiaries.other.{routes => otherRoutes}
+
 import javax.inject.Inject
 import models.CompanyOrEmploymentRelatedToAdd.{Company, _}
 import models.ReadableUserAnswers
@@ -37,13 +38,11 @@ import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
 import pages.register.beneficiaries.companyoremploymentrelated.CompanyOrEmploymentRelatedPage
 import play.api.mvc.Call
 import sections.beneficiaries.{ClassOfBeneficiaries, CompanyBeneficiaries, IndividualBeneficiaries, _}
+import uk.gov.hmrc.http.HttpVerbs.GET
 
 class BeneficiaryNavigator @Inject()(config: FrontendAppConfig) extends Navigator {
 
   override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call =
-    nextPage(page, draftId, fiveMldEnabled = false, trustTaxable = true, userAnswers)
-
-  override def nextPage(page: Page, draftId: String, fiveMldEnabled: Boolean, trustTaxable: Boolean, userAnswers: ReadableUserAnswers): Call =
     route(draftId, config)(page)(userAnswers)
 
   private def route(draftId: String, config: FrontendAppConfig): PartialFunction[Page, ReadableUserAnswers => Call] = {
@@ -56,7 +55,7 @@ class BeneficiaryNavigator @Inject()(config: FrontendAppConfig) extends Navigato
   }
 
   private def assetsCompletedRoute(draftId: String, config: FrontendAppConfig): Call = {
-    Call("GET", config.registrationProgressUrl(draftId))
+    Call(GET, config.registrationProgressUrl(draftId))
   }
 
   private def whatTypeOfBeneficiaryRoute(draftId: String)(userAnswers: ReadableUserAnswers): Call = {

@@ -24,6 +24,9 @@ import scala.util.{Failure, Success, Try}
 
 trait ReadableUserAnswers {
   val data: JsObject
+  val is5mldEnabled: Boolean = false
+  val isTaxable: Boolean = true
+
   def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] = {
     Reads.at(page.path).reads(data) match {
       case JsSuccess(value, _) => Some(value)
@@ -38,11 +41,11 @@ object ReadOnlyUserAnswers {
   implicit lazy val formats: OFormat[ReadOnlyUserAnswers] = Json.format[ReadOnlyUserAnswers]
 }
 
-final case class UserAnswers(
-                              draftId: String,
-                              data: JsObject = Json.obj(),
-                              internalAuthId :String
-                            ) extends ReadableUserAnswers with Logging {
+final case class UserAnswers(draftId: String,
+                             data: JsObject = Json.obj(),
+                             internalAuthId :String,
+                             override val is5mldEnabled: Boolean = false,
+                             override val isTaxable: Boolean = true) extends ReadableUserAnswers with Logging {
 
   def set[A](page: Settable[A], value: A)(implicit writes: Writes[A]): Try[UserAnswers] = {
 
@@ -95,7 +98,9 @@ object UserAnswers {
     (
       (__ \ "_id").read[String] and
         (__ \ "data").read[JsObject] and
-        (__ \ "internalId").read[String]
+        (__ \ "internalId").read[String] and
+        (__ \ "is5mldEnabled").read[Boolean] and
+        (__ \ "isTaxable").read[Boolean]
       ) (UserAnswers.apply _)
   }
 
@@ -106,7 +111,9 @@ object UserAnswers {
     (
       (__ \ "_id").write[String] and
         (__ \ "data").write[JsObject] and
-        (__ \ "internalId").write[String]
+        (__ \ "internalId").write[String] and
+        (__ \ "is5mldEnabled").write[Boolean] and
+        (__ \ "isTaxable").write[Boolean]
       ) (unlift(UserAnswers.unapply))
   }
 }

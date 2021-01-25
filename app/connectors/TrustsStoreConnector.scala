@@ -18,6 +18,7 @@ package connectors
 
 import config.FrontendAppConfig
 import models.FeatureResponse
+import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 
 import javax.inject.Inject

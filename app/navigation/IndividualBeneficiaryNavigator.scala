@@ -28,10 +28,12 @@ import play.api.mvc.Call
 class IndividualBeneficiaryNavigator extends Navigator {
 
   override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call =
-    nextPage(page, draftId, fiveMldEnabled = false, trustTaxable = true, userAnswers)
-
-  override def nextPage(page: Page, draftId: String, fiveMldEnabled: Boolean, trustTaxable: Boolean, userAnswers: ReadableUserAnswers): Call =
     routes(draftId)(page)(userAnswers)
+
+  private def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] =
+    simpleNavigation(draftId) andThen (c => (_:ReadableUserAnswers) => c) orElse
+      conditionalNavigation(draftId) orElse
+      trustTypeNavigation(draftId)
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, Call] = {
     case RoleInCompanyPage(index) => DateOfBirthYesNoController.onPageLoad(index, draftId)
@@ -47,54 +49,54 @@ class IndividualBeneficiaryNavigator extends Navigator {
   }
 
   private def conditionalNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case DateOfBirthYesNoPage(index) => ua =>
+    case page @ DateOfBirthYesNoPage(index) => ua =>
       yesNoNav(
-        ua,
-        DateOfBirthYesNoPage(index),
-        DateOfBirthController.onPageLoad(index, draftId),
-        IncomeYesNoController.onPageLoad(index, draftId)
+        ua = ua,
+        fromPage = page,
+        yesCall = DateOfBirthController.onPageLoad(index, draftId),
+        noCall = IncomeYesNoController.onPageLoad(index, draftId)
       )
-    case IncomeYesNoPage(index) => ua =>
+    case page @ IncomeYesNoPage(index) => ua =>
       yesNoNav(
-        ua,
-        IncomeYesNoPage(index),
-        NationalInsuranceYesNoController.onPageLoad(index, draftId),
-        IncomeController.onPageLoad(index, draftId)
+        ua = ua,
+        fromPage = page,
+        yesCall = NationalInsuranceYesNoController.onPageLoad(index, draftId),
+        noCall = IncomeController.onPageLoad(index, draftId)
       )
-    case NationalInsuranceYesNoPage(index) => ua =>
+    case page @ NationalInsuranceYesNoPage(index) => ua =>
       yesNoNav(
-        ua,
-        NationalInsuranceYesNoPage(index),
-        NationalInsuranceNumberController.onPageLoad(index, draftId),
-        AddressYesNoController.onPageLoad(index, draftId)
+        ua = ua,
+        fromPage = page,
+        yesCall = NationalInsuranceNumberController.onPageLoad(index, draftId),
+        noCall = AddressYesNoController.onPageLoad(index, draftId)
       )
-    case AddressYesNoPage(index) => ua =>
+    case page @ AddressYesNoPage(index) => ua =>
       yesNoNav(
-        ua,
-        AddressYesNoPage(index),
-        AddressUKYesNoController.onPageLoad(index, draftId),
-        VulnerableYesNoController.onPageLoad(index, draftId)
+        ua = ua,
+        fromPage = page,
+        yesCall = AddressUKYesNoController.onPageLoad(index, draftId),
+        noCall = VulnerableYesNoController.onPageLoad(index, draftId)
       )
-    case AddressUKYesNoPage(index) => ua =>
+    case page @ AddressUKYesNoPage(index) => ua =>
       yesNoNav(
-        ua,
-        AddressUKYesNoPage(index),
-        AddressUKController.onPageLoad(index, draftId),
-        AddressInternationalController.onPageLoad(index, draftId)
+        ua = ua,
+        fromPage = page,
+        yesCall = AddressUKController.onPageLoad(index, draftId),
+        noCall = AddressInternationalController.onPageLoad(index, draftId)
       )
-    case PassportDetailsYesNoPage(index) => ua =>
+    case page @ PassportDetailsYesNoPage(index) => ua =>
       yesNoNav(
-        ua,
-        PassportDetailsYesNoPage(index),
-        PassportDetailsController.onPageLoad(index, draftId),
-        IDCardDetailsYesNoController.onPageLoad(index, draftId)
+        ua = ua,
+        fromPage = page,
+        yesCall = PassportDetailsController.onPageLoad(index, draftId),
+        noCall = IDCardDetailsYesNoController.onPageLoad(index, draftId)
       )
-    case IDCardDetailsYesNoPage(index) => ua =>
+    case page @ IDCardDetailsYesNoPage(index) => ua =>
       yesNoNav(
-        ua,
-        IDCardDetailsYesNoPage(index),
-        IDCardDetailsController.onPageLoad(index, draftId),
-        VulnerableYesNoController.onPageLoad(index, draftId)
+        ua = ua,
+        fromPage = page,
+        yesCall = IDCardDetailsController.onPageLoad(index, draftId),
+        noCall = VulnerableYesNoController.onPageLoad(index, draftId)
       )
   }
 
@@ -105,8 +107,4 @@ class IndividualBeneficiaryNavigator extends Navigator {
     }
   }
 
-  private def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] =
-    simpleNavigation(draftId) andThen (c => (_:ReadableUserAnswers) => c) orElse
-      conditionalNavigation(draftId) orElse
-      trustTypeNavigation(draftId)
 }
