@@ -38,7 +38,10 @@ class SubmissionDraftConnector @Inject()(http: HttpClient, config : FrontendAppC
     http.GET[SubmissionDraftResponse](s"$submissionsBaseUrl/$draftId/$section")
   }
 
+  // TODO - once the trust matching journey has been fixed to set a value for trustTaxable the recover can be removed
   def getIsTrustTaxable(draftId: String)(implicit hc: HeaderCarrier, ec : ExecutionContext): Future[Boolean] = {
-    http.GET[Boolean](s"$submissionsBaseUrl/$draftId/is-trust-taxable")
+    http.GET[Boolean](s"$submissionsBaseUrl/$draftId/is-trust-taxable").recover {
+      case _ => true
+    }
   }
 }

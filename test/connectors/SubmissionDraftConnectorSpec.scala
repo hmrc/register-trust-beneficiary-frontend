@@ -147,6 +147,19 @@ class SubmissionDraftConnectorSpec extends SpecBase with MustMatchers with Optio
         val result: Boolean = Await.result(connector.getIsTrustTaxable(testDraftId), Duration.Inf)
         result.booleanValue() mustBe false
       }
+
+      "recover to true as default" in {
+        server.stubFor(
+          get(urlEqualTo(s"$submissionsUrl/$testDraftId/is-trust-taxable"))
+            .willReturn(
+              aResponse()
+                .withStatus(Status.NOT_FOUND)
+            )
+        )
+
+        val result: Boolean = Await.result(connector.getIsTrustTaxable(testDraftId), Duration.Inf)
+        result.booleanValue() mustBe true
+      }
     }
   }
 }
