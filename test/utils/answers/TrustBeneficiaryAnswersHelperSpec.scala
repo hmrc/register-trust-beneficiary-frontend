@@ -17,11 +17,11 @@
 package utils.answers
 
 import base.SpecBase
-import controllers.register.beneficiaries.charityortrust.trust.nonTaxable.{routes => ntRts}
+import controllers.register.beneficiaries.charityortrust.trust.mld5.{routes => ntRts}
 import controllers.register.beneficiaries.charityortrust.trust.{routes => rts}
 import models.core.pages.{InternationalAddress, UKAddress}
 import pages.register.beneficiaries.charityortrust.trust._
-import pages.register.beneficiaries.charityortrust.trust.nonTaxable.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
+import pages.register.beneficiaries.charityortrust.trust.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import play.twirl.api.Html
 import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}

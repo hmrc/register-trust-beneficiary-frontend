@@ -16,12 +16,12 @@
 
 package navigation
 
-import controllers.register.beneficiaries.charityortrust.charity.nonTaxable.routes._
+import controllers.register.beneficiaries.charityortrust.charity.mld5.routes._
 import controllers.register.beneficiaries.charityortrust.charity.routes._
 import models.ReadableUserAnswers
 import pages.Page
 import pages.register.beneficiaries.charityortrust.charity._
-import pages.register.beneficiaries.charityortrust.charity.nonTaxable._
+import pages.register.beneficiaries.charityortrust.charity.mld5._
 import play.api.mvc.Call
 
 class CharityBeneficiaryNavigator extends Navigator {

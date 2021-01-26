@@ -17,11 +17,11 @@
 package utils.answers
 
 import controllers.register.beneficiaries.charityortrust.charity.{routes => rts}
-import controllers.register.beneficiaries.charityortrust.charity.nonTaxable.{routes => ntRts}
+import controllers.register.beneficiaries.charityortrust.charity.mld5.{routes => ntRts}
 import javax.inject.Inject
 import models.UserAnswers
 import pages.register.beneficiaries.charityortrust.charity._
-import pages.register.beneficiaries.charityortrust.charity.nonTaxable._
+import pages.register.beneficiaries.charityortrust.charity.mld5._
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import sections.beneficiaries.CharityBeneficiaries

@@ -16,11 +16,11 @@
 
 package utils.answers
 
-import controllers.register.beneficiaries.charityortrust.trust.nonTaxable.{routes => ntRoutes}
+import controllers.register.beneficiaries.charityortrust.trust.mld5.{routes => ntRoutes}
 import controllers.register.beneficiaries.charityortrust.trust.routes
 import models.UserAnswers
 import pages.register.beneficiaries.charityortrust.trust._
-import pages.register.beneficiaries.charityortrust.trust.nonTaxable.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
+import pages.register.beneficiaries.charityortrust.trust.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import sections.beneficiaries.TrustBeneficiaries

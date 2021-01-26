@@ -20,7 +20,7 @@ import base.SpecBase
 import models.core.pages.UKAddress
 import models.registration.pages.CharityOrTrust.Charity
 import pages.register.beneficiaries.charityortrust._
-import pages.register.beneficiaries.charityortrust.charity.nonTaxable.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
+import pages.register.beneficiaries.charityortrust.charity.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import pages.register.beneficiaries.charityortrust.charity.{AddressInTheUkYesNoPage, AddressYesNoPage, AmountDiscretionYesNoPage, CharityAddressUKPage, CharityNamePage, HowMuchIncomePage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._

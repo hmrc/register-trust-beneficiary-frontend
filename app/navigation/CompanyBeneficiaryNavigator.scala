@@ -16,12 +16,12 @@
 
 package navigation
 
-import controllers.register.beneficiaries.companyoremploymentrelated.company.nonTaxable.{routes => ntrts}
+import controllers.register.beneficiaries.companyoremploymentrelated.company.mld5.{routes => ntrts}
 import controllers.register.beneficiaries.companyoremploymentrelated.company.{routes => rts}
 import models.ReadableUserAnswers
 import pages.Page
 import pages.register.beneficiaries.companyoremploymentrelated.company._
-import pages.register.beneficiaries.companyoremploymentrelated.company.nonTaxable._
+import pages.register.beneficiaries.companyoremploymentrelated.company.mld5._
 import play.api.mvc.Call
 
 class CompanyBeneficiaryNavigator extends Navigator {
