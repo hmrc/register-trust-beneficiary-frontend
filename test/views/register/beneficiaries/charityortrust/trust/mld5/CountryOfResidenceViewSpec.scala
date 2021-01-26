@@ -26,7 +26,7 @@ import views.html.register.beneficiaries.charityortrust.trust.mld5.CountryOfResi
 
 class CountryOfResidenceViewSpec extends SelectCountryViewBehaviours {
 
-  val prefix = "trust.nonTaxable.countryOfResidence"
+  val prefix = "trust.5mld.countryOfResidence"
   val index = 0
   val trustName = "Test"
 

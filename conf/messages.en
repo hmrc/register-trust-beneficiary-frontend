@@ -317,39 +317,39 @@ beneficiaryInfo.paragraph7 = Do not include named or specific employees such as 
 beneficiaryInfo.subheading5 = Other beneficiaries
 beneficiaryInfo.paragraph8 = You need to give a short description for beneficiaries that do not fall into the other beneficiary types. For example, pets.
 
-beneficiaryInfo.nonTaxable.title = Information you need to register a beneficiary
-beneficiaryInfo.nonTaxable.heading = Information you need to register a beneficiary
-beneficiaryInfo.nonTaxable.caption = Beneficiaries
-beneficiaryInfo.nonTaxable.caption.hidden = This section is
-beneficiaryInfo.nonTaxable.subheading1 = Beneficiaries that are an Individual
-beneficiaryInfo.nonTaxable.paragraph1 = For individuals named in the trust deed, tell us their name. If you know more details, tell us their:
-beneficiaryInfo.nonTaxable.bulletpoint1 = date of birth
-beneficiaryInfo.nonTaxable.bulletpoint2 = country of nationality
-beneficiaryInfo.nonTaxable.bulletpoint3 = country of residence
-beneficiaryInfo.nonTaxable.paragraph2 = If the trust is for the employees of a business, tell us their roles in the business. For example, a director or other named employee.
-beneficiaryInfo.nonTaxable.paragraph3 = You also need to tell us if any of the beneficiaries are legally incapable at the time of registration. This is when the individual does not have mental capacity if they cannot understand information and make decisions about the trust due to a mental illness, learning disability, dementia or related condition, or they cannot communicate.
-beneficiaryInfo.nonTaxable.subheading2 = Class of beneficiaries
-beneficiaryInfo.nonTaxable.paragraph4 = You need to give a short description for individual beneficiaries that cannot be identified. For example, children not born yet, future grandchildren and great grandchildren.
-beneficiaryInfo.nonTaxable.subheading3 = Beneficiaries that are a charity or trust
-beneficiaryInfo.nonTaxable.paragraph5 = Tell us their name. If you know more details, tell us their country of residence.
-beneficiaryInfo.nonTaxable.subheading4 = Beneficiaries that are a company or employment related
-beneficiaryInfo.nonTaxable.paragraph6 = For companies or employees named in the trust deed, tell us the name of the company or employment-related trust. If you know more details, tell us their:
-beneficiaryInfo.nonTaxable.bulletpoint4 = country of residence
-beneficiaryInfo.nonTaxable.bulletpoint5 = how many beneficiaries there are
-beneficiaryInfo.nonTaxable.bulletpoint6 = a short description of the beneficiaries: for example, employees and their children, spouses or widows
-beneficiaryInfo.nonTaxable.paragraph7 = Do not include named or specific employees such as directors. They must be listed as individual beneficiaries.
-beneficiaryInfo.nonTaxable.paragraph8 = Tell us whether the trustees can decide how much income the business or employment trust can get.
+beneficiaryInfo.5mld.title = Information you need to register a beneficiary
+beneficiaryInfo.5mld.heading = Information you need to register a beneficiary
+beneficiaryInfo.5mld.caption = Beneficiaries
+beneficiaryInfo.5mld.caption.hidden = This section is
+beneficiaryInfo.5mld.subheading1 = Beneficiaries that are an Individual
+beneficiaryInfo.5mld.paragraph1 = For individuals named in the trust deed, tell us their name. If you know more details, tell us their:
+beneficiaryInfo.5mld.bulletpoint1 = date of birth
+beneficiaryInfo.5mld.bulletpoint2 = country of nationality
+beneficiaryInfo.5mld.bulletpoint3 = country of residence
+beneficiaryInfo.5mld.paragraph2 = If the trust is for the employees of a business, tell us their roles in the business. For example, a director or other named employee.
+beneficiaryInfo.5mld.paragraph3 = You also need to tell us if any of the beneficiaries are legally incapable at the time of registration. This is when the individual does not have mental capacity if they cannot understand information and make decisions about the trust due to a mental illness, learning disability, dementia or related condition, or they cannot communicate.
+beneficiaryInfo.5mld.subheading2 = Class of beneficiaries
+beneficiaryInfo.5mld.paragraph4 = You need to give a short description for individual beneficiaries that cannot be identified. For example, children not born yet, future grandchildren and great grandchildren.
+beneficiaryInfo.5mld.subheading3 = Beneficiaries that are a charity or trust
+beneficiaryInfo.5mld.paragraph5 = Tell us their name. If you know more details, tell us their country of residence.
+beneficiaryInfo.5mld.subheading4 = Beneficiaries that are a company or employment related
+beneficiaryInfo.5mld.paragraph6 = For companies or employees named in the trust deed, tell us the name of the company or employment-related trust. If you know more details, tell us their:
+beneficiaryInfo.5mld.bulletpoint4 = country of residence
+beneficiaryInfo.5mld.bulletpoint5 = how many beneficiaries there are
+beneficiaryInfo.5mld.bulletpoint6 = a short description of the beneficiaries: for example, employees and their children, spouses or widows
+beneficiaryInfo.5mld.paragraph7 = Do not include named or specific employees such as directors. They must be listed as individual beneficiaries.
+beneficiaryInfo.5mld.paragraph8 = Tell us whether the trustees can decide how much income the business or employment trust can get.
 
-beneficiaryInfo.nonTaxable.details = What we mean by country of residence
-beneficiaryInfo.nonTaxable.details.subheading1 = Individual
-beneficiaryInfo.nonTaxable.details.paragraph1 = This is usually the country where the beneficiary lives and works most of the time during the tax year. You can check the status of their residency through the Statutory Residence Test (SRT).
-beneficiaryInfo.nonTaxable.details.subheading2 = Company or charity
-beneficiaryInfo.nonTaxable.details.paragraph2 = This is usually where the company or charity is registered (incorporated). For example, the company has UK residency if it is registered with Companies House.
-beneficiaryInfo.nonTaxable.details.subheading3 = Trust
-beneficiaryInfo.nonTaxable.details.paragraph3 = This is usually based on the residency of the trustees and settlors within that trust.
+beneficiaryInfo.5mld.details = What we mean by country of residence
+beneficiaryInfo.5mld.details.subheading1 = Individual
+beneficiaryInfo.5mld.details.paragraph1 = This is usually the country where the beneficiary lives and works most of the time during the tax year. You can check the status of their residency through the Statutory Residence Test (SRT).
+beneficiaryInfo.5mld.details.subheading2 = Company or charity
+beneficiaryInfo.5mld.details.paragraph2 = This is usually where the company or charity is registered (incorporated). For example, the company has UK residency if it is registered with Companies House.
+beneficiaryInfo.5mld.details.subheading3 = Trust
+beneficiaryInfo.5mld.details.paragraph3 = This is usually based on the residency of the trustees and settlors within that trust.
 
-beneficiaryInfo.nonTaxable.subheading5 = Other beneficiaries
-beneficiaryInfo.nonTaxable.paragraph9 = You need to give a short description for beneficiaries that do not fall into the other beneficiary types. For example, pets. If you know, tell us their country of residence.
+beneficiaryInfo.5mld.subheading5 = Other beneficiaries
+beneficiaryInfo.5mld.paragraph9 = You need to give a short description for beneficiaries that do not fall into the other beneficiary types. For example, pets. If you know, tell us their country of residence.
 
 individualBeneficiaryAnswers.title = Check beneficiary details
 individualBeneficiaryAnswers.heading = Check beneficiary details
@@ -407,23 +407,23 @@ trustBeneficiary.checkDetails.utr.p3 = When asked for the date {0} was added or 
 
 trustBeneficiary.name.default = Name
 
-trust.nonTaxable.countryOfResidenceYesNo.title = Do you know the trust beneficiary’s country of residence?
-trust.nonTaxable.countryOfResidenceYesNo.heading = Do you know {0}’s country of residence?
-trust.nonTaxable.countryOfResidenceYesNo.checkYourAnswersLabel = Do you know {0}’s country of residence?
-trust.nonTaxable.countryOfResidenceYesNo.error.required = Select yes if you know the trust beneficiary’s country of residence
-trust.nonTaxable.countryOfResidenceYesNo.hint = The trust’s country of residence is usually based on the residency of the trustees and settlors within that trust.
+trust.5mld.countryOfResidenceYesNo.title = Do you know the trust beneficiary’s country of residence?
+trust.5mld.countryOfResidenceYesNo.heading = Do you know {0}’s country of residence?
+trust.5mld.countryOfResidenceYesNo.checkYourAnswersLabel = Do you know {0}’s country of residence?
+trust.5mld.countryOfResidenceYesNo.error.required = Select yes if you know the trust beneficiary’s country of residence
+trust.5mld.countryOfResidenceYesNo.hint = The trust’s country of residence is usually based on the residency of the trustees and settlors within that trust.
 
-trust.nonTaxable.countryOfResidenceInTheUkYesNo.title = Does trust beneficiary have UK residency?
-trust.nonTaxable.countryOfResidenceInTheUkYesNo.heading = Does {0} have UK residency?
-trust.nonTaxable.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = Does {0} have UK residency?
-trust.nonTaxable.countryOfResidenceInTheUkYesNo.error.required = Select yes if the trust beneficiary has UK residency
+trust.5mld.countryOfResidenceInTheUkYesNo.title = Does trust beneficiary have UK residency?
+trust.5mld.countryOfResidenceInTheUkYesNo.heading = Does {0} have UK residency?
+trust.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = Does {0} have UK residency?
+trust.5mld.countryOfResidenceInTheUkYesNo.error.required = Select yes if the trust beneficiary has UK residency
 
-trust.nonTaxable.countryOfResidence.title = What is the trust beneficiary’s country of residence?
-trust.nonTaxable.countryOfResidence.heading = What is {0}’s country of residence?
-trust.nonTaxable.countryOfResidence.checkYourAnswersLabel = What is {0}’s country of residence?
-trust.nonTaxable.countryOfResidence.error.required = Enter a country
-trust.nonTaxable.countryOfResidence.error.length = The country of residence must be 100 characters or less
-trust.nonTaxable.countryOfResidence.error.invalidCharacters = The country of residence must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
+trust.5mld.countryOfResidence.title = What is the trust beneficiary’s country of residence?
+trust.5mld.countryOfResidence.heading = What is {0}’s country of residence?
+trust.5mld.countryOfResidence.checkYourAnswersLabel = What is {0}’s country of residence?
+trust.5mld.countryOfResidence.error.required = Enter a country
+trust.5mld.countryOfResidence.error.length = The country of residence must be 100 characters or less
+trust.5mld.countryOfResidence.error.invalidCharacters = The country of residence must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
 
 otherBeneficiaryDescription.checkYourAnswersLabel = What is the description of the beneficiary?
 otherBeneficiaryShareOfIncomeYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
@@ -577,23 +577,23 @@ charityOrTrust.trust = Trust
 charity.answers.title = Check charity beneficiary details
 charity.answers.heading = Check charity beneficiary details
 
-charity.nonTaxable.countryOfResidenceYesNo.title = Do you know the charity beneficiary’s country of residence?
-charity.nonTaxable.countryOfResidenceYesNo.heading = Do you know {0}’s country of residence?
-charity.nonTaxable.countryOfResidenceYesNo.checkYourAnswersLabel = Do you know {0}’s country of residence?
-charity.nonTaxable.countryOfResidenceYesNo.error.required = Select yes if you know the charity beneficiary’s country of residence
-charity.nonTaxable.countryOfResidenceYesNo.hint = The country of residence is usually where the charity is registered.
+charity.5mld.countryOfResidenceYesNo.title = Do you know the charity beneficiary’s country of residence?
+charity.5mld.countryOfResidenceYesNo.heading = Do you know {0}’s country of residence?
+charity.5mld.countryOfResidenceYesNo.checkYourAnswersLabel = Do you know {0}’s country of residence?
+charity.5mld.countryOfResidenceYesNo.error.required = Select yes if you know the charity beneficiary’s country of residence
+charity.5mld.countryOfResidenceYesNo.hint = The country of residence is usually where the charity is registered.
 
-charity.nonTaxable.countryOfResidenceInTheUkYesNo.title = Does charity beneficiary have UK residency?
-charity.nonTaxable.countryOfResidenceInTheUkYesNo.heading = Does {0} have UK residency?
-charity.nonTaxable.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = Does {0} have UK residency?
-charity.nonTaxable.countryOfResidenceInTheUkYesNo.error.required = Select yes if the charity beneficiary has UK residency
+charity.5mld.countryOfResidenceInTheUkYesNo.title = Does charity beneficiary have UK residency?
+charity.5mld.countryOfResidenceInTheUkYesNo.heading = Does {0} have UK residency?
+charity.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = Does {0} have UK residency?
+charity.5mld.countryOfResidenceInTheUkYesNo.error.required = Select yes if the charity beneficiary has UK residency
 
-charity.nonTaxable.countryOfResidence.title = What is the charity beneficiary’s country of residence?
-charity.nonTaxable.countryOfResidence.heading = What is {0}’s country of residence?
-charity.nonTaxable.countryOfResidence.checkYourAnswersLabel = What is {0}’s country of residence?
-charity.nonTaxable.countryOfResidence.error.required = Enter a country
-charity.nonTaxable.countryOfResidence.error.length = The country of residence must be 100 characters or less
-charity.nonTaxable.countryOfResidence.error.invalidCharacters = The country of residence must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
+charity.5mld.countryOfResidence.title = What is the charity beneficiary’s country of residence?
+charity.5mld.countryOfResidence.heading = What is {0}’s country of residence?
+charity.5mld.countryOfResidence.checkYourAnswersLabel = What is {0}’s country of residence?
+charity.5mld.countryOfResidence.error.required = Enter a country
+charity.5mld.countryOfResidence.error.length = The country of residence must be 100 characters or less
+charity.5mld.countryOfResidence.error.invalidCharacters = The country of residence must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
 
 charityBeneficiary.name.default = Name
 
@@ -650,23 +650,23 @@ companyBeneficiary.ukAddress.checkYourAnswersLabel = What is {0}’s address?
 
 companyBeneficiary.nonUkAddress.checkYourAnswersLabel = What is {0}’s address?
 
-companyBeneficiary.nonTaxable.countryOfResidenceYesNo.title = Do you know the company beneficiary’s country of residence?
-companyBeneficiary.nonTaxable.countryOfResidenceYesNo.heading = Do you know {0}’s country of residence?
-companyBeneficiary.nonTaxable.countryOfResidenceYesNo.checkYourAnswersLabel = Do you know {0}’s country of residence?
-companyBeneficiary.nonTaxable.countryOfResidenceYesNo.error.required = Select yes if you know the company beneficiary’s country of residence
-companyBeneficiary.nonTaxable.countryOfResidenceYesNo.hint = The country of residence is usually where the company is registered.
+companyBeneficiary.5mld.countryOfResidenceYesNo.title = Do you know the company beneficiary’s country of residence?
+companyBeneficiary.5mld.countryOfResidenceYesNo.heading = Do you know {0}’s country of residence?
+companyBeneficiary.5mld.countryOfResidenceYesNo.checkYourAnswersLabel = Do you know {0}’s country of residence?
+companyBeneficiary.5mld.countryOfResidenceYesNo.error.required = Select yes if you know the company beneficiary’s country of residence
+companyBeneficiary.5mld.countryOfResidenceYesNo.hint = The country of residence is usually where the company is registered.
 
-companyBeneficiary.nonTaxable.countryOfResidenceInTheUkYesNo.title = Does company beneficiary have UK residency?
-companyBeneficiary.nonTaxable.countryOfResidenceInTheUkYesNo.heading = Does {0} have UK residency?
-companyBeneficiary.nonTaxable.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = Does {0} have UK residency?
-companyBeneficiary.nonTaxable.countryOfResidenceInTheUkYesNo.error.required = Select yes if the company beneficiary has UK residency
+companyBeneficiary.5mld.countryOfResidenceInTheUkYesNo.title = Does company beneficiary have UK residency?
+companyBeneficiary.5mld.countryOfResidenceInTheUkYesNo.heading = Does {0} have UK residency?
+companyBeneficiary.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = Does {0} have UK residency?
+companyBeneficiary.5mld.countryOfResidenceInTheUkYesNo.error.required = Select yes if the company beneficiary has UK residency
 
-companyBeneficiary.nonTaxable.countryOfResidence.title = What is the company beneficiary’s country of residence?
-companyBeneficiary.nonTaxable.countryOfResidence.heading = What is {0}’s country of residence?
-companyBeneficiary.nonTaxable.countryOfResidence.checkYourAnswersLabel = What is {0}’s country of residence?
-companyBeneficiary.nonTaxable.countryOfResidence.error.required = Enter a country
-companyBeneficiary.nonTaxable.countryOfResidence.error.length = The country of residence must be 100 characters or less
-companyBeneficiary.nonTaxable.countryOfResidence.error.invalidCharacters = The country of residence must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
+companyBeneficiary.5mld.countryOfResidence.title = What is the company beneficiary’s country of residence?
+companyBeneficiary.5mld.countryOfResidence.heading = What is {0}’s country of residence?
+companyBeneficiary.5mld.countryOfResidence.checkYourAnswersLabel = What is {0}’s country of residence?
+companyBeneficiary.5mld.countryOfResidence.error.required = Enter a country
+companyBeneficiary.5mld.countryOfResidence.error.length = The country of residence must be 100 characters or less
+companyBeneficiary.5mld.countryOfResidence.error.invalidCharacters = The country of residence must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
 
 
 companyBeneficiary.checkDetails.title = Check company beneficiary details

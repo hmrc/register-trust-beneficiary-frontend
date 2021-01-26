@@ -49,7 +49,7 @@ class CountryOfResidenceController @Inject()(
 
   private def actions(draftId: String) = standardActions.identifiedUserWithData(draftId)
 
-  private val form: Form[String] = formProvider.withPrefix("companyBeneficiary.nonTaxable.countryOfResidence")
+  private val form: Form[String] = formProvider.withPrefix("companyBeneficiary.5mld.countryOfResidence")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {

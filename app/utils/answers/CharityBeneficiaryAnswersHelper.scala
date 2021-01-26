@@ -70,7 +70,7 @@ class CharityBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
   def countryOfResidenceYesNo(index: Int): Option[AnswerRow] = userAnswers.get(CountryOfResidenceYesNoPage(index)) map {
     x =>
       AnswerRow(
-        "charity.nonTaxable.countryOfResidenceYesNo.checkYourAnswersLabel",
+        "charity.5mld.countryOfResidenceYesNo.checkYourAnswersLabel",
         yesOrNo(x),
         Some(ntRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId).url),
         charityBeneficiaryName(index, userAnswers),
@@ -81,7 +81,7 @@ class CharityBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
   def countryOfResidenceInUkYesNo(index: Int): Option[AnswerRow] = userAnswers.get(CountryOfResidenceInTheUkYesNoPage(index)) map {
     x =>
       AnswerRow(
-        "charity.nonTaxable.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel",
+        "charity.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel",
         yesOrNo(x),
         Some(ntRts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId).url),
         charityBeneficiaryName(index, userAnswers),
@@ -93,7 +93,7 @@ class CharityBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
     case false => userAnswers.get(CountryOfResidencePage(index)) map {
       x =>
         AnswerRow(
-          "charity.nonTaxable.countryOfResidence.checkYourAnswersLabel",
+          "charity.5mld.countryOfResidence.checkYourAnswersLabel",
           HtmlFormat.escape(country(x, countryOptions)),
           Some(ntRts.CountryOfResidenceController.onPageLoad(index, draftId).url),
           canEdit = canEdit

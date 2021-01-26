@@ -24,7 +24,7 @@
 @(form: Form[_], draftId: String, index: Int, charityName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("charity.nonTaxable.countryOfResidenceInTheUkYesNo.title")}"
+    title = s"${errorPrefix(form)}${messages("charity.5mld.countryOfResidenceInTheUkYesNo.title")}"
 ) {
 
     @formHelper(action = CountryOfResidenceInTheUkYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
@@ -35,7 +35,7 @@
 
         @components.input_yes_no(
             field = form("value"),
-            label = messages("charity.nonTaxable.countryOfResidenceInTheUkYesNo.heading", charityName),
+            label = messages("charity.5mld.countryOfResidenceInTheUkYesNo.heading", charityName),
             legendClass = Some("heading-large"),
             legendAsHeading = true
         )

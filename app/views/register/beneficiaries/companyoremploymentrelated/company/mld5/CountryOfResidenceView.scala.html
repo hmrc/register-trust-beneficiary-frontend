@@ -25,7 +25,7 @@
 @(form: Form[_], countryOptions: Seq[InputOption], draftId: String, index: Int, trustName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("companyBeneficiary.nonTaxable.countryOfResidence.title")}"
+    title = s"${errorPrefix(form)}${messages("companyBeneficiary.5mld.countryOfResidence.title")}"
 ) {
 
     @formHelper(action = CountryOfResidenceController.onSubmit(index, draftId), 'autoComplete -> "off") {
@@ -35,7 +35,7 @@
         @components.error_summary(form.errors)
 
         @components.select(field = form("value"),
-            label = messages("companyBeneficiary.nonTaxable.countryOfResidence.heading", trustName),
+            label = messages("companyBeneficiary.5mld.countryOfResidence.heading", trustName),
             labelClasses = Set("heading-large"),
             labelAsHeading = true,
             options = countryOptions,

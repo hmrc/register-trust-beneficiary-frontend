@@ -34,7 +34,7 @@ import views.html.register.beneficiaries.companyoremploymentrelated.company.mld5
 class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
 
   val formProvider = new CountryFormProvider()
-  val form: Form[String] = formProvider.withPrefix("companyBeneficiary.nonTaxable.countryOfResidence")
+  val form: Form[String] = formProvider.withPrefix("companyBeneficiary.5mld.countryOfResidence")
   val index: Int = 0
   val companyName = "Test"
 

@@ -43,7 +43,7 @@ class CountryOfResidenceInTheUkYesNoController @Inject()(
                                                nameAction: NameRequiredAction
                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form: Form[Boolean] = formProvider.withPrefix("companyBeneficiary.nonTaxable.countryOfResidenceInTheUkYesNo")
+  private val form: Form[Boolean] = formProvider.withPrefix("companyBeneficiary.5mld.countryOfResidenceInTheUkYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {

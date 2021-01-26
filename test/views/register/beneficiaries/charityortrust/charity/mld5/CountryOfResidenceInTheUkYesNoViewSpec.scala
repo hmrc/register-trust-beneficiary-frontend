@@ -24,7 +24,7 @@ import views.html.register.beneficiaries.charityortrust.charity.mld5.CountryOfRe
 
 class CountryOfResidenceInTheUkYesNoViewSpec extends YesNoViewBehaviours {
 
-  val prefix = "charity.nonTaxable.countryOfResidenceInTheUkYesNo"
+  val prefix = "charity.5mld.countryOfResidenceInTheUkYesNo"
   val index = 0
   val charityName = "Test"
 

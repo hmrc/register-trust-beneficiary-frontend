@@ -28,7 +28,7 @@ class NonTaxableInfoViewSpec extends ViewBehaviours {
 
     val applyView = view.apply(fakeDraftId)(fakeRequest, messages)
 
-    behave like normalPageTitleWithCaption(applyView, "beneficiaryInfo.nonTaxable",
+    behave like normalPageTitleWithCaption(applyView, "beneficiaryInfo.5mld",
       "caption",
       "subheading1",
       "paragraph1",
