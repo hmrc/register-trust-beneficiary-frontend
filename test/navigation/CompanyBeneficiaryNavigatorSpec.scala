@@ -18,12 +18,12 @@ package navigation
 
 import base.SpecBase
 import controllers.register.beneficiaries.companyoremploymentrelated.company.{routes => companyRoutes}
-import controllers.register.beneficiaries.companyoremploymentrelated.company.nonTaxable.{routes => ntrts}
+import controllers.register.beneficiaries.companyoremploymentrelated.company.mld5.{routes => ntrts}
 import generators.Generators
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.register.beneficiaries.companyoremploymentrelated.company.nonTaxable._
+import pages.register.beneficiaries.companyoremploymentrelated.company.mld5._
 import pages.register.beneficiaries.companyoremploymentrelated.company._
 
 class CompanyBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {

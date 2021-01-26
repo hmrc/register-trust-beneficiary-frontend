@@ -23,18 +23,18 @@
 @(draftId: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("beneficiaryInfo.nonTaxable.title")
+    title = messages("beneficiaryInfo.5mld.title")
     ) {
 
     @components.back_link()
 
-    @components.heading_with_caption("beneficiaryInfo.nonTaxable")
+    @components.heading_with_caption("beneficiaryInfo.5mld")
 
-    <h2>@messages("beneficiaryInfo.nonTaxable.subheading1")</h2>
+    <h2>@messages("beneficiaryInfo.5mld.subheading1")</h2>
 
-    <p>@messages("beneficiaryInfo.nonTaxable.paragraph1")</p>
+    <p>@messages("beneficiaryInfo.5mld.paragraph1")</p>
 
-    @components.bullet_list("beneficiaryInfo.nonTaxable",
+    @components.bullet_list("beneficiaryInfo.5mld",
         List(
             "bulletpoint1",
             "bulletpoint2",
@@ -42,23 +42,23 @@
         )
     )
 
-    <p>@messages("beneficiaryInfo.nonTaxable.paragraph2")</p>
+    <p>@messages("beneficiaryInfo.5mld.paragraph2")</p>
 
-    <p>@messages("beneficiaryInfo.nonTaxable.paragraph3")</p>
+    <p>@messages("beneficiaryInfo.5mld.paragraph3")</p>
 
-    <h2>@messages("beneficiaryInfo.nonTaxable.subheading2")</h2>
+    <h2>@messages("beneficiaryInfo.5mld.subheading2")</h2>
 
-    <p>@messages("beneficiaryInfo.nonTaxable.paragraph4")</p>
+    <p>@messages("beneficiaryInfo.5mld.paragraph4")</p>
 
-    <h2>@messages("beneficiaryInfo.nonTaxable.subheading3")</h2>
+    <h2>@messages("beneficiaryInfo.5mld.subheading3")</h2>
 
-    <p>@messages("beneficiaryInfo.nonTaxable.paragraph5")</p>
+    <p>@messages("beneficiaryInfo.5mld.paragraph5")</p>
 
-    <h2>@messages("beneficiaryInfo.nonTaxable.subheading4")</h2>
+    <h2>@messages("beneficiaryInfo.5mld.subheading4")</h2>
 
-    <p>@messages("beneficiaryInfo.nonTaxable.paragraph6")</p>
+    <p>@messages("beneficiaryInfo.5mld.paragraph6")</p>
 
-    @components.bullet_list("beneficiaryInfo.nonTaxable",
+    @components.bullet_list("beneficiaryInfo.5mld",
         List(
             "bulletpoint4",
             "bulletpoint5",
@@ -66,29 +66,29 @@
         )
     )
 
-    <p>@messages("beneficiaryInfo.nonTaxable.paragraph7")</p>
+    <p>@messages("beneficiaryInfo.5mld.paragraph7")</p>
 
-    <p>@messages("beneficiaryInfo.nonTaxable.paragraph8")</p>
+    <p>@messages("beneficiaryInfo.5mld.paragraph8")</p>
 
     <details class="govuk-details" data-module="govuk-details">
         <summary class="govuk-details__summary">
         <span class="govuk-details__summary-text">
-          @messages("beneficiaryInfo.nonTaxable.details")
+          @messages("beneficiaryInfo.5mld.details")
         </span>
         </summary>
         <div class="govuk-details__text">
-            <h3>@messages("beneficiaryInfo.nonTaxable.details.subheading1")</h3>
-            <p>@messages("beneficiaryInfo.nonTaxable.details.paragraph1")</p>
-            <h3>@messages("beneficiaryInfo.nonTaxable.details.subheading2")</h3>
-            <p>@messages("beneficiaryInfo.nonTaxable.details.paragraph2")</p>
-            <h3>@messages("beneficiaryInfo.nonTaxable.details.subheading3")</h3>
-            <p>@messages("beneficiaryInfo.nonTaxable.details.paragraph3")</p>
+            <h3>@messages("beneficiaryInfo.5mld.details.subheading1")</h3>
+            <p>@messages("beneficiaryInfo.5mld.details.paragraph1")</p>
+            <h3>@messages("beneficiaryInfo.5mld.details.subheading2")</h3>
+            <p>@messages("beneficiaryInfo.5mld.details.paragraph2")</p>
+            <h3>@messages("beneficiaryInfo.5mld.details.subheading3")</h3>
+            <p>@messages("beneficiaryInfo.5mld.details.paragraph3")</p>
         </div>
     </details>
 
-    <h2>@messages("beneficiaryInfo.nonTaxable.subheading5")</h2>
+    <h2>@messages("beneficiaryInfo.5mld.subheading5")</h2>
 
-    <p>@messages("beneficiaryInfo.nonTaxable.paragraph9")</p>
+    <p>@messages("beneficiaryInfo.5mld.paragraph9")</p>
 
     @components.button_link(messages("site.onlyContinue"), WhatTypeOfBeneficiaryController.onPageLoad(draftId).url)
 

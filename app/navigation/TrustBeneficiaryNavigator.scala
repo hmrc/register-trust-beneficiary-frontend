@@ -16,11 +16,11 @@
 
 package navigation
 
-import controllers.register.beneficiaries.charityortrust.trust.nonTaxable.{routes => nonTaxRts}
+import controllers.register.beneficiaries.charityortrust.trust.mld5.{routes => nonTaxRts}
 import controllers.register.beneficiaries.charityortrust.trust.{routes => rts}
 import models.ReadableUserAnswers
 import pages.Page
-import pages.register.beneficiaries.charityortrust.trust.nonTaxable.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
+import pages.register.beneficiaries.charityortrust.trust.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import pages.register.beneficiaries.charityortrust.trust.{NamePage, _}
 import play.api.mvc.Call
 

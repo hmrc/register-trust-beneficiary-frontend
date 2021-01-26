@@ -21,7 +21,7 @@ import generators.Generators
 import models.core.pages.{InternationalAddress, UKAddress}
 import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.beneficiaries.companyoremploymentrelated.company._
-import pages.register.beneficiaries.companyoremploymentrelated.company.nonTaxable._
+import pages.register.beneficiaries.companyoremploymentrelated.company.mld5._
 
 class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers with OptionValues with Generators {
 

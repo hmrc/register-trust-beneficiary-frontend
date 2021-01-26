@@ -19,7 +19,7 @@ package controllers.register.beneficiaries.charityortrust.trust
 import base.SpecBase
 import models.core.pages.UKAddress
 import pages.register.beneficiaries.charityortrust.trust._
-import pages.register.beneficiaries.charityortrust.trust.nonTaxable.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
+import pages.register.beneficiaries.charityortrust.trust.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils.answers.TrustBeneficiaryAnswersHelper

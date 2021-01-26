@@ -16,11 +16,11 @@
 
 package utils.answers
 
-import controllers.register.beneficiaries.charityortrust.trust.nonTaxable.{routes => ntRoutes}
+import controllers.register.beneficiaries.charityortrust.trust.mld5.{routes => ntRoutes}
 import controllers.register.beneficiaries.charityortrust.trust.routes
 import models.UserAnswers
 import pages.register.beneficiaries.charityortrust.trust._
-import pages.register.beneficiaries.charityortrust.trust.nonTaxable.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
+import pages.register.beneficiaries.charityortrust.trust.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import sections.beneficiaries.TrustBeneficiaries
@@ -151,7 +151,7 @@ class TrustBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
   def trustBeneficiaryCountryOfResidenceYesNo(index: Int): Option[AnswerRow] = userAnswers.get(CountryOfResidenceYesNoPage(index)) map {
     x =>
       AnswerRow(
-        "trust.nonTaxable.countryOfResidenceYesNo.checkYourAnswersLabel",
+        "trust.5mld.countryOfResidenceYesNo.checkYourAnswersLabel",
         yesOrNo(x),
         Some(ntRoutes.CountryOfResidenceYesNoController.onPageLoad(index, draftId).url),
         trustBeneficiaryName(index, userAnswers),
@@ -162,7 +162,7 @@ class TrustBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
   def trustBeneficiaryCountryOfResidenceInTheUkYesNo(index: Int): Option[AnswerRow] = userAnswers.get(CountryOfResidenceInTheUkYesNoPage(index)) map {
     x =>
       AnswerRow(
-        "trust.nonTaxable.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel",
+        "trust.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel",
         yesOrNo(x),
         Some(ntRoutes.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId).url),
         trustBeneficiaryName(index, userAnswers),
@@ -174,7 +174,7 @@ class TrustBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
     case false => userAnswers.get(CountryOfResidencePage(index)) map {
       x =>
         AnswerRow(
-          "trust.nonTaxable.countryOfResidence.checkYourAnswersLabel",
+          "trust.5mld.countryOfResidence.checkYourAnswersLabel",
           HtmlFormat.escape(country(x, countryOptions)),
           Some(ntRoutes.CountryOfResidenceController.onPageLoad(index, draftId).url),
           trustBeneficiaryName(index, userAnswers),
