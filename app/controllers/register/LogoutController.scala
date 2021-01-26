@@ -27,7 +27,6 @@ import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.Session
 
-import java.util.concurrent.Executor
 import scala.concurrent.ExecutionContext
 
 @Singleton
