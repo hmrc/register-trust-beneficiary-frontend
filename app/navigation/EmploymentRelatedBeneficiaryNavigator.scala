@@ -17,9 +17,11 @@
 package navigation
 
 import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.{routes => rts}
+import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.mld5.{routes => mld5Rts}
 import models.ReadableUserAnswers
 import pages.Page
 import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated._
+import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.mld5._
 import play.api.mvc.Call
 
 class EmploymentRelatedBeneficiaryNavigator extends Navigator {
@@ -28,16 +30,17 @@ class EmploymentRelatedBeneficiaryNavigator extends Navigator {
     routes(draftId)(page)(userAnswers)
 
   private def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    simpleNavigation(draftId) andThen (c => (_:ReadableUserAnswers) => c) orElse
+    simpleNavigation(draftId) orElse
       yesNoNavigation(draftId)
   }
 
-  private def simpleNavigation(draftId: String): PartialFunction[Page, Call] = {
-    case LargeBeneficiaryNamePage(index) => rts.AddressYesNoController.onPageLoad(index, draftId)
-    case LargeBeneficiaryAddressPage(index) => rts.DescriptionController.onPageLoad(index, draftId)
-    case LargeBeneficiaryAddressInternationalPage(index) => rts.DescriptionController.onPageLoad(index, draftId)
-    case LargeBeneficiaryDescriptionPage(index) => rts.NumberOfBeneficiariesController.onPageLoad(index, draftId)
-    case LargeBeneficiaryNumberOfBeneficiariesPage(index) => rts.CheckDetailsController.onPageLoad(index, draftId)
+  private def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
+    case LargeBeneficiaryNamePage(index) => ua => navigateAwayFromNameQuestion(draftId, index, ua.is5mldEnabled)
+    case LargeBeneficiaryAddressPage(index) => _ => rts.DescriptionController.onPageLoad(index, draftId)
+    case LargeBeneficiaryAddressInternationalPage(index) => _ => rts.DescriptionController.onPageLoad(index, draftId)
+    case LargeBeneficiaryDescriptionPage(index) => _ => rts.NumberOfBeneficiariesController.onPageLoad(index, draftId)
+    case LargeBeneficiaryNumberOfBeneficiariesPage(index) => _ => rts.CheckDetailsController.onPageLoad(index, draftId)
+    case CountryOfResidencePage(index) => _ => rts.AddressYesNoController.onPageLoad(index, draftId)
   }
 
   private def yesNoNavigation(draftId: String) : PartialFunction[Page, ReadableUserAnswers => Call] = {
@@ -55,6 +58,28 @@ class EmploymentRelatedBeneficiaryNavigator extends Navigator {
         yesCall = rts.UkAddressController.onPageLoad(index, draftId),
         noCall = rts.NonUkAddressController.onPageLoad(index, draftId)
       )
+    case page @ CountryOfResidenceYesNoPage(index) => ua =>
+      yesNoNav(
+        ua = ua,
+        fromPage = page,
+        yesCall = mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId),
+        noCall = rts.AddressYesNoController.onPageLoad(index, draftId)
+      )
+    case page @ CountryOfResidenceInTheUkYesNoPage(index) => ua =>
+      yesNoNav(
+        ua = ua,
+        fromPage = page,
+        yesCall = rts.AddressYesNoController.onPageLoad(index, draftId),
+        noCall = mld5Rts.CountryOfResidenceController.onPageLoad(index, draftId)
+      )
+  }
+
+  private def navigateAwayFromNameQuestion(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
+    if (is5mldEnabled) {
+      mld5Rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
+    } else {
+      rts.AddressYesNoController.onPageLoad(index, draftId)
+    }
   }
 
 }

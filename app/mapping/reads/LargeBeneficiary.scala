@@ -26,7 +26,8 @@ final case class LargeBeneficiary(name: String,
                                   address : Option[UKAddress],
                                   internationalAddress : Option[InternationalAddress],
                                   discretionYesNo: Option[Boolean],
-                                  shareOfIncome: Option[String]
+                                  shareOfIncome: Option[String],
+                                  countryOfResidence: Option[String]
                                    ) {
 }
 
