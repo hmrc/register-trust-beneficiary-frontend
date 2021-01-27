@@ -108,7 +108,8 @@ case class LargeType(organisationName: String,
                      numberOfBeneficiary: String,
                      identification: Option[IdentificationOrgType],
                      beneficiaryDiscretion: Option[Boolean],
-                     beneficiaryShareOfIncome: Option[String])
+                     beneficiaryShareOfIncome: Option[String],
+                     countryOfResidence: Option[String])
 
 object LargeType {
   implicit val largeTypeFormat: Format[LargeType] = Json.format[LargeType]
