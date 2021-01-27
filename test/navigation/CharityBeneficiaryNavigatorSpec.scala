@@ -185,6 +185,58 @@ class CharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
             .mustBe(CountryOfResidenceYesNoController.onPageLoad(index, draftId))
         }
       }
+
+      "a non taxable trust" must {
+
+        val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = false)
+
+        "Charity Name page -> CountryOfResidence Yes No page" in {
+          val answers = baseAnswers
+            .set(CharityNamePage(index), "Charity Name").success.value
+
+          navigator.nextPage(CharityNamePage(index), draftId, answers)
+            .mustBe(CountryOfResidenceYesNoController.onPageLoad(index, draftId))
+        }
+
+        "CountryOfResidence yes no page -> No -> Check your answers page" in {
+          val answers = baseAnswers
+            .set(CountryOfResidenceYesNoPage(index), false).success.value
+
+          navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, answers)
+            .mustBe(CharityAnswersController.onPageLoad(index, draftId))
+        }
+
+        "CountryOfResidence yes no page -> Yes -> CountryOfResidence Uk yes no page" in {
+          val answers = baseAnswers
+            .set(CountryOfResidenceYesNoPage(index), true).success.value
+
+          navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, answers)
+            .mustBe(CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId))
+        }
+
+
+        "CountryOfResidence Uk yes no page -> Yes -> Check your answers page" in {
+          val answers = baseAnswers
+            .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
+
+          navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, answers)
+            .mustBe(CharityAnswersController.onPageLoad(index, draftId))
+        }
+
+        "CountryOfResidence Uk yes no page -> No -> CountryOfResidence page" in {
+          val answers = baseAnswers
+            .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+
+          navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, answers)
+            .mustBe(CountryOfResidenceController.onPageLoad(index, draftId))
+        }
+
+        "CountryOfResidence page -> Check your answers page" in {
+          navigator.nextPage(CountryOfResidencePage(index), draftId, baseAnswers)
+            .mustBe(CharityAnswersController.onPageLoad(index, draftId))
+        }
+      }
+
     }
   }
 }

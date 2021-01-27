@@ -33,11 +33,21 @@ class CharityBeneficiaryNavigator extends Navigator {
     simpleNavigation(draftId) orElse yesNoNavigation(draftId)
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case CharityNamePage(index) => _ => AmountDiscretionYesNoController.onPageLoad(index, draftId)
+    case CharityNamePage(index) => ua =>
+      if (is5mldNonTaxable(ua)) {
+        CountryOfResidenceYesNoController.onPageLoad(index, draftId)
+      } else {
+        AmountDiscretionYesNoController.onPageLoad(index, draftId)
+      }
     case HowMuchIncomePage(index) => ua => navigateAwayFromShareOfIncomeQuestions(draftId, index, ua.is5mldEnabled)
     case CharityAddressUKPage(index) => _ => CharityAnswersController.onPageLoad(index, draftId)
     case CharityInternationalAddressPage(index) => _ => CharityAnswersController.onPageLoad(index, draftId)
-    case CountryOfResidencePage(index) => _ => AddressYesNoController.onPageLoad(index, draftId)
+    case CountryOfResidencePage(index) => ua =>
+      if (is5mldNonTaxable(ua)) {
+        CharityAnswersController.onPageLoad(index, draftId)
+      } else {
+        AddressYesNoController.onPageLoad(index, draftId)
+      }
   }
 
   private def yesNoNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
@@ -67,13 +77,13 @@ class CharityBeneficiaryNavigator extends Navigator {
         ua = ua,
         fromPage = page,
         yesCall = CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId),
-        noCall = AddressYesNoController.onPageLoad(index, draftId)
+        noCall = navigateToAnswersOrAddressQuestions(draftId, index)(ua)
       )
     case page @ CountryOfResidenceInTheUkYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
         fromPage = page,
-        yesCall = AddressYesNoController.onPageLoad(index, draftId),
+        yesCall = navigateToAnswersOrAddressQuestions(draftId, index)(ua),
         noCall = CountryOfResidenceController.onPageLoad(index, draftId)
       )
   }
@@ -84,6 +94,15 @@ class CharityBeneficiaryNavigator extends Navigator {
     } else {
       AddressYesNoController.onPageLoad(index, draftId)
     }
+  }
+
+  private def navigateToAnswersOrAddressQuestions(draftId: String, index: Int): PartialFunction[ReadableUserAnswers, Call] = {
+    case ua =>
+      if (is5mldNonTaxable(ua)) {
+        CharityAnswersController.onPageLoad(index, draftId)
+      } else {
+        AddressYesNoController.onPageLoad(index, draftId)
+      }
   }
 
 }
