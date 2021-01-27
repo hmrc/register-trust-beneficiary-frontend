@@ -17,13 +17,18 @@
 package controllers.register.beneficiaries.other.mld5
 
 import config.annotations.OtherBeneficiary
-import controllers.actions._
+import controllers.actions.StandardActionSets
 import controllers.actions.register.other.DescriptionRequiredAction
 import forms.UKAddressFormProvider
+import javax.inject.Inject
 import navigation.Navigator
 import pages.register.beneficiaries.other.AddressUKPage
+import pages.register.beneficiaries.other.mld5.BeneficiariesAddressPage
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
-import views.register.beneficiaries.other.mld5.BeneficiariesAddressView
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.register.beneficiaries.other.mld5.BeneficiariesAddressView
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -44,7 +49,7 @@ class BeneficiariesAddressController @Inject()(
     standardActionSets.identifiedUserWithData(draftId).andThen(descriptionAction(index)) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(AddressUKPage(index)) match {
+      val preparedForm = request.userAnswers.get(BeneficiariesAddressPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -62,9 +67,9 @@ class BeneficiariesAddressController @Inject()(
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressUKPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(BeneficiariesAddressPage(index), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddressUKPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(BeneficiariesAddressPage(index), draftId, updatedAnswers))
       )
   }
 }

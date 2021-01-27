@@ -16,6 +16,7 @@
 
 package pages.register.beneficiaries.other.mld5
 
+import play.api.libs.json.JsPath
 import pages.QuestionPage
 import sections.beneficiaries.{Beneficiaries, OtherBeneficiaries}
 
@@ -23,7 +24,7 @@ final case class CountryOfResidenceYesNoPage(index: Int) extends QuestionPage[Bo
 
   override def path: JsPath = JsPath \ Beneficiaries \ OtherBeneficiaries \ index \ toString
 
-  override def toString: String = "addressUKYesNo"
+  override def toString: String = "countryOfResidenceYesNo"
 
 //  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
 //    value match {
