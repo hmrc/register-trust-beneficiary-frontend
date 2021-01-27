@@ -771,3 +771,25 @@ removeEmploymentRelatedBeneficiary.title = Are you sure you want to remove the e
 removeEmploymentRelatedBeneficiary.heading = Are you sure you want to remove {0}?
 removeEmploymentRelatedBeneficiary.default = the employment related beneficiary
 removeEmploymentRelatedBeneficiary.error.required = Select yes if you want to remove the employment related beneficiary
+
+#5mld
+
+beneficiariesAddress.title = What is the beneficiaries address?
+beneficiariesAddress.heading = What is the beneficiaries address?
+beneficiariesAddress.checkYourAnswersLabel = Do you know the beneficiaries address?
+beneficiariesAddress.error.required = Select yes if you know the beneficiaries address?
+
+beneficiaryAddressYesNo.title = Do you know this beneficiary's address?
+beneficiaryAddressYesNo.heading = Do you know this beneficiary's address?
+beneficiaryAddressYesNo.checkYourAnswersLabel = Do you know this beneficiary's address?
+beneficiaryAddressYesNo.error.required = Select yes if you know the other beneficiary’s address
+
+countryOfResidenceYesNo.title = Do you know this beneficiary’s country of residence?
+countryOfResidenceYesNo.heading = Do you know this beneficiary’s country of residence?
+countryOfResidenceYesNo.checkYourAnswersLabel = Do you know this beneficiary’s country of residence?
+countryOfResidenceYesNo.error.required = Select yes if you know the charity’s country of residence
+
+ukResidentYesNo.title = Is this beneficiary a UK resident?
+ukResidentYesNo.heading = Is this beneficiary a UK resident?
+ukResidentYesNo.checkYourAnswersLabel = Is this beneficiary a UK resident?
+ukResidentYesNo.error.required = Select yes if if the charity is a UK resident

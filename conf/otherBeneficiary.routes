@@ -19,9 +19,22 @@ POST        /:draftId/:index/uk-address                 controllers.register.ben
 GET         /:draftId/:index/non-uk-address             controllers.register.beneficiaries.other.NonUkAddressController.onPageLoad(index: Int, draftId: String)
 POST        /:draftId/:index/non-uk-address             controllers.register.beneficiaries.other.NonUkAddressController.onSubmit(index: Int, draftId: String)
 
-
 GET         /:draftId/:index/check-details              controllers.register.beneficiaries.other.CheckDetailsController.onPageLoad(index: Int, draftId: String)
 POST        /:draftId/:index/check-details              controllers.register.beneficiaries.other.CheckDetailsController.onSubmit(index: Int, draftId: String)
 
 GET        /:draftId/:index/remove                     controllers.register.beneficiaries.other.RemoveOtherBeneficiaryController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/:index/remove                     controllers.register.beneficiaries.other.RemoveOtherBeneficiaryController.onSubmit(index: Int, draftId: String)
+
+#5mld
+
+GET         /:draftId/:index/description                 controllers.register.beneficiaries.other.mld5.BeneficiariesAddressController.onPageLoad(index: Int, draftId: String)
+POST        /:draftId/:index/description                 controllers.register.beneficiaries.other.mld5.BeneficiariesAddressController.onSubmit(index: Int, draftId: String)
+
+GET         /:draftId/:index/has-discretion              controllers.register.beneficiaries.other.mld5.BeneficiaryAddressYesNoController.onPageLoad(index: Int, draftId: String)
+POST        /:draftId/:index/has-discretion              controllers.register.beneficiaries.other.mld5.BeneficiaryAddressYesNoController.onSubmit(index: Int, draftId: String)
+
+GET         /:draftId/:index/share-of-income            controllers.register.beneficiaries.other.mld5.CountryOfResidenceYesNoController.onPageLoad(index: Int, draftId: String)
+POST        /:draftId/:index/share-of-income            controllers.register.beneficiaries.other.mld5.CountryOfResidenceYesNoController.onSubmit(index: Int, draftId: String)
+
+GET         /:draftId/:index/has-address                controllers.register.beneficiaries.other.mld5.UkResidentYesNoController.onPageLoad(index: Int, draftId: String)
+POST        /:draftId/:index/has-address                controllers.register.beneficiaries.other.mld5.UkResidentYesNoController.onSubmit(index: Int, draftId: String)
