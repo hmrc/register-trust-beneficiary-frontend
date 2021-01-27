@@ -351,6 +351,20 @@ beneficiaryInfo.5mld.details.paragraph3 = This is usually based on the residency
 beneficiaryInfo.5mld.subheading5 = Other beneficiaries
 beneficiaryInfo.5mld.paragraph9 = You need to give a short description for beneficiaries that do not fall into the other beneficiary types. For example, pets. If you know, tell us their country of residence.
 
+beneficiaryInfo.5mld.taxable.paragraph1 = Also, if you have these details, tell us one of them:
+beneficiaryInfo.5mld.taxable.bulletpoint1 = National Insurance number
+beneficiaryInfo.5mld.taxable.bulletpoint2 = address
+beneficiaryInfo.5mld.taxable.bulletpoint3 = passport details and address
+beneficiaryInfo.5mld.taxable.bulletpoint4 = ID card details and address
+
+beneficiaryInfo.5mld.taxable.paragraph2 = Tell us their name. If you know more details, tell us their country of residence and address.
+beneficiaryInfo.5mld.taxable.paragraph3 = Tell us whether the trustees can decide how much income the named company, charity or trust can get.
+
+beneficiaryInfo.5mld.taxable.bulletpoint5 = address
+
+beneficiaryInfo.5mld.taxable.paragraph4 = You need to give a short description for beneficiaries that do not fall into the other beneficiary types. For example, pets.
+beneficiaryInfo.5mld.taxable.paragraph5 = If you know, tell us their country of residence, address and whether the trustees can decide how much income the beneficiary can get.
+
 individualBeneficiaryAnswers.title = Check beneficiary details
 individualBeneficiaryAnswers.heading = Check beneficiary details
 
