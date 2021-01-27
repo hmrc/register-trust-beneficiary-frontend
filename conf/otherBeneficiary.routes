@@ -38,3 +38,9 @@ POST        /:draftId/:index/share-of-income            controllers.register.ben
 
 GET         /:draftId/:index/has-address                controllers.register.beneficiaries.other.mld5.UkResidentYesNoController.onPageLoad(index: Int, draftId: String)
 POST        /:draftId/:index/has-address                controllers.register.beneficiaries.other.mld5.UkResidentYesNoController.onSubmit(index: Int, draftId: String)
+
+GET         /:draftId/:index/description                controllers.register.beneficiaries.other.mld5.BeneficiariesInternationalAddressController.onPageLoad(index: Int, draftId: String)
+POST        /:draftId/:index/description                controllers.register.beneficiaries.other.mld5.BeneficiariesInternationalAddressController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/trust/:index/has-country-of-residence                            controllers.register.beneficiaries.other.mld5.CountryOfResidenceYesNoController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/trust/:index/has-country-of-residence                            controllers.register.beneficiaries.other.mld5.CountryOfResidenceYesNoController.onSubmit(index: Int, draftId: String)
