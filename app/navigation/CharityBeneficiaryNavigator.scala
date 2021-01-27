@@ -105,8 +105,4 @@ class CharityBeneficiaryNavigator extends Navigator {
       }
   }
 
-  private def is5mldNonTaxable(ua: ReadableUserAnswers): Boolean = {
-    ua.is5mldEnabled && !ua.isTaxable
-  }
-
 }
