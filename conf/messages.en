@@ -718,6 +718,24 @@ numberOfBeneficiaries.over201 = 201 to 500
 numberOfBeneficiaries.over501 = 501 to 1,000
 numberOfBeneficiaries.over1001 = Over 1,001
 
+employmentRelatedBeneficiary.5mld.countryOfResidenceYesNo.title = Do you know this beneficiary’s country of residence?
+employmentRelatedBeneficiary.5mld.countryOfResidenceYesNo.heading = Do you know {0}’s country of residence?
+employmentRelatedBeneficiary.5mld.countryOfResidenceYesNo.checkYourAnswersLabel = Do you know {0}’s country of residence?
+employmentRelatedBeneficiary.5mld.countryOfResidenceYesNo.error.required = Select yes if you know this beneficiary’s country of residence
+employmentRelatedBeneficiary.5mld.countryOfResidenceYesNo.hint = The country of residence is usually where the business group is registered. The business group has UK residency if it is registered with Companies House.
+
+employmentRelatedBeneficiary.5mld.countryOfResidenceInTheUkYesNo.title = Does this beneficiary have UK residency?
+employmentRelatedBeneficiary.5mld.countryOfResidenceInTheUkYesNo.heading = Does {0} have UK residency?
+employmentRelatedBeneficiary.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = Does {0} have UK residency?
+employmentRelatedBeneficiary.5mld.countryOfResidenceInTheUkYesNo.error.required = Select yes if the company beneficiary has UK residency
+
+employmentRelatedBeneficiary.5mld.countryOfResidence.title = What is this beneficiary’s country of residence?
+employmentRelatedBeneficiary.5mld.countryOfResidence.heading = What is {0}’s country of residence?
+employmentRelatedBeneficiary.5mld.countryOfResidence.checkYourAnswersLabel = What is {0}’s country of residence?
+employmentRelatedBeneficiary.5mld.countryOfResidence.error.required = Enter a country
+employmentRelatedBeneficiary.5mld.countryOfResidence.error.length = The country of residence must be 100 characters or less
+employmentRelatedBeneficiary.5mld.countryOfResidence.error.invalidCharacters = The country of residence must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
+
 employmentRelatedBeneficiary.checkDetails.title = Check employment related beneficiary details
 employmentRelatedBeneficiary.checkDetails.heading = Check employment related beneficiary details
 

@@ -42,3 +42,21 @@ charity.5mld.countryOfResidence.checkYourAnswersLabel = Beth yw gwlad breswyl {0
 charity.5mld.countryOfResidence.error.required = Nodwch wlad
 #charity.5mld.countryOfResidence.error.length =
 #charity.5mld.countryOfResidence.error.invalidCharacters =
+
+#employmentRelatedBeneficiary.5mld.countryOfResidenceYesNo.title =
+employmentRelatedBeneficiary.5mld.countryOfResidenceYesNo.heading = A ydych yn gwybod beth yw gwlad breswyl {0}?
+employmentRelatedBeneficiary.5mld.countryOfResidenceYesNo.checkYourAnswersLabel = A ydych yn gwybod beth yw gwlad breswyl {0}?
+#employmentRelatedBeneficiary.5mld.countryOfResidenceYesNo.error.required =
+employmentRelatedBeneficiary.5mld.countryOfResidenceYesNo.hint = Y wlad breswyl fel arfer yw’r wlad lle mae’r grŵp busnes wedi’i gofrestru. Mae’r grŵp busnes yn breswyl yn y DU os ydyw wedi’i gofrestru gyda Thŷ’r Cwmnïau.
+
+#employmentRelatedBeneficiary.5mld.countryOfResidenceInTheUkYesNo.title =
+employmentRelatedBeneficiary.5mld.countryOfResidenceInTheUkYesNo.heading = A yw {0} yn breswyl yn y DU?
+employmentRelatedBeneficiary.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = A yw {0} yn breswyl yn y DU?
+#employmentRelatedBeneficiary.5mld.countryOfResidenceInTheUkYesNo.error.required =
+
+#employmentRelatedBeneficiary.5mld.countryOfResidence.title =
+employmentRelatedBeneficiary.5mld.countryOfResidence.heading = Beth yw gwlad breswyl {0}?
+employmentRelatedBeneficiary.5mld.countryOfResidence.checkYourAnswersLabel = Beth yw gwlad breswyl {0}?
+employmentRelatedBeneficiary.5mld.countryOfResidence.error.required = Nodwch wlad
+#employmentRelatedBeneficiary.5mld.countryOfResidence.error.length =
+#employmentRelatedBeneficiary.5mld.countryOfResidence.error.invalidCharacters =
