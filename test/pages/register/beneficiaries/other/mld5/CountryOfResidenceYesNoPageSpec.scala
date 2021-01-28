@@ -19,29 +19,31 @@ package pages.register.beneficiaries.other.mld5
 import models.UserAnswers
 import models.core.pages.{InternationalAddress, UKAddress}
 import pages.behaviours.PageBehaviours
+import pages.register.beneficiaries.other.{AddressInternationalPage, AddressUKPage}
+import org.scalacheck.Arbitrary.arbitrary
 
 class CountryOfResidenceYesNoPageSpec extends PageBehaviours {
 
   "AddressYesNoPage" must {
 
-    beRetrievable[Boolean](AddressYesNoPage(0))
+    beRetrievable[Boolean](CountryOfResidenceYesNoPage(0))
 
-    beSettable[Boolean](AddressYesNoPage(0))
+    beSettable[Boolean](CountryOfResidenceYesNoPage(0))
 
-    beRemovable[Boolean](AddressYesNoPage(0))
+    beRemovable[Boolean](CountryOfResidenceYesNoPage(0))
   }
 
   "remove relevant Data when AddressYesNoPage is set to false" in {
     val index = 0
     forAll(arbitrary[UserAnswers], arbitrary[String]) {
       (initial, str) =>
-        val answers: UserAnswers = initial.set(AddressUKYesNoPage(index), true).success.value
+        val answers: UserAnswers = initial.set(CountryOfResidenceYesNoPage(index), true).success.value
           .set(AddressUKPage(index), UKAddress(str, str, Some(str), Some(str), str)).success.value
           .set(AddressInternationalPage(index), InternationalAddress(str, str, Some(str), str)).success.value
 
-        val result = answers.set(AddressYesNoPage(index), false).success.value
+        val result = answers.set(CountryOfResidenceYesNoPage(index), false).success.value
 
-        result.get(AddressUKYesNoPage(index)) mustNot be(defined)
+        result.get(CountryOfResidencePage(index)) mustNot be(defined)
         result.get(AddressUKPage(index)) mustNot be(defined)
         result.get(AddressInternationalPage(index)) mustNot be(defined)
     }

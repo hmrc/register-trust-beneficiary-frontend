@@ -26,7 +26,7 @@ import views.html.register.beneficiaries.charityortrust.charity.mld5.CountryOfRe
 
 class CountryOfResidenceViewSpec extends SelectCountryViewBehaviours {
 
-  val prefix = "charity.5mld.countryOfResidence"
+  val prefix = "otherBeneficiary.countryOfResidence"
   val index = 0
   val charityName = "Test"
 

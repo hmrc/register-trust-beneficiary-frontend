@@ -774,23 +774,18 @@ removeEmploymentRelatedBeneficiary.error.required = Select yes if you want to re
 
 #5mld
 
-otherBeneficiary.beneficiaryAddressYesNo.title = Do you know this beneficiary's address?
-otherBeneficiary.beneficiaryAddressYesNo.heading = Do you know this beneficiary's address?
-otherBeneficiary.beneficiaryAddressYesNo.checkYourAnswersLabel = Do you know this beneficiary's address?
+otherBeneficiary.beneficiaryAddressYesNo.title = Do you know this {0}’s address?
+otherBeneficiary.beneficiaryAddressYesNo.heading = Do you know this {0}’s address?
+otherBeneficiary.beneficiaryAddressYesNo.checkYourAnswersLabel = Do you know this {0}’s address?
 otherBeneficiary.beneficiaryAddressYesNo.error.required = Select yes if you know the other beneficiary’s address
 
-otherBeneficiary.countryOfResidenceYesNo.title = Do you know this beneficiary’s country of residence?
-otherBeneficiary.countryOfResidenceYesNo.heading = Do you know this beneficiary’s country of residence?
-otherBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel = Do you know this beneficiary’s country of residence?
+otherBeneficiary.countryOfResidenceYesNo.title = Do you know this {0}’s country of residence?
+otherBeneficiary.countryOfResidenceYesNo.heading = Do you know this {0}’s country of residence?
+otherBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel = Do you know this {0}’s country of residence?
 otherBeneficiary.countryOfResidenceYesNo.error.required = Select yes if you know the charity’s country of residence
 
-otherBeneficiary.ukResidentYesNo.title = Is this beneficiary a UK resident?
-otherBeneficiary.ukResidentYesNo.heading = Is this beneficiary a UK resident?
-otherBeneficiary.ukResidentYesNo.checkYourAnswersLabel = Is this beneficiary a UK resident?
-otherBeneficiary.ukResidentYesNo.error.required = Select yes if if the charity is a UK resident
-
-otherBeneficiary.countryOfResidence.title = What is this beneficiary’s country of residence?
-otherBeneficiary.countryOfResidence.heading = What is this beneficiary’s country of residence?
-otherBeneficiary.countryOfResidence.checkYourAnswersLabel = What is this beneficiary’s country of residence?
+otherBeneficiary.countryOfResidence.title = What is this {0}’s country of residence?
+otherBeneficiary.countryOfResidence.heading = What is this {0}’s country of residence?
+otherBeneficiary.countryOfResidence.checkYourAnswersLabel = What is this {0}’s country of residence?
 otherBeneficiary.countryOfResidence.error.required = Enter a country
 

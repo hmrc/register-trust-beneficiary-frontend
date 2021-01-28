@@ -17,17 +17,20 @@
 package views.register.beneficiaries.other.mld5
 
 import forms.YesNoFormProvider
+import play.api.data.Form
+import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
+import views.html.register.beneficiaries.other.AddressUkYesNoView
 
 class BeneficiaryAddressYesNoViewSpec extends YesNoViewBehaviours {
 
   private val index = 0
-  private val messageKeyPrefix = "otherBeneficiary.addressUkYesNo"
+  private val messageKeyPrefix = "otherBeneficiary.beneficiaryAddressYesNo"
   private val description = "Other"
 
   override val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
-  "AddressYesNo view" must {
+  "BeneficiaryAddressYesNo view" must {
 
     val view = viewFor[AddressUkYesNoView](Some(emptyUserAnswers))
 

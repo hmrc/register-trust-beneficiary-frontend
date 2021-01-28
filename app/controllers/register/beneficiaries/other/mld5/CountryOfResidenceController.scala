@@ -19,6 +19,7 @@ package controllers.register.beneficiaries.other.mld5
 import config.annotations.CharityBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.register.charity.NameRequiredAction
+import controllers.actions.register.other.DescriptionRequiredAction
 import forms.CountryFormProvider
 import javax.inject.Inject
 import navigation.Navigator
@@ -41,6 +42,7 @@ class CountryOfResidenceController @Inject()(
                                                      nameAction: NameRequiredAction,
                                                      formProvider: CountryFormProvider,
                                                      standardActions: StandardActionSets,
+                                                     descriptionAction: DescriptionRequiredAction,
                                                      val controllerComponents: MessagesControllerComponents,
                                                      view: CountryOfResidenceView,
                                                      val countryOptions: CountryOptionsNonUK
@@ -49,7 +51,7 @@ class CountryOfResidenceController @Inject()(
   private val form: Form[String] = formProvider.withPrefix("otherBeneficiary.countryOfResidence")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
-    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
+    standardActionSets.identifiedUserWithData(draftId).andThen(descriptionAction(index)) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(CountryOfResidencePage(index)) match {
@@ -57,16 +59,16 @@ class CountryOfResidenceController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, countryOptions.options, draftId, index))
+      Ok(view(preparedForm, countryOptions.options, draftId, index, request.description))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
-    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
+    standardActionSets.identifiedUserWithData(draftId).andThen(descriptionAction(index)).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, index))),
+          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, index, request.description))),
 
         value => {
           for {

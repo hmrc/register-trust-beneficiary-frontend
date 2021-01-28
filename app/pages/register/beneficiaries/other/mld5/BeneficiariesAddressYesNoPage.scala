@@ -16,9 +16,13 @@
 
 package pages.register.beneficiaries.other.mld5
 
+import models.UserAnswers
 import play.api.libs.json.JsPath
 import pages.QuestionPage
+import pages.register.beneficiaries.other.{AddressInternationalPage, AddressUKPage}
 import sections.beneficiaries.{Beneficiaries, OtherBeneficiaries}
+
+import scala.util.Try
 
 final case class BeneficiariesAddressYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
@@ -26,11 +30,11 @@ final case class BeneficiariesAddressYesNoPage(index: Int) extends QuestionPage[
 
   override def toString: String = "beneficiariesUKAddressYesNo"
 
-//  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
-//    value match {
-//      case Some(true) => userAnswers.remove(AddressInternationalPage(index))
-//      case Some(false) => userAnswers.remove(AddressUKPage(index))
-//      case _ => super.cleanup(value, userAnswers)
-//    }
-//  }
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+    value match {
+      case Some(true) => userAnswers.remove(AddressInternationalPage(index))
+      case Some(false) => userAnswers.remove(AddressUKPage(index))
+      case _ => super.cleanup(value, userAnswers)
+    }
+  }
 }

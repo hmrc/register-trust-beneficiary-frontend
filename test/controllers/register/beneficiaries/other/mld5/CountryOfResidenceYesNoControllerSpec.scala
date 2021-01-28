@@ -21,17 +21,28 @@ import config.annotations.OtherBeneficiary
 import forms.YesNoFormProvider
 import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.other.{AddressUKYesNoPage, DescriptionPage}
+import base.SpecBase
+import config.annotations.OtherBeneficiary
+import forms.YesNoFormProvider
+import navigation.{FakeNavigator, Navigator}
+import org.scalatestplus.mockito.MockitoSugar
+import pages.register.beneficiaries.other.{AddressUKYesNoPage, DescriptionPage}
+import play.api.inject.bind
+import play.api.mvc.Call
+import play.api.test.FakeRequest
+import play.api.test.Helpers._
+import views.html.register.beneficiaries.other.AddressUkYesNoView
 
 class CountryOfResidenceYesNoControllerSpec extends SpecBase with MockitoSugar {
 
   private val index = 0
-  private val form = new YesNoFormProvider().withPrefix("otherBeneficiary.addressUkYesNo")
-  private val addressUkYesNoRoute = routes.AddressUkYesNoController.onPageLoad(index, draftId).url
+  private val form = new YesNoFormProvider().withPrefix("otherBeneficiary.countryOfResidenceYesNo")
+  private val addressUkYesNoRoute = routes.CountryOfResidenceYesNoController.onPageLoad(index, draftId).url
   private val description = "Other"
 
   private val baseAnswers = emptyUserAnswers.set(DescriptionPage(index), description).success.value
 
-  "AddressUkYesNo Controller" must {
+  "CountryOfResidenceYesNo Controller" must {
 
     "return OK and the correct view for a GET" in {
 

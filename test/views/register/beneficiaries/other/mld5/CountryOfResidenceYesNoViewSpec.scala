@@ -17,7 +17,10 @@
 package views.register.beneficiaries.other.mld5
 
 import forms.YesNoFormProvider
+import play.api.data.Form
+import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
+import views.html.register.beneficiaries.other.mld5.CountryOfResidenceYesNoView
 
 class CountryOfResidenceYesNoViewSpec extends YesNoViewBehaviours {
 
@@ -29,7 +32,7 @@ class CountryOfResidenceYesNoViewSpec extends YesNoViewBehaviours {
 
   "AddressYesNo view" must {
 
-    val view = viewFor[AddressYesNoView](Some(emptyUserAnswers))
+    val view = viewFor[CountryOfResidenceYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, description, index, draftId)(fakeRequest, messages)

@@ -21,8 +21,7 @@ import config.annotations.CharityBeneficiary
 import forms.CountryFormProvider
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
-import pages.register.beneficiaries.charityortrust.charity.mld5.CountryOfResidencePage
+import pages.register.beneficiaries.other.mld5.CountryOfResidencePage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -34,9 +33,9 @@ import views.html.register.beneficiaries.charityortrust.charity.mld5.CountryOfRe
 class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
 
   val formProvider = new CountryFormProvider()
-  val form: Form[String] = formProvider.withPrefix("charity.5mld.countryOfResidence")
+  val form: Form[String] = formProvider.withPrefix("otherBeneficiary.countryOfResidence")
   val index: Int = 0
-  val charityName = "Name"
+  private val description = "Other"
 
   lazy val countryOfResidence: String = routes.CountryOfResidenceController.onPageLoad(index, draftId).url
 
@@ -45,7 +44,7 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(CharityNamePage(index), charityName).success.value
+        .set(CountryOfResidencePage(index), description).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -60,14 +59,14 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, countryOptions, draftId, index, charityName)(request, messages).toString
+        view(form, countryOptions, draftId, index, description)(request, messages).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(CharityNamePage(index), charityName).success.value
+      val userAnswers = emptyUserAnswers.set(CountryOfResidencePage(index), description).success.value
         .set(CountryOfResidencePage(index), "Spain").success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -83,7 +82,7 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill("Spain"), countryOptions, draftId, index, charityName)(request, messages).toString
+        view(form.fill("Spain"), countryOptions, draftId, index, description)(request, messages).toString
 
       application.stop()
     }
@@ -91,7 +90,7 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(CharityNamePage(index), charityName).success.value
+        .set(CountryOfResidencePage(index), description).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
@@ -114,7 +113,7 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(CharityNamePage(index), charityName).success.value
+        .set(CountryOfResidencePage(index), description).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -133,7 +132,7 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, countryOptions, draftId, index, charityName)(request, messages).toString
+        view(boundForm, countryOptions, draftId, index, description)(request, messages).toString
 
       application.stop()
     }
