@@ -16,9 +16,12 @@
 
 package pages.register.beneficiaries.other.mld5
 
+import models.UserAnswers
 import play.api.libs.json.JsPath
 import pages.QuestionPage
 import sections.beneficiaries.{Beneficiaries, OtherBeneficiaries}
+
+import scala.util.Try
 
 final case class CountryOfResidenceYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
@@ -26,11 +29,9 @@ final case class CountryOfResidenceYesNoPage(index: Int) extends QuestionPage[Bo
 
   override def toString: String = "countryOfResidenceYesNo"
 
-//  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
-//    value match {
-//      case Some(true) => userAnswers.remove(AddressInternationalPage(index))
-//      case Some(false) => userAnswers.remove(AddressUKPage(index))
-//      case _ => super.cleanup(value, userAnswers)
-//    }
-//  }
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
+    value match {
+      case Some(true) => userAnswers.set(CountryOfResidencePage(index), "GB")
+      case _ => super.cleanup(value, userAnswers)
+    }
 }

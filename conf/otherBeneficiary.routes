@@ -27,20 +27,11 @@ POST       /:draftId/:index/remove                     controllers.register.bene
 
 #5mld
 
-GET         /:draftId/:index/description                 controllers.register.beneficiaries.other.mld5.UkAddressController.onPageLoad(index: Int, draftId: String)
-POST        /:draftId/:index/description                 controllers.register.beneficiaries.other.mld5.UkAddressController.onSubmit(index: Int, draftId: String)
+GET         /:draftId/:index/has-beneficiaries-address           controllers.register.beneficiaries.other.mld5.BeneficiariesAddressYesNoController.onPageLoad(index: Int, draftId: String)
+POST        /:draftId/:index/has-beneficiaries-address           controllers.register.beneficiaries.other.mld5.BeneficiariesAddressYesNoController.onSubmit(index: Int, draftId: String)
 
-GET         /:draftId/:index/has-discretion              controllers.register.beneficiaries.other.mld5.BeneficiariesAddressYesNoController.onPageLoad(index: Int, draftId: String)
-POST        /:draftId/:index/has-discretion              controllers.register.beneficiaries.other.mld5.BeneficiariesAddressYesNoController.onSubmit(index: Int, draftId: String)
+GET         /:draftId/:index/has-country-of-residence            controllers.register.beneficiaries.other.mld5.CountryOfResidenceYesNoController.onPageLoad(index: Int, draftId: String)
+POST        /:draftId/:index/has-country-of-residence            controllers.register.beneficiaries.other.mld5.CountryOfResidenceYesNoController.onSubmit(index: Int, draftId: String)
 
-GET         /:draftId/:index/share-of-income            controllers.register.beneficiaries.other.mld5.CountryOfResidenceYesNoController.onPageLoad(index: Int, draftId: String)
-POST        /:draftId/:index/share-of-income            controllers.register.beneficiaries.other.mld5.CountryOfResidenceYesNoController.onSubmit(index: Int, draftId: String)
-
-GET         /:draftId/:index/has-address                controllers.register.beneficiaries.other.mld5.UkResidentYesNoController.onPageLoad(index: Int, draftId: String)
-POST        /:draftId/:index/has-address                controllers.register.beneficiaries.other.mld5.UkResidentYesNoController.onSubmit(index: Int, draftId: String)
-
-GET         /:draftId/:index/description                controllers.register.beneficiaries.other.mld5.InternationalAddressController.onPageLoad(index: Int, draftId: String)
-POST        /:draftId/:index/description                controllers.register.beneficiaries.other.mld5.InternationalAddressController.onSubmit(index: Int, draftId: String)
-
-GET        /:draftId/trust/:index/has-country-of-residence                            controllers.register.beneficiaries.other.mld5.CountryOfResidenceController.onPageLoad(index: Int, draftId: String)
-POST       /:draftId/trust/:index/has-country-of-residence                            controllers.register.beneficiaries.other.mld5.CountryOfResidenceController.onSubmit(index: Int, draftId: String)
+GET        /:draftId/:index/country-of-residence                 controllers.register.beneficiaries.other.mld5.CountryOfResidenceController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/country-of-residence                 controllers.register.beneficiaries.other.mld5.CountryOfResidenceController.onSubmit(index: Int, draftId: String)

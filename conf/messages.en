@@ -774,11 +774,6 @@ removeEmploymentRelatedBeneficiary.error.required = Select yes if you want to re
 
 #5mld
 
-otherBeneficiary.ukAddress.title = What is the beneficiaries address?
-otherBeneficiary.ukAddress.heading = What is the beneficiaries address?
-otherBeneficiary.ukAddress.checkYourAnswersLabel = Do you know the beneficiaries address?
-otherBeneficiary.ukAddress.error.required = Select yes if you know the beneficiaries address?
-
 otherBeneficiary.beneficiaryAddressYesNo.title = Do you know this beneficiary's address?
 otherBeneficiary.beneficiaryAddressYesNo.heading = Do you know this beneficiary's address?
 otherBeneficiary.beneficiaryAddressYesNo.checkYourAnswersLabel = Do you know this beneficiary's address?
@@ -799,7 +794,3 @@ otherBeneficiary.countryOfResidence.heading = What is this beneficiary’s count
 otherBeneficiary.countryOfResidence.checkYourAnswersLabel = What is this beneficiary’s country of residence?
 otherBeneficiary.countryOfResidence.error.required = Enter a country
 
-otherBeneficiary.internationalAddress.title = What is the beneficiaries address?
-otherBeneficiary.internationalAddress.heading = What is the beneficiaries address?
-otherBeneficiary.internationalAddress.checkYourAnswersLabel = What is the beneficiaries address?
-otherBeneficiary.internationalAddress.error.required = Select yes if you know the beneficiaries address?
