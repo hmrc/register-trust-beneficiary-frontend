@@ -18,6 +18,7 @@ $(document).ready(function() {
   // =====================================================
 
   GOVUK.shimLinksWithButtonRole.init();
+  GOVUK.details.init();
 
   // =====================================================
   // Back link mimics browser back functionality
