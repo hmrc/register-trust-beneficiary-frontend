@@ -727,7 +727,7 @@ employmentRelatedBeneficiary.5mld.countryOfResidenceYesNo.hint = The country of 
 employmentRelatedBeneficiary.5mld.countryOfResidenceInTheUkYesNo.title = Does this beneficiary have UK residency?
 employmentRelatedBeneficiary.5mld.countryOfResidenceInTheUkYesNo.heading = Does {0} have UK residency?
 employmentRelatedBeneficiary.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = Does {0} have UK residency?
-employmentRelatedBeneficiary.5mld.countryOfResidenceInTheUkYesNo.error.required = Select yes if the company beneficiary has UK residency
+employmentRelatedBeneficiary.5mld.countryOfResidenceInTheUkYesNo.error.required = Select yes if the beneficiary has UK residency
 
 employmentRelatedBeneficiary.5mld.countryOfResidence.title = What is this beneficiary’s country of residence?
 employmentRelatedBeneficiary.5mld.countryOfResidence.heading = What is {0}’s country of residence?
