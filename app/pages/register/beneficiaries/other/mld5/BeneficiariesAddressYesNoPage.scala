@@ -16,16 +16,15 @@
 
 package pages.register.beneficiaries.other.mld5
 
-import models.core.pages.InternationalAddress
-import pages.QuestionPage
 import play.api.libs.json.JsPath
+import pages.QuestionPage
 import sections.beneficiaries.{Beneficiaries, OtherBeneficiaries}
 
-final case class BeneficiariesInternationalAddressPage(index: Int) extends QuestionPage[InternationalAddress] {
+final case class BeneficiariesAddressYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
   override def path: JsPath = JsPath \ Beneficiaries \ OtherBeneficiaries \ index \ toString
 
-  override def toString: String = "beneficiarieInternationalUkAddress"
+  override def toString: String = "beneficiariesUKAddressYesNo"
 
 //  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
 //    value match {

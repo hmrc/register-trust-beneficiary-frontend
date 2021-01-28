@@ -19,41 +19,41 @@ package controllers.register.beneficiaries.other.mld5
 import config.annotations.OtherBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.register.other.DescriptionRequiredAction
-import forms.InternationalAddressFormProvider
+import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.beneficiaries.other.mld5.BeneficiariesInternationalAddressPage
-import play.api.i18n.{I18nSupport, MessagesApi}
+import pages.register.beneficiaries.other.mld5.BeneficiariesAddressYesNoPage
+import play.api.data.Form
+import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.register.beneficiaries.other.mld5.AddressInternationalView
+import views.html.register.beneficiaries.other.mld5.BeneficiariesAddressYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class BeneficiariesInternationalAddressController @Inject()(
-                                               override val messagesApi: MessagesApi,
-                                               sessionRepository: RegistrationsRepository,
-                                               @OtherBeneficiary navigator: Navigator,
-                                               standardActionSets: StandardActionSets,
-                                               descriptionAction: DescriptionRequiredAction,
-                                               formProvider: InternationalAddressFormProvider,
-                                               val controllerComponents: MessagesControllerComponents,
-                                               view: AddressInternationalView
+class BeneficiariesAddressYesNoController @Inject()(
+                                                  val controllerComponents: MessagesControllerComponents,
+                                                  standardActionSets: StandardActionSets,
+                                                  formProvider: YesNoFormProvider,
+                                                  view: BeneficiariesAddressYesNoView,
+                                                  repository: RegistrationsRepository,
+                                                  @OtherBeneficiary navigator: Navigator,
+                                                  descriptionAction: DescriptionRequiredAction
                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form = formProvider()
+  val form: Form[Boolean] = formProvider.withPrefix("otherBeneficiary.beneficiaryAddressYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(descriptionAction(index)) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(BeneficiariesInternationalAddressPage(index)) match {
+      val preparedForm = request.userAnswers.get(BeneficiariesAddressYesNoPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, request.description, index, draftId))
+      Ok(view(preparedForm, index, draftId))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
@@ -62,13 +62,13 @@ class BeneficiariesInternationalAddressController @Inject()(
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, request.description, index, draftId))),
+          Future.successful(BadRequest(view(formWithErrors, index, draftId))),
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(BeneficiariesInternationalAddressPage(index), value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(BeneficiariesInternationalAddressPage(index), draftId, updatedAnswers))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(BeneficiariesAddressYesNoPage(index), value))
+            _              <- repository.set(updatedAnswers)
+          } yield Redirect(navigator.nextPage(BeneficiariesAddressYesNoPage(index), draftId, updatedAnswers))
       )
   }
 }

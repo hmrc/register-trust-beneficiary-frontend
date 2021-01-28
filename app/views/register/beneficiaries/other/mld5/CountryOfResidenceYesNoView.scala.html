@@ -21,10 +21,10 @@
         formHelper: FormWithCSRF
 )
 
-@(form: Form[_], name: String, index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("otherBeneficiary.addressUkYesNo.title")}"
+    title = s"${errorPrefix(form)}${messages("otherBeneficiary.countryOfResidenceYesNo.title")}"
 ) {
 
     @formHelper(action = CountryOfResidenceYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
@@ -35,7 +35,7 @@
 
         @components.input_yes_no(
             field = form("value"),
-            label = messages("otherBeneficiary.addressUkYesNo.heading", name),
+            label = messages("otherBeneficiary.countryOfResidenceYesNo.heading"),
             legendAsHeading = true
         )
 

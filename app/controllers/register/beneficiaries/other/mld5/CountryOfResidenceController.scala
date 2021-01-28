@@ -29,7 +29,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.countryOptions.CountryOptionsNonUK
-import views.html.register.beneficiaries.charityortrust.charity.mld5.CountryOfResidenceView
+import views.html.register.beneficiaries.other.mld5.CountryOfResidenceView
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -46,7 +46,7 @@ class CountryOfResidenceController @Inject()(
                                                      val countryOptions: CountryOptionsNonUK
                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form: Form[String] = formProvider.withPrefix("charity.5mld.countryOfResidence")
+  private val form: Form[String] = formProvider.withPrefix("otherBeneficiary.countryOfResidence")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
@@ -57,7 +57,7 @@ class CountryOfResidenceController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, countryOptions.options, draftId, index, request.beneficiaryName))
+      Ok(view(preparedForm, countryOptions.options, draftId, index))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
@@ -66,7 +66,7 @@ class CountryOfResidenceController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, index, request.beneficiaryName))),
+          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, index))),
 
         value => {
           for {

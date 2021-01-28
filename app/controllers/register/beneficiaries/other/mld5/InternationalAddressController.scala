@@ -19,28 +19,29 @@ package controllers.register.beneficiaries.other.mld5
 import config.annotations.OtherBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.register.other.DescriptionRequiredAction
-import forms.UKAddressFormProvider
+import forms.InternationalAddressFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.beneficiaries.other.AddressUKPage
-import pages.register.beneficiaries.other.mld5.BeneficiariesAddressPage
+import pages.register.beneficiaries.other.mld5.InternationalAddressPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.register.beneficiaries.other.mld5.BeneficiariesAddressView
+import utils.countryOptions.CountryOptionsNonUK
+import views.html.register.beneficiaries.other.mld5.InternationalAddressView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class BeneficiariesAddressController @Inject()(
+class InternationalAddressController @Inject()(
                                                override val messagesApi: MessagesApi,
                                                sessionRepository: RegistrationsRepository,
                                                @OtherBeneficiary navigator: Navigator,
                                                standardActionSets: StandardActionSets,
                                                descriptionAction: DescriptionRequiredAction,
-                                               formProvider: UKAddressFormProvider,
+                                               formProvider: InternationalAddressFormProvider,
                                                val controllerComponents: MessagesControllerComponents,
-                                               view: BeneficiariesAddressView
+                                               view: InternationalAddressView,
+                                               val countryOptions: CountryOptionsNonUK
                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form = formProvider()
@@ -49,12 +50,12 @@ class BeneficiariesAddressController @Inject()(
     standardActionSets.identifiedUserWithData(draftId).andThen(descriptionAction(index)) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(BeneficiariesAddressPage(index)) match {
+      val preparedForm = request.userAnswers.get(InternationalAddressPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, request.description, index, draftId))
+      Ok(view(preparedForm, countryOptions.options, index, draftId))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
@@ -63,13 +64,13 @@ class BeneficiariesAddressController @Inject()(
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, request.description, index, draftId))),
+          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, index, draftId))),
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(BeneficiariesAddressPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(InternationalAddressPage(index), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(BeneficiariesAddressPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(InternationalAddressPage(index), draftId, updatedAnswers))
       )
   }
 }

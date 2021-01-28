@@ -22,10 +22,10 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], countryOptions: Seq[InputOption], draftId: String, index: Int, charityName: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], countryOptions: Seq[InputOption], draftId: String, index: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("charity.5mld.countryOfResidence.title")}"
+    title = s"${errorPrefix(form)}${messages("otherBeneficiary.countryOfResidence.title")}"
 ) {
 
     @formHelper(action = CountryOfResidenceController.onSubmit(index, draftId), 'autoComplete -> "off") {
@@ -35,7 +35,7 @@
         @components.error_summary(form.errors)
 
         @components.select(field = form("value"),
-            label = messages("charity.5mld.countryOfResidence.heading", charityName),
+            label = messages("otherBeneficiary.countryOfResidence.heading"),
             labelClasses = Set("heading-large"),
             labelAsHeading = true,
             options = countryOptions,

@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.register.beneficiaries.charityortrust.trust.routes._
+@import controllers.register.beneficiaries.other.mld5.routes._
 @import models.Mode
 @import utils.InputOption
 
@@ -23,13 +23,13 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], countryOptions:Seq[InputOption], index:Int, draftId: String, name: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], countryOptions:Seq[InputOption], index:Int, draftId: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("site.address.international.title")}"
+    title = s"${errorPrefix(form)}${messages("otherBeneficiary.internationalAddress.title")}"
     ) {
 
-    @formHelper(action = AddressInternationalController.onSubmit(index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = InternationalAddressController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 
@@ -38,7 +38,7 @@
         <fieldset>
 
             <legend>
-                @components.heading("site.address.international.heading", Some(name))
+                @components.heading("otherBeneficiary.internationalAddress.heading")
             </legend>
 
             @components.international_address(form, countryOptions)

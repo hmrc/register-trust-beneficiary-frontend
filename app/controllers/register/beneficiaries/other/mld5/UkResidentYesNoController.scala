@@ -22,14 +22,13 @@ import controllers.actions.register.other.DescriptionRequiredAction
 import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.beneficiaries.other.AddressUKYesNoPage
 import pages.register.beneficiaries.other.mld5.UkResidentYesNoPage
+import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.beneficiaries.other.mld5.UkResidentYesNoView
-import play.api.data.Form
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -43,7 +42,7 @@ class UkResidentYesNoController @Inject()(
                                           descriptionAction: DescriptionRequiredAction
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[Boolean] = formProvider.withPrefix("ukResidentYesNo")
+  val form: Form[Boolean] = formProvider.withPrefix("otherBeneficiary.ukResidentYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(descriptionAction(index)) {
@@ -54,7 +53,7 @@ class UkResidentYesNoController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, request.description, index, draftId))
+      Ok(view(preparedForm, index, draftId))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
@@ -63,7 +62,7 @@ class UkResidentYesNoController @Inject()(
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, request.description, index, draftId))),
+          Future.successful(BadRequest(view(formWithErrors, index, draftId))),
 
         value =>
           for {
