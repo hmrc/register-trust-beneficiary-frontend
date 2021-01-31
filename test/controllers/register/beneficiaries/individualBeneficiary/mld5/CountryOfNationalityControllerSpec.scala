@@ -30,6 +30,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils.InputOption
 import utils.countryOptions.CountryOptionsNonUK
+import utils.Constants._
 import views.html.register.beneficiaries.individualBeneficiary.mld5.CountryOfNationalityView
 
 class CountryOfNationalityControllerSpec extends SpecBase with MockitoSugar {
@@ -69,7 +70,7 @@ class CountryOfNationalityControllerSpec extends SpecBase with MockitoSugar {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers.set(NamePage(index), name).success.value
-        .set(CountryOfNationalityPage(index), "Spain").success.value
+        .set(CountryOfNationalityPage(index), SPAIN).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -84,7 +85,7 @@ class CountryOfNationalityControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill("Spain"), countryOptions, draftId, index, name.toString)(request, messages).toString
+        view(form.fill(SPAIN), countryOptions, draftId, index, name.toString)(request, messages).toString
 
       application.stop()
     }
@@ -101,7 +102,7 @@ class CountryOfNationalityControllerSpec extends SpecBase with MockitoSugar {
 
       val request =
         FakeRequest(POST, countryOfNationality)
-          .withFormUrlEncodedBody(("value", "ES"))
+          .withFormUrlEncodedBody(("value", ES))
 
       val result = route(application, request).value
 
@@ -160,7 +161,7 @@ class CountryOfNationalityControllerSpec extends SpecBase with MockitoSugar {
 
       val request =
         FakeRequest(POST, countryOfNationality)
-          .withFormUrlEncodedBody(("value", "ES"))
+          .withFormUrlEncodedBody(("value", ES))
 
       val result = route(application, request).value
 

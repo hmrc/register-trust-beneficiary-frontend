@@ -19,6 +19,7 @@ package pages.register.beneficiaries.charityortrust.trust.mld5
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
+import utils.Constants._
 
 class CountryOfResidenceYesNoPageSpec extends PageBehaviours {
 
@@ -35,7 +36,7 @@ class CountryOfResidenceYesNoPageSpec extends PageBehaviours {
     forAll(arbitrary[UserAnswers]) {
       initial =>
         val answers: UserAnswers = initial.set(CountryOfResidenceInTheUkYesNoPage(0), false).success.value
-          .set(CountryOfResidencePage(0), "ES").success.value
+          .set(CountryOfResidencePage(0), ES).success.value
 
         val result = answers.set(CountryOfResidenceYesNoPage(0), false).success.value
 

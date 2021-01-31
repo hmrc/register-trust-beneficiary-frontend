@@ -26,6 +26,7 @@ import models.registration.pages.PassportOrIdCardDetails
 import models.registration.pages.RoleInCompany.Director
 import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.beneficiaries.individual._
+import utils.Constants._
 
 class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {
@@ -130,7 +131,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
               nino = None,
               None,
               address = Some(
-                AddressType("Line1", "Line2", None, Some("Newcastle"), Some("NE62RT"), "GB")
+                AddressType("Line1", "Line2", None, Some("Newcastle"), Some("NE62RT"), GB)
               )
             ))
           )
@@ -170,7 +171,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
               .set(AddressYesNoPage(index0), false).success.value
               .set(VulnerableYesNoPage(index0), false).success.value
               .set(PassportDetailsYesNoPage(index0), true).success.value
-              .set(PassportDetailsPage(index0), PassportOrIdCardDetails("GB", "012345678", LocalDate.of(2024, 5, 13))).success.value
+              .set(PassportDetailsPage(index0), PassportOrIdCardDetails(GB, "012345678", LocalDate.of(2024, 5, 13))).success.value
 
           val individuals = individualBeneficiariesMapper.build(userAnswers)
 
@@ -184,7 +185,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
             beneficiaryShareOfIncome = None,
             identification = Some(IdentificationType(
               None,
-              Some(PassportType("012345678", LocalDate.of(2024, 5, 13), "GB")),
+              Some(PassportType("012345678", LocalDate.of(2024, 5, 13), GB)),
               None
             ))
           )
@@ -200,7 +201,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
               .set(VulnerableYesNoPage(index0), false).success.value
               .set(PassportDetailsYesNoPage(index0), false).success.value
               .set(IDCardDetailsYesNoPage(index0), true).success.value
-              .set(IDCardDetailsPage(index0), PassportOrIdCardDetails("GB", "012345678", LocalDate.of(2024, 5, 13))).success.value
+              .set(IDCardDetailsPage(index0), PassportOrIdCardDetails(GB, "012345678", LocalDate.of(2024, 5, 13))).success.value
 
           val individuals = individualBeneficiariesMapper.build(userAnswers)
 
@@ -214,7 +215,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
             beneficiaryShareOfIncome = None,
             identification = Some(IdentificationType(
               None,
-              Some(PassportType("012345678", LocalDate.of(2024, 5, 13), "GB")),
+              Some(PassportType("012345678", LocalDate.of(2024, 5, 13), GB)),
               None
             ))
           )
@@ -277,7 +278,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
                   nino = None,
                   passport = None,
                   address = Some(
-                    AddressType("line1", "line2", None, None, Some("NE62RT"), "GB")
+                    AddressType("line1", "line2", None, None, Some("NE62RT"), GB)
                   ))
               ))
           )

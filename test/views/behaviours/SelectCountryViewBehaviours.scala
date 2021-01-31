@@ -19,10 +19,9 @@ package views.behaviours
 import play.api.data.{Form, FormError}
 import play.twirl.api.HtmlFormat
 import views.ViewUtils
+import utils.Constants._
 
 trait SelectCountryViewBehaviours extends QuestionViewBehaviours[String] {
-
-  val answer = "ES"
 
   def selectCountryPage(form: Form[String],
                  createView: Form[String] => HtmlFormat.Appendable,
@@ -52,8 +51,8 @@ trait SelectCountryViewBehaviours extends QuestionViewBehaviours[String] {
 
         "have the correct selection option value 'selected' for the form country input value" in {
 
-          val doc = asDocument(createView(form.fill(answer)))
-          doc.getElementsByAttribute("selected").attr("value") mustBe answer
+          val doc = asDocument(createView(form.fill(ES)))
+          doc.getElementsByAttribute("selected").attr("value") mustBe ES
         }
       }
 

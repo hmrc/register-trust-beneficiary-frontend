@@ -23,6 +23,7 @@ import models.core.pages.{InternationalAddress, UKAddress}
 import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.beneficiaries.charityortrust.charity._
 import pages.register.beneficiaries.charityortrust.charity.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
+import utils.Constants._
 
 class CharityBeneficiaryMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {
@@ -82,7 +83,7 @@ class CharityBeneficiaryMapperSpec extends SpecBase with MustMatchers
             beneficiaryDiscretion = Some(false),
             beneficiaryShareOfIncome = Some("60"),
             identification = None,
-            countryOfResidence = Some("GB")
+            countryOfResidence = Some(GB)
           )
         }
 
@@ -125,7 +126,7 @@ class CharityBeneficiaryMapperSpec extends SpecBase with MustMatchers
             identification = Some(IdentificationOrgType(
               utr = None,
               address = Some(
-                AddressType(ukAddress.line1, ukAddress.line2, ukAddress.line3, ukAddress.line4, Some(ukAddress.postcode), "GB")
+                AddressType(ukAddress.line1, ukAddress.line2, ukAddress.line3, ukAddress.line4, Some(ukAddress.postcode), GB)
               )
             )),
             countryOfResidence = None
