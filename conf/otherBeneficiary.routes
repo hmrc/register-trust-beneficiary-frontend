@@ -25,8 +25,8 @@ POST        /:draftId/:index/check-details              controllers.register.ben
 GET        /:draftId/:index/remove                     controllers.register.beneficiaries.other.RemoveOtherBeneficiaryController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/:index/remove                     controllers.register.beneficiaries.other.RemoveOtherBeneficiaryController.onSubmit(index: Int, draftId: String)
 
-GET         /:draftId/:index/has-beneficiaries-address           controllers.register.beneficiaries.other.mld5.BeneficiariesAddressYesNoController.onPageLoad(index: Int, draftId: String)
-POST        /:draftId/:index/has-beneficiaries-address           controllers.register.beneficiaries.other.mld5.BeneficiariesAddressYesNoController.onSubmit(index: Int, draftId: String)
+GET         /:draftId/:index/has-beneficiaries-address           controllers.register.beneficiaries.other.mld5.BeneficiariesAddressInUKYesNoController.onPageLoad(index: Int, draftId: String)
+POST        /:draftId/:index/has-beneficiaries-address           controllers.register.beneficiaries.other.mld5.BeneficiariesAddressInUKYesNoController.onSubmit(index: Int, draftId: String)
 
 GET         /:draftId/:index/has-country-of-residence            controllers.register.beneficiaries.other.mld5.CountryOfResidenceYesNoController.onPageLoad(index: Int, draftId: String)
 POST        /:draftId/:index/has-country-of-residence            controllers.register.beneficiaries.other.mld5.CountryOfResidenceYesNoController.onSubmit(index: Int, draftId: String)

@@ -20,18 +20,14 @@ import base.SpecBase
 import config.annotations.OtherBeneficiary
 import forms.YesNoFormProvider
 import navigation.{FakeNavigator, Navigator}
-import pages.register.beneficiaries.other.{AddressUKYesNoPage, DescriptionPage}
-import base.SpecBase
-import config.annotations.OtherBeneficiary
-import forms.YesNoFormProvider
-import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.register.beneficiaries.other.{AddressUKYesNoPage, DescriptionPage}
+import pages.register.beneficiaries.other.DescriptionPage
+import pages.register.beneficiaries.other.mld5.CountryOfResidenceYesNoPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.register.beneficiaries.other.AddressUkYesNoView
+import views.html.register.beneficiaries.other.mld5.CountryOfResidenceYesNoView
 
 class CountryOfResidenceYesNoControllerSpec extends SpecBase with MockitoSugar {
 
@@ -50,34 +46,34 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase with MockitoSugar {
 
       val request = FakeRequest(GET, addressUkYesNoRoute)
 
-      val view = application.injector.instanceOf[AddressUkYesNoView]
+      val view = application.injector.instanceOf[CountryOfResidenceYesNoView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, description, index, draftId)(request, messages).toString
+        view(form, index, draftId, description)(request, messages).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = baseAnswers.set(AddressUKYesNoPage(index), true).success.value
+      val answers = baseAnswers.set(CountryOfResidenceYesNoPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 
       val request = FakeRequest(GET, addressUkYesNoRoute)
 
-      val view = application.injector.instanceOf[AddressUkYesNoView]
+      val view = application.injector.instanceOf[CountryOfResidenceYesNoView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), description, index, draftId)(request, messages).toString
+        view(form.fill(true), index, draftId, description)(request, messages).toString
 
       application.stop()
     }
@@ -113,14 +109,14 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase with MockitoSugar {
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[AddressUkYesNoView]
+      val view = application.injector.instanceOf[CountryOfResidenceYesNoView]
 
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, description, index, draftId)(request, messages).toString
+        view(boundForm, index, draftId, description)(request, messages).toString
 
        application.stop()
     }

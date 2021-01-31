@@ -27,7 +27,7 @@
     title = s"${errorPrefix(form)}${messages("otherBeneficiary.beneficiaryAddressYesNo.title")}"
 ) {
 
-    @formHelper(action = BeneficiariesAddressYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = BeneficiariesAddressInUKYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 
@@ -35,7 +35,7 @@
 
         @components.input_yes_no(
             field = form("value"),
-            label = messages("otherBeneficiary.beneficiaryAddressYesNo.heading"),
+            label = messages("otherBeneficiary.beneficiaryAddressYesNo.heading", name),
             legendAsHeading = true
         )
 

@@ -20,17 +20,17 @@ import models.UserAnswers
 import models.core.pages.{InternationalAddress, UKAddress}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-import pages.register.beneficiaries.other.{AddressInternationalPage, AddressUKYesNoPage}
+import pages.register.beneficiaries.other.{AddressInternationalPage, AddressUKPage}
 
-class BeneficiaryAddressYesNoPageSpec extends PageBehaviours {
+class BeneficiaryAddressInUKYesNoPageSpec extends PageBehaviours {
 
   "BeneficiariesAddressYesNoPage" must {
 
-    beRetrievable[Boolean](BeneficiariesAddressYesNoPage(0))
+    beRetrievable[Boolean](BeneficiariesAddressInUKYesNoPage(0))
 
-    beSettable[Boolean](BeneficiariesAddressYesNoPage(0))
+    beSettable[Boolean](BeneficiariesAddressInUKYesNoPage(0))
 
-    beRemovable[Boolean](BeneficiariesAddressYesNoPage(0))
+    beRemovable[Boolean](BeneficiariesAddressInUKYesNoPage(0))
   }
 
   "remove UK address when BeneficiariesAddressYesNoPage is set to false" in {
@@ -38,28 +38,27 @@ class BeneficiaryAddressYesNoPageSpec extends PageBehaviours {
     forAll(arbitrary[UserAnswers], arbitrary[String]) {
       (initial, str) =>
         val answers: UserAnswers =
-          initial.set(BeneficiariesAddressYesNoPage(index), UKAddress(str, str, Some(str), Some(str), str)).success.value
-          .set(AddressInternationalPage(index), InternationalAddress(str, str, Some(str), str)).success.value
+          initial.set(AddressUKPage(index), UKAddress(str, str, Some(str), Some(str), str)).success.value
+            .set(AddressInternationalPage(index), InternationalAddress(str, str, Some(str), str)).success.value
 
-        val result = answers.set(AddressUKYesNoPage(index), false).success.value
+        val result = answers.set(BeneficiariesAddressInUKYesNoPage(index), false).success.value
 
         result.get(AddressInternationalPage(index)) must be(defined)
-        result.get(BeneficiariesAddressYesNoPage(index)) mustNot be(defined)
+        result.get(AddressUKPage(index)) mustNot be(defined)
     }
   }
-  "remove international address page when AddressUKYesNoPage is set to true" in {
+  "remove international address page when BeneficiariesAddressYesNoPage is set to true" in {
     val index = 0
     forAll(arbitrary[UserAnswers], arbitrary[String]) {
       (initial, str) =>
         val answers: UserAnswers =
-          initial.set(BeneficiariesAddressYesNoPage(index), UKAddress(str, str, Some(str), Some(str), str)).success.value
+          initial.set(AddressUKPage(index), UKAddress(str, str, Some(str), Some(str), str)).success.value
             .set(AddressInternationalPage(index), InternationalAddress(str, str, Some(str), str)).success.value
 
-        val result = answers.set(AddressUKYesNoPage(index), true).success.value
+        val result = answers.set(BeneficiariesAddressInUKYesNoPage(index), true).success.value
 
         result.get(AddressInternationalPage(index)) mustNot be(defined)
-        result.get(BeneficiariesAddressYesNoPage(index)) must be(defined)
+        result.get(AddressUKPage(index)) must be(defined)
     }
   }
-
 }

@@ -17,10 +17,9 @@
 package pages.register.beneficiaries.other.mld5
 
 import models.UserAnswers
-import models.core.pages.{InternationalAddress, UKAddress}
-import pages.behaviours.PageBehaviours
-import pages.register.beneficiaries.other.{AddressInternationalPage, AddressUKPage}
 import org.scalacheck.Arbitrary.arbitrary
+import pages.behaviours.PageBehaviours
+import pages.register.beneficiaries.other.mld5.CountryOfResidenceYesNoPage
 
 class CountryOfResidenceYesNoPageSpec extends PageBehaviours {
 
@@ -33,20 +32,29 @@ class CountryOfResidenceYesNoPageSpec extends PageBehaviours {
     beRemovable[Boolean](CountryOfResidenceYesNoPage(0))
   }
 
-  "remove relevant Data when AddressYesNoPage is set to false" in {
-    val index = 0
-    forAll(arbitrary[UserAnswers], arbitrary[String]) {
-      (initial, str) =>
-        val answers: UserAnswers = initial.set(CountryOfResidenceYesNoPage(index), true).success.value
-          .set(AddressUKPage(index), UKAddress(str, str, Some(str), Some(str), str)).success.value
-          .set(AddressInternationalPage(index), InternationalAddress(str, str, Some(str), str)).success.value
-
-        val result = answers.set(CountryOfResidenceYesNoPage(index), false).success.value
-
-        result.get(CountryOfResidencePage(index)) mustNot be(defined)
-        result.get(AddressUKPage(index)) mustNot be(defined)
-        result.get(AddressInternationalPage(index)) mustNot be(defined)
-    }
-  }
-
+//  "remove pages when CountryOfResidenceYesNoPage is set to false" in {
+//    forAll(arbitrary[UserAnswers]) {
+//      initial =>
+//        val answers: UserAnswers = initial.set(CountryOfResidenceYesNoPage(0), false).success.value
+//          .set(CountryOfResidencePage(0), "ES").success.value
+//
+//        val result = answers.set(CountryOfResidenceYesNoPage(0), false).success.value
+//
+//        result.get(CountryOfResidenceYesNoPage(0)) mustNot be(defined)
+//        result.get(CountryOfResidencePage(0)) mustNot be(defined)
+//    }
+//  }
+//
+//  "set to gb when true" in {
+//    forAll(arbitrary[UserAnswers]) {
+//      initial =>
+//        val answers: UserAnswers = initial.set(CountryOfResidenceYesNoPage(0), true).success.value
+//          .set(CountryOfResidencePage(0), "GB").success.value
+//
+//        val result = answers.set(CountryOfResidenceYesNoPage(0), true).success.value
+//
+//        result.get(CountryOfResidenceYesNoPage(0)) must be(defined)
+//        result.get(CountryOfResidencePage(0)) must be(defined)
+//    }
+//  }
 }

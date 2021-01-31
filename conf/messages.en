@@ -774,18 +774,18 @@ removeEmploymentRelatedBeneficiary.error.required = Select yes if you want to re
 
 #5mld
 
-otherBeneficiary.beneficiaryAddressYesNo.title = Do you know this {0}’s address?
-otherBeneficiary.beneficiaryAddressYesNo.heading = Do you know this {0}’s address?
-otherBeneficiary.beneficiaryAddressYesNo.checkYourAnswersLabel = Do you know this {0}’s address?
+otherBeneficiary.beneficiaryAddressYesNo.title = Do you know the other beneficiary’s address?
+otherBeneficiary.beneficiaryAddressYesNo.heading = Do you know {0}’s address?
+otherBeneficiary.beneficiaryAddressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
 otherBeneficiary.beneficiaryAddressYesNo.error.required = Select yes if you know the other beneficiary’s address
 
-otherBeneficiary.countryOfResidenceYesNo.title = Do you know this {0}’s country of residence?
-otherBeneficiary.countryOfResidenceYesNo.heading = Do you know this {0}’s country of residence?
-otherBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel = Do you know this {0}’s country of residence?
+otherBeneficiary.countryOfResidenceYesNo.title = Do you know the other beneficiary’s country of residence?
+otherBeneficiary.countryOfResidenceYesNo.heading = Do you know {0}’s country of residence?
+otherBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel = Do you know {0}’s country of residence?
 otherBeneficiary.countryOfResidenceYesNo.error.required = Select yes if you know the charity’s country of residence
 
-otherBeneficiary.countryOfResidence.title = What is this {0}’s country of residence?
-otherBeneficiary.countryOfResidence.heading = What is this {0}’s country of residence?
-otherBeneficiary.countryOfResidence.checkYourAnswersLabel = What is this {0}’s country of residence?
+otherBeneficiary.countryOfResidence.title = What is the other beneficiary’s country of residence?
+otherBeneficiary.countryOfResidence.heading = What is {0}’s country of residence?
+otherBeneficiary.countryOfResidence.checkYourAnswersLabel = What is {0}’s country of residence?
 otherBeneficiary.countryOfResidence.error.required = Enter a country
 

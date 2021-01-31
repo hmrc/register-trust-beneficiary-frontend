@@ -25,17 +25,17 @@ import views.html.register.beneficiaries.other.mld5.CountryOfResidenceYesNoView
 class CountryOfResidenceYesNoViewSpec extends YesNoViewBehaviours {
 
   private val index = 0
-  private val messageKeyPrefix = "otherBeneficiary.addressYesNo"
+  private val messageKeyPrefix = "otherBeneficiary.countryOfResidenceYesNo"
   private val description = "Other"
 
   override val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
-  "AddressYesNo view" must {
+  "CountryOfResidenceYesNo view" must {
 
     val view = viewFor[CountryOfResidenceYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, description, index, draftId)(fakeRequest, messages)
+      view.apply(form, index, draftId, description)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, description)
 

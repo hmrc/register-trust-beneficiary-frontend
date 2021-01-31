@@ -23,7 +23,7 @@ import controllers.actions.register.other.DescriptionRequiredAction
 import forms.CountryFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.beneficiaries.charityortrust.charity.mld5.CountryOfResidencePage
+import pages.register.beneficiaries.other.mld5.CountryOfResidencePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

@@ -22,21 +22,21 @@ import controllers.actions.register.other.DescriptionRequiredAction
 import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.beneficiaries.other.mld5.BeneficiariesAddressYesNoPage
+import pages.register.beneficiaries.other.mld5.BeneficiariesAddressInUKYesNoPage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.register.beneficiaries.other.mld5.BeneficiariesAddressYesNoView
+import views.html.register.beneficiaries.other.mld5.BeneficiariesAddressInUKYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class BeneficiariesAddressYesNoController @Inject()(
+class BeneficiariesAddressInUKYesNoController @Inject()(
                                                   val controllerComponents: MessagesControllerComponents,
                                                   standardActionSets: StandardActionSets,
                                                   formProvider: YesNoFormProvider,
-                                                  view: BeneficiariesAddressYesNoView,
+                                                  view: BeneficiariesAddressInUKYesNoView,
                                                   repository: RegistrationsRepository,
                                                   @OtherBeneficiary navigator: Navigator,
                                                   descriptionAction: DescriptionRequiredAction
@@ -48,7 +48,7 @@ class BeneficiariesAddressYesNoController @Inject()(
     standardActionSets.identifiedUserWithData(draftId).andThen(descriptionAction(index)) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(BeneficiariesAddressYesNoPage(index)) match {
+      val preparedForm = request.userAnswers.get(BeneficiariesAddressInUKYesNoPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -66,9 +66,9 @@ class BeneficiariesAddressYesNoController @Inject()(
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(BeneficiariesAddressYesNoPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(BeneficiariesAddressInUKYesNoPage(index), value))
             _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(BeneficiariesAddressYesNoPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(BeneficiariesAddressInUKYesNoPage(index), draftId, updatedAnswers))
       )
   }
 }

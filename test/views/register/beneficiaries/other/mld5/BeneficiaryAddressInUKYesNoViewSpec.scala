@@ -20,9 +20,9 @@ import forms.YesNoFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.register.beneficiaries.other.AddressUkYesNoView
+import views.html.register.beneficiaries.other.mld5.BeneficiariesAddressInUKYesNoView
 
-class BeneficiaryAddressYesNoViewSpec extends YesNoViewBehaviours {
+class BeneficiaryAddressInUKYesNoViewSpec extends YesNoViewBehaviours {
 
   private val index = 0
   private val messageKeyPrefix = "otherBeneficiary.beneficiaryAddressYesNo"
@@ -32,10 +32,10 @@ class BeneficiaryAddressYesNoViewSpec extends YesNoViewBehaviours {
 
   "BeneficiaryAddressYesNo view" must {
 
-    val view = viewFor[AddressUkYesNoView](Some(emptyUserAnswers))
+    val view = viewFor[BeneficiariesAddressInUKYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, description, index, draftId)(fakeRequest, messages)
+      view.apply(form, index, draftId, description)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, description)
 

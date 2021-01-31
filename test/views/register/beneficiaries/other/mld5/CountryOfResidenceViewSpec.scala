@@ -22,7 +22,7 @@ import play.twirl.api.HtmlFormat
 import utils.InputOption
 import utils.countryOptions.CountryOptionsNonUK
 import views.behaviours.SelectCountryViewBehaviours
-import views.html.register.beneficiaries.charityortrust.charity.mld5.CountryOfResidenceView
+import views.html.register.beneficiaries.other.mld5.CountryOfResidenceView
 
 class CountryOfResidenceViewSpec extends SelectCountryViewBehaviours {
 

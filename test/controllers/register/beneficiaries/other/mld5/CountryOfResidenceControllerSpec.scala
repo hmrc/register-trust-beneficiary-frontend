@@ -21,6 +21,7 @@ import config.annotations.CharityBeneficiary
 import forms.CountryFormProvider
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
+import pages.register.beneficiaries.other.DescriptionPage
 import pages.register.beneficiaries.other.mld5.CountryOfResidencePage
 import play.api.data.Form
 import play.api.inject.bind
@@ -28,7 +29,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils.InputOption
 import utils.countryOptions.CountryOptionsNonUK
-import views.html.register.beneficiaries.charityortrust.charity.mld5.CountryOfResidenceView
+import views.html.register.beneficiaries.other.mld5.CountryOfResidenceView
 
 class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
 
@@ -44,7 +45,7 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(CountryOfResidencePage(index), description).success.value
+        .set(DescriptionPage(index), description).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -66,7 +67,7 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(CountryOfResidencePage(index), description).success.value
+      val userAnswers = emptyUserAnswers.set(DescriptionPage(index), description).success.value
         .set(CountryOfResidencePage(index), "Spain").success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -90,7 +91,7 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(CountryOfResidencePage(index), description).success.value
+        .set(DescriptionPage(index), description).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
@@ -113,7 +114,7 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(CountryOfResidencePage(index), description).success.value
+        .set(DescriptionPage(index), description).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

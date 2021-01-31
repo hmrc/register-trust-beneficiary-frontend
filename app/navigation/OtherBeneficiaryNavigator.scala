@@ -21,7 +21,7 @@ import javax.inject.Inject
 import models.ReadableUserAnswers
 import pages.Page
 import pages.register.beneficiaries.other._
-import pages.register.beneficiaries.other.mld5.{BeneficiariesAddressYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
+import pages.register.beneficiaries.other.mld5.{BeneficiariesAddressInUKYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import play.api.mvc.Call
 
 class OtherBeneficiaryNavigator @Inject()() extends Navigator {
@@ -30,62 +30,60 @@ class OtherBeneficiaryNavigator @Inject()() extends Navigator {
     routes(draftId)(page)(userAnswers)
 
   private def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] =
-    simpleNavigation(draftId) andThen (c => (_:ReadableUserAnswers) => c) orElse
+    simpleNavigation(draftId)  orElse
       yesNoNavigation(draftId)
 
-  private def simpleNavigation(draftId: String, is5mldEnabled: Boolean = false): PartialFunction[Page, Call] = {
-    case DescriptionPage(index) => CountryOfResidence(draftId, index, is5mldEnabled)
-    case ShareOfIncomePage(index) => other.routes.AddressYesNoController.onPageLoad(index, draftId)
-    case AddressUKPage(index) => other.routes.CheckDetailsController.onPageLoad(index, draftId)
-    case AddressInternationalPage(index) => other.routes.CheckDetailsController.onPageLoad(index, draftId)
-    case CountryOfResidencePage(index) => other.mld5.routes.BeneficiariesAddressYesNoController.onPageLoad(index, draftId)
+  private def simpleNavigation(draftId: String):  PartialFunction[Page, ReadableUserAnswers => Call] = {
+    case DescriptionPage(index) => ua => CountryOfResidenceYesNo(draftId, index, ua.is5mldEnabled)
+    case ShareOfIncomePage(index) => _ => other.routes.AddressYesNoController.onPageLoad(index, draftId)
+    case AddressUKPage(index) => _ => other.routes.CheckDetailsController.onPageLoad(index, draftId)
+    case AddressInternationalPage(index) =>_ =>  other.routes.CheckDetailsController.onPageLoad(index, draftId)
+    case CountryOfResidencePage(index) => _ => other.routes.AddressYesNoController.onPageLoad(index, draftId)
   }
 
   private def yesNoNavigation(draftId: String) : PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case page @ IncomeDiscretionYesNoPage(index) => ua =>
+    case page@IncomeDiscretionYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
         fromPage = page,
         yesCall = other.routes.AddressYesNoController.onPageLoad(index, draftId),
         noCall = other.routes.ShareOfIncomeController.onPageLoad(index, draftId)
       )
-    case page @ AddressYesNoPage(index) => ua =>
+    case page@AddressYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
         fromPage = page,
         yesCall = other.routes.AddressUkYesNoController.onPageLoad(index, draftId),
         noCall = other.routes.CheckDetailsController.onPageLoad(index, draftId)
       )
-    case page @ AddressUKYesNoPage(index) => ua =>
+    case page@AddressUKYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
         fromPage = page,
         yesCall = other.routes.UkAddressController.onPageLoad(index, draftId),
         noCall = other.routes.NonUkAddressController.onPageLoad(index, draftId)
       )
-
-    case page @ CountryOfResidenceYesNoPage(index) => ua =>
+    case page@CountryOfResidenceYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
         fromPage = page,
-        yesCall = other.mld5.routes.BeneficiariesAddressYesNoController.onPageLoad(index, draftId),
-        noCall = other.mld5.routes.CountryOfResidenceController.onPageLoad(index, draftId)
+        yesCall = other.mld5.routes.BeneficiariesAddressInUKYesNoController.onPageLoad(index, draftId),
+        noCall = other.routes.AddressYesNoController.onPageLoad(index, draftId)
       )
-    case page @ BeneficiariesAddressYesNoPage(index) => ua =>
+    case page@BeneficiariesAddressInUKYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
         fromPage = page,
-        yesCall = other.routes.AddressUkYesNoController.onPageLoad(index, draftId),
-        noCall = other.routes.CheckDetailsController.onPageLoad(index, draftId)
+        yesCall = other.routes.AddressYesNoController.onPageLoad(index, draftId),
+        noCall = other.mld5.routes.CountryOfResidenceController.onPageLoad(index, draftId)
       )
   }
 
-  private def CountryOfResidence(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
+  private def CountryOfResidenceYesNo(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
     if (is5mldEnabled) {
       controllers.register.beneficiaries.other.mld5.routes.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
     } else {
       other.routes.DiscretionYesNoController.onPageLoad(index, draftId)
     }
   }
-
 }
