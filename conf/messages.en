@@ -217,7 +217,7 @@ individualBeneficiary.5mld.countryOfNationality.error.invalidCharacters = The co
 individualBeneficiary.5mld.legallyIncapableYesNo.title = Do you know if the individual beneficiary is legally incapable at the time of registration?
 individualBeneficiary.5mld.legallyIncapableYesNo.heading = Do you know if {0} is legally incapable at the time of registration?
 individualBeneficiary.5mld.legallyIncapableYesNo.checkYourAnswersLabel = Do you know if {0} is legally incapable at the time of registration?
-individualBeneficiary.5mld.legallyIncapableYesNo.error.required = Select yes if you know the beneficiary’s legally capacity
+individualBeneficiary.5mld.legallyIncapableYesNo.error.required = Select yes if you know the beneficiary’s legal capacity
 individualBeneficiary.5mld.legallyIncapableYesNo.hint = A beneficiary is legally incapable if they cannot understand information and make decisions about the trust due to a mental illness, learning disability, dementia or related condition, or they cannot communicate.
 
 individualBeneficiaryDateOfBirthYesNo.title = Do you know the individual beneficiary’s date of birth?
