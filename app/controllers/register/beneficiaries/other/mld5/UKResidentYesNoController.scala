@@ -22,33 +22,33 @@ import controllers.actions.register.other.DescriptionRequiredAction
 import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.register.beneficiaries.other.mld5.BeneficiariesAddressInUKYesNoPage
+import pages.register.beneficiaries.other.mld5.UKResidentYesNoPage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.register.beneficiaries.other.mld5.BeneficiariesAddressInUKYesNoView
+import views.html.register.beneficiaries.other.mld5.UKResidentYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class BeneficiariesAddressInUKYesNoController @Inject()(
+class UKResidentYesNoController @Inject()(
                                                   val controllerComponents: MessagesControllerComponents,
                                                   standardActionSets: StandardActionSets,
                                                   formProvider: YesNoFormProvider,
-                                                  view: BeneficiariesAddressInUKYesNoView,
+                                                  view: UKResidentYesNoView,
                                                   repository: RegistrationsRepository,
                                                   @OtherBeneficiary navigator: Navigator,
                                                   descriptionAction: DescriptionRequiredAction
                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[Boolean] = formProvider.withPrefix("otherBeneficiary.beneficiaryAddressYesNo")
+  val form: Form[Boolean] = formProvider.withPrefix("otherBeneficiary.ukResidentYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(descriptionAction(index)) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(BeneficiariesAddressInUKYesNoPage(index)) match {
+      val preparedForm = request.userAnswers.get(UKResidentYesNoPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -66,9 +66,9 @@ class BeneficiariesAddressInUKYesNoController @Inject()(
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(BeneficiariesAddressInUKYesNoPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(UKResidentYesNoPage(index), value))
             _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(BeneficiariesAddressInUKYesNoPage(index), draftId, updatedAnswers))
+          } yield Redirect(navigator.nextPage(UKResidentYesNoPage(index), draftId, updatedAnswers))
       )
   }
 }

@@ -20,7 +20,7 @@ import base.SpecBase
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.beneficiaries.other._
 import controllers.register.beneficiaries.other.routes._
-import pages.register.beneficiaries.other.mld5.{BeneficiariesAddressInUKYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
+import pages.register.beneficiaries.other.mld5.{UKResidentYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 
 class OtherBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks {
 
@@ -127,24 +127,24 @@ class OtherBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
           .set(CountryOfResidenceYesNoPage(index), true).success.value
 
         navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, answers)
-          .mustBe(controllers.register.beneficiaries.other.mld5.routes.BeneficiariesAddressInUKYesNoController.onPageLoad(index, draftId))
+          .mustBe(controllers.register.beneficiaries.other.mld5.routes.UKResidentYesNoController.onPageLoad(index, draftId))
       }
 
-      "BeneficiariesAddressInUKYesNo -> false -> CountryOfResidence Page" in {
+      "UKResidentYesNoYesNo -> false -> CountryOfResidence Page" in {
 
         val answers = baseAnswers
-          .set(BeneficiariesAddressInUKYesNoPage(index), false).success.value
+          .set(UKResidentYesNoPage(index), false).success.value
 
-        navigator.nextPage(BeneficiariesAddressInUKYesNoPage(index), draftId, answers)
+        navigator.nextPage(UKResidentYesNoPage(index), draftId, answers)
           .mustBe(controllers.register.beneficiaries.other.mld5.routes.CountryOfResidenceController.onPageLoad(index, draftId))
       }
 
-      "BeneficiariesAddressInUKYesNo -> true -> AddressYesNo Page" in {
+      "UKResidentYesNoYesNo -> true -> AddressYesNo Page" in {
 
         val answers = baseAnswers
-          .set(BeneficiariesAddressInUKYesNoPage(index), true).success.value
+          .set(UKResidentYesNoPage(index), true).success.value
 
-        navigator.nextPage(BeneficiariesAddressInUKYesNoPage(index), draftId, answers)
+        navigator.nextPage(UKResidentYesNoPage(index), draftId, answers)
           .mustBe(controllers.register.beneficiaries.other.routes.AddressYesNoController.onPageLoad(index, draftId))
       }
 

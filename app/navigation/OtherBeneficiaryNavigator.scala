@@ -21,7 +21,7 @@ import javax.inject.Inject
 import models.ReadableUserAnswers
 import pages.Page
 import pages.register.beneficiaries.other._
-import pages.register.beneficiaries.other.mld5.{BeneficiariesAddressInUKYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
+import pages.register.beneficiaries.other.mld5.{UKResidentYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import play.api.mvc.Call
 
 class OtherBeneficiaryNavigator @Inject()() extends Navigator {
@@ -67,10 +67,10 @@ class OtherBeneficiaryNavigator @Inject()() extends Navigator {
       yesNoNav(
         ua = ua,
         fromPage = page,
-        yesCall = other.mld5.routes.BeneficiariesAddressInUKYesNoController.onPageLoad(index, draftId),
+        yesCall = other.mld5.routes.UKResidentYesNoController.onPageLoad(index, draftId),
         noCall = other.routes.AddressYesNoController.onPageLoad(index, draftId)
       )
-    case page@BeneficiariesAddressInUKYesNoPage(index) => ua =>
+    case page@UKResidentYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
         fromPage = page,

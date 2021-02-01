@@ -22,15 +22,15 @@ import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 import pages.register.beneficiaries.other.{AddressInternationalPage, AddressUKPage}
 
-class BeneficiaryAddressInUKYesNoPageSpec extends PageBehaviours {
+class UKResidentYesNoPageSpec extends PageBehaviours {
 
-  "BeneficiariesAddressYesNoPage" must {
+  "UKResidentYesNoPage" must {
 
-    beRetrievable[Boolean](BeneficiariesAddressInUKYesNoPage(0))
+    beRetrievable[Boolean](UKResidentYesNoPage(0))
 
-    beSettable[Boolean](BeneficiariesAddressInUKYesNoPage(0))
+    beSettable[Boolean](UKResidentYesNoPage(0))
 
-    beRemovable[Boolean](BeneficiariesAddressInUKYesNoPage(0))
+    beRemovable[Boolean](UKResidentYesNoPage(0))
   }
 
   "remove UK address when BeneficiariesAddressYesNoPage is set to false" in {
@@ -41,7 +41,7 @@ class BeneficiaryAddressInUKYesNoPageSpec extends PageBehaviours {
           initial.set(AddressUKPage(index), UKAddress(str, str, Some(str), Some(str), str)).success.value
             .set(AddressInternationalPage(index), InternationalAddress(str, str, Some(str), str)).success.value
 
-        val result = answers.set(BeneficiariesAddressInUKYesNoPage(index), false).success.value
+        val result = answers.set(UKResidentYesNoPage(index), false).success.value
 
         result.get(AddressInternationalPage(index)) must be(defined)
         result.get(AddressUKPage(index)) mustNot be(defined)
@@ -55,7 +55,7 @@ class BeneficiaryAddressInUKYesNoPageSpec extends PageBehaviours {
           initial.set(AddressUKPage(index), UKAddress(str, str, Some(str), Some(str), str)).success.value
             .set(AddressInternationalPage(index), InternationalAddress(str, str, Some(str), str)).success.value
 
-        val result = answers.set(BeneficiariesAddressInUKYesNoPage(index), true).success.value
+        val result = answers.set(UKResidentYesNoPage(index), true).success.value
 
         result.get(AddressInternationalPage(index)) mustNot be(defined)
         result.get(AddressUKPage(index)) must be(defined)

@@ -43,10 +43,10 @@ charity.5mld.countryOfResidence.error.required = Nodwch wlad
 #charity.5mld.countryOfResidence.error.length =
 #charity.5mld.countryOfResidence.error.invalidCharacters =
 
-otherBeneficiary.beneficiaryAddressYesNo.title = Do you know the other beneficiary’s address?
-otherBeneficiary.beneficiaryAddressYesNo.heading = Do you know {0}’s address?
-otherBeneficiary.beneficiaryAddressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
-otherBeneficiary.beneficiaryAddressYesNo.error.required = Select yes if you know the other beneficiary’s address
+otherBeneficiary.ukResidentYesNo.title = Do you know the other beneficiary’s address?
+otherBeneficiary.ukResidentYesNo.heading = Do you know {0}’s address?
+otherBeneficiary.ukResidentYesNo.checkYourAnswersLabel = Do you know {0}’s address?
+otherBeneficiary.ukResidentYesNo.error.required = Select yes if you know the other beneficiary’s address
 
 otherBeneficiary.countryOfResidenceYesNo.title = Do you know the other beneficiary’s country of residence?
 otherBeneficiary.countryOfResidenceYesNo.heading = Do you know {0}’s country of residence?
