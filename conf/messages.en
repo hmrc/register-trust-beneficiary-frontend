@@ -177,6 +177,49 @@ individualBeneficiary.roleInCompany.NA = None of these
 individualBeneficiary.roleInCompany.checkYourAnswersLabel.na = Not a director or employee
 individualBeneficiary.roleInCompany.error.required = Select the individual beneficiary’s role in the company the trust was created for
 
+
+individualBeneficiary.5mld.countryOfResidenceYesNo.title = Do you know the individual beneficiary’s country of residence?
+individualBeneficiary.5mld.countryOfResidenceYesNo.heading = Do you know {0}’s country of residence?
+individualBeneficiary.5mld.countryOfResidenceYesNo.checkYourAnswersLabel = Do you know {0}’s country of residence?
+individualBeneficiary.5mld.countryOfResidenceYesNo.error.required = Select yes if you know the individual beneficiary’s country of residence
+individualBeneficiary.5mld.countryOfResidenceYesNo.hint = The country of residence is usually where the individual lives and works most of the time during the tax year.
+
+individualBeneficiary.5mld.countryOfResidenceInTheUkYesNo.title = Does the individual beneficiary have UK residency?
+individualBeneficiary.5mld.countryOfResidenceInTheUkYesNo.heading = Does {0} have UK residency?
+individualBeneficiary.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = Does {0} have UK residency?
+individualBeneficiary.5mld.countryOfResidenceInTheUkYesNo.error.required = Select yes if the individual beneficiary has UK residency
+
+individualBeneficiary.5mld.countryOfResidence.title = What is the individual beneficiary’s country of residence?
+individualBeneficiary.5mld.countryOfResidence.heading = What is {0}’s country of residence?
+individualBeneficiary.5mld.countryOfResidence.checkYourAnswersLabel = What is {0}’s country of residence?
+individualBeneficiary.5mld.countryOfResidence.error.required = Enter a country
+individualBeneficiary.5mld.countryOfResidence.error.length = The country of residence must be 100 characters or less
+individualBeneficiary.5mld.countryOfResidence.error.invalidCharacters = The country of residence must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
+
+individualBeneficiary.5mld.countryOfNationalityYesNo.title = Do you know the individual beneficiary’s country of nationality?
+individualBeneficiary.5mld.countryOfNationalityYesNo.heading = Do you know {0}’s country of nationality?
+individualBeneficiary.5mld.countryOfNationalityYesNo.checkYourAnswersLabel = Do you know {0}’s country of nationality?
+individualBeneficiary.5mld.countryOfNationalityYesNo.error.required = Select yes if you know the individual beneficiary’s country of nationality
+individualBeneficiary.5mld.countryOfNationalityYesNo.hint = The country of nationality is usually where the individual was born and where their passport is registered.
+
+individualBeneficiary.5mld.countryOfNationalityInTheUkYesNo.title = Does the individual beneficiary have UK nationality?
+individualBeneficiary.5mld.countryOfNationalityInTheUkYesNo.heading = Does {0} have UK nationality?
+individualBeneficiary.5mld.countryOfNationalityInTheUkYesNo.checkYourAnswersLabel = Does {0} have UK nationality?
+individualBeneficiary.5mld.countryOfNationalityInTheUkYesNo.error.required = Select yes if the individual beneficiary has UK nationality
+
+individualBeneficiary.5mld.countryOfNationality.title = What is the individual beneficiary’s country of nationality?
+individualBeneficiary.5mld.countryOfNationality.heading = What is {0}’s country of nationality?
+individualBeneficiary.5mld.countryOfNationality.checkYourAnswersLabel = What is {0}’s country of nationality?
+individualBeneficiary.5mld.countryOfNationality.error.required = Enter a country
+individualBeneficiary.5mld.countryOfNationality.error.length = The country of nationality must be 100 characters or less
+individualBeneficiary.5mld.countryOfNationality.error.invalidCharacters = The country of nationality must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
+
+individualBeneficiary.5mld.legallyIncapableYesNo.title = Do you know if the individual beneficiary is legally incapable at the time of registration?
+individualBeneficiary.5mld.legallyIncapableYesNo.heading = Do you know if {0} is legally incapable at the time of registration?
+individualBeneficiary.5mld.legallyIncapableYesNo.checkYourAnswersLabel = Do you know if {0} is legally incapable at the time of registration?
+individualBeneficiary.5mld.legallyIncapableYesNo.error.required = Select yes if you know the beneficiary’s legal capacity
+individualBeneficiary.5mld.legallyIncapableYesNo.hint = A beneficiary is legally incapable if they cannot understand information and make decisions about the trust due to a mental illness, learning disability, dementia or related condition, or they cannot communicate.
+
 individualBeneficiaryDateOfBirthYesNo.title = Do you know the individual beneficiary’s date of birth?
 individualBeneficiaryDateOfBirthYesNo.heading = Do you know {0}’s date of birth?
 individualBeneficiaryDateOfBirthYesNo.checkYourAnswersLabel = Do you know {0}’s date of birth?

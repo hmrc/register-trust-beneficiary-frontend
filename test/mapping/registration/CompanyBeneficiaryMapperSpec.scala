@@ -22,6 +22,7 @@ import models.core.pages.{InternationalAddress, UKAddress}
 import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.beneficiaries.companyoremploymentrelated.company._
 import pages.register.beneficiaries.companyoremploymentrelated.company.mld5._
+import utils.Constants._
 
 class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers with OptionValues with Generators {
 
@@ -105,7 +106,7 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers with Optio
             identification = Some(IdentificationOrgType(
               None,
               address = Some(
-                AddressType("Line1", "Line2", Some("Line3"), Some("Newcastle"), Some("NE62RT"), "GB")
+                AddressType("Line1", "Line2", Some("Line3"), Some("Newcastle"), Some("NE62RT"), GB)
               ))),
             countryOfResidence = None
           )
@@ -173,7 +174,7 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers with Optio
                 IdentificationOrgType(
                   None,
                   address = Some(
-                    AddressType("line1", "line2", None, None, Some("NE62RT"), "GB")
+                    AddressType("line1", "line2", None, None, Some("NE62RT"), GB)
                   ))),
               countryOfResidence = None
             )
@@ -199,7 +200,7 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers with Optio
           beneficiaryDiscretion = Some(false),
           beneficiaryShareOfIncome = Some("60"),
           identification = None,
-          countryOfResidence = Some("GB")
+          countryOfResidence = Some(GB)
         )
       }
 

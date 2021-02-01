@@ -23,6 +23,7 @@ import models.core.pages.{InternationalAddress, UKAddress}
 import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.beneficiaries.charityortrust.trust._
 import pages.register.beneficiaries.charityortrust.trust.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
+import utils.Constants._
 
 class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {
@@ -86,7 +87,7 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
             beneficiaryDiscretion = Some(false),
             beneficiaryShareOfIncome = Some("100"),
             identification = None,
-            countryOfResidence = Some("GB")
+            countryOfResidence = Some(GB)
           )
         }
 
@@ -133,7 +134,7 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
             identification = Some(IdentificationOrgType(
               None,
               address = Some(
-                AddressType("Line1", "Line2", None, Some("Newcastle"), Some("NE62RT"), "GB")
+                AddressType("Line1", "Line2", None, Some("Newcastle"), Some("NE62RT"), GB)
               )
             )
           ),
@@ -199,7 +200,7 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
               identification = Some(IdentificationOrgType(
                 None,
                 address = Some(
-                  AddressType("Line1", "Line2", None, Some("Newcastle"), Some("NE62RT"), "GB")
+                  AddressType("Line1", "Line2", None, Some("Newcastle"), Some("NE62RT"), GB)
                 )
               )
             ),
@@ -238,7 +239,7 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
         val userAnswers =
           emptyUserAnswers
             .set(NamePage(index), trustName).success.value
-            .set(CountryOfResidencePage(index), "GB").success.value
+            .set(CountryOfResidencePage(index), GB).success.value
 
         val trusts = trustBeneficiariesMapper.build(userAnswers)
 
@@ -247,7 +248,7 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
           beneficiaryDiscretion = None,
           beneficiaryShareOfIncome = None,
           identification = None,
-          countryOfResidence = Some("GB"))
+          countryOfResidence = Some(GB))
       }
 
       "must not be able to create BeneficiaryTrustType when incomplete data " in {

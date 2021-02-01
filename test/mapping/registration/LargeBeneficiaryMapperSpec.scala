@@ -23,6 +23,7 @@ import models.registration.pages.HowManyBeneficiaries
 import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated._
 import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
+import utils.Constants._
 
 class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {
@@ -71,7 +72,7 @@ class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
             identification = None,
             beneficiaryDiscretion = None,
             beneficiaryShareOfIncome = None,
-            countryOfResidence = Some("GB")
+            countryOfResidence = Some(GB)
           )
         }
 
@@ -156,7 +157,7 @@ class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
             identification = Some(IdentificationOrgType(
               None,
               address = Some(
-                AddressType("Line1", "Line2", Some("Line3"), Some("Newcastle"), Some("NE62RT"), "GB")
+                AddressType("Line1", "Line2", Some("Line3"), Some("Newcastle"), Some("NE62RT"), GB)
               )
             )),
             beneficiaryDiscretion = None,
@@ -248,7 +249,7 @@ class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
               identification = Some(IdentificationOrgType(
                 None,
                 address = Some(
-                  AddressType("Line1", "Line2", Some("Line3"), Some("Newcastle"), Some("NE62RT"), "GB")
+                  AddressType("Line1", "Line2", Some("Line3"), Some("Newcastle"), Some("NE62RT"), GB)
                 )
               )),
               beneficiaryDiscretion = None,

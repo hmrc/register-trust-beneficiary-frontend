@@ -85,6 +85,28 @@ POST       /:draftId/individual/:index/check-answers                            
 GET        /:draftId/individual/:index/remove                                         controllers.register.beneficiaries.individualBeneficiary.RemoveIndividualBeneficiaryController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/individual/:index/remove                                         controllers.register.beneficiaries.individualBeneficiary.RemoveIndividualBeneficiaryController.onSubmit(index: Int, draftId: String)
 
+GET        /:draftId/individual/:index/has-country-of-residence                       controllers.register.beneficiaries.individualBeneficiary.mld5.CountryOfResidenceYesNoController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/individual/:index/has-country-of-residence                       controllers.register.beneficiaries.individualBeneficiary.mld5.CountryOfResidenceYesNoController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/individual/:index/uk-residence                                   controllers.register.beneficiaries.individualBeneficiary.mld5.CountryOfResidenceInTheUkYesNoController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/individual/:index/uk-residence                                   controllers.register.beneficiaries.individualBeneficiary.mld5.CountryOfResidenceInTheUkYesNoController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/individual/:index/country-of-residence                           controllers.register.beneficiaries.individualBeneficiary.mld5.CountryOfResidenceController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/individual/:index/country-of-residence                           controllers.register.beneficiaries.individualBeneficiary.mld5.CountryOfResidenceController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/individual/:index/has-country-of-nationality                     controllers.register.beneficiaries.individualBeneficiary.mld5.CountryOfNationalityYesNoController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/individual/:index/has-country-of-nationality                     controllers.register.beneficiaries.individualBeneficiary.mld5.CountryOfNationalityYesNoController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/individual/:index/uk-nationality                                 controllers.register.beneficiaries.individualBeneficiary.mld5.CountryOfNationalityInTheUkYesNoController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/individual/:index/uk-nationality                                 controllers.register.beneficiaries.individualBeneficiary.mld5.CountryOfNationalityInTheUkYesNoController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/individual/:index/country-of-nationality                         controllers.register.beneficiaries.individualBeneficiary.mld5.CountryOfNationalityController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/individual/:index/country-of-nationality                         controllers.register.beneficiaries.individualBeneficiary.mld5.CountryOfNationalityController.onSubmit(index: Int, draftId: String)
+
+GET        /:draftId/individual/:index/legally-incapable                              controllers.register.beneficiaries.individualBeneficiary.mld5.LegallyIncapableYesNoController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/individual/:index/legally-incapable                              controllers.register.beneficiaries.individualBeneficiary.mld5.LegallyIncapableYesNoController.onSubmit(index: Int, draftId: String)
+
+
 # trust
 
 GET        /:draftId/trust/:index/name                                                controllers.register.beneficiaries.charityortrust.trust.NameController.onPageLoad(index: Int, draftId: String)

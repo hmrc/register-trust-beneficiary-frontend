@@ -27,6 +27,7 @@ import play.api.test.Helpers._
 import utils.answers.CharityBeneficiaryAnswersHelper
 import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
+import utils.Constants._
 import views.html.register.beneficiaries.charityortrust.charity.CharityAnswersView
 
 class CharityAnswersControllerSpec extends SpecBase {
@@ -45,7 +46,7 @@ class CharityAnswersControllerSpec extends SpecBase {
           .set(HowMuchIncomePage(index),60).success.value
           .set(CountryOfResidenceYesNoPage(index), true).success.value
           .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
-          .set(CountryOfResidencePage(index), "ES").success.value
+          .set(CountryOfResidencePage(index), ES).success.value
           .set(AddressYesNoPage(index),true).success.value
           .set(AddressInTheUkYesNoPage(index),true).success.value
           .set(CharityAddressUKPage(index),UKAddress("Test 1","Test 2", None, None, "AB11AB")).success.value
