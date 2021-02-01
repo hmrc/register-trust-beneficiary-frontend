@@ -774,10 +774,10 @@ removeEmploymentRelatedBeneficiary.error.required = Select yes if you want to re
 
 #5mld
 
-otherBeneficiary.beneficiaryAddressYesNo.title = Do you know the other beneficiary’s address?
-otherBeneficiary.beneficiaryAddressYesNo.heading = Do you know {0}’s address?
-otherBeneficiary.beneficiaryAddressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
-otherBeneficiary.beneficiaryAddressYesNo.error.required = Select yes if you know the other beneficiary’s address
+otherBeneficiary.beneficiaryAddressYesNo.title = Is this beneficiary a UK resident?
+otherBeneficiary.beneficiaryAddressYesNo.heading = Is {0} a UK resident?
+otherBeneficiary.beneficiaryAddressYesNo.checkYourAnswersLabel = Is {0} a UK resident?
+otherBeneficiary.beneficiaryAddressYesNo.error.required = Select yes if this beneficiary is a UK resident
 
 otherBeneficiary.countryOfResidenceYesNo.title = Do you know the other beneficiary’s country of residence?
 otherBeneficiary.countryOfResidenceYesNo.heading = Do you know {0}’s country of residence?
