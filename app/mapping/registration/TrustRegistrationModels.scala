@@ -43,7 +43,10 @@ case class IndividualDetailsType(name: FullName,
                                  beneficiaryType: Option[String],
                                  beneficiaryDiscretion: Boolean,
                                  beneficiaryShareOfIncome: Option[String],
-                                 identification: Option[IdentificationType])
+                                 identification: Option[IdentificationType],
+                                 countryOfResidence: Option[String],
+                                 nationality: Option[String],
+                                 legallyIncapable: Option[Boolean])
 
 object IndividualDetailsType {
 

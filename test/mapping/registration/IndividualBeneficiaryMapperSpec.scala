@@ -26,6 +26,7 @@ import models.registration.pages.PassportOrIdCardDetails
 import models.registration.pages.RoleInCompany.Director
 import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.beneficiaries.individual._
+import pages.register.beneficiaries.individual.mld5.{CountryOfNationalityInTheUkYesNoPage, CountryOfNationalityPage, CountryOfNationalityYesNoPage, CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage, LegallyIncapableYesNoPage}
 import utils.Constants._
 
 class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
@@ -51,6 +52,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
     "when user answers is not empty" must {
 
       "must be able to create IndividualDetailsType" when {
+
         "Nino is set" in {
 
           val userAnswers =
@@ -74,7 +76,10 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
             beneficiaryType = None,
             beneficiaryDiscretion = false,
             beneficiaryShareOfIncome = Some("100"),
-            identification = Some(IdentificationType(nino = Some("AB123456C"), None, None))
+            identification = Some(IdentificationType(nino = Some("AB123456C"), None, None)),
+            countryOfResidence = None,
+            nationality = None,
+            legallyIncapable = None
           )
         }
 
@@ -99,7 +104,10 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
             beneficiaryType = Some(Director.toString),
             beneficiaryDiscretion = false,
             beneficiaryShareOfIncome = Some("100"),
-            identification = None
+            identification = None,
+            countryOfResidence = None,
+            nationality = None,
+            legallyIncapable = None
           )
         }
 
@@ -133,7 +141,10 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
               address = Some(
                 AddressType("Line1", "Line2", None, Some("Newcastle"), Some("NE62RT"), GB)
               )
-            ))
+            )),
+            countryOfResidence = None,
+            nationality = None,
+            legallyIncapable = None
           )
         }
 
@@ -157,7 +168,10 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
             beneficiaryType = None,
             beneficiaryDiscretion = true,
             beneficiaryShareOfIncome = None,
-            identification = None
+            identification = None,
+            countryOfResidence = None,
+            nationality = None,
+            legallyIncapable = None
           )
         }
 
@@ -187,7 +201,10 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
               None,
               Some(PassportType("012345678", LocalDate.of(2024, 5, 13), GB)),
               None
-            ))
+            )),
+            countryOfResidence = None,
+            nationality = None,
+            legallyIncapable = None
           )
         }
         "Id card is set" in {
@@ -217,7 +234,10 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
               None,
               Some(PassportType("012345678", LocalDate.of(2024, 5, 13), GB)),
               None
-            ))
+            )),
+            countryOfResidence = None,
+            nationality = None,
+            legallyIncapable = None
           )
         }
       }
@@ -264,7 +284,10 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
                   nino = Some("AB123456C"),
                   passport = None,
                   address = None)
-              )),
+              ),
+              countryOfResidence = None,
+              nationality = None,
+              legallyIncapable = None),
 
             IndividualDetailsType(
               name = FullName("first name", None, "last name"),
@@ -280,7 +303,10 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
                   address = Some(
                     AddressType("line1", "line2", None, None, Some("NE62RT"), GB)
                   ))
-              ))
+              ),
+              countryOfResidence = None,
+              nationality = None,
+              legallyIncapable = None)
           )
       }
 
@@ -295,6 +321,82 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
 
         individualBeneficiariesMapper.build(userAnswers) mustNot be(defined)
       }
+
+
+      "In 5mld mode with UK country of residence, UK country of nationality and legally incapable" in {
+
+        val userAnswers =
+          emptyUserAnswers
+            .set(NamePage(index0), FullName("first name", None, "last name")).success.value
+            .set(DateOfBirthYesNoPage(index0), true).success.value
+            .set(DateOfBirthPage(index0), dateOfBirth).success.value
+            .set(IncomeYesNoPage(index0), false).success.value
+            .set(IncomePage(index0), 100).success.value
+            .set(NationalInsuranceYesNoPage(index0), true).success.value
+            .set(NationalInsuranceNumberPage(index0), "AB123456C").success.value
+            .set(VulnerableYesNoPage(index0), true).success.value
+            .set(CountryOfNationalityYesNoPage(index0), true).success.value
+            .set(CountryOfNationalityInTheUkYesNoPage(index0), true).success.value
+            .set(CountryOfResidenceYesNoPage(index0), true).success.value
+            .set(CountryOfResidenceInTheUkYesNoPage(index0), true).success.value
+            .set(LegallyIncapableYesNoPage(index0), true).success.value
+
+        val individuals = individualBeneficiariesMapper.build(userAnswers)
+
+        individuals mustBe defined
+        individuals.value.head mustBe IndividualDetailsType(
+          name = FullName("first name", None, "last name"),
+          dateOfBirth = Some(dateOfBirth),
+          vulnerableBeneficiary = true,
+          beneficiaryType = None,
+          beneficiaryDiscretion = false,
+          beneficiaryShareOfIncome = Some("100"),
+          identification = Some(IdentificationType(nino = Some("AB123456C"), None, None)),
+          countryOfResidence = Some(GB),
+          nationality = Some(GB),
+          legallyIncapable = Some(true)
+        )
+
+      }
+
+      "In 5mld mode with Non UK country of residence, Non UK country of nationality and Not legally incapable" in {
+
+        val userAnswers =
+          emptyUserAnswers
+            .set(NamePage(index0), FullName("first name", None, "last name")).success.value
+            .set(DateOfBirthYesNoPage(index0), true).success.value
+            .set(DateOfBirthPage(index0), dateOfBirth).success.value
+            .set(IncomeYesNoPage(index0), false).success.value
+            .set(IncomePage(index0), 100).success.value
+            .set(NationalInsuranceYesNoPage(index0), true).success.value
+            .set(NationalInsuranceNumberPage(index0), "AB123456C").success.value
+            .set(VulnerableYesNoPage(index0), true).success.value
+            .set(CountryOfNationalityYesNoPage(index0), true).success.value
+            .set(CountryOfNationalityInTheUkYesNoPage(index0), false).success.value
+            .set(CountryOfNationalityPage(index0), ES).success.value
+            .set(CountryOfResidenceYesNoPage(index0), true).success.value
+            .set(CountryOfResidenceInTheUkYesNoPage(index0), false).success.value
+            .set(CountryOfResidencePage(index0), ES).success.value
+            .set(LegallyIncapableYesNoPage(index0), false).success.value
+
+        val individuals = individualBeneficiariesMapper.build(userAnswers)
+
+        individuals mustBe defined
+        individuals.value.head mustBe IndividualDetailsType(
+          name = FullName("first name", None, "last name"),
+          dateOfBirth = Some(dateOfBirth),
+          vulnerableBeneficiary = true,
+          beneficiaryType = None,
+          beneficiaryDiscretion = false,
+          beneficiaryShareOfIncome = Some("100"),
+          identification = Some(IdentificationType(nino = Some("AB123456C"), None, None)),
+          countryOfResidence = Some(ES),
+          nationality = Some(ES),
+          legallyIncapable = Some(false)
+        )
+
+      }
+
     }
   }
 }

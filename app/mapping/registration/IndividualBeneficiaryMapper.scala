@@ -40,7 +40,10 @@ class IndividualBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extend
               beneficiaryType = indBen.roleInCompany.map(_.toString),
               beneficiaryDiscretion = indBen.incomeYesNo,
               beneficiaryShareOfIncome = indBen.income.map(_.toString),
-              identification = identificationMap(indBen)
+              identification = identificationMap(indBen),
+              countryOfResidence = indBen.countryOfResidence,
+              nationality = indBen.countryOfNationality,
+              legallyIncapable = indBen.legallyIncapableYesNo
             )
           }
         )

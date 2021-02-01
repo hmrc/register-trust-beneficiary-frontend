@@ -33,7 +33,10 @@ final case class IndividualBeneficiary(name: FullName,
                                        internationalAddress : Option[InternationalAddress],
                                        vulnerableYesNo: Boolean,
                                        income: Option[Int] ,
-                                       incomeYesNo: Boolean
+                                       incomeYesNo: Boolean,
+                                       countryOfResidence: Option[String],
+                                       countryOfNationality: Option[String],
+                                       legallyIncapableYesNo: Option[Boolean]
                                       ) {
 }
 
