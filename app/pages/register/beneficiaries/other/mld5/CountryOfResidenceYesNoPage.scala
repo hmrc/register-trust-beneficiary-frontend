@@ -20,7 +20,7 @@ import models.UserAnswers
 import play.api.libs.json.JsPath
 import pages.QuestionPage
 import sections.beneficiaries.{Beneficiaries, OtherBeneficiaries}
-
+import utils.Constants.GB
 import scala.util.Try
 
 final case class CountryOfResidenceYesNoPage(index: Int) extends QuestionPage[Boolean] {
@@ -31,7 +31,7 @@ final case class CountryOfResidenceYesNoPage(index: Int) extends QuestionPage[Bo
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(true) => userAnswers.set(CountryOfResidencePage(index), "GB")
+      case Some(true) => userAnswers.set(CountryOfResidencePage(index), GB)
       case _ => super.cleanup(value, userAnswers)
     }
 }
