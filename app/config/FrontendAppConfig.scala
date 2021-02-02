@@ -30,7 +30,6 @@ class FrontendAppConfig @Inject() (val configuration: Configuration) {
 
   final val ENGLISH = "en"
   final val WELSH = "cy"
-  final val UK_COUNTRY_CODE = "GB"
 
   private val contactHost = configuration.get[String]("contact-frontend.host")
   private val contactFormServiceIdentifier = "trusts"
@@ -46,6 +45,9 @@ class FrontendAppConfig @Inject() (val configuration: Configuration) {
   lazy val loginUrl: String = configuration.get[String]("urls.login")
   lazy val loginContinueUrl: String = configuration.get[String]("urls.loginContinue")
   lazy val logoutUrl: String = configuration.get[String]("urls.logout")
+
+  lazy val logoutAudit: Boolean =
+    configuration.get[Boolean]("microservice.services.features.auditing.logout")
 
   lazy val trustsUrl: String = configuration.get[Service]("microservice.services.trusts").baseUrl
 

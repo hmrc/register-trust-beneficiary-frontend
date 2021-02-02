@@ -21,7 +21,6 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.beneficiaries._
-
 import javax.inject.Inject
 
 class InfoController @Inject()(
@@ -31,13 +30,14 @@ class InfoController @Inject()(
                                 requireData: RegistrationDataRequiredAction,
                                 val controllerComponents: MessagesControllerComponents,
                                 view: TaxableInfoView,
-                                viewNonTaxable: NonTaxableInfoView
+                                view5MLD: mld5InfoView
                               ) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(draftId: String): Action[AnyContent] = (identify andThen getData(draftId) andThen requireData) {
     implicit request =>
-      if (request.userAnswers.is5mldEnabled) {
-        Ok(viewNonTaxable(draftId))
+      val ua = request.userAnswers
+      if (ua.is5mldEnabled) {
+        Ok(view5MLD(draftId, ua.isTaxable))
       } else {
         Ok(view(draftId))
       }

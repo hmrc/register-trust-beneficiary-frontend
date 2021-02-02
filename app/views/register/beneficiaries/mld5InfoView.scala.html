@@ -20,7 +20,7 @@
     main_template: MainTemplate
 )
 
-@(draftId: String)(implicit request: Request[_], messages: Messages)
+@(draftId: String, isTaxable: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("beneficiaryInfo.5mld.title")
@@ -42,6 +42,21 @@
         )
     )
 
+    @if(isTaxable){
+
+        <p>@messages("beneficiaryInfo.5mld.taxable.paragraph1")</p>
+
+        @components.bullet_list("beneficiaryInfo.5mld.taxable",
+            List(
+                "bulletpoint1",
+                "bulletpoint2",
+                "bulletpoint3",
+                "bulletpoint4"
+            )
+        )
+
+    }
+
     <p>@messages("beneficiaryInfo.5mld.paragraph2")</p>
 
     <p>@messages("beneficiaryInfo.5mld.paragraph3")</p>
@@ -52,19 +67,35 @@
 
     <h2>@messages("beneficiaryInfo.5mld.subheading3")</h2>
 
-    <p>@messages("beneficiaryInfo.5mld.paragraph5")</p>
+    @if(isTaxable){
+        <p>@messages("beneficiaryInfo.5mld.taxable.paragraph2")</p>
+        <p>@messages("beneficiaryInfo.5mld.taxable.paragraph3")</p>
+    } else {
+        <p>@messages("beneficiaryInfo.5mld.paragraph5")</p>
+    }
 
     <h2>@messages("beneficiaryInfo.5mld.subheading4")</h2>
 
     <p>@messages("beneficiaryInfo.5mld.paragraph6")</p>
 
-    @components.bullet_list("beneficiaryInfo.5mld",
-        List(
-            "bulletpoint4",
-            "bulletpoint5",
-            "bulletpoint6"
+    @if(isTaxable){
+        @components.bullet_list("beneficiaryInfo.5mld",
+            List(
+                "bulletpoint4",
+                "taxable.bulletpoint5",
+                "bulletpoint5",
+                "bulletpoint6"
+            )
         )
-    )
+    } else {
+        @components.bullet_list("beneficiaryInfo.5mld",
+            List(
+                "bulletpoint4",
+                "bulletpoint5",
+                "bulletpoint6"
+            )
+        )
+    }
 
     <p>@messages("beneficiaryInfo.5mld.paragraph7")</p>
 
@@ -88,7 +119,12 @@
 
     <h2>@messages("beneficiaryInfo.5mld.subheading5")</h2>
 
-    <p>@messages("beneficiaryInfo.5mld.paragraph9")</p>
+    @if(isTaxable){
+        <p>@messages("beneficiaryInfo.5mld.taxable.paragraph4")</p>
+        <p>@messages("beneficiaryInfo.5mld.taxable.paragraph5")</p>
+    } else {
+        <p>@messages("beneficiaryInfo.5mld.paragraph9")</p>
+    }
 
     @components.button_link(messages("site.onlyContinue"), WhatTypeOfBeneficiaryController.onPageLoad(draftId).url)
 

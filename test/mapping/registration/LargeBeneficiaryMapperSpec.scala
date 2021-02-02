@@ -22,6 +22,8 @@ import models.core.pages.{Description, InternationalAddress, UKAddress}
 import models.registration.pages.HowManyBeneficiaries
 import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated._
+import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
+import utils.Constants._
 
 class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {
@@ -46,6 +48,63 @@ class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
 
       "return mapped data" when {
 
+        "in 5ml mode with UK country of residence set" in {
+          val userAnswers =
+            emptyUserAnswers
+              .set(LargeBeneficiaryNamePage(index0), "Employment Related Name").success.value
+              .set(CountryOfResidenceYesNoPage(index0), true).success.value
+              .set(CountryOfResidenceInTheUkYesNoPage(index0), true).success.value
+              .set(LargeBeneficiaryAddressYesNoPage(index0), false).success.value
+              .set(LargeBeneficiaryDescriptionPage(index0), Description("Description", None, None, None, None)).success.value
+              .set(LargeBeneficiaryNumberOfBeneficiariesPage(index0), HowManyBeneficiaries.Over1).success.value
+
+          val large = mapper.build(userAnswers)
+
+          large mustBe defined
+          large.value.head mustBe LargeType(
+            organisationName = "Employment Related Name",
+            description = "Description",
+            description1 = None,
+            description2 = None,
+            description3 = None,
+            description4 = None,
+            numberOfBeneficiary = "1",
+            identification = None,
+            beneficiaryDiscretion = None,
+            beneficiaryShareOfIncome = None,
+            countryOfResidence = Some(GB)
+          )
+        }
+
+        "in 5ml mode with Non UK country of residence set" in {
+          val userAnswers =
+            emptyUserAnswers
+              .set(LargeBeneficiaryNamePage(index0), "Employment Related Name").success.value
+              .set(CountryOfResidenceYesNoPage(index0), true).success.value
+              .set(CountryOfResidenceInTheUkYesNoPage(index0), false).success.value
+              .set(CountryOfResidencePage(index0), "FR").success.value
+              .set(LargeBeneficiaryAddressYesNoPage(index0), false).success.value
+              .set(LargeBeneficiaryDescriptionPage(index0), Description("Description", None, None, None, None)).success.value
+              .set(LargeBeneficiaryNumberOfBeneficiariesPage(index0), HowManyBeneficiaries.Over1).success.value
+
+          val large = mapper.build(userAnswers)
+
+          large mustBe defined
+          large.value.head mustBe LargeType(
+            organisationName = "Employment Related Name",
+            description = "Description",
+            description1 = None,
+            description2 = None,
+            description3 = None,
+            description4 = None,
+            numberOfBeneficiary = "1",
+            identification = None,
+            beneficiaryDiscretion = None,
+            beneficiaryShareOfIncome = None,
+            countryOfResidence = Some("FR")
+          )
+        }
+
         "No address is set" in {
           val userAnswers =
             emptyUserAnswers
@@ -67,7 +126,8 @@ class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
             numberOfBeneficiary = "1",
             identification = None,
             beneficiaryDiscretion = None,
-            beneficiaryShareOfIncome = None
+            beneficiaryShareOfIncome = None,
+            countryOfResidence = None
           )
         }
 
@@ -97,11 +157,12 @@ class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
             identification = Some(IdentificationOrgType(
               None,
               address = Some(
-                AddressType("Line1", "Line2", Some("Line3"), Some("Newcastle"), Some("NE62RT"), "GB")
+                AddressType("Line1", "Line2", Some("Line3"), Some("Newcastle"), Some("NE62RT"), GB)
               )
             )),
             beneficiaryDiscretion = None,
-            beneficiaryShareOfIncome = None
+            beneficiaryShareOfIncome = None,
+            countryOfResidence = None
           )
         }
 
@@ -134,7 +195,8 @@ class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
               )
             )),
             beneficiaryDiscretion = None,
-            beneficiaryShareOfIncome = None
+            beneficiaryShareOfIncome = None,
+            countryOfResidence = None
           )
         }
 
@@ -172,7 +234,8 @@ class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
               numberOfBeneficiary = "1",
               identification = None,
               beneficiaryDiscretion = None,
-              beneficiaryShareOfIncome = None
+              beneficiaryShareOfIncome = None,
+              countryOfResidence = None
             ),
 
             LargeType(
@@ -186,11 +249,12 @@ class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
               identification = Some(IdentificationOrgType(
                 None,
                 address = Some(
-                  AddressType("Line1", "Line2", Some("Line3"), Some("Newcastle"), Some("NE62RT"), "GB")
+                  AddressType("Line1", "Line2", Some("Line3"), Some("Newcastle"), Some("NE62RT"), GB)
                 )
               )),
               beneficiaryDiscretion = None,
-              beneficiaryShareOfIncome = None
+              beneficiaryShareOfIncome = None,
+              countryOfResidence = None
             )
           )
       }

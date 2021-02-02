@@ -43,7 +43,8 @@ class LargeBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Map
               numberOfBeneficiary = convertNumberOfBeneficiaries(beneficiary.numberOfBeneficiaries),
               identification = buildIdentification(beneficiary),
               beneficiaryDiscretion = beneficiary.discretionYesNo,
-              beneficiaryShareOfIncome = beneficiary.shareOfIncome
+              beneficiaryShareOfIncome = beneficiary.shareOfIncome,
+              countryOfResidence = beneficiary.countryOfResidence
             )
           }
         )
