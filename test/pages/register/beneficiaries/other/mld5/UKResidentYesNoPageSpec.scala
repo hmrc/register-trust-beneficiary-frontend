@@ -33,20 +33,6 @@ class UKResidentYesNoPageSpec extends PageBehaviours {
     beRemovable[Boolean](UKResidentYesNoPage(0))
   }
 
-  "remove UK address when BeneficiariesAddressYesNoPage is set to false" in {
-    val index = 0
-    forAll(arbitrary[UserAnswers], arbitrary[String]) {
-      (initial, str) =>
-        val answers: UserAnswers =
-          initial.set(AddressUKPage(index), UKAddress(str, str, Some(str), Some(str), str)).success.value
-            .set(AddressInternationalPage(index), InternationalAddress(str, str, Some(str), str)).success.value
-
-        val result = answers.set(UKResidentYesNoPage(index), false).success.value
-
-        result.get(AddressInternationalPage(index)) must be(defined)
-        result.get(AddressUKPage(index)) mustNot be(defined)
-    }
-  }
   "remove international address page when BeneficiariesAddressYesNoPage is set to true" in {
     val index = 0
     forAll(arbitrary[UserAnswers], arbitrary[String]) {
@@ -57,7 +43,7 @@ class UKResidentYesNoPageSpec extends PageBehaviours {
 
         val result = answers.set(UKResidentYesNoPage(index), true).success.value
 
-        result.get(AddressInternationalPage(index)) mustNot be(defined)
+        result.get(CountryOfResidencePage(index)) mustNot be(defined)
         result.get(AddressUKPage(index)) must be(defined)
     }
   }

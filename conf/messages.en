@@ -772,8 +772,6 @@ removeEmploymentRelatedBeneficiary.heading = Are you sure you want to remove {0}
 removeEmploymentRelatedBeneficiary.default = the employment related beneficiary
 removeEmploymentRelatedBeneficiary.error.required = Select yes if you want to remove the employment related beneficiary
 
-#5mld
-
 otherBeneficiary.ukResidentYesNo.title = Is this beneficiary a UK resident?
 otherBeneficiary.ukResidentYesNo.heading = Is {0} a UK resident?
 otherBeneficiary.ukResidentYesNo.checkYourAnswersLabel = Is {0} a UK resident?
@@ -782,7 +780,7 @@ otherBeneficiary.ukResidentYesNo.error.required = Select yes if this beneficiary
 otherBeneficiary.countryOfResidenceYesNo.title = Do you know the other beneficiary’s country of residence?
 otherBeneficiary.countryOfResidenceYesNo.heading = Do you know {0}’s country of residence?
 otherBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel = Do you know {0}’s country of residence?
-otherBeneficiary.countryOfResidenceYesNo.error.required = Select yes if you know the charity’s country of residence
+otherBeneficiary.countryOfResidenceYesNo.error.required = Select yes if you know the other beneficiary’s  country of residence
 
 otherBeneficiary.countryOfResidence.title = What is the other beneficiary’s country of residence?
 otherBeneficiary.countryOfResidence.heading = What is {0}’s country of residence?
