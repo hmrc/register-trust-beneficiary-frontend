@@ -17,13 +17,12 @@
 package pages.register.beneficiaries.other.mld5
 
 import models.UserAnswers
-import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-import pages.register.beneficiaries.other.mld5.CountryOfResidenceYesNoPage
+import org.scalacheck.Arbitrary.arbitrary
 
 class CountryOfResidenceYesNoPageSpec extends PageBehaviours {
 
-  "AddressYesNoPage" must {
+  "CountryOfResidenceYesNoPage" must {
 
     beRetrievable[Boolean](CountryOfResidenceYesNoPage(0))
 
@@ -32,29 +31,17 @@ class CountryOfResidenceYesNoPageSpec extends PageBehaviours {
     beRemovable[Boolean](CountryOfResidenceYesNoPage(0))
   }
 
-//  "remove pages when CountryOfResidenceYesNoPage is set to false" in {
-//    forAll(arbitrary[UserAnswers]) {
-//      initial =>
-//        val answers: UserAnswers = initial.set(CountryOfResidenceYesNoPage(0), false).success.value
-//          .set(CountryOfResidencePage(0), "ES").success.value
-//
-//        val result = answers.set(CountryOfResidenceYesNoPage(0), false).success.value
-//
-//        result.get(CountryOfResidenceYesNoPage(0)) mustNot be(defined)
-//        result.get(CountryOfResidencePage(0)) mustNot be(defined)
-//    }
-//  }
-//
-//  "set to gb when true" in {
-//    forAll(arbitrary[UserAnswers]) {
-//      initial =>
-//        val answers: UserAnswers = initial.set(CountryOfResidenceYesNoPage(0), true).success.value
-//          .set(CountryOfResidencePage(0), "GB").success.value
-//
-//        val result = answers.set(CountryOfResidenceYesNoPage(0), true).success.value
-//
-//        result.get(CountryOfResidenceYesNoPage(0)) must be(defined)
-//        result.get(CountryOfResidencePage(0)) must be(defined)
-//    }
-//  }
+  "remove pages when CountryOfResidenceYesNoPage is set to false" in {
+    forAll(arbitrary[UserAnswers]) {
+      initial =>
+        val answers: UserAnswers = initial.set(UKResidentYesNoPage(0), false).success.value
+          .set(CountryOfResidencePage(0), "ES").success.value
+
+        val result = answers.set(CountryOfResidenceYesNoPage(0), false).success.value
+
+        result.get(UKResidentYesNoPage(0)) mustNot be(defined)
+        result.get(CountryOfResidencePage(0)) mustNot be(defined)
+    }
+  }
+
 }

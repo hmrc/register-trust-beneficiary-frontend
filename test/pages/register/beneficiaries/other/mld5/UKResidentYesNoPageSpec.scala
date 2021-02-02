@@ -17,10 +17,11 @@
 package pages.register.beneficiaries.other.mld5
 
 import models.UserAnswers
-import models.core.pages.{InternationalAddress, UKAddress}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-import pages.register.beneficiaries.other.{AddressInternationalPage, AddressUKPage}
+import pages.register.beneficiaries.individual.mld5.CountryOfResidenceInTheUkYesNoPage
+import utils.Constants.ES
+import utils.Constants.GB
 
 class UKResidentYesNoPageSpec extends PageBehaviours {
 
@@ -33,18 +34,27 @@ class UKResidentYesNoPageSpec extends PageBehaviours {
     beRemovable[Boolean](UKResidentYesNoPage(0))
   }
 
-  "remove international address page when BeneficiariesAddressYesNoPage is set to true" in {
-    val index = 0
-    forAll(arbitrary[UserAnswers], arbitrary[String]) {
-      (initial, str) =>
-        val answers: UserAnswers =
-          initial.set(AddressUKPage(index), UKAddress(str, str, Some(str), Some(str), str)).success.value
-            .set(AddressInternationalPage(index), InternationalAddress(str, str, Some(str), str)).success.value
+  "Yes selected - set CountryOfResidencePage to 'GB' " in {
+    forAll(arbitrary[UserAnswers]) {
+      initial =>
+        val answers: UserAnswers = initial.set(CountryOfResidenceYesNoPage(0), true).success.value
+          .set(CountryOfResidencePage(0), ES).success.value
 
-        val result = answers.set(UKResidentYesNoPage(index), true).success.value
+        val result = answers.set(UKResidentYesNoPage(0), true).success.value
 
-        result.get(CountryOfResidencePage(index)) mustNot be(defined)
-        result.get(AddressUKPage(index)) must be(defined)
+        result.get(CountryOfResidencePage(0)).get mustBe GB
+    }
+  }
+
+  "No selected" in {
+    forAll(arbitrary[UserAnswers]) {
+      initial =>
+        val answers: UserAnswers = initial.set(CountryOfResidenceYesNoPage(0), true).success.value
+          .set(CountryOfResidencePage(0), ES).success.value
+
+        val result = answers.set(UKResidentYesNoPage(0), false).success.value
+
+        result.get(CountryOfResidencePage(0)).get mustBe ES
     }
   }
 }
