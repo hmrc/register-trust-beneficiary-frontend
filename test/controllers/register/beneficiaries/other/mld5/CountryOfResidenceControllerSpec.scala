@@ -17,7 +17,7 @@
 package controllers.register.beneficiaries.other.mld5
 
 import base.SpecBase
-import config.annotations.CharityBeneficiary
+import config.annotations.OtherBeneficiary
 import forms.CountryFormProvider
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
@@ -95,7 +95,7 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
-          bind[Navigator].qualifiedWith(classOf[CharityBeneficiary]).toInstance(new FakeNavigator)
+          bind[Navigator].qualifiedWith(classOf[OtherBeneficiary]).toInstance(new FakeNavigator())
         ).build()
 
       val request =

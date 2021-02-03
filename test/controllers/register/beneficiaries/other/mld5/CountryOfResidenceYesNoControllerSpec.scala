@@ -80,12 +80,10 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase with MockitoSugar {
 
     "redirect to the next page when valid data is submitted" in {
 
-      val onwardRoute = Call("GET", "/foo")
-
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[OtherBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
+            bind[Navigator].qualifiedWith(classOf[OtherBeneficiary]).toInstance(new FakeNavigator())
           ).build()
 
       val request =
@@ -96,7 +94,7 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase with MockitoSugar {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual onwardRoute.url
+      redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
       application.stop()
     }

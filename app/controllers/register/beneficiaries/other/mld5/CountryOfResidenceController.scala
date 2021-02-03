@@ -16,12 +16,10 @@
 
 package controllers.register.beneficiaries.other.mld5
 
-import config.annotations.CharityBeneficiary
+import config.annotations.OtherBeneficiary
 import controllers.actions.StandardActionSets
-import controllers.actions.register.charity.NameRequiredAction
 import controllers.actions.register.other.DescriptionRequiredAction
 import forms.CountryFormProvider
-import javax.inject.Inject
 import navigation.Navigator
 import pages.register.beneficiaries.other.mld5.CountryOfResidencePage
 import play.api.data.Form
@@ -32,50 +30,49 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.countryOptions.CountryOptionsNonUK
 import views.html.register.beneficiaries.other.mld5.CountryOfResidenceView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CountryOfResidenceController @Inject()(
-                                                     override val messagesApi: MessagesApi,
-                                                     registrationsRepository: RegistrationsRepository,
-                                                     @CharityBeneficiary navigator: Navigator,
-                                                     standardActionSets: StandardActionSets,
-                                                     nameAction: NameRequiredAction,
-                                                     formProvider: CountryFormProvider,
-                                                     standardActions: StandardActionSets,
-                                                     descriptionAction: DescriptionRequiredAction,
-                                                     val controllerComponents: MessagesControllerComponents,
-                                                     view: CountryOfResidenceView,
-                                                     val countryOptions: CountryOptionsNonUK
-                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                              override val messagesApi: MessagesApi,
+                                              registrationsRepository: RegistrationsRepository,
+                                              @OtherBeneficiary navigator: Navigator,
+                                              standardActionSets: StandardActionSets,
+                                              formProvider: CountryFormProvider,
+                                              descriptionAction: DescriptionRequiredAction,
+                                              val controllerComponents: MessagesControllerComponents,
+                                              view: CountryOfResidenceView,
+                                              val countryOptions: CountryOptionsNonUK
+                                            )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form: Form[String] = formProvider.withPrefix("otherBeneficiary.countryOfResidence")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(descriptionAction(index)) {
-    implicit request =>
+      implicit request =>
 
-      val preparedForm = request.userAnswers.get(CountryOfResidencePage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
+        val preparedForm = request.userAnswers.get(CountryOfResidencePage(index)) match {
+          case None => form
+          case Some(value) => form.fill(value)
+        }
 
-      Ok(view(preparedForm, countryOptions.options, draftId, index, request.description))
-  }
+        Ok(view(preparedForm, countryOptions.options, draftId, index, request.description))
+    }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(descriptionAction(index)).async {
-    implicit request =>
+      implicit request =>
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, index, request.description))),
+        form.bindFromRequest().fold(
+          (formWithErrors: Form[_]) =>
+            Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, index, request.description))),
 
-        value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfResidencePage(index), value))
-            _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CountryOfResidencePage(index), draftId, updatedAnswers))
-        }
-      )
-  }
+          value => {
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfResidencePage(index), value))
+              _              <- registrationsRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(CountryOfResidencePage(index), draftId, updatedAnswers))
+          }
+        )
+    }
 }

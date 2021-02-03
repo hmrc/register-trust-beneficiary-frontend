@@ -24,7 +24,6 @@ import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.other.DescriptionPage
 import pages.register.beneficiaries.other.mld5.UKResidentYesNoPage
 import play.api.inject.bind
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.other.mld5.UKResidentYesNoView
@@ -80,12 +79,10 @@ class UKResidentYesNoControllerSpec extends SpecBase with MockitoSugar {
 
     "redirect to the next page when valid data is submitted" in {
 
-      val onwardRoute = Call("GET", "/foo")
-
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[OtherBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
+            bind[Navigator].qualifiedWith(classOf[OtherBeneficiary]).toInstance(new FakeNavigator())
           ).build()
 
       val request =
@@ -96,7 +93,7 @@ class UKResidentYesNoControllerSpec extends SpecBase with MockitoSugar {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual onwardRoute.url
+      redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
       application.stop()
     }
