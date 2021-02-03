@@ -77,7 +77,7 @@ class IndividualBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOption
       individualBeneficiaryPassportDetails(index),
       individualBeneficiaryIDCardDetailsYesNo(index),
       individualBeneficiaryIDCardDetails(index),
-      legallyIncapableYesNo(index),
+      mentalCapacityYesNo(index),
       individualBeneficiaryVulnerableYesNo(index)
     ).flatten
   }
@@ -152,12 +152,12 @@ class IndividualBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOption
     case _ => None
   }
 
-  def legallyIncapableYesNo(index: Int): Option[AnswerRow] = userAnswers.get(LegallyIncapableYesNoPage(index)) map {
+  def mentalCapacityYesNo(index: Int): Option[AnswerRow] = userAnswers.get(MentalCapacityYesNoPage(index)) map {
     x =>
       AnswerRow(
-        "individualBeneficiary.5mld.legallyIncapableYesNo.checkYourAnswersLabel",
+        "individualBeneficiary.5mld.mentalCapacityYesNo.checkYourAnswersLabel",
         yesOrNo(x),
-        Some(ntRts.LegallyIncapableYesNoController.onPageLoad(index, draftId).url),
+        Some(ntRts.MentalCapacityYesNoController.onPageLoad(index, draftId).url),
         indBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )

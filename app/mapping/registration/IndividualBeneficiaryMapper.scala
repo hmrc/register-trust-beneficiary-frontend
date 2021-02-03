@@ -43,7 +43,7 @@ class IndividualBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extend
               identification = identificationMap(indBen),
               countryOfResidence = indBen.countryOfResidence,
               nationality = indBen.countryOfNationality,
-              legallyIncapable = indBen.legallyIncapableYesNo
+              legallyIncapable = indBen.mentalCapacityYesNo.map(!_)
             )
           }
         )

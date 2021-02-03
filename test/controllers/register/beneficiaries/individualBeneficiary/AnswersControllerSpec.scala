@@ -56,7 +56,7 @@ class AnswersControllerSpec extends SpecBase {
           .set(AddressYesNoPage(index),true).success.value
           .set(AddressUKYesNoPage(index),true).success.value
           .set(AddressUKPage(index),UKAddress("Line1", "Line2", None, None, "NE62RT")).success.value
-          .set(LegallyIncapableYesNoPage(index), true).success.value
+          .set(MentalCapacityYesNoPage(index), true).success.value
           .set(VulnerableYesNoPage(index),true).success.value
 
 
@@ -83,7 +83,7 @@ class AnswersControllerSpec extends SpecBase {
             checkYourAnswersHelper.individualBeneficiaryAddressYesNo(index).value,
             checkYourAnswersHelper.individualBeneficiaryAddressUKYesNo(index).value,
             checkYourAnswersHelper.individualBeneficiaryAddressUK(index).value,
-            checkYourAnswersHelper.legallyIncapableYesNo(index).value,
+            checkYourAnswersHelper.mentalCapacityYesNo(index).value,
             checkYourAnswersHelper.individualBeneficiaryVulnerableYesNo(index).value
           )
         )

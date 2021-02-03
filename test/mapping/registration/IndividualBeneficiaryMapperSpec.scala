@@ -26,7 +26,7 @@ import models.registration.pages.PassportOrIdCardDetails
 import models.registration.pages.RoleInCompany.Director
 import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.beneficiaries.individual._
-import pages.register.beneficiaries.individual.mld5.{CountryOfNationalityInTheUkYesNoPage, CountryOfNationalityPage, CountryOfNationalityYesNoPage, CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage, LegallyIncapableYesNoPage}
+import pages.register.beneficiaries.individual.mld5.{CountryOfNationalityInTheUkYesNoPage, CountryOfNationalityPage, CountryOfNationalityYesNoPage, CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage, MentalCapacityYesNoPage}
 import utils.Constants._
 
 class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
@@ -323,7 +323,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
       }
 
 
-      "In 5mld mode with UK country of residence, UK country of nationality and legally incapable" in {
+      "In 5mld mode with UK country of residence, UK country of nationality and Mental Capacity" in {
 
         val userAnswers =
           emptyUserAnswers
@@ -339,7 +339,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
             .set(CountryOfNationalityInTheUkYesNoPage(index0), true).success.value
             .set(CountryOfResidenceYesNoPage(index0), true).success.value
             .set(CountryOfResidenceInTheUkYesNoPage(index0), true).success.value
-            .set(LegallyIncapableYesNoPage(index0), true).success.value
+            .set(MentalCapacityYesNoPage(index0), true).success.value
 
         val individuals = individualBeneficiariesMapper.build(userAnswers)
 
@@ -354,12 +354,12 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
           identification = Some(IdentificationType(nino = Some("AB123456C"), None, None)),
           countryOfResidence = Some(GB),
           nationality = Some(GB),
-          legallyIncapable = Some(true)
+          legallyIncapable = Some(false)
         )
 
       }
 
-      "In 5mld mode with Non UK country of residence, Non UK country of nationality and Not legally incapable" in {
+      "In 5mld mode with Non UK country of residence, Non UK country of nationality and No Mental Capacity" in {
 
         val userAnswers =
           emptyUserAnswers
@@ -377,7 +377,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
             .set(CountryOfResidenceYesNoPage(index0), true).success.value
             .set(CountryOfResidenceInTheUkYesNoPage(index0), false).success.value
             .set(CountryOfResidencePage(index0), ES).success.value
-            .set(LegallyIncapableYesNoPage(index0), false).success.value
+            .set(MentalCapacityYesNoPage(index0), false).success.value
 
         val individuals = individualBeneficiariesMapper.build(userAnswers)
 
@@ -392,7 +392,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
           identification = Some(IdentificationType(nino = Some("AB123456C"), None, None)),
           countryOfResidence = Some(ES),
           nationality = Some(ES),
-          legallyIncapable = Some(false)
+          legallyIncapable = Some(true)
         )
 
       }

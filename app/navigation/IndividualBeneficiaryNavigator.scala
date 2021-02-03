@@ -46,9 +46,9 @@ class IndividualBeneficiaryNavigator extends Navigator {
     case CountryOfResidencePage(index) => ua => navigateAwayFromCountryOfResidencyQuestions(draftId, index, ua)
     case AddressUKPage(index) => _ => PassportDetailsYesNoController.onPageLoad(index, draftId)
     case AddressInternationalPage(index) => _ => PassportDetailsYesNoController.onPageLoad(index, draftId)
-    case PassportDetailsPage(index) => ua => navigateToLegallyIncapableOrVulnerableQuestions(draftId, index, ua.is5mldEnabled)
-    case IDCardDetailsPage(index) => ua => navigateToLegallyIncapableOrVulnerableQuestions(draftId, index, ua.is5mldEnabled)
-    case LegallyIncapableYesNoPage(index) => _ => VulnerableYesNoController.onPageLoad(index, draftId)
+    case PassportDetailsPage(index) => ua => navigateToMentalCapacityOrVulnerableQuestions(draftId, index, ua.is5mldEnabled)
+    case IDCardDetailsPage(index) => ua => navigateToMentalCapacityOrVulnerableQuestions(draftId, index, ua.is5mldEnabled)
+    case MentalCapacityYesNoPage(index) => _ => VulnerableYesNoController.onPageLoad(index, draftId)
     case VulnerableYesNoPage(index) => _ => AnswersController.onPageLoad(index, draftId)
     case AnswersPage => _ => controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
   }
@@ -108,7 +108,7 @@ class IndividualBeneficiaryNavigator extends Navigator {
         ua = ua,
         fromPage = page,
         yesCall = AddressUKYesNoController.onPageLoad(index, draftId),
-        noCall = navigateToLegallyIncapableOrVulnerableQuestions(draftId, index, ua.is5mldEnabled)
+        noCall = navigateToMentalCapacityOrVulnerableQuestions(draftId, index, ua.is5mldEnabled)
       )
     case page @ AddressUKYesNoPage(index) => ua =>
       yesNoNav(
@@ -129,7 +129,7 @@ class IndividualBeneficiaryNavigator extends Navigator {
         ua = ua,
         fromPage = page,
         yesCall = IDCardDetailsController.onPageLoad(index, draftId),
-        noCall = navigateToLegallyIncapableOrVulnerableQuestions(draftId, index, ua.is5mldEnabled)
+        noCall = navigateToMentalCapacityOrVulnerableQuestions(draftId, index, ua.is5mldEnabled)
       )
   }
 
@@ -142,7 +142,7 @@ class IndividualBeneficiaryNavigator extends Navigator {
 
   private def navigateAwayFromCountryOfResidencyQuestions(draftId: String, index: Int, ua: ReadableUserAnswers): Call = {
     ua.get(NationalInsuranceYesNoPage(index)) match {
-      case Some(true) => LegallyIncapableYesNoController.onPageLoad(index, draftId)
+      case Some(true) => MentalCapacityYesNoController.onPageLoad(index, draftId)
       case _ => AddressYesNoController.onPageLoad(index, draftId)
     }
   }
@@ -171,9 +171,9 @@ class IndividualBeneficiaryNavigator extends Navigator {
     }
   }
 
-  private def navigateToLegallyIncapableOrVulnerableQuestions(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
+  private def navigateToMentalCapacityOrVulnerableQuestions(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
     if (is5mldEnabled) {
-      LegallyIncapableYesNoController.onPageLoad(index, draftId)
+      MentalCapacityYesNoController.onPageLoad(index, draftId)
     } else {
       VulnerableYesNoController.onPageLoad(index, draftId)
     }

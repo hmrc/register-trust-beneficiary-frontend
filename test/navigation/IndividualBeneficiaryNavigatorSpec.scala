@@ -361,14 +361,14 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
           .mustBe(AddressYesNoController.onPageLoad(index, draftId))
       }
 
-      "CountryOfResidence (with Nino) -> LegallyIncapableYesNo page" in {
+      "CountryOfResidence (with Nino) -> MentalCapacityYesNo page" in {
 
         val answers = baseAnswers
           .set(NationalInsuranceYesNoPage(index), true).success.value
           .set(CountryOfResidencePage(index), ES).success.value
 
         navigator.nextPage(CountryOfResidencePage(index), draftId, answers)
-          .mustBe(LegallyIncapableYesNoController.onPageLoad(index, draftId))
+          .mustBe(MentalCapacityYesNoController.onPageLoad(index, draftId))
 
       }
 
@@ -383,37 +383,37 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
 
       }
 
-      "Address Yes No page -> No -> LegallyIncapableYesNo page" in {
+      "Address Yes No page -> No -> MentalCapacityYesNo page" in {
 
         val answers = baseAnswers
           .set(AddressYesNoPage(index), false).success.value
 
         navigator.nextPage(AddressYesNoPage(index), draftId, answers)
-          .mustBe(LegallyIncapableYesNoController.onPageLoad(index, draftId))
+          .mustBe(MentalCapacityYesNoController.onPageLoad(index, draftId))
 
       }
 
-      "PassportDetailsPage -> LegallyIncapableYesNo page" in {
+      "PassportDetailsPage -> MentalCapacityYesNo page" in {
 
         navigator.nextPage(PassportDetailsPage(index), fakeDraftId, baseAnswers)
-          .mustBe(LegallyIncapableYesNoController.onPageLoad(index, fakeDraftId))
+          .mustBe(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId))
 
       }
 
-      "IDCardDetails Yes No page -> No -> LegallyIncapableYesNo page" in {
+      "IDCardDetails Yes No page -> No -> MentalCapacityYesNo page" in {
 
         val answers = baseAnswers
           .set(IDCardDetailsYesNoPage(index), false).success.value
 
         navigator.nextPage(IDCardDetailsYesNoPage(index), draftId, answers)
-          .mustBe(LegallyIncapableYesNoController.onPageLoad(index, draftId))
+          .mustBe(MentalCapacityYesNoController.onPageLoad(index, draftId))
 
       }
 
-      "IDCardDetails page -> LegallyIncapableYesNo page" in {
+      "IDCardDetails page -> MentalCapacityYesNo page" in {
 
         navigator.nextPage(IDCardDetailsPage(index), fakeDraftId, baseAnswers)
-          .mustBe(LegallyIncapableYesNoController.onPageLoad(index, fakeDraftId))
+          .mustBe(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId))
 
       }
 
