@@ -23,7 +23,8 @@ final case class OtherBeneficiary(description: String,
                                     ukAddress : Option[UKAddress],
                                     internationalAddress : Option[InternationalAddress],
                                     shareOfIncome: Option[Int],
-                                    incomeDiscretionYesNo: Boolean
+                                    incomeDiscretionYesNo: Boolean,
+                                    countryOfResidence: Option[String]
                                    ) {
 }
 

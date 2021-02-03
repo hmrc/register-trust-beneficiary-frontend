@@ -36,7 +36,8 @@ class OtherBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Map
               description = beneficiary.description,
               beneficiaryDiscretion = Some(beneficiary.incomeDiscretionYesNo),
               beneficiaryShareOfIncome = beneficiary.shareOfIncome map(_.toString),
-              address = buildAddress(beneficiary)
+              address = buildAddress(beneficiary),
+              countryOfResidence = beneficiary.countryOfResidence
             )
           }
         )
