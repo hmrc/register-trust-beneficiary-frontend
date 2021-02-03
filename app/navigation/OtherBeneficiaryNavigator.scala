@@ -34,7 +34,7 @@ class OtherBeneficiaryNavigator @Inject()() extends Navigator {
       yesNoNavigation(draftId)
 
   private def simpleNavigation(draftId: String):  PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case DescriptionPage(index) => ua => CountryOfResidenceYesNo(draftId, index, ua.is5mldEnabled)
+    case DescriptionPage(index) => ua => other.routes.DiscretionYesNoController.onPageLoad(index, draftId)
     case ShareOfIncomePage(index) => _ => other.routes.AddressYesNoController.onPageLoad(index, draftId)
     case AddressUKPage(index) => _ => other.routes.CheckDetailsController.onPageLoad(index, draftId)
     case AddressInternationalPage(index) =>_ =>  other.routes.CheckDetailsController.onPageLoad(index, draftId)
@@ -46,7 +46,7 @@ class OtherBeneficiaryNavigator @Inject()() extends Navigator {
       yesNoNav(
         ua = ua,
         fromPage = page,
-        yesCall = other.routes.AddressYesNoController.onPageLoad(index, draftId),
+        yesCall = CountryOfResidenceYesNo(draftId, index, ua.is5mldEnabled),
         noCall = other.routes.ShareOfIncomeController.onPageLoad(index, draftId)
       )
     case page@AddressYesNoPage(index) => ua =>
@@ -83,7 +83,7 @@ class OtherBeneficiaryNavigator @Inject()() extends Navigator {
     if (is5mldEnabled) {
       controllers.register.beneficiaries.other.mld5.routes.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
     } else {
-      other.routes.DiscretionYesNoController.onPageLoad(index, draftId)
+      other.routes.AddressYesNoController.onPageLoad(index, draftId)
     }
   }
 }

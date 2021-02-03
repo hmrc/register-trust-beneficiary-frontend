@@ -106,9 +106,18 @@ class OtherBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
       val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = true)
 
-      "Description -> 5mld -> CountryOfResidenceYesNo Page" in {
+      "DiscretionYesNoPage -> true -> CountryOfResidenceYesNo Page" in {
 
-        navigator.nextPage(DescriptionPage(index), draftId, baseAnswers)
+        val answers = baseAnswers
+          .set(IncomeDiscretionYesNoPage(index), true).success.value
+
+        navigator.nextPage(DiscretionYesNoController(index), draftId, answers)
+          .mustBe(controllers.register.beneficiaries.other.mld5.routes.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
+      }
+
+      "ShareOfIncomePage -> amount -> CountryOfResidenceYesNo Page" in {
+
+        navigator.nextPage(ShareOfIncomeController(index), draftId, baseAnswers)
           .mustBe(controllers.register.beneficiaries.other.mld5.routes.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
       }
 
