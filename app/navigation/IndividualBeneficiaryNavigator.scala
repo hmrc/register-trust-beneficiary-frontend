@@ -17,12 +17,14 @@
 package navigation
 
 import controllers.register.beneficiaries.individualBeneficiary.routes._
+import controllers.register.beneficiaries.individualBeneficiary.mld5.routes._
 import models.ReadableUserAnswers
 import models.registration.pages.KindOfTrust.Employees
 import pages.Page
 import pages.register.KindOfTrustPage
 import pages.register.beneficiaries.AnswersPage
 import pages.register.beneficiaries.individual._
+import pages.register.beneficiaries.individual.mld5._
 import play.api.mvc.Call
 
 class IndividualBeneficiaryNavigator extends Navigator {
@@ -31,21 +33,24 @@ class IndividualBeneficiaryNavigator extends Navigator {
     routes(draftId)(page)(userAnswers)
 
   private def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] =
-    simpleNavigation(draftId) andThen (c => (_:ReadableUserAnswers) => c) orElse
+    simpleNavigation(draftId) orElse
       conditionalNavigation(draftId) orElse
       trustTypeNavigation(draftId)
 
-  private def simpleNavigation(draftId: String): PartialFunction[Page, Call] = {
-    case RoleInCompanyPage(index) => DateOfBirthYesNoController.onPageLoad(index, draftId)
-    case DateOfBirthPage(index) => IncomeYesNoController.onPageLoad(index, draftId)
-    case IncomePage(index) => NationalInsuranceYesNoController.onPageLoad(index, draftId)
-    case NationalInsuranceNumberPage(index) => VulnerableYesNoController.onPageLoad(index, draftId)
-    case AddressUKPage(index) => PassportDetailsYesNoController.onPageLoad(index, draftId)
-    case AddressInternationalPage(index) => PassportDetailsYesNoController.onPageLoad(index, draftId)
-    case PassportDetailsPage(index) => VulnerableYesNoController.onPageLoad(index, draftId)
-    case IDCardDetailsPage(index) => VulnerableYesNoController.onPageLoad(index, draftId)
-    case VulnerableYesNoPage(index) => AnswersController.onPageLoad(index, draftId)
-    case AnswersPage => controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
+  private def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
+    case RoleInCompanyPage(index) => _ => DateOfBirthYesNoController.onPageLoad(index, draftId)
+    case DateOfBirthPage(index) => _ => IncomeYesNoController.onPageLoad(index, draftId)
+    case IncomePage(index) => ua => navigateAwayFromShareOfIncomeQuestions(draftId, index, ua.is5mldEnabled)
+    case CountryOfNationalityPage(index) => ua => NationalInsuranceYesNoController.onPageLoad(index, draftId)
+    case NationalInsuranceNumberPage(index) => ua => navigateAwayFromNinoQuestion(draftId, index, ua.is5mldEnabled)
+    case CountryOfResidencePage(index) => ua => navigateAwayFromCountryOfResidencyQuestions(draftId, index, ua)
+    case AddressUKPage(index) => _ => PassportDetailsYesNoController.onPageLoad(index, draftId)
+    case AddressInternationalPage(index) => _ => PassportDetailsYesNoController.onPageLoad(index, draftId)
+    case PassportDetailsPage(index) => ua => navigateToMentalCapacityOrVulnerableQuestions(draftId, index, ua.is5mldEnabled)
+    case IDCardDetailsPage(index) => ua => navigateToMentalCapacityOrVulnerableQuestions(draftId, index, ua.is5mldEnabled)
+    case MentalCapacityYesNoPage(index) => _ => VulnerableYesNoController.onPageLoad(index, draftId)
+    case VulnerableYesNoPage(index) => _ => AnswersController.onPageLoad(index, draftId)
+    case AnswersPage => _ => controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
   }
 
   private def conditionalNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
@@ -60,22 +65,50 @@ class IndividualBeneficiaryNavigator extends Navigator {
       yesNoNav(
         ua = ua,
         fromPage = page,
-        yesCall = NationalInsuranceYesNoController.onPageLoad(index, draftId),
+        yesCall = navigateAwayFromShareOfIncomeQuestions(draftId, index, ua.is5mldEnabled),
         noCall = IncomeController.onPageLoad(index, draftId)
+      )
+    case page @ CountryOfNationalityYesNoPage(index) => ua =>
+      yesNoNav(
+        ua = ua,
+        fromPage = page,
+        yesCall = CountryOfNationalityInTheUkYesNoController.onPageLoad(index, draftId),
+        noCall = NationalInsuranceYesNoController.onPageLoad(index, draftId)
+      )
+    case page @ CountryOfNationalityInTheUkYesNoPage(index) => ua =>
+      yesNoNav(
+        ua = ua,
+        fromPage = page,
+        yesCall = NationalInsuranceYesNoController.onPageLoad(index, draftId),
+        noCall = CountryOfNationalityController.onPageLoad(index, draftId)
       )
     case page @ NationalInsuranceYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
         fromPage = page,
         yesCall = NationalInsuranceNumberController.onPageLoad(index, draftId),
-        noCall = AddressYesNoController.onPageLoad(index, draftId)
+        noCall = navigateAwayFromNinoYesNoQuestion(draftId, index, ua.is5mldEnabled)
+      )
+    case page @ CountryOfResidenceYesNoPage(index) => ua =>
+      yesNoNav(
+        ua = ua,
+        fromPage = page,
+        yesCall = CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId),
+        noCall = navigateAwayFromCountryOfResidencyQuestions(draftId, index, ua)
+      )
+    case page @ CountryOfResidenceInTheUkYesNoPage(index) => ua =>
+      yesNoNav(
+        ua = ua,
+        fromPage = page,
+        yesCall = navigateAwayFromCountryOfResidencyQuestions(draftId, index, ua),
+        noCall = CountryOfResidenceController.onPageLoad(index, draftId)
       )
     case page @ AddressYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
         fromPage = page,
         yesCall = AddressUKYesNoController.onPageLoad(index, draftId),
-        noCall = VulnerableYesNoController.onPageLoad(index, draftId)
+        noCall = navigateToMentalCapacityOrVulnerableQuestions(draftId, index, ua.is5mldEnabled)
       )
     case page @ AddressUKYesNoPage(index) => ua =>
       yesNoNav(
@@ -96,7 +129,7 @@ class IndividualBeneficiaryNavigator extends Navigator {
         ua = ua,
         fromPage = page,
         yesCall = IDCardDetailsController.onPageLoad(index, draftId),
-        noCall = VulnerableYesNoController.onPageLoad(index, draftId)
+        noCall = navigateToMentalCapacityOrVulnerableQuestions(draftId, index, ua.is5mldEnabled)
       )
   }
 
@@ -104,6 +137,45 @@ class IndividualBeneficiaryNavigator extends Navigator {
     case NamePage(index) => ua => ua.get(KindOfTrustPage) match {
       case Some(Employees) => RoleInCompanyController.onPageLoad(index, draftId)
       case _ => DateOfBirthYesNoController.onPageLoad(index, draftId)
+    }
+  }
+
+  private def navigateAwayFromCountryOfResidencyQuestions(draftId: String, index: Int, ua: ReadableUserAnswers): Call = {
+    ua.get(NationalInsuranceYesNoPage(index)) match {
+      case Some(true) => MentalCapacityYesNoController.onPageLoad(index, draftId)
+      case _ => AddressYesNoController.onPageLoad(index, draftId)
+    }
+  }
+
+  private def navigateAwayFromNinoYesNoQuestion(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
+    if (is5mldEnabled) {
+      CountryOfResidenceYesNoController.onPageLoad(index, draftId)
+    } else {
+      AddressYesNoController.onPageLoad(index, draftId)
+    }
+  }
+
+  private def navigateAwayFromNinoQuestion(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
+    if (is5mldEnabled) {
+      CountryOfResidenceYesNoController.onPageLoad(index, draftId)
+    } else {
+      VulnerableYesNoController.onPageLoad(index, draftId)
+    }
+  }
+
+  private def navigateAwayFromShareOfIncomeQuestions(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
+    if (is5mldEnabled) {
+      CountryOfNationalityYesNoController.onPageLoad(index, draftId)
+    } else {
+      NationalInsuranceYesNoController.onPageLoad(index, draftId)
+    }
+  }
+
+  private def navigateToMentalCapacityOrVulnerableQuestions(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
+    if (is5mldEnabled) {
+      MentalCapacityYesNoController.onPageLoad(index, draftId)
+    } else {
+      VulnerableYesNoController.onPageLoad(index, draftId)
     }
   }
 

@@ -16,10 +16,13 @@
 
 package utils.answers
 
+import controllers.register.beneficiaries.individualBeneficiary.{routes => rts}
+import controllers.register.beneficiaries.individualBeneficiary.mld5.{routes => ntRts}
 import javax.inject.Inject
 import models.UserAnswers
 import pages.register.beneficiaries._
 import pages.register.beneficiaries.individual._
+import pages.register.beneficiaries.individual.mld5._
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import sections.beneficiaries.IndividualBeneficiaries
@@ -58,8 +61,14 @@ class IndividualBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOption
       individualBeneficiaryDateOfBirth(index),
       individualBeneficiaryIncomeYesNo(index),
       individualBeneficiaryIncome(index),
+      countryOfNationalityYesNo(index),
+      countryOfNationalityInUkYesNo(index),
+      countryOfNationality(index),
       individualBeneficiaryNationalInsuranceYesNo(index),
       individualBeneficiaryNationalInsuranceNumber(index),
+      countryOfResidenceYesNo(index),
+      countryOfResidenceInUkYesNo(index),
+      countryOfResidence(index),
       individualBeneficiaryAddressYesNo(index),
       individualBeneficiaryAddressUKYesNo(index),
       individualBeneficiaryAddressUK(index),
@@ -68,8 +77,90 @@ class IndividualBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOption
       individualBeneficiaryPassportDetails(index),
       individualBeneficiaryIDCardDetailsYesNo(index),
       individualBeneficiaryIDCardDetails(index),
+      mentalCapacityYesNo(index),
       individualBeneficiaryVulnerableYesNo(index)
     ).flatten
+  }
+
+  def countryOfNationalityYesNo(index: Int): Option[AnswerRow] = userAnswers.get(CountryOfNationalityYesNoPage(index)) map {
+    x =>
+      AnswerRow(
+        "individualBeneficiary.5mld.countryOfNationalityYesNo.checkYourAnswersLabel",
+        yesOrNo(x),
+        Some(ntRts.CountryOfNationalityYesNoController.onPageLoad(index, draftId).url),
+        indBeneficiaryName(index, userAnswers),
+        canEdit = canEdit
+      )
+  }
+
+  def countryOfNationalityInUkYesNo(index: Int): Option[AnswerRow] = userAnswers.get(CountryOfNationalityInTheUkYesNoPage(index)) map {
+    x =>
+      AnswerRow(
+        "individualBeneficiary.5mld.countryOfNationalityInTheUkYesNo.checkYourAnswersLabel",
+        yesOrNo(x),
+        Some(ntRts.CountryOfNationalityInTheUkYesNoController.onPageLoad(index, draftId).url),
+        indBeneficiaryName(index, userAnswers),
+        canEdit = canEdit
+      )
+  }
+
+  def countryOfNationality(index: Int): Option[AnswerRow] = userAnswers.get(CountryOfNationalityInTheUkYesNoPage(index)) flatMap {
+    case false => userAnswers.get(CountryOfNationalityPage(index)) map {
+      x =>
+        AnswerRow(
+          "individualBeneficiary.5mld.countryONationality.checkYourAnswersLabel",
+          HtmlFormat.escape(country(x, countryOptions)),
+          Some(ntRts.CountryOfNationalityController.onPageLoad(index, draftId).url),
+          canEdit = canEdit
+        )
+    }
+    case _ => None
+  }
+
+  def countryOfResidenceYesNo(index: Int): Option[AnswerRow] = userAnswers.get(CountryOfResidenceYesNoPage(index)) map {
+    x =>
+      AnswerRow(
+        "individualBeneficiary.5mld.countryOfResidenceYesNo.checkYourAnswersLabel",
+        yesOrNo(x),
+        Some(ntRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId).url),
+        indBeneficiaryName(index, userAnswers),
+        canEdit = canEdit
+      )
+  }
+
+  def countryOfResidenceInUkYesNo(index: Int): Option[AnswerRow] = userAnswers.get(CountryOfResidenceInTheUkYesNoPage(index)) map {
+    x =>
+      AnswerRow(
+        "individualBeneficiary.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel",
+        yesOrNo(x),
+        Some(ntRts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId).url),
+        indBeneficiaryName(index, userAnswers),
+        canEdit = canEdit
+      )
+  }
+
+  def countryOfResidence(index: Int): Option[AnswerRow] = userAnswers.get(CountryOfResidenceInTheUkYesNoPage(index)) flatMap {
+    case false => userAnswers.get(CountryOfResidencePage(index)) map {
+      x =>
+        AnswerRow(
+          "individualBeneficiary.5mld.countryOfResidence.checkYourAnswersLabel",
+          HtmlFormat.escape(country(x, countryOptions)),
+          Some(ntRts.CountryOfResidenceController.onPageLoad(index, draftId).url),
+          canEdit = canEdit
+        )
+    }
+    case _ => None
+  }
+
+  def mentalCapacityYesNo(index: Int): Option[AnswerRow] = userAnswers.get(MentalCapacityYesNoPage(index)) map {
+    x =>
+      AnswerRow(
+        "individualBeneficiary.5mld.mentalCapacityYesNo.checkYourAnswersLabel",
+        yesOrNo(x),
+        Some(ntRts.MentalCapacityYesNoController.onPageLoad(index, draftId).url),
+        indBeneficiaryName(index, userAnswers),
+        canEdit = canEdit
+      )
   }
 
   def individualBeneficiaryAddressUKYesNo(index: Int): Option[AnswerRow] = userAnswers.get(AddressUKYesNoPage(index)) map {
@@ -77,7 +168,7 @@ class IndividualBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOption
       AnswerRow(
         "individualBeneficiaryAddressUKYesNo.checkYourAnswersLabel",
         yesOrNo(x),
-        Some(controllers.register.beneficiaries.individualBeneficiary.routes.AddressUKYesNoController.onPageLoad(index, draftId).url),
+        Some(rts.AddressUKYesNoController.onPageLoad(index, draftId).url),
         indBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
@@ -88,7 +179,7 @@ class IndividualBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOption
       AnswerRow(
         "individualBeneficiaryVulnerableYesNo.checkYourAnswersLabel",
         yesOrNo(x),
-        Some(controllers.register.beneficiaries.individualBeneficiary.routes.VulnerableYesNoController.onPageLoad(index, draftId).url),
+        Some(rts.VulnerableYesNoController.onPageLoad(index, draftId).url),
         indBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
@@ -99,7 +190,7 @@ class IndividualBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOption
       AnswerRow(
         "individualBeneficiaryPassportDetailsYesNo.checkYourAnswersLabel",
         yesOrNo(x),
-        Some(controllers.register.beneficiaries.individualBeneficiary.routes.PassportDetailsYesNoController.onPageLoad(index, draftId).url),
+        Some(rts.PassportDetailsYesNoController.onPageLoad(index, draftId).url),
         indBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
@@ -110,7 +201,7 @@ class IndividualBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOption
       AnswerRow(
         "individualBeneficiaryPassportDetails.checkYourAnswersLabel",
         passportOrIDCard(x, countryOptions),
-        Some(controllers.register.beneficiaries.individualBeneficiary.routes.PassportDetailsController.onPageLoad(index, draftId).url),
+        Some(rts.PassportDetailsController.onPageLoad(index, draftId).url),
         indBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
@@ -121,7 +212,7 @@ class IndividualBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOption
       AnswerRow(
         "individualBeneficiaryIDCardDetailsYesNo.checkYourAnswersLabel",
         yesOrNo(x),
-        Some(controllers.register.beneficiaries.individualBeneficiary.routes.IDCardDetailsYesNoController.onPageLoad(index, draftId).url),
+        Some(rts.IDCardDetailsYesNoController.onPageLoad(index, draftId).url),
         indBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
@@ -132,7 +223,7 @@ class IndividualBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOption
       AnswerRow(
         "individualBeneficiaryIDCardDetails.checkYourAnswersLabel",
         passportOrIDCard(x, countryOptions),
-        Some(controllers.register.beneficiaries.individualBeneficiary.routes.IDCardDetailsController.onPageLoad(index, draftId).url),
+        Some(rts.IDCardDetailsController.onPageLoad(index, draftId).url),
         indBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
@@ -143,7 +234,7 @@ class IndividualBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOption
       AnswerRow(
         "individualBeneficiaryAddressUK.checkYourAnswersLabel",
         ukAddress(x),
-        Some(controllers.register.beneficiaries.individualBeneficiary.routes.AddressUKController.onPageLoad(index, draftId).url),
+        Some(rts.AddressUKController.onPageLoad(index, draftId).url),
         indBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
@@ -154,7 +245,7 @@ class IndividualBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOption
       AnswerRow(
         "individualBeneficiaryAddressInternational.checkYourAnswersLabel",
         internationalAddress(x, countryOptions),
-        Some(controllers.register.beneficiaries.individualBeneficiary.routes.AddressInternationalController.onPageLoad(index, draftId).url),
+        Some(rts.AddressInternationalController.onPageLoad(index, draftId).url),
         indBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
@@ -165,7 +256,7 @@ class IndividualBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOption
       AnswerRow(
         "individualBeneficiaryAddressYesNo.checkYourAnswersLabel",
         yesOrNo(x),
-        Some(controllers.register.beneficiaries.individualBeneficiary.routes.AddressYesNoController.onPageLoad(index, draftId).url),
+        Some(rts.AddressYesNoController.onPageLoad(index, draftId).url),
         indBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
@@ -177,7 +268,7 @@ class IndividualBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOption
         AnswerRow(
           "individualBeneficiaryNationalInsuranceNumber.checkYourAnswersLabel",
           HtmlFormat.escape(formatNino(x)),
-          Some(controllers.register.beneficiaries.individualBeneficiary.routes.NationalInsuranceNumberController.onPageLoad(index, draftId).url),
+          Some(rts.NationalInsuranceNumberController.onPageLoad(index, draftId).url),
           indBeneficiaryName(index, userAnswers),
           canEdit = canEdit
         )
@@ -188,7 +279,7 @@ class IndividualBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOption
       AnswerRow(
         "individualBeneficiaryNationalInsuranceYesNo.checkYourAnswersLabel",
         yesOrNo(x),
-        Some(controllers.register.beneficiaries.individualBeneficiary.routes.NationalInsuranceYesNoController.onPageLoad(index, draftId).url),
+        Some(rts.NationalInsuranceYesNoController.onPageLoad(index, draftId).url),
         indBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
@@ -199,7 +290,7 @@ class IndividualBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOption
       AnswerRow(
         "individualBeneficiaryIncome.checkYourAnswersLabel",
         percentage(x.toString),
-        Some(controllers.register.beneficiaries.individualBeneficiary.routes.IncomeController.onPageLoad(index, draftId).url),
+        Some(rts.IncomeController.onPageLoad(index, draftId).url),
         indBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
@@ -210,7 +301,7 @@ class IndividualBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOption
       AnswerRow(
         "individualBeneficiaryIncomeYesNo.checkYourAnswersLabel",
         yesOrNo(x),
-        Some(controllers.register.beneficiaries.individualBeneficiary.routes.IncomeYesNoController.onPageLoad(index, draftId).url),
+        Some(rts.IncomeYesNoController.onPageLoad(index, draftId).url),
         indBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
@@ -221,7 +312,7 @@ class IndividualBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOption
       AnswerRow(
         "individualBeneficiaryDateOfBirth.checkYourAnswersLabel",
         HtmlFormat.escape(x.format(dateFormatter)),
-        Some(controllers.register.beneficiaries.individualBeneficiary.routes.DateOfBirthController.onPageLoad(index, draftId).url),
+        Some(rts.DateOfBirthController.onPageLoad(index, draftId).url),
         indBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
@@ -232,7 +323,7 @@ class IndividualBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOption
       AnswerRow(
         "individualBeneficiaryDateOfBirthYesNo.checkYourAnswersLabel",
         yesOrNo(x),
-        Some(controllers.register.beneficiaries.individualBeneficiary.routes.DateOfBirthYesNoController.onPageLoad(index, draftId).url),
+        Some(rts.DateOfBirthYesNoController.onPageLoad(index, draftId).url),
         indBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
@@ -243,7 +334,7 @@ class IndividualBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOption
       AnswerRow(
         "individualBeneficiaryName.checkYourAnswersLabel",
         HtmlFormat.escape(x.displayFullName),
-        Some(controllers.register.beneficiaries.individualBeneficiary.routes.NameController.onPageLoad(index, draftId).url),
+        Some(rts.NameController.onPageLoad(index, draftId).url),
         canEdit = canEdit
       )
   }
@@ -253,7 +344,7 @@ class IndividualBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOption
       AnswerRow(
         "individualBeneficiaryRoleInCompany.checkYourAnswersLabel",
         HtmlFormat.escape(x.toString),
-        Some(controllers.register.beneficiaries.individualBeneficiary.routes.RoleInCompanyController.onPageLoad(index, draftId).url),
+        Some(rts.RoleInCompanyController.onPageLoad(index, draftId).url),
         indBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )

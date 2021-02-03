@@ -23,23 +23,23 @@ import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.individual.NamePage
-import pages.register.beneficiaries.individual.mld5.LegallyIncapableYesNoPage
+import pages.register.beneficiaries.individual.mld5.MentalCapacityYesNoPage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.register.beneficiaries.individualBeneficiary.mld5.LegallyIncapableYesNoView
+import views.html.register.beneficiaries.individualBeneficiary.mld5.MentalCapacityYesNoView
 
-class LegallyIncapableYesNoControllerSpec extends SpecBase with MockitoSugar {
+class MentalCapacityYesNoControllerSpec extends SpecBase with MockitoSugar {
 
   val formProvider = new YesNoFormProvider()
-  val form: Form[Boolean] = formProvider.withPrefix("individualBeneficiary.5mld.legallyIncapableYesNo")
+  val form: Form[Boolean] = formProvider.withPrefix("individualBeneficiary.5mld.mentalCapacityYesNo")
   val index: Int = 0
   val name: FullName = FullName("FirstName", None, "LastName")
 
-  lazy val legallyIncapableYesNo: String = routes.LegallyIncapableYesNoController.onPageLoad(index, draftId).url
+  lazy val mentalCapacityYesNo: String = routes.MentalCapacityYesNoController.onPageLoad(index, draftId).url
 
-  "LegallyIncapableYesNo Controller" must {
+  "MentalCapacityYesNo Controller" must {
 
     "return OK and the correct view for a GET" in {
 
@@ -48,11 +48,11 @@ class LegallyIncapableYesNoControllerSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, legallyIncapableYesNo)
+      val request = FakeRequest(GET, mentalCapacityYesNo)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[LegallyIncapableYesNoView]
+      val view = application.injector.instanceOf[MentalCapacityYesNoView]
 
       status(result) mustEqual OK
 
@@ -65,14 +65,14 @@ class LegallyIncapableYesNoControllerSpec extends SpecBase with MockitoSugar {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers.set(NamePage(index), name).success.value
-        .set(LegallyIncapableYesNoPage(index), true).success.value
+        .set(MentalCapacityYesNoPage(index), true).success.value
 
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, legallyIncapableYesNo)
+      val request = FakeRequest(GET, mentalCapacityYesNo)
 
-      val view = application.injector.instanceOf[LegallyIncapableYesNoView]
+      val view = application.injector.instanceOf[MentalCapacityYesNoView]
 
       val result = route(application, request).value
 
@@ -95,7 +95,7 @@ class LegallyIncapableYesNoControllerSpec extends SpecBase with MockitoSugar {
         ).build()
 
       val request =
-        FakeRequest(POST, legallyIncapableYesNo)
+        FakeRequest(POST, mentalCapacityYesNo)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -115,12 +115,12 @@ class LegallyIncapableYesNoControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, legallyIncapableYesNo)
+        FakeRequest(POST, mentalCapacityYesNo)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[LegallyIncapableYesNoView]
+      val view = application.injector.instanceOf[MentalCapacityYesNoView]
 
       val result = route(application, request).value
 
@@ -136,7 +136,7 @@ class LegallyIncapableYesNoControllerSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, legallyIncapableYesNo)
+      val request = FakeRequest(GET, mentalCapacityYesNo)
 
       val result = route(application, request).value
 
@@ -152,7 +152,7 @@ class LegallyIncapableYesNoControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, legallyIncapableYesNo)
+        FakeRequest(POST, mentalCapacityYesNo)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value

@@ -103,8 +103,8 @@ POST       /:draftId/individual/:index/uk-nationality                           
 GET        /:draftId/individual/:index/country-of-nationality                         controllers.register.beneficiaries.individualBeneficiary.mld5.CountryOfNationalityController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/individual/:index/country-of-nationality                         controllers.register.beneficiaries.individualBeneficiary.mld5.CountryOfNationalityController.onSubmit(index: Int, draftId: String)
 
-GET        /:draftId/individual/:index/legally-incapable                              controllers.register.beneficiaries.individualBeneficiary.mld5.LegallyIncapableYesNoController.onPageLoad(index: Int, draftId: String)
-POST       /:draftId/individual/:index/legally-incapable                              controllers.register.beneficiaries.individualBeneficiary.mld5.LegallyIncapableYesNoController.onSubmit(index: Int, draftId: String)
+GET        /:draftId/individual/:index/legally-capable                              controllers.register.beneficiaries.individualBeneficiary.mld5.MentalCapacityYesNoController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/individual/:index/legally-capable                              controllers.register.beneficiaries.individualBeneficiary.mld5.MentalCapacityYesNoController.onSubmit(index: Int, draftId: String)
 
 
 # trust
