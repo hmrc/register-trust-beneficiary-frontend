@@ -184,10 +184,10 @@ individualBeneficiary.5mld.countryOfResidenceYesNo.checkYourAnswersLabel = Do yo
 individualBeneficiary.5mld.countryOfResidenceYesNo.error.required = Select yes if you know the individual beneficiary’s country of residence
 individualBeneficiary.5mld.countryOfResidenceYesNo.hint = The country of residence is usually where the individual lives and works most of the time during the tax year.
 
-individualBeneficiary.5mld.countryOfResidenceInTheUkYesNo.title = Does the individual beneficiary have UK residency?
-individualBeneficiary.5mld.countryOfResidenceInTheUkYesNo.heading = Does {0} have UK residency?
-individualBeneficiary.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = Does {0} have UK residency?
-individualBeneficiary.5mld.countryOfResidenceInTheUkYesNo.error.required = Select yes if the individual beneficiary has UK residency
+individualBeneficiary.5mld.countryOfResidenceInTheUkYesNo.title = Is the individual beneficiary a UK resident?
+individualBeneficiary.5mld.countryOfResidenceInTheUkYesNo.heading = Is {0} a UK resident?
+individualBeneficiary.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = Is {0} a UK resident?
+individualBeneficiary.5mld.countryOfResidenceInTheUkYesNo.error.required = Select yes if the individual beneficiary is a UK resident
 
 individualBeneficiary.5mld.countryOfResidence.title = What is the individual beneficiary’s country of residence?
 individualBeneficiary.5mld.countryOfResidence.heading = What is {0}’s country of residence?
