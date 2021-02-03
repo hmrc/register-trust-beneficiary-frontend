@@ -21,17 +21,22 @@ import generators.Generators
 import mapping.Mapping
 import models.core.pages.{InternationalAddress, UKAddress}
 import org.scalatest.{MustMatchers, OptionValues}
-import pages.register.beneficiaries.other.mld5.{CountryOfResidencePage, CountryOfResidenceYesNoPage, UKResidentYesNoPage}
-import pages.register.beneficiaries.other.{AddressInternationalPage, AddressUKPage, AddressUKYesNoPage, AddressYesNoPage, DescriptionPage, IncomeDiscretionYesNoPage}
+import pages.register.beneficiaries.other._
+import pages.register.beneficiaries.other.mld5._
+import utils.Constants.GB
 
 class OtherBeneficiaryMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {
 
-  val otherBeneficiaryMapper: Mapping[List[OtherType]] = injector.instanceOf[OtherBeneficiaryMapper]
+  private val otherBeneficiaryMapper: Mapping[List[OtherType]] = injector.instanceOf[OtherBeneficiaryMapper]
 
-  private val name: String = "Other Name"
+  private val description: String = "Other Description"
   private val ukAddress: UKAddress = UKAddress("Line 1", "Line 2", None, None, "POSTCODE")
-  private val internationalAddress: InternationalAddress = InternationalAddress("Line 1", "Line 2", None, "COUNTRY")
+  private val ukAddressType: AddressType = AddressType("Line 1", "Line 2", None, None, Some("POSTCODE"), GB)
+  private val country: String = "FR"
+  private val internationalAddress: InternationalAddress = InternationalAddress("Line 1", "Line 2", None, country)
+  private val internationalAddressType: AddressType = AddressType("Line 1", "Line 2", None, None, None, country)
+  private val percentage: Int = 50
 
   "Other Beneficiary Mapper" when {
 
@@ -45,68 +50,142 @@ class OtherBeneficiaryMapperSpec extends SpecBase with MustMatchers
 
     "when user answers is not empty" must {
 
+      val index = 0
+
       "must be able to create a beneficiary of type Other" when {
 
-        val index = 0
+        "4mld" when {
 
-        "no address" in {
-          val userAnswers = emptyUserAnswers
-            .set(DescriptionPage(index), name).success.value
-            .set(IncomeDiscretionYesNoPage(index), true).success.value
-            .set(AddressYesNoPage(index), false).success.value
+          "no address and discretion" in {
+            val userAnswers = emptyUserAnswers
+              .set(DescriptionPage(index), description).success.value
+              .set(IncomeDiscretionYesNoPage(index), true).success.value
+              .set(AddressYesNoPage(index), false).success.value
 
-          otherBeneficiaryMapper.build(userAnswers).value.head mustBe OtherType(
-            description = name,
-            beneficiaryDiscretion = Some(true),
-            beneficiaryShareOfIncome = None,
-            address = None,
-            countryOfResidence = None
-          )
+            otherBeneficiaryMapper.build(userAnswers).value.head mustBe OtherType(
+              description = description,
+              beneficiaryDiscretion = Some(true),
+              beneficiaryShareOfIncome = None,
+              address = None,
+              countryOfResidence = None
+            )
+          }
+
+          "UK address and no discretion" in {
+
+            val userAnswers = emptyUserAnswers
+              .set(DescriptionPage(index), description).success.value
+              .set(IncomeDiscretionYesNoPage(index), false).success.value
+              .set(ShareOfIncomePage(index), percentage).success.value
+              .set(AddressYesNoPage(index), true).success.value
+              .set(AddressUKYesNoPage(index), true).success.value
+              .set(AddressUKPage(index), ukAddress).success.value
+
+            val other = otherBeneficiaryMapper.build(userAnswers)
+
+            other mustBe defined
+            other.value.head mustBe OtherType(
+              description = description,
+              beneficiaryDiscretion = Some(false),
+              beneficiaryShareOfIncome = Some(percentage.toString),
+              address = Some(ukAddressType),
+              countryOfResidence = None
+            )
+          }
+
+          "non-UK address and no discretion" in {
+
+            val userAnswers = emptyUserAnswers
+              .set(DescriptionPage(index), description).success.value
+              .set(IncomeDiscretionYesNoPage(index), false).success.value
+              .set(ShareOfIncomePage(index), percentage).success.value
+              .set(AddressYesNoPage(index), true).success.value
+              .set(AddressUKYesNoPage(index), false).success.value
+              .set(AddressInternationalPage(index), internationalAddress).success.value
+
+            val other = otherBeneficiaryMapper.build(userAnswers)
+
+            other mustBe defined
+            other.value.head mustBe OtherType(
+              description = description,
+              beneficiaryDiscretion = Some(false),
+              beneficiaryShareOfIncome = Some(percentage.toString),
+              address = Some(internationalAddressType),
+              countryOfResidence = None
+            )
+          }
         }
 
-        "Country of residence is set to the UK in 5mld mode" in {
-          val userAnswers =
-            emptyUserAnswers
-              .set(DescriptionPage(index), name).success.value
+        "5mld" when {
+
+          "no country of residence, no address and discretion" in {
+
+            val userAnswers = emptyUserAnswers
+              .set(DescriptionPage(index), description).success.value
+              .set(IncomeDiscretionYesNoPage(index), true).success.value
+              .set(CountryOfResidenceYesNoPage(index), false).success.value
+              .set(AddressYesNoPage(index), false).success.value
+
+            val other = otherBeneficiaryMapper.build(userAnswers)
+
+            other mustBe defined
+            other.value.head mustBe OtherType(
+              description = description,
+              beneficiaryDiscretion = Some(true),
+              beneficiaryShareOfIncome = None,
+              address = None,
+              countryOfResidence = None
+            )
+          }
+
+          "UK country of residence, UK address and no discretion" in {
+
+            val userAnswers = emptyUserAnswers
+              .set(DescriptionPage(index), description).success.value
+              .set(IncomeDiscretionYesNoPage(index), false).success.value
+              .set(ShareOfIncomePage(index), percentage).success.value
               .set(CountryOfResidenceYesNoPage(index), true).success.value
               .set(UKResidentYesNoPage(index), true).success.value
               .set(AddressYesNoPage(index), true).success.value
               .set(AddressUKYesNoPage(index), true).success.value
               .set(AddressUKPage(index), ukAddress).success.value
 
-          val other = otherBeneficiaryMapper.build(userAnswers)
+            val other = otherBeneficiaryMapper.build(userAnswers)
 
-          other mustBe defined
-          other.value.head mustBe OtherType(
-            description = "Other Name",
-            beneficiaryDiscretion = None,
-            beneficiaryShareOfIncome = None,
-            address = Some(AddressType("Line 1", "Line 2", None, Some("COUNTRY"), Some("POSTCODE"), "GB")),
-            countryOfResidence = None
-          )
-        }
+            other mustBe defined
+            other.value.head mustBe OtherType(
+              description = description,
+              beneficiaryDiscretion = Some(false),
+              beneficiaryShareOfIncome = Some(percentage.toString),
+              address = Some(ukAddressType),
+              countryOfResidence = Some(GB)
+            )
+          }
 
-        "Country of residence is set to outside the UK in 5mld mode" in {
-          val userAnswers =
-            emptyUserAnswers
-              .set(DescriptionPage(index), name).success.value
+          "non-UK residence, non-UK address and no discretion" in {
+
+            val userAnswers = emptyUserAnswers
+              .set(DescriptionPage(index), description).success.value
+              .set(IncomeDiscretionYesNoPage(index), false).success.value
+              .set(ShareOfIncomePage(index), percentage).success.value
               .set(CountryOfResidenceYesNoPage(index), true).success.value
               .set(UKResidentYesNoPage(index), false).success.value
-              .set(CountryOfResidencePage(index), "FR").success.value
+              .set(CountryOfResidencePage(index), country).success.value
               .set(AddressYesNoPage(index), true).success.value
               .set(AddressUKYesNoPage(index), false).success.value
               .set(AddressInternationalPage(index), internationalAddress).success.value
 
-          val other = otherBeneficiaryMapper.build(userAnswers)
+            val other = otherBeneficiaryMapper.build(userAnswers)
 
-          other mustBe defined
-          other.value.head mustBe OtherType(
-            description = "Other Name",
-            beneficiaryDiscretion = None,
-            beneficiaryShareOfIncome = None,
-            address = Some(AddressType("Line 1", "Line 2", None, None, None, "FR")),
-            countryOfResidence = Some("FR")
-          )
+            other mustBe defined
+            other.value.head mustBe OtherType(
+              description = description,
+              beneficiaryDiscretion = Some(false),
+              beneficiaryShareOfIncome = Some(percentage.toString),
+              address = Some(internationalAddressType),
+              countryOfResidence = Some(country)
+            )
+          }
         }
       }
     }
