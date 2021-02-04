@@ -17,12 +17,12 @@
 package navigation
 
 import controllers.register.beneficiaries.other
+import javax.inject.Inject
 import models.ReadableUserAnswers
 import pages.Page
 import pages.register.beneficiaries.other._
+import pages.register.beneficiaries.other.mld5.{UKResidentYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import play.api.mvc.Call
-
-import javax.inject.Inject
 
 class OtherBeneficiaryNavigator @Inject()() extends Navigator {
 
@@ -30,14 +30,15 @@ class OtherBeneficiaryNavigator @Inject()() extends Navigator {
     routes(draftId)(page)(userAnswers)
 
   private def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] =
-    simpleNavigation(draftId) andThen (c => (_:ReadableUserAnswers) => c) orElse
+    simpleNavigation(draftId)  orElse
       yesNoNavigation(draftId)
 
-  private def simpleNavigation(draftId: String): PartialFunction[Page, Call] = {
-    case DescriptionPage(index) => other.routes.DiscretionYesNoController.onPageLoad(index, draftId)
-    case ShareOfIncomePage(index) => other.routes.AddressYesNoController.onPageLoad(index, draftId)
-    case AddressUKPage(index) => other.routes.CheckDetailsController.onPageLoad(index, draftId)
-    case AddressInternationalPage(index) => other.routes.CheckDetailsController.onPageLoad(index, draftId)
+  private def simpleNavigation(draftId: String):  PartialFunction[Page, ReadableUserAnswers => Call] = {
+    case DescriptionPage(index) => _ => other.routes.DiscretionYesNoController.onPageLoad(index, draftId)
+    case ShareOfIncomePage(index) => ua => navigateAwayFromIncomeQuestions(draftId, index, ua.is5mldEnabled)
+    case AddressUKPage(index) => _ => other.routes.CheckDetailsController.onPageLoad(index, draftId)
+    case AddressInternationalPage(index) =>_ =>  other.routes.CheckDetailsController.onPageLoad(index, draftId)
+    case CountryOfResidencePage(index) => _ => other.routes.AddressYesNoController.onPageLoad(index, draftId)
   }
 
   private def yesNoNavigation(draftId: String) : PartialFunction[Page, ReadableUserAnswers => Call] = {
@@ -45,7 +46,7 @@ class OtherBeneficiaryNavigator @Inject()() extends Navigator {
       yesNoNav(
         ua = ua,
         fromPage = page,
-        yesCall = other.routes.AddressYesNoController.onPageLoad(index, draftId),
+        yesCall = navigateAwayFromIncomeQuestions(draftId, index, ua.is5mldEnabled),
         noCall = other.routes.ShareOfIncomeController.onPageLoad(index, draftId)
       )
     case page @ AddressYesNoPage(index) => ua =>
@@ -62,6 +63,27 @@ class OtherBeneficiaryNavigator @Inject()() extends Navigator {
         yesCall = other.routes.UkAddressController.onPageLoad(index, draftId),
         noCall = other.routes.NonUkAddressController.onPageLoad(index, draftId)
       )
+    case page @ CountryOfResidenceYesNoPage(index) => ua =>
+      yesNoNav(
+        ua = ua,
+        fromPage = page,
+        yesCall = other.mld5.routes.UKResidentYesNoController.onPageLoad(index, draftId),
+        noCall = other.routes.AddressYesNoController.onPageLoad(index, draftId)
+      )
+    case page @ UKResidentYesNoPage(index) => ua =>
+      yesNoNav(
+        ua = ua,
+        fromPage = page,
+        yesCall = other.routes.AddressYesNoController.onPageLoad(index, draftId),
+        noCall = other.mld5.routes.CountryOfResidenceController.onPageLoad(index, draftId)
+      )
   }
 
+  private def navigateAwayFromIncomeQuestions(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
+    if (is5mldEnabled) {
+      controllers.register.beneficiaries.other.mld5.routes.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
+    } else {
+      other.routes.AddressYesNoController.onPageLoad(index, draftId)
+    }
+  }
 }
