@@ -108,9 +108,10 @@ class IndividualBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOption
     case false => userAnswers.get(CountryOfNationalityPage(index)) map {
       x =>
         AnswerRow(
-          "individualBeneficiary.5mld.countryONationality.checkYourAnswersLabel",
+          "individualBeneficiary.5mld.countryOfNationality.checkYourAnswersLabel",
           HtmlFormat.escape(country(x, countryOptions)),
           Some(ntRts.CountryOfNationalityController.onPageLoad(index, draftId).url),
+          indBeneficiaryName(index, userAnswers),
           canEdit = canEdit
         )
     }
@@ -146,6 +147,7 @@ class IndividualBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOption
           "individualBeneficiary.5mld.countryOfResidence.checkYourAnswersLabel",
           HtmlFormat.escape(country(x, countryOptions)),
           Some(ntRts.CountryOfResidenceController.onPageLoad(index, draftId).url),
+          indBeneficiaryName(index, userAnswers),
           canEdit = canEdit
         )
     }
