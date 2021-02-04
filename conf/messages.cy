@@ -5,6 +5,10 @@ site.edit=Newid
 site.delete=Tynnu
 site.save.continue = cadw ac yn eich blaen
 
+date.day = diwrnod
+date.month = mis
+date.year = blwyddyn
+
 error.summary.title=Mae problem wedi codi
 
 #trust.5mld.countryOfResidenceYesNo.title = A ydych yn gwybod beth yw gwlad breswyl y buddiolwr?
