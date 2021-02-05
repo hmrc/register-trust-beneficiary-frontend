@@ -16,9 +16,6 @@
 
 package utils.answers
 
-import java.time.LocalDate
-
-import javax.inject.Inject
 import models.UserAnswers
 import models.core.pages.{Address, FullName}
 import models.registration.pages.PassportOrIdCardDetails
@@ -28,10 +25,11 @@ import play.api.libs.json.Reads
 import play.twirl.api.HtmlFormat
 import queries.Gettable
 import viewmodels.AnswerRow
-import utils.answers.CheckAnswersFormatters._
-import utils.countryOptions.CountryOptions
 
-class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
+import java.time.LocalDate
+import javax.inject.Inject
+
+class CheckYourAnswersHelper @Inject()(checkAnswersFormatters: CheckAnswersFormatters)
                                       (userAnswers: UserAnswers,
                                        arg: String = "",
                                        canEdit: Boolean)
@@ -72,7 +70,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
     userAnswers.get(query) map {x =>
       AnswerRow(
         label = s"$labelKey.checkYourAnswersLabel",
-        answer = yesOrNo(x),
+        answer = checkAnswersFormatters.yesOrNo(x),
         changeUrl = changeUrl,
         labelArg = arg,
         canEdit = canEdit
@@ -86,7 +84,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
     userAnswers.get(query) map {x =>
       AnswerRow(
         label = s"$labelKey.checkYourAnswersLabel",
-        answer = HtmlFormat.escape(x.format(dateFormatter)),
+        answer = HtmlFormat.escape(checkAnswersFormatters.formatDate(x)),
         changeUrl = changeUrl,
         labelArg = arg,
         canEdit = canEdit
@@ -100,7 +98,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
     userAnswers.get(query) map {x =>
       AnswerRow(
         label = s"$labelKey.checkYourAnswersLabel",
-        answer = HtmlFormat.escape(formatNino(x)),
+        answer = HtmlFormat.escape(checkAnswersFormatters.formatNino(x)),
         changeUrl = changeUrl,
         labelArg = arg,
         canEdit = canEdit
@@ -115,7 +113,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
     userAnswers.get(query) map {x =>
       AnswerRow(
         label = s"$labelKey.checkYourAnswersLabel",
-        answer = addressFormatter(x, countryOptions),
+        answer = checkAnswersFormatters.addressFormatter(x),
         changeUrl = changeUrl,
         labelArg = arg,
         canEdit = canEdit
@@ -129,7 +127,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
     userAnswers.get(query) map {x =>
       AnswerRow(
         label = s"$labelKey.checkYourAnswersLabel",
-        answer = passportOrIDCard(x, countryOptions),
+        answer = checkAnswersFormatters.passportOrIDCard(x),
         changeUrl = changeUrl,
         labelArg = arg,
         canEdit = canEdit

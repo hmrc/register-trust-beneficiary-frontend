@@ -16,15 +16,15 @@
 
 package utils.answers
 
-import javax.inject.Inject
 import models.UserAnswers
 import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
 import play.api.i18n.Messages
 import sections.beneficiaries.ClassOfBeneficiaries
-import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
 
-class ClassOfBeneficiariesAnswersHelper @Inject()(countryOptions: CountryOptions)
+import javax.inject.Inject
+
+class ClassOfBeneficiariesAnswersHelper @Inject()(checkAnswersFormatters: CheckAnswersFormatters)
                                                  (userAnswers: UserAnswers,
                                                   draftId: String,
                                                   canEdit: Boolean)
@@ -49,7 +49,7 @@ class ClassOfBeneficiariesAnswersHelper @Inject()(countryOptions: CountryOptions
   }
 
   private def classOfBeneficiariesRows(index: Int): Seq[AnswerRow] = {
-    val helper = new CheckYourAnswersHelper(countryOptions)(userAnswers, canEdit = canEdit)
+    val helper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, canEdit = canEdit)
 
     Seq(
       helper.stringQuestion(

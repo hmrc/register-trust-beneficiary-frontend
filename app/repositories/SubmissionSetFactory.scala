@@ -16,20 +16,20 @@
 
 package repositories
 
-import javax.inject.Inject
 import mapping.registration.BeneficiariesMapper
 import models._
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 import utils.RegistrationProgress
 import utils.answers._
-import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
+
+import javax.inject.Inject
 
 class SubmissionSetFactory @Inject()(
                                       registrationProgress: RegistrationProgress,
                                       beneficiariesMapper: BeneficiariesMapper,
-                                      countryOptions: CountryOptions,
+                                      checkAnswersFormatters: CheckAnswersFormatters,
                                       companyBeneficiaryAnswersHelper: CompanyBeneficiaryAnswersHelper,
                                       largeBeneficiaryAnswersHelper: EmploymentRelatedBeneficiaryAnswersHelper,
                                       otherBeneficiaryAnswersHelper: OtherBeneficiaryAnswersHelper
@@ -63,10 +63,10 @@ class SubmissionSetFactory @Inject()(
 
     if (status.contains(Status.Completed)) {
 
-      val individualBeneficiariesHelper = new IndividualBeneficiaryAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, false)
-      val classOfBeneficiariesHelper = new ClassOfBeneficiariesAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, false)
-      val charityBeneficiariesHelper = new CharityBeneficiaryAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, false)
-      val trustBeneficiariesHelper = new TrustBeneficiaryAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, false)
+      val individualBeneficiariesHelper = new IndividualBeneficiaryAnswersHelper(checkAnswersFormatters)(userAnswers, userAnswers.draftId, false)
+      val classOfBeneficiariesHelper = new ClassOfBeneficiariesAnswersHelper(checkAnswersFormatters)(userAnswers, userAnswers.draftId, false)
+      val charityBeneficiariesHelper = new CharityBeneficiaryAnswersHelper(checkAnswersFormatters)(userAnswers, userAnswers.draftId, false)
+      val trustBeneficiariesHelper = new TrustBeneficiaryAnswersHelper(checkAnswersFormatters)(userAnswers, userAnswers.draftId, false)
 
       val entitySections = List(
         individualBeneficiariesHelper.individualBeneficiaries,

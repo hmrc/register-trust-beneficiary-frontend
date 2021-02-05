@@ -18,18 +18,17 @@ package controllers.register.beneficiaries.charityortrust.charity
 
 import controllers.actions._
 import controllers.actions.register.charity.NameRequiredAction
-import javax.inject.Inject
 import models.Status.Completed
 import pages.entitystatus.CharityBeneficiaryStatus
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.answers.CharityBeneficiaryAnswersHelper
-import utils.countryOptions.CountryOptions
+import utils.answers.{CharityBeneficiaryAnswersHelper, CheckAnswersFormatters}
 import viewmodels.AnswerSection
 import views.html.register.beneficiaries.charityortrust.charity.CharityAnswersView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CharityAnswersController @Inject()(
@@ -38,14 +37,14 @@ class CharityAnswersController @Inject()(
                                           standardActionSets: StandardActionSets,
                                           nameAction: NameRequiredAction,
                                           view: CharityAnswersView,
-                                          countryOptions: CountryOptions
+                                          checkAnswersFormatters: CheckAnswersFormatters
                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
     implicit request =>
 
-      val answers = new CharityBeneficiaryAnswersHelper(countryOptions)(request.userAnswers, draftId, canEdit = true)
+      val answers = new CharityBeneficiaryAnswersHelper(checkAnswersFormatters)(request.userAnswers, draftId, canEdit = true)
 
       val sections = Seq(
         AnswerSection(

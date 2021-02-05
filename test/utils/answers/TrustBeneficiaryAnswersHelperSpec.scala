@@ -23,12 +23,11 @@ import models.core.pages.{InternationalAddress, UKAddress}
 import pages.register.beneficiaries.charityortrust.trust._
 import pages.register.beneficiaries.charityortrust.trust.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import play.twirl.api.Html
-import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
 
 class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
 
-  private val countryOptions: CountryOptions = injector.instanceOf[CountryOptions]
+  private val checkAnswersFormatters = injector.instanceOf[CheckAnswersFormatters]
 
   private val index: Int = 0
   private val name: String = "Trust Name"
@@ -49,7 +48,7 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
             .set(DiscretionYesNoPage(index), true).success.value
             .set(AddressYesNoPage(index), false).success.value
 
-          val helper: TrustBeneficiaryAnswersHelper = new TrustBeneficiaryAnswersHelper(countryOptions)(userAnswers, fakeDraftId, canEdit)
+          val helper: TrustBeneficiaryAnswersHelper = new TrustBeneficiaryAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
 
           val result = helper.trustBeneficiaries
 
@@ -76,7 +75,7 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
             .set(AddressUKYesNoPage(index), false).success.value
             .set(AddressInternationalPage(index), nonUkAddress).success.value
 
-          val helper: TrustBeneficiaryAnswersHelper = new TrustBeneficiaryAnswersHelper(countryOptions)(userAnswers, fakeDraftId, canEdit)
+          val helper: TrustBeneficiaryAnswersHelper = new TrustBeneficiaryAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
 
           val result = helper.trustBeneficiaries
 
@@ -106,7 +105,7 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
             .set(AddressUKYesNoPage(index), true).success.value
             .set(AddressUKPage(index), ukAddress).success.value
 
-          val helper: TrustBeneficiaryAnswersHelper = new TrustBeneficiaryAnswersHelper(countryOptions)(userAnswers, fakeDraftId, canEdit)
+          val helper: TrustBeneficiaryAnswersHelper = new TrustBeneficiaryAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
 
           val result = helper.trustBeneficiaries
 
@@ -136,7 +135,7 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
             .set(CountryOfResidenceYesNoPage(index), false).success.value
             .set(AddressYesNoPage(index), false).success.value
 
-          val helper: TrustBeneficiaryAnswersHelper = new TrustBeneficiaryAnswersHelper(countryOptions)(userAnswers, fakeDraftId, canEdit)
+          val helper: TrustBeneficiaryAnswersHelper = new TrustBeneficiaryAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
 
           val result = helper.trustBeneficiaries
 
@@ -167,7 +166,7 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
             .set(AddressUKYesNoPage(index), false).success.value
             .set(AddressInternationalPage(index), nonUkAddress).success.value
 
-          val helper: TrustBeneficiaryAnswersHelper = new TrustBeneficiaryAnswersHelper(countryOptions)(userAnswers, fakeDraftId, canEdit)
+          val helper: TrustBeneficiaryAnswersHelper = new TrustBeneficiaryAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
 
           val result = helper.trustBeneficiaries
 
@@ -202,7 +201,7 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
             .set(AddressUKYesNoPage(index), true).success.value
             .set(AddressUKPage(index), ukAddress).success.value
 
-          val helper: TrustBeneficiaryAnswersHelper = new TrustBeneficiaryAnswersHelper(countryOptions)(userAnswers, fakeDraftId, canEdit)
+          val helper: TrustBeneficiaryAnswersHelper = new TrustBeneficiaryAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
 
           val result = helper.trustBeneficiaries
 
@@ -232,7 +231,7 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
             .set(NamePage(index), name).success.value
             .set(CountryOfResidenceYesNoPage(index), false).success.value
 
-          val helper: TrustBeneficiaryAnswersHelper = new TrustBeneficiaryAnswersHelper(countryOptions)(userAnswers, fakeDraftId, canEdit)
+          val helper: TrustBeneficiaryAnswersHelper = new TrustBeneficiaryAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
 
           val result = helper.trustBeneficiaries
 
@@ -256,7 +255,7 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
             .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
             .set(CountryOfResidencePage(index), nonUkCountry).success.value
 
-          val helper: TrustBeneficiaryAnswersHelper = new TrustBeneficiaryAnswersHelper(countryOptions)(userAnswers, fakeDraftId, canEdit)
+          val helper: TrustBeneficiaryAnswersHelper = new TrustBeneficiaryAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
 
           val result = helper.trustBeneficiaries
 

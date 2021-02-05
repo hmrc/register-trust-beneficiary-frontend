@@ -16,19 +16,18 @@
 
 package controllers.register.beneficiaries.individualBeneficiary
 
-import java.time.{LocalDate, ZoneOffset}
-
 import base.SpecBase
 import models.core.pages.{FullName, UKAddress}
 import pages.register.beneficiaries.individual._
 import pages.register.beneficiaries.individual.mld5._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import utils.answers.IndividualBeneficiaryAnswersHelper
-import utils.countryOptions.CountryOptions
-import viewmodels.AnswerSection
 import utils.Constants._
+import utils.answers.{CheckAnswersFormatters, IndividualBeneficiaryAnswersHelper}
+import viewmodels.AnswerSection
 import views.html.register.beneficiaries.individualBeneficiary.AnswersView
+
+import java.time.{LocalDate, ZoneOffset}
 
 class AnswersControllerSpec extends SpecBase {
 
@@ -38,30 +37,29 @@ class AnswersControllerSpec extends SpecBase {
 
     "return OK and the correct view for a GET" in {
 
-      val userAnswers =
-        emptyUserAnswers
-          .set(NamePage(index), FullName("first name", None, "last name")).success.value
-          .set(DateOfBirthYesNoPage(index),true).success.value
-          .set(DateOfBirthPage(index),LocalDate.now(ZoneOffset.UTC)).success.value
-          .set(IncomeYesNoPage(index),true).success.value
-          .set(IncomePage(index),100).success.value
-          .set(CountryOfNationalityYesNoPage(index), true).success.value
-          .set(CountryOfNationalityInTheUkYesNoPage(index), false).success.value
-          .set(CountryOfNationalityPage(index), ES).success.value
-          .set(NationalInsuranceYesNoPage(index),true).success.value
-          .set(NationalInsuranceNumberPage(index),"AB123456C").success.value
-          .set(CountryOfResidenceYesNoPage(index), true).success.value
-          .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
-          .set(CountryOfResidencePage(index), ES).success.value
-          .set(AddressYesNoPage(index),true).success.value
-          .set(AddressUKYesNoPage(index),true).success.value
-          .set(AddressUKPage(index),UKAddress("Line1", "Line2", None, None, "NE62RT")).success.value
-          .set(MentalCapacityYesNoPage(index), true).success.value
-          .set(VulnerableYesNoPage(index),true).success.value
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(index), FullName("first name", None, "last name")).success.value
+        .set(DateOfBirthYesNoPage(index),true).success.value
+        .set(DateOfBirthPage(index),LocalDate.now(ZoneOffset.UTC)).success.value
+        .set(IncomeYesNoPage(index),true).success.value
+        .set(IncomePage(index),100).success.value
+        .set(CountryOfNationalityYesNoPage(index), true).success.value
+        .set(CountryOfNationalityInTheUkYesNoPage(index), false).success.value
+        .set(CountryOfNationalityPage(index), ES).success.value
+        .set(NationalInsuranceYesNoPage(index),true).success.value
+        .set(NationalInsuranceNumberPage(index),"AB123456C").success.value
+        .set(CountryOfResidenceYesNoPage(index), true).success.value
+        .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+        .set(CountryOfResidencePage(index), ES).success.value
+        .set(AddressYesNoPage(index),true).success.value
+        .set(AddressUKYesNoPage(index),true).success.value
+        .set(AddressUKPage(index),UKAddress("Line1", "Line2", None, None, "NE62RT")).success.value
+        .set(MentalCapacityYesNoPage(index), true).success.value
+        .set(VulnerableYesNoPage(index),true).success.value
 
 
-      val countryOptions = injector.instanceOf[CountryOptions]
-      val checkYourAnswersHelper = new IndividualBeneficiaryAnswersHelper(countryOptions)(userAnswers, fakeDraftId, canEdit = true)
+      val checkAnswersFormatters = injector.instanceOf[CheckAnswersFormatters]
+      val checkYourAnswersHelper = new IndividualBeneficiaryAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit = true)
 
       val expectedSections = Seq(
         AnswerSection(

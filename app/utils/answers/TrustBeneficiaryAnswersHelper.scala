@@ -24,13 +24,11 @@ import pages.register.beneficiaries.charityortrust.trust.mld5.{CountryOfResidenc
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import sections.beneficiaries.TrustBeneficiaries
-import utils.answers.CheckAnswersFormatters._
-import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
 
 import javax.inject.Inject
 
-class TrustBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
+class TrustBeneficiaryAnswersHelper @Inject()(checkAnswersFormatters: CheckAnswersFormatters)
                                              (userAnswers: UserAnswers,
                                               draftId: String,
                                               canEdit: Boolean)
@@ -76,7 +74,7 @@ class TrustBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
     x =>
       AnswerRow(
         "trustBeneficiaryAddressUKYesNo.checkYourAnswersLabel",
-        yesOrNo(x),
+        checkAnswersFormatters.yesOrNo(x),
         Some(routes.AddressUKYesNoController.onPageLoad(index, draftId).url),
         trustBeneficiaryName(index, userAnswers),
         canEdit = canEdit
@@ -87,7 +85,7 @@ class TrustBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
     x =>
       AnswerRow(
         "site.address.uk.checkYourAnswersLabel",
-        ukAddress(x),
+        checkAnswersFormatters.ukAddress(x),
         Some(routes.AddressUKController.onPageLoad(index, draftId).url),
         trustBeneficiaryName(index, userAnswers),
         canEdit = canEdit
@@ -98,7 +96,7 @@ class TrustBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
     x =>
       AnswerRow(
         "site.address.international.checkYourAnswersLabel",
-        internationalAddress(x, countryOptions),
+        checkAnswersFormatters.internationalAddress(x),
         Some(routes.AddressInternationalController.onPageLoad(index, draftId).url),
         trustBeneficiaryName(index, userAnswers),
         canEdit = canEdit
@@ -109,7 +107,7 @@ class TrustBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
     x =>
       AnswerRow(
         "trustBeneficiaryAddressYesNo.checkYourAnswersLabel",
-        yesOrNo(x),
+        checkAnswersFormatters.yesOrNo(x),
         Some(routes.AddressYesNoController.onPageLoad(index, draftId).url),
         trustBeneficiaryName(index, userAnswers),
         canEdit = canEdit
@@ -120,7 +118,7 @@ class TrustBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
     x =>
       AnswerRow(
         "trustBeneficiaryShareOfIncome.checkYourAnswersLabel",
-        percentage(x.toString),
+        checkAnswersFormatters.percentage(x.toString),
         Some(routes.ShareOfIncomeController.onPageLoad(index, draftId).url),
         trustBeneficiaryName(index, userAnswers),
         canEdit = canEdit
@@ -131,9 +129,9 @@ class TrustBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
     x =>
       AnswerRow(
         "trustBeneficiaryDiscretionYesNo.checkYourAnswersLabel",
-        yesOrNo(x),
+        checkAnswersFormatters.yesOrNo(x),
         Some(routes.DiscretionYesNoController.onPageLoad(index, draftId).url),
-        indBeneficiaryName(index, userAnswers),
+        checkAnswersFormatters.indBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
   }
@@ -152,7 +150,7 @@ class TrustBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
     x =>
       AnswerRow(
         "trust.5mld.countryOfResidenceYesNo.checkYourAnswersLabel",
-        yesOrNo(x),
+        checkAnswersFormatters.yesOrNo(x),
         Some(ntRoutes.CountryOfResidenceYesNoController.onPageLoad(index, draftId).url),
         trustBeneficiaryName(index, userAnswers),
         canEdit = canEdit
@@ -163,7 +161,7 @@ class TrustBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
     x =>
       AnswerRow(
         "trust.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel",
-        yesOrNo(x),
+        checkAnswersFormatters.yesOrNo(x),
         Some(ntRoutes.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId).url),
         trustBeneficiaryName(index, userAnswers),
         canEdit = canEdit
@@ -175,7 +173,7 @@ class TrustBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
       x =>
         AnswerRow(
           "trust.5mld.countryOfResidence.checkYourAnswersLabel",
-          HtmlFormat.escape(country(x, countryOptions)),
+          HtmlFormat.escape(checkAnswersFormatters.country(x)),
           Some(ntRoutes.CountryOfResidenceController.onPageLoad(index, draftId).url),
           trustBeneficiaryName(index, userAnswers),
           canEdit = canEdit

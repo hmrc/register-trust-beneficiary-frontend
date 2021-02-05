@@ -21,13 +21,12 @@ import models.core.pages.UKAddress
 import models.registration.pages.CharityOrTrust.Charity
 import pages.register.beneficiaries.charityortrust._
 import pages.register.beneficiaries.charityortrust.charity.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
-import pages.register.beneficiaries.charityortrust.charity.{AddressInTheUkYesNoPage, AddressYesNoPage, AmountDiscretionYesNoPage, CharityAddressUKPage, CharityNamePage, HowMuchIncomePage}
+import pages.register.beneficiaries.charityortrust.charity._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import utils.answers.CharityBeneficiaryAnswersHelper
-import utils.countryOptions.CountryOptions
-import viewmodels.AnswerSection
 import utils.Constants._
+import utils.answers.{CharityBeneficiaryAnswersHelper, CheckAnswersFormatters}
+import viewmodels.AnswerSection
 import views.html.register.beneficiaries.charityortrust.charity.CharityAnswersView
 
 class CharityAnswersControllerSpec extends SpecBase {
@@ -38,21 +37,20 @@ class CharityAnswersControllerSpec extends SpecBase {
 
     "return OK and the correct view for a GET" in {
 
-      val userAnswers =
-        emptyUserAnswers
-          .set(CharityOrTrustPage, Charity).success.value
-          .set(CharityNamePage(index),"Test").success.value
-          .set(AmountDiscretionYesNoPage(index), false).success.value
-          .set(HowMuchIncomePage(index),60).success.value
-          .set(CountryOfResidenceYesNoPage(index), true).success.value
-          .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
-          .set(CountryOfResidencePage(index), ES).success.value
-          .set(AddressYesNoPage(index),true).success.value
-          .set(AddressInTheUkYesNoPage(index),true).success.value
-          .set(CharityAddressUKPage(index),UKAddress("Test 1","Test 2", None, None, "AB11AB")).success.value
+      val userAnswers = emptyUserAnswers
+        .set(CharityOrTrustPage, Charity).success.value
+        .set(CharityNamePage(index),"Test").success.value
+        .set(AmountDiscretionYesNoPage(index), false).success.value
+        .set(HowMuchIncomePage(index),60).success.value
+        .set(CountryOfResidenceYesNoPage(index), true).success.value
+        .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+        .set(CountryOfResidencePage(index), ES).success.value
+        .set(AddressYesNoPage(index),true).success.value
+        .set(AddressInTheUkYesNoPage(index),true).success.value
+        .set(CharityAddressUKPage(index),UKAddress("Test 1","Test 2", None, None, "AB11AB")).success.value
 
-      val countryOptions = injector.instanceOf[CountryOptions]
-      val checkYourAnswersHelper = new CharityBeneficiaryAnswersHelper(countryOptions)(userAnswers, fakeDraftId, canEdit = true)
+      val checkAnswersFormatters = injector.instanceOf[CheckAnswersFormatters]
+      val checkYourAnswersHelper = new CharityBeneficiaryAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit = true)
 
       val expectedSections = Seq(
         AnswerSection(
