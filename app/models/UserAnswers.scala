@@ -99,8 +99,8 @@ object UserAnswers {
       (__ \ "_id").read[String] and
         (__ \ "data").read[JsObject] and
         (__ \ "internalId").read[String] and
-        (__ \ "is5mldEnabled").read[Boolean] and
-        (__ \ "isTaxable").read[Boolean]
+        (__ \ "is5mldEnabled").readWithDefault[Boolean](false) and
+        (__ \ "isTaxable").readWithDefault[Boolean](true)
       ) (UserAnswers.apply _)
   }
 
