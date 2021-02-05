@@ -17,7 +17,6 @@
 package controllers.register.beneficiaries.charityortrust.trust
 
 import controllers.actions._
-import javax.inject.Inject
 import models.Status.Completed
 import navigation.Navigator
 import pages.entitystatus.TrustBeneficiaryStatus
@@ -26,11 +25,11 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.answers.TrustBeneficiaryAnswersHelper
-import utils.countryOptions.CountryOptions
+import utils.answers.{CheckAnswersFormatters, TrustBeneficiaryAnswersHelper}
 import viewmodels.AnswerSection
 import views.html.register.beneficiaries.charityortrust.trust.AnswersView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AnswersController @Inject()(
@@ -40,14 +39,14 @@ class AnswersController @Inject()(
                                    standardActionSets: StandardActionSets,
                                    val controllerComponents: MessagesControllerComponents,
                                    view: AnswersView,
-                                   countryOptions: CountryOptions
+                                   checkAnswersFormatters: CheckAnswersFormatters
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId) {
     implicit request =>
 
-      val answers = new TrustBeneficiaryAnswersHelper(countryOptions)(request.userAnswers, draftId, canEdit = true)
+      val answers = new TrustBeneficiaryAnswersHelper(checkAnswersFormatters)(request.userAnswers, draftId, canEdit = true)
 
       val sections = Seq(
         AnswerSection(

@@ -16,23 +16,22 @@
 
 package utils.answers
 
-import controllers.register.beneficiaries.charityortrust.charity.{routes => rts}
 import controllers.register.beneficiaries.charityortrust.charity.mld5.{routes => ntRts}
-import javax.inject.Inject
+import controllers.register.beneficiaries.charityortrust.charity.{routes => rts}
 import models.UserAnswers
 import pages.register.beneficiaries.charityortrust.charity._
 import pages.register.beneficiaries.charityortrust.charity.mld5._
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import sections.beneficiaries.CharityBeneficiaries
-import utils.answers.CheckAnswersFormatters._
-import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
 
-class CharityBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
+import javax.inject.Inject
+
+class CharityBeneficiaryAnswersHelper @Inject()(checkAnswersFormatters: CheckAnswersFormatters)
                                                (userAnswers: UserAnswers,
-                                              draftId: String,
-                                              canEdit: Boolean)
+                                                draftId: String,
+                                                canEdit: Boolean)
                                                (implicit messages: Messages) {
 
   def charityBeneficiaries: Option[Seq[AnswerSection]] = {
@@ -71,9 +70,9 @@ class CharityBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
     x =>
       AnswerRow(
         "charity.5mld.countryOfResidenceYesNo.checkYourAnswersLabel",
-        yesOrNo(x),
+        checkAnswersFormatters.yesOrNo(x),
         Some(ntRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId).url),
-        charityBeneficiaryName(index, userAnswers),
+        checkAnswersFormatters.charityBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
   }
@@ -82,9 +81,9 @@ class CharityBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
     x =>
       AnswerRow(
         "charity.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel",
-        yesOrNo(x),
+        checkAnswersFormatters.yesOrNo(x),
         Some(ntRts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId).url),
-        charityBeneficiaryName(index, userAnswers),
+        checkAnswersFormatters.charityBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
   }
@@ -94,7 +93,7 @@ class CharityBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
       x =>
         AnswerRow(
           "charity.5mld.countryOfResidence.checkYourAnswersLabel",
-          HtmlFormat.escape(country(x, countryOptions)),
+          HtmlFormat.escape(checkAnswersFormatters.country(x)),
           Some(ntRts.CountryOfResidenceController.onPageLoad(index, draftId).url),
           canEdit = canEdit
         )
@@ -106,9 +105,9 @@ class CharityBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
     x =>
       AnswerRow(
         "charity.addressYesNo.checkYourAnswersLabel",
-        yesOrNo(x),
+        checkAnswersFormatters.yesOrNo(x),
         Some(rts.AddressYesNoController.onPageLoad(index, draftId).url),
-        charityBeneficiaryName(index, userAnswers),
+        checkAnswersFormatters.charityBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
   }
@@ -117,9 +116,9 @@ class CharityBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
     x =>
       AnswerRow(
         "charity.discretionYesNo.checkYourAnswersLabel",
-        yesOrNo(x),
+        checkAnswersFormatters.yesOrNo(x),
         Some(rts.AmountDiscretionYesNoController.onPageLoad(index, draftId).url),
-        charityBeneficiaryName(index, userAnswers),
+        checkAnswersFormatters.charityBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
   }
@@ -138,7 +137,7 @@ class CharityBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
     x =>
       AnswerRow(
         "charity.shareOfIncome.checkYourAnswersLabel",
-        percentage(x.toString),
+        checkAnswersFormatters.percentage(x.toString),
         Some(rts.HowMuchIncomeController.onPageLoad(index, draftId).url),
         canEdit = canEdit
       )
@@ -148,9 +147,9 @@ class CharityBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
     x =>
       AnswerRow(
         "charity.internationalAddress.checkYourAnswersLabel",
-        internationalAddress(x, countryOptions),
+        checkAnswersFormatters.internationalAddress(x),
         Some(rts.CharityInternationalAddressController.onPageLoad(index, draftId).url),
-        charityBeneficiaryName(index, userAnswers),
+        checkAnswersFormatters.charityBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
   }
@@ -159,9 +158,9 @@ class CharityBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
     x =>
       AnswerRow(
         "charity.ukAddress.checkYourAnswersLabel",
-        ukAddress(x),
+        checkAnswersFormatters.ukAddress(x),
         Some(rts.CharityAddressUKController.onPageLoad(index, draftId).url),
-        charityBeneficiaryName(index, userAnswers),
+        checkAnswersFormatters.charityBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
   }
@@ -170,9 +169,9 @@ class CharityBeneficiaryAnswersHelper @Inject()(countryOptions: CountryOptions)
     x =>
       AnswerRow(
         "charity.addressInTheUkYesNo.checkYourAnswersLabel",
-        yesOrNo(x),
+        checkAnswersFormatters.yesOrNo(x),
         Some(rts.AddressInTheUkYesNoController.onPageLoad(index, draftId).url),
-        charityBeneficiaryName(index, userAnswers),
+        checkAnswersFormatters.charityBeneficiaryName(index, userAnswers),
         canEdit = canEdit
       )
   }

@@ -19,7 +19,6 @@ package controllers.register.beneficiaries.individualBeneficiary
 import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import javax.inject.Inject
 import models.Status.Completed
 import navigation.Navigator
 import pages.entitystatus.IndividualBeneficiaryStatus
@@ -29,11 +28,11 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.answers.IndividualBeneficiaryAnswersHelper
-import utils.countryOptions.CountryOptions
+import utils.answers.{CheckAnswersFormatters, IndividualBeneficiaryAnswersHelper}
 import viewmodels.AnswerSection
 import views.html.register.beneficiaries.individualBeneficiary.AnswersView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AnswersController @Inject()(
@@ -46,7 +45,7 @@ class AnswersController @Inject()(
                                    val controllerComponents: MessagesControllerComponents,
                                    requiredAnswer: RequiredAnswerActionProvider,
                                    view: AnswersView,
-                                   countryOptions: CountryOptions
+                                   checkAnswersFormatters: CheckAnswersFormatters
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
 
@@ -60,7 +59,7 @@ class AnswersController @Inject()(
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val answers = new IndividualBeneficiaryAnswersHelper(countryOptions)(request.userAnswers, draftId, canEdit = true)
+      val answers = new IndividualBeneficiaryAnswersHelper(checkAnswersFormatters)(request.userAnswers, draftId, canEdit = true)
 
       val sections = Seq(
         AnswerSection(

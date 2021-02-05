@@ -20,17 +20,13 @@ import com.google.inject.Inject
 import controllers.register.beneficiaries.other.routes._
 import models.UserAnswers
 import pages.register.beneficiaries.other._
-import pages.register.beneficiaries.other.mld5.{UKResidentYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
+import pages.register.beneficiaries.other.mld5.{CountryOfResidencePage, CountryOfResidenceYesNoPage, UKResidentYesNoPage}
 import play.api.i18n.Messages
 import sections.beneficiaries.OtherBeneficiaries
-import utils.countryOptions.CountryOptions
 import utils.print.AnswerRowConverter
 import viewmodels.{AnswerRow, AnswerSection}
 
-
-class OtherBeneficiaryAnswersHelper @Inject()(answerRowConverter: AnswerRowConverter,
-                                              countryOptions: CountryOptions
-                                 ) {
+class OtherBeneficiaryAnswersHelper @Inject()(answerRowConverter: AnswerRowConverter) {
 
   def otherBeneficiaries(userAnswers: UserAnswers)(implicit messages: Messages): Option[Seq[AnswerSection]] = {
     for {
@@ -55,7 +51,7 @@ class OtherBeneficiaryAnswersHelper @Inject()(answerRowConverter: AnswerRowConve
 
   def answers(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
              (implicit messages: Messages): Seq[AnswerRow] = {
-    val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name, countryOptions)
+    val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
 
     Seq(
       bound.stringQuestion(DescriptionPage(index), "otherBeneficiary.description", DescriptionController.onPageLoad(index, draftId).url),

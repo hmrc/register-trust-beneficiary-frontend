@@ -22,10 +22,9 @@ import pages.register.beneficiaries.charityortrust.trust._
 import pages.register.beneficiaries.charityortrust.trust.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import utils.answers.TrustBeneficiaryAnswersHelper
-import utils.countryOptions.CountryOptions
-import viewmodels.AnswerSection
 import utils.Constants._
+import utils.answers.{CheckAnswersFormatters, TrustBeneficiaryAnswersHelper}
+import viewmodels.AnswerSection
 import views.html.register.beneficiaries.charityortrust.trust.AnswersView
 
 class AnswersControllerSpec extends SpecBase {
@@ -36,20 +35,19 @@ class AnswersControllerSpec extends SpecBase {
 
     "return OK and the correct view for a GET" in {
 
-      val userAnswers =
-        emptyUserAnswers
-          .set(NamePage(index), "Trust Name").success.value
-          .set(DiscretionYesNoPage(index),true).success.value
-          .set(ShareOfIncomePage(index),100).success.value
-          .set(CountryOfResidenceYesNoPage(index), true).success.value
-          .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
-          .set(CountryOfResidencePage(index), ES).success.value
-          .set(AddressYesNoPage(index),true).success.value
-          .set(AddressUKYesNoPage(index),true).success.value
-          .set(AddressUKPage(index),UKAddress("Line1", "Line2", None, None, "NE62RT")).success.value
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(index), "Trust Name").success.value
+        .set(DiscretionYesNoPage(index),true).success.value
+        .set(ShareOfIncomePage(index),100).success.value
+        .set(CountryOfResidenceYesNoPage(index), true).success.value
+        .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+        .set(CountryOfResidencePage(index), ES).success.value
+        .set(AddressYesNoPage(index),true).success.value
+        .set(AddressUKYesNoPage(index),true).success.value
+        .set(AddressUKPage(index),UKAddress("Line1", "Line2", None, None, "NE62RT")).success.value
 
-      val countryOptions = injector.instanceOf[CountryOptions]
-      val checkYourAnswersHelper = new TrustBeneficiaryAnswersHelper(countryOptions)(userAnswers, fakeDraftId, canEdit = true)
+      val checkAnswersFormatters = injector.instanceOf[CheckAnswersFormatters]
+      val checkYourAnswersHelper = new TrustBeneficiaryAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit = true)
 
       val expectedSections = Seq(
         AnswerSection(

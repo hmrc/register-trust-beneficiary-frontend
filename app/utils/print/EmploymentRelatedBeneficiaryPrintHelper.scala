@@ -17,18 +17,15 @@
 package utils.print
 
 import com.google.inject.Inject
-import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.{routes => rts}
 import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.mld5.{routes => mld5Rts}
+import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.{routes => rts}
 import models.UserAnswers
 import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated._
 import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import play.api.i18n.Messages
-import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
 
-class EmploymentRelatedBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter,
-                                                        countryOptions: CountryOptions
-                                 ) {
+class EmploymentRelatedBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter) {
 
   def printSection(userAnswers: UserAnswers, name: String, index: Int, draftId: String)(implicit messages: Messages): AnswerSection = {
     AnswerSection(
@@ -46,7 +43,7 @@ class EmploymentRelatedBeneficiaryPrintHelper @Inject()(answerRowConverter: Answ
 
   def answers(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
              (implicit messages: Messages): Seq[AnswerRow] = {
-    val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name, countryOptions)
+    val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
 
     Seq(
       bound.stringQuestion(LargeBeneficiaryNamePage(index), "employmentRelatedBeneficiary.name", rts.NameController.onPageLoad(index, draftId).url),

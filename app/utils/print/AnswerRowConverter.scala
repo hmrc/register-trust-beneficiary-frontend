@@ -16,7 +16,6 @@
 
 package utils.print
 
-import java.time.LocalDate
 import com.google.inject.Inject
 import models.UserAnswers
 import models.core.pages.{Address, Description, FullName}
@@ -26,16 +25,17 @@ import play.api.i18n.Messages
 import play.api.libs.json.Reads
 import play.twirl.api.HtmlFormat
 import queries.Gettable
-import utils.answers.CheckAnswersFormatters._
-import utils.countryOptions.CountryOptions
+import utils.answers.CheckAnswersFormatters
 import viewmodels.AnswerRow
 
-class AnswerRowConverter @Inject()() {
+import java.time.LocalDate
 
-  def bind(userAnswers: UserAnswers, name: String, countryOptions: CountryOptions)
-          (implicit messages: Messages): Bound = new Bound(userAnswers, name, countryOptions)
+class AnswerRowConverter @Inject()(checkAnswersFormatters: CheckAnswersFormatters) {
 
-  class Bound(userAnswers: UserAnswers, name: String, countryOptions: CountryOptions)(implicit messages: Messages) {
+  def bind(userAnswers: UserAnswers, name: String)
+          (implicit messages: Messages): Bound = new Bound(userAnswers, name)
+
+  class Bound(userAnswers: UserAnswers, name: String)(implicit messages: Messages) {
 
     def nameQuestion(query: Gettable[FullName],
                      labelKey: String,
@@ -86,7 +86,7 @@ class AnswerRowConverter @Inject()() {
         case false => userAnswers.get(query) map { x =>
           AnswerRow(
             s"$labelKey.checkYourAnswersLabel",
-            HtmlFormat.escape(country(x, countryOptions)),
+            HtmlFormat.escape(checkAnswersFormatters.country(x)),
             Some(changeUrl),
             name
           )
@@ -101,7 +101,7 @@ class AnswerRowConverter @Inject()() {
       userAnswers.get(query) map {x =>
         AnswerRow(
           s"$labelKey.checkYourAnswersLabel",
-          percentage(x.toString),
+          checkAnswersFormatters.percentage(x.toString),
           Some(changeUrl),
           name
         )
@@ -127,7 +127,7 @@ class AnswerRowConverter @Inject()() {
       userAnswers.get(query) map {x =>
         AnswerRow(
           s"$labelKey.checkYourAnswersLabel",
-          yesOrNo(x),
+          checkAnswersFormatters.yesOrNo(x),
           Some(changeUrl),
           name
         )
@@ -140,7 +140,7 @@ class AnswerRowConverter @Inject()() {
       userAnswers.get(query) map {x =>
         AnswerRow(
           s"$labelKey.checkYourAnswersLabel",
-          HtmlFormat.escape(x.format(dateFormatter)),
+          HtmlFormat.escape(checkAnswersFormatters.formatDate(x)),
           Some(changeUrl),
           name
         )
@@ -153,7 +153,7 @@ class AnswerRowConverter @Inject()() {
       userAnswers.get(query) map {x =>
         AnswerRow(
           s"$labelKey.checkYourAnswersLabel",
-          HtmlFormat.escape(formatNino(x)),
+          HtmlFormat.escape(checkAnswersFormatters.formatNino(x)),
           Some(changeUrl),
           name
         )
@@ -167,7 +167,7 @@ class AnswerRowConverter @Inject()() {
       userAnswers.get(query) map { x =>
         AnswerRow(
           s"$labelKey.checkYourAnswersLabel",
-          addressFormatter(x, countryOptions),
+          checkAnswersFormatters.addressFormatter(x),
           Some(changeUrl),
           name
         )
@@ -180,7 +180,7 @@ class AnswerRowConverter @Inject()() {
       userAnswers.get(query) map {x =>
         AnswerRow(
           s"$labelKey.checkYourAnswersLabel",
-          passportOrIDCard(x, countryOptions),
+          checkAnswersFormatters.passportOrIDCard(x),
           Some(changeUrl),
           name
         )
@@ -193,7 +193,7 @@ class AnswerRowConverter @Inject()() {
       userAnswers.get(query) map {x =>
         AnswerRow(
           s"$labelKey.checkYourAnswersLabel",
-          formatDescription(x),
+          checkAnswersFormatters.formatDescription(x),
           Some(changeUrl)
         )
       }
@@ -205,7 +205,7 @@ class AnswerRowConverter @Inject()() {
       userAnswers.get(query) map {x =>
         AnswerRow(
           s"$labelKey.checkYourAnswersLabel",
-          formatNumberOfBeneficiaries(x),
+          checkAnswersFormatters.formatNumberOfBeneficiaries(x),
           Some(changeUrl)
         )
       }
