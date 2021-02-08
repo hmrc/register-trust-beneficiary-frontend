@@ -30,7 +30,7 @@ object ViewUtils {
     val suffix = error.args match {
       case x if x.contains("day") || x.contains("month") || x.contains("year") =>
         s"_${error.args.head}"
-      case Nil =>
+      case _ =>
         val isSingleDateField = error.message.toLowerCase.contains("date")
         if (error.key.toLowerCase.contains("date") || isSingleDateField) {
           "_day"
