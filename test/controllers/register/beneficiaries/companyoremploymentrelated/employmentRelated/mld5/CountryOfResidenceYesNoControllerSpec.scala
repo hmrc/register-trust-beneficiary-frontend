@@ -17,7 +17,7 @@
 package controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.mld5
 
 import base.SpecBase
-import config.annotations.{CompanyBeneficiary, EmploymentRelatedBeneficiary}
+import config.annotations.EmploymentRelatedBeneficiary
 import forms.YesNoFormProvider
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
