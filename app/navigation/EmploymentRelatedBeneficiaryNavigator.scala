@@ -40,7 +40,7 @@ class EmploymentRelatedBeneficiaryNavigator extends Navigator {
     case LargeBeneficiaryAddressInternationalPage(index) => _ => rts.DescriptionController.onPageLoad(index, draftId)
     case LargeBeneficiaryDescriptionPage(index) => _ => rts.NumberOfBeneficiariesController.onPageLoad(index, draftId)
     case LargeBeneficiaryNumberOfBeneficiariesPage(index) => _ => rts.CheckDetailsController.onPageLoad(index, draftId)
-    case CountryOfResidencePage(index) => _ => rts.AddressYesNoController.onPageLoad(index, draftId)
+    case CountryOfResidencePage(index) => ua => navigateAwayFromResidencyQuestions(draftId, index, ua.isTaxable)
   }
 
   private def yesNoNavigation(draftId: String) : PartialFunction[Page, ReadableUserAnswers => Call] = {
@@ -63,13 +63,13 @@ class EmploymentRelatedBeneficiaryNavigator extends Navigator {
         ua = ua,
         fromPage = page,
         yesCall = mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId),
-        noCall = rts.AddressYesNoController.onPageLoad(index, draftId)
+        noCall = navigateAwayFromResidencyQuestions(draftId, index, ua.isTaxable)
       )
     case page @ CountryOfResidenceInTheUkYesNoPage(index) => ua =>
       yesNoNav(
         ua = ua,
         fromPage = page,
-        yesCall = rts.AddressYesNoController.onPageLoad(index, draftId),
+        yesCall = navigateAwayFromResidencyQuestions(draftId, index, ua.isTaxable),
         noCall = mld5Rts.CountryOfResidenceController.onPageLoad(index, draftId)
       )
   }
@@ -79,6 +79,14 @@ class EmploymentRelatedBeneficiaryNavigator extends Navigator {
       mld5Rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
     } else {
       rts.AddressYesNoController.onPageLoad(index, draftId)
+    }
+  }
+
+  private def navigateAwayFromResidencyQuestions(draftId: String, index: Int, isTaxable: Boolean): Call = {
+    if (isTaxable) {
+      rts.AddressYesNoController.onPageLoad(index, draftId)
+    } else {
+      rts.DescriptionController.onPageLoad(index, draftId)
     }
   }
 
