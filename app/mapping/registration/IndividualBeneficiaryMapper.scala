@@ -28,7 +28,7 @@ class IndividualBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extend
     val individualBeneficiaries : List[mapping.reads.IndividualBeneficiary] =
       userAnswers.get(mapping.reads.IndividualBeneficiaries).getOrElse(List.empty)
 
-    individualBeneficiaries match {
+    removeIncompleteBeneficiaries(individualBeneficiaries, userAnswers) match {
       case Nil => None
       case list =>
         Some(
@@ -49,6 +49,21 @@ class IndividualBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extend
         )
     }
   }
+
+  def removeIncompleteBeneficiaries(beneficiaries: List[IndividualBeneficiary], userAnswers: UserAnswers): List[IndividualBeneficiary] = {
+    beneficiaries.filter(indDetailsType =>
+      (userAnswers.is5mldEnabled, userAnswers.isTaxable) match {
+        case (true, true) =>
+            indDetailsType.incomeYesNo.isDefined &&
+            indDetailsType.vulnerableYesNo.isDefined &&
+            indDetailsType.mentalCapacityYesNo.isDefined
+        case (true, false) =>
+            indDetailsType.mentalCapacityYesNo.isDefined
+        case (false, _) => true
+      }
+    )
+  }
+
 
   private def identificationMap(indBen: IndividualBeneficiary): Option[IdentificationType] = {
     val nino = indBen.nationalInsuranceNumber

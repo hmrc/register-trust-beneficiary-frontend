@@ -48,7 +48,7 @@ class IndividualBeneficiaryNavigator extends Navigator {
     case AddressInternationalPage(index) => _ => PassportDetailsYesNoController.onPageLoad(index, draftId)
     case PassportDetailsPage(index) => ua => navigateToMentalCapacityOrVulnerableQuestions(draftId, index, ua.is5mldEnabled)
     case IDCardDetailsPage(index) => ua => navigateToMentalCapacityOrVulnerableQuestions(draftId, index, ua.is5mldEnabled)
-    case MentalCapacityYesNoPage(index) => _ => VulnerableYesNoController.onPageLoad(index, draftId)
+    case MentalCapacityYesNoPage(index) => ua => navigateAwayFromMentalCapacityPage(draftId, index, ua)
     case VulnerableYesNoPage(index) => _ => AnswersController.onPageLoad(index, draftId)
     case AnswersPage => _ => controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
   }
@@ -193,6 +193,14 @@ class IndividualBeneficiaryNavigator extends Navigator {
       MentalCapacityYesNoController.onPageLoad(index, draftId)
     } else {
       VulnerableYesNoController.onPageLoad(index, draftId)
+    }
+  }
+
+  private def navigateAwayFromMentalCapacityPage(draftId: String, index: Int, ua: ReadableUserAnswers): Call = {
+    if (ua.isTaxable) {
+      VulnerableYesNoController.onPageLoad(index, draftId)
+    } else {
+      AnswersController.onPageLoad(index, draftId)
     }
   }
 

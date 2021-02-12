@@ -39,9 +39,9 @@ object BeneficiaryType {
 
 case class IndividualDetailsType(name: FullName,
                                  dateOfBirth: Option[LocalDate],
-                                 vulnerableBeneficiary: Boolean,
+                                 vulnerableBeneficiary: Option[Boolean],
                                  beneficiaryType: Option[String],
-                                 beneficiaryDiscretion: Boolean,
+                                 beneficiaryDiscretion: Option[Boolean],
                                  beneficiaryShareOfIncome: Option[String],
                                  identification: Option[IdentificationType],
                                  countryOfResidence: Option[String],
