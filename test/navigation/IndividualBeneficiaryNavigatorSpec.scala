@@ -473,6 +473,17 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
 
         }
 
+        "MentalCapacityYesNo page -> Has VPE1 been submitted page" in {
+
+          navigator.nextPage(MentalCapacityYesNoPage(index), fakeDraftId, baseAnswers)
+            .mustBe(VulnerableYesNoController.onPageLoad(index, fakeDraftId))
+
+        }
+
+        "Has VPE1 been submitted page -> Check answers page" in {
+          navigator.nextPage(VulnerableYesNoPage(index), fakeDraftId, emptyUserAnswers)
+            .mustBe(AnswersController.onPageLoad(index, fakeDraftId))
+        }
       }
 
       "none taxable " when {
@@ -613,6 +624,12 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
 
         }
 
+        "MentalCapacityYesNo page -> Check answers page" in {
+
+          navigator.nextPage(MentalCapacityYesNoPage(index), fakeDraftId, baseAnswers)
+            .mustBe(AnswersController.onPageLoad(index, fakeDraftId))
+
+        }
       }
     }
   }

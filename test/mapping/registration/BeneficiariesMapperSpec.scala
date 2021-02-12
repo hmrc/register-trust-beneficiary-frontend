@@ -49,17 +49,7 @@ class BeneficiariesMapperSpec extends SpecBase with MustMatchers
     "when user answers is not empty" must {
 
       "must not be able to create BeneficiaryType when there is incomplete data" in {
-        val index = 0
-        val dateOfBirth = LocalDate.of(2010, 10, 10)
-
-        val userAnswers = emptyUserAnswers
-          .set(individual.NamePage(index), FullName("first name", None, "last name")).success.value
-          .set(individual.DateOfBirthYesNoPage(index), true).success.value
-          .set(individual.DateOfBirthPage(index), dateOfBirth).success.value
-          .set(individual.IncomeYesNoPage(index), false).success.value
-          .set(individual.IncomePage(index), 100).success.value
-
-        beneficiariesMapper.build(userAnswers) mustNot be(defined)
+        beneficiariesMapper.build(emptyUserAnswers) mustNot be(defined)
       }
 
       "must be able to create BeneficiaryType when there is an individual beneficiary" in {
