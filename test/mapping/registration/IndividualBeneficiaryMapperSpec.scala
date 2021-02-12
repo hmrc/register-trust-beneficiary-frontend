@@ -387,32 +387,6 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
 
         }
 
-        "with No Country of Residence answered must not create the data" in {
-
-          val userAnswers = baseAnswers
-            .set(NamePage(index0), FullName("first name", None, "last name")).success.value
-            .set(DateOfBirthYesNoPage(index0), true).success.value
-            .set(DateOfBirthPage(index0), dateOfBirth).success.value
-            .set(CountryOfNationalityYesNoPage(index0), true).success.value
-            .set(CountryOfNationalityInTheUkYesNoPage(index0), true).success.value
-            .set(MentalCapacityYesNoPage(index0), true).success.value
-
-          individualBeneficiariesMapper.build(userAnswers) mustNot be(defined)
-        }
-
-        "with No Country of Nationality answered ust not create the data" in {
-
-          val userAnswers = baseAnswers
-            .set(NamePage(index0), FullName("first name", None, "last name")).success.value
-            .set(DateOfBirthYesNoPage(index0), true).success.value
-            .set(DateOfBirthPage(index0), dateOfBirth).success.value
-            .set(CountryOfResidenceYesNoPage(index0), true).success.value
-            .set(CountryOfResidenceInTheUkYesNoPage(index0), true).success.value
-            .set(MentalCapacityYesNoPage(index0), true).success.value
-
-          individualBeneficiariesMapper.build(userAnswers) mustNot be(defined)
-        }
-
         "with No Income or Vulnerable data must not create data" in {
           val userAnswers = baseAnswers
             .set(NamePage(index0), FullName("first name", None, "last name")).success.value
@@ -453,32 +427,6 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
 
       "In 5mld none taxable mode" when {
         val baseAnswers = emptyUserAnswers.copy(isTaxable = false, is5mldEnabled = true)
-
-        "with No Country of Residence answered must not create the data" in {
-
-          val userAnswers = baseAnswers
-            .set(NamePage(index0), FullName("first name", None, "last name")).success.value
-            .set(DateOfBirthYesNoPage(index0), true).success.value
-            .set(DateOfBirthPage(index0), dateOfBirth).success.value
-            .set(CountryOfNationalityYesNoPage(index0), true).success.value
-            .set(CountryOfNationalityInTheUkYesNoPage(index0), true).success.value
-            .set(MentalCapacityYesNoPage(index0), true).success.value
-
-          individualBeneficiariesMapper.build(userAnswers) mustNot be(defined)
-        }
-
-        "with No Country of Nationality answered ust not create the data" in {
-
-          val userAnswers = baseAnswers
-            .set(NamePage(index0), FullName("first name", None, "last name")).success.value
-            .set(DateOfBirthYesNoPage(index0), true).success.value
-            .set(DateOfBirthPage(index0), dateOfBirth).success.value
-            .set(CountryOfResidenceYesNoPage(index0), true).success.value
-            .set(CountryOfResidenceInTheUkYesNoPage(index0), true).success.value
-            .set(MentalCapacityYesNoPage(index0), true).success.value
-
-          individualBeneficiariesMapper.build(userAnswers) mustNot be(defined)
-        }
 
         "with No Income or Vulnerable data answered" in {
           val userAnswers = baseAnswers
@@ -531,8 +479,6 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
 
         }
       }
-
-
 
 
     }

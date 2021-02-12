@@ -56,12 +56,8 @@ class IndividualBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extend
         case (true, true) =>
             indDetailsType.incomeYesNo.isDefined &&
             indDetailsType.vulnerableYesNo.isDefined &&
-            indDetailsType.countryOfResidence.isDefined &&
-            indDetailsType.countryOfNationality.isDefined &&
             indDetailsType.mentalCapacityYesNo.isDefined
         case (true, false) =>
-            indDetailsType.countryOfResidence.isDefined &&
-            indDetailsType.countryOfNationality.isDefined &&
             indDetailsType.mentalCapacityYesNo.isDefined
         case (false, _) => true
       }
