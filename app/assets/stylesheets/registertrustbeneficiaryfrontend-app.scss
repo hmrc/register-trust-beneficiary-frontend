@@ -268,3 +268,13 @@ $error-colour: #d4351c;
 .no-details details summary .arrow-closed {
     display: none;
 }
+
+.inline .multiple-choice {
+    clear: both;
+}
+
+@media all and (min-width: 641px) {
+  .inline .multiple-choice {
+    clear: none;
+  }
+}
