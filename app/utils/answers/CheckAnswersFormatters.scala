@@ -17,7 +17,8 @@
 package utils.answers
 
 import models.core.pages._
-import models.registration.pages.{HowManyBeneficiaries, PassportOrIdCardDetails}
+import models.registration.pages.RoleInCompany.NA
+import models.registration.pages.{HowManyBeneficiaries, PassportOrIdCardDetails, RoleInCompany}
 import org.joda.time.{LocalDate => JodaDate}
 import play.api.i18n.Messages
 import play.twirl.api.Html
@@ -116,6 +117,13 @@ class CheckAnswersFormatters @Inject()(languageUtils: LanguageUtils,
 
   def formatNumberOfBeneficiaries(answer: HowManyBeneficiaries)(implicit messages: Messages): Html = {
     formatEnum("numberOfBeneficiaries", answer)
+  }
+
+  def formatRoleInCompany(answer: RoleInCompany)(implicit messages: Messages): Html = {
+    answer match {
+      case NA => escape(messages("individualBeneficiary.roleInCompany.checkYourAnswersLabel.na"))
+      case _ => formatEnum("individualBeneficiary.roleInCompany", answer)
+    }
   }
 
 }

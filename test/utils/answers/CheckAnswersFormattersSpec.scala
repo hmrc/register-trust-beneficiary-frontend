@@ -18,7 +18,7 @@ package utils.answers
 
 import base.SpecBase
 import models.core.pages.{Description, InternationalAddress, UKAddress}
-import models.registration.pages.{HowManyBeneficiaries, PassportOrIdCardDetails}
+import models.registration.pages.{HowManyBeneficiaries, PassportOrIdCardDetails, RoleInCompany}
 import play.api.i18n.{Lang, MessagesImpl}
 import play.twirl.api.Html
 
@@ -185,6 +185,26 @@ class CheckAnswersFormattersSpec extends SpecBase {
         "Over 1,001" in {
           val result: Html = checkAnswersFormatters.formatNumberOfBeneficiaries(HowManyBeneficiaries.Over1001)
           result mustBe Html("Over 1,001")
+        }
+      }
+    }
+
+    ".formatRoleInCompany" must {
+      "display role in company" when {
+
+        "Director" in {
+          val result: Html = checkAnswersFormatters.formatRoleInCompany(RoleInCompany.Director)
+          result mustBe Html("Director")
+        }
+
+        "Employee" in {
+          val result: Html = checkAnswersFormatters.formatRoleInCompany(RoleInCompany.Employee)
+          result mustBe Html("Employee")
+        }
+
+        "NA" in {
+          val result: Html = checkAnswersFormatters.formatRoleInCompany(RoleInCompany.NA)
+          result mustBe Html("Not a director or employee")
         }
       }
     }

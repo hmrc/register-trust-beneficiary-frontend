@@ -19,7 +19,6 @@ package utils.print
 import com.google.inject.Inject
 import models.UserAnswers
 import models.core.pages.{Address, Description, FullName}
-import models.registration.pages.RoleInCompany.NA
 import models.registration.pages.{HowManyBeneficiaries, PassportOrIdCardDetails, RoleInCompany}
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
@@ -47,10 +46,7 @@ class AnswerRowConverter @Inject()(checkAnswersFormatters: CheckAnswersFormatter
     def roleInCompanyQuestion(query: Gettable[RoleInCompany],
                               labelKey: String,
                               changeUrl: String): Option[AnswerRow] = {
-      val format = (x: RoleInCompany) => x match {
-        case NA => HtmlFormat.escape(messages("individualBeneficiary.roleInCompany.checkYourAnswersLabel.na"))
-        case _ => HtmlFormat.escape(messages(s"individualBeneficiary.roleInCompany.$x"))
-      }
+      val format = (x: RoleInCompany) => checkAnswersFormatters.formatRoleInCompany(x)
       question(query, labelKey, format, changeUrl, name)
     }
 
