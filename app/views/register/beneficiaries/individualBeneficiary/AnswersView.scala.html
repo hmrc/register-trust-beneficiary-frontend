@@ -18,30 +18,24 @@
 @import viewmodels.{AnswerSection, RepeaterAnswerSection, Section}
 
 @this(
-main_template: MainTemplate,
-formHelper: FormWithCSRF
+    main_template: MainTemplate,
+    formHelper: FormWithCSRF
 )
 
-@(index : Int, draftId: String, answerSections: Seq[Section])(implicit request: Request[_], messages: Messages)
+@(answerSection: AnswerSection, index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("individualBeneficiaryAnswers.title")
 ) {
 
-    @components.back_link()
-
-    @components.heading("individualBeneficiaryAnswers.heading")
-
-    @for(section <- answerSections){
-        @{
-            section match {
-                case a: AnswerSection => components.answer_section(a)
-                case r: RepeaterAnswerSection => components.repeater_answer_section(r)
-            }
-        }
-    }
-
     @formHelper(action = AnswersController.onSubmit(index, draftId), 'autoComplete -> "off") {
+
+        @components.back_link()
+
+        @components.heading("individualBeneficiaryAnswers.heading")
+
+        @components.answer_section(answerSection)
+
         @components.submit_button()
     }
 }

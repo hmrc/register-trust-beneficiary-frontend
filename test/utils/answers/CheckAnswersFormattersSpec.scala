@@ -69,13 +69,6 @@ class CheckAnswersFormattersSpec extends SpecBase {
       }
     }
 
-    ".utr" must {
-      "render UTR" in {
-        val result: Html = checkAnswersFormatters.utr("1234567890")
-        result mustBe Html("1234567890")
-      }
-    }
-
     ".formatNino" must {
       "format NINO" in {
         val result: String = checkAnswersFormatters.formatNino("AB123456C")

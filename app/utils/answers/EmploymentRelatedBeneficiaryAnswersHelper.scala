@@ -31,7 +31,7 @@ class EmploymentRelatedBeneficiaryAnswersHelper @Inject()(employmentRelatedBenef
       indexed = beneficiaries.zipWithIndex
     } yield indexed.map {
       case (beneficiaryViewModel, index) =>
-        employmentRelatedBeneficiaryPrintHelper.printSection(userAnswers, beneficiaryViewModel.name.getOrElse(""), index, userAnswers.draftId)
+        employmentRelatedBeneficiaryPrintHelper.printSection(userAnswers, beneficiaryViewModel.name, index, userAnswers.draftId)
     }
   }
 }

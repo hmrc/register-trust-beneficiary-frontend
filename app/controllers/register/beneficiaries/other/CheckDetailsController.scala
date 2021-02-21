@@ -19,7 +19,6 @@ package controllers.register.beneficiaries.other
 import config.FrontendAppConfig
 import controllers.actions._
 import controllers.actions.register.other.DescriptionRequiredAction
-import javax.inject.Inject
 import models.Status.Completed
 import navigation.Navigator
 import pages.entitystatus.OtherBeneficiaryStatus
@@ -28,10 +27,11 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.answers.OtherBeneficiaryAnswersHelper
+import utils.print.OtherBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.register.beneficiaries.other.CheckDetailsView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CheckDetailsController @Inject()(
@@ -42,15 +42,15 @@ class CheckDetailsController @Inject()(
                                         val controllerComponents: MessagesControllerComponents,
                                         view: CheckDetailsView,
                                         val appConfig: FrontendAppConfig,
-                                        answersHelper: OtherBeneficiaryAnswersHelper,
-                                        descriptionRequiredAction: DescriptionRequiredAction
+                                        descriptionRequiredAction: DescriptionRequiredAction,
+                                        printHelper: OtherBeneficiaryPrintHelper
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(descriptionRequiredAction(index)) {
       implicit request =>
 
-        val section: AnswerSection = answersHelper.checkDetailsSection(request.userAnswers, request.description, index, draftId)
+        val section: AnswerSection = printHelper.checkDetailsSection(request.userAnswers, request.description, index, draftId)
         Ok(view(section, index, draftId))
     }
 

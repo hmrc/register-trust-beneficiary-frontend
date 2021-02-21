@@ -24,7 +24,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.answers.{CharityBeneficiaryAnswersHelper, CheckAnswersFormatters}
+import utils.print.CharityBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.register.beneficiaries.charityortrust.charity.CharityAnswersView
 
@@ -37,23 +37,14 @@ class CharityAnswersController @Inject()(
                                           standardActionSets: StandardActionSets,
                                           nameAction: NameRequiredAction,
                                           view: CharityAnswersView,
-                                          checkAnswersFormatters: CheckAnswersFormatters
+                                          printHelper: CharityBeneficiaryPrintHelper
                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
-    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
     implicit request =>
 
-      val answers = new CharityBeneficiaryAnswersHelper(checkAnswersFormatters)(request.userAnswers, draftId, canEdit = true)
-
-      val sections = Seq(
-        AnswerSection(
-          None,
-          answers.charityBeneficiaryRows(index)
-        )
-      )
-
-      Ok(view(index, draftId, sections))
+      val section: AnswerSection = printHelper.checkDetailsSection(request.userAnswers, request.beneficiaryName, index, draftId)
+      Ok(view(section, index, draftId))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =

@@ -28,7 +28,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.answers.{CheckAnswersFormatters, IndividualBeneficiaryAnswersHelper}
+import utils.print.IndividualBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.register.beneficiaries.individualBeneficiary.AnswersView
 
@@ -45,7 +45,7 @@ class AnswersController @Inject()(
                                    val controllerComponents: MessagesControllerComponents,
                                    requiredAnswer: RequiredAnswerActionProvider,
                                    view: AnswersView,
-                                   checkAnswersFormatters: CheckAnswersFormatters
+                                   printHelper: IndividualBeneficiaryPrintHelper
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
 
@@ -55,20 +55,13 @@ class AnswersController @Inject()(
       requireData andThen
       requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(index, draftId)))
 
-
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val answers = new IndividualBeneficiaryAnswersHelper(checkAnswersFormatters)(request.userAnswers, draftId, canEdit = true)
+      val name = request.userAnswers.get(NamePage(index)).get
 
-      val sections = Seq(
-        AnswerSection(
-          None,
-          answers.individualBeneficiaryRows(index)
-        )
-      )
-
-      Ok(view(index, draftId, sections))
+      val section: AnswerSection = printHelper.checkDetailsSection(request.userAnswers, name.toString, index, draftId)
+      Ok(view(section, index, draftId))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {

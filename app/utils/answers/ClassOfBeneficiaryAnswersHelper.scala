@@ -16,22 +16,24 @@
 
 package utils.answers
 
-import javax.inject.Inject
 import models.UserAnswers
 import play.api.i18n.Messages
-import sections.beneficiaries.CompanyBeneficiaries
-import utils.print.CompanyBeneficiaryPrintHelper
+import sections.beneficiaries.ClassOfBeneficiaries
+import utils.print.ClassOfBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 
-class CompanyBeneficiaryAnswersHelper @Inject()(printHelper: CompanyBeneficiaryPrintHelper) {
+import javax.inject.Inject
 
-  def companyBeneficiaries(userAnswers: UserAnswers)(implicit messages: Messages): Option[Seq[AnswerSection]] = {
+class ClassOfBeneficiaryAnswersHelper @Inject()(printHelper: ClassOfBeneficiaryPrintHelper) {
+
+  def classOfBeneficiaries(userAnswers: UserAnswers)(implicit messages: Messages): Option[Seq[AnswerSection]] = {
     for {
-      beneficiaries <- userAnswers.get(CompanyBeneficiaries)
+      beneficiaries <- userAnswers.get(ClassOfBeneficiaries)
       indexed = beneficiaries.zipWithIndex
     } yield indexed.map {
       case (beneficiary, index) =>
-        printHelper.printSection(userAnswers, beneficiary.name, index, userAnswers.draftId)
+        printHelper.printSection(userAnswers, beneficiary.description, index, userAnswers.draftId)
     }
   }
+
 }

@@ -23,26 +23,14 @@ import models.UserAnswers
 import pages.register.beneficiaries.companyoremploymentrelated.company._
 import pages.register.beneficiaries.companyoremploymentrelated.company.mld5._
 import play.api.i18n.Messages
-import viewmodels.{AnswerRow, AnswerSection}
+import viewmodels.AnswerRow
 
-class CompanyBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter) {
+class CompanyBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter) extends PrintHelper {
 
-  def printSection(userAnswers: UserAnswers, name: String, index: Int, draftId: String)(implicit messages: Messages): AnswerSection = {
-    AnswerSection(
-      Some(Messages("answerPage.section.companyBeneficiary.subheading", index + 1)),
-      answers(userAnswers, name, index, draftId)
-    )
-  }
+  override val beneficiaryType: String = "companyBeneficiary"
 
-  def checkDetailsSection(userAnswers: UserAnswers, name: String, index: Int, draftId: String)(implicit messages: Messages): AnswerSection = {
-    AnswerSection(
-      None,
-      answers(userAnswers, name, index, draftId)
-    )
-  }
-
-  def answers(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
-             (implicit messages: Messages): Seq[AnswerRow] = {
+  override def answers(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
+                     (implicit messages: Messages): Seq[AnswerRow] = {
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
 
     Seq(
