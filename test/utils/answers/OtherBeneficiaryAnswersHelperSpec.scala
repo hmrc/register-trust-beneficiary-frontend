@@ -52,7 +52,7 @@ class OtherBeneficiaryAnswersHelperSpec extends SpecBase {
             .set(other.IncomeDiscretionYesNoPage(index), true).success.value
             .set(other.AddressYesNoPage(index), false).success.value
 
-          val result = helper.otherBeneficiaries(userAnswers)
+          val result = helper.beneficiaries(userAnswers)
 
           result mustBe Some(Seq(
             AnswerSection(
@@ -77,7 +77,7 @@ class OtherBeneficiaryAnswersHelperSpec extends SpecBase {
             .set(other.AddressUKYesNoPage(index), false).success.value
             .set(other.AddressInternationalPage(index), nonUkAddress).success.value
 
-          val result = helper.otherBeneficiaries(userAnswers)
+          val result = helper.beneficiaries(userAnswers)
 
           result mustBe Some(Seq(
             AnswerSection(
@@ -109,7 +109,7 @@ class OtherBeneficiaryAnswersHelperSpec extends SpecBase {
             .set(AddressUKYesNoPage(index), true).success.value
             .set(AddressUKPage(index), ukAddress).success.value
 
-          val result = helper.otherBeneficiaries(userAnswers)
+          val result = helper.beneficiaries(userAnswers)
 
           result mustBe Some(Seq(
             AnswerSection(
@@ -137,7 +137,7 @@ class OtherBeneficiaryAnswersHelperSpec extends SpecBase {
             .set(AddressUKYesNoPage(index), true).success.value
             .set(AddressInternationalPage(index), nonUkAddress).success.value
 
-          val result = helper.otherBeneficiaries(userAnswers)
+          val result = helper.beneficiaries(userAnswers)
 
           result mustBe Some(Seq(
             AnswerSection(

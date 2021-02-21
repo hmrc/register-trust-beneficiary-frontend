@@ -67,13 +67,13 @@ class SubmissionSetFactory @Inject()(
     if (status.contains(Status.Completed)) {
 
       val entitySections = List(
-        individualBeneficiaryAnswersHelper.individualBeneficiaries(userAnswers),
-        classOfBeneficiaryAnswersHelper.classOfBeneficiaries(userAnswers),
-        charityBeneficiaryAnswersHelper.charityBeneficiaries(userAnswers),
-        trustBeneficiaryAnswersHelper.trustBeneficiaries(userAnswers),
-        companyBeneficiaryAnswersHelper.companyBeneficiaries(userAnswers),
-        largeBeneficiaryAnswersHelper.employmentRelatedBeneficiaries(userAnswers),
-        otherBeneficiaryAnswersHelper.otherBeneficiaries(userAnswers)
+        individualBeneficiaryAnswersHelper.beneficiaries(userAnswers),
+        classOfBeneficiaryAnswersHelper.beneficiaries(userAnswers),
+        charityBeneficiaryAnswersHelper.beneficiaries(userAnswers),
+        trustBeneficiaryAnswersHelper.beneficiaries(userAnswers),
+        companyBeneficiaryAnswersHelper.beneficiaries(userAnswers),
+        largeBeneficiaryAnswersHelper.beneficiaries(userAnswers),
+        otherBeneficiaryAnswersHelper.beneficiaries(userAnswers)
       ).flatten.flatten
 
       val updatedFirstSection = AnswerSection(

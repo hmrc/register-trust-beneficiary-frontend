@@ -30,7 +30,7 @@ class BeneficiariesSpec extends SpecBase {
 
   val max: Int = 25
 
-  val individual: IndividualBeneficiaryViewModel = IndividualBeneficiaryViewModel(Some(fullName), Completed)
+  val individual: IndividualBeneficiaryViewModel = IndividualBeneficiaryViewModel(Some(fullName.toString), Completed)
   val unidentified: ClassOfBeneficiaryViewModel = ClassOfBeneficiaryViewModel(Some(name), Completed)
   val charity: CharityBeneficiaryViewModel = CharityBeneficiaryViewModel(Some(name), Completed)
   val trust: TrustBeneficiaryViewModel = TrustBeneficiaryViewModel(Some(name), Completed)

@@ -16,23 +16,15 @@
 
 package utils.answers
 
-import models.UserAnswers
-import play.api.i18n.Messages
+import pages.QuestionPage
 import sections.beneficiaries.TrustBeneficiaries
 import utils.print.TrustBeneficiaryPrintHelper
-import viewmodels.AnswerSection
+import viewmodels.addAnother.TrustBeneficiaryViewModel
 
 import javax.inject.Inject
 
-class TrustBeneficiaryAnswersHelper @Inject()(printHelper: TrustBeneficiaryPrintHelper) {
+class TrustBeneficiaryAnswersHelper @Inject()(printHelper: TrustBeneficiaryPrintHelper)
+  extends AnswersHelper[TrustBeneficiaryViewModel](printHelper) {
 
-  def trustBeneficiaries(userAnswers: UserAnswers)(implicit messages: Messages): Option[Seq[AnswerSection]] = {
-    for {
-      beneficiaries <- userAnswers.get(TrustBeneficiaries)
-      indexed = beneficiaries.zipWithIndex
-    } yield indexed.map {
-      case (beneficiary, index) =>
-        printHelper.printSection(userAnswers, beneficiary.name, index, userAnswers.draftId)
-    }
-  }
+  override val beneficiaryType: QuestionPage[List[TrustBeneficiaryViewModel]] = TrustBeneficiaries
 }

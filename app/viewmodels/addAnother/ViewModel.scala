@@ -20,4 +20,7 @@ import models.Status
 
 trait ViewModel {
   val status: Status
+  val label: Option[String]
+
+  def isComplete: Boolean = label.nonEmpty && (status == Status.Completed)
 }

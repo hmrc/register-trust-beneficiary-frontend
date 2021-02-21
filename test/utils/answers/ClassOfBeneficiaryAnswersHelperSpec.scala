@@ -34,7 +34,7 @@ class ClassOfBeneficiaryAnswersHelperSpec extends SpecBase {
 
     "return None for empty user answers" in {
 
-      val result = helper.classOfBeneficiaries(emptyUserAnswers)
+      val result = helper.beneficiaries(emptyUserAnswers)
 
       result mustBe None
     }
@@ -44,7 +44,7 @@ class ClassOfBeneficiaryAnswersHelperSpec extends SpecBase {
       val userAnswers = emptyUserAnswers
         .set(ClassBeneficiaryDescriptionPage(index), description).success.value
 
-      val result = helper.classOfBeneficiaries(userAnswers).get
+      val result = helper.beneficiaries(userAnswers).get
 
       result mustBe
         Seq(

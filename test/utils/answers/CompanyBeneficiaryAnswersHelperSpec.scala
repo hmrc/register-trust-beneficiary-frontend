@@ -41,7 +41,7 @@ class CompanyBeneficiaryAnswersHelperSpec extends SpecBase {
 
     "return None for empty user answers" in {
 
-      val result = helper.companyBeneficiaries(emptyUserAnswers)
+      val result = helper.beneficiaries(emptyUserAnswers)
 
       result mustBe None
     }
@@ -60,7 +60,7 @@ class CompanyBeneficiaryAnswersHelperSpec extends SpecBase {
         .set(AddressUKPage(index), ukAddress).success.value
         .set(AddressInternationalPage(index), nonUkAddress).success.value
 
-      val result = helper.companyBeneficiaries(userAnswers).get
+      val result = helper.beneficiaries(userAnswers).get
 
       result mustBe
         Seq(

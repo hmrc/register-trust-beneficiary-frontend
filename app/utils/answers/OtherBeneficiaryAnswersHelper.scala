@@ -17,21 +17,13 @@
 package utils.answers
 
 import com.google.inject.Inject
-import models.UserAnswers
-import play.api.i18n.Messages
+import pages.QuestionPage
 import sections.beneficiaries.OtherBeneficiaries
 import utils.print.OtherBeneficiaryPrintHelper
-import viewmodels.AnswerSection
+import viewmodels.addAnother.OtherBeneficiaryViewModel
 
-class OtherBeneficiaryAnswersHelper @Inject()(printHelper: OtherBeneficiaryPrintHelper) {
+class OtherBeneficiaryAnswersHelper @Inject()(printHelper: OtherBeneficiaryPrintHelper)
+  extends AnswersHelper[OtherBeneficiaryViewModel](printHelper) {
 
-  def otherBeneficiaries(userAnswers: UserAnswers)(implicit messages: Messages): Option[Seq[AnswerSection]] = {
-    for {
-      beneficiaries <- userAnswers.get(OtherBeneficiaries)
-      indexed = beneficiaries.zipWithIndex
-    } yield indexed.map {
-      case (beneficiary, index) =>
-        printHelper.printSection(userAnswers, beneficiary.description, index, userAnswers.draftId)
-    }
-  }
+  override val beneficiaryType: QuestionPage[List[OtherBeneficiaryViewModel]] = OtherBeneficiaries
 }

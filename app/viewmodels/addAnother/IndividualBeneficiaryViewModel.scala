@@ -20,18 +20,14 @@ import models.Status
 import models.core.pages.FullName
 import play.api.libs.json.{Reads, _}
 
-case class IndividualBeneficiaryViewModel(name: Option[FullName], override val status: Status) extends ViewModel {
-
-  def isComplete: Boolean = name.nonEmpty && (status == Status.Completed)
-
-}
+case class IndividualBeneficiaryViewModel(label: Option[String], status: Status) extends ViewModel
 
 object IndividualBeneficiaryViewModel {
 
   import play.api.libs.functional.syntax._
 
   implicit val reads : Reads[IndividualBeneficiaryViewModel] = (
-    (__ \ "name").readNullable[FullName] and
+    (__ \ "name").readNullable[FullName].map(_.map(_.toString)) and
       (__ \ "status").readWithDefault[Status](Status.InProgress)
     )(IndividualBeneficiaryViewModel.apply _)
 

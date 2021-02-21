@@ -48,7 +48,7 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
             .set(DiscretionYesNoPage(index), true).success.value
             .set(AddressYesNoPage(index), false).success.value
 
-          val result = helper.trustBeneficiaries(userAnswers)
+          val result = helper.beneficiaries(userAnswers)
 
           result mustBe Some(Seq(
             AnswerSection(
@@ -73,7 +73,7 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
             .set(AddressUKYesNoPage(index), false).success.value
             .set(AddressInternationalPage(index), nonUkAddress).success.value
 
-          val result = helper.trustBeneficiaries(userAnswers)
+          val result = helper.beneficiaries(userAnswers)
 
           result mustBe Some(Seq(
             AnswerSection(
@@ -101,7 +101,7 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
             .set(AddressUKYesNoPage(index), true).success.value
             .set(AddressUKPage(index), ukAddress).success.value
 
-          val result = helper.trustBeneficiaries(userAnswers)
+          val result = helper.beneficiaries(userAnswers)
 
           result mustBe Some(Seq(
             AnswerSection(
@@ -129,7 +129,7 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
             .set(CountryOfResidenceYesNoPage(index), false).success.value
             .set(AddressYesNoPage(index), false).success.value
 
-          val result = helper.trustBeneficiaries(userAnswers)
+          val result = helper.beneficiaries(userAnswers)
 
           result mustBe Some(Seq(
             AnswerSection(
@@ -158,7 +158,7 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
             .set(AddressUKYesNoPage(index), false).success.value
             .set(AddressInternationalPage(index), nonUkAddress).success.value
 
-          val result = helper.trustBeneficiaries(userAnswers)
+          val result = helper.beneficiaries(userAnswers)
 
           result mustBe Some(Seq(
             AnswerSection(
@@ -191,7 +191,7 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
             .set(AddressUKYesNoPage(index), true).success.value
             .set(AddressUKPage(index), ukAddress).success.value
 
-          val result = helper.trustBeneficiaries(userAnswers)
+          val result = helper.beneficiaries(userAnswers)
 
           result mustBe Some(Seq(
             AnswerSection(
@@ -219,7 +219,7 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
             .set(NamePage(index), name).success.value
             .set(CountryOfResidenceYesNoPage(index), false).success.value
 
-          val result = helper.trustBeneficiaries(userAnswers)
+          val result = helper.beneficiaries(userAnswers)
 
           result mustBe Some(Seq(
             AnswerSection(
@@ -241,7 +241,7 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
             .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
             .set(CountryOfResidencePage(index), nonUkCountry).success.value
 
-          val result = helper.trustBeneficiaries(userAnswers)
+          val result = helper.beneficiaries(userAnswers)
 
           result mustBe Some(Seq(
             AnswerSection(

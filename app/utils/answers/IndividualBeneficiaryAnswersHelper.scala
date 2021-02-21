@@ -16,23 +16,15 @@
 
 package utils.answers
 
-import models.UserAnswers
-import play.api.i18n.Messages
+import pages.QuestionPage
 import sections.beneficiaries.IndividualBeneficiaries
 import utils.print.IndividualBeneficiaryPrintHelper
-import viewmodels.AnswerSection
+import viewmodels.addAnother.IndividualBeneficiaryViewModel
 
 import javax.inject.Inject
 
-class IndividualBeneficiaryAnswersHelper @Inject()(printHelper: IndividualBeneficiaryPrintHelper) {
+class IndividualBeneficiaryAnswersHelper @Inject()(printHelper: IndividualBeneficiaryPrintHelper)
+  extends AnswersHelper[IndividualBeneficiaryViewModel](printHelper) {
 
-  def individualBeneficiaries(userAnswers: UserAnswers)(implicit messages: Messages): Option[Seq[AnswerSection]] = {
-    for {
-      beneficiaries <- userAnswers.get(IndividualBeneficiaries)
-      indexed = beneficiaries.zipWithIndex
-    } yield indexed.map {
-      case (beneficiary, index) =>
-        printHelper.printSection(userAnswers, beneficiary.name.map(_.toString), index, userAnswers.draftId)
-    }
-  }
+  override val beneficiaryType: QuestionPage[List[IndividualBeneficiaryViewModel]] = IndividualBeneficiaries
 }

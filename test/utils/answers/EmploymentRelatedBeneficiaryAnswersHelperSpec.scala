@@ -42,7 +42,7 @@ class EmploymentRelatedBeneficiaryAnswersHelperSpec extends SpecBase {
 
     "return None for empty user answers" in {
 
-      val result = helper.employmentRelatedBeneficiaries(emptyUserAnswers)
+      val result = helper.beneficiaries(emptyUserAnswers)
 
       result mustBe None
     }
@@ -61,7 +61,7 @@ class EmploymentRelatedBeneficiaryAnswersHelperSpec extends SpecBase {
         .set(LargeBeneficiaryDescriptionPage(index), description).success.value
         .set(LargeBeneficiaryNumberOfBeneficiariesPage(index), HowManyBeneficiaries.Over201).success.value
 
-      val result = helper.employmentRelatedBeneficiaries(userAnswers).get
+      val result = helper.beneficiaries(userAnswers).get
 
       result mustBe
         Seq(

@@ -48,7 +48,7 @@ class IndividualBeneficiaryAnswersHelperSpec extends SpecBase {
 
     "return None for empty user answers" in {
 
-      val result = helper.individualBeneficiaries(emptyUserAnswers)
+      val result = helper.beneficiaries(emptyUserAnswers)
 
       result mustBe None
     }
@@ -81,7 +81,7 @@ class IndividualBeneficiaryAnswersHelperSpec extends SpecBase {
         .set(MentalCapacityYesNoPage(index), true).success.value
         .set(VulnerableYesNoPage(index), false).success.value
 
-      val result = helper.individualBeneficiaries(userAnswers).get
+      val result = helper.beneficiaries(userAnswers).get
 
       result mustBe
         Seq(

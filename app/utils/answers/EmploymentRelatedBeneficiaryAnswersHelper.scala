@@ -16,22 +16,15 @@
 
 package utils.answers
 
-import javax.inject.Inject
-import models.UserAnswers
-import play.api.i18n.Messages
+import pages.QuestionPage
 import sections.beneficiaries.LargeBeneficiaries
 import utils.print.EmploymentRelatedBeneficiaryPrintHelper
-import viewmodels.AnswerSection
+import viewmodels.addAnother.EmploymentRelatedBeneficiaryViewModel
 
-class EmploymentRelatedBeneficiaryAnswersHelper @Inject()(employmentRelatedBeneficiaryPrintHelper: EmploymentRelatedBeneficiaryPrintHelper) {
+import javax.inject.Inject
 
-  def employmentRelatedBeneficiaries(userAnswers: UserAnswers)(implicit messages: Messages): Option[Seq[AnswerSection]] = {
-    for {
-      beneficiaries <- userAnswers.get(LargeBeneficiaries)
-      indexed = beneficiaries.zipWithIndex
-    } yield indexed.map {
-      case (beneficiaryViewModel, index) =>
-        employmentRelatedBeneficiaryPrintHelper.printSection(userAnswers, beneficiaryViewModel.name, index, userAnswers.draftId)
-    }
-  }
+class EmploymentRelatedBeneficiaryAnswersHelper @Inject()(printHelper: EmploymentRelatedBeneficiaryPrintHelper)
+  extends AnswersHelper[EmploymentRelatedBeneficiaryViewModel](printHelper) {
+
+  override val beneficiaryType: QuestionPage[List[EmploymentRelatedBeneficiaryViewModel]] = LargeBeneficiaries
 }
