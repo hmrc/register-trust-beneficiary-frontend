@@ -43,13 +43,13 @@ class CheckAnswersFormattersSpec extends SpecBase {
       "in English mode" must {
         "format date in English" when {
           "recent date" in {
-            val result: String = checkAnswersFormatters.formatDate(recentDate)(messages("en"))
-            result mustBe "25 January 2015"
+            val result: Html = checkAnswersFormatters.formatDate(recentDate)(messages("en"))
+            result mustBe Html("25 January 2015")
           }
 
           "old date" ignore {
-            val result: String = checkAnswersFormatters.formatDate(oldDate)(messages("en"))
-            result mustBe "1 December 1840"
+            val result: Html = checkAnswersFormatters.formatDate(oldDate)(messages("en"))
+            result mustBe Html("1 December 1840")
           }
         }
       }
@@ -57,13 +57,13 @@ class CheckAnswersFormattersSpec extends SpecBase {
       "in Welsh mode" must {
         "format date in Welsh" when {
           "recent date" in {
-            val result: String = checkAnswersFormatters.formatDate(recentDate)(messages("cy"))
-            result mustBe "25 Ionawr 2015"
+            val result: Html = checkAnswersFormatters.formatDate(recentDate)(messages("cy"))
+            result mustBe Html("25 Ionawr 2015")
           }
 
           "old date" ignore {
-            val result: String = checkAnswersFormatters.formatDate(oldDate)(messages("cy"))
-            result mustBe "1 Rhagfyr 1840"
+            val result: Html = checkAnswersFormatters.formatDate(oldDate)(messages("cy"))
+            result mustBe Html("1 Rhagfyr 1840")
           }
         }
       }
@@ -71,8 +71,8 @@ class CheckAnswersFormattersSpec extends SpecBase {
 
     ".formatNino" must {
       "format NINO" in {
-        val result: String = checkAnswersFormatters.formatNino("AB123456C")
-        result mustBe "AB 12 34 56 C"
+        val result: Html = checkAnswersFormatters.formatNino("AB123456C")
+        result mustBe Html("AB 12 34 56 C")
       }
     }
 

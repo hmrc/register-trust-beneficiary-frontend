@@ -40,7 +40,7 @@ class TrustBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConvert
       bound.yesNoQuestion(CountryOfResidenceYesNoPage(index), "trust.5mld.countryOfResidenceYesNo", CountryOfResidenceYesNoController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(CountryOfResidenceInTheUkYesNoPage(index), "trust.5mld.countryOfResidenceInTheUkYesNo", CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId).url),
       bound.countryQuestion(CountryOfResidenceInTheUkYesNoPage(index), CountryOfResidencePage(index), "trust.5mld.countryOfResidence", CountryOfResidenceController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(AddressYesNoPage(index), "trustBeneficiaryAddressYesNo.checkYourAnswersLabel", AddressYesNoController.onPageLoad(index, draftId).url),
+      bound.yesNoQuestion(AddressYesNoPage(index), "trustBeneficiaryAddressYesNo", AddressYesNoController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(AddressUKYesNoPage(index), "trustBeneficiaryAddressUKYesNo", AddressUKYesNoController.onPageLoad(index, draftId).url),
       bound.addressQuestion(AddressUKPage(index), "site.address.uk", AddressUKController.onPageLoad(index, draftId).url),
       bound.addressQuestion(AddressInternationalPage(index), "site.address.international", AddressInternationalController.onPageLoad(index, draftId).url)

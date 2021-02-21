@@ -16,6 +16,7 @@
 
 package views.register.beneficiaries.charityortrust.charity
 
+import viewmodels.AnswerSection
 import views.behaviours.ViewBehaviours
 import views.html.register.beneficiaries.charityortrust.charity.CharityAnswersView
 
@@ -26,7 +27,7 @@ class CharityAnswersViewSpec extends ViewBehaviours {
 
     val view = viewFor[CharityAnswersView](Some(emptyUserAnswers))
 
-    val applyView = view.apply(index, fakeDraftId, Nil)(fakeRequest, messages)
+    val applyView = view.apply(AnswerSection(), index, fakeDraftId)(fakeRequest, messages)
 
     behave like normalPage(applyView, "charity.answers")
 

@@ -16,6 +16,7 @@
 
 package views.register.beneficiaries.individualBeneficiary
 
+import viewmodels.AnswerSection
 import views.behaviours.ViewBehaviours
 import views.html.register.beneficiaries.individualBeneficiary.AnswersView
 
@@ -26,7 +27,7 @@ class AnswersViewSpec extends ViewBehaviours {
 
     val view = viewFor[AnswersView](Some(emptyUserAnswers))
 
-    val applyView = view.apply(index, fakeDraftId, Nil)(fakeRequest, messages)
+    val applyView = view.apply(AnswerSection(), index, fakeDraftId)(fakeRequest, messages)
 
     behave like normalPage(applyView, "individualBeneficiaryAnswers")
 
