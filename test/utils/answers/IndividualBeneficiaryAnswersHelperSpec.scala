@@ -111,7 +111,7 @@ class IndividualBeneficiaryAnswersHelperSpec extends SpecBase {
               AnswerRow("individualBeneficiaryIDCardDetailsYesNo.checkYourAnswersLabel", Html("Yes"), Some(IDCardDetailsYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
               AnswerRow("individualBeneficiaryIDCardDetails.checkYourAnswersLabel", Html("France<br />12345<br />3 February 1996"), Some(IDCardDetailsController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
               AnswerRow("individualBeneficiary.5mld.mentalCapacityYesNo.checkYourAnswersLabel", Html("Yes"), Some(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
-              AnswerRow("individualBeneficiaryVulnerableYesNo.checkYourAnswersLabel", Html("No"), Some(VulnerableYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
+              AnswerRow("individualBeneficiaryVulnerableYesNo.checkYourAnswersLabel", Html("No"), Some(VulnerableYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit)
             )
           )
         )
