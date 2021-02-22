@@ -18,12 +18,15 @@ package controllers.register.beneficiaries.individualBeneficiary
 
 import base.SpecBase
 import models.core.pages.{FullName, UKAddress}
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
 import pages.register.beneficiaries.individual._
 import pages.register.beneficiaries.individual.mld5._
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils.Constants._
-import utils.answers.{CheckAnswersFormatters, IndividualBeneficiaryAnswersHelper}
+import utils.print.IndividualBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.register.beneficiaries.individualBeneficiary.AnswersView
 
@@ -57,37 +60,16 @@ class AnswersControllerSpec extends SpecBase {
         .set(MentalCapacityYesNoPage(index), true).success.value
         .set(VulnerableYesNoPage(index),true).success.value
 
+      val mockPrintHelper: IndividualBeneficiaryPrintHelper = mock[IndividualBeneficiaryPrintHelper]
 
-      val checkAnswersFormatters = injector.instanceOf[CheckAnswersFormatters]
-      val checkYourAnswersHelper = new IndividualBeneficiaryAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit = true)
+      val fakeAnswerSection: AnswerSection = AnswerSection()
 
-      val expectedSections = Seq(
-        AnswerSection(
-          None,
-          Seq(
-            checkYourAnswersHelper.individualBeneficiaryName(index).value,
-            checkYourAnswersHelper.individualBeneficiaryDateOfBirthYesNo(index).value,
-            checkYourAnswersHelper.individualBeneficiaryDateOfBirth(index).value,
-            checkYourAnswersHelper.individualBeneficiaryIncomeYesNo(index).value,
-            checkYourAnswersHelper.individualBeneficiaryIncome(index).value,
-            checkYourAnswersHelper.countryOfNationalityYesNo(index).value,
-            checkYourAnswersHelper.countryOfNationalityInUkYesNo(index).value,
-            checkYourAnswersHelper.countryOfNationality(index).value,
-            checkYourAnswersHelper.individualBeneficiaryNationalInsuranceYesNo(index).value,
-            checkYourAnswersHelper.individualBeneficiaryNationalInsuranceNumber(index).value,
-            checkYourAnswersHelper.countryOfResidenceYesNo(index).value,
-            checkYourAnswersHelper.countryOfResidenceInUkYesNo(index).value,
-            checkYourAnswersHelper.countryOfResidence(index).value,
-            checkYourAnswersHelper.individualBeneficiaryAddressYesNo(index).value,
-            checkYourAnswersHelper.individualBeneficiaryAddressUKYesNo(index).value,
-            checkYourAnswersHelper.individualBeneficiaryAddressUK(index).value,
-            checkYourAnswersHelper.mentalCapacityYesNo(index).value,
-            checkYourAnswersHelper.individualBeneficiaryVulnerableYesNo(index).value
-          )
-        )
-      )
+      when(mockPrintHelper.checkDetailsSection(any(), any(), any(), any())(any()))
+        .thenReturn(fakeAnswerSection)
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[IndividualBeneficiaryPrintHelper].toInstance(mockPrintHelper))
+        .build()
 
       val request = FakeRequest(GET, routes.AnswersController.onPageLoad(index, fakeDraftId).url)
 
@@ -98,7 +80,7 @@ class AnswersControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(index, fakeDraftId, expectedSections)(request, messages).toString
+        view(fakeAnswerSection, index, fakeDraftId)(request, messages).toString
 
       application.stop()
     }

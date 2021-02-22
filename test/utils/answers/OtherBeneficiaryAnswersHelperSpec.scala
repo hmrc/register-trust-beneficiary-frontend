@@ -21,15 +21,13 @@ import controllers.register.beneficiaries.other.mld5.{routes => mld5}
 import controllers.register.beneficiaries.other.routes._
 import models.core.pages.{InternationalAddress, UKAddress}
 import pages.register.beneficiaries.other
-import pages.register.beneficiaries.other.mld5.{CountryOfResidencePage, CountryOfResidenceYesNoPage, UKResidentYesNoPage}
 import pages.register.beneficiaries.other._
+import pages.register.beneficiaries.other.mld5.{CountryOfResidencePage, CountryOfResidenceYesNoPage, UKResidentYesNoPage}
 import play.twirl.api.Html
-import utils.print.AnswerRowConverter
 import viewmodels.{AnswerRow, AnswerSection}
 
 class OtherBeneficiaryAnswersHelperSpec extends SpecBase {
 
-  private val answerRowConverter = injector.instanceOf[AnswerRowConverter]
   private val index: Int = 0
   private val description: String = "Description"
   private val ukAddress: UKAddress = UKAddress("Line 1", "Line 2", Some("Line 3"), Some("Line 4"), "AB11AB")
@@ -37,7 +35,7 @@ class OtherBeneficiaryAnswersHelperSpec extends SpecBase {
   private val nonUkCountry: String = "FR"
   private val canEdit: Boolean = true
 
-  private val helper: OtherBeneficiaryAnswersHelper = new OtherBeneficiaryAnswersHelper(answerRowConverter)
+  private val helper: OtherBeneficiaryAnswersHelper = injector.instanceOf[OtherBeneficiaryAnswersHelper]
 
   "Other Beneficiary answers helper" must {
 
@@ -54,7 +52,7 @@ class OtherBeneficiaryAnswersHelperSpec extends SpecBase {
             .set(other.IncomeDiscretionYesNoPage(index), true).success.value
             .set(other.AddressYesNoPage(index), false).success.value
 
-          val result = helper.otherBeneficiaries(userAnswers)
+          val result = helper.beneficiaries(userAnswers)
 
           result mustBe Some(Seq(
             AnswerSection(
@@ -79,7 +77,7 @@ class OtherBeneficiaryAnswersHelperSpec extends SpecBase {
             .set(other.AddressUKYesNoPage(index), false).success.value
             .set(other.AddressInternationalPage(index), nonUkAddress).success.value
 
-          val result = helper.otherBeneficiaries(userAnswers)
+          val result = helper.beneficiaries(userAnswers)
 
           result mustBe Some(Seq(
             AnswerSection(
@@ -111,7 +109,7 @@ class OtherBeneficiaryAnswersHelperSpec extends SpecBase {
             .set(AddressUKYesNoPage(index), true).success.value
             .set(AddressUKPage(index), ukAddress).success.value
 
-          val result = helper.otherBeneficiaries(userAnswers)
+          val result = helper.beneficiaries(userAnswers)
 
           result mustBe Some(Seq(
             AnswerSection(
@@ -139,9 +137,7 @@ class OtherBeneficiaryAnswersHelperSpec extends SpecBase {
             .set(AddressUKYesNoPage(index), true).success.value
             .set(AddressInternationalPage(index), nonUkAddress).success.value
 
-          val helper: OtherBeneficiaryAnswersHelper = new OtherBeneficiaryAnswersHelper(answerRowConverter)
-
-          val result = helper.otherBeneficiaries(userAnswers)
+          val result = helper.beneficiaries(userAnswers)
 
           result mustBe Some(Seq(
             AnswerSection(
@@ -164,4 +160,3 @@ class OtherBeneficiaryAnswersHelperSpec extends SpecBase {
     }
   }
 }
-

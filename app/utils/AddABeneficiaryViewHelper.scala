@@ -44,7 +44,7 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
     val index = individualBeneficiary._2
 
     AddRow(
-      name = parseName(vm.name.map(_.toString)),
+      name = parseName(vm.label),
       typeLabel = messages("entities.beneficiary.individual"),
       changeUrl = if (vm.isComplete) {
         individualRts.AnswersController.onPageLoad(index, draftId).url
@@ -62,7 +62,7 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
 
     val defaultValue = messages("entities.no.description.added")
     AddRow(
-      name = vm.description.getOrElse(defaultValue),
+      name = vm.label.getOrElse(defaultValue),
       typeLabel = messages("entities.beneficiary.class"),
       changeUrl = classOfBeneficiaryRts.ClassBeneficiaryDescriptionController.onPageLoad(index, draftId).url,
       removeUrl = classOfBeneficiaryRts.RemoveClassOfBeneficiaryController.onPageLoad(index, draftId).url
@@ -75,7 +75,7 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
     val index = charityBeneficiary._2
 
     AddRow(
-      name = parseName(vm.name),
+      name = parseName(vm.label),
       typeLabel = messages("entities.beneficiary.charity"),
       changeUrl = if (vm.isComplete) {
         charityRts.CharityAnswersController.onPageLoad(index, draftId).url
@@ -92,7 +92,7 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
     val index = trustBeneficiary._2
 
     AddRow(
-      name = parseName(vm.name),
+      name = parseName(vm.label),
       messages("entities.beneficiary.trust"),
       changeUrl = if (vm.isComplete) {
         trustRts.AnswersController.onPageLoad(index, draftId).url
@@ -109,7 +109,7 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
     val index = companyBeneficiary._2
 
     AddRow(
-      name = parseName(vm.name),
+      name = parseName(vm.label),
       typeLabel = messages("entities.beneficiary.company"),
       changeUrl = if (vm.isComplete) {
         companyRts.CheckDetailsController.onPageLoad(index, draftId).url
@@ -126,7 +126,7 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
     val index = largeBeneficiary._2
 
     AddRow(
-      name = parseName(vm.name),
+      name = parseName(vm.label),
       typeLabel = messages("entities.beneficiary.large"),
       changeUrl = if (vm.isComplete) {
         largeRts.CheckDetailsController.onPageLoad(index, draftId).url
@@ -143,7 +143,7 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
     val index = companyBeneficiary._2
 
     AddRow(
-      name = parseName(vm.description),
+      name = parseName(vm.label),
       typeLabel = messages("entities.beneficiary.other"),
       changeUrl = if (vm.isComplete) {
         otherRts.CheckDetailsController.onPageLoad(index, draftId).url

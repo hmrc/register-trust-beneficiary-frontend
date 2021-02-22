@@ -16,14 +16,13 @@
 
 package utils.answers
 
-import models.UserAnswers
 import models.core.pages._
-import models.registration.pages.{HowManyBeneficiaries, PassportOrIdCardDetails}
+import models.registration.pages.RoleInCompany.NA
+import models.registration.pages.{HowManyBeneficiaries, PassportOrIdCardDetails, RoleInCompany}
 import org.joda.time.{LocalDate => JodaDate}
-import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
-import pages.register.beneficiaries.individual.NamePage
 import play.api.i18n.Messages
-import play.twirl.api.{Html, HtmlFormat}
+import play.twirl.api.Html
+import play.twirl.api.HtmlFormat.escape
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.play.language.LanguageUtils
 import utils.countryOptions.CountryOptions
@@ -34,13 +33,9 @@ import javax.inject.Inject
 class CheckAnswersFormatters @Inject()(languageUtils: LanguageUtils,
                                        countryOptions: CountryOptions) {
 
-  def formatDate(date: JavaDate)(implicit messages: Messages): String = {
+  def formatDate(date: JavaDate)(implicit messages: Messages): Html = {
     val convertedDate: JodaDate = new JodaDate(date.getYear, date.getMonthValue, date.getDayOfMonth)
-    languageUtils.Dates.formatDate(convertedDate)
-  }
-
-  def utr(answer: String): Html = {
-    escape(answer)
+    escape(languageUtils.Dates.formatDate(convertedDate))
   }
 
   def yesOrNo(answer: Boolean)(implicit messages: Messages): Html = {
@@ -51,7 +46,7 @@ class CheckAnswersFormatters @Inject()(languageUtils: LanguageUtils,
     }
   }
 
-  def formatNino(nino: String): String = Nino(nino).formatted
+  def formatNino(nino: String): Html = escape(Nino(nino).formatted)
 
   def country(code: String)(implicit messages: Messages): String =
     countryOptions.options.find(_.value.equals(code)).map(_.label).getOrElse("")
@@ -60,17 +55,8 @@ class CheckAnswersFormatters @Inject()(languageUtils: LanguageUtils,
 
   def percentage(value: String): Html = escape(s"$value%")
 
-  def answer[T](key: String, answer: T)(implicit messages: Messages): Html =
+  def formatEnum[T](key: String, answer: T)(implicit messages: Messages): Html = {
     escape(messages(s"$key.$answer"))
-
-  def escape(x: String): Html = HtmlFormat.escape(x)
-
-  def indBeneficiaryName(index: Int, userAnswers: UserAnswers): String = {
-    userAnswers.get(NamePage(index)).map(_.toString).getOrElse("")
-  }
-
-  def charityBeneficiaryName(index: Int, userAnswers: UserAnswers): String = {
-    userAnswers.get(CharityNamePage(index)).getOrElse("")
   }
 
   def ukAddress(address: UKAddress): Html = {
@@ -110,7 +96,7 @@ class CheckAnswersFormatters @Inject()(languageUtils: LanguageUtils,
       Seq(
         Some(country(passportOrIdCard.country)),
         Some(escape(passportOrIdCard.cardNumber)),
-        Some(escape(formatDate(passportOrIdCard.expiryDate)))
+        Some(formatDate(passportOrIdCard.expiryDate))
       ).flatten
 
     Html(lines.mkString("<br />"))
@@ -130,7 +116,14 @@ class CheckAnswersFormatters @Inject()(languageUtils: LanguageUtils,
   }
 
   def formatNumberOfBeneficiaries(answer: HowManyBeneficiaries)(implicit messages: Messages): Html = {
-    escape(messages(s"numberOfBeneficiaries.$answer"))
+    formatEnum("numberOfBeneficiaries", answer)
+  }
+
+  def formatRoleInCompany(answer: RoleInCompany)(implicit messages: Messages): Html = {
+    answer match {
+      case NA => escape(messages("individualBeneficiary.roleInCompany.checkYourAnswersLabel.na"))
+      case _ => formatEnum("individualBeneficiary.roleInCompany", answer)
+    }
   }
 
 }

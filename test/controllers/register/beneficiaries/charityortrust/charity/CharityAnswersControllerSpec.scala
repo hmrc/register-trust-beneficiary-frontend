@@ -19,13 +19,16 @@ package controllers.register.beneficiaries.charityortrust.charity
 import base.SpecBase
 import models.core.pages.UKAddress
 import models.registration.pages.CharityOrTrust.Charity
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
 import pages.register.beneficiaries.charityortrust._
-import pages.register.beneficiaries.charityortrust.charity.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import pages.register.beneficiaries.charityortrust.charity._
+import pages.register.beneficiaries.charityortrust.charity.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils.Constants._
-import utils.answers.{CharityBeneficiaryAnswersHelper, CheckAnswersFormatters}
+import utils.print.CharityBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.register.beneficiaries.charityortrust.charity.CharityAnswersView
 
@@ -49,27 +52,16 @@ class CharityAnswersControllerSpec extends SpecBase {
         .set(AddressInTheUkYesNoPage(index),true).success.value
         .set(CharityAddressUKPage(index),UKAddress("Test 1","Test 2", None, None, "AB11AB")).success.value
 
-      val checkAnswersFormatters = injector.instanceOf[CheckAnswersFormatters]
-      val checkYourAnswersHelper = new CharityBeneficiaryAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit = true)
+      val mockPrintHelper: CharityBeneficiaryPrintHelper = mock[CharityBeneficiaryPrintHelper]
 
-      val expectedSections = Seq(
-        AnswerSection(
-          None,
-          Seq(
-            checkYourAnswersHelper.charityName(index).value,
-            checkYourAnswersHelper.amountDiscretionYesNo(index).value,
-            checkYourAnswersHelper.howMuchIncome(index).value,
-            checkYourAnswersHelper.countryOfResidenceYesNo(index).value,
-            checkYourAnswersHelper.countryOfResidenceInUkYesNo(index).value,
-            checkYourAnswersHelper.countryOfResidence(index).value,
-            checkYourAnswersHelper.addressYesNo(index).value,
-            checkYourAnswersHelper.addressInTheUkYesNo(index).value,
-            checkYourAnswersHelper.charityAddressUK(index).value
-          )
-        )
-      )
+      val fakeAnswerSection: AnswerSection = AnswerSection()
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      when(mockPrintHelper.checkDetailsSection(any(), any(), any(), any())(any()))
+        .thenReturn(fakeAnswerSection)
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[CharityBeneficiaryPrintHelper].toInstance(mockPrintHelper))
+        .build()
 
       val request = FakeRequest(GET, routes.CharityAnswersController.onPageLoad(index, fakeDraftId).url)
 
@@ -80,7 +72,7 @@ class CharityAnswersControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(index, fakeDraftId, expectedSections)(request, messages).toString
+        view(fakeAnswerSection, index, fakeDraftId)(request, messages).toString
 
       application.stop()
     }

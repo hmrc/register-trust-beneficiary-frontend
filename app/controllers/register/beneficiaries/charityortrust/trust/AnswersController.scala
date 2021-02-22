@@ -17,6 +17,7 @@
 package controllers.register.beneficiaries.charityortrust.trust
 
 import controllers.actions._
+import controllers.actions.register.trust.NameRequiredAction
 import models.Status.Completed
 import navigation.Navigator
 import pages.entitystatus.TrustBeneficiaryStatus
@@ -25,7 +26,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.answers.{CheckAnswersFormatters, TrustBeneficiaryAnswersHelper}
+import utils.print.TrustBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.register.beneficiaries.charityortrust.trust.AnswersView
 
@@ -37,25 +38,17 @@ class AnswersController @Inject()(
                                    registrationsRepository: RegistrationsRepository,
                                    navigator: Navigator,
                                    standardActionSets: StandardActionSets,
+                                   nameAction: NameRequiredAction,
                                    val controllerComponents: MessagesControllerComponents,
                                    view: AnswersView,
-                                   checkAnswersFormatters: CheckAnswersFormatters
+                                   printHelper: TrustBeneficiaryPrintHelper
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
     implicit request =>
 
-      val answers = new TrustBeneficiaryAnswersHelper(checkAnswersFormatters)(request.userAnswers, draftId, canEdit = true)
-
-      val sections = Seq(
-        AnswerSection(
-          None,
-          answers.trustBeneficiaryRows(index)
-        )
-      )
-
-      Ok(view(index, draftId, sections))
+      val section: AnswerSection = printHelper.checkDetailsSection(request.userAnswers, request.beneficiaryName, index, draftId)
+      Ok(view(section, index, draftId))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).async {

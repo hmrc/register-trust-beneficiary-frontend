@@ -17,14 +17,14 @@
 package utils.answers
 
 import pages.QuestionPage
-import sections.beneficiaries.TrustBeneficiaries
-import utils.print.TrustBeneficiaryPrintHelper
-import viewmodels.addAnother.TrustBeneficiaryViewModel
+import sections.beneficiaries.ClassOfBeneficiaries
+import utils.print.ClassOfBeneficiaryPrintHelper
+import viewmodels.addAnother.ClassOfBeneficiaryViewModel
 
 import javax.inject.Inject
 
-class TrustBeneficiaryAnswersHelper @Inject()(printHelper: TrustBeneficiaryPrintHelper)
-  extends AnswersHelper[TrustBeneficiaryViewModel](printHelper) {
+class ClassOfBeneficiaryAnswersHelper @Inject()(printHelper: ClassOfBeneficiaryPrintHelper)
+  extends AnswersHelper[ClassOfBeneficiaryViewModel](printHelper) {
 
-  override val beneficiaryType: QuestionPage[List[TrustBeneficiaryViewModel]] = TrustBeneficiaries
+  override val beneficiaryType: QuestionPage[List[ClassOfBeneficiaryViewModel]] = ClassOfBeneficiaries
 }

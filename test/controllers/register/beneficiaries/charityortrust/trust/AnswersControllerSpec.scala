@@ -18,12 +18,15 @@ package controllers.register.beneficiaries.charityortrust.trust
 
 import base.SpecBase
 import models.core.pages.UKAddress
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
 import pages.register.beneficiaries.charityortrust.trust._
 import pages.register.beneficiaries.charityortrust.trust.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils.Constants._
-import utils.answers.{CheckAnswersFormatters, TrustBeneficiaryAnswersHelper}
+import utils.print.TrustBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.register.beneficiaries.charityortrust.trust.AnswersView
 
@@ -46,27 +49,16 @@ class AnswersControllerSpec extends SpecBase {
         .set(AddressUKYesNoPage(index),true).success.value
         .set(AddressUKPage(index),UKAddress("Line1", "Line2", None, None, "NE62RT")).success.value
 
-      val checkAnswersFormatters = injector.instanceOf[CheckAnswersFormatters]
-      val checkYourAnswersHelper = new TrustBeneficiaryAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit = true)
+      val mockPrintHelper: TrustBeneficiaryPrintHelper = mock[TrustBeneficiaryPrintHelper]
 
-      val expectedSections = Seq(
-        AnswerSection(
-          None,
-          Seq(
-            checkYourAnswersHelper.trustBeneficiaryName(index).value,
-            checkYourAnswersHelper.trustBeneficiaryDiscretionYesNo(index).value,
-            checkYourAnswersHelper.trustBeneficiaryShareOfIncome(index).value,
-            checkYourAnswersHelper.trustBeneficiaryCountryOfResidenceYesNo(index).value,
-            checkYourAnswersHelper.trustBeneficiaryCountryOfResidenceInTheUkYesNo(index).value,
-            checkYourAnswersHelper.trustBeneficiaryCountryOfResidence(index).value,
-            checkYourAnswersHelper.trustBeneficiaryAddressYesNo(index).value,
-            checkYourAnswersHelper.trustBeneficiaryAddressUKYesNo(index).value,
-            checkYourAnswersHelper.trustBeneficiaryAddressUK(index).value
-          )
-        )
-      )
+      val fakeAnswerSection: AnswerSection = AnswerSection()
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      when(mockPrintHelper.checkDetailsSection(any(), any(), any(), any())(any()))
+        .thenReturn(fakeAnswerSection)
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[TrustBeneficiaryPrintHelper].toInstance(mockPrintHelper))
+        .build()
 
       val request = FakeRequest(GET, routes.AnswersController.onPageLoad(index, fakeDraftId).url)
 
@@ -77,7 +69,7 @@ class AnswersControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(index, fakeDraftId, expectedSections)(request, messages).toString
+        view(fakeAnswerSection, index, fakeDraftId)(request, messages).toString
 
       application.stop()
     }

@@ -16,22 +16,15 @@
 
 package utils.answers
 
-import javax.inject.Inject
-import models.UserAnswers
-import play.api.i18n.Messages
+import pages.QuestionPage
 import sections.beneficiaries.CompanyBeneficiaries
 import utils.print.CompanyBeneficiaryPrintHelper
-import viewmodels.AnswerSection
+import viewmodels.addAnother.CompanyBeneficiaryViewModel
 
-class CompanyBeneficiaryAnswersHelper @Inject()(companyBeneficiaryPrintHelper: CompanyBeneficiaryPrintHelper) {
+import javax.inject.Inject
 
-  def companyBeneficiaries(userAnswers: UserAnswers)(implicit messages: Messages): Option[Seq[AnswerSection]] = {
-    for {
-      beneficiaries <- userAnswers.get(CompanyBeneficiaries)
-      indexed = beneficiaries.zipWithIndex
-    } yield indexed.map {
-      case (beneficiaryViewModel, index) =>
-        companyBeneficiaryPrintHelper.printSection(userAnswers, beneficiaryViewModel.name.getOrElse(""), index, userAnswers.draftId)
-    }
-  }
+class CompanyBeneficiaryAnswersHelper @Inject()(printHelper: CompanyBeneficiaryPrintHelper)
+  extends AnswersHelper[CompanyBeneficiaryViewModel](printHelper) {
+
+  override val beneficiaryType: QuestionPage[List[CompanyBeneficiaryViewModel]] = CompanyBeneficiaries
 }

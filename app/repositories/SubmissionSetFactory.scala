@@ -29,7 +29,10 @@ import javax.inject.Inject
 class SubmissionSetFactory @Inject()(
                                       registrationProgress: RegistrationProgress,
                                       beneficiariesMapper: BeneficiariesMapper,
-                                      checkAnswersFormatters: CheckAnswersFormatters,
+                                      individualBeneficiaryAnswersHelper: IndividualBeneficiaryAnswersHelper,
+                                      classOfBeneficiaryAnswersHelper: ClassOfBeneficiaryAnswersHelper,
+                                      charityBeneficiaryAnswersHelper: CharityBeneficiaryAnswersHelper,
+                                      trustBeneficiaryAnswersHelper: TrustBeneficiaryAnswersHelper,
                                       companyBeneficiaryAnswersHelper: CompanyBeneficiaryAnswersHelper,
                                       largeBeneficiaryAnswersHelper: EmploymentRelatedBeneficiaryAnswersHelper,
                                       otherBeneficiaryAnswersHelper: OtherBeneficiaryAnswersHelper
@@ -63,19 +66,14 @@ class SubmissionSetFactory @Inject()(
 
     if (status.contains(Status.Completed)) {
 
-      val individualBeneficiariesHelper = new IndividualBeneficiaryAnswersHelper(checkAnswersFormatters)(userAnswers, userAnswers.draftId, false)
-      val classOfBeneficiariesHelper = new ClassOfBeneficiariesAnswersHelper(checkAnswersFormatters)(userAnswers, userAnswers.draftId, false)
-      val charityBeneficiariesHelper = new CharityBeneficiaryAnswersHelper(checkAnswersFormatters)(userAnswers, userAnswers.draftId, false)
-      val trustBeneficiariesHelper = new TrustBeneficiaryAnswersHelper(checkAnswersFormatters)(userAnswers, userAnswers.draftId, false)
-
       val entitySections = List(
-        individualBeneficiariesHelper.individualBeneficiaries,
-        classOfBeneficiariesHelper.classOfBeneficiaries,
-        charityBeneficiariesHelper.charityBeneficiaries,
-        trustBeneficiariesHelper.trustBeneficiaries,
-        companyBeneficiaryAnswersHelper.companyBeneficiaries(userAnswers),
-        largeBeneficiaryAnswersHelper.employmentRelatedBeneficiaries(userAnswers),
-        otherBeneficiaryAnswersHelper.otherBeneficiaries(userAnswers)
+        individualBeneficiaryAnswersHelper.beneficiaries(userAnswers),
+        classOfBeneficiaryAnswersHelper.beneficiaries(userAnswers),
+        charityBeneficiaryAnswersHelper.beneficiaries(userAnswers),
+        trustBeneficiaryAnswersHelper.beneficiaries(userAnswers),
+        companyBeneficiaryAnswersHelper.beneficiaries(userAnswers),
+        largeBeneficiaryAnswersHelper.beneficiaries(userAnswers),
+        otherBeneficiaryAnswersHelper.beneficiaries(userAnswers)
       ).flatten.flatten
 
       val updatedFirstSection = AnswerSection(

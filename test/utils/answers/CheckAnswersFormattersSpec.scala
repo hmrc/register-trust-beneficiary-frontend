@@ -18,7 +18,7 @@ package utils.answers
 
 import base.SpecBase
 import models.core.pages.{Description, InternationalAddress, UKAddress}
-import models.registration.pages.{HowManyBeneficiaries, PassportOrIdCardDetails}
+import models.registration.pages.{HowManyBeneficiaries, PassportOrIdCardDetails, RoleInCompany}
 import play.api.i18n.{Lang, MessagesImpl}
 import play.twirl.api.Html
 
@@ -43,13 +43,13 @@ class CheckAnswersFormattersSpec extends SpecBase {
       "in English mode" must {
         "format date in English" when {
           "recent date" in {
-            val result: String = checkAnswersFormatters.formatDate(recentDate)(messages("en"))
-            result mustBe "25 January 2015"
+            val result: Html = checkAnswersFormatters.formatDate(recentDate)(messages("en"))
+            result mustBe Html("25 January 2015")
           }
 
           "old date" ignore {
-            val result: String = checkAnswersFormatters.formatDate(oldDate)(messages("en"))
-            result mustBe "1 December 1840"
+            val result: Html = checkAnswersFormatters.formatDate(oldDate)(messages("en"))
+            result mustBe Html("1 December 1840")
           }
         }
       }
@@ -57,29 +57,22 @@ class CheckAnswersFormattersSpec extends SpecBase {
       "in Welsh mode" must {
         "format date in Welsh" when {
           "recent date" in {
-            val result: String = checkAnswersFormatters.formatDate(recentDate)(messages("cy"))
-            result mustBe "25 Ionawr 2015"
+            val result: Html = checkAnswersFormatters.formatDate(recentDate)(messages("cy"))
+            result mustBe Html("25 Ionawr 2015")
           }
 
           "old date" ignore {
-            val result: String = checkAnswersFormatters.formatDate(oldDate)(messages("cy"))
-            result mustBe "1 Rhagfyr 1840"
+            val result: Html = checkAnswersFormatters.formatDate(oldDate)(messages("cy"))
+            result mustBe Html("1 Rhagfyr 1840")
           }
         }
       }
     }
 
-    ".utr" must {
-      "render UTR" in {
-        val result: Html = checkAnswersFormatters.utr("1234567890")
-        result mustBe Html("1234567890")
-      }
-    }
-
     ".formatNino" must {
       "format NINO" in {
-        val result: String = checkAnswersFormatters.formatNino("AB123456C")
-        result mustBe "AB 12 34 56 C"
+        val result: Html = checkAnswersFormatters.formatNino("AB123456C")
+        result mustBe Html("AB 12 34 56 C")
       }
     }
 
@@ -192,6 +185,26 @@ class CheckAnswersFormattersSpec extends SpecBase {
         "Over 1,001" in {
           val result: Html = checkAnswersFormatters.formatNumberOfBeneficiaries(HowManyBeneficiaries.Over1001)
           result mustBe Html("Over 1,001")
+        }
+      }
+    }
+
+    ".formatRoleInCompany" must {
+      "display role in company" when {
+
+        "Director" in {
+          val result: Html = checkAnswersFormatters.formatRoleInCompany(RoleInCompany.Director)
+          result mustBe Html("Director")
+        }
+
+        "Employee" in {
+          val result: Html = checkAnswersFormatters.formatRoleInCompany(RoleInCompany.Employee)
+          result mustBe Html("Employee")
+        }
+
+        "NA" in {
+          val result: Html = checkAnswersFormatters.formatRoleInCompany(RoleInCompany.NA)
+          result mustBe Html("Not a director or employee")
         }
       }
     }
