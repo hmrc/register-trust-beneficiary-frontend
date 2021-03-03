@@ -21,7 +21,9 @@ GET        /timeout                                     controllers.SessionTimeo
 
 GET        /:draftId/add                                                              controllers.register.beneficiaries.AddABeneficiaryController.onPageLoad(draftId: String)
 POST       /:draftId/add                                                              controllers.register.beneficiaries.AddABeneficiaryController.submitOne(draftId: String)
+GET        /:draftId/add-another                                                      controllers.register.beneficiaries.AddABeneficiaryController.onPageLoad(draftId: String)
 POST       /:draftId/add-another                                                      controllers.register.beneficiaries.AddABeneficiaryController.submitAnother(draftId: String)
+GET        /complete                                                                  controllers.register.beneficiaries.AddABeneficiaryController.onPageLoad(draftId: String)
 POST       /complete                                                                  controllers.register.beneficiaries.AddABeneficiaryController.submitComplete(draftId: String)
 
 GET        /:draftId/information-you-need                                             controllers.register.beneficiaries.InfoController.onPageLoad(draftId: String)
