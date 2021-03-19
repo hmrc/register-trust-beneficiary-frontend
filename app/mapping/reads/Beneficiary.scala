@@ -16,21 +16,25 @@
 
 package mapping.reads
 
-import mapping.registration.AddressMapper.buildAddress
+import mapping.registration.IdentificationMapper.buildAddress
 import models.core.pages.{InternationalAddress, UKAddress}
 import models.{AddressType, IdentificationOrgType}
 
-trait Beneficiary
+trait Beneficiary {
+  def buildValue[A, B](o1: Option[A], o2: Option[A])
+                      (build: A => Option[B]): Option[B] = (o1, o2) match {
+    case (Some(v), _) => build(v)
+    case (_, Some(v)) => build(v)
+    case _ => None
+  }
+}
 
 trait BeneficiaryWithAddress extends Beneficiary {
   def ukAddress: Option[UKAddress]
   def internationalAddress: Option[InternationalAddress]
 
-  def ukOrInternationalAddress: Option[AddressType] = (ukAddress, internationalAddress) match {
-    case (Some(a), _) => buildAddress(a)
-    case (_, Some(a)) => buildAddress(a)
-    case _ => None
-  }
+  def ukOrInternationalAddress: Option[AddressType] =
+    buildValue(ukAddress, internationalAddress)(buildAddress)
 }
 
 trait OrgBeneficiaryWithAddress extends BeneficiaryWithAddress {

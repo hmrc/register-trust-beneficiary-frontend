@@ -16,11 +16,12 @@
 
 package mapping.registration
 
-import models.AddressType
+import models.{AddressType, PassportType}
 import models.core.pages.{Address, InternationalAddress, UKAddress}
+import models.registration.pages.PassportOrIdCardDetails
 import utils.Constants.GB
 
-object AddressMapper {
+object IdentificationMapper {
 
   def buildAddress(address: Address): Option[AddressType] = {
     address match {
@@ -50,5 +51,8 @@ object AddressMapper {
       country = address.country
     )
   }
+
+  def buildPassport(details: PassportOrIdCardDetails): Option[PassportType] =
+    Some(PassportType(details.cardNumber, details.expiryDate, details.country))
 
 }

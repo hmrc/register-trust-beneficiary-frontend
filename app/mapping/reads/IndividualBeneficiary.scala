@@ -16,11 +16,13 @@
 
 package mapping.reads
 
-import java.time.LocalDate
-
+import mapping.registration.IdentificationMapper.buildPassport
+import models.IdentificationType
 import models.core.pages.{FullName, InternationalAddress, UKAddress}
 import models.registration.pages.{PassportOrIdCardDetails, RoleInCompany}
 import play.api.libs.json.{Format, Json}
+
+import java.time.LocalDate
 
 
 final case class IndividualBeneficiary(name: FullName,
@@ -36,7 +38,14 @@ final case class IndividualBeneficiary(name: FullName,
                                        incomeYesNo: Option[Boolean],
                                        countryOfResidence: Option[String],
                                        countryOfNationality: Option[String],
-                                       mentalCapacityYesNo: Option[Boolean]) extends BeneficiaryWithAddress
+                                       mentalCapacityYesNo: Option[Boolean]) extends BeneficiaryWithAddress {
+
+  val identification: Option[IdentificationType] = (nationalInsuranceNumber, ukOrInternationalAddress, passportDetails, idCardDetails) match {
+    case (None, None, None, None) => None
+    case (Some(_), _, _, _) => Some(IdentificationType(nationalInsuranceNumber, None, None))
+    case _ => Some(IdentificationType(None, buildValue(passportDetails, idCardDetails)(buildPassport), ukOrInternationalAddress))
+  }
+}
 
 object IndividualBeneficiary {
   implicit val classFormat: Format[IndividualBeneficiary] = Json.format[IndividualBeneficiary]
