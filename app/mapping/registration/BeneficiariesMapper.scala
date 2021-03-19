@@ -45,7 +45,7 @@ class BeneficiariesMapper @Inject()(
 
     if (all.nonEmpty) {
       Some(
-        models.BeneficiaryType(
+        BeneficiaryType(
           individualDetails = individuals,
           company = company,
           trust = trust,
