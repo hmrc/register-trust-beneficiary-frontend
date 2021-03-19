@@ -21,9 +21,7 @@ import models.registration.pages.PassportOrIdCardDetails
 import models.{IdentificationType, IndividualDetailsType, PassportType}
 import pages.QuestionPage
 
-import javax.inject.Inject
-
-class IndividualBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapper[IndividualDetailsType, IndividualBeneficiary] {
+class IndividualBeneficiaryMapper extends Mapper[IndividualDetailsType, IndividualBeneficiary] {
 
   override def section: QuestionPage[List[IndividualBeneficiary]] = IndividualBeneficiaries
 
@@ -42,18 +40,19 @@ class IndividualBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extend
 
   private def identificationMap(indBen: IndividualBeneficiary): Option[IdentificationType] = {
     val nino = indBen.nationalInsuranceNumber
-    val address = (indBen.ukAddress, indBen.internationalAddress) match {
-      case (None, None) => None
-      case (Some(address), _) => addressMapper.build(address)
-      case (_, Some(address)) => addressMapper.build(address)
-    }
+    val address = indBen.ukOrInternationalAddress
     val passport = indBen.passportDetails
     val idCard = indBen.idCardDetails
+
     (nino, address, passport, idCard) match {
       case (None, None, None, None) =>
         None
       case (Some(_), _, _, _) =>
-        Some(IdentificationType(nino, None, None))
+        Some(IdentificationType(
+          nino = nino,
+          passport = None,
+          address = None
+        ))
       case (_, _, _, _) =>
         Some(IdentificationType(
           nino = None,

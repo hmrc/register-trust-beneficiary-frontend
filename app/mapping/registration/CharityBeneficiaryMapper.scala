@@ -17,12 +17,10 @@
 package mapping.registration
 
 import mapping.reads.{CharityBeneficiaries, CharityBeneficiary}
-import models.{CharityType, IdentificationOrgType}
+import models.CharityType
 import pages.QuestionPage
 
-import javax.inject.Inject
-
-class CharityBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapper[CharityType, CharityBeneficiary] {
+class CharityBeneficiaryMapper extends Mapper[CharityType, CharityBeneficiary] {
 
   override def section: QuestionPage[List[CharityBeneficiary]] = CharityBeneficiaries
 
@@ -30,16 +28,8 @@ class CharityBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends M
     organisationName = beneficiary.name,
     beneficiaryDiscretion = Some(beneficiary.howMuchIncome.isEmpty),
     beneficiaryShareOfIncome = beneficiary.howMuchIncome.map(_.toString),
-    identification = identificationMap(beneficiary),
+    identification = beneficiary.identification,
     countryOfResidence = beneficiary.countryOfResidence
   )
-
-  private def identificationMap(beneficiary: CharityBeneficiary): Option[IdentificationOrgType] = {
-    (beneficiary.ukAddress, beneficiary.internationalAddress) match {
-      case (None, None) => None
-      case (Some(address), _) => Some(IdentificationOrgType(None, addressMapper.build(address)))
-      case (_, Some(address)) => Some(IdentificationOrgType(None, addressMapper.build(address)))
-    }
-  }
 
 }

@@ -17,12 +17,10 @@
 package mapping.registration
 
 import mapping.reads.{TrustBeneficiaries, TrustBeneficiary}
-import models.{BeneficiaryTrustType, IdentificationOrgType}
+import models.BeneficiaryTrustType
 import pages.QuestionPage
 
-import javax.inject.Inject
-
-class TrustBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapper[BeneficiaryTrustType, TrustBeneficiary] {
+class TrustBeneficiaryMapper extends Mapper[BeneficiaryTrustType, TrustBeneficiary] {
 
   override def section: QuestionPage[List[TrustBeneficiary]] = TrustBeneficiaries
 
@@ -30,16 +28,8 @@ class TrustBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Map
     organisationName = beneficiary.name,
     beneficiaryDiscretion = beneficiary.discretionYesNo,
     beneficiaryShareOfIncome = beneficiary.shareOfIncome.map(_.toString),
-    identification = identificationMap(beneficiary),
+    identification = beneficiary.identification,
     countryOfResidence = beneficiary.countryOfResidence
   )
-
-  private def identificationMap(beneficiary: TrustBeneficiary): Option[IdentificationOrgType] = {
-    (beneficiary.ukAddress, beneficiary.internationalAddress) match {
-      case (None, None) => None
-      case (Some(address), _) => Some(IdentificationOrgType(None, addressMapper.build(address)))
-      case (_, Some(address)) => Some(IdentificationOrgType(None, addressMapper.build(address)))
-    }
-  }
 
 }

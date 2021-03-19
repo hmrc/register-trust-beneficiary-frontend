@@ -25,8 +25,7 @@ final case class TrustBeneficiary(name: String,
                                   shareOfIncome: Option[Int],
                                   countryOfResidence: Option[String],
                                   ukAddress: Option[UKAddress],
-                                  internationalAddress: Option[InternationalAddress])
-
+                                  internationalAddress: Option[InternationalAddress]) extends OrgBeneficiaryWithAddress
 
 object TrustBeneficiary {
   implicit val format: Format[TrustBeneficiary] = Json.format[TrustBeneficiary]

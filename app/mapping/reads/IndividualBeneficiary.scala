@@ -36,7 +36,7 @@ final case class IndividualBeneficiary(name: FullName,
                                        incomeYesNo: Option[Boolean],
                                        countryOfResidence: Option[String],
                                        countryOfNationality: Option[String],
-                                       mentalCapacityYesNo: Option[Boolean])
+                                       mentalCapacityYesNo: Option[Boolean]) extends BeneficiaryWithAddress
 
 object IndividualBeneficiary {
   implicit val classFormat: Format[IndividualBeneficiary] = Json.format[IndividualBeneficiary]

@@ -24,7 +24,7 @@ final case class CompanyBeneficiary(name: String,
                                     countryOfResidence: Option[String],
                                     internationalAddress: Option[InternationalAddress],
                                     income: Option[Int],
-                                    incomeYesNo: Boolean)
+                                    incomeYesNo: Boolean) extends OrgBeneficiaryWithAddress
 
 object CompanyBeneficiary {
   implicit val classFormat: Format[CompanyBeneficiary] = Json.format[CompanyBeneficiary]

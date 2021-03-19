@@ -16,11 +16,12 @@
 
 package mapping.registration
 
+import mapping.reads.Beneficiary
 import models.UserAnswers
 import pages.QuestionPage
 import play.api.libs.json.Reads
 
-trait Mapper[A, B] {
+trait Mapper[A, B <: Beneficiary] {
 
   def build(userAnswers: UserAnswers)(implicit rds: Reads[B]): Option[List[A]] = {
 

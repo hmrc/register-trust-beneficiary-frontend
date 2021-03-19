@@ -27,7 +27,10 @@ final case class LargeBeneficiary(name: String,
                                   internationalAddress: Option[InternationalAddress],
                                   discretionYesNo: Option[Boolean],
                                   shareOfIncome: Option[String],
-                                  countryOfResidence: Option[String])
+                                  countryOfResidence: Option[String]) extends OrgBeneficiaryWithAddress {
+
+  override def ukAddress: Option[UKAddress] = address
+}
 
 object LargeBeneficiary {
   implicit val classFormat: Format[LargeBeneficiary] = Json.format[LargeBeneficiary]

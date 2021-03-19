@@ -17,13 +17,11 @@
 package mapping.registration
 
 import mapping.reads.{LargeBeneficiaries, LargeBeneficiary}
+import models.LargeType
 import models.registration.pages.HowManyBeneficiaries
-import models.{IdentificationOrgType, LargeType}
 import pages.QuestionPage
 
-import javax.inject.Inject
-
-class LargeBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapper[LargeType, LargeBeneficiary] {
+class LargeBeneficiaryMapper extends Mapper[LargeType, LargeBeneficiary] {
 
   override def section: QuestionPage[List[LargeBeneficiary]] = LargeBeneficiaries
 
@@ -35,19 +33,11 @@ class LargeBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Map
     description3 = beneficiary.description.description3,
     description4 = beneficiary.description.description4,
     numberOfBeneficiary = convertNumberOfBeneficiaries(beneficiary.numberOfBeneficiaries),
-    identification = buildIdentification(beneficiary),
+    identification = beneficiary.identification,
     beneficiaryDiscretion = beneficiary.discretionYesNo,
     beneficiaryShareOfIncome = beneficiary.shareOfIncome,
     countryOfResidence = beneficiary.countryOfResidence
   )
-
-  private def buildIdentification(beneficiary: LargeBeneficiary): Option[IdentificationOrgType] = {
-    (beneficiary.address, beneficiary.internationalAddress) match {
-      case (None, None) => None
-      case (Some(address), _) => Some(IdentificationOrgType(None, addressMapper.build(address)))
-      case (_, Some(address)) => Some(IdentificationOrgType(None, addressMapper.build(address)))
-    }
-  }
 
   private def convertNumberOfBeneficiaries(numberOfBeneficiaries: HowManyBeneficiaries): String = {
     numberOfBeneficiaries match {

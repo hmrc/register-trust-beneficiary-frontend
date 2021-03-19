@@ -17,12 +17,10 @@
 package mapping.registration
 
 import mapping.reads.{CompanyBeneficiaries, CompanyBeneficiary}
-import models.{CompanyType, IdentificationOrgType}
+import models.CompanyType
 import pages.QuestionPage
 
-import javax.inject.Inject
-
-class CompanyBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapper[CompanyType, CompanyBeneficiary] {
+class CompanyBeneficiaryMapper extends Mapper[CompanyType, CompanyBeneficiary] {
 
   override def section: QuestionPage[List[CompanyBeneficiary]] = CompanyBeneficiaries
 
@@ -30,16 +28,8 @@ class CompanyBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends M
     organisationName = beneficiary.name,
     beneficiaryDiscretion = Some(beneficiary.incomeYesNo),
     beneficiaryShareOfIncome = beneficiary.income map(_.toString),
-    identification = buildIdentification(beneficiary),
+    identification = beneficiary.identification,
     countryOfResidence = beneficiary.countryOfResidence
   )
-
-  private def buildIdentification(beneficiary: CompanyBeneficiary): Option[IdentificationOrgType] = {
-    (beneficiary.ukAddress, beneficiary.internationalAddress) match {
-      case (None, None) => None
-      case (Some(address), _) => Some(IdentificationOrgType(None, addressMapper.build(address)))
-      case (_, Some(address)) => Some(IdentificationOrgType(None, addressMapper.build(address)))
-    }
-  }
 
 }

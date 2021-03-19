@@ -17,12 +17,10 @@
 package mapping.registration
 
 import mapping.reads.{OtherBeneficiaries, OtherBeneficiary}
-import models.{AddressType, OtherType}
+import models.OtherType
 import pages.QuestionPage
 
-import javax.inject.Inject
-
-class OtherBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapper[OtherType, OtherBeneficiary] {
+class OtherBeneficiaryMapper extends Mapper[OtherType, OtherBeneficiary] {
 
   override def section: QuestionPage[List[OtherBeneficiary]] = OtherBeneficiaries
 
@@ -30,16 +28,8 @@ class OtherBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Map
     description = beneficiary.description,
     beneficiaryDiscretion = Some(beneficiary.incomeDiscretionYesNo),
     beneficiaryShareOfIncome = beneficiary.shareOfIncome map(_.toString),
-    address = buildAddress(beneficiary),
+    address = beneficiary.ukOrInternationalAddress,
     countryOfResidence = beneficiary.countryOfResidence
   )
-
-  private def buildAddress(beneficiary: OtherBeneficiary): Option[AddressType] = {
-    (beneficiary.ukAddress, beneficiary.internationalAddress) match {
-      case (None, None) => None
-      case (Some(address), _) => addressMapper.build(address)
-      case (_, Some(address)) => addressMapper.build(address)
-    }
-  }
 
 }

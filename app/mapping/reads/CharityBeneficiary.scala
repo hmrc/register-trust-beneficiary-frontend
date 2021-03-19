@@ -23,7 +23,7 @@ final case class CharityBeneficiary(name: String,
                                     howMuchIncome: Option[Int],
                                     countryOfResidence: Option[String],
                                     ukAddress: Option[UKAddress],
-                                    internationalAddress: Option[InternationalAddress])
+                                    internationalAddress: Option[InternationalAddress]) extends OrgBeneficiaryWithAddress
 
 object CharityBeneficiary {
   implicit val classFormat: Format[CharityBeneficiary] = Json.format[CharityBeneficiary]
