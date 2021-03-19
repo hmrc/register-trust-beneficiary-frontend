@@ -20,6 +20,6 @@ import models.UserAnswers
 
 trait Mapping[T] {
 
-  def build(userAnswers: UserAnswers) : Option[T]
+  def build(userAnswers: UserAnswers): Option[T]
 
 }

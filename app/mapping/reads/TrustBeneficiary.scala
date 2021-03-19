@@ -24,12 +24,10 @@ final case class TrustBeneficiary(name: String,
                                   discretionYesNo: Option[Boolean],
                                   shareOfIncome: Option[Int],
                                   countryOfResidence: Option[String],
-                                  ukAddress : Option[UKAddress],
-                                  internationalAddress : Option[InternationalAddress]
-                                 )
+                                  ukAddress: Option[UKAddress],
+                                  internationalAddress: Option[InternationalAddress])
 
 
 object TrustBeneficiary {
   implicit val format: Format[TrustBeneficiary] = Json.format[TrustBeneficiary]
 }
-

@@ -29,16 +29,14 @@ final case class IndividualBeneficiary(name: FullName,
                                        nationalInsuranceNumber: Option[String],
                                        passportDetails: Option[PassportOrIdCardDetails],
                                        idCardDetails: Option[PassportOrIdCardDetails],
-                                       ukAddress : Option[UKAddress],
-                                       internationalAddress : Option[InternationalAddress],
+                                       ukAddress: Option[UKAddress],
+                                       internationalAddress: Option[InternationalAddress],
                                        vulnerableYesNo: Option[Boolean],
                                        income: Option[Int] ,
                                        incomeYesNo: Option[Boolean],
                                        countryOfResidence: Option[String],
                                        countryOfNationality: Option[String],
-                                       mentalCapacityYesNo: Option[Boolean]
-                                      ) {
-}
+                                       mentalCapacityYesNo: Option[Boolean])
 
 object IndividualBeneficiary {
   implicit val classFormat: Format[IndividualBeneficiary] = Json.format[IndividualBeneficiary]

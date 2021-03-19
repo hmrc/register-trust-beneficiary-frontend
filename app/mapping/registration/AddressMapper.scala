@@ -47,7 +47,8 @@ class AddressMapper  {
           x.line3,
           x.line4,
           Some(x.postcode),
-          GB)
+          GB
+        )
     }
   }
 
