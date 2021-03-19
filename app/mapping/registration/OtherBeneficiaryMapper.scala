@@ -16,39 +16,20 @@
 
 package mapping.registration
 
-import javax.inject.Inject
-import mapping.Mapping
 import mapping.reads.{OtherBeneficiaries, OtherBeneficiary}
-import models.UserAnswers
+import models.OtherType
+import pages.QuestionPage
 
-class OtherBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapping[List[OtherType]] {
-  override def build(userAnswers: UserAnswers): Option[List[OtherType]] = {
+class OtherBeneficiaryMapper extends Mapper[OtherType, OtherBeneficiary] {
 
-    val beneficiaries: List[OtherBeneficiary] =
-      userAnswers.get(OtherBeneficiaries).getOrElse(List.empty)
+  override def section: QuestionPage[List[OtherBeneficiary]] = OtherBeneficiaries
 
-    beneficiaries match {
-      case Nil => None
-      case list =>
-        Some(
-          list.map { beneficiary =>
-            OtherType(
-              description = beneficiary.description,
-              beneficiaryDiscretion = Some(beneficiary.incomeDiscretionYesNo),
-              beneficiaryShareOfIncome = beneficiary.shareOfIncome map(_.toString),
-              address = buildAddress(beneficiary),
-              countryOfResidence = beneficiary.countryOfResidence
-            )
-          }
-        )
-    }
-  }
+  override def beneficiaryType(beneficiary: OtherBeneficiary): OtherType = OtherType(
+    description = beneficiary.description,
+    beneficiaryDiscretion = Some(beneficiary.incomeDiscretionYesNo),
+    beneficiaryShareOfIncome = beneficiary.shareOfIncome map(_.toString),
+    address = beneficiary.ukOrInternationalAddress,
+    countryOfResidence = beneficiary.countryOfResidence
+  )
 
-  private def buildAddress(beneficiary: OtherBeneficiary): Option[AddressType] = {
-    (beneficiary.ukAddress, beneficiary.internationalAddress) match {
-      case (None, None) => None
-      case (Some(address), _) => addressMapper.build(address)
-      case (_, Some(address)) => addressMapper.build(address)
-    }
-  }
 }

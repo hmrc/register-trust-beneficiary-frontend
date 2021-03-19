@@ -18,7 +18,7 @@ package mapping.registration
 
 import base.SpecBase
 import generators.Generators
-import mapping.Mapping
+import models.UnidentifiedType
 import models.registration.pages.WhatTypeOfBeneficiary
 import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.beneficiaries.WhatTypeOfBeneficiaryPage
@@ -27,7 +27,7 @@ import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescrip
 class ClassOfBeneficiariesMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {
 
-  val classOfBeneficiariesMapper: Mapping[List[UnidentifiedType]] = injector.instanceOf[ClassOfBeneficiariesMapper]
+  val classOfBeneficiariesMapper: ClassOfBeneficiariesMapper = injector.instanceOf[ClassOfBeneficiariesMapper]
 
   "ClassOfBeneficiaries" when {
 

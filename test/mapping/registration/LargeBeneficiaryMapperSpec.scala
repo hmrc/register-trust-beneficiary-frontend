@@ -18,6 +18,7 @@ package mapping.registration
 
 import base.SpecBase
 import generators.Generators
+import models.{AddressType, IdentificationOrgType, LargeType}
 import models.core.pages.{Description, InternationalAddress, UKAddress}
 import models.registration.pages.HowManyBeneficiaries
 import org.scalatest.{MustMatchers, OptionValues}
@@ -48,7 +49,7 @@ class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
 
       "return mapped data" when {
 
-        "in 5ml mode with UK country of residence set" in {
+        "in 5mld mode with UK country of residence set" in {
           val userAnswers =
             emptyUserAnswers
               .set(LargeBeneficiaryNamePage(index0), "Employment Related Name").success.value
@@ -76,7 +77,7 @@ class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
           )
         }
 
-        "in 5ml mode with Non UK country of residence set" in {
+        "in 5mld mode with Non UK country of residence set" in {
           val userAnswers =
             emptyUserAnswers
               .set(LargeBeneficiaryNamePage(index0), "Employment Related Name").success.value

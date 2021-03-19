@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package mapping.registration
-
-import java.time.LocalDate
+package models
 
 import models.core.pages.FullName
 import play.api.libs.json._
+
+import java.time.LocalDate
 
 /**
   * Trust Registration API Schema - definitions models below

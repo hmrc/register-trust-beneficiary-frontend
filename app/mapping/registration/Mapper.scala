@@ -14,12 +14,25 @@
  * limitations under the License.
  */
 
-package mapping
+package mapping.registration
 
+import mapping.reads.Beneficiary
 import models.UserAnswers
+import pages.QuestionPage
+import play.api.libs.json.Reads
 
-trait Mapping[T] {
+trait Mapper[A, B <: Beneficiary] {
 
-  def build(userAnswers: UserAnswers) : Option[T]
+  def build(userAnswers: UserAnswers)(implicit rds: Reads[B]): Option[List[A]] = {
+
+    userAnswers.get(section).getOrElse(List.empty) match {
+      case Nil => None
+      case list => Some(list.map(beneficiaryType))
+    }
+  }
+
+  def section: QuestionPage[List[B]]
+
+  def beneficiaryType(beneficiary: B): A
 
 }

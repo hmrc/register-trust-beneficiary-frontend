@@ -16,39 +16,20 @@
 
 package mapping.registration
 
-import javax.inject.Inject
-import mapping.Mapping
-import mapping.reads.CharityBeneficiary
-import models.UserAnswers
+import mapping.reads.{CharityBeneficiaries, CharityBeneficiary}
+import models.CharityType
+import pages.QuestionPage
 
-class CharityBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapping[List[CharityType]] {
+class CharityBeneficiaryMapper extends Mapper[CharityType, CharityBeneficiary] {
 
-  override def build(userAnswers: UserAnswers): Option[List[CharityType]] = {
+  override def section: QuestionPage[List[CharityBeneficiary]] = CharityBeneficiaries
 
-    val charityBeneficiaries : List[CharityBeneficiary] =
-      userAnswers.get(mapping.reads.CharityBeneficiaries).getOrElse(List.empty)
+  override def beneficiaryType(beneficiary: CharityBeneficiary): CharityType = CharityType(
+    organisationName = beneficiary.name,
+    beneficiaryDiscretion = Some(beneficiary.howMuchIncome.isEmpty),
+    beneficiaryShareOfIncome = beneficiary.howMuchIncome.map(_.toString),
+    identification = beneficiary.identification,
+    countryOfResidence = beneficiary.countryOfResidence
+  )
 
-    charityBeneficiaries match {
-      case Nil => None
-      case list =>
-        Some(
-          list.map { charBen =>
-            CharityType(
-              organisationName = charBen.name,
-              beneficiaryDiscretion = Some(charBen.howMuchIncome.isEmpty),
-              beneficiaryShareOfIncome = charBen.howMuchIncome.map(_.toString),
-              identification = identificationMap(charBen),
-              countryOfResidence = charBen.countryOfResidence)
-          }
-        )
-    }
-  }
-
-  private def identificationMap(beneficiary: CharityBeneficiary): Option[IdentificationOrgType] = {
-    (beneficiary.ukAddress, beneficiary.internationalAddress) match {
-      case (None, None) => None
-      case (Some(address), _) => Some(IdentificationOrgType(None, addressMapper.build(address)))
-      case (_, Some(address)) => Some(IdentificationOrgType(None, addressMapper.build(address)))
-    }
-  }
 }

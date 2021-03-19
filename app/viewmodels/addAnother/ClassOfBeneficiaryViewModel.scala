@@ -19,7 +19,8 @@ package viewmodels.addAnother
 import models.Status
 import play.api.libs.json.{Reads, __}
 
-case class ClassOfBeneficiaryViewModel(label: Option[String], status: Status) extends ViewModel
+case class ClassOfBeneficiaryViewModel(label: Option[String],
+                                       status: Status) extends ViewModel
 
 object ClassOfBeneficiaryViewModel {
 

@@ -16,12 +16,11 @@
 
 package mapping.registration
 
-import mapping.Mapping
-import mapping.reads.ClassOfBeneficiary
-import models.UserAnswers
+import mapping.reads.{ClassOfBeneficiaries, ClassOfBeneficiary}
+import models.UnidentifiedType
+import pages.QuestionPage
 
-
-class ClassOfBeneficiariesMapper extends Mapping[List[UnidentifiedType]]{
+class ClassOfBeneficiariesMapper extends Mapper[UnidentifiedType, ClassOfBeneficiary]{
 
   /**
     * Construct instances of UnidentifiedType, known as 'class of beneficiary'
@@ -29,24 +28,12 @@ class ClassOfBeneficiariesMapper extends Mapping[List[UnidentifiedType]]{
     * class being a 'future issue of...'
     */
 
-  override def build(userAnswers: UserAnswers): Option[List[UnidentifiedType]] = {
+  override def section: QuestionPage[List[ClassOfBeneficiary]] = ClassOfBeneficiaries
 
-    val beneficiaries : List[ClassOfBeneficiary] =
-      userAnswers.get(mapping.reads.ClassOfBeneficiaries).getOrElse(List.empty)
-
-    beneficiaries match {
-      case Nil => None
-      case list =>
-        Some(
-          list.map { b =>
-              UnidentifiedType(
-                description = b.description,
-                beneficiaryDiscretion = None,
-                beneficiaryShareOfIncome = None
-              )
-          }
-        )
-    }
-  }
+  override def beneficiaryType(beneficiary: ClassOfBeneficiary): UnidentifiedType = UnidentifiedType(
+    description = beneficiary.description,
+    beneficiaryDiscretion = None,
+    beneficiaryShareOfIncome = None
+  )
 
 }

@@ -19,8 +19,8 @@ package mapping.reads
 import play.api.libs.json.{Format, Json}
 
 
-final case class ClassOfBeneficiary(description: String)
+final case class ClassOfBeneficiary(description: String) extends Beneficiary
 
 object ClassOfBeneficiary {
-  implicit val classFormat : Format[ClassOfBeneficiary] = Json.format[ClassOfBeneficiary]
+  implicit val classFormat: Format[ClassOfBeneficiary] = Json.format[ClassOfBeneficiary]
 }

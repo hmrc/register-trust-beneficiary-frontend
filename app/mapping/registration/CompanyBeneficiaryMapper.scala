@@ -16,38 +16,20 @@
 
 package mapping.registration
 
-import javax.inject.Inject
-import mapping.Mapping
 import mapping.reads.{CompanyBeneficiaries, CompanyBeneficiary}
-import models.UserAnswers
+import models.CompanyType
+import pages.QuestionPage
 
-class CompanyBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapping[List[CompanyType]] {
-  override def build(userAnswers: UserAnswers): Option[List[CompanyType]] = {
+class CompanyBeneficiaryMapper extends Mapper[CompanyType, CompanyBeneficiary] {
 
-    val beneficiaries: List[CompanyBeneficiary] =
-      userAnswers.get(CompanyBeneficiaries).getOrElse(List.empty)
+  override def section: QuestionPage[List[CompanyBeneficiary]] = CompanyBeneficiaries
 
-    beneficiaries match {
-      case Nil => None
-      case list =>
-        Some(
-          list.map { beneficiary =>
-            CompanyType(
-              organisationName = beneficiary.name,
-              beneficiaryDiscretion = Some(beneficiary.incomeYesNo),
-              beneficiaryShareOfIncome = beneficiary.income map(_.toString),
-              identification = buildIdentification(beneficiary),
-              countryOfResidence = beneficiary.countryOfResidence)
-          }
-        )
-    }
-  }
+  override def beneficiaryType(beneficiary: CompanyBeneficiary): CompanyType = CompanyType(
+    organisationName = beneficiary.name,
+    beneficiaryDiscretion = Some(beneficiary.incomeYesNo),
+    beneficiaryShareOfIncome = beneficiary.income map(_.toString),
+    identification = beneficiary.identification,
+    countryOfResidence = beneficiary.countryOfResidence
+  )
 
-  private def buildIdentification(beneficiary: CompanyBeneficiary): Option[IdentificationOrgType] = {
-    (beneficiary.ukAddress, beneficiary.internationalAddress) match {
-      case (None, None) => None
-      case (Some(address), _) => Some(IdentificationOrgType(None, addressMapper.build(address)))
-      case (_, Some(address)) => Some(IdentificationOrgType(None, addressMapper.build(address)))
-    }
-  }
 }

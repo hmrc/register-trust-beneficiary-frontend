@@ -16,41 +16,20 @@
 
 package mapping.registration
 
-import javax.inject.Inject
-import mapping.Mapping
-import mapping.reads.TrustBeneficiary
-import models.UserAnswers
+import mapping.reads.{TrustBeneficiaries, TrustBeneficiary}
+import models.BeneficiaryTrustType
+import pages.QuestionPage
 
-class TrustBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapping[List[BeneficiaryTrustType]] {
+class TrustBeneficiaryMapper extends Mapper[BeneficiaryTrustType, TrustBeneficiary] {
 
-  override def build(userAnswers: UserAnswers): Option[List[BeneficiaryTrustType]] = {
+  override def section: QuestionPage[List[TrustBeneficiary]] = TrustBeneficiaries
 
-    val trustBeneficiaries : List[mapping.reads.TrustBeneficiary] =
-      userAnswers.get(mapping.reads.TrustBeneficiaries).getOrElse(List.empty)
-
-    trustBeneficiaries match {
-      case Nil => None
-      case list =>
-        Some(
-          list.map { trustBen =>
-            BeneficiaryTrustType(
-              organisationName = trustBen.name,
-              beneficiaryDiscretion = trustBen.discretionYesNo,
-              beneficiaryShareOfIncome = trustBen.shareOfIncome.map(_.toString),
-              identification = identificationMap(trustBen),
-              countryOfResidence = trustBen.countryOfResidence
-            )
-          }
-        )
-    }
-  }
-
-  private def identificationMap(beneficiary: TrustBeneficiary): Option[IdentificationOrgType] = {
-    (beneficiary.ukAddress, beneficiary.internationalAddress) match {
-      case (None, None) => None
-      case (Some(address), _) => Some(IdentificationOrgType(None, addressMapper.build(address)))
-      case (_, Some(address)) => Some(IdentificationOrgType(None, addressMapper.build(address)))
-    }
-  }
+  override def beneficiaryType(beneficiary: TrustBeneficiary): BeneficiaryTrustType = BeneficiaryTrustType(
+    organisationName = beneficiary.name,
+    beneficiaryDiscretion = beneficiary.discretionYesNo,
+    beneficiaryShareOfIncome = beneficiary.shareOfIncome.map(_.toString),
+    identification = beneficiary.identification,
+    countryOfResidence = beneficiary.countryOfResidence
+  )
 
 }

@@ -23,15 +23,15 @@ import play.api.libs.json.{Format, Json}
 final case class LargeBeneficiary(name: String,
                                   description: Description,
                                   numberOfBeneficiaries: HowManyBeneficiaries,
-                                  address : Option[UKAddress],
-                                  internationalAddress : Option[InternationalAddress],
+                                  address: Option[UKAddress],
+                                  internationalAddress: Option[InternationalAddress],
                                   discretionYesNo: Option[Boolean],
                                   shareOfIncome: Option[String],
-                                  countryOfResidence: Option[String]
-                                   ) {
+                                  countryOfResidence: Option[String]) extends OrgBeneficiaryWithAddress {
+
+  override def ukAddress: Option[UKAddress] = address
 }
 
 object LargeBeneficiary {
   implicit val classFormat: Format[LargeBeneficiary] = Json.format[LargeBeneficiary]
 }
-

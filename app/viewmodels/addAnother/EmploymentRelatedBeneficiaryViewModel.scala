@@ -19,16 +19,15 @@ package viewmodels.addAnother
 import models.Status
 import play.api.libs.json.{Reads, __}
 
-case class EmploymentRelatedBeneficiaryViewModel(label: Option[String], status: Status) extends ViewModel
+case class EmploymentRelatedBeneficiaryViewModel(label: Option[String],
+                                                 status: Status) extends ViewModel
 
 object EmploymentRelatedBeneficiaryViewModel {
 
   import play.api.libs.functional.syntax._
 
-  implicit val reads : Reads[EmploymentRelatedBeneficiaryViewModel] = (
+  implicit val reads: Reads[EmploymentRelatedBeneficiaryViewModel] = (
     (__ \ "name").readNullable[String] and
       (__ \ "status").readWithDefault[Status](Status.InProgress)
     )(EmploymentRelatedBeneficiaryViewModel.apply _)
 }
-
-
