@@ -18,7 +18,7 @@ package mapping.registration
 
 import mapping.Mapping
 import mapping.reads.ClassOfBeneficiary
-import models.UserAnswers
+import models.{UnidentifiedType, UserAnswers}
 
 
 class ClassOfBeneficiariesMapper extends Mapping[List[UnidentifiedType]]{

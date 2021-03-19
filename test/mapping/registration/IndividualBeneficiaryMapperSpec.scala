@@ -17,10 +17,10 @@
 package mapping.registration
 
 import java.time.LocalDate
-
 import base.SpecBase
 import generators.Generators
 import mapping._
+import models.{AddressType, IdentificationType, IndividualDetailsType, PassportType}
 import models.core.pages.{FullName, UKAddress}
 import models.registration.pages.PassportOrIdCardDetails
 import models.registration.pages.RoleInCompany.Director

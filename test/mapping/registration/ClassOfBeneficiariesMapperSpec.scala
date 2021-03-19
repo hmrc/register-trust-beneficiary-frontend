@@ -19,6 +19,7 @@ package mapping.registration
 import base.SpecBase
 import generators.Generators
 import mapping.Mapping
+import models.UnidentifiedType
 import models.registration.pages.WhatTypeOfBeneficiary
 import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.beneficiaries.WhatTypeOfBeneficiaryPage

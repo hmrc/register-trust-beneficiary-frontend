@@ -18,7 +18,7 @@ package mapping.registration
 
 import javax.inject.Inject
 import mapping.Mapping
-import models.UserAnswers
+import models.{BeneficiaryType, UserAnswers}
 import play.api.Logging
 
 class BeneficiariesMapper @Inject()(
@@ -44,7 +44,7 @@ class BeneficiariesMapper @Inject()(
 
     if (all.nonEmpty) {
       Some(
-        BeneficiaryType(
+        models.BeneficiaryType(
           individualDetails = individuals,
           company = company,
           trust = trust,

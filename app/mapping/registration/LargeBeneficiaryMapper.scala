@@ -19,7 +19,7 @@ package mapping.registration
 import javax.inject.Inject
 import mapping.Mapping
 import mapping.reads.{LargeBeneficiaries, LargeBeneficiary}
-import models.UserAnswers
+import models.{IdentificationOrgType, LargeType, UserAnswers}
 import models.registration.pages.HowManyBeneficiaries
 
 class LargeBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapping[List[LargeType]] {

@@ -19,6 +19,7 @@ package mapping.registration
 import base.SpecBase
 import generators.Generators
 import mapping.Mapping
+import models.{AddressType, CharityType, IdentificationOrgType}
 import models.core.pages.{InternationalAddress, UKAddress}
 import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.beneficiaries.charityortrust.charity._

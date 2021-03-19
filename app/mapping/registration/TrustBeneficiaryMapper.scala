@@ -19,7 +19,7 @@ package mapping.registration
 import javax.inject.Inject
 import mapping.Mapping
 import mapping.reads.TrustBeneficiary
-import models.UserAnswers
+import models.{BeneficiaryTrustType, IdentificationOrgType, UserAnswers}
 
 class TrustBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapping[List[BeneficiaryTrustType]] {
 
@@ -33,7 +33,7 @@ class TrustBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Map
       case list =>
         Some(
           list.map { trustBen =>
-            BeneficiaryTrustType(
+            models.BeneficiaryTrustType(
               organisationName = trustBen.name,
               beneficiaryDiscretion = trustBen.discretionYesNo,
               beneficiaryShareOfIncome = trustBen.shareOfIncome.map(_.toString),

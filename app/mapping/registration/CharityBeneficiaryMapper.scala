@@ -19,7 +19,7 @@ package mapping.registration
 import javax.inject.Inject
 import mapping.Mapping
 import mapping.reads.CharityBeneficiary
-import models.UserAnswers
+import models.{CharityType, IdentificationOrgType, UserAnswers}
 
 class CharityBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapping[List[CharityType]] {
 

@@ -19,7 +19,7 @@ package mapping.registration
 import javax.inject.Inject
 import mapping.Mapping
 import mapping.reads.{CompanyBeneficiaries, CompanyBeneficiary}
-import models.UserAnswers
+import models.{CompanyType, IdentificationOrgType, UserAnswers}
 
 class CompanyBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapping[List[CompanyType]] {
   override def build(userAnswers: UserAnswers): Option[List[CompanyType]] = {

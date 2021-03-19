@@ -17,10 +17,10 @@
 package mapping.registration
 
 import java.time.LocalDate
-
 import base.SpecBase
 import generators.Generators
 import mapping.Mapping
+import models.BeneficiaryType
 import models.core.pages.{Description, FullName}
 import models.registration.pages.HowManyBeneficiaries
 import org.scalatest.{MustMatchers, OptionValues}

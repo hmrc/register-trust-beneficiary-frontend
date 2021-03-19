@@ -19,7 +19,7 @@ package mapping.registration
 import javax.inject.Inject
 import mapping.Mapping
 import mapping.reads.{OtherBeneficiaries, OtherBeneficiary}
-import models.UserAnswers
+import models.{AddressType, OtherType, UserAnswers}
 
 class OtherBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapping[List[OtherType]] {
   override def build(userAnswers: UserAnswers): Option[List[OtherType]] = {
@@ -32,7 +32,7 @@ class OtherBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Map
       case list =>
         Some(
           list.map { beneficiary =>
-            OtherType(
+            models.OtherType(
               description = beneficiary.description,
               beneficiaryDiscretion = Some(beneficiary.incomeDiscretionYesNo),
               beneficiaryShareOfIncome = beneficiary.shareOfIncome map(_.toString),

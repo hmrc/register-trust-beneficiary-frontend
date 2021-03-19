@@ -19,7 +19,7 @@ package mapping.registration
 import javax.inject.Inject
 import mapping.Mapping
 import mapping.reads.IndividualBeneficiary
-import models.UserAnswers
+import models.{IdentificationType, IndividualDetailsType, PassportType, UserAnswers}
 import models.registration.pages.PassportOrIdCardDetails
 
 class IndividualBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapping[List[IndividualDetailsType]] {
@@ -33,7 +33,7 @@ class IndividualBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extend
       case list =>
         Some(
           list.map { indBen =>
-            IndividualDetailsType(
+            models.IndividualDetailsType(
               name = indBen.name,
               dateOfBirth = indBen.dateOfBirth,
               vulnerableBeneficiary = indBen.vulnerableYesNo,

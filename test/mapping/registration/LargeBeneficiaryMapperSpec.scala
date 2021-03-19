@@ -18,6 +18,7 @@ package mapping.registration
 
 import base.SpecBase
 import generators.Generators
+import models.{AddressType, IdentificationOrgType, LargeType}
 import models.core.pages.{Description, InternationalAddress, UKAddress}
 import models.registration.pages.HowManyBeneficiaries
 import org.scalatest.{MustMatchers, OptionValues}
