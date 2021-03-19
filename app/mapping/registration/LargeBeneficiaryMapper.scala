@@ -16,40 +16,30 @@
 
 package mapping.registration
 
-import javax.inject.Inject
-import mapping.Mapping
 import mapping.reads.{LargeBeneficiaries, LargeBeneficiary}
-import models.{IdentificationOrgType, LargeType, UserAnswers}
 import models.registration.pages.HowManyBeneficiaries
+import models.{IdentificationOrgType, LargeType}
+import pages.QuestionPage
 
-class LargeBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapping[List[LargeType]] {
-  override def build(userAnswers: UserAnswers): Option[List[LargeType]] = {
+import javax.inject.Inject
 
-    val beneficiaries: List[LargeBeneficiary] =
-      userAnswers.get(LargeBeneficiaries).getOrElse(List.empty)
+class LargeBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapper[LargeType, LargeBeneficiary] {
 
-    beneficiaries match {
-      case Nil => None
-      case list =>
-        Some(
-          list.map { beneficiary =>
-            LargeType(
-              organisationName = beneficiary.name,
-              description = beneficiary.description.description,
-              description1 = beneficiary.description.description1,
-              description2 = beneficiary.description.description2,
-              description3 = beneficiary.description.description3,
-              description4 = beneficiary.description.description4,
-              numberOfBeneficiary = convertNumberOfBeneficiaries(beneficiary.numberOfBeneficiaries),
-              identification = buildIdentification(beneficiary),
-              beneficiaryDiscretion = beneficiary.discretionYesNo,
-              beneficiaryShareOfIncome = beneficiary.shareOfIncome,
-              countryOfResidence = beneficiary.countryOfResidence
-            )
-          }
-        )
-    }
-  }
+  override def section: QuestionPage[List[LargeBeneficiary]] = LargeBeneficiaries
+
+  override def beneficiaryType(beneficiary: LargeBeneficiary): LargeType = LargeType(
+    organisationName = beneficiary.name,
+    description = beneficiary.description.description,
+    description1 = beneficiary.description.description1,
+    description2 = beneficiary.description.description2,
+    description3 = beneficiary.description.description3,
+    description4 = beneficiary.description.description4,
+    numberOfBeneficiary = convertNumberOfBeneficiaries(beneficiary.numberOfBeneficiaries),
+    identification = buildIdentification(beneficiary),
+    beneficiaryDiscretion = beneficiary.discretionYesNo,
+    beneficiaryShareOfIncome = beneficiary.shareOfIncome,
+    countryOfResidence = beneficiary.countryOfResidence
+  )
 
   private def buildIdentification(beneficiary: LargeBeneficiary): Option[IdentificationOrgType] = {
     (beneficiary.address, beneficiary.internationalAddress) match {

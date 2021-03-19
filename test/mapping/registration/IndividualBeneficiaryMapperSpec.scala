@@ -16,23 +16,23 @@
 
 package mapping.registration
 
-import java.time.LocalDate
 import base.SpecBase
 import generators.Generators
-import mapping._
-import models.{AddressType, IdentificationType, IndividualDetailsType, PassportType}
 import models.core.pages.{FullName, UKAddress}
 import models.registration.pages.PassportOrIdCardDetails
 import models.registration.pages.RoleInCompany.Director
+import models.{AddressType, IdentificationType, IndividualDetailsType, PassportType}
 import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.beneficiaries.individual._
-import pages.register.beneficiaries.individual.mld5.{CountryOfNationalityInTheUkYesNoPage, CountryOfNationalityPage, CountryOfNationalityYesNoPage, CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage, MentalCapacityYesNoPage}
+import pages.register.beneficiaries.individual.mld5._
 import utils.Constants._
+
+import java.time.LocalDate
 
 class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {
 
-  private val individualBeneficiariesMapper: Mapping[List[IndividualDetailsType]] = injector.instanceOf[IndividualBeneficiaryMapper]
+  private val individualBeneficiariesMapper: IndividualBeneficiaryMapper = injector.instanceOf[IndividualBeneficiaryMapper]
   private val index0 = 0
   private val index1 = 1
   private val dateOfBirth = LocalDate.of(2010, 10, 10)
@@ -386,43 +386,6 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
           )
 
         }
-
-        "with No Income or Vulnerable data must not create data" in {
-          val userAnswers = baseAnswers
-            .set(NamePage(index0), FullName("first name", None, "last name")).success.value
-            .set(DateOfBirthYesNoPage(index0), true).success.value
-            .set(DateOfBirthPage(index0), dateOfBirth).success.value
-            .set(CountryOfNationalityYesNoPage(index0), true).success.value
-            .set(CountryOfNationalityInTheUkYesNoPage(index0), true).success.value
-            .set(CountryOfResidenceYesNoPage(index0), true).success.value
-            .set(CountryOfResidenceInTheUkYesNoPage(index0), true).success.value
-            .set(MentalCapacityYesNoPage(index0), true).success.value
-
-          individualBeneficiariesMapper.build(userAnswers) mustNot be(defined)
-
-        }
-
-        "without Mental Capacity answered must not create data" in {
-
-          val userAnswers = baseAnswers
-            .set(NamePage(index0), FullName("first name", None, "last name")).success.value
-            .set(DateOfBirthYesNoPage(index0), true).success.value
-            .set(DateOfBirthPage(index0), dateOfBirth).success.value
-            .set(IncomeYesNoPage(index0), false).success.value
-            .set(IncomePage(index0), 100).success.value
-            .set(NationalInsuranceYesNoPage(index0), true).success.value
-            .set(NationalInsuranceNumberPage(index0), "AB123456C").success.value
-            .set(VulnerableYesNoPage(index0), true).success.value
-            .set(CountryOfNationalityYesNoPage(index0), true).success.value
-            .set(CountryOfNationalityInTheUkYesNoPage(index0), false).success.value
-            .set(CountryOfNationalityPage(index0), ES).success.value
-            .set(CountryOfResidenceYesNoPage(index0), true).success.value
-            .set(CountryOfResidenceInTheUkYesNoPage(index0), false).success.value
-            .set(CountryOfResidencePage(index0), ES).success.value
-
-          individualBeneficiariesMapper.build(userAnswers) mustNot be(defined)
-
-        }
       }
 
       "In 5mld none taxable mode" when {
@@ -456,31 +419,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
           )
 
         }
-
-        "without Mental Capacity answered must not create data" in {
-
-          val userAnswers = baseAnswers
-            .set(NamePage(index0), FullName("first name", None, "last name")).success.value
-            .set(DateOfBirthYesNoPage(index0), true).success.value
-            .set(DateOfBirthPage(index0), dateOfBirth).success.value
-            .set(IncomeYesNoPage(index0), false).success.value
-            .set(IncomePage(index0), 100).success.value
-            .set(NationalInsuranceYesNoPage(index0), true).success.value
-            .set(NationalInsuranceNumberPage(index0), "AB123456C").success.value
-            .set(VulnerableYesNoPage(index0), true).success.value
-            .set(CountryOfNationalityYesNoPage(index0), true).success.value
-            .set(CountryOfNationalityInTheUkYesNoPage(index0), false).success.value
-            .set(CountryOfNationalityPage(index0), ES).success.value
-            .set(CountryOfResidenceYesNoPage(index0), true).success.value
-            .set(CountryOfResidenceInTheUkYesNoPage(index0), false).success.value
-            .set(CountryOfResidencePage(index0), ES).success.value
-
-          individualBeneficiariesMapper.build(userAnswers) mustNot be(defined)
-
-        }
       }
-
-
     }
   }
 }

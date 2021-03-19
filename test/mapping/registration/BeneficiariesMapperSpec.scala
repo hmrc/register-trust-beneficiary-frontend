@@ -16,23 +16,21 @@
 
 package mapping.registration
 
-import java.time.LocalDate
 import base.SpecBase
 import generators.Generators
-import mapping.Mapping
-import models.BeneficiaryType
 import models.core.pages.{Description, FullName}
 import models.registration.pages.HowManyBeneficiaries
 import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.beneficiaries.charityortrust.{charity, trust}
-import pages.register.beneficiaries.companyoremploymentrelated.company
-import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.{LargeBeneficiaryAddressYesNoPage, LargeBeneficiaryDescriptionPage, LargeBeneficiaryNamePage, LargeBeneficiaryNumberOfBeneficiariesPage}
+import pages.register.beneficiaries.companyoremploymentrelated.{company, employmentRelated}
 import pages.register.beneficiaries.{classofbeneficiaries, individual, other}
+
+import java.time.LocalDate
 
 class BeneficiariesMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {
 
-  val beneficiariesMapper : Mapping[BeneficiaryType] = injector.instanceOf[BeneficiariesMapper]
+  val beneficiariesMapper: BeneficiariesMapper = injector.instanceOf[BeneficiariesMapper]
 
   "BeneficiariesMapper" when {
 
@@ -164,10 +162,10 @@ class BeneficiariesMapperSpec extends SpecBase with MustMatchers
         val index = 0
 
         val userAnswers = emptyUserAnswers
-          .set(LargeBeneficiaryNamePage(index), "Employment Related Name").success.value
-          .set(LargeBeneficiaryAddressYesNoPage(index), false).success.value
-          .set(LargeBeneficiaryDescriptionPage(index), Description("Description", None, None, None, None)).success.value
-          .set(LargeBeneficiaryNumberOfBeneficiariesPage(index), HowManyBeneficiaries.Over1).success.value
+          .set(employmentRelated.LargeBeneficiaryNamePage(index), "Employment Related Name").success.value
+          .set(employmentRelated.LargeBeneficiaryAddressYesNoPage(index), false).success.value
+          .set(employmentRelated.LargeBeneficiaryDescriptionPage(index), Description("Description", None, None, None, None)).success.value
+          .set(employmentRelated.LargeBeneficiaryNumberOfBeneficiariesPage(index), HowManyBeneficiaries.Over1).success.value
 
         val result = beneficiariesMapper.build(userAnswers).value
 

@@ -16,34 +16,23 @@
 
 package mapping.registration
 
+import mapping.reads.{TrustBeneficiaries, TrustBeneficiary}
+import models.{BeneficiaryTrustType, IdentificationOrgType}
+import pages.QuestionPage
+
 import javax.inject.Inject
-import mapping.Mapping
-import mapping.reads.TrustBeneficiary
-import models.{BeneficiaryTrustType, IdentificationOrgType, UserAnswers}
 
-class TrustBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapping[List[BeneficiaryTrustType]] {
+class TrustBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapper[BeneficiaryTrustType, TrustBeneficiary] {
 
-  override def build(userAnswers: UserAnswers): Option[List[BeneficiaryTrustType]] = {
+  override def section: QuestionPage[List[TrustBeneficiary]] = TrustBeneficiaries
 
-    val trustBeneficiaries : List[mapping.reads.TrustBeneficiary] =
-      userAnswers.get(mapping.reads.TrustBeneficiaries).getOrElse(List.empty)
-
-    trustBeneficiaries match {
-      case Nil => None
-      case list =>
-        Some(
-          list.map { trustBen =>
-            models.BeneficiaryTrustType(
-              organisationName = trustBen.name,
-              beneficiaryDiscretion = trustBen.discretionYesNo,
-              beneficiaryShareOfIncome = trustBen.shareOfIncome.map(_.toString),
-              identification = identificationMap(trustBen),
-              countryOfResidence = trustBen.countryOfResidence
-            )
-          }
-        )
-    }
-  }
+  override def beneficiaryType(beneficiary: TrustBeneficiary): BeneficiaryTrustType = BeneficiaryTrustType(
+    organisationName = beneficiary.name,
+    beneficiaryDiscretion = beneficiary.discretionYesNo,
+    beneficiaryShareOfIncome = beneficiary.shareOfIncome.map(_.toString),
+    identification = identificationMap(beneficiary),
+    countryOfResidence = beneficiary.countryOfResidence
+  )
 
   private def identificationMap(beneficiary: TrustBeneficiary): Option[IdentificationOrgType] = {
     (beneficiary.ukAddress, beneficiary.internationalAddress) match {

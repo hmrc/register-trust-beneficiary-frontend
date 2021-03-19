@@ -18,7 +18,6 @@ package mapping.registration
 
 import base.SpecBase
 import generators.Generators
-import mapping.Mapping
 import models.{AddressType, OtherType}
 import models.core.pages.{InternationalAddress, UKAddress}
 import org.scalatest.{MustMatchers, OptionValues}
@@ -29,7 +28,7 @@ import utils.Constants.GB
 class OtherBeneficiaryMapperSpec extends SpecBase with MustMatchers
   with OptionValues with Generators {
 
-  private val otherBeneficiaryMapper: Mapping[List[OtherType]] = injector.instanceOf[OtherBeneficiaryMapper]
+  private val otherBeneficiaryMapper: OtherBeneficiaryMapper = injector.instanceOf[OtherBeneficiaryMapper]
 
   private val description: String = "Other Description"
   private val ukAddress: UKAddress = UKAddress("Line 1", "Line 2", None, None, "POSTCODE")

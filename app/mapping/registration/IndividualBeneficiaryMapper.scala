@@ -16,54 +16,29 @@
 
 package mapping.registration
 
-import javax.inject.Inject
-import mapping.Mapping
-import mapping.reads.IndividualBeneficiary
-import models.{IdentificationType, IndividualDetailsType, PassportType, UserAnswers}
+import mapping.reads.{IndividualBeneficiaries, IndividualBeneficiary}
 import models.registration.pages.PassportOrIdCardDetails
+import models.{IdentificationType, IndividualDetailsType, PassportType}
+import pages.QuestionPage
 
-class IndividualBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapping[List[IndividualDetailsType]] {
-  override def build(userAnswers: UserAnswers): Option[List[IndividualDetailsType]] = {
+import javax.inject.Inject
 
-    val individualBeneficiaries : List[mapping.reads.IndividualBeneficiary] =
-      userAnswers.get(mapping.reads.IndividualBeneficiaries).getOrElse(List.empty)
+class IndividualBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapper[IndividualDetailsType, IndividualBeneficiary] {
 
-    removeIncompleteBeneficiaries(individualBeneficiaries, userAnswers) match {
-      case Nil => None
-      case list =>
-        Some(
-          list.map { indBen =>
-            models.IndividualDetailsType(
-              name = indBen.name,
-              dateOfBirth = indBen.dateOfBirth,
-              vulnerableBeneficiary = indBen.vulnerableYesNo,
-              beneficiaryType = indBen.roleInCompany.map(_.toString),
-              beneficiaryDiscretion = indBen.incomeYesNo,
-              beneficiaryShareOfIncome = indBen.income.map(_.toString),
-              identification = identificationMap(indBen),
-              countryOfResidence = indBen.countryOfResidence,
-              nationality = indBen.countryOfNationality,
-              legallyIncapable = indBen.mentalCapacityYesNo.map(!_)
-            )
-          }
-        )
-    }
-  }
+  override def section: QuestionPage[List[IndividualBeneficiary]] = IndividualBeneficiaries
 
-  def removeIncompleteBeneficiaries(beneficiaries: List[IndividualBeneficiary], userAnswers: UserAnswers): List[IndividualBeneficiary] = {
-    beneficiaries.filter(indDetailsType =>
-      (userAnswers.is5mldEnabled, userAnswers.isTaxable) match {
-        case (true, true) =>
-            indDetailsType.incomeYesNo.isDefined &&
-            indDetailsType.vulnerableYesNo.isDefined &&
-            indDetailsType.mentalCapacityYesNo.isDefined
-        case (true, false) =>
-            indDetailsType.mentalCapacityYesNo.isDefined
-        case (false, _) => true
-      }
-    )
-  }
-
+  override def beneficiaryType(beneficiary: IndividualBeneficiary): IndividualDetailsType = IndividualDetailsType(
+    name = beneficiary.name,
+    dateOfBirth = beneficiary.dateOfBirth,
+    vulnerableBeneficiary = beneficiary.vulnerableYesNo,
+    beneficiaryType = beneficiary.roleInCompany.map(_.toString),
+    beneficiaryDiscretion = beneficiary.incomeYesNo,
+    beneficiaryShareOfIncome = beneficiary.income.map(_.toString),
+    identification = identificationMap(beneficiary),
+    countryOfResidence = beneficiary.countryOfResidence,
+    nationality = beneficiary.countryOfNationality,
+    legallyIncapable = beneficiary.mentalCapacityYesNo.map(!_)
+  )
 
   private def identificationMap(indBen: IndividualBeneficiary): Option[IdentificationType] = {
     val nino = indBen.nationalInsuranceNumber
@@ -74,26 +49,28 @@ class IndividualBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extend
     }
     val passport = indBen.passportDetails
     val idCard = indBen.idCardDetails
-     (nino, address, passport, idCard) match {
-       case (None, None, None, None) => None
-       case (Some(_), _, _, _) => Some(IdentificationType(nino, None, None))
-       case (_, _, _, _) =>
-         Some(IdentificationType(
-           nino = None,
-           passport = buildPassportOrIdCard(indBen.passportDetails, indBen.idCardDetails),
-           address = address
-         )
-       )
-     }
+    (nino, address, passport, idCard) match {
+      case (None, None, None, None) =>
+        None
+      case (Some(_), _, _, _) =>
+        Some(IdentificationType(nino, None, None))
+      case (_, _, _, _) =>
+        Some(IdentificationType(
+          nino = None,
+          passport = buildPassportOrIdCard(indBen.passportDetails, indBen.idCardDetails),
+          address = address
+        ))
+    }
   }
 
-  private def buildPassportOrIdCard(passport: Option[PassportOrIdCardDetails], idCardDetails: Option[PassportOrIdCardDetails]) =
+  private def buildPassportOrIdCard(passport: Option[PassportOrIdCardDetails], idCardDetails: Option[PassportOrIdCardDetails]): Option[PassportType] =
     (passport, idCardDetails) match {
       case (Some(passport), _) => buildPassport(passport)
       case (_, Some(idCard)) => buildPassport(idCard)
       case (None, None) => None
     }
 
-  private def buildPassport(details: PassportOrIdCardDetails) =
-      Some(PassportType(details.cardNumber, details.expiryDate, details.country))
+  private def buildPassport(details: PassportOrIdCardDetails): Option[PassportType] =
+    Some(PassportType(details.cardNumber, details.expiryDate, details.country))
+
 }

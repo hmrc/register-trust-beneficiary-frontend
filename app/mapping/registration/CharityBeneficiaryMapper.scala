@@ -16,33 +16,23 @@
 
 package mapping.registration
 
+import mapping.reads.{CharityBeneficiaries, CharityBeneficiary}
+import models.{CharityType, IdentificationOrgType}
+import pages.QuestionPage
+
 import javax.inject.Inject
-import mapping.Mapping
-import mapping.reads.CharityBeneficiary
-import models.{CharityType, IdentificationOrgType, UserAnswers}
 
-class CharityBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapping[List[CharityType]] {
+class CharityBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapper[CharityType, CharityBeneficiary] {
 
-  override def build(userAnswers: UserAnswers): Option[List[CharityType]] = {
+  override def section: QuestionPage[List[CharityBeneficiary]] = CharityBeneficiaries
 
-    val charityBeneficiaries : List[CharityBeneficiary] =
-      userAnswers.get(mapping.reads.CharityBeneficiaries).getOrElse(List.empty)
-
-    charityBeneficiaries match {
-      case Nil => None
-      case list =>
-        Some(
-          list.map { charBen =>
-            CharityType(
-              organisationName = charBen.name,
-              beneficiaryDiscretion = Some(charBen.howMuchIncome.isEmpty),
-              beneficiaryShareOfIncome = charBen.howMuchIncome.map(_.toString),
-              identification = identificationMap(charBen),
-              countryOfResidence = charBen.countryOfResidence)
-          }
-        )
-    }
-  }
+  override def beneficiaryType(beneficiary: CharityBeneficiary): CharityType = CharityType(
+    organisationName = beneficiary.name,
+    beneficiaryDiscretion = Some(beneficiary.howMuchIncome.isEmpty),
+    beneficiaryShareOfIncome = beneficiary.howMuchIncome.map(_.toString),
+    identification = identificationMap(beneficiary),
+    countryOfResidence = beneficiary.countryOfResidence
+  )
 
   private def identificationMap(beneficiary: CharityBeneficiary): Option[IdentificationOrgType] = {
     (beneficiary.ukAddress, beneficiary.internationalAddress) match {
@@ -51,4 +41,5 @@ class CharityBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends M
       case (_, Some(address)) => Some(IdentificationOrgType(None, addressMapper.build(address)))
     }
   }
+
 }

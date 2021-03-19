@@ -16,32 +16,23 @@
 
 package mapping.registration
 
-import javax.inject.Inject
-import mapping.Mapping
 import mapping.reads.{CompanyBeneficiaries, CompanyBeneficiary}
-import models.{CompanyType, IdentificationOrgType, UserAnswers}
+import models.{CompanyType, IdentificationOrgType}
+import pages.QuestionPage
 
-class CompanyBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapping[List[CompanyType]] {
-  override def build(userAnswers: UserAnswers): Option[List[CompanyType]] = {
+import javax.inject.Inject
 
-    val beneficiaries: List[CompanyBeneficiary] =
-      userAnswers.get(CompanyBeneficiaries).getOrElse(List.empty)
+class CompanyBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapper[CompanyType, CompanyBeneficiary] {
 
-    beneficiaries match {
-      case Nil => None
-      case list =>
-        Some(
-          list.map { beneficiary =>
-            CompanyType(
-              organisationName = beneficiary.name,
-              beneficiaryDiscretion = Some(beneficiary.incomeYesNo),
-              beneficiaryShareOfIncome = beneficiary.income map(_.toString),
-              identification = buildIdentification(beneficiary),
-              countryOfResidence = beneficiary.countryOfResidence)
-          }
-        )
-    }
-  }
+  override def section: QuestionPage[List[CompanyBeneficiary]] = CompanyBeneficiaries
+
+  override def beneficiaryType(beneficiary: CompanyBeneficiary): CompanyType = CompanyType(
+    organisationName = beneficiary.name,
+    beneficiaryDiscretion = Some(beneficiary.incomeYesNo),
+    beneficiaryShareOfIncome = beneficiary.income map(_.toString),
+    identification = buildIdentification(beneficiary),
+    countryOfResidence = beneficiary.countryOfResidence
+  )
 
   private def buildIdentification(beneficiary: CompanyBeneficiary): Option[IdentificationOrgType] = {
     (beneficiary.ukAddress, beneficiary.internationalAddress) match {
@@ -50,4 +41,5 @@ class CompanyBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends M
       case (_, Some(address)) => Some(IdentificationOrgType(None, addressMapper.build(address)))
     }
   }
+
 }

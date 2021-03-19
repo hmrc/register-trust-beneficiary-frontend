@@ -16,33 +16,23 @@
 
 package mapping.registration
 
-import javax.inject.Inject
-import mapping.Mapping
 import mapping.reads.{OtherBeneficiaries, OtherBeneficiary}
-import models.{AddressType, OtherType, UserAnswers}
+import models.{AddressType, OtherType}
+import pages.QuestionPage
 
-class OtherBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapping[List[OtherType]] {
-  override def build(userAnswers: UserAnswers): Option[List[OtherType]] = {
+import javax.inject.Inject
 
-    val beneficiaries: List[OtherBeneficiary] =
-      userAnswers.get(OtherBeneficiaries).getOrElse(List.empty)
+class OtherBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Mapper[OtherType, OtherBeneficiary] {
 
-    beneficiaries match {
-      case Nil => None
-      case list =>
-        Some(
-          list.map { beneficiary =>
-            models.OtherType(
-              description = beneficiary.description,
-              beneficiaryDiscretion = Some(beneficiary.incomeDiscretionYesNo),
-              beneficiaryShareOfIncome = beneficiary.shareOfIncome map(_.toString),
-              address = buildAddress(beneficiary),
-              countryOfResidence = beneficiary.countryOfResidence
-            )
-          }
-        )
-    }
-  }
+  override def section: QuestionPage[List[OtherBeneficiary]] = OtherBeneficiaries
+
+  override def beneficiaryType(beneficiary: OtherBeneficiary): OtherType = OtherType(
+    description = beneficiary.description,
+    beneficiaryDiscretion = Some(beneficiary.incomeDiscretionYesNo),
+    beneficiaryShareOfIncome = beneficiary.shareOfIncome map(_.toString),
+    address = buildAddress(beneficiary),
+    countryOfResidence = beneficiary.countryOfResidence
+  )
 
   private def buildAddress(beneficiary: OtherBeneficiary): Option[AddressType] = {
     (beneficiary.ukAddress, beneficiary.internationalAddress) match {
@@ -51,4 +41,5 @@ class OtherBeneficiaryMapper @Inject()(addressMapper: AddressMapper) extends Map
       case (_, Some(address)) => addressMapper.build(address)
     }
   }
+
 }
