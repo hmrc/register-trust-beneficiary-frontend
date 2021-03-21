@@ -16,19 +16,14 @@
 
 package mapping.registration
 
-import mapping.reads.{ClassOfBeneficiaries, ClassOfBeneficiary}
+import mapping.reads.ClassOfBeneficiary
 import models.UnidentifiedType
-import pages.QuestionPage
+import play.api.libs.json.JsPath
+import sections.beneficiaries.ClassOfBeneficiaries
 
 class ClassOfBeneficiariesMapper extends Mapper[UnidentifiedType, ClassOfBeneficiary]{
 
-  /**
-    * Construct instances of UnidentifiedType, known as 'class of beneficiary'
-    * We never provide the values for 'beneficiaryDiscretion' and 'beneficiaryShareOfIncome' due to a
-    * class being a 'future issue of...'
-    */
-
-  override def section: QuestionPage[List[ClassOfBeneficiary]] = ClassOfBeneficiaries
+  override def jsPath: JsPath = ClassOfBeneficiaries.path
 
   override def beneficiaryType(beneficiary: ClassOfBeneficiary): UnidentifiedType = UnidentifiedType(
     description = beneficiary.description,

@@ -16,13 +16,14 @@
 
 package mapping.registration
 
-import mapping.reads.{TrustBeneficiaries, TrustBeneficiary}
+import mapping.reads.TrustBeneficiary
 import models.BeneficiaryTrustType
-import pages.QuestionPage
+import play.api.libs.json.JsPath
+import sections.beneficiaries.TrustBeneficiaries
 
 class TrustBeneficiaryMapper extends Mapper[BeneficiaryTrustType, TrustBeneficiary] {
 
-  override def section: QuestionPage[List[TrustBeneficiary]] = TrustBeneficiaries
+  override def jsPath: JsPath = TrustBeneficiaries.path
 
   override def beneficiaryType(beneficiary: TrustBeneficiary): BeneficiaryTrustType = BeneficiaryTrustType(
     organisationName = beneficiary.name,

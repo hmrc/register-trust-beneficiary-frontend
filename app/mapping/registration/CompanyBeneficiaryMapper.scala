@@ -16,13 +16,14 @@
 
 package mapping.registration
 
-import mapping.reads.{CompanyBeneficiaries, CompanyBeneficiary}
+import mapping.reads.CompanyBeneficiary
 import models.CompanyType
-import pages.QuestionPage
+import play.api.libs.json.JsPath
+import sections.beneficiaries.CompanyBeneficiaries
 
 class CompanyBeneficiaryMapper extends Mapper[CompanyType, CompanyBeneficiary] {
 
-  override def section: QuestionPage[List[CompanyBeneficiary]] = CompanyBeneficiaries
+  override def jsPath: JsPath = CompanyBeneficiaries.path
 
   override def beneficiaryType(beneficiary: CompanyBeneficiary): CompanyType = CompanyType(
     organisationName = beneficiary.name,

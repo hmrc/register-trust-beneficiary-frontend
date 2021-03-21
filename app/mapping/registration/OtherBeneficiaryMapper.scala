@@ -16,13 +16,14 @@
 
 package mapping.registration
 
-import mapping.reads.{OtherBeneficiaries, OtherBeneficiary}
+import mapping.reads.OtherBeneficiary
 import models.OtherType
-import pages.QuestionPage
+import play.api.libs.json.JsPath
+import sections.beneficiaries.OtherBeneficiaries
 
 class OtherBeneficiaryMapper extends Mapper[OtherType, OtherBeneficiary] {
 
-  override def section: QuestionPage[List[OtherBeneficiary]] = OtherBeneficiaries
+  override def jsPath: JsPath = OtherBeneficiaries.path
 
   override def beneficiaryType(beneficiary: OtherBeneficiary): OtherType = OtherType(
     description = beneficiary.description,

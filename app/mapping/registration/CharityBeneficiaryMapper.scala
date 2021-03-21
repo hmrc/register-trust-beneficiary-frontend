@@ -16,13 +16,14 @@
 
 package mapping.registration
 
-import mapping.reads.{CharityBeneficiaries, CharityBeneficiary}
+import mapping.reads.CharityBeneficiary
 import models.CharityType
-import pages.QuestionPage
+import play.api.libs.json.JsPath
+import sections.beneficiaries.CharityBeneficiaries
 
 class CharityBeneficiaryMapper extends Mapper[CharityType, CharityBeneficiary] {
 
-  override def section: QuestionPage[List[CharityBeneficiary]] = CharityBeneficiaries
+  override def jsPath: JsPath = CharityBeneficiaries.path
 
   override def beneficiaryType(beneficiary: CharityBeneficiary): CharityType = CharityType(
     organisationName = beneficiary.name,

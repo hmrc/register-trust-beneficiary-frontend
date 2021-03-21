@@ -16,13 +16,14 @@
 
 package mapping.registration
 
-import mapping.reads.{IndividualBeneficiaries, IndividualBeneficiary}
+import mapping.reads.IndividualBeneficiary
 import models.IndividualDetailsType
-import pages.QuestionPage
+import play.api.libs.json.JsPath
+import sections.beneficiaries.IndividualBeneficiaries
 
 class IndividualBeneficiaryMapper extends Mapper[IndividualDetailsType, IndividualBeneficiary] {
 
-  override def section: QuestionPage[List[IndividualBeneficiary]] = IndividualBeneficiaries
+  override def jsPath: JsPath = IndividualBeneficiaries.path
 
   override def beneficiaryType(beneficiary: IndividualBeneficiary): IndividualDetailsType = IndividualDetailsType(
     name = beneficiary.name,

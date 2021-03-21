@@ -16,14 +16,15 @@
 
 package mapping.registration
 
-import mapping.reads.{LargeBeneficiaries, LargeBeneficiary}
+import mapping.reads.LargeBeneficiary
 import models.LargeType
 import models.registration.pages.HowManyBeneficiaries
-import pages.QuestionPage
+import play.api.libs.json.JsPath
+import sections.beneficiaries.LargeBeneficiaries
 
 class LargeBeneficiaryMapper extends Mapper[LargeType, LargeBeneficiary] {
 
-  override def section: QuestionPage[List[LargeBeneficiary]] = LargeBeneficiaries
+  override def jsPath: JsPath = LargeBeneficiaries.path
 
   override def beneficiaryType(beneficiary: LargeBeneficiary): LargeType = LargeType(
     organisationName = beneficiary.name,
