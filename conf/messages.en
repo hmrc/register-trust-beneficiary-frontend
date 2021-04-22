@@ -364,24 +364,45 @@ beneficiaryInfo.5mld.title = Information you need to register a beneficiary
 beneficiaryInfo.5mld.heading = Information you need to register a beneficiary
 beneficiaryInfo.5mld.caption = Beneficiaries
 beneficiaryInfo.5mld.caption.hidden = This section is
-beneficiaryInfo.5mld.subheading1 = Beneficiaries that are an Individual
+beneficiaryInfo.5mld.subheading1 = Beneficiaries that are an individual
 beneficiaryInfo.5mld.paragraph1 = For individuals named in the trust deed, tell us their name. If you know more details, tell us their:
-beneficiaryInfo.5mld.bulletpoint1 = date of birth
-beneficiaryInfo.5mld.bulletpoint2 = country of nationality
-beneficiaryInfo.5mld.bulletpoint3 = country of residence
-beneficiaryInfo.5mld.paragraph2 = If the trust is for the employees of a business, tell us their roles in the business. For example, a director or other named employee.
-beneficiaryInfo.5mld.paragraph3 = You also need to tell us if any of the beneficiaries are legally incapable at the time of registration. This is when the individual does not have mental capacity if they cannot understand information and make decisions about the trust due to a mental illness, learning disability, dementia or related condition, or they cannot communicate.
-beneficiaryInfo.5mld.subheading2 = Class of beneficiaries
+beneficiaryInfo.5mld.bulletpoint11 = date of birth
+beneficiaryInfo.5mld.bulletpoint12 = country of nationality
+beneficiaryInfo.5mld.bulletpoint13 = country of residence
+
+beneficiaryInfo.5mld.subheading2 = Beneficiaries that are employees of a business
+beneficiaryInfo.5mld.paragraph2 = If the trust was set up for the employees of a business, tell us:
+beneficiaryInfo.5mld.bulletpoint21 = the business role of each beneficiary, such as a director or other named employee
+beneficiaryInfo.5mld.bulletpoint22 = if the trustees have discretion over how much income the beneficiaries will get
+
+beneficiaryInfo.5mld.subheading3 = Beneficiaries that lack mental capacity
+beneficiaryInfo.5mld.paragraph31 = You need to tell us if any of the beneficiaries lack mental capacity at time of registration.
+beneficiaryInfo.5mld.paragraph32 = A beneficiary does not have mental capacity if they cannot understand information about the trust due to any of the following:
+beneficiaryInfo.5mld.bulletpoint31 = mental illness
+beneficiaryInfo.5mld.bulletpoint32 = learning disability
+beneficiaryInfo.5mld.bulletpoint33 = dementia or a related condition
+beneficiaryInfo.5mld.bulletpoint34 = being unable to communicate
+beneficiaryInfo.5mld.paragraph33 = If a beneficiary lacks mental capacity, you need to tell us if a vulnerable person election form (VPE1) has been submitted to HMRC.
+
+beneficiaryInfo.5mld.subheading4 = Class of beneficiaries
 beneficiaryInfo.5mld.paragraph4 = You need to give a short description for individual beneficiaries that cannot be identified. For example, children not born yet, future grandchildren and great grandchildren.
-beneficiaryInfo.5mld.subheading3 = Beneficiaries that are a charity or trust
+
+beneficiaryInfo.5mld.subheading5 = Beneficiaries that are a charity or trust
 beneficiaryInfo.5mld.paragraph5 = Tell us their name. If you know more details, tell us their country of residence.
-beneficiaryInfo.5mld.subheading4 = Beneficiaries that are a company or employment related
-beneficiaryInfo.5mld.paragraph6 = For companies or employees named in the trust deed, tell us the name of the company or employment-related trust. If you know more details, tell us their:
-beneficiaryInfo.5mld.bulletpoint4 = country of residence
-beneficiaryInfo.5mld.bulletpoint5 = how many beneficiaries there are
-beneficiaryInfo.5mld.bulletpoint6 = a short description of the beneficiaries: for example, employees and their children, spouses or widows
-beneficiaryInfo.5mld.paragraph7 = Do not include named or specific employees such as directors. They must be listed as individual beneficiaries.
-beneficiaryInfo.5mld.paragraph8 = Tell us whether the trustees can decide how much income the business or employment trust can get.
+
+beneficiaryInfo.5mld.subheading6 = Beneficiaries that are a company or employment related
+beneficiaryInfo.5mld.paragraph61 = For companies or a group of employees named in the trust deed, tell us the name of either:
+beneficiaryInfo.5mld.bulletpoint61 = the company
+beneficiaryInfo.5mld.bulletpoint62 = the employment-related trust
+
+beneficiaryInfo.5mld.paragraph62 = If you have the information, tell us the country of residence of the company or the group of employees. For companies, this is usually where the company or charity is registered.
+beneficiaryInfo.5mld.paragraph63 = If you have the information, tell us:
+beneficiaryInfo.5mld.bulletpoint63 = how many beneficiaries the trust has
+beneficiaryInfo.5mld.bulletpoint64 = if the trustees can decide how much income the business or employment trust can get
+beneficiaryInfo.5mld.paragraph64 = You should include a short description of the group of beneficiaries, for example:
+beneficiaryInfo.5mld.bulletpoint65 = employees and their children
+beneficiaryInfo.5mld.bulletpoint66 = spouses or widows
+beneficiaryInfo.5mld.paragraph65 = Do not include named or specific employees such as directors. They must be listed as individual beneficiaries.
 
 beneficiaryInfo.5mld.details = What we mean by country of residence
 beneficiaryInfo.5mld.details.subheading1 = Individual
@@ -391,22 +412,12 @@ beneficiaryInfo.5mld.details.paragraph2 = This is usually where the company or c
 beneficiaryInfo.5mld.details.subheading3 = Trust
 beneficiaryInfo.5mld.details.paragraph3 = This is usually based on the residency of the trustees and settlors within that trust.
 
-beneficiaryInfo.5mld.subheading5 = Other beneficiaries
-beneficiaryInfo.5mld.paragraph9 = You need to give a short description for beneficiaries that do not fall into the other beneficiary types. For example, pets. If you know, tell us their country of residence.
+beneficiaryInfo.5mld.subheading7 = Other beneficiaries
+beneficiaryInfo.5mld.paragraph71 = You need to give a short description for beneficiaries that do not fit into any of the other categories mentioned.
+beneficiaryInfo.5mld.paragraph72 = If you know, tell us their country of residence.
+beneficiaryInfo.5mld.taxable.paragraph71 = You need to give a short description for beneficiaries that do not fall into the other beneficiary types. For example, pets.
+beneficiaryInfo.5mld.taxable.paragraph72 = If you know, tell us their country of residence, address and whether the trustees can decide how much income the beneficiary can get.
 
-beneficiaryInfo.5mld.taxable.paragraph1 = Also, if you have these details, tell us one of them:
-beneficiaryInfo.5mld.taxable.bulletpoint1 = National Insurance number
-beneficiaryInfo.5mld.taxable.bulletpoint2 = address
-beneficiaryInfo.5mld.taxable.bulletpoint3 = passport details and address
-beneficiaryInfo.5mld.taxable.bulletpoint4 = ID card details and address
-
-beneficiaryInfo.5mld.taxable.paragraph2 = Tell us their name. If you know more details, tell us their country of residence and address.
-beneficiaryInfo.5mld.taxable.paragraph3 = Tell us whether the trustees can decide how much income the named company, charity or trust can get.
-
-beneficiaryInfo.5mld.taxable.bulletpoint5 = address
-
-beneficiaryInfo.5mld.taxable.paragraph4 = You need to give a short description for beneficiaries that do not fall into the other beneficiary types. For example, pets.
-beneficiaryInfo.5mld.taxable.paragraph5 = If you know, tell us their country of residence, address and whether the trustees can decide how much income the beneficiary can get.
 
 individualBeneficiaryAnswers.title = Check beneficiary details
 individualBeneficiaryAnswers.heading = Check beneficiary details
