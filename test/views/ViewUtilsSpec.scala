@@ -22,7 +22,7 @@ class ViewUtilsSpec extends ViewSpecBase {
 
   "errorHref" must {
 
-    "refer to date field when error is for a single date input" in {
+    "refer to date field when error is for a single date input (lowercase message contains 'date' and not 'yesno')" in {
       val error = FormError(key = "value", message = "dateOfBirth.error.required")
       val result = ViewUtils.errorHref(error)
       result mustBe "value_day"
@@ -34,10 +34,23 @@ class ViewUtilsSpec extends ViewSpecBase {
       result mustBe "expiryDate_month"
     }
 
-    "not refer to date field when error is for a single input" in {
+    "not refer to date field when error is for a single input (lowercase message does not contains 'date')" in {
       val error = FormError(key = "value", message = "name.error.required")
       val result = ViewUtils.errorHref(error)
       result mustBe "value"
     }
+
+    "not refer to date field when error is for a single input (lowercase message contains 'date' and 'yesno')" in {
+      val error = FormError(key = "value", message = "individualBeneficiaryDateOfBirthYesNo.error.required")
+      val result = ViewUtils.errorHref(error)
+      result mustBe "value"
+    }
+
+    "not refer to date field when error has arguments" in {
+      val error = FormError(key = "value", message = "name.error.firstname.required", args = Seq("^[A-Za-z0-9 ,.()/&'-]*$"))
+      val result = ViewUtils.errorHref(error)
+      result mustBe "value"
+    }
+
   }
 }
