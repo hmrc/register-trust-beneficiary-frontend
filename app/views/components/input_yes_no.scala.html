@@ -26,7 +26,8 @@
         noAssoc: Option[String] = None,
         legendClass: Option[String] = None,
         link : Option[Link] = None,
-        legendAsHeading: Boolean = true
+        legendAsHeading: Boolean = true,
+        additionalContent: Option[Html] = None
 )(implicit messages: Messages)
 
 
@@ -43,6 +44,9 @@
             @label
             @if(legendAsHeading){</h1>}
         </legend>
+        @if(additionalContent.isDefined){
+            @additionalContent
+        }
         @form_hint(hint = hint, link = link)
         @field.errors.map { error =>
         <span class="error-message" id="error-message-@{field.id}-input">

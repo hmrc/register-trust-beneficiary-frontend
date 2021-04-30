@@ -38,7 +38,7 @@ class MentalCapacityYesNoViewSpec extends YesNoViewBehaviours {
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, fakeDraftId, index, name)(fakeRequest, messages)
 
-    behave like dynamicTitlePage(applyView(form), prefix, name)
+    behave like dynamicTitlePage(applyView(form), prefix, name,"p1", "bulletpoint1", "bulletpoint2", "bulletpoint3", "bulletpoint4")
 
     behave like pageWithBackLink(applyView(form))
 
