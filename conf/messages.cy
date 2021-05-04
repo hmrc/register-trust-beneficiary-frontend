@@ -105,7 +105,6 @@ individualBeneficiary.5mld.countryOfNationality.error.required = Nodwch wlad
 #individualBeneficiary.5mld.mentalCapacityYesNo.heading =
 #individualBeneficiary.5mld.mentalCapacityYesNo.checkYourAnswersLabel =
 #individualBeneficiary.5mld.mentalCapacityYesNo.error.required =
-#individualBeneficiary.5mld.mentalCapacityYesNo.hint =
 
 #beneficiaryInfo.5mld.title =
 #beneficiaryInfo.5mld.heading =
