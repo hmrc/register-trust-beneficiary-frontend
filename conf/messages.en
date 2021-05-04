@@ -219,6 +219,11 @@ individualBeneficiary.5mld.mentalCapacityYesNo.heading = Does {0} have mental ca
 individualBeneficiary.5mld.mentalCapacityYesNo.checkYourAnswersLabel = Does {0} have mental capacity at the time of registration?
 individualBeneficiary.5mld.mentalCapacityYesNo.error.required = Select yes if you know the individual beneficiary has mental capacity at the time of registration
 individualBeneficiary.5mld.mentalCapacityYesNo.hint = An individual beneficiary does not have mental capacity if they cannot understand information and make decisions about the trust due to a mental illness, learning disability, dementia or related condition, or they cannot communicate.
+individualBeneficiary.5mld.mentalCapacityYesNo.p1 = A beneficiary does not have mental capacity if they cannot understand information about the trust due to any of the following:
+individualBeneficiary.5mld.mentalCapacityYesNo.bulletpoint1 = mental illness
+individualBeneficiary.5mld.mentalCapacityYesNo.bulletpoint2 = learning disability
+individualBeneficiary.5mld.mentalCapacityYesNo.bulletpoint3 = dementia or a related condition
+individualBeneficiary.5mld.mentalCapacityYesNo.bulletpoint4 = being unable to communicate
 
 individualBeneficiaryDateOfBirthYesNo.title = Do you know the individual beneficiary’s date of birth?
 individualBeneficiaryDateOfBirthYesNo.heading = Do you know {0}’s date of birth?
