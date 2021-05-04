@@ -42,7 +42,7 @@ class MentalCapacityYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, prefix, Some(prefix), Seq(name))
+    behave like yesNoPage(form, applyView, prefix, None, Seq(name))
 
     behave like pageWithASubmitButton(applyView(form))
   }
