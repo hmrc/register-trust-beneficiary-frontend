@@ -489,7 +489,6 @@ internationalAddress.error.line3.invalidCharacters=Mae’n rhaid i gyfeiriad –
 internationalAddress.error.line3.length=Mae’n rhaid i gyfeiriad – llinell 3 fod yn 35 o gymeriadau neu lai
 isTheBeneficiaryACompanyOrEmploymentRelated.company=Cwmni
 isTheBeneficiaryACompanyOrEmploymentRelated.employmentRelated=Cyflogeion a/neu eu teuluoedd
-Key=English
 largeBeneficiaryAddress.checkYourAnswersLabel=Beth yw cyfeiriad {0}?
 largeBeneficiaryAddressUKYesNo.checkYourAnswersLabel=A yw cyfeiriad {0} yn y DU?
 largeBeneficiaryAddressYesNo.checkYourAnswersLabel=A ydych yn gwybod cyfeiriad {0}?
