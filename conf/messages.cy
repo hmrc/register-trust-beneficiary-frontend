@@ -27,36 +27,11 @@ answerPage.section.individualBeneficiary.subheading=Buddiolwr unigol {0}
 answerPage.section.largeBeneficiary.subheading=Buddiolwr sy’n ymwneud â chyflogaeth {0}
 answerPage.section.otherBeneficiary.subheading=Buddiolwr arall {0}
 answerPage.section.trustBeneficiary.subheading=Buddiolwr sy’n ymddiriedolaeth {0}
-beneficiaryInfo.5mld.bulletpoint1=dyddiad geni
-beneficiaryInfo.5mld.bulletpoint2=gwlad cenedligrwydd
-beneficiaryInfo.5mld.bulletpoint3=gwlad breswyl
-beneficiaryInfo.5mld.bulletpoint4=gwlad breswyl
-beneficiaryInfo.5mld.bulletpoint5=sawl buddiolwr sydd
-beneficiaryInfo.5mld.bulletpoint6=disgrifiad byr o’r buddiolwyr: er enghraifft
-beneficiaryInfo.5mld.caption=Buddiolwyr
-beneficiaryInfo.5mld.caption.hidden=Teitl yr adran hon yw
-beneficiaryInfo.5mld.details=Yr hyn a olygwn wrth ddweud gwlad breswyl
-beneficiaryInfo.5mld.details.paragraph1=Fel arfer, dyma’r wlad lle mae’r buddiolwr yn byw ac yn gweithio’r rhan fwyaf o’r amser yn ystod y flwyddyn dreth. Gallwch wirio ei statws preswylio drwy’r Prawf Preswylio Statudol (SRT).
-beneficiaryInfo.5mld.details.paragraph2=Fel arfer, dyma lle mae’r cwmni neu’r elusen wedi cofrestru (ymgorffori). Er enghraifft,
-beneficiaryInfo.5mld.details.paragraph3=Mae hyn fel arfer yn seiliedig ar statws preswylio’r ymddiriedolwyr a’r setlwyr yn yr ymddiriedolaeth honno.
-beneficiaryInfo.5mld.details.subheading1=Unigolyn
-beneficiaryInfo.5mld.details.subheading2=Cwmni neu elusen
-beneficiaryInfo.5mld.details.subheading3=Ymddiriedolaeth
-beneficiaryInfo.5mld.heading=Gwybodaeth sydd ei hangen arnoch er mwyn cofrestru buddiolwr
-beneficiaryInfo.5mld.paragraph1=Ar gyfer unigolion a enwir yn y weithred ymddiriedolaeth
-beneficiaryInfo.5mld.paragraph2=Os yw’r ymddiriedolaeth ar gyfer cyflogeion busnes
-beneficiaryInfo.5mld.paragraph3=Mae angen i chi roi gwybod i ni hefyd a yw unrhyw un o’r buddiolwyr yn gyfreithiol analluog ar adeg y cofrestru. Dyma pan nad oes gan yr unigolyn alluedd meddyliol os nad yw’n gallu deall gwybodaeth na gwneud penderfyniadau ynghylch yr ymddiriedolaeth oherwydd salwch meddwl
-beneficiaryInfo.5mld.paragraph4=Mae angen i chi roi disgrifiad byr ar gyfer buddiolwyr unigol nad oes modd eu hadnabod. Er enghraifft,
-beneficiaryInfo.5mld.paragraph5=Rhowch wybod i ni beth yw ei enw. Os ydych yn gwybod rhagor o fanylion
-beneficiaryInfo.5mld.paragraph6=Ar gyfer cwmnïau neu gyflogeion a enwir y weithred ymddiriedolaeth
-beneficiaryInfo.5mld.paragraph7=Peidiwch â chynnwys cyflogeion a enwyd na chyflogeion penodol, megis cyfarwyddwyr. Mae’n rhaid iddynt gael eu rhestru fel buddiolwyr unigol.
-beneficiaryInfo.5mld.paragraph8=Rhowch wybod i ni a yw’r ymddiriedolwyr yn gallu penderfynu faint o incwm y gall yr ymddiriedolaeth sy’n gysylltiedig â busnes neu â chyflogaeth ei gael.
-beneficiaryInfo.5mld.paragraph9=Mae angen i chi roi disgrifiad byr ar gyfer buddiolwyr nad ydynt wedi’u cynnwys o dan y mathau eraill o fuddiolwyr. Er enghraifft,
-beneficiaryInfo.5mld.subheading1=Buddiolwyr sy’n unigolion
-beneficiaryInfo.5mld.subheading2=Dosbarth o fuddiolwyr
-beneficiaryInfo.5mld.subheading3=Buddiolwyr sy’n elusen neu’n ymddiriedolaeth
-beneficiaryInfo.5mld.subheading4=Buddiolwyr sy’n gwmni neu sy’n ymwneud â chyflogaeth
-beneficiaryInfo.5mld.subheading5=Buddiolwyr eraill
+
+### beneficiaryInfo.5mld keys to be put here
+
+###
+
 beneficiaryInfo.5mld.taxable.bulletpoint1=rhif Yswiriant Gwladol
 beneficiaryInfo.5mld.taxable.bulletpoint2=cyfeiriad
 beneficiaryInfo.5mld.taxable.bulletpoint3=manylion pasbort a chyfeiriad
@@ -67,7 +42,9 @@ beneficiaryInfo.5mld.taxable.paragraph2=Rhowch wybod i ni beth yw ei enw. Os ydy
 beneficiaryInfo.5mld.taxable.paragraph3=Rhowch wybod i ni a yw’r ymddiriedolwyr yn gallu penderfynu faint o incwm y gall y cwmni a enwyd ei gael.
 beneficiaryInfo.5mld.taxable.paragraph4=Mae angen i chi roi disgrifiad byr ar gyfer buddiolwyr nad ydynt wedi’u cynnwys o dan y mathau eraill o fuddiolwyr. Er enghraifft,
 beneficiaryInfo.5mld.taxable.paragraph5=Os ydych yn gwybod
+
 beneficiaryInfo.5mld.title=Gwybodaeth sydd ei hangen arnoch er mwyn cofrestru buddiolwr
+
 beneficiaryInfo.bulletpoint1=dyddiad geni
 beneficiaryInfo.bulletpoint2=rhif Yswiriant Gwladol
 beneficiaryInfo.bulletpoint3=cyfeiriad
@@ -347,7 +324,6 @@ individualBeneficiary.5mld.countryOfResidenceYesNo.title=A ydych yn gwybod gwlad
 individualBeneficiary.5mld.mentalCapacityYesNo.checkYourAnswersLabel=A oes gan {0} alluedd meddyliol ar adeg y cofrestru?
 individualBeneficiary.5mld.mentalCapacityYesNo.error.required=Dewiswch ‘Iawn’ os ydych yn gwybod bod gan y buddiolwr unigol alluedd meddyliol ar adeg y cofrestru
 individualBeneficiary.5mld.mentalCapacityYesNo.heading=A oes gan {0} alluedd meddyliol ar adeg y cofrestru?
-individualBeneficiary.5mld.mentalCapacityYesNo.hint=Nid oes gan fuddiolwr unigol alluedd meddyliol os nad yw’n gallu deall gwybodaeth na gwneud penderfyniadau ynghylch yr ymddiriedolaeth oherwydd salwch meddwl
 individualBeneficiary.5mld.mentalCapacityYesNo.title=A oes gan y buddiolwr unigol alluedd meddyliol ar adeg y cofrestru?
 individualBeneficiary.roleInCompany.checkYourAnswersLabel=Beth yw rôl {0} yn y cwmni y cafodd yr ymddiriedolaeth ei chreu ar ei gyfer?
 individualBeneficiary.roleInCompany.checkYourAnswersLabel.na=Ddim yn gyfarwyddwr nac yn gyflogai
