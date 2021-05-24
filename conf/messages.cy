@@ -324,7 +324,6 @@ individualBeneficiary.5mld.countryOfResidenceYesNo.title=A ydych yn gwybod gwlad
 individualBeneficiary.5mld.mentalCapacityYesNo.checkYourAnswersLabel=A oes gan {0} alluedd meddyliol ar adeg y cofrestru?
 individualBeneficiary.5mld.mentalCapacityYesNo.error.required=Dewiswch ‘Iawn’ os ydych yn gwybod bod gan y buddiolwr unigol alluedd meddyliol ar adeg y cofrestru
 individualBeneficiary.5mld.mentalCapacityYesNo.heading=A oes gan {0} alluedd meddyliol ar adeg y cofrestru?
-individualBeneficiary.5mld.mentalCapacityYesNo.hint=Nid oes gan fuddiolwr unigol alluedd meddyliol os nad yw’n gallu deall gwybodaeth na gwneud penderfyniadau ynghylch yr ymddiriedolaeth oherwydd salwch meddwl
 individualBeneficiary.5mld.mentalCapacityYesNo.title=A oes gan y buddiolwr unigol alluedd meddyliol ar adeg y cofrestru?
 individualBeneficiary.roleInCompany.checkYourAnswersLabel=Beth yw rôl {0} yn y cwmni y cafodd yr ymddiriedolaeth ei chreu ar ei gyfer?
 individualBeneficiary.roleInCompany.checkYourAnswersLabel.na=Ddim yn gyfarwyddwr nac yn gyflogai
