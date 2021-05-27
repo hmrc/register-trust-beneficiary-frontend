@@ -19,18 +19,20 @@ package controllers.register.beneficiaries.classofbeneficiaries
 import config.annotations.ClassOfBeneficiaries
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.ClassBeneficiaryDescriptionFormProvider
-import javax.inject.Inject
 import models.Status.Completed
+import models.requests.RegistrationDataRequest
 import navigation.Navigator
 import pages.entitystatus.ClassBeneficiaryStatus
+import pages.register.beneficiaries.WhatTypeOfBeneficiaryPage
 import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ClassBeneficiaryDescriptionController @Inject()(
@@ -43,9 +45,9 @@ class ClassBeneficiaryDescriptionController @Inject()(
                                                        formProvider: ClassBeneficiaryDescriptionFormProvider,
                                                        val controllerComponents: MessagesControllerComponents,
                                                        view: ClassBeneficiaryDescriptionView
-                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private def actions(draftId: String) = identify andThen getData(draftId) andThen requireData
+  private def actions(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] = identify andThen getData(draftId) andThen requireData
 
   private val form = formProvider()
 
@@ -71,6 +73,7 @@ class ClassBeneficiaryDescriptionController @Inject()(
 
           val answers = request.userAnswers.set(ClassBeneficiaryDescriptionPage(index), value)
             .flatMap(_.set(ClassBeneficiaryStatus(index), Completed))
+            .flatMap(_.remove(WhatTypeOfBeneficiaryPage))
 
           for {
             updatedAnswers <- Future.fromTry(answers)

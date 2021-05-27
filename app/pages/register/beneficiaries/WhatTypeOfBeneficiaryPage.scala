@@ -20,6 +20,8 @@ import models.UserAnswers
 import models.registration.pages.WhatTypeOfBeneficiary
 import models.registration.pages.WhatTypeOfBeneficiary._
 import pages.QuestionPage
+import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
+import pages.register.beneficiaries.companyoremploymentrelated.CompanyOrEmploymentRelatedPage
 import play.api.libs.json._
 import sections.beneficiaries._
 
@@ -43,25 +45,31 @@ case object WhatTypeOfBeneficiaryPage extends QuestionPage[WhatTypeOfBeneficiary
       OtherBeneficiaries.path,
     )
 
+    implicit class RemoveSubTypes(userAnswers: Try[UserAnswers]) {
+      def removeAllSubTypes(): Try[UserAnswers] = userAnswers.removeCharityOrTrustSubType().removeCompanyOrEmploymentSubType()
+      def removeCharityOrTrustSubType(): Try[UserAnswers] = userAnswers.flatMap(_.remove(CharityOrTrustPage))
+      def removeCompanyOrEmploymentSubType(): Try[UserAnswers] = userAnswers.flatMap(_.remove(CompanyOrEmploymentRelatedPage))
+    }
+
     value match {
       case Some(Individual) =>
-        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == IndividualBeneficiaries.path))
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == IndividualBeneficiaries.path)).removeAllSubTypes()
       case Some(ClassOfBeneficiary) =>
-        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == ClassOfBeneficiaries.path))
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == ClassOfBeneficiaries.path)).removeAllSubTypes()
       case Some(CharityOrTrust) =>
-        cleanupLastIfInProgress(userAnswers, paths.filterNot(x => x == CharityBeneficiaries.path || x == TrustBeneficiaries.path))
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(x => x == CharityBeneficiaries.path || x == TrustBeneficiaries.path)).removeCompanyOrEmploymentSubType()
       case Some(Charity) =>
-        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == CharityBeneficiaries.path))
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == CharityBeneficiaries.path)).removeCompanyOrEmploymentSubType()
       case Some(Trust) =>
-        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == TrustBeneficiaries.path))
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == TrustBeneficiaries.path)).removeCompanyOrEmploymentSubType()
       case Some(CompanyOrEmployment) =>
-        cleanupLastIfInProgress(userAnswers, paths.filterNot(x => x == CompanyBeneficiaries.path || x == LargeBeneficiaries.path))
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(x => x == CompanyBeneficiaries.path || x == LargeBeneficiaries.path)).removeCharityOrTrustSubType()
       case Some(Company) =>
-        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == CompanyBeneficiaries.path))
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == CompanyBeneficiaries.path)).removeCharityOrTrustSubType()
       case Some(Employment) =>
-        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == LargeBeneficiaries.path))
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == LargeBeneficiaries.path)).removeCharityOrTrustSubType()
       case Some(Other) =>
-        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == OtherBeneficiaries.path))
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == OtherBeneficiaries.path)).removeAllSubTypes()
       case _ =>
         super.cleanup(value, userAnswers)
     }

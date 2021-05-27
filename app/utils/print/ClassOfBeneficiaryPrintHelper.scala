@@ -28,7 +28,7 @@ class ClassOfBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConve
   override val beneficiaryType: String = "classOfBeneficiary"
 
   override def answers(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
-                     (implicit messages: Messages): Seq[AnswerRow] = {
+                      (implicit messages: Messages): Seq[AnswerRow] = {
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
 
     Seq(
