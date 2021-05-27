@@ -36,7 +36,7 @@ case object CharityOrTrustPage extends QuestionPage[CharityOrTrust] with TypeOfB
 
     def paths: Seq[JsPath] = Seq(
       CharityBeneficiaries.path,
-      TrustBeneficiaries.path,
+      TrustBeneficiaries.path
     )
 
     value match {

@@ -35,7 +35,7 @@ case object CompanyOrEmploymentRelatedPage extends QuestionPage[CompanyOrEmploym
 
     def paths: Seq[JsPath] = Seq(
       CompanyBeneficiaries.path,
-      LargeBeneficiaries.path,
+      LargeBeneficiaries.path
     )
 
     value match {
