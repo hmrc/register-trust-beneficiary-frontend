@@ -44,6 +44,8 @@ class WhatTypeOfBeneficiaryControllerSpec extends SpecBase {
     RadioOption(roPrefix, WhatTypeOfBeneficiary.Other.toString)
   )
 
+  val validAnswer: WhatTypeOfBeneficiary = WhatTypeOfBeneficiary.values.head
+
   "WhatTypeOfBeneficiary Controller" must {
 
     "return OK and the correct view for a GET when no beneficiaries are added" in {
@@ -85,7 +87,7 @@ class WhatTypeOfBeneficiaryControllerSpec extends SpecBase {
 
     "populate the view without value on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.values.head).success.value
+      val userAnswers = emptyUserAnswers.set(WhatTypeOfBeneficiaryPage, validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -98,7 +100,7 @@ class WhatTypeOfBeneficiaryControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, beneficiaryAdded = false, defaultOptions)(request, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, beneficiaryAdded = false, defaultOptions)(request, messages).toString
 
       application.stop()
     }
@@ -110,7 +112,7 @@ class WhatTypeOfBeneficiaryControllerSpec extends SpecBase {
 
       val request =
         FakeRequest(POST, whatTypeOfBeneficiaryRoute)
-          .withFormUrlEncodedBody(("value", defaultOptions.head.value))
+          .withFormUrlEncodedBody(("value", validAnswer.toString))
 
       val result = route(application, request).value
 
@@ -163,7 +165,7 @@ class WhatTypeOfBeneficiaryControllerSpec extends SpecBase {
 
       val request =
         FakeRequest(POST, whatTypeOfBeneficiaryRoute)
-          .withFormUrlEncodedBody(("value", WhatTypeOfBeneficiary.values.head.toString))
+          .withFormUrlEncodedBody(("value", validAnswer.toString))
 
       val result = route(application, request).value
 

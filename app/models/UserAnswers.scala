@@ -33,6 +33,13 @@ trait ReadableUserAnswers {
       case JsError(_) => None
     }
   }
+
+  def getAtPath[A](path: JsPath)(implicit rds: Reads[A]): Option[A] = {
+    Reads.at(path).reads(data) match {
+      case JsSuccess(value, _) => Some(value)
+      case JsError(_) => None
+    }
+  }
 }
 
 case class ReadOnlyUserAnswers(data: JsObject) extends ReadableUserAnswers

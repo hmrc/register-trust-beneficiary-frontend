@@ -17,27 +17,15 @@
 package generators
 
 import models.UserAnswers
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.TryValues
 import pages._
-import pages.register.beneficiaries.charityortrust._
-import pages.register.beneficiaries.charityortrust.charity.{AddressInTheUkYesNoPage, AddressYesNoPage, AmountDiscretionYesNoPage, CharityAddressUKPage, CharityInternationalAddressPage, CharityNamePage, HowMuchIncomePage}
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersGenerator extends TryValues {
   self: Generators =>
 
-  val generators: Seq[Gen[(QuestionPage[_], JsValue)]] =
-    arbitrary[(CharityInternationalAddressPage, JsValue)] ::
-    arbitrary[(CharityAddressUKPage, JsValue)] ::
-    arbitrary[(AddressInTheUkYesNoPage, JsValue)] ::
-    arbitrary[(AddressYesNoPage, JsValue)] ::
-    arbitrary[(HowMuchIncomePage, JsValue)] ::
-    arbitrary[(AmountDiscretionYesNoPage, JsValue)] ::
-    arbitrary[(CharityNamePage, JsValue)] ::
-    arbitrary[(CharityOrTrustPage.type , JsValue)] ::
-    Nil
+  val generators: Seq[Gen[(QuestionPage[_], JsValue)]] = Nil
 
   implicit lazy val arbitraryUserData: Arbitrary[UserAnswers] = {
 
