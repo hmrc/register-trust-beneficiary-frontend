@@ -42,7 +42,7 @@ case object WhatTypeOfBeneficiaryPage extends QuestionPage[WhatTypeOfBeneficiary
       TrustBeneficiaries.path,
       CompanyBeneficiaries.path,
       LargeBeneficiaries.path,
-      OtherBeneficiaries.path,
+      OtherBeneficiaries.path
     )
 
     implicit class RemoveSubTypes(userAnswers: Try[UserAnswers]) {
