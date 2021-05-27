@@ -19,7 +19,9 @@ package controllers.register.beneficiaries.charityortrust
 import base.SpecBase
 import forms.CharityOrTrustFormProvider
 import models.registration.pages.CharityOrTrust
+import models.registration.pages.CharityOrTrust.Charity
 import org.scalatestplus.mockito.MockitoSugar
+import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
 import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -32,6 +34,8 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
   val index: Int = 0
 
   lazy val charityOrTrustRoute: String = routes.CharityOrTrustController.onPageLoad(draftId).url
+
+  val validAnswer: CharityOrTrust = Charity
 
   "CharityOrTrust Controller" must {
 
@@ -53,13 +57,33 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
 
+    "populate the view correctly on a GET when the question has previously been answered" in {
+
+      val answers = emptyUserAnswers.set(CharityOrTrustPage, validAnswer).success.value
+
+      val application = applicationBuilder(userAnswers = Some(answers)).build()
+
+      val request = FakeRequest(GET, charityOrTrustRoute)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[CharityOrTrustView]
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(form.fill(validAnswer), draftId)(request, messages).toString
+
+      application.stop()
+    }
+
     "redirect to the next page when valid data is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
         FakeRequest(POST, charityOrTrustRoute)
-          .withFormUrlEncodedBody(("value", "charity"))
+          .withFormUrlEncodedBody(("value", validAnswer.toString))
 
       val result = route(application, request).value
 
@@ -113,7 +137,7 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
 
       val request =
         FakeRequest(POST, charityOrTrustRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+          .withFormUrlEncodedBody(("value", validAnswer.toString))
 
       val result = route(application, request).value
 

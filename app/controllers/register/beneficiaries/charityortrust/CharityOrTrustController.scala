@@ -18,13 +18,15 @@ package controllers.register.beneficiaries.charityortrust
 
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.CharityOrTrustFormProvider
+
 import javax.inject.Inject
 import models.registration.pages.CharityOrTrust
+import models.requests.RegistrationDataRequest
 import navigation.Navigator
 import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.beneficiaries.charityortrust.CharityOrTrustView
@@ -45,13 +47,20 @@ class CharityOrTrustController @Inject()(
 
   private val form: Form[CharityOrTrust] = formProvider()
 
-  private def actions(draftId: String) =
+  private def actions(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
     identify andThen
       getData(draftId) andThen
       requireData
 
   def onPageLoad(draftId: String): Action[AnyContent] = actions(draftId) {
-    implicit request => Ok(view(form, draftId))
+    implicit request =>
+
+      val preparedForm = request.userAnswers.get(CharityOrTrustPage) match {
+        case Some(value) => form.fill(value)
+        case None => form
+      }
+
+      Ok(view(preparedForm, draftId))
   }
 
   def onSubmit(draftId: String): Action[AnyContent] = actions(draftId).async {
