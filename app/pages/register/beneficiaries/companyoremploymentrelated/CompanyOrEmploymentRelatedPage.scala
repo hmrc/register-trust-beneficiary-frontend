@@ -16,13 +16,32 @@
 
 package pages.register.beneficiaries.companyoremploymentrelated
 
-import models.CompanyOrEmploymentRelatedToAdd
+import models.CompanyOrEmploymentRelatedToAdd.{Company, EmploymentRelated}
+import models.{CompanyOrEmploymentRelatedToAdd, UserAnswers}
 import pages.QuestionPage
+import pages.register.beneficiaries.TypeOfBeneficiaryPage
 import play.api.libs.json.JsPath
+import sections.beneficiaries.{CompanyBeneficiaries, LargeBeneficiaries}
 
-case object CompanyOrEmploymentRelatedPage extends QuestionPage[CompanyOrEmploymentRelatedToAdd] {
+import scala.util.Try
+
+case object CompanyOrEmploymentRelatedPage extends QuestionPage[CompanyOrEmploymentRelatedToAdd] with TypeOfBeneficiaryPage {
 
   override def path: JsPath = JsPath \ toString
 
   override def toString: String = "companyOrEmploymentRelated"
+
+  override def cleanup(value: Option[CompanyOrEmploymentRelatedToAdd], userAnswers: UserAnswers): Try[UserAnswers] = {
+
+    def paths: Seq[JsPath] = Seq(
+      CompanyBeneficiaries.path,
+      LargeBeneficiaries.path,
+    )
+
+    value match {
+      case Some(Company) => cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == CompanyBeneficiaries.path))
+      case Some(EmploymentRelated) => cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == LargeBeneficiaries.path))
+      case _ => super.cleanup(value, userAnswers)
+    }
+  }
 }

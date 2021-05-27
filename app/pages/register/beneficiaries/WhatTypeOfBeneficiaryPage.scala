@@ -16,17 +16,16 @@
 
 package pages.register.beneficiaries
 
-import models.Status.InProgress
+import models.UserAnswers
 import models.registration.pages.WhatTypeOfBeneficiary
 import models.registration.pages.WhatTypeOfBeneficiary._
-import models.{Status, UserAnswers}
 import pages.QuestionPage
 import play.api.libs.json._
 import sections.beneficiaries._
 
-import scala.util.{Success, Try}
+import scala.util.Try
 
-case object WhatTypeOfBeneficiaryPage extends QuestionPage[WhatTypeOfBeneficiary] {
+case object WhatTypeOfBeneficiaryPage extends QuestionPage[WhatTypeOfBeneficiary] with TypeOfBeneficiaryPage {
 
   override def path: JsPath = JsPath \ Beneficiaries \ toString
 
@@ -44,35 +43,27 @@ case object WhatTypeOfBeneficiaryPage extends QuestionPage[WhatTypeOfBeneficiary
       OtherBeneficiaries.path,
     )
 
-    def cleanupLastIfInProgress(paths: Seq[JsPath]): Try[UserAnswers] = {
-
-      def status(beneficiary: JsValue) = beneficiary.transform((__ \ "status").json.pick) match {
-        case JsSuccess(value, _) => value.as[Status]
-        case _ => InProgress
-      }
-
-      paths.foldLeft[Try[UserAnswers]](Success(userAnswers))((acc, path) => {
-        acc match {
-          case Success(value) => value.getAtPath[JsArray](path).getOrElse(JsArray()) match {
-            case x if x.value.nonEmpty && status(x.value.last) == InProgress => value.deleteAtPath(path \ (x.value.size - 1))
-            case _ => Success(value)
-          }
-          case _ => acc
-        }
-      })
-    }
-
     value match {
-      case Some(Individual) => cleanupLastIfInProgress(paths.filterNot(_ == IndividualBeneficiaries.path))
-      case Some(ClassOfBeneficiary) => cleanupLastIfInProgress(paths.filterNot(_ == ClassOfBeneficiaries.path))
-      case Some(CharityOrTrust) => cleanupLastIfInProgress(paths.filterNot(x => x == CharityBeneficiaries.path || x == TrustBeneficiaries.path))
-      case Some(Charity) => cleanupLastIfInProgress(paths.filterNot(_ == CharityBeneficiaries.path))
-      case Some(Trust) => cleanupLastIfInProgress(paths.filterNot(_ == TrustBeneficiaries.path))
-      case Some(CompanyOrEmployment) => cleanupLastIfInProgress(paths.filterNot(x => x == CompanyBeneficiaries.path || x == LargeBeneficiaries.path))
-      case Some(Company) => cleanupLastIfInProgress(paths.filterNot(_ == CompanyBeneficiaries.path))
-      case Some(Employment) => cleanupLastIfInProgress(paths.filterNot(_ == LargeBeneficiaries.path))
-      case Some(Other) => cleanupLastIfInProgress(paths.filterNot(_ == OtherBeneficiaries.path))
-      case _ => super.cleanup(value, userAnswers)
+      case Some(Individual) =>
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == IndividualBeneficiaries.path))
+      case Some(ClassOfBeneficiary) =>
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == ClassOfBeneficiaries.path))
+      case Some(CharityOrTrust) =>
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(x => x == CharityBeneficiaries.path || x == TrustBeneficiaries.path))
+      case Some(Charity) =>
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == CharityBeneficiaries.path))
+      case Some(Trust) =>
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == TrustBeneficiaries.path))
+      case Some(CompanyOrEmployment) =>
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(x => x == CompanyBeneficiaries.path || x == LargeBeneficiaries.path))
+      case Some(Company) =>
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == CompanyBeneficiaries.path))
+      case Some(Employment) =>
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == LargeBeneficiaries.path))
+      case Some(Other) =>
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == OtherBeneficiaries.path))
+      case _ =>
+        super.cleanup(value, userAnswers)
     }
   }
 }

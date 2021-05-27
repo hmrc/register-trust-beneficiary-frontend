@@ -16,14 +16,33 @@
 
 package pages.register.beneficiaries.charityortrust
 
+import models.UserAnswers
 import models.registration.pages.CharityOrTrust
+import models.registration.pages.CharityOrTrust._
 import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.beneficiaries.Beneficiaries
+import pages.register.beneficiaries.TypeOfBeneficiaryPage
+import play.api.libs.json._
+import sections.beneficiaries._
 
- case object CharityOrTrustPage extends QuestionPage[CharityOrTrust] {
+import scala.util.Try
+
+case object CharityOrTrustPage extends QuestionPage[CharityOrTrust] with TypeOfBeneficiaryPage {
 
   override def path: JsPath = JsPath \ Beneficiaries \ toString
 
   override def toString: String = "charityortrust"
+
+  override def cleanup(value: Option[CharityOrTrust], userAnswers: UserAnswers): Try[UserAnswers] = {
+
+    def paths: Seq[JsPath] = Seq(
+      CharityBeneficiaries.path,
+      TrustBeneficiaries.path,
+    )
+
+    value match {
+      case Some(Charity) => cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == CharityBeneficiaries.path))
+      case Some(Trust) => cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == TrustBeneficiaries.path))
+      case _ => super.cleanup(value, userAnswers)
+    }
+  }
 }
