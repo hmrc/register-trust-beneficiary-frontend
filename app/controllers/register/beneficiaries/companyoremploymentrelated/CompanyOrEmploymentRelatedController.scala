@@ -18,7 +18,6 @@ package controllers.register.beneficiaries.companyoremploymentrelated
 
 import controllers.actions._
 import forms.CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider
-import javax.inject.Inject
 import models.CompanyOrEmploymentRelatedToAdd
 import navigation.Navigator
 import pages.register.beneficiaries.companyoremploymentrelated.CompanyOrEmploymentRelatedPage
@@ -29,6 +28,7 @@ import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.beneficiaries.companyoremploymentrelated.CompanyOrEmploymentRelatedView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CompanyOrEmploymentRelatedController @Inject()(
@@ -39,12 +39,19 @@ class CompanyOrEmploymentRelatedController @Inject()(
                                                       view: CompanyOrEmploymentRelatedView,
                                                       formProvider: CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider,
                                                       repository: RegistrationsRepository
-                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[CompanyOrEmploymentRelatedToAdd] = formProvider()
+  private val form: Form[CompanyOrEmploymentRelatedToAdd] = formProvider()
 
   def onPageLoad(draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId) {
-    implicit request => Ok(view(form, draftId))
+    implicit request =>
+
+      val preparedForm = request.userAnswers.get(CompanyOrEmploymentRelatedPage) match {
+        case Some(value) => form.fill(value)
+        case None => form
+      }
+
+      Ok(view(preparedForm, draftId))
   }
 
   def onSubmit(draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).async {

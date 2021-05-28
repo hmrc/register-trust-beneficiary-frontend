@@ -16,14 +16,13 @@
 
 package generators
 
-import java.time.LocalDate
-
-import models.core.pages.{FullName, UKAddress}
-import models.registration.pages.{AddABeneficiary, PassportOrIdCardDetails, WhatTypeOfBeneficiary}
+import models.CompanyOrEmploymentRelatedToAdd
 import models.core.pages.{FullName, InternationalAddress, UKAddress}
-import models.registration.pages.{AddABeneficiary, CharityOrTrust, WhatTypeOfBeneficiary}
+import models.registration.pages.{AddABeneficiary, CharityOrTrust, PassportOrIdCardDetails, WhatTypeOfBeneficiary}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
+
+import java.time.LocalDate
 
 trait ModelGenerators {
 
@@ -44,7 +43,12 @@ trait ModelGenerators {
 
   implicit lazy val arbitraryCharityOrTrust: Arbitrary[CharityOrTrust] =
     Arbitrary {
-      Gen.oneOf(CharityOrTrust.values.toSeq)
+      Gen.oneOf(CharityOrTrust.values)
+    }
+
+  implicit lazy val arbitraryCompanyOrEmploymentRelated: Arbitrary[CompanyOrEmploymentRelatedToAdd] =
+    Arbitrary {
+      Gen.oneOf(CompanyOrEmploymentRelatedToAdd.values)
     }
 
   implicit lazy val arbitraryUkAddress: Arbitrary[UKAddress] =
@@ -83,7 +87,5 @@ trait ModelGenerators {
       }
     }
   }
-
-
 
 }

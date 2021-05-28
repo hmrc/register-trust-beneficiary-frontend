@@ -19,11 +19,13 @@ package controllers.register.beneficiaries.companyoremploymentrelated.employment
 import config.FrontendAppConfig
 import controllers.actions._
 import controllers.actions.register.employmentRelated.NameRequiredAction
+
 import javax.inject.Inject
 import models.Status.Completed
 import navigation.Navigator
 import pages.entitystatus.LargeBeneficiaryStatus
-import pages.register.beneficiaries.AnswersPage
+import pages.register.beneficiaries.companyoremploymentrelated.CompanyOrEmploymentRelatedPage
+import pages.register.beneficiaries.{AnswersPage, WhatTypeOfBeneficiaryPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
@@ -57,6 +59,8 @@ class CheckDetailsController @Inject()(
     implicit request =>
 
       val answers = request.userAnswers.set(LargeBeneficiaryStatus(index), Completed)
+        .flatMap(_.remove(WhatTypeOfBeneficiaryPage))
+        .flatMap(_.remove(CompanyOrEmploymentRelatedPage))
 
       for {
         updatedAnswers <- Future.fromTry(answers)

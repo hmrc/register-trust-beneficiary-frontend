@@ -20,12 +20,13 @@ import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import models.Status.Completed
+import models.requests.RegistrationDataRequest
 import navigation.Navigator
 import pages.entitystatus.IndividualBeneficiaryStatus
-import pages.register.beneficiaries.AnswersPage
 import pages.register.beneficiaries.individual.NamePage
+import pages.register.beneficiaries.{AnswersPage, WhatTypeOfBeneficiaryPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.print.IndividualBeneficiaryPrintHelper
@@ -48,8 +49,7 @@ class AnswersController @Inject()(
                                    printHelper: IndividualBeneficiaryPrintHelper
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-
-  private def actions(index: Int, draftId: String) =
+  private def actions(index: Int, draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
     identify andThen
       getData(draftId) andThen
       requireData andThen
@@ -68,6 +68,7 @@ class AnswersController @Inject()(
     implicit request =>
 
       val answers = request.userAnswers.set(IndividualBeneficiaryStatus(index), Completed)
+        .flatMap(_.remove(WhatTypeOfBeneficiaryPage))
 
       for {
         updatedAnswers <- Future.fromTry(answers)

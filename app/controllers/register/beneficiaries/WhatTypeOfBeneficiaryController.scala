@@ -54,12 +54,18 @@ class WhatTypeOfBeneficiaryController @Inject()(
 
   def onPageLoad(draftId: String): Action[AnyContent] = actions(draftId) {
     implicit request =>
+
+      val preparedForm = request.userAnswers.get(WhatTypeOfBeneficiaryPage) match {
+        case Some(value) => form.fill(value)
+        case None => form
+      }
+
       Ok(view(
-        form,
-        draftId,
-        isAnyBeneficiaryAdded(request.userAnswers),
-        beneficiaries(request.userAnswers).nonMaxedOutOptions)
-      )
+        form = preparedForm,
+        draftId = draftId,
+        beneficiaryAdded = isAnyBeneficiaryAdded(request.userAnswers),
+        options = beneficiaries(request.userAnswers).nonMaxedOutOptions
+      ))
   }
 
   def onSubmit(draftId: String): Action[AnyContent] = actions(draftId).async {
@@ -68,10 +74,10 @@ class WhatTypeOfBeneficiaryController @Inject()(
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(
-            formWithErrors,
-            draftId,
-            isAnyBeneficiaryAdded(request.userAnswers),
-            beneficiaries(request.userAnswers).nonMaxedOutOptions
+            form = formWithErrors,
+            draftId = draftId,
+            beneficiaryAdded = isAnyBeneficiaryAdded(request.userAnswers),
+            options = beneficiaries(request.userAnswers).nonMaxedOutOptions
           ))),
 
         value => {

@@ -517,8 +517,6 @@ addABeneficiary.add-them-later = Yes, I want to add them later
 addABeneficiary.no-complete = No, I have added all beneficiaries
 addABeneficiary.individualBeneficiary = Individual beneficiary
 addABeneficiary.error.required = Select yes if you want to add another beneficiary
-addABeneficiary.singular.heading = Add a beneficiary
-addABeneficiary.singular.title = Add a beneficiary
 addABeneficiary.count.heading = You have added {0} beneficiaries
 addABeneficiary.count.title = You have added {0} beneficiaries
 

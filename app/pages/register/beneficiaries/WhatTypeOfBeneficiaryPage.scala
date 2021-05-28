@@ -16,14 +16,62 @@
 
 package pages.register.beneficiaries
 
+import models.UserAnswers
 import models.registration.pages.WhatTypeOfBeneficiary
+import models.registration.pages.WhatTypeOfBeneficiary._
 import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.beneficiaries.Beneficiaries
+import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
+import pages.register.beneficiaries.companyoremploymentrelated.CompanyOrEmploymentRelatedPage
+import play.api.libs.json._
+import sections.beneficiaries._
 
-case object WhatTypeOfBeneficiaryPage extends QuestionPage[WhatTypeOfBeneficiary] {
+import scala.util.Try
+
+case object WhatTypeOfBeneficiaryPage extends QuestionPage[WhatTypeOfBeneficiary] with TypeOfBeneficiaryPage {
 
   override def path: JsPath = JsPath \ Beneficiaries \ toString
 
   override def toString: String = "whatTypeOfBeneficiary"
+
+  override def cleanup(value: Option[WhatTypeOfBeneficiary], userAnswers: UserAnswers): Try[UserAnswers] = {
+
+    def paths: Seq[JsPath] = Seq(
+      IndividualBeneficiaries.path,
+      ClassOfBeneficiaries.path,
+      CharityBeneficiaries.path,
+      TrustBeneficiaries.path,
+      CompanyBeneficiaries.path,
+      LargeBeneficiaries.path,
+      OtherBeneficiaries.path
+    )
+
+    implicit class RemoveSubTypes(userAnswers: Try[UserAnswers]) {
+      def removeAllSubTypes(): Try[UserAnswers] = userAnswers.removeCharityOrTrustSubType().removeCompanyOrEmploymentSubType()
+      def removeCharityOrTrustSubType(): Try[UserAnswers] = userAnswers.flatMap(_.remove(CharityOrTrustPage))
+      def removeCompanyOrEmploymentSubType(): Try[UserAnswers] = userAnswers.flatMap(_.remove(CompanyOrEmploymentRelatedPage))
+    }
+
+    value match {
+      case Some(Individual) =>
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == IndividualBeneficiaries.path)).removeAllSubTypes()
+      case Some(ClassOfBeneficiary) =>
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == ClassOfBeneficiaries.path)).removeAllSubTypes()
+      case Some(CharityOrTrust) =>
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(x => x == CharityBeneficiaries.path || x == TrustBeneficiaries.path)).removeCompanyOrEmploymentSubType()
+      case Some(Charity) =>
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == CharityBeneficiaries.path)).removeCompanyOrEmploymentSubType()
+      case Some(Trust) =>
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == TrustBeneficiaries.path)).removeCompanyOrEmploymentSubType()
+      case Some(CompanyOrEmployment) =>
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(x => x == CompanyBeneficiaries.path || x == LargeBeneficiaries.path)).removeCharityOrTrustSubType()
+      case Some(Company) =>
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == CompanyBeneficiaries.path)).removeCharityOrTrustSubType()
+      case Some(Employment) =>
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == LargeBeneficiaries.path)).removeCharityOrTrustSubType()
+      case Some(Other) =>
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == OtherBeneficiaries.path)).removeAllSubTypes()
+      case _ =>
+        super.cleanup(value, userAnswers)
+    }
+  }
 }

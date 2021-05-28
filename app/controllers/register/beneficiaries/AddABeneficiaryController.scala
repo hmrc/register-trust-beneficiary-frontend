@@ -19,10 +19,12 @@ package controllers.register.beneficiaries
 import config.FrontendAppConfig
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
+
 import javax.inject.Inject
 import models.Status.InProgress
 import models.registration.pages.AddABeneficiary.NoComplete
 import models.registration.pages.KindOfTrust.Employees
+import models.requests.RegistrationDataRequest
 import models.{Enumerable, ReadOnlyUserAnswers, UserAnswers}
 import navigation.Navigator
 import pages.entitystatus.IndividualBeneficiaryStatus
@@ -32,7 +34,7 @@ import pages.register.beneficiaries.{AddABeneficiaryPage, AddABeneficiaryYesNoPa
 import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi, MessagesProvider}
-import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
+import play.api.mvc.{Action, ActionBuilder, AnyContent, Call, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import sections.beneficiaries.IndividualBeneficiaries
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -63,14 +65,13 @@ class AddABeneficiaryController @Inject()(
 
   private val yesNoForm = yesNoFormProvider.withPrefix("addABeneficiaryYesNo")
 
-  private def routes(draftId: String) =
+  private def routes(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
     identify andThen getData(draftId) andThen requireData
 
-  private def heading(count: Int)(implicit mp : MessagesProvider) = {
+  private def heading(count: Int)(implicit mp : MessagesProvider): String = {
     count match {
-      case 0 => Messages("addABeneficiary.heading")
-      case 1 => Messages("addABeneficiary.singular.heading")
-      case size => Messages("addABeneficiary.count.heading", size)
+      case x if x <= 1 => Messages("addABeneficiary.heading")
+      case _ => Messages("addABeneficiary.count.heading", count)
     }
   }
 

@@ -30,7 +30,7 @@ class EmploymentRelatedBeneficiaryPrintHelper @Inject()(answerRowConverter: Answ
   override val beneficiaryType: String = "largeBeneficiary"
 
   override def answers(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
-                     (implicit messages: Messages): Seq[AnswerRow] = {
+                      (implicit messages: Messages): Seq[AnswerRow] = {
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
 
     Seq(

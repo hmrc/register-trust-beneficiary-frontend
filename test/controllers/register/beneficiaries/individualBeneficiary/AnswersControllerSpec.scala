@@ -17,48 +17,38 @@
 package controllers.register.beneficiaries.individualBeneficiary
 
 import base.SpecBase
-import models.core.pages.{FullName, UKAddress}
+import config.annotations.IndividualBeneficiary
+import models.Status.Completed
+import models.UserAnswers
+import models.core.pages.FullName
+import models.registration.pages.WhatTypeOfBeneficiary.Individual
+import navigation.{FakeNavigator, Navigator}
+import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{verify, when}
+import pages.entitystatus.IndividualBeneficiaryStatus
+import pages.register.beneficiaries.WhatTypeOfBeneficiaryPage
 import pages.register.beneficiaries.individual._
-import pages.register.beneficiaries.individual.mld5._
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import utils.Constants._
 import utils.print.IndividualBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.register.beneficiaries.individualBeneficiary.AnswersView
 
-import java.time.{LocalDate, ZoneOffset}
-
 class AnswersControllerSpec extends SpecBase {
 
-  val index = 0
+  private val index = 0
+
+  private lazy val answersRoute = routes.AnswersController.onPageLoad(index, fakeDraftId).url
+
+  override def emptyUserAnswers: UserAnswers = super.emptyUserAnswers
+    .set(WhatTypeOfBeneficiaryPage, Individual).success.value
+    .set(NamePage(index), FullName("first name", None, "last name")).success.value
 
   "IndividualBeneficiaryAnswers Controller" must {
 
     "return OK and the correct view for a GET" in {
-
-      val userAnswers = emptyUserAnswers
-        .set(NamePage(index), FullName("first name", None, "last name")).success.value
-        .set(DateOfBirthYesNoPage(index),true).success.value
-        .set(DateOfBirthPage(index),LocalDate.now(ZoneOffset.UTC)).success.value
-        .set(IncomeYesNoPage(index),true).success.value
-        .set(IncomePage(index),100).success.value
-        .set(CountryOfNationalityYesNoPage(index), true).success.value
-        .set(CountryOfNationalityInTheUkYesNoPage(index), false).success.value
-        .set(CountryOfNationalityPage(index), ES).success.value
-        .set(NationalInsuranceYesNoPage(index),true).success.value
-        .set(NationalInsuranceNumberPage(index),"AB123456C").success.value
-        .set(CountryOfResidenceYesNoPage(index), true).success.value
-        .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
-        .set(CountryOfResidencePage(index), ES).success.value
-        .set(AddressYesNoPage(index),true).success.value
-        .set(AddressUKYesNoPage(index),true).success.value
-        .set(AddressUKPage(index),UKAddress("Line1", "Line2", None, None, "NE62RT")).success.value
-        .set(MentalCapacityYesNoPage(index), true).success.value
-        .set(VulnerableYesNoPage(index),true).success.value
 
       val mockPrintHelper: IndividualBeneficiaryPrintHelper = mock[IndividualBeneficiaryPrintHelper]
 
@@ -67,11 +57,11 @@ class AnswersControllerSpec extends SpecBase {
       when(mockPrintHelper.checkDetailsSection(any(), any(), any(), any())(any()))
         .thenReturn(fakeAnswerSection)
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers))
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(bind[IndividualBeneficiaryPrintHelper].toInstance(mockPrintHelper))
         .build()
 
-      val request = FakeRequest(GET, routes.AnswersController.onPageLoad(index, fakeDraftId).url)
+      val request = FakeRequest(GET, answersRoute)
 
       val result = route(application, request).value
 
@@ -81,6 +71,28 @@ class AnswersControllerSpec extends SpecBase {
 
       contentAsString(result) mustEqual
         view(fakeAnswerSection, index, fakeDraftId)(request, messages).toString
+
+      application.stop()
+    }
+
+    "amend user answers and redirect" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator))
+        .build()
+
+      val request = FakeRequest(POST, answersRoute)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+      val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+      verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
+      uaCaptor.getValue.get(IndividualBeneficiaryStatus(index)).get mustBe Completed
+      uaCaptor.getValue.get(WhatTypeOfBeneficiaryPage) mustNot be(defined)
 
       application.stop()
     }

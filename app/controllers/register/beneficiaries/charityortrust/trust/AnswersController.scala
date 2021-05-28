@@ -21,7 +21,8 @@ import controllers.actions.register.trust.NameRequiredAction
 import models.Status.Completed
 import navigation.Navigator
 import pages.entitystatus.TrustBeneficiaryStatus
-import pages.register.beneficiaries.AnswersPage
+import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
+import pages.register.beneficiaries.{AnswersPage, WhatTypeOfBeneficiaryPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
@@ -55,6 +56,8 @@ class AnswersController @Inject()(
     implicit request =>
 
       val answers = request.userAnswers.set(TrustBeneficiaryStatus(index), Completed)
+        .flatMap(_.remove(WhatTypeOfBeneficiaryPage))
+        .flatMap(_.remove(CharityOrTrustPage))
 
       for {
         updatedAnswers <- Future.fromTry(answers)

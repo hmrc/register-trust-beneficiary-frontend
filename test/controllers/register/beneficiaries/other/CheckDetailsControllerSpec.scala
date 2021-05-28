@@ -14,43 +14,40 @@
  * limitations under the License.
  */
 
-package controllers.register.beneficiaries.charityortrust.trust
+package controllers.register.beneficiaries.other
 
 import base.SpecBase
 import models.Status.Completed
 import models.UserAnswers
-import models.registration.pages.CharityOrTrust.Trust
-import models.registration.pages.WhatTypeOfBeneficiary.CharityOrTrust
+import models.registration.pages.WhatTypeOfBeneficiary.Other
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{verify, when}
-import pages.entitystatus.TrustBeneficiaryStatus
+import pages.entitystatus.OtherBeneficiaryStatus
 import pages.register.beneficiaries.WhatTypeOfBeneficiaryPage
-import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
-import pages.register.beneficiaries.charityortrust.trust._
+import pages.register.beneficiaries.other.DescriptionPage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import utils.print.TrustBeneficiaryPrintHelper
+import utils.print.OtherBeneficiaryPrintHelper
 import viewmodels.AnswerSection
-import views.html.register.beneficiaries.charityortrust.trust.AnswersView
+import views.html.register.beneficiaries.other.CheckDetailsView
 
-class AnswersControllerSpec extends SpecBase {
+class CheckDetailsControllerSpec extends SpecBase {
 
   private val index = 0
 
-  private lazy val answersRoute = routes.AnswersController.onPageLoad(index, fakeDraftId).url
+  private lazy val checkDetailsRoute = routes.CheckDetailsController.onPageLoad(index, fakeDraftId).url
 
   override def emptyUserAnswers: UserAnswers = super.emptyUserAnswers
-    .set(WhatTypeOfBeneficiaryPage, CharityOrTrust).success.value
-    .set(CharityOrTrustPage, Trust).success.value
-    .set(NamePage(index), "Trust Name").success.value
+    .set(WhatTypeOfBeneficiaryPage, Other).success.value
+    .set(DescriptionPage(index), "Description").success.value
 
-  "TrustBeneficiaryAnswers Controller" must {
+  "CheckDetailsController" must {
 
     "return OK and the correct view for a GET" in {
 
-      val mockPrintHelper: TrustBeneficiaryPrintHelper = mock[TrustBeneficiaryPrintHelper]
+      val mockPrintHelper: OtherBeneficiaryPrintHelper = mock[OtherBeneficiaryPrintHelper]
 
       val fakeAnswerSection: AnswerSection = AnswerSection()
 
@@ -58,14 +55,14 @@ class AnswersControllerSpec extends SpecBase {
         .thenReturn(fakeAnswerSection)
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[TrustBeneficiaryPrintHelper].toInstance(mockPrintHelper))
+        .overrides(bind[OtherBeneficiaryPrintHelper].toInstance(mockPrintHelper))
         .build()
 
-      val request = FakeRequest(GET, answersRoute)
+      val request = FakeRequest(GET, checkDetailsRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[AnswersView]
+      val view = application.injector.instanceOf[CheckDetailsView]
 
       status(result) mustEqual OK
 
@@ -80,7 +77,7 @@ class AnswersControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .build()
 
-      val request = FakeRequest(POST, answersRoute)
+      val request = FakeRequest(POST, checkDetailsRoute)
 
       val result = route(application, request).value
 
@@ -90,9 +87,8 @@ class AnswersControllerSpec extends SpecBase {
 
       val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
       verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
-      uaCaptor.getValue.get(TrustBeneficiaryStatus(index)).get mustBe Completed
+      uaCaptor.getValue.get(OtherBeneficiaryStatus(index)).get mustBe Completed
       uaCaptor.getValue.get(WhatTypeOfBeneficiaryPage) mustNot be(defined)
-      uaCaptor.getValue.get(CharityOrTrustPage) mustNot be(defined)
 
       application.stop()
     }

@@ -17,40 +17,38 @@
 package controllers.register.beneficiaries.charityortrust.charity
 
 import base.SpecBase
-import models.core.pages.UKAddress
+import models.Status.Completed
+import models.UserAnswers
 import models.registration.pages.CharityOrTrust.Charity
+import models.registration.pages.WhatTypeOfBeneficiary.CharityOrTrust
+import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{verify, when}
+import pages.entitystatus.CharityBeneficiaryStatus
+import pages.register.beneficiaries.WhatTypeOfBeneficiaryPage
 import pages.register.beneficiaries.charityortrust._
 import pages.register.beneficiaries.charityortrust.charity._
-import pages.register.beneficiaries.charityortrust.charity.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import utils.Constants._
 import utils.print.CharityBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.register.beneficiaries.charityortrust.charity.CharityAnswersView
 
 class CharityAnswersControllerSpec extends SpecBase {
 
-  val index = 0
+  private val index = 0
+
+  private lazy val charityAnswersRoute = routes.CharityAnswersController.onPageLoad(index, fakeDraftId).url
+
+  override def emptyUserAnswers: UserAnswers = super.emptyUserAnswers
+    .set(WhatTypeOfBeneficiaryPage, CharityOrTrust).success.value
+    .set(CharityOrTrustPage, Charity).success.value
+    .set(CharityNamePage(index),"Test").success.value
 
   "CharityAnswers Controller" must {
 
     "return OK and the correct view for a GET" in {
-
-      val userAnswers = emptyUserAnswers
-        .set(CharityOrTrustPage, Charity).success.value
-        .set(CharityNamePage(index),"Test").success.value
-        .set(AmountDiscretionYesNoPage(index), false).success.value
-        .set(HowMuchIncomePage(index),60).success.value
-        .set(CountryOfResidenceYesNoPage(index), true).success.value
-        .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
-        .set(CountryOfResidencePage(index), ES).success.value
-        .set(AddressYesNoPage(index),true).success.value
-        .set(AddressInTheUkYesNoPage(index),true).success.value
-        .set(CharityAddressUKPage(index),UKAddress("Test 1","Test 2", None, None, "AB11AB")).success.value
 
       val mockPrintHelper: CharityBeneficiaryPrintHelper = mock[CharityBeneficiaryPrintHelper]
 
@@ -59,11 +57,11 @@ class CharityAnswersControllerSpec extends SpecBase {
       when(mockPrintHelper.checkDetailsSection(any(), any(), any(), any())(any()))
         .thenReturn(fakeAnswerSection)
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers))
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(bind[CharityBeneficiaryPrintHelper].toInstance(mockPrintHelper))
         .build()
 
-      val request = FakeRequest(GET, routes.CharityAnswersController.onPageLoad(index, fakeDraftId).url)
+      val request = FakeRequest(GET, charityAnswersRoute)
 
       val result = route(application, request).value
 
@@ -73,6 +71,29 @@ class CharityAnswersControllerSpec extends SpecBase {
 
       contentAsString(result) mustEqual
         view(fakeAnswerSection, index, fakeDraftId)(request, messages).toString
+
+      application.stop()
+    }
+
+    "amend user answers and redirect" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val request = FakeRequest(POST, charityAnswersRoute)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual
+        controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(fakeDraftId).url
+
+      val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+      verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
+      uaCaptor.getValue.get(CharityBeneficiaryStatus(index)).get mustBe Completed
+      uaCaptor.getValue.get(WhatTypeOfBeneficiaryPage) mustNot be(defined)
+      uaCaptor.getValue.get(CharityOrTrustPage) mustNot be(defined)
 
       application.stop()
     }

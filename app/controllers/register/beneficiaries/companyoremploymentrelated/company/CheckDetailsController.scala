@@ -19,11 +19,11 @@ package controllers.register.beneficiaries.companyoremploymentrelated.company
 import config.FrontendAppConfig
 import controllers.actions._
 import controllers.actions.register.company.NameRequiredAction
-import javax.inject.Inject
 import models.Status.Completed
 import navigation.Navigator
 import pages.entitystatus.CompanyBeneficiaryStatus
-import pages.register.beneficiaries.AnswersPage
+import pages.register.beneficiaries.companyoremploymentrelated.CompanyOrEmploymentRelatedPage
+import pages.register.beneficiaries.{AnswersPage, WhatTypeOfBeneficiaryPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
@@ -32,6 +32,7 @@ import utils.print.CompanyBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.register.beneficiaries.companyoremploymentrelated.company.CheckDetailsView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CheckDetailsController @Inject()(
@@ -57,6 +58,8 @@ class CheckDetailsController @Inject()(
     implicit request =>
 
       val answers = request.userAnswers.set(CompanyBeneficiaryStatus(index), Completed)
+        .flatMap(_.remove(WhatTypeOfBeneficiaryPage))
+        .flatMap(_.remove(CompanyOrEmploymentRelatedPage))
 
       for {
         updatedAnswers <- Future.fromTry(answers)

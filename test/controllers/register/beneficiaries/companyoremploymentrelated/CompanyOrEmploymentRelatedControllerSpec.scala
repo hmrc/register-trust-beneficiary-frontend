@@ -30,7 +30,7 @@ class CompanyOrEmploymentRelatedControllerSpec extends SpecBase with MockitoSuga
 
   private val form: Form[CompanyOrEmploymentRelatedToAdd] = new CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider()()
   private lazy val companyOrEmploymentRelatedRoute: String = routes.CompanyOrEmploymentRelatedController.onPageLoad(draftId).url
-  private val companyOrEmploymentRelatedBeneficiaryAnswer = CompanyOrEmploymentRelatedToAdd.Company
+  private val validAnswer = CompanyOrEmploymentRelatedToAdd.Company
 
   "CompanyOrEmploymentRelatedController Controller" must {
 
@@ -54,7 +54,7 @@ class CompanyOrEmploymentRelatedControllerSpec extends SpecBase with MockitoSuga
 
     "populate the view without the previous answer when the question has previously been answered" in {
 
-      val answers = emptyUserAnswers.set(CompanyOrEmploymentRelatedPage, companyOrEmploymentRelatedBeneficiaryAnswer).success.value
+      val answers = emptyUserAnswers.set(CompanyOrEmploymentRelatedPage, validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 
@@ -67,19 +67,19 @@ class CompanyOrEmploymentRelatedControllerSpec extends SpecBase with MockitoSuga
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, draftId)(request, messages).toString
+        view(form.fill(validAnswer), draftId)(request, messages).toString
 
       application.stop()
     }
 
-    "redirect to the Name page when Company is selected" in {
+    "redirect to the next page when valid data is submitted" in {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
         FakeRequest(POST, companyOrEmploymentRelatedRoute)
-          .withFormUrlEncodedBody(("value", companyOrEmploymentRelatedBeneficiaryAnswer.toString))
+          .withFormUrlEncodedBody(("value", validAnswer.toString))
 
       val result = route(application, request).value
 
@@ -89,23 +89,6 @@ class CompanyOrEmploymentRelatedControllerSpec extends SpecBase with MockitoSuga
 
       application.stop()
     }
-
-//    "redirect to the Name page when Employment Related is selected" in {
-//      val application =
-//        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-//
-//      val request =
-//        FakeRequest(POST, companyOrEmploymentRelatedRoute)
-//          .withFormUrlEncodedBody(("value", CompanyOrEmploymentRelatedToAdd.EmploymentRelated.toString))
-//
-//      val result = route(application, request).value
-//
-//      status(result) mustEqual SEE_OTHER
-//
-//      redirectLocation(result).value mustEqual controllers.companyoremploymentrelated.employment.add.routes.NameController.onPageLoad().url
-//
-//      application.stop()
-//    }
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
@@ -146,7 +129,7 @@ class CompanyOrEmploymentRelatedControllerSpec extends SpecBase with MockitoSuga
 
       val request =
         FakeRequest(POST, companyOrEmploymentRelatedRoute)
-          .withFormUrlEncodedBody(("value", companyOrEmploymentRelatedBeneficiaryAnswer.toString))
+          .withFormUrlEncodedBody(("value", validAnswer.toString))
 
       val result = route(application, request).value
 

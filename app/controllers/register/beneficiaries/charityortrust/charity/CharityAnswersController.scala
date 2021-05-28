@@ -20,6 +20,8 @@ import controllers.actions._
 import controllers.actions.register.charity.NameRequiredAction
 import models.Status.Completed
 import pages.entitystatus.CharityBeneficiaryStatus
+import pages.register.beneficiaries.WhatTypeOfBeneficiaryPage
+import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
@@ -52,6 +54,8 @@ class CharityAnswersController @Inject()(
     implicit request =>
 
       val answers = request.userAnswers.set(CharityBeneficiaryStatus(index), Completed)
+        .flatMap(_.remove(WhatTypeOfBeneficiaryPage))
+        .flatMap(_.remove(CharityOrTrustPage))
 
       for {
         updatedAnswers <- Future.fromTry(answers)

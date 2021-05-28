@@ -19,7 +19,15 @@ package controllers.register.beneficiaries.classofbeneficiaries
 import base.SpecBase
 import config.annotations.ClassOfBeneficiaries
 import forms.ClassBeneficiaryDescriptionFormProvider
+import models.Status.Completed
+import models.UserAnswers
+import models.registration.pages.WhatTypeOfBeneficiary.ClassOfBeneficiary
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.ArgumentCaptor
+import org.mockito.Matchers.any
+import org.mockito.Mockito.verify
+import pages.entitystatus.ClassBeneficiaryStatus
+import pages.register.beneficiaries.WhatTypeOfBeneficiaryPage
 import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -33,6 +41,9 @@ class ClassBeneficiaryDescriptionControllerSpec extends SpecBase {
   val index = 0
 
   lazy val classBeneficiaryDescriptionRoute = routes.ClassBeneficiaryDescriptionController.onPageLoad(index, fakeDraftId).url
+
+  override def emptyUserAnswers: UserAnswers = super.emptyUserAnswers
+    .set(WhatTypeOfBeneficiaryPage, ClassOfBeneficiary).success.value
 
   "ClassBeneficiaryDescription Controller" must {
 
@@ -74,7 +85,7 @@ class ClassBeneficiaryDescriptionControllerSpec extends SpecBase {
       application.stop()
     }
 
-    "redirect to the next page when valid data is submitted" in {
+    "redirect to the next page when valid data is submitted and amend user answers" in {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
@@ -90,6 +101,11 @@ class ClassBeneficiaryDescriptionControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+      val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+      verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
+      uaCaptor.getValue.get(ClassBeneficiaryStatus(index)).get mustBe Completed
+      uaCaptor.getValue.get(WhatTypeOfBeneficiaryPage) mustNot be(defined)
 
       application.stop()
     }
