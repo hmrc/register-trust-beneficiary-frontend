@@ -65,6 +65,12 @@ footer.links.accessibility.text = Accessibility
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
+unauthorised.p1 = To use the Trust Registration Service, you need to log in with a Government Gateway Account for an organisation.
+unauthorised.p2 = If you do not have a Government Gateway account for an organisation,
+unauthorised.link = you can create an account online when you register the trust (opens in a new tab or window).
+unauthorised.p3 = To create an account, you’ll need:
+unauthorised.bullet1 = your full name
+unauthorised.bullet2 = an email address
 
 featureNotAvailable.title = This part of the online service is not available yet
 featureNotAvailable.heading = This part of the online service is not available yet

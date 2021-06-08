@@ -14,15 +14,30 @@
  * limitations under the License.
  *@
 
+@import config.FrontendAppConfig
+
 @this(
-    main_template: MainTemplate
+        main_template: MainTemplate,
+        config: FrontendAppConfig
 )
 
 @()(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("unauthorised.title")
-    ) {
+ title = messages("unauthorised.title"),
+ canSignOut = false
+) {
 
-    @components.heading("unauthorised.heading")
+ @components.heading("unauthorised.heading")
+
+ <p>@messages("unauthorised.p1")</p>
+
+ <p>@messages("unauthorised.p2") @components.link(config.registerTrustAsTrusteeUrl, "help-link", messages("unauthorised.link"), openInNewWindow = true)</p>
+
+ <p>@messages("unauthorised.p3")</p>
+
+ @components.bullet_list("unauthorised", Seq(
+  "bullet1",
+  "bullet2"
+ ))
 }
