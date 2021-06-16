@@ -375,10 +375,15 @@ beneficiaryInfo.5mld.heading = Information you need to register a beneficiary
 beneficiaryInfo.5mld.caption = Beneficiaries
 beneficiaryInfo.5mld.caption.hidden = This section is
 beneficiaryInfo.5mld.subheading1 = Beneficiaries that are an individual
-beneficiaryInfo.5mld.paragraph1 = For individuals named in the trust deed, tell us their name. If you know more details, tell us their:
+beneficiaryInfo.5mld.paragraph11 = For individuals named in the trust deed, tell us their name. If you know more details, tell us their:
+beneficiaryInfo.5mld.paragraph12 = Also, if you have these details, tell us one of them:
 beneficiaryInfo.5mld.bulletpoint11 = date of birth
 beneficiaryInfo.5mld.bulletpoint12 = country of nationality
 beneficiaryInfo.5mld.bulletpoint13 = country of residence
+beneficiaryInfo.5mld.bulletpoint14 = National Insurance number
+beneficiaryInfo.5mld.bulletpoint15 = address
+beneficiaryInfo.5mld.bulletpoint16 = passport details and address
+beneficiaryInfo.5mld.bulletpoint17 = ID card details and address
 
 beneficiaryInfo.5mld.subheading2 = Beneficiaries that are employees of a business
 beneficiaryInfo.5mld.paragraph2 = If the trust was set up for the employees of a business, tell us:
@@ -423,10 +428,10 @@ beneficiaryInfo.5mld.details.subheading3 = Trust
 beneficiaryInfo.5mld.details.paragraph3 = This is usually based on the residency of the trustees and settlors within that trust.
 
 beneficiaryInfo.5mld.subheading7 = Other beneficiaries
-beneficiaryInfo.5mld.paragraph71 = You need to give a short description for beneficiaries that do not fit into any of the other categories mentioned.
-beneficiaryInfo.5mld.paragraph72 = If you know, tell us their country of residence.
-beneficiaryInfo.5mld.taxable.paragraph71 = You need to give a short description for beneficiaries that do not fall into the other beneficiary types. For example, pets.
-beneficiaryInfo.5mld.taxable.paragraph72 = If you know, tell us their country of residence, address and whether the trustees can decide how much income the beneficiary can get.
+beneficiaryInfo.5mld.paragraph71.nonTaxable = You need to give a short description for beneficiaries that do not fit into any of the other categories mentioned.
+beneficiaryInfo.5mld.paragraph72.nonTaxable = If you know, tell us their country of residence.
+beneficiaryInfo.5mld.paragraph71.taxable = You need to give a short description for beneficiaries that do not fall into the other beneficiary types. For example, pets.
+beneficiaryInfo.5mld.paragraph72.taxable = If you know, tell us their country of residence, address and whether the trustees can decide how much income the beneficiary can get.
 
 
 individualBeneficiaryAnswers.title = Check beneficiary details

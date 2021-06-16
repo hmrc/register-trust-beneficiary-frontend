@@ -24,25 +24,39 @@
 
 @main_template(
     title = messages("beneficiaryInfo.5mld.title")
-    ) {
+) {
 
     @components.back_link()
 
     @components.heading_with_caption("beneficiaryInfo.5mld")
 
     <h2>@messages("beneficiaryInfo.5mld.subheading1")</h2>
-    <p>@messages("beneficiaryInfo.5mld.paragraph1")</p>
-    @components.bullet_list("beneficiaryInfo.5mld",
+    <p>@messages("beneficiaryInfo.5mld.paragraph11")</p>
+    @components.bullet_list(
+        "beneficiaryInfo.5mld",
         List(
             "bulletpoint11",
             "bulletpoint12",
             "bulletpoint13"
         )
     )
+    @if(isTaxable) {
+        <p>@messages("beneficiaryInfo.5mld.paragraph12")</p>
+        @components.bullet_list(
+            "beneficiaryInfo.5mld",
+            List(
+                "bulletpoint14",
+                "bulletpoint15",
+                "bulletpoint16",
+                "bulletpoint17"
+            )
+        )
+    }
 
     <h2>@messages("beneficiaryInfo.5mld.subheading2")</h2>
     <p>@messages("beneficiaryInfo.5mld.paragraph2")</p>
-    @components.bullet_list("beneficiaryInfo.5mld",
+    @components.bullet_list(
+        "beneficiaryInfo.5mld",
         List(
             "bulletpoint21",
             "bulletpoint22"
@@ -52,7 +66,8 @@
     <h2>@messages("beneficiaryInfo.5mld.subheading3")</h2>
     <p>@messages("beneficiaryInfo.5mld.paragraph31")</p>
     <p>@messages("beneficiaryInfo.5mld.paragraph32")</p>
-    @components.bullet_list("beneficiaryInfo.5mld",
+    @components.bullet_list(
+        "beneficiaryInfo.5mld",
         List(
             "bulletpoint31",
             "bulletpoint32",
@@ -70,7 +85,8 @@
 
     <h2>@messages("beneficiaryInfo.5mld.subheading6")</h2>
     <p>@messages("beneficiaryInfo.5mld.paragraph61")</p>
-    @components.bullet_list("beneficiaryInfo.5mld",
+    @components.bullet_list(
+        "beneficiaryInfo.5mld",
         List(
             "bulletpoint61",
             "bulletpoint62"
@@ -79,7 +95,8 @@
 
     <p>@messages("beneficiaryInfo.5mld.paragraph62")</p>
     <p>@messages("beneficiaryInfo.5mld.paragraph63")</p>
-    @components.bullet_list("beneficiaryInfo.5mld",
+    @components.bullet_list(
+        "beneficiaryInfo.5mld",
         List(
             "bulletpoint63",
             "bulletpoint64"
@@ -87,7 +104,8 @@
     )
 
     <p>@messages("beneficiaryInfo.5mld.paragraph64")</p>
-    @components.bullet_list("beneficiaryInfo.5mld",
+    @components.bullet_list(
+        "beneficiaryInfo.5mld",
         List(
             "bulletpoint65",
             "bulletpoint66"
@@ -114,8 +132,13 @@
 
     <h2>@messages("beneficiaryInfo.5mld.subheading7")</h2>
 
-    <p>@messages("beneficiaryInfo.5mld.paragraph71")</p>
-    <p>@messages("beneficiaryInfo.5mld.paragraph72")</p>
+    @if(isTaxable) {
+        <p>@messages("beneficiaryInfo.5mld.paragraph71.taxable")</p>
+        <p>@messages("beneficiaryInfo.5mld.paragraph72.taxable")</p>
+    } else {
+        <p>@messages("beneficiaryInfo.5mld.paragraph71.nonTaxable")</p>
+        <p>@messages("beneficiaryInfo.5mld.paragraph72.nonTaxable")</p>
+    }
 
     @components.button_link(messages("site.onlyContinue"), WhatTypeOfBeneficiaryController.onPageLoad(draftId).url)
 

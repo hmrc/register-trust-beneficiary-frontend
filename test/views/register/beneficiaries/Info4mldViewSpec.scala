@@ -18,13 +18,13 @@ package views.register.beneficiaries
 
 import controllers.register.beneficiaries.routes
 import views.behaviours.ViewBehaviours
-import views.html.register.beneficiaries.TaxableInfoView
+import views.html.register.beneficiaries.Info4mldView
 
-class TaxableInfoViewSpec extends ViewBehaviours {
+class Info4mldViewSpec extends ViewBehaviours {
 
   "TaxableInfo view" must {
 
-    val view = viewFor[TaxableInfoView](Some(emptyUserAnswers))
+    val view = viewFor[Info4mldView](Some(emptyUserAnswers))
 
     val applyView = view.apply(fakeDraftId)(fakeRequest, messages)
 

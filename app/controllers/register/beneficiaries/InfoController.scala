@@ -29,8 +29,8 @@ class InfoController @Inject()(
                                 getData: DraftIdRetrievalActionProvider,
                                 requireData: RegistrationDataRequiredAction,
                                 val controllerComponents: MessagesControllerComponents,
-                                view: TaxableInfoView,
-                                view5MLD: mld5InfoView
+                                view4MLD: Info4mldView,
+                                view5MLD: Info5mldView
                               ) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(draftId: String): Action[AnyContent] = (identify andThen getData(draftId) andThen requireData) {
@@ -39,7 +39,7 @@ class InfoController @Inject()(
       if (ua.is5mldEnabled) {
         Ok(view5MLD(draftId, ua.isTaxable))
       } else {
-        Ok(view(draftId))
+        Ok(view4MLD(draftId))
       }
   }
 }
