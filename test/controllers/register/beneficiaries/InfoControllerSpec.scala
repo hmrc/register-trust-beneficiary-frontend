@@ -19,7 +19,7 @@ package controllers.register.beneficiaries
 import base.SpecBase
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.register.beneficiaries.{mld5InfoView, TaxableInfoView}
+import views.html.register.beneficiaries.{Info4mldView, Info5mldView}
 
 class InfoControllerSpec extends SpecBase {
 
@@ -35,7 +35,7 @@ class InfoControllerSpec extends SpecBase {
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[TaxableInfoView]
+      val view = application.injector.instanceOf[Info4mldView]
 
       status(result) mustEqual OK
 
@@ -55,12 +55,12 @@ class InfoControllerSpec extends SpecBase {
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[mld5InfoView]
+      val view = application.injector.instanceOf[Info5mldView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(fakeDraftId, true)(request, messages).toString
+        view(fakeDraftId, isTaxable = true)(request, messages).toString
 
       application.stop()
     }

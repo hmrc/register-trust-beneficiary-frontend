@@ -18,28 +18,24 @@ package views.register.beneficiaries
 
 import controllers.register.beneficiaries.routes
 import views.behaviours.ViewBehaviours
-import views.html.register.beneficiaries.mld5InfoView
+import views.html.register.beneficiaries.Info5mldView
 
-class mld5InfoViewSpec extends ViewBehaviours {
+class Info5mldViewSpec extends ViewBehaviours {
 
   "mld5Info view" when {
 
     "a non-taxable trust" must {
 
-      val view = viewFor[mld5InfoView](Some(emptyUserAnswers))
-      val applyView = view.apply(fakeDraftId, false)(fakeRequest, messages)
+      val view = viewFor[Info5mldView](Some(emptyUserAnswers))
+      val applyView = view.apply(fakeDraftId, isTaxable = false)(fakeRequest, messages)
 
       behave like normalPageTitleWithCaption(applyView, "beneficiaryInfo.5mld",
         "caption",
         "subheading1",
-        "paragraph1",
+        "paragraph11",
         "bulletpoint11",
         "bulletpoint12",
         "bulletpoint13",
-        "subheading2",
-        "paragraph2",
-        "bulletpoint21",
-        "bulletpoint22",
         "subheading3",
         "paragraph31",
         "paragraph32",
@@ -60,7 +56,6 @@ class mld5InfoViewSpec extends ViewBehaviours {
         "paragraph63",
         "paragraph64",
         "bulletpoint63",
-        "bulletpoint64",
         "paragraph65",
         "details",
         "details.subheading1",
@@ -70,8 +65,8 @@ class mld5InfoViewSpec extends ViewBehaviours {
         "details.subheading3",
         "details.paragraph3",
         "subheading7",
-        "paragraph71",
-        "paragraph72"
+        "paragraph71.nonTaxable",
+        "paragraph72.nonTaxable"
       )
 
       behave like pageWithBackLink(applyView)
@@ -81,16 +76,21 @@ class mld5InfoViewSpec extends ViewBehaviours {
 
     "a taxable trust" must {
 
-      val view = viewFor[mld5InfoView](Some(emptyUserAnswers))
-      val applyView = view.apply(fakeDraftId, true)(fakeRequest, messages)
+      val view = viewFor[Info5mldView](Some(emptyUserAnswers))
+      val applyView = view.apply(fakeDraftId, isTaxable = true)(fakeRequest, messages)
 
       behave like normalPageTitleWithCaption(applyView, "beneficiaryInfo.5mld",
         "caption",
         "subheading1",
-        "paragraph1",
+        "paragraph11",
         "bulletpoint11",
         "bulletpoint12",
         "bulletpoint13",
+        "paragraph12",
+        "bulletpoint14",
+        "bulletpoint15",
+        "bulletpoint16",
+        "bulletpoint17",
         "subheading2",
         "paragraph2",
         "bulletpoint21",
@@ -125,8 +125,8 @@ class mld5InfoViewSpec extends ViewBehaviours {
         "details.subheading3",
         "details.paragraph3",
         "subheading7",
-        "paragraph71",
-        "paragraph72"
+        "paragraph71.taxable",
+        "paragraph72.taxable"
       )
 
       behave like pageWithBackLink(applyView)
