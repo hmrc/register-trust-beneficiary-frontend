@@ -51,17 +51,18 @@
                 "bulletpoint17"
             )
         )
-    }
 
-    <h2>@messages("beneficiaryInfo.5mld.subheading2")</h2>
-    <p>@messages("beneficiaryInfo.5mld.paragraph2")</p>
-    @components.bullet_list(
-        "beneficiaryInfo.5mld",
-        List(
-            "bulletpoint21",
-            "bulletpoint22"
+
+        <h2>@messages("beneficiaryInfo.5mld.subheading2")</h2>
+        <p>@messages("beneficiaryInfo.5mld.paragraph2")</p>
+        @components.bullet_list(
+            "beneficiaryInfo.5mld",
+            List(
+                "bulletpoint21",
+                "bulletpoint22"
+            )
         )
-    )
+    }
 
     <h2>@messages("beneficiaryInfo.5mld.subheading3")</h2>
     <p>@messages("beneficiaryInfo.5mld.paragraph31")</p>
@@ -97,10 +98,7 @@
     <p>@messages("beneficiaryInfo.5mld.paragraph63")</p>
     @components.bullet_list(
         "beneficiaryInfo.5mld",
-        List(
-            "bulletpoint63",
-            "bulletpoint64"
-        )
+        "bulletpoint63" +: (if(isTaxable) List("bulletpoint64") else Nil)
     )
 
     <p>@messages("beneficiaryInfo.5mld.paragraph64")</p>
