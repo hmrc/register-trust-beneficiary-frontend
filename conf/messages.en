@@ -61,8 +61,6 @@ answerPage.section.companyBeneficiary.subheading = Company beneficiary {0}
 answerPage.section.largeBeneficiary.subheading = Employment related beneficiary {0}
 answerPage.section.otherBeneficiary.subheading = Other beneficiary {0}
 
-footer.links.accessibility.text = Accessibility
-
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
 unauthorised.p1 = To use the Trust Registration Service, you need to log in with a Government Gateway Account for an organisation.
