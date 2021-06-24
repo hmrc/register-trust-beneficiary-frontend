@@ -326,7 +326,6 @@ featureNotAvailable.link=gysylltu â Gwasanaeth Cwsmeriaid Cymraeg CThEM (yn ago
 featureNotAvailable.p1=Os oes angen i chi wneud unrhyw newidiadau i’r ymddiriedolaeth, gallwch
 featureNotAvailable.p2=Byddwch yn gallu diweddaru’r manylion hyn ar-lein yn y dyfodol.
 featureNotAvailable.title=Nid yw rhan hon y gwasanaeth ar-lein ar gael eto
-footer.links.accessibility.text=Hygyrchedd
 individualBeneficiary.5mld.countryOfNationality.checkYourAnswersLabel=Beth yw gwlad cenedligrwydd {0}?
 individualBeneficiary.5mld.countryOfNationality.error.invalidCharacters=Mae’n rhaid i wlad y cenedligrwydd gynnwys y llythrennau a i z yn unig
 individualBeneficiary.5mld.countryOfNationality.error.length=Mae’n rhaid i wlad y cenedligrwydd fod yn 100 o gymeriadau neu lai
