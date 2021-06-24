@@ -19,7 +19,6 @@ package utils.answers
 import models.core.pages._
 import models.registration.pages.RoleInCompany.NA
 import models.registration.pages.{HowManyBeneficiaries, PassportOrIdCardDetails, RoleInCompany}
-import org.joda.time.{LocalDate => JodaDate}
 import play.api.i18n.Messages
 import play.twirl.api.Html
 import play.twirl.api.HtmlFormat.escape
