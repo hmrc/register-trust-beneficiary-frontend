@@ -17,6 +17,7 @@
 package models
 
 import models.registration.pages.WhatTypeOfBeneficiary
+import utils.Constants.MAX
 import viewmodels.RadioOption
 import viewmodels.addAnother._
 
@@ -69,14 +70,14 @@ case class Beneficiaries(individuals: List[IndividualBeneficiaryViewModel] = Nil
       recurse(uncombinedOptions, Nil)
     }
 
-    combineOptions(options.filter(x => x._1 < 25)).map {
+    combineOptions(options.filter(x => x._1 < MAX)).map {
       x => RadioOption(WhatTypeOfBeneficiary.prefix, x._2.toString)
     }
   }
 
   val maxedOutOptions: List[RadioOption] = {
 
-    options.filter(x => x._1 >= 25).map {
+    options.filter(x => x._1 >= MAX).map {
       x => RadioOption(WhatTypeOfBeneficiary.prefix, x._2.toString)
     }
   }
