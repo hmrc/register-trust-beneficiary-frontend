@@ -18,7 +18,6 @@ package controllers
 
 import connectors.SubmissionDraftConnector
 import controllers.actions.register.RegistrationIdentifierAction
-import controllers.register.beneficiaries.AnyBeneficiaries
 import models.UserAnswers
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Json
@@ -36,13 +35,13 @@ class IndexController @Inject()(
                                  identify: RegistrationIdentifierAction,
                                  featureFlagService: FeatureFlagService,
                                  submissionDraftConnector: SubmissionDraftConnector
-                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with AnyBeneficiaries {
+                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(draftId: String): Action[AnyContent] = identify.async { implicit request =>
 
     def redirect(userAnswers: UserAnswers): Future[Result] = {
       repository.set(userAnswers) map { _ =>
-        if (isAnyBeneficiaryAdded(userAnswers)) {
+        if (userAnswers.isAnyBeneficiaryAdded) {
           Redirect(controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId))
         } else {
           Redirect(controllers.register.beneficiaries.routes.InfoController.onPageLoad(draftId))

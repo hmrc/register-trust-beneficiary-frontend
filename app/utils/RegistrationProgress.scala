@@ -16,7 +16,6 @@
 
 package utils
 
-import controllers.register.beneficiaries.AnyBeneficiaries
 import models.registration.pages._
 import models.{ReadableUserAnswers, Status}
 import pages.QuestionPage
@@ -25,11 +24,11 @@ import play.api.libs.json.Reads
 import sections.beneficiaries._
 import viewmodels.addAnother._
 
-class RegistrationProgress extends AnyBeneficiaries {
+class RegistrationProgress {
 
   def beneficiariesStatus(userAnswers: ReadableUserAnswers): Option[Status] = {
 
-    if (!isAnyBeneficiaryAdded(userAnswers)) {
+    if (!userAnswers.isAnyBeneficiaryAdded) {
       None
     } else {
 

@@ -19,6 +19,7 @@ package models
 import play.api.Logging
 import play.api.libs.json._
 import queries.{Gettable, Settable}
+import sections.beneficiaries._
 
 import scala.util.{Failure, Success, Try}
 
@@ -36,6 +37,26 @@ trait ReadableUserAnswers {
       case JsSuccess(value, _) => Some(value)
       case JsError(_) => None
     }
+  }
+
+  val beneficiaries: Beneficiaries = Beneficiaries(
+    this.get(IndividualBeneficiaries).getOrElse(List.empty),
+    this.get(ClassOfBeneficiaries).getOrElse(List.empty),
+    this.get(CharityBeneficiaries).getOrElse(List.empty),
+    this.get(TrustBeneficiaries).getOrElse(List.empty),
+    this.get(CompanyBeneficiaries).getOrElse(List.empty),
+    this.get(LargeBeneficiaries).getOrElse(List.empty),
+    this.get(OtherBeneficiaries).getOrElse(List.empty)
+  )
+
+  val isAnyBeneficiaryAdded: Boolean = {
+    beneficiaries.individuals.nonEmpty ||
+      beneficiaries.unidentified.nonEmpty ||
+      beneficiaries.charities.nonEmpty ||
+      beneficiaries.trusts.nonEmpty ||
+      beneficiaries.companies.nonEmpty ||
+      beneficiaries.large.nonEmpty ||
+      beneficiaries.other.nonEmpty
   }
 }
 

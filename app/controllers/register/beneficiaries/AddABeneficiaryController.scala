@@ -19,13 +19,11 @@ package controllers.register.beneficiaries
 import config.FrontendAppConfig
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
-
-import javax.inject.Inject
 import models.Status.InProgress
 import models.registration.pages.AddABeneficiary.NoComplete
 import models.registration.pages.KindOfTrust.Employees
 import models.requests.RegistrationDataRequest
-import models.{Enumerable, ReadOnlyUserAnswers, UserAnswers}
+import models.{ReadOnlyUserAnswers, UserAnswers}
 import navigation.Navigator
 import pages.entitystatus.IndividualBeneficiaryStatus
 import pages.register.KindOfTrustPage
@@ -34,13 +32,14 @@ import pages.register.beneficiaries.{AddABeneficiaryPage, AddABeneficiaryYesNoPa
 import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi, MessagesProvider}
-import play.api.mvc.{Action, ActionBuilder, AnyContent, Call, MessagesControllerComponents}
+import play.api.mvc._
 import repositories.RegistrationsRepository
 import sections.beneficiaries.IndividualBeneficiaries
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.AddABeneficiaryViewHelper
 import views.html.register.beneficiaries.{AddABeneficiaryView, AddABeneficiaryYesNoView, MaxedOutBeneficiariesView}
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddABeneficiaryController @Inject()(
@@ -57,9 +56,7 @@ class AddABeneficiaryController @Inject()(
                                            yesNoView: AddABeneficiaryYesNoView,
                                            maxedOutView: MaxedOutBeneficiariesView,
                                            config: FrontendAppConfig
-                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with Logging
-
-  with I18nSupport with Enumerable.Implicits with AnyBeneficiaries {
+                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with Logging with I18nSupport {
 
   private val addAnotherForm = addAnotherFormProvider()
 
@@ -108,15 +105,13 @@ class AddABeneficiaryController @Inject()(
       updateUserAnswers(request.userAnswers) map { userAnswers =>
         val rows = new AddABeneficiaryViewHelper(userAnswers, draftId).rows
 
-        val allBeneficiaries = beneficiaries(userAnswers)
-
-        if (allBeneficiaries.nonMaxedOutOptions.isEmpty) {
+        if (userAnswers.beneficiaries.nonMaxedOutOptions.isEmpty) {
           logger.info(s"[AddABeneficiaryController][Session ID: ${request.sessionId}] ${request.internalId} has maxed out beneficiaries")
           Ok(maxedOutView(draftId, rows.inProgress, rows.complete, heading(rows.count)))
         } else {
           if(rows.count > 0) {
             logger.info(s"[AddABeneficiaryController][Session ID: ${request.sessionId}] ${request.internalId} has not maxed out beneficiaries")
-            val listOfMaxed = allBeneficiaries.maxedOutOptions.map(_.messageKey)
+            val listOfMaxed = userAnswers.beneficiaries.maxedOutOptions.map(_.messageKey)
             Ok(addAnotherView(addAnotherForm, draftId, rows.inProgress, rows.complete, heading(rows.count), listOfMaxed))
           } else {
             logger.info(s"[AddABeneficiaryController][Session ID: ${request.sessionId}] ${request.internalId} has added no beneficiaries")
@@ -150,8 +145,7 @@ class AddABeneficiaryController @Inject()(
         (formWithErrors: Form[_]) => {
           val rows = new AddABeneficiaryViewHelper(request.userAnswers, draftId).rows
 
-          val allBeneficiaries = beneficiaries(request.userAnswers)
-          val listOfMaxed = allBeneficiaries.maxedOutOptions.map(_.messageKey)
+          val listOfMaxed = request.userAnswers.beneficiaries.maxedOutOptions.map(_.messageKey)
 
           Future.successful(BadRequest(addAnotherView(formWithErrors, draftId, rows.inProgress, rows.complete, heading(rows.count), listOfMaxed)))
         },

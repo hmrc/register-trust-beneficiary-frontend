@@ -18,8 +18,6 @@ package controllers.register.beneficiaries
 
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.WhatTypeOfBeneficiaryFormProvider
-import javax.inject.Inject
-import models.Enumerable
 import models.requests.RegistrationDataRequest
 import navigation.Navigator
 import pages.register.beneficiaries.WhatTypeOfBeneficiaryPage
@@ -30,6 +28,7 @@ import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.beneficiaries.WhatTypeOfBeneficiaryView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class WhatTypeOfBeneficiaryController @Inject()(
@@ -42,11 +41,7 @@ class WhatTypeOfBeneficiaryController @Inject()(
                                                  formProvider: WhatTypeOfBeneficiaryFormProvider,
                                                  val controllerComponents: MessagesControllerComponents,
                                                  view: WhatTypeOfBeneficiaryView
-                                               )(implicit ec: ExecutionContext)
-  extends FrontendBaseController
-    with I18nSupport
-    with Enumerable.Implicits
-    with AnyBeneficiaries {
+                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def actions(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] = identify andThen getData(draftId) andThen requireData
 
@@ -63,8 +58,8 @@ class WhatTypeOfBeneficiaryController @Inject()(
       Ok(view(
         form = preparedForm,
         draftId = draftId,
-        beneficiaryAdded = isAnyBeneficiaryAdded(request.userAnswers),
-        options = beneficiaries(request.userAnswers).nonMaxedOutOptions
+        beneficiaryAdded = request.userAnswers.isAnyBeneficiaryAdded,
+        options = request.userAnswers.beneficiaries.nonMaxedOutOptions
       ))
   }
 
@@ -76,8 +71,8 @@ class WhatTypeOfBeneficiaryController @Inject()(
           Future.successful(BadRequest(view(
             form = formWithErrors,
             draftId = draftId,
-            beneficiaryAdded = isAnyBeneficiaryAdded(request.userAnswers),
-            options = beneficiaries(request.userAnswers).nonMaxedOutOptions
+            beneficiaryAdded = request.userAnswers.isAnyBeneficiaryAdded,
+            options = request.userAnswers.beneficiaries.nonMaxedOutOptions
           ))),
 
         value => {
