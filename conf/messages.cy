@@ -1,5 +1,5 @@
-addABeneficiary.add-them-later=Iawn
-addABeneficiary.add-them-now=Iawn
+addABeneficiary.add-them-later=Iawn, rwyf am ei ychwanegu yn nes ymlaen
+addABeneficiary.add-them-now=Iawn, rwyf am ei ychwanegu nawr
 addABeneficiary.additional-content=A ydych am ychwanegu buddiolwr arall?
 addABeneficiary.count.heading=Rydych wedi ychwanegu {0} o fuddiolwyr
 addABeneficiary.count.title=Rydych wedi ychwanegu {0} o fuddiolwyr
@@ -12,7 +12,7 @@ addABeneficiary.maxedOut.just1=Ni allwch ychwanegu {0} arall gan eich bod wedi n
 addABeneficiary.maxedOut.just1.paragraph=Gwiriwch y buddiolwyr rydych wedi’u hychwanegu. Os oes gennych ragor o fuddiolwyr i’w hychwanegu o dan y math hwn
 addABeneficiary.maxedOut.moreThan1=Rydych wedi nodi uchafswm nifer y buddiolwyr ar gyfer:
 addABeneficiary.maxedOut.moreThan1.paragraph=Gwiriwch y buddiolwyr rydych wedi’u hychwanegu. Os oes gennych ragor o fuddiolwyr i’w hychwanegu o dan y mathau hyn
-addABeneficiary.no-complete=Na
+addABeneficiary.no-complete=Na, rwyf wedi ychwanegu’r holl fuddiolwyr
 addABeneficiary.title=Ychwanegu buddiolwr
 addABeneficiaryYesNo.error.required=Dewiswch ‘Iawn’ os ydych am ychwanegu buddiolwr
 addABeneficiaryYesNo.heading=A ydych am ychwanegu buddiolwr?
