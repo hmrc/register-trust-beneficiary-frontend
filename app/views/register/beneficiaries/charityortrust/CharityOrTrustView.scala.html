@@ -16,9 +16,12 @@
 
 @import controllers.register.beneficiaries.charityortrust.routes._
 @import models.registration.pages.CharityOrTrust
+@import views.html.components.{ErrorSummary, SubmitButton, InputRadio}
 
 @this(
     mainTemplate: MainTemplate,
+    submitButton: SubmitButton,
+    errorSummary: ErrorSummary,
     inputRadio: InputRadio,
     formHelper: FormWithCSRF
 )
@@ -26,7 +29,8 @@
 @(form: Form[_], draftId: String)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = s"${errorPrefix(form)}${messages("charityOrTrust.title")}"
+    title = s"${errorPrefix(form)}${messages("charityOrTrust.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = CharityOrTrustController.onSubmit(draftId), 'autoComplete -> "off") {

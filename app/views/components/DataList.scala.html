@@ -16,6 +16,8 @@
 
 @import viewmodels.AddRow
 
+@this()
+
 @(data: Seq[AddRow], id: String, entity : String)(implicit messages: Messages)
 
 @if(data.nonEmpty){

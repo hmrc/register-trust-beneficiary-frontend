@@ -17,21 +17,27 @@
 @import controllers.register.beneficiaries.individualBeneficiary.routes._
 @import utils.InputOption
 @import models.core.pages.FullName
+@import views.html.components.{ErrorSummary, SubmitButton, Select, Heading, InputText, InputDate}
 
 @this(
     mainTemplate: MainTemplate,
+    errorSummary: ErrorSummary,
+    heading: Heading,
+    inputDate: InputDate,
+    inputText: InputText,
+    select: Select,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], countryOptions:Seq[InputOption], draftId: String, index: Int, name: FullName)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = s"${errorPrefix(form)}${messages("individualBeneficiaryPassportDetails.title")}"
+    title = s"${errorPrefix(form)}${messages("individualBeneficiaryPassportDetails.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = PassportDetailsController.onSubmit(index, draftId), 'autoComplete -> "off") {
-
-        @components.back_link()
 
         @errorSummary(form.errors)
 
@@ -52,7 +58,7 @@
             hint = Some(messages("individualBeneficiaryPassportDetails.number.hint"))
         )
 
-        @components.input_date(
+        @inputDate(
             field = form("expiryDate"),
             legend = messages("individualBeneficiaryPassportDetails.expiryDate.title"),
             legendClass = "bold",

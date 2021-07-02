@@ -15,9 +15,13 @@
  *@
 
 @import controllers.register.beneficiaries.individualBeneficiary.mld5.routes._
+@import views.html.components.{ErrorSummary, SubmitButton, InputYesNo}
 
 @this(
     mainTemplate: MainTemplate,
+    errorSummary: ErrorSummary,
+    inputYesNo: InputYesNo,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
@@ -28,8 +32,6 @@
 ) {
 
         @formHelper(action = CountryOfNationalityYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
-
-        @components.back_link()
 
         @errorSummary(form.errors)
 

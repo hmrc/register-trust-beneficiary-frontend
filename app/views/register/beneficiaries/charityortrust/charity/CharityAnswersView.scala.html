@@ -16,13 +16,13 @@
 
 @import controllers.register.beneficiaries.charityortrust.charity.routes._
 @import viewmodels.{AnswerSection, RepeaterAnswerSection, Section}
-@import views.html.components.{AnswerSection => AnswerSectionComponent, SubmitButton, Heading}
+@import views.html.components.{Answers, SubmitButton, Heading}
 
 @this(
     mainTemplate: MainTemplate,
     formHelper: FormWithCSRF,
     heading: Heading,
-    answerSectionComponent: AnswerSectionComponent,
+    answers: Answers,
     submitButton: SubmitButton
 )
 
@@ -37,7 +37,7 @@
 
         @heading("charity.answers.heading")
 
-        @answerSectionComponent(answerSection)
+        @answers(answerSection)
 
         @submitButton()
     }

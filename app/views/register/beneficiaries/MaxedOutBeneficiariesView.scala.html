@@ -18,9 +18,13 @@
 @import models.registration.pages.AddABeneficiary
 @import viewmodels.AddRow
 @import viewmodels.RadioOption
+@import views.html.components.{Heading, SubmitButton, DataList}
 
 @this(
     mainTemplate: MainTemplate,
+    submitButton: SubmitButton,
+    dataList: DataList,
+    headingComp: Heading,
     formHelper: FormWithCSRF
 )
 
@@ -30,18 +34,17 @@
     heading: String)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = heading
+    title = heading,
+    showBackLink = true
     ) {
 
     @formHelper(action = AddABeneficiaryController.submitComplete(draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @headingComp(heading)
 
-        @heading(heading)
+        @dataList(inProgressBeneficiaries, "inprogress", "beneficiary")
 
-        @components.data_list(inProgressBeneficiaries, "inprogress", "beneficiary")
-
-        @components.data_list(completeBeneficiaries, "complete", "beneficiary")
+        @dataList(completeBeneficiaries, "complete", "beneficiary")
 
         <ul>
             <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.all")</p></li>

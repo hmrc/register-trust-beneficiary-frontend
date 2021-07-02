@@ -16,21 +16,24 @@
 
 @import controllers.register.beneficiaries.individualBeneficiary.mld5.routes._
 @import utils.InputOption
+@import views.html.components.{ErrorSummary, SubmitButton, Select}
 
 @this(
     mainTemplate: MainTemplate,
+    errorSummary: ErrorSummary,
+    select: Select,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], countryOptions: Seq[InputOption], draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = s"${errorPrefix(form)}${messages("individualBeneficiary.5mld.countryOfNationality.title")}"
+    title = s"${errorPrefix(form)}${messages("individualBeneficiary.5mld.countryOfNationality.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = CountryOfNationalityController.onSubmit(index, draftId), 'autoComplete -> "off") {
-
-        @components.back_link()
 
         @errorSummary(form.errors)
 

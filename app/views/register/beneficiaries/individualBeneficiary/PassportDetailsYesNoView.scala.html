@@ -16,21 +16,24 @@
 
 @import controllers.register.beneficiaries.individualBeneficiary.routes._
 @import models.core.pages.FullName
+@import views.html.components.{ErrorSummary, SubmitButton, InputYesNo}
 
 @this(
     mainTemplate: MainTemplate,
+    errorSummary: ErrorSummary,
+    inputYesNo: InputYesNo,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], draftId: String, index: Int, name: FullName)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = s"${errorPrefix(form)}${messages("individualBeneficiaryPassportDetailsYesNo.title")}"
+    title = s"${errorPrefix(form)}${messages("individualBeneficiaryPassportDetailsYesNo.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = PassportDetailsYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
-
-        @components.back_link()
 
         @errorSummary(form.errors)
 

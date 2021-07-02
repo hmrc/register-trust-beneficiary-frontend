@@ -16,13 +16,16 @@
 
 @import viewmodels.RepeaterAnswerSection
 @import views.html._
+@import views.html.components.AnswerRow
+
+@this(answerRow: AnswerRow)
 
 @(answerSection: RepeaterAnswerSection)(implicit messages: Messages)
 
 <h2>@messages(answerSection.headingKey)</h2>
 
 <ul role="list" class="govuk-check-your-answers cya-questions-long section">
-    @components.answer_row(answerSection.relevanceRow)
+    @answerRow(answerSection.relevanceRow)
 @for(row <- answerSection.rows){
     <li>
         <div class="cya-question">@row.answer</div>

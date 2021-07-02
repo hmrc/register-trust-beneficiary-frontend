@@ -17,9 +17,15 @@
 @import controllers.register.beneficiaries.routes._
 @import models.registration.pages.AddABeneficiary
 @import viewmodels.AddRow
+@import views.html.components.{SubmitButton, ErrorSummary, Heading, DataList, InputRadio}
 
 @this(
     mainTemplate: MainTemplate,
+    submitButton: SubmitButton,
+    errorSummary: ErrorSummary,
+    headingComp: Heading,
+    dataList: DataList,
+    inputRadio: InputRadio,
     formHelper: FormWithCSRF
 )
 
@@ -31,20 +37,19 @@
     maxedOut: List[String])(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = s"${errorPrefix(form)}$heading"
+    title = s"${errorPrefix(form)}$heading",
+    showBackLink = true
     ) {
 
     @formHelper(action = AddABeneficiaryController.submitAnother(draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
-
         @errorSummary(form.errors)
 
-        @heading(heading)
+        @headingComp(heading)
 
-        @components.data_list(inProgressIndividualBeneficiaries, "inprogress", "beneficiary")
+        @dataList(inProgressIndividualBeneficiaries, "inprogress", "beneficiary")
 
-        @components.data_list(completeIndividualBeneficiaries, "complete", "beneficiary")
+        @dataList(completeIndividualBeneficiaries, "complete", "beneficiary")
 
         @if(maxedOut.size == 1) {
         <ul>

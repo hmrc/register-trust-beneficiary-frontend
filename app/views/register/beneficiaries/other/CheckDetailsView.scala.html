@@ -16,25 +16,28 @@
 
 @import viewmodels.AnswerSection
 @import controllers.register.beneficiaries.other.routes._
+@import views.html.components.{Answers, SubmitButton, Heading}
 
 @this(
     mainTemplate: MainTemplate,
+    answers: Answers,
+    heading: Heading,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
 @(answerSection: AnswerSection, index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = messages("otherBeneficiary.checkDetails.title")
+    title = messages("otherBeneficiary.checkDetails.title"),
+    showBackLink = true
 ) {
 
     @formHelper(action = CheckDetailsController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
-
         @heading("otherBeneficiary.checkDetails.heading")
 
-        @components.answer_section(answerSection)
+        @answers(answerSection)
 
         @submitButton()
     }

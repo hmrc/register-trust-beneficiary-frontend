@@ -15,9 +15,13 @@
  *@
 
 @import controllers.register.beneficiaries.individualBeneficiary.mld5.routes._
+@import views.html.components.{ErrorSummary, SubmitButton, InputYesNo}
 
 @this(
     mainTemplate: MainTemplate,
+    errorSummary: ErrorSummary,
+    inputYesNo: InputYesNo,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
@@ -35,12 +39,11 @@
 }
 
 @mainTemplate(
-    title = s"${errorPrefix(form)}${messages("individualBeneficiary.5mld.mentalCapacityYesNo.title")}"
+    title = s"${errorPrefix(form)}${messages("individualBeneficiary.5mld.mentalCapacityYesNo.title")}",
+    showBackLink = true
 ) {
 
         @formHelper(action = MentalCapacityYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
-
-        @components.back_link()
 
         @errorSummary(form.errors)
 
@@ -48,8 +51,7 @@
             field = form("value"),
             label = messages("individualBeneficiary.5mld.mentalCapacityYesNo.heading", name),
             legendClass = Some("heading-large"),
-            legendAsHeading = true,
-            additionalContent = Some(content)
+            legendAsHeading = true
         )
 
         @submitButton()

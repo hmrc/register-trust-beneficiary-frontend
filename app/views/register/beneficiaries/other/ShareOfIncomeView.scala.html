@@ -15,21 +15,24 @@
  *@
 
 @import controllers.register.beneficiaries.other.routes._
+@import views.html.components.{ErrorSummary, SubmitButton, InputNumber}
 
 @this(
     mainTemplate: MainTemplate,
+    errorSummary: ErrorSummary,
+    inputNumber: InputNumber,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], name: String, index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = s"${errorPrefix(form)}${messages("otherBeneficiary.shareOfIncome.title")}"
+    title = s"${errorPrefix(form)}${messages("otherBeneficiary.shareOfIncome.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = ShareOfIncomeController.onSubmit(index, draftId), 'autoComplete -> "off") {
-
-        @components.back_link()
 
         @errorSummary(form.errors)
 

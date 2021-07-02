@@ -17,9 +17,13 @@
 @import controllers.register.beneficiaries.routes._
 @import models.registration.pages.WhatTypeOfBeneficiary
 @import viewmodels.RadioOption
+    @import views.html.components.{ErrorSummary, SubmitButton, InputRadio}
 
 @this(
     mainTemplate: MainTemplate,
+    submitButton: SubmitButton,
+    errorSummary: ErrorSummary,
+    inputRadio: InputRadio,
     formHelper: FormWithCSRF
 )
 
@@ -36,12 +40,11 @@
 }
 
 @mainTemplate(
-    title = s"${errorPrefix(form)}$title"
+    title = s"${errorPrefix(form)}$title",
+    showBackLink = true
     ) {
 
     @formHelper(action = WhatTypeOfBeneficiaryController.onSubmit(draftId), 'autoComplete -> "off") {
-
-        @components.back_link()
 
         @errorSummary(form.errors)
 
