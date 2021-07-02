@@ -16,26 +16,29 @@
 
 @import controllers.register.beneficiaries.charityortrust.charity.routes._
 @import viewmodels.{AnswerSection, RepeaterAnswerSection, Section}
+@import views.html.components.{AnswerSection => AnswerSectionComponent, SubmitButton, Heading}
 
 @this(
-    main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    mainTemplate: MainTemplate,
+    formHelper: FormWithCSRF,
+    heading: Heading,
+    answerSectionComponent: AnswerSectionComponent,
+    submitButton: SubmitButton
 )
 
 @(answerSection: AnswerSection, index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = messages("charity.answers.title")
+@mainTemplate(
+    title = messages("charity.answers.title"),
+    showBackLink = true
 ) {
 
     @formHelper(action = CharityAnswersController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @heading("charity.answers.heading")
 
-        @components.heading("charity.answers.heading")
+        @answerSectionComponent(answerSection)
 
-        @components.answer_section(answerSection)
-
-        @components.submit_button()
+        @submitButton()
     }
 }

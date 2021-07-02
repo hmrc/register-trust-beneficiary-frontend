@@ -1,3 +1,4 @@
+@import views.html.components.{ErrorSummary, SubmitButton, InputYesNo}
 @*
  * Copyright 2021 HM Revenue & Customs
  *
@@ -15,25 +16,28 @@
  *@
 
 @import controllers.register.beneficiaries.classofbeneficiaries.routes._
+@import views.html.components.{ErrorSummary, SubmitButton, InputText}
 
 @this(
-    main_template: MainTemplate,
+    mainTemplate: MainTemplate,
+    errorSummary: ErrorSummary,
+    submitButton: SubmitButton,
+    inputText: InputText,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], draftId: String, index: Int)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)}${messages("classBeneficiaryDescription.title")}"
+@mainTemplate(
+    title = s"${errorPrefix(form)}${messages("classBeneficiaryDescription.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = ClassBeneficiaryDescriptionController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_text(
+        @inputText(
           field = form("value"),
           label = messages("classBeneficiaryDescription.heading"),
           labelAsHeading = true,
@@ -42,6 +46,6 @@
         )
 
 
-        @components.submit_button()
+        @submitButton()
     }
 }

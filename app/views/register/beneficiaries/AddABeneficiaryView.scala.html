@@ -19,7 +19,7 @@
 @import viewmodels.AddRow
 
 @this(
-    main_template: MainTemplate,
+    mainTemplate: MainTemplate,
     formHelper: FormWithCSRF
 )
 
@@ -30,7 +30,7 @@
     heading : String,
     maxedOut: List[String])(implicit request: Request[_], messages: Messages)
 
-@main_template(
+@mainTemplate(
     title = s"${errorPrefix(form)}$heading"
     ) {
 
@@ -38,9 +38,9 @@
 
         @components.back_link()
 
-        @components.error_summary(form.errors)
+        @errorSummary(form.errors)
 
-        @components.heading(heading)
+        @heading(heading)
 
         @components.data_list(inProgressIndividualBeneficiaries, "inprogress", "beneficiary")
 
@@ -65,7 +65,7 @@
         </ul>
         }
 
-        @components.input_radio(
+        @inputRadio(
             field = form("value"),
             legend = messages("addABeneficiary.additional-content"),
             legendClass = Some("heading-medium"),
@@ -73,6 +73,6 @@
             legendAsH2Heading = true
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

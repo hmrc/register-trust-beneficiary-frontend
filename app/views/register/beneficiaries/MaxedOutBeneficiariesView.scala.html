@@ -20,7 +20,7 @@
 @import viewmodels.RadioOption
 
 @this(
-    main_template: MainTemplate,
+    mainTemplate: MainTemplate,
     formHelper: FormWithCSRF
 )
 
@@ -29,7 +29,7 @@
     completeBeneficiaries: Seq[AddRow],
     heading: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
+@mainTemplate(
     title = heading
     ) {
 
@@ -37,7 +37,7 @@
 
         @components.back_link()
 
-        @components.heading(heading)
+        @heading(heading)
 
         @components.data_list(inProgressBeneficiaries, "inprogress", "beneficiary")
 
@@ -48,6 +48,6 @@
             <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.all.paragraph")</p></li>
         </ul>
 
-        @components.submit_button()
+        @submitButton()
     }
 }

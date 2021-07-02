@@ -17,13 +17,13 @@
 @import controllers.register.beneficiaries.individualBeneficiary.mld5.routes._
 
 @this(
-    main_template: MainTemplate,
+    mainTemplate: MainTemplate,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
+@mainTemplate(
     title = s"${errorPrefix(form)}${messages("individualBeneficiary.5mld.countryOfNationalityInTheUkYesNo.title")}"
 ) {
 
@@ -31,15 +31,15 @@
 
         @components.back_link()
 
-        @components.error_summary(form.errors)
+        @errorSummary(form.errors)
 
-        @components.input_yes_no(
+        @inputYesNo(
             field = form("value"),
             label = messages("individualBeneficiary.5mld.countryOfNationalityInTheUkYesNo.heading", name),
             legendClass = Some("heading-large"),
             legendAsHeading = true
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

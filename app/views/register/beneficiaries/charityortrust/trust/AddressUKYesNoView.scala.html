@@ -17,31 +17,34 @@
 @import controllers.register.beneficiaries.charityortrust.trust.routes._
 @import models.Mode
 @import models.core.pages.FullName
+@import views.html.components.{ErrorSummary, SubmitButton, InputYesNo}
 
 @this(
-    main_template: MainTemplate,
+    mainTemplate: MainTemplate,
+    errorSummary: ErrorSummary,
+    submitButton: SubmitButton,
+    inputYesNo: InputYesNo,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], draftId: String, name: String, index: Int)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)}${messages("trustBeneficiaryAddressUKYesNo.title")}"
+@mainTemplate(
+    title = s"${errorPrefix(form)}${messages("trustBeneficiaryAddressUKYesNo.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = AddressUKYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_yes_no(
+        @inputYesNo(
             field = form("value"),
             label = messages("trustBeneficiaryAddressUKYesNo.heading", name),
             legendClass = Some("heading-large"),
             legendAsHeading = true
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

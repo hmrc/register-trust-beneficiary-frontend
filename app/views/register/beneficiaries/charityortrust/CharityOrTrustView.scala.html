@@ -18,23 +18,22 @@
 @import models.registration.pages.CharityOrTrust
 
 @this(
-    main_template: MainTemplate,
+    mainTemplate: MainTemplate,
+    inputRadio: InputRadio,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], draftId: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
+@mainTemplate(
     title = s"${errorPrefix(form)}${messages("charityOrTrust.title")}"
     ) {
 
     @formHelper(action = CharityOrTrustController.onSubmit(draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_radio(
+        @inputRadio(
             field = form("value"),
             legend = messages("charityOrTrust.heading"),
             legendClass = Some("heading-large"),
@@ -43,6 +42,6 @@
             inputs = CharityOrTrust.options.toSeq
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

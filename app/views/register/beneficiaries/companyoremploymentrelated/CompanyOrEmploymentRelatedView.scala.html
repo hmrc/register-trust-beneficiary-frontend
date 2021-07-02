@@ -16,25 +16,28 @@
 
 @import controllers.register.beneficiaries.companyoremploymentrelated.routes._
 @import models.CompanyOrEmploymentRelatedToAdd
+@import views.html.components.{ErrorSummary, SubmitButton, InputRadio}
 
 @this(
-    main_template: MainTemplate,
+    mainTemplate: MainTemplate,
+    errorSummary: ErrorSummary,
+    submitButton: SubmitButton,
+    inputRadio: InputRadio,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], draftId: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)}${messages("companyOrEmploymentRelated.title")}"
+@mainTemplate(
+    title = s"${errorPrefix(form)}${messages("companyOrEmploymentRelated.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = CompanyOrEmploymentRelatedController.onSubmit(draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_radio(
+        @inputRadio(
             field = form("value"),
             legend = messages("companyOrEmploymentRelated.heading"),
             legendClass = Some("heading-large"),
@@ -44,6 +47,6 @@
             fieldSetClass = Some("inline")
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

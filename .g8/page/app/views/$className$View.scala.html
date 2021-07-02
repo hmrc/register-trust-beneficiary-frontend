@@ -1,14 +1,14 @@
 @this(
-    main_template: MainTemplate
+    mainTemplate: MainTemplate
 )
 
 @()(implicit request: Request[_], messages: Messages)
 
-@main_template(
+@mainTemplate(
     title = messages("$className;format="decap"$.title")
     ) {
 
-    @components.back_link()
+    @back_link()
 
-    @components.heading("$className;format="decap"$.heading")
+    @heading("$className;format="decap"$.heading")
 }

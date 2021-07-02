@@ -19,7 +19,7 @@
 @import viewmodels.RadioOption
 
 @this(
-    main_template: MainTemplate,
+    mainTemplate: MainTemplate,
     formHelper: FormWithCSRF
 )
 
@@ -35,7 +35,7 @@
     }
 }
 
-@main_template(
+@mainTemplate(
     title = s"${errorPrefix(form)}$title"
     ) {
 
@@ -43,9 +43,9 @@
 
         @components.back_link()
 
-        @components.error_summary(form.errors)
+        @errorSummary(form.errors)
 
-        @components.input_radio(
+        @inputRadio(
             field = form("value"),
             legend = heading.toString,
             legendClass = Some("heading-large"),
@@ -54,6 +54,6 @@
             legendAsHeading = true
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

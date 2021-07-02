@@ -15,60 +15,65 @@
  *@
 
 @import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.routes._
+@import views.html.components.{ErrorSummary, SubmitButton, InputText, FormHint, Heading}
 
 @this(
-    main_template: MainTemplate,
+    mainTemplate: MainTemplate,
+    formHint: FormHint,
+    inputText: InputText,
+    errorSummary: ErrorSummary,
+    heading: Heading,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)}${messages("employmentRelatedBeneficiary.description.title")}"
+@mainTemplate(
+    title = s"${errorPrefix(form)}${messages("employmentRelatedBeneficiary.description.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = DescriptionController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
+        @heading("employmentRelatedBeneficiary.description.heading")
 
-        @components.heading("employmentRelatedBeneficiary.description.heading")
-
-        @components.form_hint(
+        @formHint(
             hint = Some(messages("employmentRelatedBeneficiary.description.hint"))
         )
 
-        @components.input_text(
+        @inputText(
             field = form("description"),
             label = messages("employmentRelatedBeneficiary.description.description"),
             inputClass = Some("form-control-3-4")
         )
 
-        @components.input_text(
+        @inputText(
             field = form("description1"),
             label = messages("employmentRelatedBeneficiary.description.description1"),
             inputClass = Some("form-control-3-4")
         )
 
-        @components.input_text(
+        @inputText(
             field = form("description2"),
             label = messages("employmentRelatedBeneficiary.description.description2"),
             inputClass = Some("form-control-3-4")
         )
 
-        @components.input_text(
+        @inputText(
             field = form("description3"),
             label = messages("employmentRelatedBeneficiary.description.description3"),
             inputClass = Some("form-control-3-4")
         )
 
-        @components.input_text(
+        @inputText(
             field = form("description4"),
             label = messages("employmentRelatedBeneficiary.description.description4"),
             inputClass = Some("form-control-3-4")
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

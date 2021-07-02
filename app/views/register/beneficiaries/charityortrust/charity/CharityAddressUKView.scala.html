@@ -15,34 +15,30 @@
  *@
 
 @import controllers.register.beneficiaries.charityortrust.charity.routes._
+@import views.html.components.{UkAddress, ErrorSummary, SubmitButton, Heading}
 
 @this(
-    main_template: MainTemplate,
+    mainTemplate: MainTemplate,
+    errorSummary: ErrorSummary,
+    submitButton: SubmitButton,
+    ukAddress: UkAddress,
+    heading: Heading,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], draftId: String, charityName: String, index: Int)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)}${messages("charity.ukAddress.title")}"
+@mainTemplate(
+    title = s"${errorPrefix(form)}${messages("charity.ukAddress.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = CharityAddressUKController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
+        @ukAddress(form, "charity.ukAddress.heading")
 
-        <fieldset>
-
-            <legend>
-                @components.heading("charity.ukAddress.heading", Some(charityName))
-            </legend>
-
-            @components.uk_address(form)
-
-        </fieldset>
-
-        @components.submit_button()
+        @submitButton()
     }
 }

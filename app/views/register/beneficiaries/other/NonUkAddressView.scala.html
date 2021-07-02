@@ -18,13 +18,13 @@
 @import utils.InputOption
 
 @this(
-        main_template: MainTemplate,
+        mainTemplate: MainTemplate,
         formHelper: FormWithCSRF
 )
 
 @(form: Form[_], countryOptions: Seq[InputOption], name: String, index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
+@mainTemplate(
     title = s"${errorPrefix(form)}${messages("site.address.international.title")}"
 ) {
 
@@ -32,13 +32,13 @@
 
         @components.back_link()
 
-        @components.error_summary(form.errors)
+        @errorSummary(form.errors)
 
-        @components.heading("site.address.international.heading", Some(name))
+        @heading("site.address.international.heading", Some(name))
 
-        @components.international_address(form, countryOptions)
+        @internationalAddress(form, countryOptions)
 
-        @components.submit_button()
+        @submitButton()
 
     }
 }

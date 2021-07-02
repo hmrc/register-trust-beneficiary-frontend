@@ -17,18 +17,18 @@
 @import controllers.register.beneficiaries.routes._
 
 @this(
-    main_template: MainTemplate
+    mainTemplate: MainTemplate
 )
 
 @(draftId: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
+@mainTemplate(
     title = messages("beneficiaryInfo.title")
 ) {
 
     @components.back_link()
 
-    @components.heading_with_caption("beneficiaryInfo")
+    @heading_with_caption("beneficiaryInfo")
 
     <h2>@messages("beneficiaryInfo.subheading1")</h2>
 

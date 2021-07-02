@@ -15,25 +15,28 @@
  *@
 
 @import controllers.register.beneficiaries.charityortrust.charity.routes._
+@import views.html.components.{ErrorSummary, SubmitButton, InputYesNo}
 
 @this(
-    main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    mainTemplate: MainTemplate,
+    formHelper: FormWithCSRF,
+    inputYesNo: InputYesNo,
+    errorSummary: ErrorSummary,
+    submitButton: SubmitButton
 )
 
 @(form: Form[_], draftId: String, index: Int, charityName: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)}${messages("charity.discretionYesNo.title")}"
+@mainTemplate(
+    title = s"${errorPrefix(form)}${messages("charity.discretionYesNo.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = AmountDiscretionYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_yes_no(
+        @inputYesNo(
             field = form("value"),
             label = messages("charity.discretionYesNo.heading", charityName),
             legendClass = Some("heading-large"),
@@ -41,6 +44,6 @@
             hint = Some(messages("charity.discretionYesNo.hint"))
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

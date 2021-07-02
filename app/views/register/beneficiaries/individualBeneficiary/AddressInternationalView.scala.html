@@ -16,34 +16,32 @@
 
 @import controllers.register.beneficiaries.individualBeneficiary.routes._
 @import utils.InputOption
+@import views.html.components.{ErrorSummary, SubmitButton, Heading, InternationalAddress}
 
 @this(
-    main_template: MainTemplate,
+    mainTemplate: MainTemplate,
+    errorSummary: ErrorSummary,
+    heading: Heading,
+    internationalAddress: InternationalAddress,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], countryOptions:Seq[InputOption], index:Int, draftId: String, individualName: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)}${messages("individualBeneficiaryAddressInternational.title")}"
+@mainTemplate(
+    title = s"${errorPrefix(form)}${messages("individualBeneficiaryAddressInternational.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = AddressInternationalController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
+        @heading("individualBeneficiaryAddressInternational.heading", Some(individualName))
 
-        <fieldset>
+        @internationalAddress(form, "individualBeneficiaryAddressInternational.heading", false, countryOptions)
 
-            <legend>
-                @components.heading("individualBeneficiaryAddressInternational.heading", Some(individualName))
-            </legend>
-
-            @components.international_address(form, countryOptions)
-
-        </fieldset>
-
-        @components.submit_button(submitClass = Some("countryLookupHelper"))
+        @submitButton(submitClass = Some("countryLookupHelper"))
     }
 }

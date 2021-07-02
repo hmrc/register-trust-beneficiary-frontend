@@ -2,28 +2,28 @@
 @import models.Mode
 
 @this(
-    main_template: MainTemplate,
+    mainTemplate: MainTemplate,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@main_template(
+@mainTemplate(
     title = s"\${errorPrefix(form)} \${messages("$className;format="decap"$.title")}"
     ) {
 
     @formHelper(action = $className$Controller.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @back_link()
 
-        @components.error_summary(form.errors)
+        @error_summary(form.errors)
 
-        @components.input_yes_no(
+        @input_yes_no(
             field = form("value"),
             legend = messages("$className;format="decap"$.heading"),
             headingIsLegend = true
         )
 
-        @components.submit_button()
+        @submit_button()
     }
 }

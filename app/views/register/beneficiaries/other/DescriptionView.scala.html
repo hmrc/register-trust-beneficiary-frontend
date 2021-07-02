@@ -17,13 +17,13 @@
 @import controllers.register.beneficiaries.other.routes._
 
 @this(
-    main_template: MainTemplate,
+    mainTemplate: MainTemplate,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
+@mainTemplate(
     title = s"${errorPrefix(form)}${messages("otherBeneficiary.description.title")}"
     ) {
 
@@ -31,9 +31,9 @@
 
         @components.back_link()
 
-        @components.error_summary(form.errors)
+        @errorSummary(form.errors)
 
-        @components.input_text(
+        @inputText(
             field = form("value"),
             label = messages("otherBeneficiary.description.heading"),
             labelAsHeading = true,
@@ -42,7 +42,7 @@
             inputClass = Some("form-control-3-4")
         )
 
-        @components.submit_button()
+        @submitButton()
 
     }
 }

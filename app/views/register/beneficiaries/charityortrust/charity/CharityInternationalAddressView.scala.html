@@ -18,13 +18,13 @@
 @import utils.InputOption
 
 @this(
-    main_template: MainTemplate,
+    mainTemplate: MainTemplate,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], countryOptions: Seq[InputOption], draftId: String, index: Int, charityName: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
+@mainTemplate(
     title = s"${errorPrefix(form)}${messages("charity.internationalAddress.title")}"
 ) {
 
@@ -32,18 +32,18 @@
 
         @components.back_link()
 
-        @components.error_summary(form.errors)
+        @errorSummary(form.errors)
 
         <fieldset>
 
             <legend>
-                @components.heading("charity.internationalAddress.heading", Some(charityName))
+                @heading("charity.internationalAddress.heading", Some(charityName))
             </legend>
 
-            @components.international_address(form, countryOptions)
+            @internationalAddress(form, countryOptions)
 
         </fieldset>
 
-        @components.submit_button(submitClass = Some("countryLookupHelper"))
+        @submitButton(submitClass = Some("countryLookupHelper"))
     }
 }

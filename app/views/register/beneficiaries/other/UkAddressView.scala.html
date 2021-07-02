@@ -17,13 +17,13 @@
 @import controllers.register.beneficiaries.other.routes._
 
 @this(
-  main_template: MainTemplate,
+  mainTemplate: MainTemplate,
   formHelper: FormWithCSRF
 )
 
 @(form: Form[_], name: String, index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
+@mainTemplate(
     title = s"${errorPrefix(form)}${messages("site.address.uk.title")}"
 ) {
 
@@ -31,13 +31,13 @@
 
         @components.back_link()
 
-        @components.error_summary(form.errors)
+        @errorSummary(form.errors)
 
-        @components.heading("site.address.uk.heading", Some(name))
+        @heading("site.address.uk.heading", Some(name))
 
-        @components.uk_address(form)
+        @ukAddress(form)
 
-        @components.submit_button()
+        @submitButton()
 
     }
 }
