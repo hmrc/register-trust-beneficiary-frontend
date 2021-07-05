@@ -46,7 +46,7 @@ object ViewUtils {
   def breadcrumbTitle(title: String)(implicit messages: Messages): String = {
     s"$title - ${messages("entity.beneficiary")} - ${messages("site.service_name")} - GOV.UK"
   }
-  
+
   def errorHref(error: FormError, radioOptions: Seq[RadioOption] = Nil): String = {
     error.args match {
       case x if x.contains("day") || x.contains("month") || x.contains("year") =>

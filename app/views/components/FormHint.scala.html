@@ -19,14 +19,9 @@
 @this()
 
 @(
-hint: Option[String] = None,
-link: Option[Link] = None
+    hint: Option[String] = None
 )(implicit messages: Messages)
 
 @if(hint.nonEmpty) {
-  <span id="form-hint" class="form-hint form-field">@hint
-  @link.map { l =>
-    <a id="link" href="@l.href" target="_blank">@l.key</a>
-  }
-  </span>
+  <span id="form-hint" class="form-hint form-field">@hint</span>
 }
