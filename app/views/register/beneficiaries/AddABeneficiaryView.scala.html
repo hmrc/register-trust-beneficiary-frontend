@@ -73,9 +73,9 @@
         @inputRadio(
             field = form("value"),
             legend = messages("addABeneficiary.additional-content"),
-            legendClass = Some("heading-medium"),
-            inputs = AddABeneficiary.options,
-            legendAsH2Heading = true
+            legendClass = Some("heading-medium govuk-fieldset__legend--m"),
+            inputs = mapRadioOptionsToRadioItems(form("value"), false, AddABeneficiary.options),
+            headingIsLegend = true
         )
 
         @submitButton()
