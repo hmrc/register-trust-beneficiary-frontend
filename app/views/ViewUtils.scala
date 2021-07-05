@@ -46,6 +46,24 @@ object ViewUtils {
   def breadcrumbTitle(title: String)(implicit messages: Messages): String = {
     s"$title - ${messages("entity.beneficiary")} - ${messages("site.service_name")} - GOV.UK"
   }
+  
+  def errorHref(error: FormError, radioOptions: Seq[RadioOption] = Nil): String = {
+    error.args match {
+      case x if x.contains("day") || x.contains("month") || x.contains("year") =>
+        s"${error.key}.${error.args.head}"
+      case _ if error.message.toLowerCase.contains("yesno") =>
+        s"${error.key}-yes"
+      case _ if radioOptions.size != 0 =>
+        radioOptions.head.id
+      case _ =>
+        val isSingleDateField = error.message.toLowerCase.contains("date") && !error.message.toLowerCase.contains("yesno")
+        if (error.key.toLowerCase.contains("date") || isSingleDateField) {
+          s"${error.key}.day"
+        } else {
+          s"${error.key}"
+        }
+    }
+  }
 
   def mapRadioOptionsToRadioItems(field: Field, trackGa: Boolean,
                                   inputs: Seq[RadioOption])(implicit messages: Messages): Seq[RadioItem] =
