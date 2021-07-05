@@ -40,9 +40,9 @@
         @inputRadio(
             field = form("value"),
             legend = messages("companyOrEmploymentRelated.heading"),
-            legendClass = Some("heading-large"),
+            legendClass = Some("heading-large inline"),
             inputs = CompanyOrEmploymentRelatedToAdd.options.toSeq,
-            legendAsHeading = true,
+            headingIsLegend = true,
             hint = Some(messages("companyOrEmploymentRelated.hint")),
             fieldSetClass = Some("inline")
         )

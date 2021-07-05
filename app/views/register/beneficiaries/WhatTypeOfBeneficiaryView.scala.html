@@ -17,7 +17,7 @@
 @import controllers.register.beneficiaries.routes._
 @import models.registration.pages.WhatTypeOfBeneficiary
 @import viewmodels.RadioOption
-    @import views.html.components.{ErrorSummary, SubmitButton, InputRadio}
+@import views.html.components.{ErrorSummary, SubmitButton, InputRadio}
 
 @this(
     mainTemplate: MainTemplate,
@@ -54,7 +54,7 @@
             legendClass = Some("heading-large"),
             inputs = options.toSeq,
             hint = Some(messages(s"whatTypeOfBeneficiary.hint")),
-            legendAsHeading = true
+            headingIsLegend = true
         )
 
         @submitButton()

@@ -16,7 +16,7 @@
 
 @import viewmodels.AddRow
 
-@this()
+@this(dataListRow: DataListRow)
 
 @(data: Seq[AddRow], id: String, entity : String)(implicit messages: Messages)
 
@@ -26,7 +26,7 @@
  <h2 id="data-list-heading--@id">@messages(s"site.$id")</h2>
  <dl id="data-list--@id" class="hmrc-add-to-a-list hmrc-add-to-a-list--short">
   @for(item <- data) {
-  @components.data_list_row(item)
+   @dataListRow(item)
   }
  </dl>
 </div>

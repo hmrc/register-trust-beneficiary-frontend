@@ -15,9 +15,13 @@
  *@
 
 @import viewmodels.{AnswerSection, RepeaterAnswerSection, Section}
+@import views.html.components.{Heading, Answers, RepeaterAnswerSectionComponent}
 
 @this(
-    main_template: MainTemplate
+    main_template: MainTemplate,
+    heading: Heading,
+    answerSection: Answers,
+    repeaterAnswerSection: RepeaterAnswerSectionComponent
 )
 
 @(answerSections: Seq[Section])(implicit request: Request[_], messages: Messages)
@@ -26,15 +30,15 @@
     title = messages("checkYourAnswers.title")
     ) {
 
-    @components.heading("checkYourAnswers.heading")</h1>
+    <h1>@heading("checkYourAnswers.heading")</h1>
 
     <p>@messages("checkYourAnswers.guidance")</p>
 
     @for(section <- answerSections){
         @{
             section match {
-                case a: AnswerSection => components.answer_section(a)
-                case r: RepeaterAnswerSection => components.repeater_answer_section(r)
+                case a: AnswerSection => answerSection(a)
+                case r: RepeaterAnswerSection => repeaterAnswerSection(r)
             }
         }
     }

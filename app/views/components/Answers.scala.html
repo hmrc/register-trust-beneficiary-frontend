@@ -16,8 +16,9 @@
 
 @import viewmodels.AnswerSection
 @import views.html._
+@import views.html.components.{AnswerRowComponent}
 
-@this()
+@this(componentsAnswerRow: AnswerRowComponent)
 
 @(answerSection: AnswerSection)(implicit messages: Messages)
 
@@ -32,7 +33,7 @@
 @if(answerSection.rows) {
     <ul role="list" class="govuk-check-your-answers cya-questions-long section">
         @for(row <- answerSection.rows){
-            @components.answer_row(row)
+            @componentsAnswerRow(row)
         }
     </ul>
 }

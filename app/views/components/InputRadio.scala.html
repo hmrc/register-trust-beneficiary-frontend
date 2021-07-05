@@ -23,7 +23,8 @@
     hint: Option[String] = None,
     headingIsLegend: Boolean = false,
     inputs: Seq[RadioItem],
-    inline: Boolean = true
+    inline: Boolean = true,
+    fieldSetClass: Option[String] = None
 )(implicit messages: Messages)
 
 @govukRadios(Radios(
