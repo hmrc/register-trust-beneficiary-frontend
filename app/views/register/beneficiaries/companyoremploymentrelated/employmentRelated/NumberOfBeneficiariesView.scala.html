@@ -41,7 +41,7 @@
             field = form("value"),
             legend = messages("employmentRelatedBeneficiary.numberOfBeneficiaries.heading"),
             legendClass = Some("heading-large"),
-            inputs = HowManyBeneficiaries.options.toSeq,
+            inputs = mapRadioOptionsToRadioItems(form("value"), false, HowManyBeneficiaries.options.toSeq),
             headingIsLegend = true
         )
 

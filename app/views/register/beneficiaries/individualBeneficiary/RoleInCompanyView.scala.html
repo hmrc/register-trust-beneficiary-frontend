@@ -43,7 +43,7 @@
             legend = messages("individualBeneficiary.roleInCompany.heading", name.toString),
             legendClass = Some("heading-large"),
             headingIsLegend = true,
-            inputs = RoleInCompany.options
+            inputs = mapRadioOptionsToRadioItems(form("value"), false, RoleInCompany.options)
         )
 
         @submitButton()

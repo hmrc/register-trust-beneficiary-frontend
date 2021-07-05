@@ -52,7 +52,7 @@
             field = form("value"),
             legend = heading.toString,
             legendClass = Some("heading-large"),
-            inputs = options.toSeq,
+            inputs = mapRadioOptionsToRadioItems(form("value"), false, options.toSeq),
             hint = Some(messages(s"whatTypeOfBeneficiary.hint")),
             headingIsLegend = true
         )

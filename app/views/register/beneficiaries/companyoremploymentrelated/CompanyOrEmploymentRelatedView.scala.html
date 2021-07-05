@@ -41,7 +41,7 @@
             field = form("value"),
             legend = messages("companyOrEmploymentRelated.heading"),
             legendClass = Some("heading-large inline"),
-            inputs = CompanyOrEmploymentRelatedToAdd.options.toSeq,
+            inputs = mapRadioOptionsToRadioItems(form("value"), false, CompanyOrEmploymentRelatedToAdd.options.toSeq),
             headingIsLegend = true,
             hint = Some(messages("companyOrEmploymentRelated.hint")),
             fieldSetClass = Some("inline")

@@ -43,7 +43,7 @@
             legendClass = Some("heading-large"),
             headingIsLegend = true,
             fieldSetClass = Some(""),
-            inputs = CharityOrTrust.options.toSeq
+            inputs = mapRadioOptionsToRadioItems(form("value"), false, CharityOrTrust.options.toSeq)
         )
 
         @submitButton()
