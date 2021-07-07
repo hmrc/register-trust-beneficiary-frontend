@@ -53,6 +53,7 @@ lazy val root = (project in file("."))
         group(Seq(
           "javascripts/show-hide-content.js",
           "javascripts/registertrustbeneficiaryfrontend.js",
+          "javascripts/iebacklink.js",
           "javascripts/autocomplete.js",
           "javascripts/libraries/location-autocomplete.min.js"
         ))

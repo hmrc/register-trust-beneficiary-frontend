@@ -64,5 +64,21 @@ class InfoControllerSpec extends SpecBase {
 
       application.stop()
     }
+
+    "redirect to WhatTypeOfBeneficiaryController" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      val request = FakeRequest(POST, routes.InfoController.onPageLoad(fakeDraftId).url)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[Info5mldView]
+
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result).value mustBe routes.WhatTypeOfBeneficiaryController.onPageLoad(fakeDraftId).url
+
+      application.stop()
+    }
   }
 }

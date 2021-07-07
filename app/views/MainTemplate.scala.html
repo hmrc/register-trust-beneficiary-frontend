@@ -83,13 +83,11 @@
         headBlock = Some(headScripts)
     )),
     headerBlock = Some(hmrcStandardHeader(
-        serviceUrl = Some(appConfig.trustsUrl),
+        serviceUrl = Some("appConfig.loginContinueUrl"),
         signOutUrl = if(canSignOut) Some(controllers.register.routes.LogoutController.logout().url) else None,
         phaseBanner = Some(standardBetaBanner(url = appConfig.betaFeedbackUrl))
     )),
     beforeContentBlock = Some(beforeContentBlock),
     scriptsBlock = Some(hmrcScripts()),
-    footerBlock = Some(hmrcStandardFooter(
-        accessibilityStatementUrl = None
-    ))
+    footerBlock = Some(hmrcStandardFooter())
 )(mainContentWithGetHelp)

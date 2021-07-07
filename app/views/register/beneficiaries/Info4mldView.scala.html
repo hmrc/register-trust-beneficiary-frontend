@@ -15,12 +15,13 @@
  *@
 
 @import controllers.register.beneficiaries.routes._
-@import views.html.components.{BulletList, HeadingWithCaption, ButtonLink}
+@import views.html.components.{BulletList, HeadingWithCaption, SubmitButton}
 
 @this(
     mainTemplate: MainTemplate,
     bulletList: BulletList,
-    buttonLink: ButtonLink,
+    formHelper: FormWithCSRF,
+    submitButton: SubmitButton,
     headingWithCaption: HeadingWithCaption
 )
 
@@ -77,6 +78,7 @@
 
     <p>@messages("beneficiaryInfo.paragraph8")</p>
 
-    @buttonLink(messages("site.onlyContinue"), WhatTypeOfBeneficiaryController.onPageLoad(draftId).url)
-
+    @formHelper(action = InfoController.onSubmit(draftId), 'autoComplete -> "off") {
+        @submitButton(Some(messages("site.onlyContinue")))
+    }
 }

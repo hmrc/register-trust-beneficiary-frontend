@@ -18,8 +18,8 @@ package views.behaviours
 
 import play.api.data.{Form, FormError}
 import play.twirl.api.HtmlFormat
-import views.ViewUtils
 import utils.Constants._
+import views.ViewUtils
 
 trait SelectCountryViewBehaviours extends QuestionViewBehaviours[String] {
 
@@ -61,7 +61,7 @@ trait SelectCountryViewBehaviours extends QuestionViewBehaviours[String] {
         "show an error summary" in {
 
           val doc = asDocument(createView(form.withError(error)))
-          assertRenderedById(doc, "error-summary-heading")
+          assertRenderedById(doc, "error-summary-title")
         }
 
         "show an error in the value field's label" in {
@@ -71,7 +71,7 @@ trait SelectCountryViewBehaviours extends QuestionViewBehaviours[String] {
           val error = FormError(errorKey, errorMessage)
 
           val doc = asDocument(createView(form.withError(error)))
-          val errorSpan = doc.getElementsByClass("error-message").first
+          val errorSpan = doc.getElementsByClass("govuk-error-message").first
           errorSpan.text mustBe s"""${messages(errorPrefix)} ${messages(errorMessage)}"""
         }
 

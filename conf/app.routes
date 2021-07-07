@@ -27,6 +27,7 @@ GET        /:draftId/complete                                                   
 POST       /:draftId/complete                                                         controllers.register.beneficiaries.AddABeneficiaryController.submitComplete(draftId: String)
 
 GET        /:draftId/information-you-need                                             controllers.register.beneficiaries.InfoController.onPageLoad(draftId: String)
+POST       /:draftId/information-you-need                                             controllers.register.beneficiaries.InfoController.onSubmit(draftId: String)
 
 # individual
 
