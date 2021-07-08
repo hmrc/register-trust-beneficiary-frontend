@@ -28,7 +28,8 @@
 @(form: Form[_], draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
-    title = s"${errorPrefix(form)}${messages("individualBeneficiary.5mld.countryOfNationalityYesNo.title")}"
+    title = s"${errorPrefix(form)}${messages("individualBeneficiary.5mld.countryOfNationalityYesNo.title")}",
+    showBackLink = true
 ) {
 
         @formHelper(action = CountryOfNationalityYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
