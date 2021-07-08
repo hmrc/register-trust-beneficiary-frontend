@@ -40,9 +40,9 @@
         @inputRadio(
             field = form("value"),
             legend = messages("employmentRelatedBeneficiary.numberOfBeneficiaries.heading"),
-            legendClass = Some("heading-large"),
             inputs = mapRadioOptionsToRadioItems(form("value"), false, HowManyBeneficiaries.options.toSeq),
-            headingIsLegend = true
+            headingIsLegend = true,
+            inline = false
         )
 
         @submitButton()

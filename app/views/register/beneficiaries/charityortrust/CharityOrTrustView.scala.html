@@ -40,9 +40,7 @@
         @inputRadio(
             field = form("value"),
             legend = messages("charityOrTrust.heading"),
-            legendClass = Some("heading-large"),
             headingIsLegend = true,
-            fieldSetClass = Some(""),
             inputs = mapRadioOptionsToRadioItems(form("value"), false, CharityOrTrust.options.toSeq)
         )
 
