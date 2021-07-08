@@ -51,10 +51,11 @@
         @inputRadio(
             field = form("value"),
             legend = heading.toString,
-            legendClass = Some("heading-large"),
+            legendClass = Some("govuk-fieldset__legend--l"),
             inputs = mapRadioOptionsToRadioItems(form("value"), false, options.toSeq),
             hint = Some(messages(s"whatTypeOfBeneficiary.hint")),
-            headingIsLegend = true
+            headingIsLegend = true,
+            inline = false
         )
 
         @submitButton()
