@@ -36,7 +36,7 @@
 
     @formHelper(action = RoleInCompanyController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @errorSummary(form.errors)
+        @errorSummary(form.errors, RoleInCompany.options)
 
         @inputRadio(
             field = form("value"),

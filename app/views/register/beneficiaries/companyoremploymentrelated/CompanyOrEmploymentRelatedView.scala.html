@@ -35,7 +35,7 @@
 
     @formHelper(action = CompanyOrEmploymentRelatedController.onSubmit(draftId), 'autoComplete -> "off") {
 
-        @errorSummary(form.errors)
+        @errorSummary(form.errors, CompanyOrEmploymentRelatedToAdd.options.toSeq)
 
         @inputRadio(
             field = form("value"),

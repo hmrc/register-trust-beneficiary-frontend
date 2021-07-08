@@ -35,7 +35,7 @@
 
     @formHelper(action = CharityOrTrustController.onSubmit(draftId), 'autoComplete -> "off") {
 
-        @errorSummary(form.errors)
+        @errorSummary(form.errors, CharityOrTrust.options.toSeq)
 
         @inputRadio(
             field = form("value"),

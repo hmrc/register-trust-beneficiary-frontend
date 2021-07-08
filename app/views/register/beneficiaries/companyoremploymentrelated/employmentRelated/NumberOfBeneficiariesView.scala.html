@@ -35,7 +35,7 @@
 
     @formHelper(action = NumberOfBeneficiariesController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @errorSummary(form.errors)
+        @errorSummary(form.errors, HowManyBeneficiaries.options.toSeq)
 
         @inputRadio(
             field = form("value"),

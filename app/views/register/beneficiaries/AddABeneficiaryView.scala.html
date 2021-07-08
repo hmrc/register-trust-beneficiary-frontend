@@ -43,7 +43,7 @@
 
     @formHelper(action = AddABeneficiaryController.submitAnother(draftId), 'autoComplete -> "off") {
 
-        @errorSummary(form.errors)
+        @errorSummary(form.errors, AddABeneficiary.options)
 
         @headingComp(heading)
 
