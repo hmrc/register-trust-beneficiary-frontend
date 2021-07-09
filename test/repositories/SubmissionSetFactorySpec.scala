@@ -47,9 +47,10 @@ class SubmissionSetFactorySpec extends SpecBase {
             factory.answerSectionsIfCompleted(userAnswers, Some(Completed)) mustBe
               List(
                 AnswerSection(
-                  Some("Individual beneficiary 1"),
-                  Nil,
-                  Some("Beneficiaries")
+                  headingKey = Some("answerPage.section.individualBeneficiary.subheading"),
+                  rows = Nil,
+                  sectionKey = Some("answerPage.section.beneficiaries.heading"),
+                  headingArgs = Seq("1")
                 )
               )
           }
@@ -61,9 +62,10 @@ class SubmissionSetFactorySpec extends SpecBase {
             factory.answerSectionsIfCompleted(userAnswers, Some(Completed)) mustBe
               List(
                 AnswerSection(
-                  Some("Class of beneficiary 1"),
-                  Nil,
-                  Some("Beneficiaries")
+                  headingKey = Some("answerPage.section.classOfBeneficiary.subheading"),
+                  rows = Nil,
+                  sectionKey = Some("answerPage.section.beneficiaries.heading"),
+                  headingArgs = Seq("1")
                 )
               )
           }
@@ -75,9 +77,10 @@ class SubmissionSetFactorySpec extends SpecBase {
             factory.answerSectionsIfCompleted(userAnswers, Some(Completed)) mustBe
               List(
                 AnswerSection(
-                  Some("Charity beneficiary 1"),
-                  Nil,
-                  Some("Beneficiaries")
+                  headingKey = Some("answerPage.section.charityBeneficiary.subheading"),
+                  rows = Nil,
+                  sectionKey = Some("answerPage.section.beneficiaries.heading"),
+                  headingArgs = Seq("1")
                 )
               )
           }
@@ -89,9 +92,10 @@ class SubmissionSetFactorySpec extends SpecBase {
             factory.answerSectionsIfCompleted(userAnswers, Some(Completed)) mustBe
               List(
                 AnswerSection(
-                  Some("Trust beneficiary 1"),
-                  Nil,
-                  Some("Beneficiaries")
+                  headingKey = Some("answerPage.section.trustBeneficiary.subheading"),
+                  rows = Nil,
+                  sectionKey = Some("answerPage.section.beneficiaries.heading"),
+                  headingArgs = Seq("1")
                 )
               )
           }
@@ -103,9 +107,10 @@ class SubmissionSetFactorySpec extends SpecBase {
             factory.answerSectionsIfCompleted(userAnswers, Some(Completed)) mustBe
               List(
                 AnswerSection(
-                  Some("Company beneficiary 1"),
-                  Nil,
-                  Some("Beneficiaries")
+                  headingKey = Some("answerPage.section.companyBeneficiary.subheading"),
+                  rows = Nil,
+                  sectionKey = Some("answerPage.section.beneficiaries.heading"),
+                  headingArgs = Seq("1")
                 )
               )
           }
@@ -117,9 +122,10 @@ class SubmissionSetFactorySpec extends SpecBase {
             factory.answerSectionsIfCompleted(userAnswers, Some(Completed)) mustBe
               List(
                 AnswerSection(
-                  Some("Employment related beneficiary 1"),
-                  Nil,
-                  Some("Beneficiaries")
+                  headingKey = Some("answerPage.section.largeBeneficiary.subheading"),
+                  rows = Nil,
+                  sectionKey = Some("answerPage.section.beneficiaries.heading"),
+                  headingArgs = Seq("1")
                 )
               )
           }
@@ -131,9 +137,10 @@ class SubmissionSetFactorySpec extends SpecBase {
             factory.answerSectionsIfCompleted(userAnswers, Some(Completed)) mustBe
               List(
                 AnswerSection(
-                  Some("Other beneficiary 1"),
-                  Nil,
-                  Some("Beneficiaries")
+                  headingKey = Some("answerPage.section.otherBeneficiary.subheading"),
+                  rows = Nil,
+                  sectionKey = Some("answerPage.section.beneficiaries.heading"),
+                  headingArgs = Seq("1")
                 )
               )
           }
@@ -150,14 +157,16 @@ class SubmissionSetFactorySpec extends SpecBase {
             factory.answerSectionsIfCompleted(userAnswers, Some(Completed)) mustBe
               List(
                 AnswerSection(
-                  Some("Individual beneficiary 1"),
-                  Nil,
-                  Some("Beneficiaries")
+                  headingKey = Some("answerPage.section.individualBeneficiary.subheading"),
+                  rows = Nil,
+                  sectionKey = Some("answerPage.section.beneficiaries.heading"),
+                  headingArgs = Seq("1")
                 ),
                 AnswerSection(
-                  Some("Class of beneficiary 1"),
-                  Nil,
-                  None
+                  headingKey = Some("answerPage.section.classOfBeneficiary.subheading"),
+                  rows = Nil,
+                  sectionKey = None,
+                  headingArgs = Seq("1")
                 )
               )
           }
@@ -170,14 +179,16 @@ class SubmissionSetFactorySpec extends SpecBase {
             factory.answerSectionsIfCompleted(userAnswers, Some(Completed)) mustBe
               List(
                 AnswerSection(
-                  Some("Class of beneficiary 1"),
-                  Nil,
-                  Some("Beneficiaries")
+                  headingKey = Some("answerPage.section.classOfBeneficiary.subheading"),
+                  rows = Nil,
+                  sectionKey = Some("answerPage.section.beneficiaries.heading"),
+                  headingArgs = Seq("1")
                 ),
                 AnswerSection(
-                  Some("Trust beneficiary 1"),
-                  Nil,
-                  None
+                  headingKey = Some("answerPage.section.trustBeneficiary.subheading"),
+                  rows = Nil,
+                  sectionKey = None,
+                  headingArgs = Seq("1")
                 )
               )
           }

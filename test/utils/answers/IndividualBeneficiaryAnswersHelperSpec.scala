@@ -17,8 +17,8 @@
 package utils.answers
 
 import base.SpecBase
-import controllers.register.beneficiaries.individualBeneficiary.routes._
 import controllers.register.beneficiaries.individualBeneficiary.mld5.routes._
+import controllers.register.beneficiaries.individualBeneficiary.routes._
 import models.core.pages.{FullName, InternationalAddress, UKAddress}
 import models.registration.pages.{PassportOrIdCardDetails, RoleInCompany}
 import pages.register.beneficiaries.individual._
@@ -86,7 +86,7 @@ class IndividualBeneficiaryAnswersHelperSpec extends SpecBase {
       result mustBe
         Seq(
           AnswerSection(
-            headingKey = Some(messages("answerPage.section.individualBeneficiary.subheading", index + 1)),
+            headingKey = Some("answerPage.section.individualBeneficiary.subheading"),
             rows = Seq(
               AnswerRow("individualBeneficiaryName.checkYourAnswersLabel", Html(name.displayFullName), Some(NameController.onPageLoad(index, fakeDraftId).url), "", canEdit),
               AnswerRow("individualBeneficiaryRoleInCompany.checkYourAnswersLabel", Html("Director"), Some(RoleInCompanyController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
@@ -112,7 +112,8 @@ class IndividualBeneficiaryAnswersHelperSpec extends SpecBase {
               AnswerRow("individualBeneficiaryIDCardDetails.checkYourAnswersLabel", Html("France<br />12345<br />3 February 1996"), Some(IDCardDetailsController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
               AnswerRow("individualBeneficiary.5mld.mentalCapacityYesNo.checkYourAnswersLabel", Html("Yes"), Some(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
               AnswerRow("individualBeneficiaryVulnerableYesNo.checkYourAnswersLabel", Html("No"), Some(VulnerableYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit)
-            )
+            ),
+            headingArgs = Seq(index + 1)
           )
         )
     }

@@ -52,13 +52,13 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
 
           result mustBe Some(Seq(
             AnswerSection(
-              headingKey = Some(messages("answerPage.section.trustBeneficiary.subheading", index + 1)),
+              headingKey = Some("answerPage.section.trustBeneficiary.subheading"),
               rows = Seq(
                 AnswerRow(label = "trustBeneficiaryName.checkYourAnswersLabel", answer = Html(name), changeUrl = Some(rts.NameController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
                 AnswerRow(label = "trustBeneficiaryDiscretionYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(rts.DiscretionYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
                 AnswerRow(label = "trustBeneficiaryAddressYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(rts.AddressYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name)
               ),
-              sectionKey = None
+              headingArgs = Seq(index + 1)
             )
           ))
         }
@@ -77,7 +77,7 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
 
           result mustBe Some(Seq(
             AnswerSection(
-              headingKey = Some(messages("answerPage.section.trustBeneficiary.subheading", index + 1)),
+              headingKey = Some("answerPage.section.trustBeneficiary.subheading"),
               rows = Seq(
                 AnswerRow(label = "trustBeneficiaryName.checkYourAnswersLabel", answer = Html(name), changeUrl = Some(rts.NameController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
                 AnswerRow(label = "trustBeneficiaryDiscretionYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(rts.DiscretionYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
@@ -86,7 +86,7 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
                 AnswerRow(label = "trustBeneficiaryAddressUKYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(rts.AddressUKYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
                 AnswerRow(label = "site.address.international.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />France"), changeUrl = Some(rts.AddressInternationalController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name)
               ),
-              sectionKey = None
+              headingArgs = Seq(index + 1)
             )
           ))
         }
@@ -105,7 +105,7 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
 
           result mustBe Some(Seq(
             AnswerSection(
-              headingKey = Some(messages("answerPage.section.trustBeneficiary.subheading", index + 1)),
+              headingKey = Some("answerPage.section.trustBeneficiary.subheading"),
               rows = Seq(
                 AnswerRow(label = "trustBeneficiaryName.checkYourAnswersLabel", answer = Html(name), changeUrl = Some(rts.NameController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
                 AnswerRow(label = "trustBeneficiaryDiscretionYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(rts.DiscretionYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
@@ -114,7 +114,7 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
                 AnswerRow(label = "trustBeneficiaryAddressUKYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(rts.AddressUKYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
                 AnswerRow(label = "site.address.uk.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"), changeUrl = Some(rts.AddressUKController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name)
               ),
-              sectionKey = None
+              headingArgs = Seq(index + 1)
             )
           ))
         }
@@ -133,14 +133,14 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
 
           result mustBe Some(Seq(
             AnswerSection(
-              headingKey = Some(messages("answerPage.section.trustBeneficiary.subheading", index + 1)),
+              headingKey = Some("answerPage.section.trustBeneficiary.subheading"),
               rows = Seq(
                 AnswerRow(label = "trustBeneficiaryName.checkYourAnswersLabel", answer = Html(name), changeUrl = Some(rts.NameController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
                 AnswerRow(label = "trustBeneficiaryDiscretionYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(rts.DiscretionYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
                 AnswerRow(label = "trust.5mld.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(ntRts.CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
                 AnswerRow(label = "trustBeneficiaryAddressYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(rts.AddressYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name)
               ),
-              sectionKey = None
+              headingArgs = Seq(index + 1)
             )
           ))
         }
@@ -162,7 +162,7 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
 
           result mustBe Some(Seq(
             AnswerSection(
-              headingKey = Some(messages("answerPage.section.trustBeneficiary.subheading", index + 1)),
+              headingKey = Some("answerPage.section.trustBeneficiary.subheading"),
               rows = Seq(
                 AnswerRow(label = "trustBeneficiaryName.checkYourAnswersLabel", answer = Html(name), changeUrl = Some(rts.NameController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
                 AnswerRow(label = "trustBeneficiaryDiscretionYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(rts.DiscretionYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
@@ -174,7 +174,7 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
                 AnswerRow(label = "trustBeneficiaryAddressUKYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(rts.AddressUKYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
                 AnswerRow(label = "site.address.international.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />France"), changeUrl = Some(rts.AddressInternationalController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name)
               ),
-              sectionKey = None
+              headingArgs = Seq(index + 1)
             )
           ))
         }
@@ -195,7 +195,7 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
 
           result mustBe Some(Seq(
             AnswerSection(
-              headingKey = Some(messages("answerPage.section.trustBeneficiary.subheading", index + 1)),
+              headingKey = Some("answerPage.section.trustBeneficiary.subheading"),
               rows = Seq(
                 AnswerRow(label = "trustBeneficiaryName.checkYourAnswersLabel", answer = Html(name), changeUrl = Some(rts.NameController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
                 AnswerRow(label = "trustBeneficiaryDiscretionYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(rts.DiscretionYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
@@ -206,7 +206,7 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
                 AnswerRow(label = "trustBeneficiaryAddressUKYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(rts.AddressUKYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
                 AnswerRow(label = "site.address.uk.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"), changeUrl = Some(rts.AddressUKController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name)
               ),
-              sectionKey = None
+              headingArgs = Seq(index + 1)
             )
           ))
         }
@@ -223,12 +223,12 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
 
           result mustBe Some(Seq(
             AnswerSection(
-              headingKey = Some(messages("answerPage.section.trustBeneficiary.subheading", index + 1)),
+              headingKey = Some("answerPage.section.trustBeneficiary.subheading"),
               rows = Seq(
                 AnswerRow(label = "trustBeneficiaryName.checkYourAnswersLabel", answer = Html(name), changeUrl = Some(rts.NameController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
                 AnswerRow(label = "trust.5mld.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(ntRts.CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name)
               ),
-              sectionKey = None
+              headingArgs = Seq(index + 1)
             )
           ))
         }
@@ -245,14 +245,14 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
 
           result mustBe Some(Seq(
             AnswerSection(
-              headingKey = Some(messages("answerPage.section.trustBeneficiary.subheading", index + 1)),
+              headingKey = Some("answerPage.section.trustBeneficiary.subheading"),
               rows = Seq(
                 AnswerRow(label = "trustBeneficiaryName.checkYourAnswersLabel", answer = Html(name), changeUrl = Some(rts.NameController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
                 AnswerRow(label = "trust.5mld.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(ntRts.CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
                 AnswerRow(label = "trust.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(ntRts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
                 AnswerRow(label = "trust.5mld.countryOfResidence.checkYourAnswersLabel", answer = Html("France"), changeUrl = Some(ntRts.CountryOfResidenceController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name)
               ),
-              sectionKey = None
+              headingArgs = Seq(index + 1)
             )
           ))
         }
