@@ -15,13 +15,13 @@
  *@
 
 @import controllers.register.beneficiaries.charityortrust.charity.routes._
-@import views.html.components.{ErrorSummary, SubmitButton, InputNumber}
+@import views.html.components.{ErrorSummary, SubmitButton, InputText}
 
 @this(
     mainTemplate: MainTemplate,
     errorSummary: ErrorSummary,
     submitButton: SubmitButton,
-    inputNumber: InputNumber,
+    inputPercent: InputText,
     formHelper: FormWithCSRF
 )
 
@@ -36,11 +36,15 @@
 
         @errorSummary(form.errors)
 
-        @inputNumber(
+        @inputPercent(
             field = form("value"),
             label = messages("charity.shareOfIncome.heading", charityName),
             hint = Some(messages("charity.shareOfIncome.hint")),
-            symbol = Some("percentage")
+            labelClass = Some("govuk-heading-l"),
+            suffix = Some("%"),
+            inputMode = Some("numeric"),
+            pattern = Some("[0-9]*"),
+            inputClass = Some("govuk-input--width-5")
         )
 
         @submitButton()

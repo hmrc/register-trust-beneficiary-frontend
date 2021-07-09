@@ -16,12 +16,12 @@
 
 @import controllers.register.beneficiaries.individualBeneficiary.routes._
 @import models.core.pages.FullName
-@import views.html.components.{ErrorSummary, SubmitButton, InputNumber}
+@import views.html.components.{ErrorSummary, SubmitButton, InputText}
 
 @this(
     mainTemplate: MainTemplate,
     errorSummary: ErrorSummary,
-    inputNumber: InputNumber,
+    inputPercent: InputText,
     submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
@@ -37,11 +37,15 @@
 
         @errorSummary(form.errors)
 
-        @inputNumber(
+        @inputPercent(
             field = form("value"),
             label = messages("individualBeneficiaryIncome.heading", name.toString),
             hint = Some(messages(s"individualBeneficiaryIncome.hint")),
-            symbol = Some("percentage")
+            labelClass = Some("govuk-heading-l"),
+            suffix = Some("%"),
+            inputMode = Some("numeric"),
+            pattern = Some("[0-9]*"),
+            inputClass = Some("govuk-input--width-5")
         )
 
         @submitButton()
