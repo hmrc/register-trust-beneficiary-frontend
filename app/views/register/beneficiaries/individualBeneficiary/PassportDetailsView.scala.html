@@ -17,7 +17,7 @@
 @import controllers.register.beneficiaries.individualBeneficiary.routes._
 @import utils.InputOption
 @import models.core.pages.FullName
-@import views.html.components.{ErrorSummary, SubmitButton, Select, Heading, InputText, InputDate}
+@import views.html.components.{ErrorSummary, SubmitButton, InputSelect, Heading, InputText, InputDate}
 
 @this(
     mainTemplate: MainTemplate,
@@ -25,7 +25,7 @@
     heading: Heading,
     inputDate: InputDate,
     inputText: InputText,
-    select: Select,
+    select: InputSelect,
     submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
@@ -49,7 +49,7 @@
             options = countryOptions,
             placeholder = Some(messages("site.address.country.select")),
             formGroupClasses = Set("autocomplete-wrapper form-control-2-1"),
-            selectAttribute = Set("data-non-uk-countries")
+            selectAttribute = Map("data-non-uk-countries" -> "")
         )
 
         @inputText(
