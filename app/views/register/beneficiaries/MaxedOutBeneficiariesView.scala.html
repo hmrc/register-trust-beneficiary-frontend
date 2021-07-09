@@ -18,12 +18,12 @@
 @import models.registration.pages.AddABeneficiary
 @import viewmodels.AddRow
 @import viewmodels.RadioOption
-@import views.html.components.{Heading, SubmitButton, DataList}
+@import views.html.components.{Heading, SubmitButton, AddToList}
 
 @this(
     mainTemplate: MainTemplate,
     submitButton: SubmitButton,
-    dataList: DataList,
+    addToList: AddToList,
     headingComp: Heading,
     formHelper: FormWithCSRF
 )
@@ -42,14 +42,16 @@
 
         @headingComp(heading)
 
-        @dataList(inProgressBeneficiaries, "inprogress", "beneficiary")
+        @addToList(inProgressBeneficiaries, "inprogress", "beneficiary")
 
-        @dataList(completeBeneficiaries, "complete", "beneficiary")
+        @addToList(completeBeneficiaries, "complete", "beneficiary")
 
-        <ul>
-            <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.all")</p></li>
-            <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.all.paragraph")</p></li>
+    <div class="govuk-inset-text">
+        <ul class="govuk-list">
+            <li><p>@messages("addABeneficiary.maxedOut.all")</p></li>
+            <li><p>@messages("addABeneficiary.maxedOut.all.paragraph")</p></li>
         </ul>
+    </div>
 
         @submitButton()
     }
