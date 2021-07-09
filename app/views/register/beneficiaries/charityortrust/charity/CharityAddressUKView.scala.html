@@ -37,7 +37,9 @@
 
         @errorSummary(form.errors)
 
-        @ukAddress(form, "charity.ukAddress.heading")
+        @heading("site.address.uk.heading", Some(charityName))
+
+        @ukAddress(form, "charity.ukAddress.heading", false)
 
         @submitButton()
     }
