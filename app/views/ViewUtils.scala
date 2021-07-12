@@ -27,22 +27,6 @@ object ViewUtils {
     if (form.hasErrors || form.hasGlobalErrors) s"${messages("error.browser.title.prefix")} " else ""
   }
 
-  def errorHref(error: FormError): String = {
-
-    val suffix = error.args match {
-      case x if x.contains("day") || x.contains("month") || x.contains("year") =>
-        s"_${error.args.head}"
-      case _ =>
-        val isSingleDateField = error.message.toLowerCase.contains("date") && !error.message.toLowerCase.contains("yesno")
-        if (error.key.toLowerCase.contains("date") || isSingleDateField) {
-          "_day"
-        } else {
-          ""
-        }
-    }
-    s"${error.key}$suffix"
-  }
-
   def breadcrumbTitle(title: String)(implicit messages: Messages): String = {
     s"$title - ${messages("entity.beneficiary")} - ${messages("service.name")} - GOV.UK"
   }
