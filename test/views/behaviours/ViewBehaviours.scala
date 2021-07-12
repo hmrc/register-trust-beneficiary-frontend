@@ -233,12 +233,7 @@ trait ViewBehaviours extends ViewSpecBase {
     "behave like a page with a Continue button" must {
       "have a continue button" in {
         val doc = asDocument(view)
-        assertContainsTextForId(doc,"button", "Continue")
-        assertAttributeValueForElement(
-          doc.getElementById("button"),
-          "href",
-          url
-        )
+        assertContainsTextForId(doc,"submit", "Continue")
       }
     }
   }
