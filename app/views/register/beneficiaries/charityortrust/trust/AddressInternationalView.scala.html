@@ -17,13 +17,12 @@
 @import controllers.register.beneficiaries.charityortrust.trust.routes._
 @import models.Mode
 @import utils.InputOption
-@import views.html.components.{ErrorSummary, SubmitButton, Heading, InternationalAddress}
+@import views.html.components.{ErrorSummary, SubmitButton, InternationalAddress}
 
 @this(
     mainTemplate: MainTemplate,
     errorSummary: ErrorSummary,
     submitButton: SubmitButton,
-    heading: Heading,
     internationalAddress: InternationalAddress,
     formHelper: FormWithCSRF
 )
@@ -39,7 +38,12 @@
 
         @errorSummary(form.errors)
 
-        @internationalAddress(form, "site.address.international.heading", true, countryOptions)
+        @internationalAddress(
+            form = form,
+            legend = messages("site.address.international.heading", name),
+            legendAsHeading = true,
+            countryOptions = countryOptions
+        )
 
         @submitButton(submitClass = Some("countryLookupHelper"))
     }

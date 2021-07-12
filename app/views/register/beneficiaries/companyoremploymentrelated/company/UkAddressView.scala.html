@@ -15,12 +15,11 @@
  *@
 
 @import controllers.register.beneficiaries.companyoremploymentrelated.company.routes._
-@import views.html.components.{ErrorSummary, SubmitButton, UkAddress, Heading}
+@import views.html.components.{ErrorSummary, SubmitButton, UkAddress}
 
 @this(
   mainTemplate: MainTemplate,
     errorSummary: ErrorSummary,
-    heading: Heading,
     submitButton: SubmitButton,
     ukAddress: UkAddress,
   formHelper: FormWithCSRF
@@ -37,9 +36,7 @@
 
         @errorSummary(form.errors)
 
-        @heading("site.address.uk.heading", Some(name))
-
-        @ukAddress(form, "site.address.uk.heading", false)
+        @ukAddress(form, messages("site.address.uk.heading", name), true)
 
         @submitButton()
     }
