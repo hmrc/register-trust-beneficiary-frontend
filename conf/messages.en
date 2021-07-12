@@ -510,11 +510,6 @@ otherBeneficiaryAddressYesNo.checkYourAnswersLabel = Do you know {0}’s address
 otherBeneficiaryAddressUKYesNo.checkYourAnswersLabel = Is {0}’s address in the UK?
 otherBeneficiaryAddress.checkYourAnswersLabel = What is {0}’s address?
 
-removeOtherBeneficiary.title = Are you sure you want to remove the other beneficiary?
-removeOtherBeneficiary.heading = Are you sure you want to remove {0}?
-removeOtherBeneficiary.default = the other beneficiary
-removeOtherBeneficiary.error.required = Select yes if you want to remove the other beneficiary
-
 addABeneficiary.title = Add a beneficiary
 addABeneficiary.heading = Add a beneficiary
 addABeneficiary.additional-content = Do you want to add another beneficiary?
@@ -547,11 +542,6 @@ classBeneficiaryDescription.hint = This must be 56 characters or less. For examp
 
 classBeneficiaryShareOfIncomeYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
 classBeneficiaryShareOfIncome.checkYourAnswersLabel = What percentage of the trust’s income is {0} entitled to?
-
-removeClassOfBeneficiaryYesNo.title = Are you sure you want to remove the class of beneficiaries?
-removeClassOfBeneficiaryYesNo.heading = Are you sure you want to remove {0}?
-removeClassOfBeneficiaryYesNo.default = the class of beneficiaries
-removeClassOfBeneficiaryYesNo.error.required = Select yes if you want to remove the class of beneficiaries
 
 whatTypeOfBeneficiary.first.title = What kind of beneficiary do you need to add first?
 whatTypeOfBeneficiary.next.title = What kind of beneficiary do you need to add next?
@@ -591,6 +581,21 @@ removeCompanyBeneficiaryYesNo.title = Are you sure you want to remove the compan
 removeCompanyBeneficiaryYesNo.heading = Are you sure you want to remove {0}?
 removeCompanyBeneficiaryYesNo.default = the company beneficiary
 removeCompanyBeneficiaryYesNo.error.required = Select yes if you want to remove the company beneficiary
+
+removeClassOfBeneficiaryYesNo.title = Are you sure you want to remove the class of beneficiaries?
+removeClassOfBeneficiaryYesNo.heading = Are you sure you want to remove {0}?
+removeClassOfBeneficiaryYesNo.default = the class of beneficiaries
+removeClassOfBeneficiaryYesNo.error.required = Select yes if you want to remove the class of beneficiaries
+
+removeOtherBeneficiaryYesNo.title = Are you sure you want to remove the other beneficiary?
+removeOtherBeneficiaryYesNo.heading = Are you sure you want to remove {0}?
+removeOtherBeneficiaryYesNo.default = the other beneficiary
+removeOtherBeneficiaryYesNo.error.required = Select yes if you want to remove the other beneficiary
+
+removeEmploymentRelatedBeneficiaryYesNo.title = Are you sure you want to remove the employment related beneficiary?
+removeEmploymentRelatedBeneficiaryYesNo.heading = Are you sure you want to remove {0}?
+removeEmploymentRelatedBeneficiaryYesNo.default = the employment related beneficiary
+removeEmploymentRelatedBeneficiaryYesNo.error.required = Select yes if you want to remove the employment related beneficiary
 
 dateOfBirth.error.required.all = Enter a date of birth
 dateOfBirth.error.required.two = The date of birth must include {0} and {1}
@@ -860,11 +865,6 @@ otherBeneficiary.nonUkAddress.checkYourAnswersLabel = What is {0}’s address?
 
 otherBeneficiary.checkDetails.title = Check other beneficiary details
 otherBeneficiary.checkDetails.heading = Check other beneficiary details
-
-removeEmploymentRelatedBeneficiaryYesNo.title = Are you sure you want to remove the employment related beneficiary?
-removeEmploymentRelatedBeneficiaryYesNo.heading = Are you sure you want to remove {0}?
-removeEmploymentRelatedBeneficiaryYesNo.default = the employment related beneficiary
-removeEmploymentRelatedBeneficiaryYesNo.error.required = Select yes if you want to remove the employment related beneficiary
 
 otherBeneficiary.ukResidentYesNo.title = Is this beneficiary a UK resident?
 otherBeneficiary.ukResidentYesNo.heading = Is {0} a UK resident?
