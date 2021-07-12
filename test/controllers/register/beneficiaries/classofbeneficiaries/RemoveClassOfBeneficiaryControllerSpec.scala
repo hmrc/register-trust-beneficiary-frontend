@@ -27,7 +27,7 @@ import views.html.RemoveIndexView
 
 class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
-  val messagesPrefix = "removeClassOfBeneficiary"
+  val messagesPrefix = "removeClassOfBeneficiaryYesNo"
 
   lazy val formProvider = new RemoveIndexFormProvider()
   lazy val form = formProvider(messagesPrefix)
