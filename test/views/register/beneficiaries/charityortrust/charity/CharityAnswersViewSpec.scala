@@ -27,7 +27,7 @@ class CharityAnswersViewSpec extends ViewBehaviours {
 
     val view = viewFor[CharityAnswersView](Some(emptyUserAnswers))
 
-    val applyView = view.apply(AnswerSection(), index, fakeDraftId)(fakeRequest, messages)
+    val applyView = view.apply(Seq(AnswerSection()), index, fakeDraftId)(fakeRequest, messages)
 
     behave like normalPage(applyView, "charity.answers")
 
