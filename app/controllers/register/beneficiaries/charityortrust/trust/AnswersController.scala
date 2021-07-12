@@ -49,7 +49,7 @@ class AnswersController @Inject()(
     implicit request =>
 
       val section: AnswerSection = printHelper.checkDetailsSection(request.userAnswers, request.beneficiaryName, index, draftId)
-      Ok(view(section, index, draftId))
+      Ok(view(Seq(section), index, draftId))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).async {

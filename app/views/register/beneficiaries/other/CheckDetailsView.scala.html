@@ -16,17 +16,18 @@
 
 @import viewmodels.AnswerSection
 @import controllers.register.beneficiaries.other.routes._
-@import views.html.components.{Answers, SubmitButton, Heading}
+@import utils.SectionFormatter.formatSections
+@import views.html.components.{SubmitButton, Heading}
 
 @this(
     mainTemplate: MainTemplate,
-    answers: Answers,
+    govukSummaryList: GovukSummaryList,
     heading: Heading,
     submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
-@(answerSection: AnswerSection, index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
+@(answerSection: Seq[AnswerSection], index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("otherBeneficiary.checkDetails.title"),
@@ -37,7 +38,7 @@
 
         @heading("otherBeneficiary.checkDetails.heading")
 
-        @answers(answerSection)
+        @govukSummaryList(SummaryList(rows = formatSections(answerSection)))
 
         @submitButton()
     }

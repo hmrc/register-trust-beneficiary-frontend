@@ -15,19 +15,20 @@
  *@
 
 @import viewmodels.AnswerSection
+@import utils.SectionFormatter.formatSections
 @import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.routes._
-@import views.html.components.{ErrorSummary, SubmitButton, Answers, Heading}
+@import views.html.components.{ErrorSummary, SubmitButton, Heading}
 
 @this(
     mainTemplate: MainTemplate,
+    govukSummaryList: GovukSummaryList,
     errorSummary: ErrorSummary,
     heading: Heading,
     submitButton: SubmitButton,
-    answers: Answers,
     formHelper: FormWithCSRF
 )
 
-@(answerSection: AnswerSection, index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
+@(answerSection: Seq[AnswerSection], index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("employmentRelatedBeneficiary.checkDetails.title"),
@@ -38,7 +39,7 @@
 
         @heading("employmentRelatedBeneficiary.checkDetails.heading")
 
-        @answers(answerSection)
+        @govukSummaryList(SummaryList(rows = formatSections(answerSection)))
 
         @submitButton()
     }

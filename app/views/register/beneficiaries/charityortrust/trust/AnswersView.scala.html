@@ -16,17 +16,18 @@
 
 @import controllers.register.beneficiaries.charityortrust.trust.routes._
 @import viewmodels.{AnswerSection, RepeaterAnswerSection, Section}
-@import views.html.components.{Answers, SubmitButton, Heading}
+@import utils.SectionFormatter.formatSections
+@import views.html.components.{SubmitButton, Heading}
 
 @this(
     mainTemplate: MainTemplate,
-    answers: Answers,
+    govukSummaryList: GovukSummaryList,
     submitButton: SubmitButton,
     heading: Heading,
     formHelper: FormWithCSRF
 )
 
-@(answerSection: AnswerSection, index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
+@(answerSection: Seq[AnswerSection], index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
 
 @mainTemplate(
     title = messages("trustBeneficiaryAnswers.title"),
@@ -37,7 +38,7 @@
 
         @heading("trustBeneficiaryAnswers.heading")
 
-        @answers(answerSection)
+        @govukSummaryList(SummaryList(rows = formatSections(answerSection)))
 
         @submitButton()
     }
