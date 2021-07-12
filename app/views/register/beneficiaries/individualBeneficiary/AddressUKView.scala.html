@@ -38,9 +38,7 @@
 
         @errorSummary(form.errors)
 
-        @heading("individualBeneficiaryAddressUK.heading", Some(name.toString))
-
-        @ukAddress(form, "individualBeneficiaryAddressUK.heading")
+        @ukAddress(form, messages("individualBeneficiaryAddressUK.heading", name))
 
         @submitButton()
     }

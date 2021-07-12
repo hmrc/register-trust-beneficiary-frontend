@@ -15,27 +15,32 @@
  *@
 
 @import controllers.register.beneficiaries.individualBeneficiary.mld5.routes._
-@import views.html.components.{ErrorSummary, SubmitButton, InputYesNo}
+@import views.html.components.{ErrorSummary, SubmitButton, InputYesNo, Heading, BulletList}
 
 @this(
     mainTemplate: MainTemplate,
     errorSummary: ErrorSummary,
     inputYesNo: InputYesNo,
     submitButton: SubmitButton,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    heading: Heading,
+    bulletList: BulletList
 )
 
 @(form: Form[_], draftId: String, index: Int, name: String)(implicit request: Request[_], messages: Messages)
 
 @content = {
-<p>@messages("individualBeneficiary.5mld.mentalCapacityYesNo.p1")</p>
+    <p>@messages("individualBeneficiary.5mld.mentalCapacityYesNo.p1")</p>
 
-<ul class="govuk-list trust-list--bullet">
-    <li class="inside">@messages("individualBeneficiary.5mld.mentalCapacityYesNo.bulletpoint1")</li>
-    <li class="inside">@messages("individualBeneficiary.5mld.mentalCapacityYesNo.bulletpoint2")</li>
-    <li class="inside">@messages("individualBeneficiary.5mld.mentalCapacityYesNo.bulletpoint3")</li>
-    <li class="inside">@messages("individualBeneficiary.5mld.mentalCapacityYesNo.bulletpoint4")</li>
-</ul>
+    @bulletList(
+        "individualBeneficiary.5mld.mentalCapacityYesNo",
+        List(
+            "bulletpoint1",
+            "bulletpoint2",
+            "bulletpoint3",
+            "bulletpoint4"
+        )
+    )
 }
 
 @mainTemplate(
@@ -47,10 +52,15 @@
 
         @errorSummary(form.errors)
 
+        @heading(messages("individualBeneficiary.5mld.mentalCapacityYesNo.heading", name))
+
+        @content
+
         @inputYesNo(
             field = form("value"),
             label = messages("individualBeneficiary.5mld.mentalCapacityYesNo.heading", name),
-            legendAsHeading = true
+            legendClass = Some("govuk-visually-hidden"),
+            legendAsHeading = false
         )
 
         @submitButton()
