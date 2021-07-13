@@ -54,15 +54,20 @@ trait ViewSpecBase extends SpecBase {
     headers.first.text.replaceAll("\u00a0", " ") mustBe messages(expectedMessageKey, args: _*).replaceAll("&nbsp;", " ")
   }
 
-  def assertPageTitleWithCaptionEqualsMessages(doc: Document, expectedCaptionMessageKey: String, captionParam: String, expectedMessageKey: String) = {
+  def assertPageTitleWithCaptionEqualsMessages(doc: Document, expectedMessageKey: String): Assertion = {
     val headers = doc.getElementsByTag("h1")
     headers.size mustBe 1
     val actual = headers.first.text.replaceAll("\u00a0", " ")
 
-    val expectedCaption = messages(expectedCaptionMessageKey, captionParam).replaceAll("&nbsp;", " ")
-    val expectedHeading = messages(expectedMessageKey).replaceAll("&nbsp;", " ")
+    val expectedCaptionMessageKey = s"$expectedMessageKey.caption"
+    val expectedHiddenMessageKey = s"$expectedMessageKey.caption.hidden"
+    val expectedHeadingMessageKey = s"$expectedMessageKey.heading"
 
-    actual mustBe s"$expectedCaption $expectedHeading"
+    val expectedHidden = messages(expectedHiddenMessageKey).replaceAll("&nbsp;", " ")
+    val expectedCaption = messages(expectedCaptionMessageKey).replaceAll("&nbsp;", " ")
+    val expectedHeading = messages(expectedHeadingMessageKey).replaceAll("&nbsp;", " ")
+
+    actual mustBe s"$expectedHidden $expectedCaption $expectedHeading"
 
   }
 
@@ -84,7 +89,7 @@ trait ViewSpecBase extends SpecBase {
     assert(doc.getElementById(id) == null, "\n\nElement " + id + " was rendered on the page.\n")
   }
 
-  def assertRenderedByClass(doc: Document, cssClass: String) =
+  def assertRenderedByClass(doc: Document, cssClass: String): Assertion =
     assert(doc.getElementsByClass(cssClass) != null, "\n\nElement " + cssClass + " was not rendered on the page.\n")
 
   def assertNotRenderedByClass(doc: Document, className: String): Assertion = {

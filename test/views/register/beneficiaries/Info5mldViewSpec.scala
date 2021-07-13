@@ -30,7 +30,6 @@ class Info5mldViewSpec extends ViewBehaviours {
       val applyView = view.apply(fakeDraftId, isTaxable = false)(fakeRequest, messages)
 
       behave like normalPageTitleWithCaption(applyView, "beneficiaryInfo.5mld",
-        "caption",
         "subheading1",
         "paragraph11",
         "bulletpoint11",
