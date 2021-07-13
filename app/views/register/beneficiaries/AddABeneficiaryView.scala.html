@@ -17,9 +17,15 @@
 @import controllers.register.beneficiaries.routes._
 @import models.registration.pages.AddABeneficiary
 @import viewmodels.AddRow
+@import views.html.components.{SubmitButton, ErrorSummary, Heading, AddToList, InputRadio}
 
 @this(
-    main_template: MainTemplate,
+    mainTemplate: MainTemplate,
+    submitButton: SubmitButton,
+    errorSummary: ErrorSummary,
+    headingComp: Heading,
+    addToList: AddToList,
+    inputRadio: InputRadio,
     formHelper: FormWithCSRF
 )
 
@@ -30,49 +36,52 @@
     heading : String,
     maxedOut: List[String])(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)}$heading"
+@mainTemplate(
+    title = s"${errorPrefix(form)}$heading",
+    showBackLink = true
     ) {
 
     @formHelper(action = AddABeneficiaryController.submitAnother(draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors, AddABeneficiary.options)
 
-        @components.error_summary(form.errors)
+        @headingComp(heading)
 
-        @components.heading(heading)
+        @addToList(inProgressIndividualBeneficiaries, "inprogress", "beneficiary")
 
-        @components.data_list(inProgressIndividualBeneficiaries, "inprogress", "beneficiary")
-
-        @components.data_list(completeIndividualBeneficiaries, "complete", "beneficiary")
+        @addToList(completeIndividualBeneficiaries, "complete", "beneficiary")
 
         @if(maxedOut.size == 1) {
-        <ul>
-            <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.just1", messages(maxedOut.head).toLowerCase)</p></li>
-            <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.just1.paragraph")</p></li>
-        </ul>
-        } else if(maxedOut.size > 1) {
-        <ul>
-            <li class="panel-indent">
-                <p>@messages("addABeneficiary.maxedOut.moreThan1")</p>
-                <ul class="govuk-list trust-list--bullet trust-list--bullet--padding-left">
-                    @for(option <- maxedOut) {
-                    <li>@messages(option)</li>
-                    }
+            <div class="govuk-inset-text">
+                <ul class="govuk-list">
+                    <li><p>@messages("addABeneficiary.maxedOut.just1", messages(maxedOut.head).toLowerCase)</p></li>
+                    <li><p>@messages("addABeneficiary.maxedOut.just1.paragraph")</p></li>
                 </ul>
-            </li>
-            <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.moreThan1.paragraph")</p></li>
-        </ul>
+            </div>
+        } else if(maxedOut.size > 1) {
+            <div class="govuk-inset-text">
+                <ul class="govuk-list">
+                    <li>
+                        <p>@messages("addABeneficiary.maxedOut.moreThan1")</p>
+                        <ul class="govuk-list govuk-list--bullet">
+                            @for(option <- maxedOut) {
+                            <li>@messages(option)</li>
+                            }
+                        </ul>
+                    </li>
+                <li><p>@messages("addABeneficiary.maxedOut.moreThan1.paragraph")</p></li>
+                </ul>
+            </div>
         }
 
-        @components.input_radio(
+        @inputRadio(
             field = form("value"),
             legend = messages("addABeneficiary.additional-content"),
-            legendClass = Some("heading-medium"),
-            inputs = AddABeneficiary.options,
-            legendAsH2Heading = true
+            legendClass = Some("govuk-fieldset__legend--m"),
+            inputs = mapRadioOptionsToRadioItems(form("value"), false, AddABeneficiary.options),
+            inline = false
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

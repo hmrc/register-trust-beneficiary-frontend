@@ -27,7 +27,7 @@ import views.html.RemoveIndexView
 
 class RemoveCompanyBeneficiaryControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
-  val messagesPrefix = "removeCompanyBeneficiary"
+  val messagesPrefix = "removeCompanyBeneficiaryYesNo"
 
   val formProvider = new RemoveIndexFormProvider()
   val form = formProvider(messagesPrefix)

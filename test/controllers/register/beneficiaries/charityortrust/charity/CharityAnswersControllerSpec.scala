@@ -70,7 +70,7 @@ class CharityAnswersControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(fakeAnswerSection, index, fakeDraftId)(request, messages).toString
+        view(Seq(fakeAnswerSection), index, fakeDraftId)(request, messages).toString
 
       application.stop()
     }

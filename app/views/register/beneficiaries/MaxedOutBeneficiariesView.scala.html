@@ -18,9 +18,13 @@
 @import models.registration.pages.AddABeneficiary
 @import viewmodels.AddRow
 @import viewmodels.RadioOption
+@import views.html.components.{Heading, SubmitButton, AddToList}
 
 @this(
-    main_template: MainTemplate,
+    mainTemplate: MainTemplate,
+    submitButton: SubmitButton,
+    addToList: AddToList,
+    headingComp: Heading,
     formHelper: FormWithCSRF
 )
 
@@ -29,25 +33,26 @@
     completeBeneficiaries: Seq[AddRow],
     heading: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = heading
+@mainTemplate(
+    title = heading,
+    showBackLink = true
     ) {
 
     @formHelper(action = AddABeneficiaryController.submitComplete(draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @headingComp(heading)
 
-        @components.heading(heading)
+        @addToList(inProgressBeneficiaries, "inprogress", "beneficiary")
 
-        @components.data_list(inProgressBeneficiaries, "inprogress", "beneficiary")
+        @addToList(completeBeneficiaries, "complete", "beneficiary")
 
-        @components.data_list(completeBeneficiaries, "complete", "beneficiary")
-
-        <ul>
-            <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.all")</p></li>
-            <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.all.paragraph")</p></li>
+    <div class="govuk-inset-text">
+        <ul class="govuk-list">
+            <li><p>@messages("addABeneficiary.maxedOut.all")</p></li>
+            <li><p>@messages("addABeneficiary.maxedOut.all.paragraph")</p></li>
         </ul>
+    </div>
 
-        @components.submit_button()
+        @submitButton()
     }
 }

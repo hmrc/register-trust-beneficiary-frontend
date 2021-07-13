@@ -15,27 +15,31 @@
  *@
 
 @import controllers.register.beneficiaries.individualBeneficiary.routes._
-@import viewmodels.{AnswerSection, RepeaterAnswerSection, Section}
+@import utils.SectionFormatter.formatSections
+@import viewmodels.{AnswerSection, Section}
+@import views.html.components.{SubmitButton, Heading}
 
 @this(
-    main_template: MainTemplate,
+    mainTemplate: MainTemplate,
+    govukSummaryList: GovukSummaryList,
+    heading: Heading,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
-@(answerSection: AnswerSection, index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
+@(answerSection: Seq[AnswerSection], index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = messages("individualBeneficiaryAnswers.title")
+@mainTemplate(
+    title = messages("individualBeneficiaryAnswers.title"),
+    showBackLink = true
 ) {
 
     @formHelper(action = AnswersController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @heading("individualBeneficiaryAnswers.heading")
 
-        @components.heading("individualBeneficiaryAnswers.heading")
+        @govukSummaryList(SummaryList(rows = formatSections(answerSection)))
 
-        @components.answer_section(answerSection)
-
-        @components.submit_button()
+        @submitButton()
     }
 }

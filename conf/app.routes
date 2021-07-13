@@ -1,3 +1,5 @@
+->         /hmrc-frontend                      hmrcfrontend.Routes
+
 # microservice specific routes
 
 GET        /:draftId/start                              controllers.IndexController.onPageLoad(draftId: String)
@@ -7,6 +9,7 @@ GET        /assets/*file                                controllers.Assets.versi
 GET        /language/:lang                              controllers.LanguageSwitchController.switchToLanguage(lang: String)
 
 GET        /this-service-has-been-reset                 controllers.SessionExpiredController.onPageLoad
+POST       /this-service-has-been-reset                 controllers.SessionExpiredController.onSubmit
 
 GET        /logout                                      controllers.register.LogoutController.logout()
 
@@ -27,6 +30,7 @@ GET        /:draftId/complete                                                   
 POST       /:draftId/complete                                                         controllers.register.beneficiaries.AddABeneficiaryController.submitComplete(draftId: String)
 
 GET        /:draftId/information-you-need                                             controllers.register.beneficiaries.InfoController.onPageLoad(draftId: String)
+POST       /:draftId/information-you-need                                             controllers.register.beneficiaries.InfoController.onSubmit(draftId: String)
 
 # individual
 
@@ -145,8 +149,6 @@ POST       /:draftId/class/:index/remove                                        
 
 GET        /:draftId/what-type                                                        controllers.register.beneficiaries.WhatTypeOfBeneficiaryController.onPageLoad(draftId: String)
 POST       /:draftId/what-type                                                        controllers.register.beneficiaries.WhatTypeOfBeneficiaryController.onSubmit(draftId: String)
-
-GET        /feature-not-available                                                     controllers.FeatureNotAvailableController.onPageLoad()
 
 GET        /feature-not-available                                                     controllers.FeatureNotAvailableController.onPageLoad()
 

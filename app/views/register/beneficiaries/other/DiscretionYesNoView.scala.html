@@ -15,32 +15,35 @@
  *@
 
 @import controllers.register.beneficiaries.other.routes._
+@import views.html.components.{ErrorSummary, SubmitButton, InputYesNo}
 
 @this(
-        main_template: MainTemplate,
+        mainTemplate: MainTemplate,
+        errorSummary: ErrorSummary,
+        inputYesNo: InputYesNo,
+        submitButton: SubmitButton,
         formHelper: FormWithCSRF
 )
 
 @(form: Form[_], name: String, index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)}${messages("otherBeneficiary.discretionYesNo.title")}"
+@mainTemplate(
+    title = s"${errorPrefix(form)}${messages("otherBeneficiary.discretionYesNo.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = DiscretionYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_yes_no(
+        @inputYesNo(
             field = form("value"),
             label = messages("otherBeneficiary.discretionYesNo.heading", name),
             legendAsHeading = true,
             hint = Some(messages("otherBeneficiary.discretionYesNo.hint"))
         )
 
-        @components.submit_button()
+        @submitButton()
 
     }
 }

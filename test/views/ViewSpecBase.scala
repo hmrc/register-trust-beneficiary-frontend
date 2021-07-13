@@ -57,8 +57,13 @@ trait ViewSpecBase extends SpecBase {
   def assertPageTitleWithCaptionEqualsMessages(doc: Document, expectedCaptionMessageKey: String, captionParam: String, expectedMessageKey: String) = {
     val headers = doc.getElementsByTag("h1")
     headers.size mustBe 1
-    headers.first.text.replaceAll("\u00a0", " ") mustBe
-      messages(expectedCaptionMessageKey, captionParam).replaceAll("&nbsp;", " ") + messages(expectedMessageKey).replaceAll("&nbsp;", " ")
+    val actual = headers.first.text.replaceAll("\u00a0", " ")
+
+    val expectedCaption = messages(expectedCaptionMessageKey, captionParam).replaceAll("&nbsp;", " ")
+    val expectedHeading = messages(expectedMessageKey).replaceAll("&nbsp;", " ")
+
+    actual mustBe s"$expectedCaption $expectedHeading"
+
   }
 
   def assertContainsText(doc: Document, text: String): Assertion = assert(doc.toString.contains(text), "\n\ntext " + text + " was not rendered on the page.\n")
@@ -78,6 +83,9 @@ trait ViewSpecBase extends SpecBase {
   def assertNotRenderedById(doc: Document, id: String): Assertion = {
     assert(doc.getElementById(id) == null, "\n\nElement " + id + " was rendered on the page.\n")
   }
+
+  def assertRenderedByClass(doc: Document, cssClass: String) =
+    assert(doc.getElementsByClass(cssClass) != null, "\n\nElement " + cssClass + " was not rendered on the page.\n")
 
   def assertNotRenderedByClass(doc: Document, className: String): Assertion = {
     assert(doc.getElementsByClass(className).isEmpty, "\n\nElement " + className + " was rendered on the page.\n")
@@ -107,7 +115,7 @@ trait ViewSpecBase extends SpecBase {
 
   def assertContainsHint(doc: Document, forElement: String, expectedHintText: Option[String]): Any = {
     if (expectedHintText.isDefined) {
-      assert(doc.getElementsByClass("form-hint").first.text == expectedHintText.get,
+      assert(doc.getElementsByClass("govuk-hint").first.text == expectedHintText.get,
         s"\n\nLabel for $forElement did not contain hint text $expectedHintText")
     }
   }
@@ -121,10 +129,9 @@ trait ViewSpecBase extends SpecBase {
     val radio = doc.getElementById(id)
     assert(radio.attr("name") == name, s"\n\nElement $id does not have name $name")
     assert(radio.attr("value") == value, s"\n\nElement $id does not have value $value")
-    if (isChecked) {
-      assert(radio.attr("checked") == "checked", s"\n\nElement $id is not checked")
-    } else {
-      assert(!radio.hasAttr("checked") && radio.attr("checked") != "checked", s"\n\nElement $id is checked")
+    isChecked match {
+      case true => assert(radio.hasAttr("checked"), s"\n\nElement $id is not checked")
+      case _ => assert(!radio.hasAttr("checked"), s"\n\nElement $id is checked")
     }
   }
 

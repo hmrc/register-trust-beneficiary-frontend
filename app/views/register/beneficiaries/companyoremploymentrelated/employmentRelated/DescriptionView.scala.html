@@ -15,60 +15,67 @@
  *@
 
 @import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.routes._
+@import views.html.components.{ErrorSummary, SubmitButton, InputText, Heading}
 
 @this(
-    main_template: MainTemplate,
+    mainTemplate: MainTemplate,
+    inputText: InputText,
+    errorSummary: ErrorSummary,
+    heading: Heading,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)}${messages("employmentRelatedBeneficiary.description.title")}"
+@mainTemplate(
+    title = s"${errorPrefix(form)}${messages("employmentRelatedBeneficiary.description.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = DescriptionController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
+    <fieldset class="govuk-fieldset" aria-describedby="form-hint">
 
-        @components.heading("employmentRelatedBeneficiary.description.heading")
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            @heading("employmentRelatedBeneficiary.description.heading")
+        </legend>
 
-        @components.form_hint(
-            hint = Some(messages("employmentRelatedBeneficiary.description.hint"))
-        )
+        <span id="form-hint" class="govuk-hint">@messages("employmentRelatedBeneficiary.description.hint")</span>
 
-        @components.input_text(
+        @inputText(
             field = form("description"),
             label = messages("employmentRelatedBeneficiary.description.description"),
-            inputClass = Some("form-control-3-4")
+            inputClass = Some("govuk-!-width-three-quarters")
         )
 
-        @components.input_text(
+        @inputText(
             field = form("description1"),
             label = messages("employmentRelatedBeneficiary.description.description1"),
-            inputClass = Some("form-control-3-4")
+            inputClass = Some("govuk-!-width-three-quarters")
         )
 
-        @components.input_text(
+        @inputText(
             field = form("description2"),
             label = messages("employmentRelatedBeneficiary.description.description2"),
-            inputClass = Some("form-control-3-4")
+            inputClass = Some("govuk-!-width-three-quarters")
         )
 
-        @components.input_text(
+        @inputText(
             field = form("description3"),
             label = messages("employmentRelatedBeneficiary.description.description3"),
-            inputClass = Some("form-control-3-4")
+            inputClass = Some("govuk-!-width-three-quarters")
         )
 
-        @components.input_text(
+        @inputText(
             field = form("description4"),
             label = messages("employmentRelatedBeneficiary.description.description4"),
-            inputClass = Some("form-control-3-4")
+            inputClass = Some("govuk-!-width-three-quarters")
         )
+    </fieldset>
 
-        @components.submit_button()
+        @submitButton()
     }
 }

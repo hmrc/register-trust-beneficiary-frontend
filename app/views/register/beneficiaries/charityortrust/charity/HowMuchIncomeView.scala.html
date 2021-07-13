@@ -15,31 +15,39 @@
  *@
 
 @import controllers.register.beneficiaries.charityortrust.charity.routes._
+@import views.html.components.{ErrorSummary, SubmitButton, InputText}
 
 @this(
-    main_template: MainTemplate,
+    mainTemplate: MainTemplate,
+    errorSummary: ErrorSummary,
+    submitButton: SubmitButton,
+    inputPercent: InputText,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], draftId: String, index: Int, charityName: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)}${messages("charity.shareOfIncome.title")}"
+@mainTemplate(
+    title = s"${errorPrefix(form)}${messages("charity.shareOfIncome.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = HowMuchIncomeController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_number(
+        @inputPercent(
             field = form("value"),
             label = messages("charity.shareOfIncome.heading", charityName),
             hint = Some(messages("charity.shareOfIncome.hint")),
-            symbol = Some("percentage")
+            labelClass = Some("govuk-heading-l"),
+            labelAsHeading = true,
+            suffix = Some("%"),
+            inputMode = Some("numeric"),
+            pattern = Some("[0-9]*"),
+            inputClass = Some("govuk-input--width-3")
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

@@ -15,10 +15,14 @@
  *@
 
 @import config.FrontendAppConfig
+@import views.html.components.{BulletList, Link, Heading}
 
 @this(
         main_template: MainTemplate,
-        config: FrontendAppConfig
+        config: FrontendAppConfig,
+        heading: Heading,
+        bulletList: BulletList,
+        link: Link
 )
 
 @()(implicit request: Request[_], messages: Messages)
@@ -28,15 +32,15 @@
  canSignOut = false
 ) {
 
- @components.heading("unauthorised.heading")
+ @heading("unauthorised.heading")
 
  <p>@messages("unauthorised.p1")</p>
 
- <p>@messages("unauthorised.p2") @components.link(config.registerTrustAsTrusteeUrl, "help-link", messages("unauthorised.link"), openInNewWindow = true).</p>
+ <p>@messages("unauthorised.p2") @link(config.registerTrustAsTrusteeUrl, "help-link", messages("unauthorised.link"), openInNewWindow = true).</p>
 
  <p>@messages("unauthorised.p3")</p>
 
- @components.bullet_list("unauthorised", Seq(
+ @bulletList("unauthorised", Seq(
   "bullet1",
   "bullet2"
  ))

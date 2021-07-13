@@ -27,7 +27,7 @@ class AnswersViewSpec extends ViewBehaviours {
 
     val view = viewFor[AnswersView](Some(emptyUserAnswers))
 
-    val applyView = view.apply(AnswerSection(), index, fakeDraftId)(fakeRequest, messages)
+    val applyView = view.apply(Seq(AnswerSection()), index, fakeDraftId)(fakeRequest, messages)
 
     behave like normalPage(applyView, "individualBeneficiaryAnswers")
 

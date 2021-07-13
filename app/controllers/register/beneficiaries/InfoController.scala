@@ -42,4 +42,9 @@ class InfoController @Inject()(
         Ok(view4MLD(draftId))
       }
   }
+
+  def onSubmit(draftId: String): Action[AnyContent] = (identify andThen getData(draftId) andThen requireData) {
+    _ =>
+      Redirect(routes.WhatTypeOfBeneficiaryController.onPageLoad(draftId))
+  }
 }

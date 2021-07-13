@@ -61,7 +61,7 @@ class AnswersController @Inject()(
       val name = request.userAnswers.get(NamePage(index)).get
 
       val section: AnswerSection = printHelper.checkDetailsSection(request.userAnswers, name.toString, index, draftId)
-      Ok(view(section, index, draftId))
+      Ok(view(Seq(section), index, draftId))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {

@@ -38,7 +38,7 @@ class RemoveTrustBeneficiaryController @Inject()(
                                                   val removeView: RemoveIndexView
                                                 ) extends RemoveIndexController {
 
-  override val messagesPrefix: String = "removeTrustBeneficiary"
+  override val messagesPrefix: String = "removeTrustBeneficiaryYesNo"
 
   override def page(index: Int): QuestionPage[String] = NamePage(index)
 

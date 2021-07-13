@@ -14,27 +14,31 @@
  * limitations under the License.
  *@
 
-@import config.FrontendAppConfig
+@import controllers.register.beneficiaries.routes._
+@import views.html.components.{SubmitButton, Heading}
 
 @this(
     main_template: MainTemplate,
-    appConfig: FrontendAppConfig
+    button: SubmitButton,
+    formHelper: FormWithCSRF,
+    heading: Heading
 )
 
 @()(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("session_expired.title"),
-    canSignOut = false
+    canSignOut = false,
+    timeoutEnabled = false
     ) {
 
-    @components.heading("session_expired.heading")
+    @heading("session_expired.heading")
 
     <p>@messages("session_expired.guidance")</p>
     <p>@messages("session_expired.guidance.2")</p>
 
-    @components.button_link(
-                            messageKey = messages("site.sign_in"),
-                            href = appConfig.loginUrl
-                            )
+    @formHelper(action = SessionExpiredController.onSubmit, 'autoComplete -> "off") {
+        @button(Some(messages("site.sign_in")))
+    }
+
 }

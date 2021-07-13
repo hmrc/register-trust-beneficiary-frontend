@@ -16,32 +16,35 @@
 
 @import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.routes._
 @import models.registration.pages.HowManyBeneficiaries
+@import views.html.components.{ErrorSummary, SubmitButton, InputRadio}
 
 @this(
-    main_template: MainTemplate,
+    mainTemplate: MainTemplate,
+    errorSummary: ErrorSummary,
+    submitButton: SubmitButton,
+    inputRadio: InputRadio,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)}${messages("employmentRelatedBeneficiary.numberOfBeneficiaries.title")}"
+@mainTemplate(
+    title = s"${errorPrefix(form)}${messages("employmentRelatedBeneficiary.numberOfBeneficiaries.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = NumberOfBeneficiariesController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors, HowManyBeneficiaries.options.toSeq)
 
-        @components.error_summary(form.errors)
-
-        @components.input_radio(
+        @inputRadio(
             field = form("value"),
             legend = messages("employmentRelatedBeneficiary.numberOfBeneficiaries.heading"),
-            legendClass = Some("heading-large"),
-            inputs = HowManyBeneficiaries.options.toSeq,
-            legendAsHeading = true
+            inputs = mapRadioOptionsToRadioItems(form("value"), false, HowManyBeneficiaries.options.toSeq),
+            headingIsLegend = true,
+            inline = false
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

@@ -17,9 +17,13 @@
 @import controllers.register.beneficiaries.routes._
 @import models.registration.pages.WhatTypeOfBeneficiary
 @import viewmodels.RadioOption
+@import views.html.components.{ErrorSummary, SubmitButton, InputRadio}
 
 @this(
-    main_template: MainTemplate,
+    mainTemplate: MainTemplate,
+    submitButton: SubmitButton,
+    errorSummary: ErrorSummary,
+    inputRadio: InputRadio,
     formHelper: FormWithCSRF
 )
 
@@ -35,25 +39,24 @@
     }
 }
 
-@main_template(
-    title = s"${errorPrefix(form)}$title"
+@mainTemplate(
+    title = s"${errorPrefix(form)}$title",
+    showBackLink = true
     ) {
 
     @formHelper(action = WhatTypeOfBeneficiaryController.onSubmit(draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors, options.toSeq)
 
-        @components.error_summary(form.errors)
-
-        @components.input_radio(
+        @inputRadio(
             field = form("value"),
             legend = heading.toString,
-            legendClass = Some("heading-large"),
-            inputs = options.toSeq,
+            inputs = mapRadioOptionsToRadioItems(form("value"), false, options.toSeq),
             hint = Some(messages(s"whatTypeOfBeneficiary.hint")),
-            legendAsHeading = true
+            headingIsLegend = true,
+            inline = false
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

@@ -15,32 +15,35 @@
  *@
 
 @import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.routes._
+@import views.html.components.{ErrorSummary, SubmitButton, InputText, Heading}
 
 @this(
-    main_template: MainTemplate,
+    mainTemplate: MainTemplate,
+    inputText: InputText,
+    errorSummary: ErrorSummary,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], index : Int, draftId: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)}${messages("employmentRelatedBeneficiary.name.title")}"
+@mainTemplate(
+    title = s"${errorPrefix(form)}${messages("employmentRelatedBeneficiary.name.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = NameController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_text(
+        @inputText(
             field = form("value"),
             label = messages("employmentRelatedBeneficiary.name.heading"),
-            labelClass = Some("heading-large"),
+            labelClass = Some("govuk-heading-l"),
             labelAsHeading = true,
-            inputClass = Some("form-control-3-4")
+            inputClass = Some("govuk-!-width-three-quarters")
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

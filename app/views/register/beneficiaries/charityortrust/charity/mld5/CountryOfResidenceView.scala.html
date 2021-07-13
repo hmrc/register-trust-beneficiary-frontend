@@ -16,34 +16,37 @@
 
 @import controllers.register.beneficiaries.charityortrust.charity.mld5.routes._
 @import utils.InputOption
+@import views.html.components.{ErrorSummary, SubmitButton, InputSelect}
 
 @this(
-    main_template: MainTemplate,
+    mainTemplate: MainTemplate,
+    errorSummary: ErrorSummary,
+    submitButton: SubmitButton,
+    select: InputSelect,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], countryOptions: Seq[InputOption], draftId: String, index: Int, charityName: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)}${messages("charity.5mld.countryOfResidence.title")}"
+@mainTemplate(
+    title = s"${errorPrefix(form)}${messages("charity.5mld.countryOfResidence.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = CountryOfResidenceController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.select(field = form("value"),
+        @select(field = form("value"),
             label = messages("charity.5mld.countryOfResidence.heading", charityName),
-            labelClasses = Set("heading-large"),
+            labelClasses = Set("govuk-heading-l"),
             labelAsHeading = true,
             options = countryOptions,
             placeholder = Some(messages("site.address.country.select")),
-            formGroupClasses = Set("autocomplete-wrapper form-control-3-4"),
-            selectAttribute = Set("data-non-uk-countries")
+            formGroupClasses = Set("autocomplete-wrapper govuk-!-width-three-quarters"),
+            selectAttribute = Map("data-non-uk-countries" -> "")
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

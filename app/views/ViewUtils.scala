@@ -16,8 +16,10 @@
 
 package views
 
-import play.api.data.{Form, FormError}
+import play.api.data.{Field, Form, FormError}
 import play.api.i18n.Messages
+import uk.gov.hmrc.govukfrontend.views.html.components.{RadioItem, Text}
+import viewmodels.RadioOption
 
 object ViewUtils {
 
@@ -25,23 +27,40 @@ object ViewUtils {
     if (form.hasErrors || form.hasGlobalErrors) s"${messages("error.browser.title.prefix")} " else ""
   }
 
-  def errorHref(error: FormError): String = {
+  def breadcrumbTitle(title: String)(implicit messages: Messages): String = {
+    s"$title - ${messages("entity.beneficiary")} - ${messages("service.name")} - GOV.UK"
+  }
 
-    val suffix = error.args match {
+  def errorHref(error: FormError, radioOptions: Seq[RadioOption] = Nil): String = {
+    error.args match {
       case x if x.contains("day") || x.contains("month") || x.contains("year") =>
-        s"_${error.args.head}"
+        s"${error.key}.${error.args.head}"
+      case _ if error.message.toLowerCase.contains("yesno") =>
+        s"${error.key}-yes"
+      case _ if radioOptions.size != 0 =>
+        radioOptions.head.id
       case _ =>
         val isSingleDateField = error.message.toLowerCase.contains("date") && !error.message.toLowerCase.contains("yesno")
         if (error.key.toLowerCase.contains("date") || isSingleDateField) {
-          "_day"
+          s"${error.key}.day"
         } else {
-          ""
+          s"${error.key}"
         }
     }
-    s"${error.key}$suffix"
   }
 
-  def breadcrumbTitle(title: String)(implicit messages: Messages): String = {
-    s"$title - ${messages("entity.beneficiary")} - ${messages("site.service_name")} - GOV.UK"
-  }
+  def mapRadioOptionsToRadioItems(field: Field, trackGa: Boolean,
+                                  inputs: Seq[RadioOption])(implicit messages: Messages): Seq[RadioItem] =
+    inputs.map(
+      a => {
+        RadioItem(
+          id = Some(a.id),
+          value = Some(a.value),
+          checked = field.value.contains(a.value),
+          content = Text(messages(a.messageKey)),
+          attributes = if (trackGa) Map[String, String]("data-journey-click" -> s"trusts-frontend:click:${a.id}") else Map.empty
+        )
+      }
+    )
+
 }

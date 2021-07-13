@@ -25,25 +25,31 @@ class ViewUtilsSpec extends ViewSpecBase {
     "refer to date field when error is for a single date input (lowercase message contains 'date' and not 'yesno')" in {
       val error = FormError(key = "value", message = "dateOfBirth.error.required")
       val result = ViewUtils.errorHref(error)
-      result mustBe "value_day"
+      result mustBe "value.day"
     }
 
     "refer to date field when error contains a date argument" in {
-      val error = FormError(key = "expiryDate", message = "individualProtector.passportDetails.expiryDate.error.required", args = Seq("month"))
+      val error = FormError(key = "expiryDate", message = "otherIndividual.passportDetails.expiryDate.error.required", args = Seq("month"))
       val result = ViewUtils.errorHref(error)
-      result mustBe "expiryDate_month"
+      result mustBe "expiryDate.month"
     }
 
-    "not refer to date field when error is for a single input (lowercase message does not contains 'date')" in {
-      val error = FormError(key = "value", message = "name.error.required")
+    "not refer to date field when error is for a single input (lowercase message does not contain 'date')" in {
+      val error = FormError(key = "value", message = "name.error.firstname.required")
       val result = ViewUtils.errorHref(error)
       result mustBe "value"
     }
 
     "not refer to date field when error is for a single input (lowercase message contains 'date' and 'yesno')" in {
-      val error = FormError(key = "value", message = "individualBeneficiaryDateOfBirthYesNo.error.required")
+      val error = FormError(key = "value", message = "otherIndividual.dateOfBirthYesNo.error.required")
       val result = ViewUtils.errorHref(error)
-      result mustBe "value"
+      result mustBe "value-yes"
+    }
+
+    "refer to yes field when error is for a yes/no input (lowercase message contains 'yesno')" in {
+      val error = FormError(key = "value", message = "otherIndividual.nationalInsuranceYesNo.error.required")
+      val result = ViewUtils.errorHref(error)
+      result mustBe "value-yes"
     }
 
     "not refer to date field when error has arguments" in {
@@ -53,4 +59,5 @@ class ViewUtilsSpec extends ViewSpecBase {
     }
 
   }
+
 }

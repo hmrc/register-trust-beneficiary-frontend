@@ -15,49 +15,56 @@
  *@
 
 @import controllers.register.beneficiaries.individualBeneficiary.routes._
+@import views.html.components.{ErrorSummary, SubmitButton, InputText, Heading}
 
 @this(
-    main_template: MainTemplate,
+    mainTemplate: MainTemplate,
+    errorSummary: ErrorSummary,
+    inputText: InputText,
+    submitButton: SubmitButton,
+    heading: Heading,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], draftId: String, index : Int)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)}${messages("individualBeneficiaryName.title")}"
+@mainTemplate(
+    title = s"${errorPrefix(form)}${messages("individualBeneficiaryName.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = NameController.onSubmit(index, draftId), 'autoComplete -> "on") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
+        <fieldset class="govuk-fieldset">
 
-        <fieldset>
-
-            <legend>
-                @components.heading("individualBeneficiaryName.heading")
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                @heading("individualBeneficiaryName.heading")
             </legend>
 
-            @components.input_text(
+            @inputText(
                 field = form("firstName"),
                 label = messages("individualBeneficiaryName.firstName"),
+                inputClass = Some("govuk-!-width-one-half"),
                 autocomplete = Some("given-name")
             )
 
-            @components.input_text(
+            @inputText(
                 field = form("middleName"),
                 label = messages("individualBeneficiaryName.middleName"),
+                inputClass = Some("govuk-!-width-one-half"),
                 autocomplete = Some("additional-name")
             )
 
-            @components.input_text(
+            @inputText(
                 field = form("lastName"),
                 label = messages("individualBeneficiaryName.lastName"),
+                inputClass = Some("govuk-!-width-one-half"),
                 autocomplete = Some("family-name")
             )
         </fieldset>
 
-        @components.submit_button()
+        @submitButton()
     }
 }

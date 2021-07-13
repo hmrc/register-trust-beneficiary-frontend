@@ -16,28 +16,34 @@
 
 @import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.routes._
 @import utils.InputOption
+@import views.html.components.{ErrorSummary, SubmitButton, InternationalAddress}
 
 @this(
-        main_template: MainTemplate,
+        mainTemplate: MainTemplate,
+        errorSummary: ErrorSummary,
+        submitButton: SubmitButton,
+        internationalAddress: InternationalAddress,
         formHelper: FormWithCSRF
 )
 
 @(form: Form[_], countryOptions: Seq[InputOption], name: String, index : Int, draftId: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)}${messages("site.address.international.title")}"
+@mainTemplate(
+    title = s"${errorPrefix(form)}${messages("site.address.international.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = NonUkAddressController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
+        @internationalAddress(
+            form,
+            messages("site.address.international.heading", name),
+            true,
+            countryOptions
+        )
 
-        @components.heading("site.address.international.heading", Some(name))
-
-        @components.international_address(form, countryOptions)
-
-        @components.submit_button()
+        @submitButton()
     }
 }

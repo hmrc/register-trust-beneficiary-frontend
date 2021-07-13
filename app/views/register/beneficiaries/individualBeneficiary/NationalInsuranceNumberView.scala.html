@@ -16,32 +16,36 @@
 
 @import controllers.register.beneficiaries.individualBeneficiary.routes._
 @import models.core.pages.FullName
+@import views.html.components.{ErrorSummary, SubmitButton, InputText}
 
 @this(
-    main_template: MainTemplate,
+    mainTemplate: MainTemplate,
+    errorSummary: ErrorSummary,
+    inputNino: InputText,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], draftId:String, name: FullName, index: Int)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)}${messages("individualBeneficiaryNationalInsuranceNumber.title")}"
+@mainTemplate(
+    title = s"${errorPrefix(form)}${messages("individualBeneficiaryNationalInsuranceNumber.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = NationalInsuranceNumberController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_nino(
+        @inputNino(
             field = form("value"),
             label = messages("individualBeneficiaryNationalInsuranceNumber.heading", name.toString),
-            labelClass = Some("heading-large"),
+            labelClass = Some("govuk-heading-l"),
             labelAsHeading = true,
+            inputClass = Some("govuk-input--width-10"),
             hint = Some(messages("individualBeneficiaryNationalInsuranceNumber.hint"))
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

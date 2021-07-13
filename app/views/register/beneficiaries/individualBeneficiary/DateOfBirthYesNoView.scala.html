@@ -16,31 +16,33 @@
 
 @import controllers.register.beneficiaries.individualBeneficiary.routes._
 @import models.core.pages.FullName
+@import views.html.components.{ErrorSummary, SubmitButton, InputYesNo}
 
 @this(
-    main_template: MainTemplate,
+    mainTemplate: MainTemplate,
+    errorSummary: ErrorSummary,
+    inputYesNo: InputYesNo,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
 @(form: Form[_], draftId: String, name: FullName, index: Int)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)}${messages("individualBeneficiaryDateOfBirthYesNo.title")}"
+@mainTemplate(
+    title = s"${errorPrefix(form)}${messages("individualBeneficiaryDateOfBirthYesNo.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = DateOfBirthYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_yes_no(
+        @inputYesNo(
             field = form("value"),
             label = messages("individualBeneficiaryDateOfBirthYesNo.heading", name.toString),
-            legendClass = Some("heading-large"),
             legendAsHeading = true
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

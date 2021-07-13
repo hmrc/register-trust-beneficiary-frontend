@@ -42,7 +42,7 @@ class RemoveCharityBeneficiaryController @Inject()(
                                                        require: RequiredAnswerActionProvider
                                  ) extends RemoveIndexController {
 
-  override val messagesPrefix : String = "removeCharityBeneficiary"
+  override val messagesPrefix : String = "removeCharityBeneficiaryYesNo"
 
   override def page(index: Int): QuestionPage[String] = CharityNamePage(index)
 

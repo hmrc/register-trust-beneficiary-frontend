@@ -15,27 +15,32 @@
  *@
 
 @import viewmodels.AnswerSection
+@import utils.SectionFormatter.formatSections
 @import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.routes._
+@import views.html.components.{ErrorSummary, SubmitButton, Heading}
 
 @this(
-    main_template: MainTemplate,
+    mainTemplate: MainTemplate,
+    govukSummaryList: GovukSummaryList,
+    errorSummary: ErrorSummary,
+    heading: Heading,
+    submitButton: SubmitButton,
     formHelper: FormWithCSRF
 )
 
-@(answerSection: AnswerSection, index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
+@(answerSection: Seq[AnswerSection], index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = messages("employmentRelatedBeneficiary.checkDetails.title")
+@mainTemplate(
+    title = messages("employmentRelatedBeneficiary.checkDetails.title"),
+    showBackLink = true
 ) {
 
     @formHelper(action = CheckDetailsController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @heading("employmentRelatedBeneficiary.checkDetails.heading")
 
-        @components.heading("employmentRelatedBeneficiary.checkDetails.heading")
+        @govukSummaryList(SummaryList(rows = formatSections(answerSection)))
 
-        @components.answer_section(answerSection)
-
-        @components.submit_button()
+        @submitButton()
     }
 }

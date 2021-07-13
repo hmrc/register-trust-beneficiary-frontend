@@ -42,7 +42,7 @@ class RemoveCompanyBeneficiaryController @Inject()(
                                                        require: RequiredAnswerActionProvider
                                  ) extends RemoveIndexController {
 
-  override val messagesPrefix : String = "removeCompanyBeneficiary"
+  override val messagesPrefix : String = "removeCompanyBeneficiaryYesNo"
 
   override def page(index: Int): QuestionPage[String] = NamePage(index)
 
