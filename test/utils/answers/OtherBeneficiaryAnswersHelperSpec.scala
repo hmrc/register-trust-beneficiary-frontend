@@ -56,13 +56,13 @@ class OtherBeneficiaryAnswersHelperSpec extends SpecBase {
 
           result mustBe Some(Seq(
             AnswerSection(
-              headingKey = Some(messages("answerPage.section.otherBeneficiary.subheading", index + 1)),
+              headingKey = Some("answerPage.section.otherBeneficiary.subheading"),
               rows = Seq(
                 AnswerRow(label = "otherBeneficiary.description.checkYourAnswersLabel", answer = Html(description), changeUrl = Some(DescriptionController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = description),
                 AnswerRow(label = "otherBeneficiary.discretionYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(DiscretionYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = description),
                 AnswerRow(label = "otherBeneficiary.addressYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(AddressYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = description)
               ),
-              sectionKey = None
+              headingArgs = Seq(index + 1)
             )
           ))
         }
@@ -81,7 +81,7 @@ class OtherBeneficiaryAnswersHelperSpec extends SpecBase {
 
           result mustBe Some(Seq(
             AnswerSection(
-              headingKey = Some(messages("answerPage.section.otherBeneficiary.subheading", index + 1)),
+              headingKey = Some("answerPage.section.otherBeneficiary.subheading"),
               rows = Seq(
                 AnswerRow(label = "otherBeneficiary.description.checkYourAnswersLabel", answer = Html(description), changeUrl = Some(DescriptionController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = description),
                 AnswerRow(label = "otherBeneficiary.discretionYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(DiscretionYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = description),
@@ -90,7 +90,7 @@ class OtherBeneficiaryAnswersHelperSpec extends SpecBase {
                 AnswerRow(label = "otherBeneficiary.addressUkYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(AddressUkYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = description),
                 AnswerRow(label = "otherBeneficiary.nonUkAddress.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />France"), changeUrl = Some(NonUkAddressController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = description)
               ),
-              sectionKey = None
+              headingArgs = Seq(index + 1)
             )
           ))
         }
@@ -113,7 +113,7 @@ class OtherBeneficiaryAnswersHelperSpec extends SpecBase {
 
           result mustBe Some(Seq(
             AnswerSection(
-              headingKey = Some(messages("answerPage.section.otherBeneficiary.subheading", index + 1)),
+              headingKey = Some("answerPage.section.otherBeneficiary.subheading"),
               rows = Seq(
                 AnswerRow(label = "otherBeneficiary.description.checkYourAnswersLabel", answer = Html(description), changeUrl = Some(DescriptionController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = description),
                 AnswerRow(label = "otherBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(mld5.CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = description),
@@ -121,7 +121,7 @@ class OtherBeneficiaryAnswersHelperSpec extends SpecBase {
                 AnswerRow(label = "otherBeneficiary.addressUkYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(AddressUkYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = description),
                 AnswerRow(label = "otherBeneficiary.ukAddress.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"), changeUrl = Some(UkAddressController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = description)
               ),
-              sectionKey = None
+              headingArgs = Seq(index + 1)
             )
           ))
         }
@@ -141,7 +141,7 @@ class OtherBeneficiaryAnswersHelperSpec extends SpecBase {
 
           result mustBe Some(Seq(
             AnswerSection(
-              headingKey = Some(messages("answerPage.section.otherBeneficiary.subheading", index + 1)),
+              headingKey = Some("answerPage.section.otherBeneficiary.subheading"),
               rows = Seq(
                 AnswerRow(label = "otherBeneficiary.description.checkYourAnswersLabel", answer = Html(description), changeUrl = Some(DescriptionController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = description),
                 AnswerRow(label = "otherBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(mld5.CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = description),
@@ -151,7 +151,7 @@ class OtherBeneficiaryAnswersHelperSpec extends SpecBase {
                 AnswerRow(label = "otherBeneficiary.addressUkYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(AddressUkYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = description),
                 AnswerRow(label = "otherBeneficiary.nonUkAddress.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />France"), changeUrl = Some(NonUkAddressController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = description)
               ),
-              sectionKey = None
+              headingArgs = Seq(index + 1)
             )
           ))
         }

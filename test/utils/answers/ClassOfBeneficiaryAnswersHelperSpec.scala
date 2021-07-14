@@ -49,10 +49,11 @@ class ClassOfBeneficiaryAnswersHelperSpec extends SpecBase {
       result mustBe
         Seq(
           AnswerSection(
-            headingKey = Some(messages("answerPage.section.classOfBeneficiary.subheading", index + 1)),
+            headingKey = Some("answerPage.section.classOfBeneficiary.subheading"),
             rows = Seq(
               AnswerRow("classBeneficiaryDescription.checkYourAnswersLabel", Html(description), Some(ClassBeneficiaryDescriptionController.onPageLoad(index, fakeDraftId).url), description, canEdit)
-            )
+            ),
+            headingArgs = Seq(index + 1)
           )
         )
     }

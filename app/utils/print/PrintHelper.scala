@@ -30,16 +30,16 @@ trait PrintHelper {
   def printSection(userAnswers: UserAnswers, name: Option[String], index: Int, draftId: String)
                   (implicit messages: Messages): AnswerSection = {
     AnswerSection(
-      Some(Messages(s"answerPage.section.$beneficiaryType.subheading", index + 1)),
-      answers(userAnswers, name.getOrElse(""), index, draftId)
+      headingKey = Some(s"answerPage.section.$beneficiaryType.subheading"),
+      rows = answers(userAnswers, name.getOrElse(""), index, draftId),
+      headingArgs = Seq(index + 1)
     )
   }
 
   def checkDetailsSection(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
                          (implicit messages: Messages): AnswerSection = {
     AnswerSection(
-      None,
-      answers(userAnswers, name, index, draftId)
+      rows = answers(userAnswers, name, index, draftId)
     )
   }
 

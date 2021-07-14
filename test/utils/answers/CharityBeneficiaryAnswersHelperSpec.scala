@@ -65,7 +65,7 @@ class CharityBeneficiaryAnswersHelperSpec extends SpecBase {
       result mustBe
         Seq(
           AnswerSection(
-            headingKey = Some(messages("answerPage.section.charityBeneficiary.subheading", index + 1)),
+            headingKey = Some("answerPage.section.charityBeneficiary.subheading"),
             rows = Seq(
               AnswerRow("charity.name.checkYourAnswersLabel", Html(name), Some(CharityNameController.onPageLoad(index, fakeDraftId).url), name, canEdit),
               AnswerRow("charity.discretionYesNo.checkYourAnswersLabel", Html("No"), Some(AmountDiscretionYesNoController.onPageLoad(index, fakeDraftId).url), name, canEdit),
@@ -77,7 +77,8 @@ class CharityBeneficiaryAnswersHelperSpec extends SpecBase {
               AnswerRow("charity.addressInTheUkYesNo.checkYourAnswersLabel", Html("Yes"), Some(AddressInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), name, canEdit),
               AnswerRow("charity.ukAddress.checkYourAnswersLabel", Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"), Some(CharityAddressUKController.onPageLoad(index, fakeDraftId).url), name, canEdit),
               AnswerRow("charity.internationalAddress.checkYourAnswersLabel", Html("Line 1<br />Line 2<br />Line 3<br />France"), Some(CharityInternationalAddressController.onPageLoad(index, fakeDraftId).url), name, canEdit)
-            )
+            ),
+            headingArgs = Seq(index + 1)
           )
         )
     }

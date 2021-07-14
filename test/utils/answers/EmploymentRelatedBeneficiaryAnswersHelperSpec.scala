@@ -66,7 +66,7 @@ class EmploymentRelatedBeneficiaryAnswersHelperSpec extends SpecBase {
       result mustBe
         Seq(
           AnswerSection(
-            headingKey = Some(messages("answerPage.section.largeBeneficiary.subheading", index + 1)),
+            headingKey = Some("answerPage.section.largeBeneficiary.subheading"),
             rows = Seq(
               AnswerRow("employmentRelatedBeneficiary.name.checkYourAnswersLabel", Html(name), Some(NameController.onPageLoad(index, fakeDraftId).url), name, canEdit),
               AnswerRow("employmentRelatedBeneficiary.5mld.countryOfResidenceYesNo.checkYourAnswersLabel", Html("Yes"), Some(CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url), name, canEdit),
@@ -78,7 +78,8 @@ class EmploymentRelatedBeneficiaryAnswersHelperSpec extends SpecBase {
               AnswerRow("employmentRelatedBeneficiary.nonUkAddress.checkYourAnswersLabel", Html("Line 1<br />Line 2<br />Line 3<br />France"), Some(NonUkAddressController.onPageLoad(index, fakeDraftId).url), name, canEdit),
               AnswerRow("employmentRelatedBeneficiary.description.checkYourAnswersLabel", Html("Description"), Some(DescriptionController.onPageLoad(index, fakeDraftId).url), "", canEdit),
               AnswerRow("employmentRelatedBeneficiary.numberOfBeneficiaries.checkYourAnswersLabel", Html("201 to 500"), Some(NumberOfBeneficiariesController.onPageLoad(index, fakeDraftId).url), "", canEdit)
-            )
+            ),
+            headingArgs = Seq(index + 1)
           )
         )
     }

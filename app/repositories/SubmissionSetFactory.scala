@@ -40,7 +40,6 @@ class SubmissionSetFactory @Inject()(
 
   def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet = {
     val status = registrationProgress.beneficiariesStatus(userAnswers)
-    answerSectionsIfCompleted(userAnswers, status)
 
     RegistrationSubmission.DataSet(
       Json.toJson(userAnswers),
@@ -50,7 +49,7 @@ class SubmissionSetFactory @Inject()(
     )
   }
 
-  private def mappedDataIfCompleted(userAnswers: UserAnswers, status: Option[Status]) = {
+  private def mappedDataIfCompleted(userAnswers: UserAnswers, status: Option[Status]): List[RegistrationSubmission.MappedPiece] = {
     if (status.contains(Status.Completed)) {
       beneficiariesMapper.build(userAnswers) match {
         case Some(assets) => List(RegistrationSubmission.MappedPiece("trust/entities/beneficiary", Json.toJson(assets)))
@@ -76,11 +75,7 @@ class SubmissionSetFactory @Inject()(
         otherBeneficiaryAnswersHelper.beneficiaries(userAnswers)
       ).flatten.flatten
 
-      val updatedFirstSection = AnswerSection(
-        entitySections.head.headingKey,
-        entitySections.head.rows,
-        Some(Messages("answerPage.section.beneficiaries.heading"))
-      )
+      val updatedFirstSection = entitySections.head.copy(sectionKey = Some("answerPage.section.beneficiaries.heading"))
 
       val updatedSections = updatedFirstSection :: entitySections.tail
 
@@ -91,11 +86,17 @@ class SubmissionSetFactory @Inject()(
     }
   }
 
+  private def convertForSubmission(section: AnswerSection): RegistrationSubmission.AnswerSection = {
+    RegistrationSubmission.AnswerSection(
+      headingKey = section.headingKey,
+      rows = section.rows.map(convertForSubmission),
+      sectionKey = section.sectionKey,
+      headingArgs = section.headingArgs.map(_.toString)
+    )
+  }
+
   private def convertForSubmission(row: AnswerRow): RegistrationSubmission.AnswerRow = {
     RegistrationSubmission.AnswerRow(row.label, row.answer.toString, row.labelArg)
   }
 
-  private def convertForSubmission(section: AnswerSection): RegistrationSubmission.AnswerSection = {
-    RegistrationSubmission.AnswerSection(section.headingKey, section.rows.map(convertForSubmission), section.sectionKey)
-  }
 }
