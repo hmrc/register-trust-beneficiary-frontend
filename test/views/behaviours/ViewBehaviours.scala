@@ -87,10 +87,10 @@ trait ViewBehaviours extends ViewSpecBase {
           assertEqualsMessage(doc, "title", s"$messageKeyPrefix.title")
         }
 
-        "display the correct page title with caption" in {
+        "display the correct page title with section" in {
 
           val doc = asDocument(view)
-          assertPageTitleWithCaptionEqualsMessages(doc, messageKeyPrefix)
+          assertPageTitleWithSectionSubheading(doc, s"$messageKeyPrefix", captionParam = "")
         }
 
         "display the correct guidance" in {
