@@ -51,7 +51,7 @@
         @inputRadio(
             field = form("value"),
             legend = heading.toString,
-            inputs = mapRadioOptionsToRadioItems(form("value"), false, options.toSeq),
+            inputs = mapRadioOptionsToRadioItems(form("value"), options.toSeq),
             hint = Some(messages(s"whatTypeOfBeneficiary.hint")),
             headingIsLegend = true,
             inline = false
