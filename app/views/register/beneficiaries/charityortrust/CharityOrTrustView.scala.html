@@ -41,7 +41,7 @@
             field = form("value"),
             legend = messages("charityOrTrust.heading"),
             headingIsLegend = true,
-            inputs = mapRadioOptionsToRadioItems(form("value"), false, CharityOrTrust.options.toSeq)
+            inputs = mapRadioOptionsToRadioItems(form("value"), CharityOrTrust.options.toSeq)
         )
 
         @submitButton()

@@ -40,7 +40,7 @@
         @inputRadio(
             field = form("value"),
             legend = messages("employmentRelatedBeneficiary.numberOfBeneficiaries.heading"),
-            inputs = mapRadioOptionsToRadioItems(form("value"), false, HowManyBeneficiaries.options.toSeq),
+            inputs = mapRadioOptionsToRadioItems(form("value"), HowManyBeneficiaries.options.toSeq),
             headingIsLegend = true,
             inline = false
         )

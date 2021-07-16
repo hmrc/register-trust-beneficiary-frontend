@@ -28,7 +28,7 @@ class Info4mldViewSpec extends ViewBehaviours {
 
     val applyView = view.apply(fakeDraftId)(fakeRequest, messages)
 
-    behave like normalPageTitleWithCaption(applyView, "beneficiaryInfo",
+    behave like normalPageTitleWithSectionSubheading(applyView, "beneficiaryInfo",
       "subheading1",
       "paragraph1",
       "bulletpoint1",
