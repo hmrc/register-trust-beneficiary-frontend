@@ -17,17 +17,20 @@
 package forms
 
 import forms.mappings.Mappings
+import models.UserAnswers
+
 import javax.inject.Inject
 import play.api.data.Form
 
 class NationalInsuranceNumberFormProvider @Inject() extends Mappings {
 
-  def withPrefix(prefix: String): Form[String] =
+  def withPrefix(prefix: String, userAnswers: UserAnswers, index: Int): Form[String] =
     Form("value" -> nino(s"$prefix.error.required")
       .verifying(
         firstError(
           isNotEmpty("value", s"$prefix.error.required"),
-          isNinoValid("value", s"$prefix.error.invalid")
+          isNinoValid("value", s"$prefix.error.invalid"),
+          isNinoDuplicated(userAnswers, index, s"$prefix.error.duplicate")
 
     )))
 }

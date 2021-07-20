@@ -17,9 +17,12 @@
 package forms.mappings
 
 import java.time.LocalDate
-
 import forms.Validation
+import models.UserAnswers
+import pages.register.beneficiaries.individual.NationalInsuranceNumberPage
 import play.api.data.validation.{Constraint, Invalid, Valid}
+import play.api.libs.json.{JsArray, JsString, JsSuccess}
+import sections.beneficiaries.IndividualBeneficiaries
 import uk.gov.hmrc.domain.Nino
 
 import scala.util.matching.Regex
@@ -114,6 +117,25 @@ trait Constraints {
         Invalid(errorKey, value)
     }
 
+  protected def isNinoDuplicated(userAnswers: UserAnswers, index: Int, errorKey: String): Constraint[String] =
+    Constraint {
+      nino =>
+        userAnswers.data.transform(IndividualBeneficiaries.path.json.pick[JsArray]) match {
+          case JsSuccess(beneficiaries, _) =>
+
+            val uniqueNino = beneficiaries.value.zipWithIndex.forall( beneficiary =>
+              !((beneficiary._1 \\ NationalInsuranceNumberPage.key).contains(JsString(nino)) && beneficiary._2 != index)
+            )
+
+            if (uniqueNino) {
+              Valid
+            } else {
+              Invalid(errorKey)
+            }
+          case _ =>
+            Valid
+        }
+    }
 
 
   protected def maxDate(maximum: LocalDate, errorKey: String, args: Any*): Constraint[LocalDate] =

@@ -24,5 +24,10 @@ final case class NationalInsuranceNumberPage(index: Int) extends QuestionPage[St
 
   override def path: JsPath = JsPath \  Beneficiaries \ IndividualBeneficiaries \ index \ toString
 
-  override def toString: String = "nationalInsuranceNumber"
+  override def toString: String = NationalInsuranceNumberPage.key
+
+}
+
+object NationalInsuranceNumberPage {
+  val key = "nationalInsuranceNumber"
 }
