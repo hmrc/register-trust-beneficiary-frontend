@@ -132,7 +132,7 @@ class NationalInsuranceNumberControllerSpec extends SpecBase {
 
       "duplicate nino is submitted" in {
 
-        val nino = "jh123456c"
+        val nino = "JH123456C"
 
         val userAnswers = emptyUserAnswers
           .set(NamePage(index), name).success.value
