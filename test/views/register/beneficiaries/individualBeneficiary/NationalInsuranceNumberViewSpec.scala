@@ -31,7 +31,7 @@ class NationalInsuranceNumberViewSpec extends StringViewBehaviours {
   val name: String = fullName.toString
 
   val form: Form[String] =
-    new NationalInsuranceNumberFormProvider().withPrefix("individualBeneficiaryNationalInsuranceNumber")
+    new NationalInsuranceNumberFormProvider().withPrefix("individualBeneficiaryNationalInsuranceNumber", emptyUserAnswers, index)
 
   "IndividualBeneficiaryNationalInsuranceNumberView view" must {
 

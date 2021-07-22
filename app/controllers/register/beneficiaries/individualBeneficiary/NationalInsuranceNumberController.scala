@@ -20,6 +20,8 @@ import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.NationalInsuranceNumberFormProvider
+import models.requests.RegistrationDataRequest
+
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.beneficiaries.individual.{NamePage, NationalInsuranceNumberPage}
@@ -45,7 +47,8 @@ class NationalInsuranceNumberController @Inject()(
                                                    view: NationalInsuranceNumberView
                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form = formProvider.withPrefix("individualBeneficiaryNationalInsuranceNumber")
+  private def form(index: Int)(implicit request: RegistrationDataRequest[AnyContent]) =
+    formProvider.withPrefix("individualBeneficiaryNationalInsuranceNumber", request.userAnswers, index)
 
   private def actions(index: Int, draftId: String) =
     identify andThen
@@ -59,8 +62,8 @@ class NationalInsuranceNumberController @Inject()(
       val name = request.userAnswers.get(NamePage(index)).get
 
       val preparedForm = request.userAnswers.get(NationalInsuranceNumberPage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
+        case None => form(index)
+        case Some(value) => form(index).fill(value)
       }
 
       Ok(view(preparedForm, draftId, name, index))
@@ -71,7 +74,7 @@ class NationalInsuranceNumberController @Inject()(
 
       val name = request.userAnswers.get(NamePage(index)).get
 
-      form.bindFromRequest().fold(
+      form(index).bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, draftId, name, index))),
 
