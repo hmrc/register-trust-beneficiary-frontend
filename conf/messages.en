@@ -268,6 +268,7 @@ individualBeneficiaryNationalInsuranceNumber.checkYourAnswersLabel = What is {0}
 individualBeneficiaryNationalInsuranceNumber.error.required = Enter the individual beneficiary’s National Insurance number
 individualBeneficiaryNationalInsuranceNumber.error.length = Individual beneficiary’s National Insurance number must be 9 characters or less
 individualBeneficiaryNationalInsuranceNumber.error.invalid = Enter the individual beneficiary’s National Insurance number in the correct format
+individualBeneficiaryNationalInsuranceNumber.error.duplicate = Enter a National Insurance number that has not already been used to add a beneficiary
 
 individualBeneficiaryAddressYesNo.title = Do you know the individual beneficiary’s address?
 individualBeneficiaryAddressYesNo.heading = Do you know {0}’s address?
