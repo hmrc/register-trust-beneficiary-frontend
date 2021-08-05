@@ -15,13 +15,13 @@
  *@
 
 @import controllers.register.beneficiaries.classofbeneficiaries.routes._
-@import views.html.components.{ErrorSummary, SubmitButton, InputText}
+@import views.html.components.{ErrorSummary, SubmitButton, InputCharacterCount}
 
 @this(
     mainTemplate: MainTemplate,
     errorSummary: ErrorSummary,
     submitButton: SubmitButton,
-    inputText: InputText,
+    characterCount: InputCharacterCount,
     formHelper: FormWithCSRF
 )
 
@@ -36,14 +36,15 @@
 
         @errorSummary(form.errors)
 
-        @inputText(
-          field = form("value"),
-          label = messages("classBeneficiaryDescription.heading"),
-          labelAsHeading = true,
-          hint = Some(messages(s"classBeneficiaryDescription.hint")),
-          labelClass = Some("govuk-heading-l")
+        @characterCount(
+            field = form("value"),
+            id = "value",
+            name = "value",
+            label = messages("classBeneficiaryDescription.heading"),
+            isPageHeading = true,
+            hint = Some(messages("classBeneficiaryDescription.hint")),
+            maxLength = Some(56)
         )
-
 
         @submitButton()
     }
