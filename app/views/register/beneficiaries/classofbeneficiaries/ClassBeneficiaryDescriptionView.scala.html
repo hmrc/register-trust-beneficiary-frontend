@@ -15,13 +15,13 @@
  *@
 
 @import controllers.register.beneficiaries.classofbeneficiaries.routes._
-@import views.html.components.{ErrorSummary, SubmitButton, InputCharacterCount}
+@import views.html.components.{ErrorSummary, SubmitButton, InputTextCharacterCount}
 
 @this(
     mainTemplate: MainTemplate,
     errorSummary: ErrorSummary,
     submitButton: SubmitButton,
-    characterCount: InputCharacterCount,
+    characterCount: InputTextCharacterCount,
     formHelper: FormWithCSRF
 )
 
@@ -41,8 +41,10 @@
             id = "value",
             name = "value",
             label = messages("classBeneficiaryDescription.heading"),
+            isLabelHidden = true,
             isPageHeading = true,
             hint = Some(messages("classBeneficiaryDescription.hint")),
+inputClass = Some("test"),
             maxLength = Some(56)
         )
 

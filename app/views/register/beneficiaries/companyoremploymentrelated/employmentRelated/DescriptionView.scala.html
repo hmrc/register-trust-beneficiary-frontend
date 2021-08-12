@@ -15,11 +15,11 @@
  *@
 
 @import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.routes._
-@import views.html.components.{ErrorSummary, SubmitButton, InputCharacterCount, Heading}
+@import views.html.components.{ErrorSummary, SubmitButton, InputTextCharacterCount, Heading}
 
 @this(
     mainTemplate: MainTemplate,
-    characterCount: InputCharacterCount,
+    characterCount: InputTextCharacterCount,
     errorSummary: ErrorSummary,
     heading: Heading,
     submitButton: SubmitButton,
@@ -50,6 +50,7 @@
             id = "description",
             name = "description",
             label = messages("employmentRelatedBeneficiary.description.description"),
+            isLabelHidden = true,
             isPageHeading = false,
             maxLength = Some(70)
         )
@@ -59,6 +60,7 @@
             id = "description1",
             name = "description1",
             label = messages("employmentRelatedBeneficiary.description.description1"),
+            isLabelHidden = true,
             isPageHeading = false,
             maxLength = Some(70)
         )
@@ -68,6 +70,7 @@
             id = "description2",
             name = "description2",
             label = messages("employmentRelatedBeneficiary.description.description2"),
+            isLabelHidden = true,
             isPageHeading = false,
             maxLength = Some(70)
         )
@@ -77,6 +80,7 @@
             id = "description3",
             name = "description3",
             label = messages("employmentRelatedBeneficiary.description.description3"),
+            isLabelHidden = true,
             isPageHeading = false,
             maxLength = Some(70)
         )
@@ -86,6 +90,7 @@
             id = "description4",
             name = "description4",
             label = messages("employmentRelatedBeneficiary.description.description4"),
+            isLabelHidden = true,
             isPageHeading = false,
             maxLength = Some(70)
         )
