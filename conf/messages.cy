@@ -454,6 +454,7 @@ individualBeneficiaryNationalInsuranceNumber.checkYourAnswersLabel=Beth yw rhif 
 individualBeneficiaryNationalInsuranceNumber.error.invalid=Nodwch rif Yswiriant Gwladol y buddiolwr unigol yn y fformat cywir
 individualBeneficiaryNationalInsuranceNumber.error.length=Mae’n rhaid i rif Yswiriant Gwladol y buddiolwr unigol fod yn 9 o gymeriadau neu lai
 individualBeneficiaryNationalInsuranceNumber.error.required=Nodwch rif Yswiriant Gwladol y buddiolwr unigol
+individualBeneficiaryNationalInsuranceNumber.error.duplicate=Nodwch rif Yswiriant Gwladol nad yw wedi’i ddefnyddio eisoes i ychwanegu buddiolwr
 individualBeneficiaryNationalInsuranceNumber.heading=Beth yw rhif Yswiriant Gwladol {0}?
 individualBeneficiaryNationalInsuranceNumber.hint=Mae hwn ar ei gerdyn Yswiriant Gwladol, llythyr ynghylch budd-daliadau, slip cyflog neu P60. Er enghraifft, ‘QQ 12 34 56 C’.
 individualBeneficiaryNationalInsuranceNumber.title=Beth yw rhif Yswiriant Gwladol y buddiolwr unigol?
