@@ -16,9 +16,9 @@
 
 package controllers
 
-import connectors.SubmissionDraftConnector
+import connectors.{SubmissionDraftConnector, TrustsStoreConnector}
 import controllers.actions.register.RegistrationIdentifierAction
-import models.UserAnswers
+import models.{TaskStatus, UserAnswers}
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
@@ -34,17 +34,20 @@ class IndexController @Inject()(
                                  repository: RegistrationsRepository,
                                  identify: RegistrationIdentifierAction,
                                  featureFlagService: FeatureFlagService,
-                                 submissionDraftConnector: SubmissionDraftConnector
+                                 submissionDraftConnector: SubmissionDraftConnector,
+                                 trustsStoreConnector: TrustsStoreConnector
                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(draftId: String): Action[AnyContent] = identify.async { implicit request =>
 
     def redirect(userAnswers: UserAnswers): Future[Result] = {
-      repository.set(userAnswers) map { _ =>
+      repository.set(userAnswers) flatMap { _ =>
         if (userAnswers.isAnyBeneficiaryAdded) {
-          Redirect(controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId))
+          Future.successful(Redirect(controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)))
         } else {
-          Redirect(controllers.register.beneficiaries.routes.InfoController.onPageLoad(draftId))
+          trustsStoreConnector.updateTaskStatus(draftId, TaskStatus.InProgress) map { _ =>
+            Redirect(controllers.register.beneficiaries.routes.InfoController.onPageLoad(draftId))
+          }
         }
       }
     }
