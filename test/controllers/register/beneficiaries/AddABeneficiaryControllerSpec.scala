@@ -17,6 +17,7 @@
 package controllers.register.beneficiaries
 
 import base.SpecBase
+import connectors.TrustsStoreConnector
 import controllers.register.beneficiaries.charityortrust.charity.{routes => charityRoutes}
 import controllers.register.beneficiaries.charityortrust.trust.{routes => trustRoutes}
 import controllers.register.beneficiaries.classofbeneficiaries.{routes => classOfBeneficiariesRoutes}
@@ -30,8 +31,8 @@ import models.core.pages.{Description, FullName}
 import models.registration.pages.AddABeneficiary
 import models.registration.pages.KindOfTrust._
 import models.registration.pages.RoleInCompany.Employee
-import models.{ReadOnlyUserAnswers, UserAnswers}
-import org.mockito.Matchers.any
+import models.{ReadOnlyUserAnswers, TaskStatus, UserAnswers}
+import org.mockito.Matchers.{any, eq => mEq}
 import org.mockito.Mockito.when
 import pages.entitystatus._
 import pages.register.KindOfTrustPage
@@ -44,6 +45,8 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils.AddABeneficiaryViewHelper
 import viewmodels.AddRow
+import play.api.inject.bind
+import uk.gov.hmrc.http.HttpResponse
 import views.html.register.beneficiaries.{AddABeneficiaryView, AddABeneficiaryYesNoView, MaxedOutBeneficiariesView}
 
 import scala.concurrent.Future
@@ -191,6 +194,8 @@ class AddABeneficiaryControllerSpec extends SpecBase {
       )
   }
 
+  private val mockTrustsStoreConnector = mock[TrustsStoreConnector]
+
   "AddABeneficiary Controller" when {
 
     "no data" must {
@@ -255,7 +260,14 @@ class AddABeneficiaryControllerSpec extends SpecBase {
       "redirect to the next page when valid data is submitted" in {
 
         val application =
-          applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+          applicationBuilder(userAnswers = Some(emptyUserAnswers))
+            .overrides(
+              bind[TrustsStoreConnector].to(mockTrustsStoreConnector)
+            )
+            .build()
+
+        when(mockTrustsStoreConnector.updateTaskStatus(any(), mEq(TaskStatus.InProgress))(any(), any()))
+          .thenReturn(Future.successful(HttpResponse.apply(OK, "")))
 
         val request =
           FakeRequest(POST, addOnePostRoute)
@@ -365,7 +377,15 @@ class AddABeneficiaryControllerSpec extends SpecBase {
               .set(individualPages.VulnerableYesNoPage(0), false).success.value
               .set(IndividualBeneficiaryStatus(0), Completed).success.value
 
-            val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+            val application =
+              applicationBuilder(userAnswers = Some(userAnswers))
+                .overrides(
+                  bind[TrustsStoreConnector].to(mockTrustsStoreConnector)
+                )
+                .build()
+
+            when(mockTrustsStoreConnector.updateTaskStatus(any(), mEq(TaskStatus.InProgress))(any(), any()))
+              .thenReturn(Future.successful(HttpResponse.apply(OK, "")))
 
             val request = FakeRequest(GET, addABeneficiaryRoute)
 
@@ -415,7 +435,15 @@ class AddABeneficiaryControllerSpec extends SpecBase {
               .set(individualPages.VulnerableYesNoPage(1), false).success.value
               .set(IndividualBeneficiaryStatus(1), Completed).success.value
 
-            val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+            val application =
+              applicationBuilder(userAnswers = Some(userAnswers))
+                .overrides(
+                  bind[TrustsStoreConnector].to(mockTrustsStoreConnector)
+                )
+                .build()
+
+            when(mockTrustsStoreConnector.updateTaskStatus(any(), mEq(TaskStatus.InProgress))(any(), any()))
+              .thenReturn(Future.successful(HttpResponse.apply(OK, "")))
 
             val request = FakeRequest(GET, addABeneficiaryRoute)
 
@@ -454,7 +482,14 @@ class AddABeneficiaryControllerSpec extends SpecBase {
       "redirect to the next page when valid data is submitted" in {
 
         val application =
-          applicationBuilder(userAnswers = Some(userAnswersWithBeneficiariesComplete)).build()
+          applicationBuilder(userAnswers = Some(userAnswersWithBeneficiariesComplete))
+            .overrides(
+              bind[TrustsStoreConnector].to(mockTrustsStoreConnector)
+            )
+            .build()
+
+        when(mockTrustsStoreConnector.updateTaskStatus(any(), mEq(TaskStatus.InProgress))(any(), any()))
+          .thenReturn(Future.successful(HttpResponse.apply(OK, "")))
 
         val request =
           FakeRequest(POST, addAnotherPostRoute)
@@ -592,7 +627,15 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
       "redirect to registration progress when user clicks continue" in {
 
-        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+        val application =
+          applicationBuilder(userAnswers = Some(emptyUserAnswers))
+            .overrides(
+              bind[TrustsStoreConnector].to(mockTrustsStoreConnector)
+            )
+            .build()
+
+        when(mockTrustsStoreConnector.updateTaskStatus(any(), mEq(TaskStatus.Completed))(any(), any()))
+          .thenReturn(Future.successful(HttpResponse.apply(OK, "")))
 
         val request = FakeRequest(POST, submitCompleteRoute)
 
