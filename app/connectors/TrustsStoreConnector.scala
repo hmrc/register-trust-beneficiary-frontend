@@ -18,18 +18,26 @@ package connectors
 
 import config.FrontendAppConfig
 import models.FeatureResponse
+import models.TaskStatus.TaskStatus
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class TrustsStoreConnector @Inject()(http: HttpClient, config : FrontendAppConfig) {
 
-  private def featureUrl(feature: String): String = s"${config.trustsStoreUrl}/trusts-store/features/$feature"
+  private val baseUrl: String = s"${config.trustsStoreUrl}/trusts-store"
 
   def getFeature(feature: String)(implicit hc : HeaderCarrier, ec : ExecutionContext): Future[FeatureResponse] = {
-    http.GET[FeatureResponse](featureUrl(feature))
+    val featureUrl: String = s"$baseUrl/features/$feature"
+    http.GET[FeatureResponse](featureUrl)
+  }
+
+  def updateTaskStatus(identifier: String, taskStatus: TaskStatus)
+                      (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+    val url: String = s"$baseUrl/register/tasks/update-beneficiaries/$identifier"
+    http.POST[TaskStatus, HttpResponse](url, taskStatus)
   }
 
 }

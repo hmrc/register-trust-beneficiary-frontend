@@ -31,6 +31,7 @@ class FeatureFlagService @Inject()(trustsStoreConnector: TrustsStoreConnector) {
       case _ => false
     }
   }
+
   def is5mldEnabled()(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] =
     isFeatureEnabled("5mld")
 }

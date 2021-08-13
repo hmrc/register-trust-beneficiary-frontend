@@ -18,7 +18,7 @@ package connectors
 
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock._
-import models.FeatureResponse
+import models.{FeatureResponse, TaskStatus}
 import org.scalatest.{MustMatchers, OptionValues}
 import play.api.Application
 import play.api.http.Status
@@ -41,26 +41,80 @@ class TrustsStoreConnectorSpec extends SpecBase with MustMatchers with OptionVal
 
   private val url = s"/trusts-store/features/5mld"
 
+  ".updateTaskStatus" must {
+
+    val url = s"/trusts-store/register/tasks/update-beneficiaries/$fakeDraftId"
+
+    "return OK with the current task status" in {
+      val application = applicationBuilder()
+        .configure(
+          Seq(
+            "microservice.services.trusts-store.port" -> server.port(),
+            "auditing.enabled" -> false
+          ): _*
+        ).build()
+
+      val connector = application.injector.instanceOf[TrustsStoreConnector]
+
+      server.stubFor(
+        post(urlEqualTo(url))
+          .willReturn(ok())
+      )
+
+      val futureResult = connector.updateTaskStatus(fakeDraftId, TaskStatus.Completed)
+
+      whenReady(futureResult) {
+        r =>
+          r.status mustBe 200
+      }
+
+      application.stop()
+    }
+
+    "return default tasks when a failure occurs" in {
+      val application = applicationBuilder()
+        .configure(
+          Seq(
+            "microservice.services.trusts-store.port" -> server.port(),
+            "auditing.enabled" -> false
+          ): _*
+        ).build()
+
+      val connector = application.injector.instanceOf[TrustsStoreConnector]
+
+      server.stubFor(
+        post(urlEqualTo(url))
+          .willReturn(serverError())
+      )
+
+      connector.updateTaskStatus(fakeDraftId, TaskStatus.Completed) map { response =>
+        response.status mustBe 500
+      }
+
+      application.stop()
+    }
+  }
+
   "TrustsStoreConnector" must {
 
-      "return a feature flag of true if 5mld is enabled" in {
+    "return a feature flag of true if 5mld is enabled" in {
 
-        server.stubFor(
-          get(urlEqualTo(url))
-            .willReturn(
-              aResponse()
-                .withStatus(Status.OK)
-                .withBody(
-                  Json.stringify(
-                  Json.toJson(FeatureResponse("5mld", isEnabled = true))
-                  )
+      server.stubFor(
+        get(urlEqualTo(url))
+          .willReturn(
+            aResponse()
+              .withStatus(Status.OK)
+              .withBody(
+                Json.stringify(
+                Json.toJson(FeatureResponse("5mld", isEnabled = true))
                 )
-            )
-        )
+              )
+          )
+      )
 
-        val result = Await.result(connector.getFeature("5mld"), Duration.Inf)
-        result mustBe FeatureResponse("5mld", isEnabled = true)
-      }
+      val result = Await.result(connector.getFeature("5mld"), Duration.Inf)
+      result mustBe FeatureResponse("5mld", isEnabled = true)
+    }
 
     "return a feature flag of false if 5mld is not enabled" in {
 
