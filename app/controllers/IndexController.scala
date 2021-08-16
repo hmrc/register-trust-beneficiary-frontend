@@ -16,14 +16,14 @@
 
 package controllers
 
-import connectors.{SubmissionDraftConnector, TrustsStoreConnector}
+import connectors.SubmissionDraftConnector
 import controllers.actions.register.RegistrationIdentifierAction
 import models.{TaskStatus, UserAnswers}
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.RegistrationsRepository
-import services.FeatureFlagService
+import services.TrustsStoreService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import javax.inject.Inject
@@ -33,21 +33,22 @@ class IndexController @Inject()(
                                  val controllerComponents: MessagesControllerComponents,
                                  repository: RegistrationsRepository,
                                  identify: RegistrationIdentifierAction,
-                                 featureFlagService: FeatureFlagService,
+                                 featureFlagService: TrustsStoreService,
                                  submissionDraftConnector: SubmissionDraftConnector,
-                                 trustsStoreConnector: TrustsStoreConnector
+                                 trustStoreService: TrustsStoreService
                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(draftId: String): Action[AnyContent] = identify.async { implicit request =>
 
     def redirect(userAnswers: UserAnswers): Future[Result] = {
-      repository.set(userAnswers) flatMap { _ =>
+      for {
+        _ <- repository.set(userAnswers)
+        _ <- trustStoreService.updateTaskStatus(draftId, TaskStatus.InProgress)
+      } yield {
         if (userAnswers.isAnyBeneficiaryAdded) {
-          Future.successful(Redirect(controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)))
+          Redirect(controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId))
         } else {
-          trustsStoreConnector.updateTaskStatus(draftId, TaskStatus.InProgress) map { _ =>
-            Redirect(controllers.register.beneficiaries.routes.InfoController.onPageLoad(draftId))
-          }
+          Redirect(controllers.register.beneficiaries.routes.InfoController.onPageLoad(draftId))
         }
       }
     }

@@ -17,10 +17,9 @@
 package controllers.register.beneficiaries
 
 import config.FrontendAppConfig
-import connectors.TrustsStoreConnector
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
-import models.Status.InProgress
+import models.Status.{Completed, InProgress}
 import models.TaskStatus.TaskStatus
 import models.registration.pages.AddABeneficiary
 import models.registration.pages.AddABeneficiary.NoComplete
@@ -38,9 +37,10 @@ import play.api.i18n.{I18nSupport, Messages, MessagesApi, MessagesProvider}
 import play.api.mvc._
 import repositories.RegistrationsRepository
 import sections.beneficiaries.IndividualBeneficiaries
+import services.TrustsStoreService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.AddABeneficiaryViewHelper
+import utils.{AddABeneficiaryViewHelper, RegistrationProgress}
 import views.html.register.beneficiaries.{AddABeneficiaryView, AddABeneficiaryYesNoView, MaxedOutBeneficiariesView}
 
 import javax.inject.Inject
@@ -60,7 +60,8 @@ class AddABeneficiaryController @Inject()(
                                            yesNoView: AddABeneficiaryYesNoView,
                                            maxedOutView: MaxedOutBeneficiariesView,
                                            config: FrontendAppConfig,
-                                           trustsStoreConnector: TrustsStoreConnector
+                                           trustsStoreService: TrustsStoreService,
+                                           registrationProgress: RegistrationProgress
                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with Logging with I18nSupport {
 
   private val addAnotherForm = addAnotherFormProvider()
@@ -79,17 +80,16 @@ class AddABeneficiaryController @Inject()(
 
   private def setTaskStatus(draftId: String, taskStatus: TaskStatus)
                            (implicit hc: HeaderCarrier) = {
-    trustsStoreConnector.updateTaskStatus(draftId, taskStatus)
+    trustsStoreService.updateTaskStatus(draftId, taskStatus)
   }
 
-  private def setTaskStatus(draftId: String, action: AddABeneficiary)
+  private def setTaskStatus(draftId: String, userAnswers: UserAnswers, action: AddABeneficiary)
                            (implicit hc: HeaderCarrier) = {
-    val status = action match {
-      case AddABeneficiary.YesNow => TaskStatus.InProgress
-      case AddABeneficiary.YesLater => TaskStatus.InProgress
-      case AddABeneficiary.NoComplete => TaskStatus.Completed
+    val status = (action, registrationProgress.beneficiariesStatus(userAnswers)) match {
+      case (NoComplete, Some(Completed)) => TaskStatus.Completed
+      case _ => TaskStatus.InProgress
     }
-    trustsStoreConnector.updateTaskStatus(draftId, status)
+    trustsStoreService.updateTaskStatus(draftId, status)
   }
 
   def onPageLoad(draftId: String): Action[AnyContent] = routes(draftId).async {
@@ -153,7 +153,7 @@ class AddABeneficiaryController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddABeneficiaryYesNoPage, value))
             _              <- registrationsRepository.set(updatedAnswers)
-            _              <- setTaskStatus(draftId, TaskStatus.InProgress)
+            _              <- setTaskStatus(draftId, if (value) TaskStatus.InProgress else TaskStatus.Completed)
           } yield Redirect(navigator.nextPage(AddABeneficiaryYesNoPage, draftId, updatedAnswers))
         }
       )
@@ -174,7 +174,7 @@ class AddABeneficiaryController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddABeneficiaryPage, value))
             _              <- registrationsRepository.set(updatedAnswers)
-            _              <- setTaskStatus(draftId, value)
+            _              <- setTaskStatus(draftId, updatedAnswers, value)
           } yield Redirect(navigator.nextPage(AddABeneficiaryPage, draftId, updatedAnswers))
         }
       )
@@ -185,7 +185,7 @@ class AddABeneficiaryController @Inject()(
       for {
         updatedAnswers <- Future.fromTry(request.userAnswers.set(AddABeneficiaryPage, NoComplete))
         _              <- registrationsRepository.set(updatedAnswers)
-        _              <- setTaskStatus(draftId, TaskStatus.Completed)
+        _              <- setTaskStatus(draftId,updatedAnswers, NoComplete)
       } yield Redirect(Call("GET", config.registrationProgressUrl(draftId)))
   }
 

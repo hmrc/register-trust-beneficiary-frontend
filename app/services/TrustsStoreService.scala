@@ -17,13 +17,14 @@
 package services
 
 import javax.inject.Inject
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import connectors.TrustsStoreConnector
 import models.FeatureResponse
+import models.TaskStatus.TaskStatus
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class FeatureFlagService @Inject()(trustsStoreConnector: TrustsStoreConnector) {
+class TrustsStoreService @Inject()(trustsStoreConnector: TrustsStoreConnector) {
 
   private def isFeatureEnabled(feature: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] = {
     trustsStoreConnector.getFeature(feature).map {
@@ -34,4 +35,9 @@ class FeatureFlagService @Inject()(trustsStoreConnector: TrustsStoreConnector) {
 
   def is5mldEnabled()(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] =
     isFeatureEnabled("5mld")
+
+  def updateTaskStatus(draftId: String, taskStatus: TaskStatus)
+                      (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+    trustsStoreConnector.updateTaskStatus(draftId, taskStatus)
+  }
 }

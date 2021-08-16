@@ -17,7 +17,6 @@
 package controllers.register.beneficiaries
 
 import base.SpecBase
-import connectors.TrustsStoreConnector
 import controllers.register.beneficiaries.charityortrust.charity.{routes => charityRoutes}
 import controllers.register.beneficiaries.charityortrust.trust.{routes => trustRoutes}
 import controllers.register.beneficiaries.classofbeneficiaries.{routes => classOfBeneficiariesRoutes}
@@ -26,14 +25,15 @@ import controllers.register.beneficiaries.companyoremploymentrelated.employmentR
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRoutes}
 import controllers.register.beneficiaries.other.{routes => otherRoutes}
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
-import models.Status.Completed
+import models.Status.{Completed, InProgress}
 import models.core.pages.{Description, FullName}
 import models.registration.pages.AddABeneficiary
 import models.registration.pages.KindOfTrust._
 import models.registration.pages.RoleInCompany.Employee
 import models.{ReadOnlyUserAnswers, TaskStatus, UserAnswers}
 import org.mockito.Matchers.{any, eq => mEq}
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{reset, verify, when}
+import org.scalatest.BeforeAndAfterEach
 import pages.entitystatus._
 import pages.register.KindOfTrustPage
 import pages.register.beneficiaries.charityortrust.{charity => charityPages, trust => trustPages}
@@ -43,15 +43,16 @@ import pages.register.beneficiaries.{AddABeneficiaryPage, classofbeneficiaries =
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import utils.AddABeneficiaryViewHelper
+import utils.{AddABeneficiaryViewHelper, RegistrationProgress}
 import viewmodels.AddRow
 import play.api.inject.bind
+import services.TrustsStoreService
 import uk.gov.hmrc.http.HttpResponse
 import views.html.register.beneficiaries.{AddABeneficiaryView, AddABeneficiaryYesNoView, MaxedOutBeneficiariesView}
 
 import scala.concurrent.Future
 
-class AddABeneficiaryControllerSpec extends SpecBase {
+class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
 
   private def onwardRoute: Call = Call("GET", "/foo")
 
@@ -194,7 +195,15 @@ class AddABeneficiaryControllerSpec extends SpecBase {
       )
   }
 
-  private val mockTrustsStoreConnector = mock[TrustsStoreConnector]
+  private val mockTrustsStoreService = mock[TrustsStoreService]
+  private val mockRegistrationProgress = mock[RegistrationProgress]
+
+  override def beforeEach(): Unit = {
+    reset(mockTrustsStoreService, mockRegistrationProgress)
+
+    when(mockTrustsStoreService.updateTaskStatus(any(), any())(any(), any()))
+      .thenReturn(Future.successful(HttpResponse(OK, "")))
+  }
 
   "AddABeneficiary Controller" when {
 
@@ -257,29 +266,53 @@ class AddABeneficiaryControllerSpec extends SpecBase {
         application.stop()
       }
 
-      "redirect to the next page when valid data is submitted" in {
+      "redirect to the next page when valid data is submitted" when {
 
-        val application =
-          applicationBuilder(userAnswers = Some(emptyUserAnswers))
-            .overrides(
-              bind[TrustsStoreConnector].to(mockTrustsStoreConnector)
-            )
-            .build()
+        "yes selected" in {
+          val application =
+            applicationBuilder(userAnswers = Some(emptyUserAnswers))
+              .overrides(
+                bind[TrustsStoreService].to(mockTrustsStoreService)
+              )
+              .build()
 
-        when(mockTrustsStoreConnector.updateTaskStatus(any(), mEq(TaskStatus.InProgress))(any(), any()))
-          .thenReturn(Future.successful(HttpResponse.apply(OK, "")))
+          val request =
+            FakeRequest(POST, addOnePostRoute)
+              .withFormUrlEncodedBody(("value", "true"))
 
-        val request =
-          FakeRequest(POST, addOnePostRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+          val result = route(application, request).value
 
-        val result = route(application, request).value
+          status(result) mustEqual SEE_OTHER
 
-        status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual onwardRoute.url
 
-        redirectLocation(result).value mustEqual onwardRoute.url
+          verify(mockTrustsStoreService).updateTaskStatus(mEq(draftId), mEq(TaskStatus.InProgress))(any(), any())
 
-        application.stop()
+          application.stop()
+        }
+
+        "no selected" in {
+          val application =
+            applicationBuilder(userAnswers = Some(emptyUserAnswers))
+              .overrides(
+                bind[TrustsStoreService].to(mockTrustsStoreService)
+              )
+              .build()
+
+          val request =
+            FakeRequest(POST, addOnePostRoute)
+              .withFormUrlEncodedBody(("value", "false"))
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustBe onwardRoute.url
+
+          verify(mockTrustsStoreService).updateTaskStatus(mEq(draftId), mEq(TaskStatus.Completed))(any(), any())
+
+          application.stop()
+        }
       }
 
       "return a Bad Request and errors when invalid data is submitted" in {
@@ -360,7 +393,9 @@ class AddABeneficiaryControllerSpec extends SpecBase {
       }
 
       "set individual beneficiary status to in progress" when {
+
         "Employees kind of trust" when {
+
           "role in company not previously answered" in {
             val settlorsAnswers: ReadOnlyUserAnswers = ReadOnlyUserAnswers(
               emptyUserAnswers.set(KindOfTrustPage, Employees).success.value.data
@@ -379,12 +414,9 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
             val application =
               applicationBuilder(userAnswers = Some(userAnswers))
-                .overrides(
-                  bind[TrustsStoreConnector].to(mockTrustsStoreConnector)
-                )
                 .build()
 
-            when(mockTrustsStoreConnector.updateTaskStatus(any(), mEq(TaskStatus.InProgress))(any(), any()))
+            when(mockTrustsStoreService.updateTaskStatus(any(), mEq(TaskStatus.InProgress))(any(), any()))
               .thenReturn(Future.successful(HttpResponse.apply(OK, "")))
 
             val request = FakeRequest(GET, addABeneficiaryRoute)
@@ -437,12 +469,9 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
             val application =
               applicationBuilder(userAnswers = Some(userAnswers))
-                .overrides(
-                  bind[TrustsStoreConnector].to(mockTrustsStoreConnector)
-                )
                 .build()
 
-            when(mockTrustsStoreConnector.updateTaskStatus(any(), mEq(TaskStatus.InProgress))(any(), any()))
+            when(mockTrustsStoreService.updateTaskStatus(any(), mEq(TaskStatus.InProgress))(any(), any()))
               .thenReturn(Future.successful(HttpResponse.apply(OK, "")))
 
             val request = FakeRequest(GET, addABeneficiaryRoute)
@@ -479,29 +508,130 @@ class AddABeneficiaryControllerSpec extends SpecBase {
         }
       }
 
-      "redirect to the next page when valid data is submitted" in {
+      "YesNow selected" must {
 
-        val application =
-          applicationBuilder(userAnswers = Some(userAnswersWithBeneficiariesComplete))
-            .overrides(
-              bind[TrustsStoreConnector].to(mockTrustsStoreConnector)
-            )
-            .build()
+        "redirect to the next page when valid data is submitted" in {
 
-        when(mockTrustsStoreConnector.updateTaskStatus(any(), mEq(TaskStatus.InProgress))(any(), any()))
-          .thenReturn(Future.successful(HttpResponse.apply(OK, "")))
+          val application =
+            applicationBuilder(userAnswers = Some(userAnswersWithBeneficiariesComplete))
+              .overrides(
+                bind[TrustsStoreService].to(mockTrustsStoreService),
+                bind[RegistrationProgress].to(mockRegistrationProgress)
+              )
+              .build()
 
-        val request =
-          FakeRequest(POST, addAnotherPostRoute)
-            .withFormUrlEncodedBody(("value", AddABeneficiary.options.head.value))
+          when(mockRegistrationProgress.beneficiariesStatus(any())).thenReturn(Some(InProgress))
 
-        val result = route(application, request).value
+          val request =
+            FakeRequest(POST, addAnotherPostRoute)
+              .withFormUrlEncodedBody(("value", AddABeneficiary.YesNow.toString))
 
-        status(result) mustEqual SEE_OTHER
+          val result = route(application, request).value
 
-        redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+          status(result) mustEqual SEE_OTHER
 
-        application.stop()
+          redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+          verify(mockTrustsStoreService).updateTaskStatus(mEq(draftId), mEq(TaskStatus.InProgress))(any(), any())
+
+          application.stop()
+        }
+      }
+
+      "YesLater selected" must {
+
+        "redirect to the next page when valid data is submitted" in {
+
+          val application =
+            applicationBuilder(userAnswers = Some(userAnswersWithBeneficiariesComplete))
+              .overrides(
+                bind[TrustsStoreService].to(mockTrustsStoreService),
+                bind[RegistrationProgress].to(mockRegistrationProgress)
+              )
+              .build()
+
+          when(mockRegistrationProgress.beneficiariesStatus(any())).thenReturn(Some(InProgress))
+
+          val request =
+            FakeRequest(POST, addAnotherPostRoute)
+              .withFormUrlEncodedBody(("value", AddABeneficiary.YesLater.toString))
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+          verify(mockTrustsStoreService).updateTaskStatus(mEq(draftId), mEq(TaskStatus.InProgress))(any(), any())
+
+          application.stop()
+        }
+      }
+
+      "NoComplete selected" when {
+
+        "registration is not complete" must {
+
+          "redirect to the next page when valid data is submitted" in {
+
+            val answersWithInProgress = userAnswersWithBeneficiariesComplete
+
+            when(mockRegistrationProgress.beneficiariesStatus(any())).thenReturn(Some(InProgress))
+
+            val application =
+              applicationBuilder(userAnswers = Some(answersWithInProgress))
+                .overrides(
+                  bind[TrustsStoreService].to(mockTrustsStoreService),
+                  bind[RegistrationProgress].to(mockRegistrationProgress)
+                ).build()
+
+            val request =
+              FakeRequest(POST, addAnotherPostRoute)
+                .withFormUrlEncodedBody(("value", AddABeneficiary.NoComplete.toString))
+
+            val result = route(application, request).value
+
+            status(result) mustEqual SEE_OTHER
+
+            redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+            verify(mockTrustsStoreService).updateTaskStatus(mEq(draftId), mEq(TaskStatus.InProgress))(any(), any())
+
+            application.stop()
+          }
+
+        }
+
+        "registration is complete" must {
+
+          "redirect to the next page when valid data is submitted" in {
+
+            val answersWithInProgress = userAnswersWithBeneficiariesComplete
+
+            when(mockRegistrationProgress.beneficiariesStatus(any())).thenReturn(Some(Completed))
+
+            val application =
+              applicationBuilder(userAnswers = Some(answersWithInProgress))
+                .overrides(
+                  bind[TrustsStoreService].to(mockTrustsStoreService),
+                  bind[RegistrationProgress].to(mockRegistrationProgress)
+                ).build()
+
+            val request =
+              FakeRequest(POST, addAnotherPostRoute)
+                .withFormUrlEncodedBody(("value", AddABeneficiary.NoComplete.toString))
+
+            val result = route(application, request).value
+
+            status(result) mustEqual SEE_OTHER
+
+            redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+            verify(mockTrustsStoreService).updateTaskStatus(mEq(draftId), mEq(TaskStatus.Completed))(any(), any())
+
+            application.stop()
+          }
+        }
       }
 
       "return a Bad Request and errors when invalid data is submitted" in {
@@ -625,27 +755,83 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
       }
 
-      "redirect to registration progress when user clicks continue" in {
+      "redirect to registration progress when user clicks continue" when {
 
-        val application =
-          applicationBuilder(userAnswers = Some(emptyUserAnswers))
-            .overrides(
-              bind[TrustsStoreConnector].to(mockTrustsStoreConnector)
-            )
-            .build()
+        "registration progress is complete" in {
 
-        when(mockTrustsStoreConnector.updateTaskStatus(any(), mEq(TaskStatus.Completed))(any(), any()))
-          .thenReturn(Future.successful(HttpResponse.apply(OK, "")))
+          val beneficiaries = List(
+            genTrustBeneficiaries(max),
+            genIndividualBeneficiaries(max),
+            genUnidentifiedBeneficiaries(max),
+            genCompanyBeneficiaries(max),
+            genCharityBeneficiaries(max),
+            genLargeBeneficiaries(max),
+            genOtherBeneficiaries(max)
+          )
 
-        val request = FakeRequest(POST, submitCompleteRoute)
+          val userAnswers = beneficiaries.foldLeft(emptyUserAnswers)((x, acc) => acc.copy(data = x.data.deepMerge(acc.data)))
 
-        val result = route(application, request).value
+          val application =
+            applicationBuilder(userAnswers = Some(userAnswers))
+              .overrides(
+                bind[TrustsStoreService].to(mockTrustsStoreService),
+                bind[RegistrationProgress].to(mockRegistrationProgress)
+              )
+              .build()
 
-        status(result) mustEqual SEE_OTHER
+          when(mockRegistrationProgress.beneficiariesStatus(any())).thenReturn(Some(Completed))
 
-        redirectLocation(result).value mustEqual "http://localhost:9781/trusts-registration/draftId/registration-progress"
+          val request = FakeRequest(POST, submitCompleteRoute)
 
-        application.stop()
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual "http://localhost:9781/trusts-registration/draftId/registration-progress"
+
+          verify(mockTrustsStoreService).updateTaskStatus(mEq(draftId), mEq(TaskStatus.Completed))(any(), any())
+
+          application.stop()
+        }
+
+        "registration progress is not complete" in {
+
+          val beneficiaries = List(
+            genTrustBeneficiaries(max),
+            genIndividualBeneficiaries(max),
+            genUnidentifiedBeneficiaries(max),
+            genCompanyBeneficiaries(max),
+            genCharityBeneficiaries(max),
+            genLargeBeneficiaries(max),
+            genOtherBeneficiaries(max)
+          )
+
+          val userAnswers = beneficiaries.foldLeft(emptyUserAnswers)((x, acc) => acc.copy(data = x.data.deepMerge(acc.data)))
+
+          val application =
+            applicationBuilder(userAnswers = Some(userAnswers))
+              .overrides(
+                bind[TrustsStoreService].to(mockTrustsStoreService),
+                bind[RegistrationProgress].to(mockRegistrationProgress)
+              )
+              .build()
+
+          when(mockRegistrationProgress.beneficiariesStatus(any())).thenReturn(Some(InProgress))
+
+          val request = FakeRequest(POST, submitCompleteRoute)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual "http://localhost:9781/trusts-registration/draftId/registration-progress"
+
+          verify(mockTrustsStoreService).updateTaskStatus(mEq(draftId), mEq(TaskStatus.InProgress))(any(), any())
+
+          application.stop()
+        }
+
+
 
       }
 
