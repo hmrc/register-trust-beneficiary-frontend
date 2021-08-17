@@ -19,11 +19,13 @@ package controllers.register.beneficiaries
 import config.FrontendAppConfig
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
-import models.Status.InProgress
+import models.Status.{Completed, InProgress}
+import models.TaskStatus.TaskStatus
+import models.registration.pages.AddABeneficiary
 import models.registration.pages.AddABeneficiary.NoComplete
 import models.registration.pages.KindOfTrust.Employees
 import models.requests.RegistrationDataRequest
-import models.{ReadOnlyUserAnswers, UserAnswers}
+import models.{ReadOnlyUserAnswers, TaskStatus, UserAnswers}
 import navigation.Navigator
 import pages.entitystatus.IndividualBeneficiaryStatus
 import pages.register.KindOfTrustPage
@@ -35,8 +37,11 @@ import play.api.i18n.{I18nSupport, Messages, MessagesApi, MessagesProvider}
 import play.api.mvc._
 import repositories.RegistrationsRepository
 import sections.beneficiaries.IndividualBeneficiaries
+import services.TrustsStoreService
+import uk.gov.hmrc.http.HttpVerbs.GET
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.AddABeneficiaryViewHelper
+import utils.{AddABeneficiaryViewHelper, RegistrationProgress}
 import views.html.register.beneficiaries.{AddABeneficiaryView, AddABeneficiaryYesNoView, MaxedOutBeneficiariesView}
 
 import javax.inject.Inject
@@ -55,7 +60,9 @@ class AddABeneficiaryController @Inject()(
                                            addAnotherView: AddABeneficiaryView,
                                            yesNoView: AddABeneficiaryYesNoView,
                                            maxedOutView: MaxedOutBeneficiariesView,
-                                           config: FrontendAppConfig
+                                           config: FrontendAppConfig,
+                                           trustsStoreService: TrustsStoreService,
+                                           registrationProgress: RegistrationProgress
                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with Logging with I18nSupport {
 
   private val addAnotherForm = addAnotherFormProvider()
@@ -65,11 +72,25 @@ class AddABeneficiaryController @Inject()(
   private def routes(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
     identify andThen getData(draftId) andThen requireData
 
-  private def heading(count: Int)(implicit mp : MessagesProvider): String = {
+  private def heading(count: Int)(implicit mp: MessagesProvider): String = {
     count match {
       case x if x <= 1 => Messages("addABeneficiary.heading")
       case _ => Messages("addABeneficiary.count.heading", count)
     }
+  }
+
+  private def setTaskStatus(draftId: String, userAnswers: UserAnswers, action: AddABeneficiary)
+                           (implicit hc: HeaderCarrier): Future[HttpResponse] = {
+    val status = (action, registrationProgress.beneficiariesStatus(userAnswers)) match {
+      case (NoComplete, Some(Completed)) => TaskStatus.Completed
+      case _ => TaskStatus.InProgress
+    }
+    setTaskStatus(draftId, status)
+  }
+  
+  private def setTaskStatus(draftId: String, taskStatus: TaskStatus)
+                           (implicit hc: HeaderCarrier): Future[HttpResponse] = {
+    trustsStoreService.updateTaskStatus(draftId, taskStatus)
   }
 
   def onPageLoad(draftId: String): Action[AnyContent] = routes(draftId).async {
@@ -121,7 +142,7 @@ class AddABeneficiaryController @Inject()(
       }
   }
 
-  def submitOne(draftId : String) : Action[AnyContent] = routes(draftId).async {
+  def submitOne(draftId: String): Action[AnyContent] = routes(draftId).async {
     implicit request =>
       yesNoForm.bindFromRequest().fold(
         (formWithErrors: Form[_]) => {
@@ -133,6 +154,7 @@ class AddABeneficiaryController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddABeneficiaryYesNoPage, value))
             _              <- registrationsRepository.set(updatedAnswers)
+            _              <- setTaskStatus(draftId, if (value) TaskStatus.InProgress else TaskStatus.Completed)
           } yield Redirect(navigator.nextPage(AddABeneficiaryYesNoPage, draftId, updatedAnswers))
         }
       )
@@ -153,6 +175,7 @@ class AddABeneficiaryController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddABeneficiaryPage, value))
             _              <- registrationsRepository.set(updatedAnswers)
+            _              <- setTaskStatus(draftId, updatedAnswers, value)
           } yield Redirect(navigator.nextPage(AddABeneficiaryPage, draftId, updatedAnswers))
         }
       )
@@ -163,7 +186,8 @@ class AddABeneficiaryController @Inject()(
       for {
         updatedAnswers <- Future.fromTry(request.userAnswers.set(AddABeneficiaryPage, NoComplete))
         _              <- registrationsRepository.set(updatedAnswers)
-      } yield Redirect(Call("GET", config.registrationProgressUrl(draftId)))
+        _              <- setTaskStatus(draftId,updatedAnswers, NoComplete)
+      } yield Redirect(Call(GET, config.registrationProgressUrl(draftId)))
   }
 
 }

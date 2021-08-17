@@ -18,12 +18,12 @@ package controllers
 
 import connectors.SubmissionDraftConnector
 import controllers.actions.register.RegistrationIdentifierAction
-import models.UserAnswers
+import models.{TaskStatus, UserAnswers}
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.RegistrationsRepository
-import services.FeatureFlagService
+import services.TrustsStoreService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import javax.inject.Inject
@@ -33,14 +33,18 @@ class IndexController @Inject()(
                                  val controllerComponents: MessagesControllerComponents,
                                  repository: RegistrationsRepository,
                                  identify: RegistrationIdentifierAction,
-                                 featureFlagService: FeatureFlagService,
-                                 submissionDraftConnector: SubmissionDraftConnector
+                                 featureFlagService: TrustsStoreService,
+                                 submissionDraftConnector: SubmissionDraftConnector,
+                                 trustStoreService: TrustsStoreService
                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(draftId: String): Action[AnyContent] = identify.async { implicit request =>
 
     def redirect(userAnswers: UserAnswers): Future[Result] = {
-      repository.set(userAnswers) map { _ =>
+      for {
+        _ <- repository.set(userAnswers)
+        _ <- trustStoreService.updateTaskStatus(draftId, TaskStatus.InProgress)
+      } yield {
         if (userAnswers.isAnyBeneficiaryAdded) {
           Redirect(controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId))
         } else {
