@@ -173,11 +173,6 @@ object BeneficiaryNavigator {
   private def routeToBeneficiaryIndex[T <: ViewModel](beneficiaries: List[T],
                                                       route: (Int, String) => Call,
                                                       draftId: String): Call = {
-    val index = beneficiaries match {
-      case Nil => 0
-      case x if !x.last.isComplete => x.size - 1
-      case x => x.size
-    }
-    route(index, draftId)
+    route(beneficiaries.size, draftId)
   }
 }
