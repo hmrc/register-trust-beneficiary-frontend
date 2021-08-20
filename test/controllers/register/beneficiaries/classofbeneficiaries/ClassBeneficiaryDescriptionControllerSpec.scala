@@ -105,7 +105,6 @@ class ClassBeneficiaryDescriptionControllerSpec extends SpecBase {
       val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
       verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
       uaCaptor.getValue.get(ClassBeneficiaryStatus(index)).get mustBe Completed
-      uaCaptor.getValue.get(WhatTypeOfBeneficiaryPage) mustNot be(defined)
 
       application.stop()
     }

@@ -56,8 +56,6 @@ class AnswersController @Inject()(
     implicit request =>
 
       val answers = request.userAnswers.set(TrustBeneficiaryStatus(index), Completed)
-        .flatMap(_.remove(WhatTypeOfBeneficiaryPage))
-        .flatMap(_.remove(CharityOrTrustPage))
 
       for {
         updatedAnswers <- Future.fromTry(answers)

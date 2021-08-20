@@ -16,6 +16,9 @@
 
 package models
 
+import pages.register.beneficiaries.WhatTypeOfBeneficiaryPage
+import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
+import pages.register.beneficiaries.companyoremploymentrelated.CompanyOrEmploymentRelatedPage
 import play.api.Logging
 import play.api.libs.json._
 import queries.{Gettable, Settable}
@@ -112,6 +115,11 @@ final case class UserAnswers(draftId: String,
       result => Success(result)
     )
   }
+
+  def removeBeneficiaryTypeAnswers(): Try[UserAnswers] = this
+    .remove(WhatTypeOfBeneficiaryPage)
+    .flatMap(_.remove(CharityOrTrustPage))
+    .flatMap(_.remove(CompanyOrEmploymentRelatedPage))
 }
 
 object UserAnswers {

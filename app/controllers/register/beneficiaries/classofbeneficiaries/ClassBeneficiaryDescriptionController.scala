@@ -73,7 +73,6 @@ class ClassBeneficiaryDescriptionController @Inject()(
 
           val answers = request.userAnswers.set(ClassBeneficiaryDescriptionPage(index), value)
             .flatMap(_.set(ClassBeneficiaryStatus(index), Completed))
-            .flatMap(_.remove(WhatTypeOfBeneficiaryPage))
 
           for {
             updatedAnswers <- Future.fromTry(answers)

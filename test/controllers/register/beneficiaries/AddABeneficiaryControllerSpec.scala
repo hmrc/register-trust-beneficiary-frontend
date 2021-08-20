@@ -25,29 +25,33 @@ import controllers.register.beneficiaries.companyoremploymentrelated.employmentR
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRoutes}
 import controllers.register.beneficiaries.other.{routes => otherRoutes}
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
+import models.CompanyOrEmploymentRelatedToAdd.Company
 import models.Status.{Completed, InProgress}
 import models.core.pages.{Description, FullName}
 import models.registration.pages.AddABeneficiary
+import models.registration.pages.CharityOrTrust.Charity
 import models.registration.pages.KindOfTrust._
 import models.registration.pages.RoleInCompany.Employee
+import models.registration.pages.WhatTypeOfBeneficiary.Individual
 import models.{ReadOnlyUserAnswers, TaskStatus, UserAnswers}
+import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.{any, eq => mEq}
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
 import pages.entitystatus._
 import pages.register.KindOfTrustPage
-import pages.register.beneficiaries.charityortrust.{charity => charityPages, trust => trustPages}
+import pages.register.beneficiaries.charityortrust.{CharityOrTrustPage, charity => charityPages, trust => trustPages}
 import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.{LargeBeneficiaryDescriptionPage, LargeBeneficiaryNamePage}
-import pages.register.beneficiaries.companyoremploymentrelated.{company => companyPages}
-import pages.register.beneficiaries.{AddABeneficiaryPage, classofbeneficiaries => classOfBeneficiariesPages, individual => individualPages, other => otherPages}
+import pages.register.beneficiaries.companyoremploymentrelated.{CompanyOrEmploymentRelatedPage, company => companyPages}
+import pages.register.beneficiaries.{AddABeneficiaryPage, WhatTypeOfBeneficiaryPage, classofbeneficiaries => classOfBeneficiariesPages, individual => individualPages, other => otherPages}
+import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import utils.{AddABeneficiaryViewHelper, RegistrationProgress}
-import viewmodels.AddRow
-import play.api.inject.bind
 import services.TrustsStoreService
 import uk.gov.hmrc.http.HttpResponse
+import utils.{AddABeneficiaryViewHelper, RegistrationProgress}
+import viewmodels.AddRow
 import views.html.register.beneficiaries.{AddABeneficiaryView, AddABeneficiaryYesNoView, MaxedOutBeneficiariesView}
 
 import scala.concurrent.Future
@@ -245,7 +249,12 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
       "return OK and the correct view for a GET" in {
 
         val settlorsAnswers: ReadOnlyUserAnswers = ReadOnlyUserAnswers(
-          emptyUserAnswers.set(KindOfTrustPage, Intervivos).success.value.data
+          emptyUserAnswers
+            .set(KindOfTrustPage, Intervivos).success.value
+            .set(WhatTypeOfBeneficiaryPage, Individual).success.value
+            .set(CharityOrTrustPage, Charity).success.value
+            .set(CompanyOrEmploymentRelatedPage, Company).success.value
+            .data
         )
 
         when(registrationsRepository.getSettlorsAnswers(any())(any())).thenReturn(Future.successful(Some(settlorsAnswers)))
@@ -262,6 +271,10 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
 
         contentAsString(result) mustEqual
           view(form, fakeDraftId)(request, messages).toString
+
+        val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+        verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
+        uaCaptor.getValue.get(WhatTypeOfBeneficiaryPage) mustNot be(defined)
 
         application.stop()
       }

@@ -59,8 +59,6 @@ class CheckDetailsController @Inject()(
     implicit request =>
 
       val answers = request.userAnswers.set(LargeBeneficiaryStatus(index), Completed)
-        .flatMap(_.remove(WhatTypeOfBeneficiaryPage))
-        .flatMap(_.remove(CompanyOrEmploymentRelatedPage))
 
       for {
         updatedAnswers <- Future.fromTry(answers)

@@ -68,7 +68,6 @@ class AnswersController @Inject()(
     implicit request =>
 
       val answers = request.userAnswers.set(IndividualBeneficiaryStatus(index), Completed)
-        .flatMap(_.remove(WhatTypeOfBeneficiaryPage))
 
       for {
         updatedAnswers <- Future.fromTry(answers)

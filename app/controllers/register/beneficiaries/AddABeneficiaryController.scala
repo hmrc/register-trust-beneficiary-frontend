@@ -119,7 +119,8 @@ class AddABeneficiaryController @Inject()(
         for {
           settlorsAnswers <- registrationsRepository.getSettlorsAnswers(draftId)
           updatedAnswers = setIndividualBeneficiaryStatuses(settlorsAnswers)
-          _ <- registrationsRepository.set(updatedAnswers)
+          cleanedAnswers <- Future.fromTry(updatedAnswers.removeBeneficiaryTypeAnswers())
+          _ <- registrationsRepository.set(cleanedAnswers)
         } yield updatedAnswers
       }
 
