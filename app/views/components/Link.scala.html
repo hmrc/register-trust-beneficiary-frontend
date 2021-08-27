@@ -16,10 +16,11 @@
 
 @this()
 
-@(href :String,
-  id : String = "",
-  key : String,
-  openInNewWindow: Boolean = false
+@(
+    href: String,
+    id: String = "",
+    key: String,
+    openInNewWindow: Boolean = false
 )(implicit messages: Messages)
 
-<a id="@id" href="@href" @if(openInNewWindow) {target="_blank"} class="govuk-link">@messages(key)</a>
+<a id="@id" href="@href" @if(openInNewWindow) {target="_blank" rel="noopener noreferrer"} class="govuk-link">@messages(key)</a>
