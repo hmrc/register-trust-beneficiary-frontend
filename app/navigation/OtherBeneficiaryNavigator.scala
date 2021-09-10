@@ -34,7 +34,6 @@ class OtherBeneficiaryNavigator @Inject()() extends Navigator {
       yesNoNavigation(draftId)
 
   private def simpleNavigation(draftId: String):  PartialFunction[Page, ReadableUserAnswers => Call] = {
-//    case DescriptionPage(index) => _ => other.routes.DiscretionYesNoController.onPageLoad(index, draftId)
     case DescriptionPage(index) => ua =>
       if (is5mldNonTaxable(ua)) {
         other.mld5.routes.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
@@ -44,7 +43,6 @@ class OtherBeneficiaryNavigator @Inject()() extends Navigator {
     case ShareOfIncomePage(index) => ua => navigateAwayFromIncomeQuestions(draftId, index, ua.is5mldEnabled)
     case AddressUKPage(index) => _ => other.routes.CheckDetailsController.onPageLoad(index, draftId)
     case AddressInternationalPage(index) =>_ =>  other.routes.CheckDetailsController.onPageLoad(index, draftId)
-//    case CountryOfResidencePage(index) => _ => other.routes.AddressYesNoController.onPageLoad(index, draftId)
     case CountryOfResidencePage(index) => ua =>
       if (is5mldNonTaxable(ua)) {
         other.routes.CheckDetailsController.onPageLoad(index, draftId)
