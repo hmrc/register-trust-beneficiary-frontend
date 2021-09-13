@@ -35,11 +35,11 @@ class OtherBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConvert
 
     Seq(
       bound.stringQuestion(DescriptionPage(index), "otherBeneficiary.description", DescriptionController.onPageLoad(index, draftId).url),
+      bound.yesNoQuestion(IncomeDiscretionYesNoPage(index), "otherBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad(index, draftId).url),
+      bound.percentageQuestion(ShareOfIncomePage(index), "otherBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(CountryOfResidenceYesNoPage(index), "otherBeneficiary.countryOfResidenceYesNo", CountryOfResidenceYesNoController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(UKResidentYesNoPage(index), "otherBeneficiary.ukResidentYesNo", UKResidentYesNoController.onPageLoad(index, draftId).url),
       bound.countryQuestion(UKResidentYesNoPage(index), CountryOfResidencePage(index), "otherBeneficiary.countryOfResidence", CountryOfResidenceController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(IncomeDiscretionYesNoPage(index), "otherBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad(index, draftId).url),
-      bound.percentageQuestion(ShareOfIncomePage(index), "otherBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(AddressYesNoPage(index), "otherBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(AddressUKYesNoPage(index), "otherBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(index, draftId).url),
       bound.addressQuestion(AddressUKPage(index), "otherBeneficiary.ukAddress", UkAddressController.onPageLoad(index, draftId).url),
