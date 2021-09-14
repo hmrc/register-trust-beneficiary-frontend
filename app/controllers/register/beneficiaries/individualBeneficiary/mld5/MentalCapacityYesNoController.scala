@@ -19,7 +19,9 @@ package controllers.register.beneficiaries.individualBeneficiary.mld5
 import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.register.individual.NameRequiredAction
-import forms.YesNoFormProvider
+import forms.YesNoDontKnowFormProvider
+import models.YesNoDontKnow
+
 import javax.inject.Inject
 import navigation.Navigator
 import pages.register.beneficiaries.individual.mld5.MentalCapacityYesNoPage
@@ -38,11 +40,11 @@ class MentalCapacityYesNoController @Inject()(
                                                    @IndividualBeneficiary navigator: Navigator,
                                                    standardActionSets: StandardActionSets,
                                                    nameAction: NameRequiredAction,
-                                                   formProvider: YesNoFormProvider,
+                                                   formProvider: YesNoDontKnowFormProvider,
                                                    view: MentalCapacityYesNoView
                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form: Form[Boolean] = formProvider.withPrefix("individualBeneficiary.5mld.mentalCapacityYesNo")
+  private val form: Form[YesNoDontKnow] = formProvider.withPrefix("individualBeneficiary.5mld.mentalCapacityYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {

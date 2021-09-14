@@ -19,6 +19,8 @@ package mapping.reads
 import mapping.registration.IdentificationMapper.buildAddress
 import models.core.pages.{InternationalAddress, UKAddress}
 import models.{AddressType, IdentificationOrgType}
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
+import play.api.libs.json.{JsError, JsSuccess, Reads, __}
 
 trait Beneficiary {
   def buildValue[A, B](o1: Option[A], o2: Option[A])

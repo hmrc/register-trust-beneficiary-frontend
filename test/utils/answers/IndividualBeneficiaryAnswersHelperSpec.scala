@@ -19,6 +19,7 @@ package utils.answers
 import base.SpecBase
 import controllers.register.beneficiaries.individualBeneficiary.mld5.routes._
 import controllers.register.beneficiaries.individualBeneficiary.routes._
+import models.YesNoDontKnow
 import models.core.pages.{FullName, InternationalAddress, UKAddress}
 import models.registration.pages.{PassportOrIdCardDetails, RoleInCompany}
 import pages.register.beneficiaries.individual._
@@ -78,7 +79,7 @@ class IndividualBeneficiaryAnswersHelperSpec extends SpecBase {
         .set(PassportDetailsPage(index), passportOrIdCard).success.value
         .set(IDCardDetailsYesNoPage(index), true).success.value
         .set(IDCardDetailsPage(index), passportOrIdCard).success.value
-        .set(MentalCapacityYesNoPage(index), true).success.value
+        .set(MentalCapacityYesNoPage(index), YesNoDontKnow.Yes).success.value
         .set(VulnerableYesNoPage(index), false).success.value
 
       val result = helper.beneficiaries(userAnswers).get
@@ -112,6 +113,69 @@ class IndividualBeneficiaryAnswersHelperSpec extends SpecBase {
               AnswerRow("individualBeneficiaryIDCardDetails.checkYourAnswersLabel", Html("France<br />12345<br />3 February 1996"), Some(IDCardDetailsController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
               AnswerRow("individualBeneficiary.5mld.mentalCapacityYesNo.checkYourAnswersLabel", Html("Yes"), Some(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
               AnswerRow("individualBeneficiaryVulnerableYesNo.checkYourAnswersLabel", Html("No"), Some(VulnerableYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit)
+            ),
+            headingArgs = Seq(index + 1)
+          )
+        )
+    }
+
+    "render mental capacity Yes" in {
+
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(index), name).success.value
+        .set(MentalCapacityYesNoPage(index), YesNoDontKnow.Yes).success.value
+
+      val result = helper.beneficiaries(userAnswers).get
+
+      result mustBe
+        Seq(
+          AnswerSection(
+            headingKey = Some("answerPage.section.individualBeneficiary.subheading"),
+            rows = Seq(
+              AnswerRow("individualBeneficiaryName.checkYourAnswersLabel", Html(name.displayFullName), Some(NameController.onPageLoad(index, fakeDraftId).url), "", canEdit),
+              AnswerRow("individualBeneficiary.5mld.mentalCapacityYesNo.checkYourAnswersLabel", Html("Yes"), Some(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit)
+            ),
+            headingArgs = Seq(index + 1)
+          )
+        )
+    }
+
+    "render mental capacity no" in {
+
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(index), name).success.value
+        .set(MentalCapacityYesNoPage(index), YesNoDontKnow.No).success.value
+
+      val result = helper.beneficiaries(userAnswers).get
+
+      result mustBe
+        Seq(
+          AnswerSection(
+            headingKey = Some("answerPage.section.individualBeneficiary.subheading"),
+            rows = Seq(
+              AnswerRow("individualBeneficiaryName.checkYourAnswersLabel", Html(name.displayFullName), Some(NameController.onPageLoad(index, fakeDraftId).url), "", canEdit),
+              AnswerRow("individualBeneficiary.5mld.mentalCapacityYesNo.checkYourAnswersLabel", Html("No"), Some(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit)
+            ),
+            headingArgs = Seq(index + 1)
+          )
+        )
+    }
+
+    "render mental capacity don't know" in {
+
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(index), name).success.value
+        .set(MentalCapacityYesNoPage(index), YesNoDontKnow.DontKnow).success.value
+
+      val result = helper.beneficiaries(userAnswers).get
+
+      result mustBe
+        Seq(
+          AnswerSection(
+            headingKey = Some("answerPage.section.individualBeneficiary.subheading"),
+            rows = Seq(
+              AnswerRow("individualBeneficiaryName.checkYourAnswersLabel", Html(name.displayFullName), Some(NameController.onPageLoad(index, fakeDraftId).url), "", canEdit),
+              AnswerRow("individualBeneficiary.5mld.mentalCapacityYesNo.checkYourAnswersLabel", Html("I don’t know"), Some(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit)
             ),
             headingArgs = Seq(index + 1)
           )

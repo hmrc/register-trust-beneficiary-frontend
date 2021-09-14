@@ -16,7 +16,7 @@
 
 package generators
 
-import models.CompanyOrEmploymentRelatedToAdd
+import models.{CompanyOrEmploymentRelatedToAdd, YesNoDontKnow}
 import models.core.pages.{FullName, InternationalAddress, UKAddress}
 import models.registration.pages.{AddABeneficiary, CharityOrTrust, PassportOrIdCardDetails, WhatTypeOfBeneficiary}
 import org.scalacheck.Arbitrary.arbitrary
@@ -49,6 +49,11 @@ trait ModelGenerators {
   implicit lazy val arbitraryCompanyOrEmploymentRelated: Arbitrary[CompanyOrEmploymentRelatedToAdd] =
     Arbitrary {
       Gen.oneOf(CompanyOrEmploymentRelatedToAdd.values)
+    }
+
+  implicit lazy val arbitraryYesNoDontKnow: Arbitrary[YesNoDontKnow] =
+    Arbitrary {
+      Gen.oneOf(YesNoDontKnow.values)
     }
 
   implicit lazy val arbitraryUkAddress: Arbitrary[UKAddress] =

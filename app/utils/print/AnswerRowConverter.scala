@@ -91,6 +91,15 @@ class AnswerRowConverter @Inject()(checkAnswersFormatters: CheckAnswersFormatter
       question(query, labelKey, format, changeUrl, name)
     }
 
+    def enumQuestion[T](query: Gettable[T],
+                        labelKey: String,
+                        changeUrl: String,
+                        enumPrefix: String)
+                       (implicit messages:Messages, rds: Reads[T]): Option[AnswerRow] = {
+      val format = (x: T) => checkAnswersFormatters.formatEnum(enumPrefix, x)
+      question(query, labelKey, format, changeUrl, name)
+    }
+
     def dateQuestion(query: Gettable[LocalDate],
                      labelKey: String,
                      changeUrl: String): Option[AnswerRow] = {

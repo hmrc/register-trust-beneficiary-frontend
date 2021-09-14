@@ -353,15 +353,30 @@ individualBeneficiary.5mld.countryOfResidenceYesNo.error.required=Dewiswch ‘Ia
 individualBeneficiary.5mld.countryOfResidenceYesNo.heading=A ydych yn gwybod gwlad breswyl {0}?
 individualBeneficiary.5mld.countryOfResidenceYesNo.hint=Fel arfer, y wlad breswyl yw lle mae’r unigolyn yn byw ac yn gweithio’r rhan fwyaf o’r amser yn ystod y flwyddyn dreth.
 individualBeneficiary.5mld.countryOfResidenceYesNo.title=A ydych yn gwybod gwlad breswyl y buddiolwr unigol?
+
+
 individualBeneficiary.5mld.mentalCapacityYesNo.bulletpoint1=salwch meddwl
 individualBeneficiary.5mld.mentalCapacityYesNo.bulletpoint2=anabledd dysgu
 individualBeneficiary.5mld.mentalCapacityYesNo.bulletpoint3=dementia neu gyflwr cysylltiedig
 individualBeneficiary.5mld.mentalCapacityYesNo.bulletpoint4=methu â chyfathrebu
+
 individualBeneficiary.5mld.mentalCapacityYesNo.checkYourAnswersLabel=A oes gan {0} alluedd meddyliol ar adeg y cofrestru?
-individualBeneficiary.5mld.mentalCapacityYesNo.error.required=Dewiswch ‘Iawn’ os ydych yn gwybod bod gan y buddiolwr unigol alluedd meddyliol ar adeg y cofrestru
 individualBeneficiary.5mld.mentalCapacityYesNo.heading=A oes gan {0} alluedd meddyliol ar adeg y cofrestru?
-individualBeneficiary.5mld.mentalCapacityYesNo.p1=Nid oes gan fuddiolwr alluedd meddyliol os nad yw’n gallu deall gwybodaeth am yr ymddiriedolaeth oherwydd unrhyw un o’r canlynol:
 individualBeneficiary.5mld.mentalCapacityYesNo.title=A oes gan y buddiolwr unigol alluedd meddyliol ar adeg y cofrestru?
+
+
+individualBeneficiary.5mld.mentalCapacityYesNo.p3 = Bydd CThEM yn cymryd bod gan y buddiolwr alluedd meddyliol, oni roddwch wybod i CThEM nad oes ganddo alluedd meddyliol.
+individualBeneficiary.5mld.mentalCapacityYesNo.p4 = Os nad ydych yn siŵr a oes gan y buddiolwr alluedd meddyliol, dewiswch ‘Nid wyf yn gwybod’.
+individualBeneficiary.5mld.mentalCapacityYesNo.p5 = Fel arfer, caiff CThEM rannu data person o dan Reoliadau Gwyngalchu Arian ac Ariannu Terfysgaeth (Diwygiad) 2020.
+individualBeneficiary.5mld.mentalCapacityYesNo.p6 = Pan nad oes gan berson alluedd meddyliol, mae gofyn i CThEM beidio â rhannu data personol y person hwnnw.
+
+# Needs welsh changed: (translations on 15/09)
+individualBeneficiary.5mld.mentalCapacityYesNo.p1=CHANGE ME: Nid oes gan fuddiolwr alluedd meddyliol os yw’n analluog yn ôl y gyfraith i ddeall gwybodaeth am yr ymddiriedolaeth oherwydd unrhyw un o’r canlynol:
+individualBeneficiary.5mld.mentalCapacityYesNo.p2=CHANGE ME NEW LINE
+individualBeneficiary.5mld.mentalCapacityYesNo.heading2=CHANGE ME NEW HEADING
+individualBeneficiary.5mld.mentalCapacityYesNo.error.required=Dewiswch ‘Iawn’ os ydych yn gwybod bod gan y buddiolwr unigol alluedd meddyliol ar adeg y cofrestru
+
+
 individualBeneficiary.roleInCompany.checkYourAnswersLabel=Beth yw rôl {0} yn y cwmni y cafodd yr ymddiriedolaeth ei chreu ar ei gyfer?
 individualBeneficiary.roleInCompany.checkYourAnswersLabel.na=Ddim yn gyfarwyddwr nac yn gyflogai
 individualBeneficiary.roleInCompany.Director=Cyfarwyddwr
@@ -636,6 +651,8 @@ site.sign_out=Allgofnodi
 site.textarea.char_limit=(Y terfyn yw {0} o gymeriadau)
 site.warning=Rhybudd
 site.yes=Iawn
+site.dontKnow = Nid wyf yn gwybod
+site.or = neu
 timeout.keep-alive-button=Yn eich blaen â’r cais
 timeout.message=Byddwn yn eich allgofnodi os na fyddwch yn ymateb ymhen
 timeout.title=Bydd eich cais yn dod i ben cyn hir
