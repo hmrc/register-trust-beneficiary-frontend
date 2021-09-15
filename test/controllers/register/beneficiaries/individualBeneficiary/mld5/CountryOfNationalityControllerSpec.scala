@@ -22,8 +22,7 @@ import forms.CountryFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.register.beneficiaries.individual.NamePage
-import pages.register.beneficiaries.individual.mld5.CountryOfNationalityPage
+import pages.register.beneficiaries.individual.{CountryOfNationalityPage, NamePage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest

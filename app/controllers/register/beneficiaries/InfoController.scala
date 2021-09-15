@@ -29,18 +29,13 @@ class InfoController @Inject()(
                                 getData: DraftIdRetrievalActionProvider,
                                 requireData: RegistrationDataRequiredAction,
                                 val controllerComponents: MessagesControllerComponents,
-                                view4MLD: Info4mldView,
-                                view5MLD: Info5mldView
+                                view: InfoView
                               ) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(draftId: String): Action[AnyContent] = (identify andThen getData(draftId) andThen requireData) {
     implicit request =>
-      val ua = request.userAnswers
-      if (ua.is5mldEnabled) {
-        Ok(view5MLD(draftId, ua.isTaxable))
-      } else {
-        Ok(view4MLD(draftId))
-      }
+      Ok(view(draftId, request.userAnswers.isTaxable))
+
   }
 
   def onSubmit(draftId: String): Action[AnyContent] = (identify andThen getData(draftId) andThen requireData) {

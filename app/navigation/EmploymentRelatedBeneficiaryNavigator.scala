@@ -17,11 +17,9 @@
 package navigation
 
 import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.{routes => rts}
-import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.mld5.{routes => mld5Rts}
 import models.ReadableUserAnswers
 import pages.Page
 import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated._
-import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.mld5._
 import play.api.mvc.Call
 
 class EmploymentRelatedBeneficiaryNavigator extends Navigator {
@@ -62,7 +60,7 @@ class EmploymentRelatedBeneficiaryNavigator extends Navigator {
       yesNoNav(
         ua = ua,
         fromPage = page,
-        yesCall = mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId),
+        yesCall = rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId),
         noCall = navigateAwayFromResidencyQuestions(draftId, index, ua.isTaxable)
       )
     case page @ CountryOfResidenceInTheUkYesNoPage(index) => ua =>
@@ -70,13 +68,13 @@ class EmploymentRelatedBeneficiaryNavigator extends Navigator {
         ua = ua,
         fromPage = page,
         yesCall = navigateAwayFromResidencyQuestions(draftId, index, ua.isTaxable),
-        noCall = mld5Rts.CountryOfResidenceController.onPageLoad(index, draftId)
+        noCall = rts.CountryOfResidenceController.onPageLoad(index, draftId)
       )
   }
 
   private def navigateAwayFromNameQuestion(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
     if (is5mldEnabled) {
-      mld5Rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
+      rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
     } else {
       rts.AddressYesNoController.onPageLoad(index, draftId)
     }

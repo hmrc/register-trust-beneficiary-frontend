@@ -17,6 +17,7 @@
 package pages.register.beneficiaries.charityortrust.charity.mld5
 
 import pages.behaviours.PageBehaviours
+import pages.register.beneficiaries.charityortrust.charity.CountryOfResidencePage
 
 class CountryOfResidencePageSpec extends PageBehaviours {
 

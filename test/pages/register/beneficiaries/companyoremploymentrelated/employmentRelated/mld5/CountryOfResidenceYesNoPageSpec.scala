@@ -19,6 +19,7 @@ package pages.register.beneficiaries.companyoremploymentrelated.employmentRelate
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
+import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import utils.Constants._
 
 class CountryOfResidenceYesNoPageSpec extends PageBehaviours {

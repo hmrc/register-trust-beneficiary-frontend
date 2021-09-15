@@ -21,7 +21,7 @@ import controllers.register.beneficiaries.charityortrust.trust.mld5.{routes => n
 import controllers.register.beneficiaries.charityortrust.trust.{routes => rts}
 import models.core.pages.{InternationalAddress, UKAddress}
 import pages.register.beneficiaries.charityortrust.trust._
-import pages.register.beneficiaries.charityortrust.trust.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
+import pages.register.beneficiaries.charityortrust.trust.mld5.CountryOfResidenceYesNoPage
 import play.twirl.api.Html
 import viewmodels.{AnswerRow, AnswerSection}
 

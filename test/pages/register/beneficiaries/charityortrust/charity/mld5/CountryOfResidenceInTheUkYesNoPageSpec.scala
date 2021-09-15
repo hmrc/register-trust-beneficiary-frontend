@@ -19,6 +19,7 @@ package pages.register.beneficiaries.charityortrust.charity.mld5
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
+import pages.register.beneficiaries.charityortrust.charity.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import utils.Constants._
 
 class CountryOfResidenceInTheUkYesNoPageSpec extends PageBehaviours {

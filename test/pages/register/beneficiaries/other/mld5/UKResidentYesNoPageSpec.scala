@@ -19,6 +19,7 @@ package pages.register.beneficiaries.other.mld5
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
+import pages.register.beneficiaries.other.{CountryOfResidencePage, CountryOfResidenceYesNoPage, UKResidentYesNoPage}
 import utils.Constants.ES
 import utils.Constants.GB
 

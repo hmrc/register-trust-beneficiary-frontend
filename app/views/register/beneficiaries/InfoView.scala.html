@@ -1,0 +1,148 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import controllers.register.beneficiaries.routes._
+@import views.html.components.{BulletList, HeadingWithCaption, SubmitButton}
+
+@this(
+    mainTemplate: MainTemplate,
+    bulletList: BulletList,
+    submitButton: SubmitButton,
+    formHelper: FormWithCSRF,
+    headingWithCaption: HeadingWithCaption
+)
+
+@(draftId: String, isTaxable: Boolean)(implicit request: Request[_], messages: Messages)
+
+@mainTemplate(
+    title = messages("beneficiaryInfo.title"),
+    showBackLink = true
+) {
+
+    @headingWithCaption("beneficiaryInfo")
+
+    <h2>@messages("beneficiaryInfo.subheading1")</h2>
+    <p>@messages("beneficiaryInfo.paragraph11")</p>
+    @bulletList(
+        "beneficiaryInfo",
+        List(
+            "bulletpoint11",
+            "bulletpoint12",
+            "bulletpoint13"
+        )
+    )
+    @if(isTaxable) {
+        <p>@messages("beneficiaryInfo.paragraph12")</p>
+        @bulletList(
+            "beneficiaryInfo",
+            List(
+                "bulletpoint14",
+                "bulletpoint15",
+                "bulletpoint16",
+                "bulletpoint17"
+            )
+        )
+
+
+        <h2>@messages("beneficiaryInfo.subheading2")</h2>
+        <p>@messages("beneficiaryInfo.paragraph2")</p>
+        @bulletList(
+            "beneficiaryInfo",
+            List(
+                "bulletpoint21",
+                "bulletpoint22"
+            )
+        )
+    }
+
+    <h2>@messages("beneficiaryInfo.subheading3")</h2>
+    <p>@messages("beneficiaryInfo.paragraph31")</p>
+    <p>@messages("beneficiaryInfo.paragraph32")</p>
+    @bulletList(
+        "beneficiaryInfo",
+        List(
+            "bulletpoint31",
+            "bulletpoint32",
+            "bulletpoint33",
+            "bulletpoint34"
+        )
+    )
+    <p>@messages("beneficiaryInfo.paragraph33")</p>
+
+    <h2>@messages("beneficiaryInfo.subheading4")</h2>
+    <p>@messages("beneficiaryInfo.paragraph4")</p>
+
+    <h2>@messages("beneficiaryInfo.subheading5")</h2>
+    <p>@messages("beneficiaryInfo.paragraph5")</p>
+
+    <h2>@messages("beneficiaryInfo.subheading6")</h2>
+    <p>@messages("beneficiaryInfo.paragraph61")</p>
+    @bulletList(
+        "beneficiaryInfo",
+        List(
+            "bulletpoint61",
+            "bulletpoint62"
+        )
+    )
+
+    <p>@messages("beneficiaryInfo.paragraph62")</p>
+    <p>@messages("beneficiaryInfo.paragraph63")</p>
+    @bulletList(
+        "beneficiaryInfo",
+        "bulletpoint63" +: (if(isTaxable) List("bulletpoint64") else Nil)
+    )
+
+    <p>@messages("beneficiaryInfo.paragraph64")</p>
+    @bulletList(
+        "beneficiaryInfo",
+        List(
+            "bulletpoint65",
+            "bulletpoint66"
+        )
+    )
+
+    <p>@messages("beneficiaryInfo.paragraph65")</p>
+
+    <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+          @messages("beneficiaryInfo.details")
+        </span>
+        </summary>
+        <div class="govuk-details__text">
+            <h3>@messages("beneficiaryInfo.details.subheading1")</h3>
+            <p>@messages("beneficiaryInfo.details.paragraph1")</p>
+            <h3>@messages("beneficiaryInfo.details.subheading2")</h3>
+            <p>@messages("beneficiaryInfo.details.paragraph2")</p>
+            <h3>@messages("beneficiaryInfo.details.subheading3")</h3>
+            <p>@messages("beneficiaryInfo.details.paragraph3")</p>
+        </div>
+    </details>
+
+    <h2>@messages("beneficiaryInfo.subheading7")</h2>
+
+    @if(isTaxable) {
+        <p>@messages("beneficiaryInfo.paragraph71.taxable")</p>
+        <p>@messages("beneficiaryInfo.paragraph72.taxable")</p>
+    } else {
+        <p>@messages("beneficiaryInfo.paragraph71.nonTaxable")</p>
+        <p>@messages("beneficiaryInfo.paragraph72.nonTaxable")</p>
+    }
+
+    @formHelper(action = InfoController.onSubmit(draftId), 'autoComplete -> "off") {
+        @submitButton(Some(messages("site.onlyContinue")))
+    }
+}

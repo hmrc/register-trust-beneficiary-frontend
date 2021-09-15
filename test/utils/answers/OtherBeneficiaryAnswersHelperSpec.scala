@@ -22,7 +22,7 @@ import controllers.register.beneficiaries.other.routes._
 import models.core.pages.{InternationalAddress, UKAddress}
 import pages.register.beneficiaries.other
 import pages.register.beneficiaries.other._
-import pages.register.beneficiaries.other.mld5.{CountryOfResidencePage, CountryOfResidenceYesNoPage, UKResidentYesNoPage}
+import pages.register.beneficiaries.other.mld5.UKResidentYesNoPage
 import play.twirl.api.Html
 import viewmodels.{AnswerRow, AnswerSection}
 

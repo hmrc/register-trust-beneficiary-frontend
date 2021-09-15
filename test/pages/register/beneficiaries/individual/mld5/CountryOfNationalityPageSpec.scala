@@ -17,6 +17,7 @@
 package pages.register.beneficiaries.individual.mld5
 
 import pages.behaviours.PageBehaviours
+import pages.register.beneficiaries.individual.CountryOfNationalityPage
 
 class CountryOfNationalityPageSpec extends PageBehaviours {
 

@@ -18,10 +18,8 @@ package utils.print
 
 import com.google.inject.Inject
 import controllers.register.beneficiaries.other.routes._
-import controllers.register.beneficiaries.other.mld5.routes._
 import models.UserAnswers
 import pages.register.beneficiaries.other._
-import pages.register.beneficiaries.other.mld5.{CountryOfResidencePage, CountryOfResidenceYesNoPage, UKResidentYesNoPage}
 import play.api.i18n.Messages
 import viewmodels.AnswerRow
 

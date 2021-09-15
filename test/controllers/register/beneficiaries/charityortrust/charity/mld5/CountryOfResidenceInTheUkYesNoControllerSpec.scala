@@ -21,8 +21,7 @@ import config.annotations.CharityBeneficiary
 import forms.YesNoFormProvider
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.register.beneficiaries.charityortrust.charity.mld5.CountryOfResidenceInTheUkYesNoPage
-import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
+import pages.register.beneficiaries.charityortrust.charity.{CharityNamePage, CountryOfResidenceInTheUkYesNoPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest

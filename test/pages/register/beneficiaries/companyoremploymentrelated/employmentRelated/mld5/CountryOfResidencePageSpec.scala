@@ -17,6 +17,7 @@
 package pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.mld5
 
 import pages.behaviours.PageBehaviours
+import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.CountryOfResidencePage
 
 class CountryOfResidencePageSpec extends PageBehaviours {
 

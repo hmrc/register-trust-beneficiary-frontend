@@ -16,12 +16,10 @@
 
 package navigation
 
-import controllers.register.beneficiaries.companyoremploymentrelated.company.mld5.{routes => ntrts}
 import controllers.register.beneficiaries.companyoremploymentrelated.company.{routes => rts}
 import models.ReadableUserAnswers
 import pages.Page
 import pages.register.beneficiaries.companyoremploymentrelated.company._
-import pages.register.beneficiaries.companyoremploymentrelated.company.mld5._
 import play.api.mvc.Call
 
 class CompanyBeneficiaryNavigator extends Navigator {
@@ -38,7 +36,7 @@ class CompanyBeneficiaryNavigator extends Navigator {
       if (ua.isTaxable) {
         rts.DiscretionYesNoController.onPageLoad(index, draftId)
       } else {
-        ntrts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
+        rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
       }
     case IncomePage(index) => ua =>
       navigateAwayFromShareOfIncomeQuestions(draftId, index, ua.is5mldEnabled)
@@ -76,7 +74,7 @@ class CompanyBeneficiaryNavigator extends Navigator {
       yesNoNav(
         ua = ua,
         fromPage = page,
-        yesCall = ntrts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId),
+        yesCall = rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId),
         noCall = navigateToAnswersOrAddressQuestions(draftId, index, ua.isTaxable)
       )
     case page @ CountryOfResidenceInTheUkYesNoPage(index) => ua =>
@@ -84,13 +82,13 @@ class CompanyBeneficiaryNavigator extends Navigator {
         ua = ua,
         fromPage = page,
         yesCall = navigateToAnswersOrAddressQuestions(draftId, index, ua.isTaxable),
-        noCall = ntrts.CountryOfResidenceController.onPageLoad(index, draftId)
+        noCall = rts.CountryOfResidenceController.onPageLoad(index, draftId)
       )
   }
 
   private def navigateAwayFromShareOfIncomeQuestions(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
     if (is5mldEnabled) {
-      ntrts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
+      rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
     } else {
       rts.AddressYesNoController.onPageLoad(index, draftId)
     }

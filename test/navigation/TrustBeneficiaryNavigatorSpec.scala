@@ -21,7 +21,7 @@ import controllers.register.beneficiaries.charityortrust.trust.mld5.{routes => n
 import controllers.register.beneficiaries.charityortrust.trust.{routes => rts}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.beneficiaries.charityortrust.trust._
-import pages.register.beneficiaries.charityortrust.trust.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
+import pages.register.beneficiaries.charityortrust.trust.mld5.CountryOfResidenceYesNoPage
 
 class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks {
 

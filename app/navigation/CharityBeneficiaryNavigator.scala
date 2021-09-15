@@ -16,12 +16,10 @@
 
 package navigation
 
-import controllers.register.beneficiaries.charityortrust.charity.mld5.routes._
 import controllers.register.beneficiaries.charityortrust.charity.routes._
 import models.ReadableUserAnswers
 import pages.Page
 import pages.register.beneficiaries.charityortrust.charity._
-import pages.register.beneficiaries.charityortrust.charity.mld5._
 import play.api.mvc.Call
 
 class CharityBeneficiaryNavigator extends Navigator {
@@ -34,7 +32,7 @@ class CharityBeneficiaryNavigator extends Navigator {
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case CharityNamePage(index) => ua =>
-      if (is5mldNonTaxable(ua)) {
+      if (isNonTaxable(ua)) {
         CountryOfResidenceYesNoController.onPageLoad(index, draftId)
       } else {
         AmountDiscretionYesNoController.onPageLoad(index, draftId)
@@ -43,7 +41,7 @@ class CharityBeneficiaryNavigator extends Navigator {
     case CharityAddressUKPage(index) => _ => CharityAnswersController.onPageLoad(index, draftId)
     case CharityInternationalAddressPage(index) => _ => CharityAnswersController.onPageLoad(index, draftId)
     case CountryOfResidencePage(index) => ua =>
-      if (is5mldNonTaxable(ua)) {
+      if (isNonTaxable(ua)) {
         CharityAnswersController.onPageLoad(index, draftId)
       } else {
         AddressYesNoController.onPageLoad(index, draftId)
@@ -98,7 +96,7 @@ class CharityBeneficiaryNavigator extends Navigator {
 
   private def navigateToAnswersOrAddressQuestions(draftId: String, index: Int): PartialFunction[ReadableUserAnswers, Call] = {
     case ua =>
-      if (is5mldNonTaxable(ua)) {
+      if (isNonTaxable(ua)) {
         CharityAnswersController.onPageLoad(index, draftId)
       } else {
         AddressYesNoController.onPageLoad(index, draftId)

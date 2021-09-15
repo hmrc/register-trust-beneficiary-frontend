@@ -17,11 +17,9 @@
 package utils.print
 
 import com.google.inject.Inject
-import controllers.register.beneficiaries.charityortrust.charity.mld5.routes._
 import controllers.register.beneficiaries.charityortrust.charity.routes._
 import models.UserAnswers
 import pages.register.beneficiaries.charityortrust.charity._
-import pages.register.beneficiaries.charityortrust.charity.mld5._
 import play.api.i18n.Messages
 import viewmodels.AnswerRow
 

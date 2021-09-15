@@ -17,11 +17,9 @@
 package utils.print
 
 import com.google.inject.Inject
-import controllers.register.beneficiaries.individualBeneficiary.mld5.routes._
 import controllers.register.beneficiaries.individualBeneficiary.routes._
 import models.UserAnswers
 import pages.register.beneficiaries.individual._
-import pages.register.beneficiaries.individual.mld5._
 import play.api.i18n.Messages
 import viewmodels.AnswerRow
 

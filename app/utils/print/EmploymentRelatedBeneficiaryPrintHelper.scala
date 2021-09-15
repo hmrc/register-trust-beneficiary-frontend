@@ -17,11 +17,9 @@
 package utils.print
 
 import com.google.inject.Inject
-import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.mld5.routes._
 import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.routes._
 import models.UserAnswers
 import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated._
-import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import play.api.i18n.Messages
 import viewmodels.AnswerRow
 

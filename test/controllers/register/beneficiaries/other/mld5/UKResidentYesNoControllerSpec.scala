@@ -21,8 +21,7 @@ import config.annotations.OtherBeneficiary
 import forms.YesNoFormProvider
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.register.beneficiaries.other.DescriptionPage
-import pages.register.beneficiaries.other.mld5.UKResidentYesNoPage
+import pages.register.beneficiaries.other.{DescriptionPage, UKResidentYesNoPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._

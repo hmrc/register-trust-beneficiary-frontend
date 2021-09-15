@@ -19,6 +19,7 @@ package pages.register.beneficiaries.individual.mld5
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
+import pages.register.beneficiaries.individual.{CountryOfNationalityInTheUkYesNoPage, CountryOfNationalityPage, CountryOfNationalityYesNoPage}
 import utils.Constants._
 
 class CountryOfNationalityYesNoPageSpec extends PageBehaviours {

@@ -21,8 +21,7 @@ import config.annotations.TrustBeneficiary
 import forms.CountryFormProvider
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.register.beneficiaries.charityortrust.trust.NamePage
-import pages.register.beneficiaries.charityortrust.trust.mld5.CountryOfResidencePage
+import pages.register.beneficiaries.charityortrust.trust.{CountryOfResidencePage, NamePage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest

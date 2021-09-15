@@ -30,8 +30,8 @@ trait Navigator {
       .getOrElse(controllers.routes.SessionExpiredController.onPageLoad())
   }
 
-  def is5mldNonTaxable(ua: ReadableUserAnswers): Boolean = {
-    ua.is5mldEnabled && !ua.isTaxable
+  def isNonTaxable(ua: ReadableUserAnswers): Boolean = {
+    !ua.isTaxable
   }
 
 }

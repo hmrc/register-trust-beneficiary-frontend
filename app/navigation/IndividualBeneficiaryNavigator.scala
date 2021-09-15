@@ -17,14 +17,12 @@
 package navigation
 
 import controllers.register.beneficiaries.individualBeneficiary.routes._
-import controllers.register.beneficiaries.individualBeneficiary.mld5.routes._
 import models.ReadableUserAnswers
 import models.registration.pages.KindOfTrust.Employees
 import pages.Page
 import pages.register.KindOfTrustPage
 import pages.register.beneficiaries.AnswersPage
 import pages.register.beneficiaries.individual._
-import pages.register.beneficiaries.individual.mld5._
 import play.api.mvc.Call
 
 class IndividualBeneficiaryNavigator extends Navigator {

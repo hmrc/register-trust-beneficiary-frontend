@@ -18,6 +18,7 @@ package pages.register.beneficiaries.individual.mld5
 
 import models.YesNoDontKnow
 import pages.behaviours.PageBehaviours
+import pages.register.beneficiaries.individual.MentalCapacityYesNoPage
 
 class MentalCapacityYesNoPageSpec extends PageBehaviours {
 
