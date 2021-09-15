@@ -18,6 +18,7 @@ package mapping.registration
 
 import mapping.reads.IndividualBeneficiary
 import models.IndividualDetailsType
+import models.YesNoDontKnow.{DontKnow, No, Yes}
 import play.api.libs.json.JsPath
 import sections.beneficiaries.IndividualBeneficiaries
 
@@ -35,7 +36,11 @@ class IndividualBeneficiaryMapper extends Mapper[IndividualDetailsType, Individu
     identification = beneficiary.identification,
     countryOfResidence = beneficiary.countryOfResidence,
     nationality = beneficiary.countryOfNationality,
-    legallyIncapable = beneficiary.mentalCapacityYesNo.map(!_)
+    legallyIncapable = beneficiary.mentalCapacityYesNo.flatMap {
+      case Yes => Some(false)
+      case No => Some(true)
+      case DontKnow => None
+    }
   )
 
 }

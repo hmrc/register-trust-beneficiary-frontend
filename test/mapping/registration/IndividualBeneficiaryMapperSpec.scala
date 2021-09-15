@@ -21,7 +21,7 @@ import generators.Generators
 import models.core.pages.{FullName, UKAddress}
 import models.registration.pages.PassportOrIdCardDetails
 import models.registration.pages.RoleInCompany.Director
-import models.{AddressType, IdentificationType, IndividualDetailsType, PassportType}
+import models.{AddressType, IdentificationType, IndividualDetailsType, PassportType, YesNoDontKnow}
 import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.beneficiaries.individual._
 import pages.register.beneficiaries.individual.mld5._
@@ -330,7 +330,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
               .set(CountryOfNationalityInTheUkYesNoPage(index0), true).success.value
               .set(CountryOfResidenceYesNoPage(index0), true).success.value
               .set(CountryOfResidenceInTheUkYesNoPage(index0), true).success.value
-              .set(MentalCapacityYesNoPage(index0), true).success.value
+              .set(MentalCapacityYesNoPage(index0), YesNoDontKnow.Yes).success.value
 
           val individuals = individualBeneficiariesMapper.build(userAnswers)
 
@@ -367,7 +367,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
               .set(CountryOfResidenceYesNoPage(index0), true).success.value
               .set(CountryOfResidenceInTheUkYesNoPage(index0), false).success.value
               .set(CountryOfResidencePage(index0), ES).success.value
-              .set(MentalCapacityYesNoPage(index0), false).success.value
+              .set(MentalCapacityYesNoPage(index0), YesNoDontKnow.No).success.value
 
           val individuals = individualBeneficiariesMapper.build(userAnswers)
 
@@ -386,6 +386,40 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
           )
 
         }
+
+        "with Don't know Mental Capacity" in {
+
+          val userAnswers = baseAnswers
+            .set(NamePage(index0), FullName("first name", None, "last name")).success.value
+            .set(IncomeYesNoPage(index0), true).success.value
+            .set(NationalInsuranceYesNoPage(index0), true).success.value
+            .set(NationalInsuranceNumberPage(index0), "AB123456C").success.value
+            .set(VulnerableYesNoPage(index0), true).success.value
+            .set(CountryOfNationalityYesNoPage(index0), true).success.value
+            .set(CountryOfNationalityInTheUkYesNoPage(index0), false).success.value
+            .set(CountryOfNationalityPage(index0), ES).success.value
+            .set(CountryOfResidenceYesNoPage(index0), true).success.value
+            .set(CountryOfResidenceInTheUkYesNoPage(index0), false).success.value
+            .set(CountryOfResidencePage(index0), ES).success.value
+            .set(MentalCapacityYesNoPage(index0), YesNoDontKnow.DontKnow).success.value
+
+          val individuals = individualBeneficiariesMapper.build(userAnswers)
+
+          individuals mustBe defined
+          individuals.value.head mustBe IndividualDetailsType(
+            name = FullName("first name", None, "last name"),
+            dateOfBirth = None,
+            vulnerableBeneficiary = Some(true),
+            beneficiaryType = None,
+            beneficiaryDiscretion = Some(true),
+            beneficiaryShareOfIncome = None,
+            identification = Some(IdentificationType(nino = Some("AB123456C"), None, None)),
+            countryOfResidence = Some(ES),
+            nationality = Some(ES),
+            legallyIncapable = None
+          )
+
+        }
       }
 
       "In 5mld none taxable mode" when {
@@ -400,7 +434,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
             .set(CountryOfNationalityInTheUkYesNoPage(index0), true).success.value
             .set(CountryOfResidenceYesNoPage(index0), true).success.value
             .set(CountryOfResidenceInTheUkYesNoPage(index0), true).success.value
-            .set(MentalCapacityYesNoPage(index0), true).success.value
+            .set(MentalCapacityYesNoPage(index0), YesNoDontKnow.Yes).success.value
 
           val individuals = individualBeneficiariesMapper.build(userAnswers)
 

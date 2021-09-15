@@ -56,7 +56,7 @@ class IndividualBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowCo
       bound.passportDetailsQuestion(PassportDetailsPage(index), "individualBeneficiaryPassportDetails", PassportDetailsController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(IDCardDetailsYesNoPage(index), "individualBeneficiaryIDCardDetailsYesNo", IDCardDetailsYesNoController.onPageLoad(index, draftId).url),
       bound.passportDetailsQuestion(IDCardDetailsPage(index), "individualBeneficiaryIDCardDetails", IDCardDetailsController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(MentalCapacityYesNoPage(index), "individualBeneficiary.5mld.mentalCapacityYesNo", MentalCapacityYesNoController.onPageLoad(index, draftId).url),
+      bound.enumQuestion(MentalCapacityYesNoPage(index), "individualBeneficiary.5mld.mentalCapacityYesNo", MentalCapacityYesNoController.onPageLoad(index, draftId).url, "site"),
       bound.yesNoQuestion(VulnerableYesNoPage(index), "individualBeneficiaryVulnerableYesNo", VulnerableYesNoController.onPageLoad(index, draftId).url)
     ).flatten
 

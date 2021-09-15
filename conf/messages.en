@@ -32,6 +32,8 @@ site.hidden-delete = Remove {0}
 site.hidden-edit = Change {0}
 site.no = No
 site.yes = Yes
+site.dontKnow = I don’t know
+site.or = or
 site.save.continue = Save and continue
 site.textarea.char_limit = (Limit is {0} characters)
 site.inprogress = In Progress
@@ -218,12 +220,23 @@ individualBeneficiary.5mld.countryOfNationality.error.invalidCharacters = The co
 individualBeneficiary.5mld.mentalCapacityYesNo.title = Does the individual beneficiary have mental capacity at the time of registration?
 individualBeneficiary.5mld.mentalCapacityYesNo.heading = Does {0} have mental capacity at the time of registration?
 individualBeneficiary.5mld.mentalCapacityYesNo.checkYourAnswersLabel = Does {0} have mental capacity at the time of registration?
-individualBeneficiary.5mld.mentalCapacityYesNo.error.required = Select yes if you know the individual beneficiary has mental capacity at the time of registration
-individualBeneficiary.5mld.mentalCapacityYesNo.p1 = A beneficiary does not have mental capacity if they cannot understand information about the trust due to any of the following:
+
+individualBeneficiary.5mld.mentalCapacityYesNo.error.required = Select yes if the beneficiary has mental capacity at the time of registration
+
+individualBeneficiary.5mld.mentalCapacityYesNo.p1 = A beneficiary does not have mental capacity if they are legally incapable of understanding information about the trust.
+individualBeneficiary.5mld.mentalCapacityYesNo.p2 = For example, this can be due to:
+
 individualBeneficiary.5mld.mentalCapacityYesNo.bulletpoint1 = mental illness
 individualBeneficiary.5mld.mentalCapacityYesNo.bulletpoint2 = learning disability
 individualBeneficiary.5mld.mentalCapacityYesNo.bulletpoint3 = dementia or a related condition
 individualBeneficiary.5mld.mentalCapacityYesNo.bulletpoint4 = being unable to communicate
+
+individualBeneficiary.5mld.mentalCapacityYesNo.p3 = HMRC will assume that the beneficiary does have mental capacity, unless you tell HMRC that they do not have mental capacity.
+individualBeneficiary.5mld.mentalCapacityYesNo.p4 = If you are not certain whether the beneficiary has mental capacity, select ‘I don’t know’.
+
+individualBeneficiary.5mld.mentalCapacityYesNo.heading2 = Why HMRC are asking this question
+individualBeneficiary.5mld.mentalCapacityYesNo.p5 = Normally, HMRC can share a person’s data under the Money Laundering and Terrorist Financing (Amendment) Regulations 2020.
+individualBeneficiary.5mld.mentalCapacityYesNo.p6 = Where a person does not have mental capacity, HMRC are required to not share their personal data.
 
 individualBeneficiaryDateOfBirthYesNo.title = Do you know the individual beneficiary’s date of birth?
 individualBeneficiaryDateOfBirthYesNo.heading = Do you know {0}’s date of birth?
