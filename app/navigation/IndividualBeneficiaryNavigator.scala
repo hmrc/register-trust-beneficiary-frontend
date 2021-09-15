@@ -63,7 +63,7 @@ class IndividualBeneficiaryNavigator extends Navigator {
       yesNoNav(
         ua = ua,
         fromPage = page,
-        yesCall = MentalCapacityYesNoController.onPageLoad(index, draftId),
+        yesCall = CountryOfNationalityYesNoController.onPageLoad(index, draftId),
         noCall = IncomeController.onPageLoad(index, draftId)
       )
     case page @ CountryOfNationalityYesNoPage(index) => ua =>

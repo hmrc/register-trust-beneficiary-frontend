@@ -31,7 +31,7 @@ import views.html.register.beneficiaries.charityortrust.charity.CountryOfResiden
 class CountryOfResidenceInTheUkYesNoControllerSpec extends SpecBase with MockitoSugar {
 
   val formProvider = new YesNoFormProvider()
-  val form: Form[Boolean] = formProvider.withPrefix("charity.5mld.countryOfResidenceInTheUkYesNo")
+  val form: Form[Boolean] = formProvider.withPrefix("charity.countryOfResidenceInTheUkYesNo")
   val index: Int = 0
   val charityName = "Name"
 
