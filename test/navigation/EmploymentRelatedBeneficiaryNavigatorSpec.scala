@@ -18,13 +18,9 @@ package navigation
 
 import base.SpecBase
 import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.{routes => rts}
-import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.mld5.{routes => mld5Rts}
 import generators.Generators
-import models.UserAnswers
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated._
-import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.mld5.CountryOfResidenceYesNoPage
 
 class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -33,93 +29,13 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
 
   "Employment related beneficiary navigator" must {
 
-    "a 4mld trust" must {
-
-      "go to AddressYesNo from NamePage" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            navigator.nextPage(LargeBeneficiaryNamePage(index), fakeDraftId, userAnswers)
-              .mustBe(rts.AddressYesNoController.onPageLoad(index, fakeDraftId))
-        }
-      }
-
-      "go to AddressUkYesNo from AddressYesNo if Yes" in {
-        forAll(arbitrary[UserAnswers]) {
-          baseAnswers =>
-            val answers = baseAnswers.set(LargeBeneficiaryAddressYesNoPage(index), true).success.value
-            navigator.nextPage(LargeBeneficiaryAddressYesNoPage(index), fakeDraftId, answers)
-              .mustBe(rts.AddressUkYesNoController.onPageLoad(index, fakeDraftId))
-        }
-      }
-
-      "go to Description from AddressYesNo if No" in {
-        forAll(arbitrary[UserAnswers]) {
-          baseAnswers =>
-            val answers = baseAnswers.set(LargeBeneficiaryAddressYesNoPage(index), false).success.value
-            navigator.nextPage(LargeBeneficiaryAddressYesNoPage(index), fakeDraftId, answers)
-              .mustBe(rts.DescriptionController.onPageLoad(index, fakeDraftId))
-        }
-      }
-
-      "go to UkAddress from AddressYesUkNo if Yes" in {
-        forAll(arbitrary[UserAnswers]) {
-          baseAnswers =>
-            val answers = baseAnswers.set(LargeBeneficiaryAddressUKYesNoPage(index), true).success.value
-            navigator.nextPage(LargeBeneficiaryAddressUKYesNoPage(index), fakeDraftId, answers)
-              .mustBe(rts.UkAddressController.onPageLoad(index, fakeDraftId))
-        }
-      }
-
-      "go to NonUkAddress from AddressYesUkNo if No" in {
-        forAll(arbitrary[UserAnswers]) {
-          baseAnswers =>
-            val answers = baseAnswers.set(LargeBeneficiaryAddressUKYesNoPage(index), false).success.value
-            navigator.nextPage(LargeBeneficiaryAddressUKYesNoPage(index), fakeDraftId, answers)
-              .mustBe(rts.NonUkAddressController.onPageLoad(index, fakeDraftId))
-        }
-      }
-
-      "go to Description from UkAddress " in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            navigator.nextPage(LargeBeneficiaryAddressPage(index), fakeDraftId, userAnswers)
-              .mustBe(rts.DescriptionController.onPageLoad(index, fakeDraftId))
-        }
-      }
-
-      "go to Description from NonUkAddress " in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            navigator.nextPage(LargeBeneficiaryAddressInternationalPage(index), fakeDraftId, userAnswers)
-              .mustBe(rts.DescriptionController.onPageLoad(index, fakeDraftId))
-        }
-      }
-
-      "go to NumberOfBeneficiaries from Description" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            navigator.nextPage(LargeBeneficiaryDescriptionPage(index), fakeDraftId, userAnswers)
-              .mustBe(rts.NumberOfBeneficiariesController.onPageLoad(index, fakeDraftId))
-        }
-      }
-
-      "go to CheckAnswers from NumberOfBeneficiaries" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            navigator.nextPage(LargeBeneficiaryNumberOfBeneficiariesPage(index), fakeDraftId, userAnswers)
-              .mustBe(rts.CheckDetailsController.onPageLoad(index, fakeDraftId))
-        }
-      }
-    }
-
-    "a 5mld trust" when {
 
       "a taxable trust" must {
-        val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = true)
+        val baseAnswers = emptyUserAnswers.copy(isTaxable = true)
 
         "Name page -> CountryOfResidence Yes No page" in {
           navigator.nextPage(LargeBeneficiaryNamePage(index), draftId, baseAnswers)
-            .mustBe(mld5Rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
+            .mustBe(rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
         }
 
         "CountryOfResidence yes no page -> No -> Address yes no page" in {
@@ -135,7 +51,7 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
             .set(CountryOfResidenceYesNoPage(index), true).success.value
 
           navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, answers)
-            .mustBe(mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId))
+            .mustBe(rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId))
         }
 
 
@@ -152,7 +68,7 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
             .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
 
           navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, answers)
-            .mustBe(mld5Rts.CountryOfResidenceController.onPageLoad(index, draftId))
+            .mustBe(rts.CountryOfResidenceController.onPageLoad(index, draftId))
         }
 
         "CountryOfResidence page -> Address yes no page" in {
@@ -162,11 +78,11 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
       }
 
       "a non taxable trust" must {
-        val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = false)
+        val baseAnswers = emptyUserAnswers.copy(isTaxable = false)
 
         "Name page -> CountryOfResidence Yes No page" in {
           navigator.nextPage(LargeBeneficiaryNamePage(index), draftId, baseAnswers)
-            .mustBe(mld5Rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
+            .mustBe(rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
         }
 
         "CountryOfResidence yes no page -> No -> Description page" in {
@@ -182,7 +98,7 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
             .set(CountryOfResidenceYesNoPage(index), true).success.value
 
           navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, answers)
-            .mustBe(mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId))
+            .mustBe(rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId))
         }
 
 
@@ -199,7 +115,7 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
             .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
 
           navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, answers)
-            .mustBe(mld5Rts.CountryOfResidenceController.onPageLoad(index, draftId))
+            .mustBe(rts.CountryOfResidenceController.onPageLoad(index, draftId))
         }
 
         "CountryOfResidence page -> Description page" in {
@@ -208,5 +124,4 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
         }
       }
     }
-  }
 }

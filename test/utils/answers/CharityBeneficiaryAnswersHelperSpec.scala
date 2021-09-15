@@ -17,11 +17,9 @@
 package utils.answers
 
 import base.SpecBase
-import controllers.register.beneficiaries.charityortrust.charity.mld5.routes._
 import controllers.register.beneficiaries.charityortrust.charity.routes._
 import models.core.pages.{InternationalAddress, UKAddress}
 import pages.register.beneficiaries.charityortrust.charity._
-import pages.register.beneficiaries.charityortrust.charity.mld5._
 import play.twirl.api.Html
 import viewmodels.{AnswerRow, AnswerSection}
 

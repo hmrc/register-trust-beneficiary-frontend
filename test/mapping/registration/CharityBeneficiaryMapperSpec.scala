@@ -22,7 +22,6 @@ import models.{AddressType, CharityType, IdentificationOrgType}
 import models.core.pages.{InternationalAddress, UKAddress}
 import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.beneficiaries.charityortrust.charity._
-import pages.register.beneficiaries.charityortrust.charity.mld5.CountryOfResidenceYesNoPage
 import utils.Constants._
 
 class CharityBeneficiaryMapperSpec extends SpecBase with MustMatchers

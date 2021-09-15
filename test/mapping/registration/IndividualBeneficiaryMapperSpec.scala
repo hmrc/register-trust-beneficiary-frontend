@@ -311,7 +311,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
       }
 
       "In 5mld taxable mode" when {
-        val baseAnswers = emptyUserAnswers.copy(isTaxable = true, is5mldEnabled = true)
+        val baseAnswers = emptyUserAnswers.copy(isTaxable = true)
         "must not be able to create IndividualDetailsType when incomplete data " in {
           individualBeneficiariesMapper.build(baseAnswers) mustNot be(defined)
         }
@@ -423,7 +423,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
       }
 
       "In 5mld none taxable mode" when {
-        val baseAnswers = emptyUserAnswers.copy(isTaxable = false, is5mldEnabled = true)
+        val baseAnswers = emptyUserAnswers.copy(isTaxable = false)
 
         "with No Income or Vulnerable data answered" in {
           val userAnswers = baseAnswers

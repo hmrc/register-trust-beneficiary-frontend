@@ -17,12 +17,10 @@
 package utils.answers
 
 import base.SpecBase
-import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.mld5.routes._
 import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.routes._
 import models.core.pages.{Description, InternationalAddress, UKAddress}
 import models.registration.pages.HowManyBeneficiaries
 import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated._
-import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.mld5._
 import play.twirl.api.Html
 import viewmodels.{AnswerRow, AnswerSection}
 

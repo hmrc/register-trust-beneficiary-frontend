@@ -29,11 +29,6 @@ class TrustsStoreConnector @Inject()(http: HttpClient, config : FrontendAppConfi
 
   private val baseUrl: String = s"${config.trustsStoreUrl}/trusts-store"
 
-  def getFeature(feature: String)(implicit hc : HeaderCarrier, ec : ExecutionContext): Future[FeatureResponse] = {
-    val featureUrl: String = s"$baseUrl/features/$feature"
-    http.GET[FeatureResponse](featureUrl)
-  }
-
   def updateTaskStatus(identifier: String, taskStatus: TaskStatus)
                       (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     val url: String = s"$baseUrl/register/tasks/update-beneficiaries/$identifier"

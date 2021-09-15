@@ -22,7 +22,6 @@ import models.core.pages.{InternationalAddress, UKAddress}
 import models.{AddressType, BeneficiaryTrustType, IdentificationOrgType}
 import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.beneficiaries.charityortrust.trust._
-import pages.register.beneficiaries.charityortrust.trust.mld5.CountryOfResidenceYesNoPage
 import utils.Constants._
 
 class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers

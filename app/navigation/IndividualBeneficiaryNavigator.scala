@@ -38,14 +38,14 @@ class IndividualBeneficiaryNavigator extends Navigator {
   private def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case RoleInCompanyPage(index) => _ => DateOfBirthYesNoController.onPageLoad(index, draftId)
     case DateOfBirthPage(index) => ua => navigateAwayFromDateOfBirthPages(draftId, index, ua)
-    case IncomePage(index) => ua => navigateAwayFromShareOfIncomeQuestions(draftId, index, ua.is5mldEnabled)
+    case IncomePage(index) => ua => CountryOfNationalityYesNoController.onPageLoad(index, draftId)
     case CountryOfNationalityPage(index) => ua => navigateAwayFromNationalityPages(draftId, index, ua)
-    case NationalInsuranceNumberPage(index) => ua => navigateAwayFromNinoQuestion(draftId, index, ua.is5mldEnabled)
+    case NationalInsuranceNumberPage(index) => ua => CountryOfResidenceYesNoController.onPageLoad(index, draftId)
     case CountryOfResidencePage(index) => ua => navigateAwayFromCountryOfResidencyQuestions(draftId, index, ua)
     case AddressUKPage(index) => _ => PassportDetailsYesNoController.onPageLoad(index, draftId)
     case AddressInternationalPage(index) => _ => PassportDetailsYesNoController.onPageLoad(index, draftId)
-    case PassportDetailsPage(index) => ua => navigateToMentalCapacityOrVulnerableQuestions(draftId, index, ua.is5mldEnabled)
-    case IDCardDetailsPage(index) => ua => navigateToMentalCapacityOrVulnerableQuestions(draftId, index, ua.is5mldEnabled)
+    case PassportDetailsPage(index) => ua => MentalCapacityYesNoController.onPageLoad(index, draftId)
+    case IDCardDetailsPage(index) => ua => MentalCapacityYesNoController.onPageLoad(index, draftId)
     case MentalCapacityYesNoPage(index) => ua => navigateAwayFromMentalCapacityPage(draftId, index, ua)
     case VulnerableYesNoPage(index) => _ => AnswersController.onPageLoad(index, draftId)
     case AnswersPage => _ => controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
@@ -63,7 +63,7 @@ class IndividualBeneficiaryNavigator extends Navigator {
       yesNoNav(
         ua = ua,
         fromPage = page,
-        yesCall = navigateAwayFromShareOfIncomeQuestions(draftId, index, ua.is5mldEnabled),
+        yesCall = MentalCapacityYesNoController.onPageLoad(index, draftId),
         noCall = IncomeController.onPageLoad(index, draftId)
       )
     case page @ CountryOfNationalityYesNoPage(index) => ua =>
@@ -85,7 +85,7 @@ class IndividualBeneficiaryNavigator extends Navigator {
         ua = ua,
         fromPage = page,
         yesCall = NationalInsuranceNumberController.onPageLoad(index, draftId),
-        noCall = navigateAwayFromNinoYesNoQuestion(draftId, index, ua.is5mldEnabled)
+        noCall = CountryOfResidenceYesNoController.onPageLoad(index, draftId)
       )
     case page @ CountryOfResidenceYesNoPage(index) => ua =>
       yesNoNav(
@@ -106,7 +106,7 @@ class IndividualBeneficiaryNavigator extends Navigator {
         ua = ua,
         fromPage = page,
         yesCall = AddressUKYesNoController.onPageLoad(index, draftId),
-        noCall = navigateToMentalCapacityOrVulnerableQuestions(draftId, index, ua.is5mldEnabled)
+        noCall = MentalCapacityYesNoController.onPageLoad(index, draftId)
       )
     case page @ AddressUKYesNoPage(index) => ua =>
       yesNoNav(
@@ -127,7 +127,7 @@ class IndividualBeneficiaryNavigator extends Navigator {
         ua = ua,
         fromPage = page,
         yesCall = IDCardDetailsController.onPageLoad(index, draftId),
-        noCall = navigateToMentalCapacityOrVulnerableQuestions(draftId, index, ua.is5mldEnabled)
+        noCall = MentalCapacityYesNoController.onPageLoad(index, draftId)
       )
   }
 
@@ -159,38 +159,6 @@ class IndividualBeneficiaryNavigator extends Navigator {
       case (Some(true), _) => MentalCapacityYesNoController.onPageLoad(index, draftId)
       case (_, true) => AddressYesNoController.onPageLoad(index, draftId)
       case _ => MentalCapacityYesNoController.onPageLoad(index, draftId)
-    }
-  }
-
-  private def navigateAwayFromNinoYesNoQuestion(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
-    if (is5mldEnabled) {
-      CountryOfResidenceYesNoController.onPageLoad(index, draftId)
-    } else {
-      AddressYesNoController.onPageLoad(index, draftId)
-    }
-  }
-
-  private def navigateAwayFromNinoQuestion(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
-    if (is5mldEnabled) {
-      CountryOfResidenceYesNoController.onPageLoad(index, draftId)
-    } else {
-      VulnerableYesNoController.onPageLoad(index, draftId)
-    }
-  }
-
-  private def navigateAwayFromShareOfIncomeQuestions(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
-    if (is5mldEnabled) {
-      CountryOfNationalityYesNoController.onPageLoad(index, draftId)
-    } else {
-      NationalInsuranceYesNoController.onPageLoad(index, draftId)
-    }
-  }
-
-  private def navigateToMentalCapacityOrVulnerableQuestions(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
-    if (is5mldEnabled) {
-      MentalCapacityYesNoController.onPageLoad(index, draftId)
-    } else {
-      VulnerableYesNoController.onPageLoad(index, draftId)
     }
   }
 

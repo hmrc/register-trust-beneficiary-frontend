@@ -44,7 +44,7 @@ class TrustBeneficiaryNavigator extends Navigator {
       } else {
         rts.AddressYesNoController.onPageLoad(index, draftId)
       }
-    case ShareOfIncomePage(index) => ua => navigateAwayFromShareOfIncomeQuestions(draftId, index, ua.is5mldEnabled)
+    case ShareOfIncomePage(index) => ua => rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
     case AddressUKPage(index) => _ => rts.AnswersController.onPageLoad(index, draftId)
     case AddressInternationalPage(index) => _ => rts.AnswersController.onPageLoad(index, draftId)
   }
@@ -54,7 +54,7 @@ class TrustBeneficiaryNavigator extends Navigator {
       yesNoNav(
         ua = ua,
         fromPage = page,
-        yesCall = navigateAwayFromShareOfIncomeQuestions(draftId, index, ua.is5mldEnabled),
+        yesCall = rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId),
         noCall = rts.ShareOfIncomeController.onPageLoad(index, draftId)
       )
     case page @ AddressUKYesNoPage(index) => ua =>
@@ -90,14 +90,6 @@ class TrustBeneficiaryNavigator extends Navigator {
         yesCall = navigateToAnswersOrAddressQuestions(draftId, index)(ua),
         noCall = rts.CountryOfResidenceController.onPageLoad(index, draftId)
       )
-  }
-
-  private def navigateAwayFromShareOfIncomeQuestions(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
-    if (is5mldEnabled) {
-      rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
-    } else {
-      rts.AddressYesNoController.onPageLoad(index, draftId)
-    }
   }
 
   private def navigateToAnswersOrAddressQuestions(draftId: String, index: Int): PartialFunction[ReadableUserAnswers, Call] = {

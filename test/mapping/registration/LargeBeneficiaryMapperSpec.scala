@@ -23,7 +23,6 @@ import models.core.pages.{Description, InternationalAddress, UKAddress}
 import models.registration.pages.HowManyBeneficiaries
 import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated._
-import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.mld5.CountryOfResidenceYesNoPage
 import utils.Constants._
 
 class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers

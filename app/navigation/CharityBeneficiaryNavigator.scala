@@ -37,7 +37,7 @@ class CharityBeneficiaryNavigator extends Navigator {
       } else {
         AmountDiscretionYesNoController.onPageLoad(index, draftId)
       }
-    case HowMuchIncomePage(index) => ua => navigateAwayFromShareOfIncomeQuestions(draftId, index, ua.is5mldEnabled)
+    case HowMuchIncomePage(index) => ua => CountryOfResidenceYesNoController.onPageLoad(index, draftId)
     case CharityAddressUKPage(index) => _ => CharityAnswersController.onPageLoad(index, draftId)
     case CharityInternationalAddressPage(index) => _ => CharityAnswersController.onPageLoad(index, draftId)
     case CountryOfResidencePage(index) => ua =>
@@ -53,7 +53,7 @@ class CharityBeneficiaryNavigator extends Navigator {
       yesNoNav(
         ua = ua,
         fromPage = page,
-        yesCall = navigateAwayFromShareOfIncomeQuestions(draftId, index, ua.is5mldEnabled),
+        yesCall = CountryOfResidenceYesNoController.onPageLoad(index, draftId),
         noCall = HowMuchIncomeController.onPageLoad(index, draftId)
       )
     case page @ AddressYesNoPage(index) => ua =>
@@ -84,14 +84,6 @@ class CharityBeneficiaryNavigator extends Navigator {
         yesCall = navigateToAnswersOrAddressQuestions(draftId, index)(ua),
         noCall = CountryOfResidenceController.onPageLoad(index, draftId)
       )
-  }
-
-  private def navigateAwayFromShareOfIncomeQuestions(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
-    if (is5mldEnabled) {
-      CountryOfResidenceYesNoController.onPageLoad(index, draftId)
-    } else {
-      AddressYesNoController.onPageLoad(index, draftId)
-    }
   }
 
   private def navigateToAnswersOrAddressQuestions(draftId: String, index: Int): PartialFunction[ReadableUserAnswers, Call] = {

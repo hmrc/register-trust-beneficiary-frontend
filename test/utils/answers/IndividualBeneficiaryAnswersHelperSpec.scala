@@ -17,13 +17,11 @@
 package utils.answers
 
 import base.SpecBase
-import controllers.register.beneficiaries.individualBeneficiary.mld5.routes._
 import controllers.register.beneficiaries.individualBeneficiary.routes._
 import models.YesNoDontKnow
 import models.core.pages.{FullName, InternationalAddress, UKAddress}
 import models.registration.pages.{PassportOrIdCardDetails, RoleInCompany}
 import pages.register.beneficiaries.individual._
-import pages.register.beneficiaries.individual.mld5._
 import play.twirl.api.Html
 import viewmodels.{AnswerRow, AnswerSection}
 

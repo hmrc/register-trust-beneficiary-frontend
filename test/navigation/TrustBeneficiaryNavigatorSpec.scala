@@ -17,11 +17,9 @@
 package navigation
 
 import base.SpecBase
-import controllers.register.beneficiaries.charityortrust.trust.mld5.{routes => ntRts}
 import controllers.register.beneficiaries.charityortrust.trust.{routes => rts}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.beneficiaries.charityortrust.trust._
-import pages.register.beneficiaries.charityortrust.trust.mld5.CountryOfResidenceYesNoPage
 
 class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks {
 
@@ -31,94 +29,16 @@ class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
   "Trust beneficiary navigator" when {
 
-    "a 4mld trust" must {
-
-      val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = false, isTaxable = true)
-
-      "Name page -> Discretion yes no page" in {
-        navigator.nextPage(NamePage(index), draftId, baseAnswers)
-          .mustBe(rts.DiscretionYesNoController.onPageLoad(index, draftId))
-      }
-
-      "Discretion yes no page -> Yes -> Address yes no page" in {
-        val answers = baseAnswers
-          .set(DiscretionYesNoPage(index), true).success.value
-
-        navigator.nextPage(DiscretionYesNoPage(index), draftId, answers)
-          .mustBe(rts.AddressYesNoController.onPageLoad(index, draftId))
-      }
-
-      "Discretion yes no page -> No -> Share of income page" in {
-        val answers = baseAnswers
-          .set(DiscretionYesNoPage(index), false).success.value
-
-        navigator.nextPage(DiscretionYesNoPage(index), draftId, answers)
-          .mustBe(rts.ShareOfIncomeController.onPageLoad(index, draftId))
-      }
-
-      "Share of income page -> Address yes no page" in {
-        navigator.nextPage(ShareOfIncomePage(index), draftId, baseAnswers)
-          .mustBe(rts.AddressYesNoController.onPageLoad(index, draftId))
-      }
-
-      "Address yes no page -> Yes -> Address in the UK yes no page" in {
-        val answers = baseAnswers
-          .set(AddressYesNoPage(index), true).success.value
-
-        navigator.nextPage(AddressYesNoPage(index), draftId, answers)
-          .mustBe(rts.AddressUKYesNoController.onPageLoad(index, draftId))
-      }
-
-      "Address in the UK yes no page -> Yes -> UK address page" in {
-        val answers = baseAnswers
-          .set(AddressUKYesNoPage(index), true).success.value
-
-        navigator.nextPage(AddressUKYesNoPage(index), draftId, answers)
-          .mustBe(rts.AddressUKController.onPageLoad(index, draftId))
-      }
-
-      "Address in the UK yes no page -> No -> Non-UK address page" in {
-        val answers = baseAnswers
-          .set(AddressUKYesNoPage(index), false).success.value
-
-        navigator.nextPage(AddressUKYesNoPage(index), draftId, answers)
-          .mustBe(rts.AddressInternationalController.onPageLoad(index, draftId))
-      }
-
-      "Address yes no page -> No -> Check your answers page" in {
-        val answers = baseAnswers
-          .set(AddressYesNoPage(index), false).success.value
-
-        navigator.nextPage(AddressYesNoPage(index), draftId, answers)
-          .mustBe(rts.AnswersController.onPageLoad(index, draftId))
-      }
-
-      "UK address page -> Check your answers page" in {
-        navigator.nextPage(AddressUKPage(index), draftId, baseAnswers)
-          .mustBe(rts.AnswersController.onPageLoad(index, draftId))
-      }
-
-      "Non-UK address page -> Check your answers page" in {
-        val answers = baseAnswers
-          .set(AddressYesNoPage(index), false).success.value
-
-        navigator.nextPage(AddressInternationalPage(index), draftId, answers)
-          .mustBe(rts.AnswersController.onPageLoad(index, draftId))
-      }
-    }
-
-    "a 5mld trust" when {
-
       "a taxable trust" must {
 
-        val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = true)
+        val baseAnswers = emptyUserAnswers.copy(isTaxable = true)
 
         "Discretion yes no page -> Yes -> CountryOfResidence Yes No page" in {
           val answers = baseAnswers
             .set(DiscretionYesNoPage(index), true).success.value
 
           navigator.nextPage(DiscretionYesNoPage(index), draftId, answers)
-            .mustBe(ntRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
+            .mustBe(rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
         }
 
         "CountryOfResidence yes no page -> No -> Address yes no page" in {
@@ -134,7 +54,7 @@ class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
             .set(CountryOfResidenceYesNoPage(index), true).success.value
 
           navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, answers)
-            .mustBe(ntRts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId))
+            .mustBe(rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId))
         }
 
 
@@ -151,7 +71,7 @@ class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
             .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
 
           navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, answers)
-            .mustBe(ntRts.CountryOfResidenceController.onPageLoad(index, draftId))
+            .mustBe(rts.CountryOfResidenceController.onPageLoad(index, draftId))
         }
 
         "CountryOfResidence page -> Address yes no page" in {
@@ -161,20 +81,20 @@ class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
         "ShareOfIncome page -> CountryOfResidence Yes No page" in {
           navigator.nextPage(ShareOfIncomePage(index), draftId, baseAnswers)
-            .mustBe(ntRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
+            .mustBe(rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
         }
       }
 
       "a non taxable trust" must {
 
-        val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = false)
+        val baseAnswers = emptyUserAnswers.copy(isTaxable = false)
 
         "Name page -> CountryOfResidence Yes No page" in {
           val answers = baseAnswers
             .set(NamePage(index), "Trust Name").success.value
 
           navigator.nextPage(NamePage(index), draftId, answers)
-            .mustBe(ntRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
+            .mustBe(rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
         }
 
         "CountryOfResidence yes no page -> No -> Check your answers page" in {
@@ -190,7 +110,7 @@ class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
             .set(CountryOfResidenceYesNoPage(index), true).success.value
 
           navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, answers)
-            .mustBe(ntRts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId))
+            .mustBe(rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId))
         }
 
 
@@ -207,7 +127,7 @@ class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
             .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
 
           navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, answers)
-            .mustBe(ntRts.CountryOfResidenceController.onPageLoad(index, draftId))
+            .mustBe(rts.CountryOfResidenceController.onPageLoad(index, draftId))
         }
 
         "CountryOfResidence page -> Check your answers page" in {
@@ -215,6 +135,5 @@ class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
             .mustBe(rts.AnswersController.onPageLoad(index, draftId))
         }
       }
-    }
   }
 }
