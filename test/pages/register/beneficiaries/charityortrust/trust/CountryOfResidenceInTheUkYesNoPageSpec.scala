@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.charityortrust.trust.mld5
+package pages.register.beneficiaries.charityortrust.trust
 
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-import pages.register.beneficiaries.charityortrust.trust.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import utils.Constants._
 
 class CountryOfResidenceInTheUkYesNoPageSpec extends PageBehaviours {

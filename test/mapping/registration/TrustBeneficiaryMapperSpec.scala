@@ -68,7 +68,7 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
           )
         }
 
-        "Country of residence is set to the UK in 5mld mode" in {
+        "Country of residence is set to the UK" in {
           val userAnswers =
             emptyUserAnswers
               .set(NamePage(index), trustName).success.value
@@ -90,7 +90,7 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
           )
         }
 
-        "Country of residence is set to outside the UK in 5mld mode" in {
+        "Country of residence is set to outside the UK" in {
           val userAnswers =
             emptyUserAnswers
               .set(NamePage(index), trustName).success.value

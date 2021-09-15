@@ -24,7 +24,6 @@ import models.registration.pages.RoleInCompany.Director
 import models.{AddressType, IdentificationType, IndividualDetailsType, PassportType, YesNoDontKnow}
 import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.beneficiaries.individual._
-import pages.register.beneficiaries.individual.mld5._
 import utils.Constants._
 
 import java.time.LocalDate
@@ -310,14 +309,12 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
           )
       }
 
-      "In 5mld taxable mode" when {
-        val baseAnswers = emptyUserAnswers.copy(isTaxable = true)
         "must not be able to create IndividualDetailsType when incomplete data " in {
-          individualBeneficiariesMapper.build(baseAnswers) mustNot be(defined)
+          individualBeneficiariesMapper.build(emptyUserAnswers) mustNot be(defined)
         }
 
         "with UK country of residence, UK country of nationality and Mental Capacity" in {
-          val userAnswers = baseAnswers
+          val userAnswers = emptyUserAnswers
               .set(NamePage(index0), FullName("first name", None, "last name")).success.value
               .set(DateOfBirthYesNoPage(index0), true).success.value
               .set(DateOfBirthPage(index0), dateOfBirth).success.value
@@ -352,7 +349,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
 
         "with Non UK country of residence, Non UK country of nationality and No Mental Capacity" in {
 
-          val userAnswers = baseAnswers
+          val userAnswers = emptyUserAnswers
               .set(NamePage(index0), FullName("first name", None, "last name")).success.value
               .set(DateOfBirthYesNoPage(index0), true).success.value
               .set(DateOfBirthPage(index0), dateOfBirth).success.value
@@ -389,7 +386,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
 
         "with Don't know Mental Capacity" in {
 
-          val userAnswers = baseAnswers
+          val userAnswers = emptyUserAnswers
             .set(NamePage(index0), FullName("first name", None, "last name")).success.value
             .set(IncomeYesNoPage(index0), true).success.value
             .set(NationalInsuranceYesNoPage(index0), true).success.value
@@ -420,13 +417,10 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
           )
 
         }
-      }
 
-      "In 5mld none taxable mode" when {
-        val baseAnswers = emptyUserAnswers.copy(isTaxable = false)
 
         "with No Income or Vulnerable data answered" in {
-          val userAnswers = baseAnswers
+          val userAnswers = emptyUserAnswers
             .set(NamePage(index0), FullName("first name", None, "last name")).success.value
             .set(DateOfBirthYesNoPage(index0), true).success.value
             .set(DateOfBirthPage(index0), dateOfBirth).success.value
@@ -455,5 +449,5 @@ class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
         }
       }
     }
-  }
+
 }

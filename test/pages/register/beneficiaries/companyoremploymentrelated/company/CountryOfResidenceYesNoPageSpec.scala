@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.individual.mld5
+package pages.register.beneficiaries.companyoremploymentrelated.company
 
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-import pages.register.beneficiaries.individual.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import utils.Constants._
 
 class CountryOfResidenceYesNoPageSpec extends PageBehaviours {

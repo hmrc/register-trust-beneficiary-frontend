@@ -48,7 +48,7 @@ class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
 
       "return mapped data" when {
 
-        "in 5mld mode with UK country of residence set" in {
+        "with UK country of residence set" in {
           val userAnswers =
             emptyUserAnswers
               .set(LargeBeneficiaryNamePage(index0), "Employment Related Name").success.value
@@ -76,7 +76,7 @@ class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
           )
         }
 
-        "in 5mld mode with Non UK country of residence set" in {
+        "with Non UK country of residence set" in {
           val userAnswers =
             emptyUserAnswers
               .set(LargeBeneficiaryNamePage(index0), "Employment Related Name").success.value

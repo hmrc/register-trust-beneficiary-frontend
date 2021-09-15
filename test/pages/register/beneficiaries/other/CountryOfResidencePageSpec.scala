@@ -14,21 +14,19 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.individual.mld5
+package pages.register.beneficiaries.other
 
-import models.YesNoDontKnow
 import pages.behaviours.PageBehaviours
-import pages.register.beneficiaries.individual.MentalCapacityYesNoPage
 
-class MentalCapacityYesNoPageSpec extends PageBehaviours {
+class CountryOfResidencePageSpec extends PageBehaviours {
 
-  "LegallyIncapableYesNoPage" must {
+  "CountryOfResidencePage" must {
 
-    beRetrievable[YesNoDontKnow](MentalCapacityYesNoPage(0))
+    beRetrievable[String](CountryOfResidencePage(0))
 
-    beSettable[YesNoDontKnow](MentalCapacityYesNoPage(0))
+    beSettable[String](CountryOfResidencePage(0))
 
-    beRemovable[YesNoDontKnow](MentalCapacityYesNoPage(0))
+    beRemovable[String](CountryOfResidencePage(0))
   }
 
 }

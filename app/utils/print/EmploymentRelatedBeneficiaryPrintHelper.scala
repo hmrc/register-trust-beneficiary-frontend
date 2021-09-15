@@ -33,9 +33,9 @@ class EmploymentRelatedBeneficiaryPrintHelper @Inject()(answerRowConverter: Answ
 
     Seq(
       bound.stringQuestion(LargeBeneficiaryNamePage(index), "employmentRelatedBeneficiary.name", NameController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(CountryOfResidenceYesNoPage(index), "employmentRelatedBeneficiary.5mld.countryOfResidenceYesNo", CountryOfResidenceYesNoController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(CountryOfResidenceInTheUkYesNoPage(index), "employmentRelatedBeneficiary.5mld.countryOfResidenceInTheUkYesNo", CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId).url),
-      bound.countryQuestion(CountryOfResidenceInTheUkYesNoPage(index), CountryOfResidencePage(index), "employmentRelatedBeneficiary.5mld.countryOfResidence", CountryOfResidenceController.onPageLoad(index, draftId).url),
+      bound.yesNoQuestion(CountryOfResidenceYesNoPage(index), "employmentRelatedBeneficiary.countryOfResidenceYesNo", CountryOfResidenceYesNoController.onPageLoad(index, draftId).url),
+      bound.yesNoQuestion(CountryOfResidenceInTheUkYesNoPage(index), "employmentRelatedBeneficiary.countryOfResidenceInTheUkYesNo", CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId).url),
+      bound.countryQuestion(CountryOfResidenceInTheUkYesNoPage(index), CountryOfResidencePage(index), "employmentRelatedBeneficiary.countryOfResidence", CountryOfResidenceController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(LargeBeneficiaryAddressYesNoPage(index), "employmentRelatedBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(index, draftId).url),
       bound.yesNoQuestion(LargeBeneficiaryAddressUKYesNoPage(index), "employmentRelatedBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(index, draftId).url),
       bound.addressQuestion(LargeBeneficiaryAddressPage(index), "employmentRelatedBeneficiary.ukAddress", UkAddressController.onPageLoad(index, draftId).url),

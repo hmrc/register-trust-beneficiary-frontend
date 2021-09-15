@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.other.mld5
+package pages.register.beneficiaries.other
 
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-import pages.register.beneficiaries.other.{CountryOfResidencePage, CountryOfResidenceYesNoPage, UKResidentYesNoPage}
-import utils.Constants.ES
-import utils.Constants.GB
+import utils.Constants.{ES, GB}
 
 class UKResidentYesNoPageSpec extends PageBehaviours {
 

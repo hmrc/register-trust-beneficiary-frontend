@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.other.mld5
+package pages.register.beneficiaries.charityortrust.trust
 
 import models.UserAnswers
-import pages.behaviours.PageBehaviours
 import org.scalacheck.Arbitrary.arbitrary
-import pages.register.beneficiaries.other.{CountryOfResidencePage, CountryOfResidenceYesNoPage, UKResidentYesNoPage}
+import pages.behaviours.PageBehaviours
+import utils.Constants._
 
 class CountryOfResidenceYesNoPageSpec extends PageBehaviours {
 
@@ -35,14 +35,13 @@ class CountryOfResidenceYesNoPageSpec extends PageBehaviours {
   "remove pages when CountryOfResidenceYesNoPage is set to false" in {
     forAll(arbitrary[UserAnswers]) {
       initial =>
-        val answers: UserAnswers = initial.set(UKResidentYesNoPage(0), false).success.value
-          .set(CountryOfResidencePage(0), "ES").success.value
+        val answers: UserAnswers = initial.set(CountryOfResidenceInTheUkYesNoPage(0), false).success.value
+          .set(CountryOfResidencePage(0), ES).success.value
 
         val result = answers.set(CountryOfResidenceYesNoPage(0), false).success.value
 
-        result.get(UKResidentYesNoPage(0)) mustNot be(defined)
+        result.get(CountryOfResidenceInTheUkYesNoPage(0)) mustNot be(defined)
         result.get(CountryOfResidencePage(0)) mustNot be(defined)
     }
   }
-
 }

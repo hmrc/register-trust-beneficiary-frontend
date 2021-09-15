@@ -38,87 +38,6 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
 
     "return a trust beneficiary answer section" when {
 
-      "in 4mld journey" when {
-        "minimum data" in {
-
-          val userAnswers = emptyUserAnswers
-            .set(NamePage(index), name).success.value
-            .set(DiscretionYesNoPage(index), true).success.value
-            .set(AddressYesNoPage(index), false).success.value
-
-          val result = helper.beneficiaries(userAnswers)
-
-          result mustBe Some(Seq(
-            AnswerSection(
-              headingKey = Some("answerPage.section.trustBeneficiary.subheading"),
-              rows = Seq(
-                AnswerRow(label = "trustBeneficiaryName.checkYourAnswersLabel", answer = Html(name), changeUrl = Some(rts.NameController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
-                AnswerRow(label = "trustBeneficiaryDiscretionYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(rts.DiscretionYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
-                AnswerRow(label = "trustBeneficiaryAddressYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(rts.AddressYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name)
-              ),
-              headingArgs = Seq(index + 1)
-            )
-          ))
-        }
-
-        "full data with international address" in {
-
-          val userAnswers = emptyUserAnswers
-            .set(NamePage(index), name).success.value
-            .set(DiscretionYesNoPage(index), false).success.value
-            .set(ShareOfIncomePage(index), 10).success.value
-            .set(AddressYesNoPage(index), true).success.value
-            .set(AddressUKYesNoPage(index), false).success.value
-            .set(AddressInternationalPage(index), nonUkAddress).success.value
-
-          val result = helper.beneficiaries(userAnswers)
-
-          result mustBe Some(Seq(
-            AnswerSection(
-              headingKey = Some("answerPage.section.trustBeneficiary.subheading"),
-              rows = Seq(
-                AnswerRow(label = "trustBeneficiaryName.checkYourAnswersLabel", answer = Html(name), changeUrl = Some(rts.NameController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
-                AnswerRow(label = "trustBeneficiaryDiscretionYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(rts.DiscretionYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
-                AnswerRow(label = "trustBeneficiaryShareOfIncome.checkYourAnswersLabel", answer = Html("10%"), changeUrl = Some(rts.ShareOfIncomeController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
-                AnswerRow(label = "trustBeneficiaryAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(rts.AddressYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
-                AnswerRow(label = "trustBeneficiaryAddressUKYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(rts.AddressUKYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
-                AnswerRow(label = "site.address.international.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />France"), changeUrl = Some(rts.AddressInternationalController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name)
-              ),
-              headingArgs = Seq(index + 1)
-            )
-          ))
-        }
-
-        "full data with UK address" in {
-
-          val userAnswers = emptyUserAnswers
-            .set(NamePage(index), name).success.value
-            .set(DiscretionYesNoPage(index), false).success.value
-            .set(ShareOfIncomePage(index), 10).success.value
-            .set(AddressYesNoPage(index), true).success.value
-            .set(AddressUKYesNoPage(index), true).success.value
-            .set(AddressUKPage(index), ukAddress).success.value
-
-          val result = helper.beneficiaries(userAnswers)
-
-          result mustBe Some(Seq(
-            AnswerSection(
-              headingKey = Some("answerPage.section.trustBeneficiary.subheading"),
-              rows = Seq(
-                AnswerRow(label = "trustBeneficiaryName.checkYourAnswersLabel", answer = Html(name), changeUrl = Some(rts.NameController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
-                AnswerRow(label = "trustBeneficiaryDiscretionYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(rts.DiscretionYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
-                AnswerRow(label = "trustBeneficiaryShareOfIncome.checkYourAnswersLabel", answer = Html("10%"), changeUrl = Some(rts.ShareOfIncomeController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
-                AnswerRow(label = "trustBeneficiaryAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(rts.AddressYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
-                AnswerRow(label = "trustBeneficiaryAddressUKYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(rts.AddressUKYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
-                AnswerRow(label = "site.address.uk.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"), changeUrl = Some(rts.AddressUKController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name)
-              ),
-              headingArgs = Seq(index + 1)
-            )
-          ))
-        }
-      }
-
-      "in 5mld taxable journey" when {
         "minimum data" in {
 
           val userAnswers = emptyUserAnswers
@@ -135,7 +54,7 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
               rows = Seq(
                 AnswerRow(label = "trustBeneficiaryName.checkYourAnswersLabel", answer = Html(name), changeUrl = Some(rts.NameController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
                 AnswerRow(label = "trustBeneficiaryDiscretionYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(rts.DiscretionYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
-                AnswerRow(label = "trust.5mld.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(rts.CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
+                AnswerRow(label = "trust.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(rts.CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
                 AnswerRow(label = "trustBeneficiaryAddressYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(rts.AddressYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name)
               ),
               headingArgs = Seq(index + 1)
@@ -165,9 +84,9 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
                 AnswerRow(label = "trustBeneficiaryName.checkYourAnswersLabel", answer = Html(name), changeUrl = Some(rts.NameController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
                 AnswerRow(label = "trustBeneficiaryDiscretionYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(rts.DiscretionYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
                 AnswerRow(label = "trustBeneficiaryShareOfIncome.checkYourAnswersLabel", answer = Html("10%"), changeUrl = Some(rts.ShareOfIncomeController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
-                AnswerRow(label = "trust.5mld.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(rts.CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
-                AnswerRow(label = "trust.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
-                AnswerRow(label = "trust.5mld.countryOfResidence.checkYourAnswersLabel", answer = Html("France"), changeUrl = Some(rts.CountryOfResidenceController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
+                AnswerRow(label = "trust.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(rts.CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
+                AnswerRow(label = "trust.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
+                AnswerRow(label = "trust.countryOfResidence.checkYourAnswersLabel", answer = Html("France"), changeUrl = Some(rts.CountryOfResidenceController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
                 AnswerRow(label = "trustBeneficiaryAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(rts.AddressYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
                 AnswerRow(label = "trustBeneficiaryAddressUKYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(rts.AddressUKYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
                 AnswerRow(label = "site.address.international.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />France"), changeUrl = Some(rts.AddressInternationalController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name)
@@ -198,33 +117,11 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
                 AnswerRow(label = "trustBeneficiaryName.checkYourAnswersLabel", answer = Html(name), changeUrl = Some(rts.NameController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
                 AnswerRow(label = "trustBeneficiaryDiscretionYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(rts.DiscretionYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
                 AnswerRow(label = "trustBeneficiaryShareOfIncome.checkYourAnswersLabel", answer = Html("10%"), changeUrl = Some(rts.ShareOfIncomeController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
-                AnswerRow(label = "trust.5mld.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(rts.CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
-                AnswerRow(label = "trust.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
+                AnswerRow(label = "trust.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(rts.CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
+                AnswerRow(label = "trust.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
                 AnswerRow(label = "trustBeneficiaryAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(rts.AddressYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
                 AnswerRow(label = "trustBeneficiaryAddressUKYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(rts.AddressUKYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
                 AnswerRow(label = "site.address.uk.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"), changeUrl = Some(rts.AddressUKController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name)
-              ),
-              headingArgs = Seq(index + 1)
-            )
-          ))
-        }
-      }
-
-      "in 5mld non taxable journey" when {
-        "minimum data" in {
-
-          val userAnswers = emptyUserAnswers
-            .set(NamePage(index), name).success.value
-            .set(CountryOfResidenceYesNoPage(index), false).success.value
-
-          val result = helper.beneficiaries(userAnswers)
-
-          result mustBe Some(Seq(
-            AnswerSection(
-              headingKey = Some("answerPage.section.trustBeneficiary.subheading"),
-              rows = Seq(
-                AnswerRow(label = "trustBeneficiaryName.checkYourAnswersLabel", answer = Html(name), changeUrl = Some(rts.NameController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
-                AnswerRow(label = "trust.5mld.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(rts.CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name)
               ),
               headingArgs = Seq(index + 1)
             )
@@ -246,15 +143,15 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
               headingKey = Some("answerPage.section.trustBeneficiary.subheading"),
               rows = Seq(
                 AnswerRow(label = "trustBeneficiaryName.checkYourAnswersLabel", answer = Html(name), changeUrl = Some(rts.NameController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
-                AnswerRow(label = "trust.5mld.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(rts.CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
-                AnswerRow(label = "trust.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
-                AnswerRow(label = "trust.5mld.countryOfResidence.checkYourAnswersLabel", answer = Html("France"), changeUrl = Some(rts.CountryOfResidenceController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name)
+                AnswerRow(label = "trust.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(rts.CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
+                AnswerRow(label = "trust.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name),
+                AnswerRow(label = "trust.countryOfResidence.checkYourAnswersLabel", answer = Html("France"), changeUrl = Some(rts.CountryOfResidenceController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = name)
               ),
               headingArgs = Seq(index + 1)
             )
           ))
         }
-      }
+
     }
   }
 }

@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.charityortrust.trust.mld5
+package pages.register.beneficiaries.charityortrust.charity
 
 import pages.behaviours.PageBehaviours
-import pages.register.beneficiaries.charityortrust.trust.CountryOfResidencePage
 
 class CountryOfResidencePageSpec extends PageBehaviours {
 

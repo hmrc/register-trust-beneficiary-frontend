@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.companyoremploymentrelated.company.mld5
+package pages.register.beneficiaries.charityortrust.charity
 
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-import pages.register.beneficiaries.companyoremploymentrelated.company.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import utils.Constants._
 
 class CountryOfResidenceInTheUkYesNoPageSpec extends PageBehaviours {
@@ -31,6 +30,7 @@ class CountryOfResidenceInTheUkYesNoPageSpec extends PageBehaviours {
     beSettable[Boolean](CountryOfResidenceInTheUkYesNoPage(0))
 
     beRemovable[Boolean](CountryOfResidenceInTheUkYesNoPage(0))
+
 
     "Yes selected - set CountryOfResidencePage to 'GB' " in {
       forAll(arbitrary[UserAnswers]) {

@@ -22,7 +22,6 @@ import models.{AddressType, CompanyType, IdentificationOrgType}
 import models.core.pages.{InternationalAddress, UKAddress}
 import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.beneficiaries.companyoremploymentrelated.company._
-import pages.register.beneficiaries.companyoremploymentrelated.company.mld5._
 import utils.Constants._
 
 class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers with OptionValues with Generators {
@@ -183,7 +182,7 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers with Optio
       }
 
 
-      "Country of residence is set to the UK in 5mld mode" in {
+      "Country of residence is set to the UK" in {
         val userAnswers =
           emptyUserAnswers
             .set(NamePage(index0), "Company Name").success.value
@@ -205,7 +204,7 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers with Optio
         )
       }
 
-      "Country of residence is set to outside the UK in 5mld mode" in {
+      "Country of residence is set to outside the UK" in {
         val userAnswers =
           emptyUserAnswers
             .set(NamePage(index0), "Company Name").success.value

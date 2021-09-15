@@ -93,14 +93,14 @@ class IndividualBeneficiaryAnswersHelperSpec extends SpecBase {
               AnswerRow("individualBeneficiaryDateOfBirth.checkYourAnswersLabel", Html("3 February 1996"), Some(DateOfBirthController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
               AnswerRow("individualBeneficiaryIncomeYesNo.checkYourAnswersLabel", Html("No"), Some(IncomeYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
               AnswerRow("individualBeneficiaryIncome.checkYourAnswersLabel", Html("50%"), Some(IncomeController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
-              AnswerRow("individualBeneficiary.5mld.countryOfNationalityYesNo.checkYourAnswersLabel", Html("Yes"), Some(CountryOfNationalityYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
-              AnswerRow("individualBeneficiary.5mld.countryOfNationalityInTheUkYesNo.checkYourAnswersLabel", Html("No"), Some(CountryOfNationalityInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
-              AnswerRow("individualBeneficiary.5mld.countryOfNationality.checkYourAnswersLabel", Html("France"), Some(CountryOfNationalityController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
+              AnswerRow("individualBeneficiary.countryOfNationalityYesNo.checkYourAnswersLabel", Html("Yes"), Some(CountryOfNationalityYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
+              AnswerRow("individualBeneficiary.countryOfNationalityInTheUkYesNo.checkYourAnswersLabel", Html("No"), Some(CountryOfNationalityInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
+              AnswerRow("individualBeneficiary.countryOfNationality.checkYourAnswersLabel", Html("France"), Some(CountryOfNationalityController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
               AnswerRow("individualBeneficiaryNationalInsuranceYesNo.checkYourAnswersLabel", Html("Yes"), Some(NationalInsuranceYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
               AnswerRow("individualBeneficiaryNationalInsuranceNumber.checkYourAnswersLabel", Html("AA 00 00 00 A"), Some(NationalInsuranceNumberController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
-              AnswerRow("individualBeneficiary.5mld.countryOfResidenceYesNo.checkYourAnswersLabel", Html("Yes"), Some(CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
-              AnswerRow("individualBeneficiary.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel", Html("No"), Some(CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
-              AnswerRow("individualBeneficiary.5mld.countryOfResidence.checkYourAnswersLabel", Html("France"), Some(CountryOfResidenceController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
+              AnswerRow("individualBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel", Html("Yes"), Some(CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
+              AnswerRow("individualBeneficiary.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel", Html("No"), Some(CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
+              AnswerRow("individualBeneficiary.countryOfResidence.checkYourAnswersLabel", Html("France"), Some(CountryOfResidenceController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
               AnswerRow("individualBeneficiaryAddressYesNo.checkYourAnswersLabel", Html("Yes"), Some(AddressYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
               AnswerRow("individualBeneficiaryAddressUKYesNo.checkYourAnswersLabel", Html("Yes"), Some(AddressUKYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
               AnswerRow("individualBeneficiaryAddressUK.checkYourAnswersLabel", Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"), Some(AddressUKController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
@@ -109,7 +109,7 @@ class IndividualBeneficiaryAnswersHelperSpec extends SpecBase {
               AnswerRow("individualBeneficiaryPassportDetails.checkYourAnswersLabel", Html("France<br />12345<br />3 February 1996"), Some(PassportDetailsController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
               AnswerRow("individualBeneficiaryIDCardDetailsYesNo.checkYourAnswersLabel", Html("Yes"), Some(IDCardDetailsYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
               AnswerRow("individualBeneficiaryIDCardDetails.checkYourAnswersLabel", Html("France<br />12345<br />3 February 1996"), Some(IDCardDetailsController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
-              AnswerRow("individualBeneficiary.5mld.mentalCapacityYesNo.checkYourAnswersLabel", Html("Yes"), Some(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
+              AnswerRow("individualBeneficiary.mentalCapacityYesNo.checkYourAnswersLabel", Html("Yes"), Some(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit),
               AnswerRow("individualBeneficiaryVulnerableYesNo.checkYourAnswersLabel", Html("No"), Some(VulnerableYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit)
             ),
             headingArgs = Seq(index + 1)
@@ -131,7 +131,7 @@ class IndividualBeneficiaryAnswersHelperSpec extends SpecBase {
             headingKey = Some("answerPage.section.individualBeneficiary.subheading"),
             rows = Seq(
               AnswerRow("individualBeneficiaryName.checkYourAnswersLabel", Html(name.displayFullName), Some(NameController.onPageLoad(index, fakeDraftId).url), "", canEdit),
-              AnswerRow("individualBeneficiary.5mld.mentalCapacityYesNo.checkYourAnswersLabel", Html("Yes"), Some(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit)
+              AnswerRow("individualBeneficiary.mentalCapacityYesNo.checkYourAnswersLabel", Html("Yes"), Some(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit)
             ),
             headingArgs = Seq(index + 1)
           )
@@ -152,7 +152,7 @@ class IndividualBeneficiaryAnswersHelperSpec extends SpecBase {
             headingKey = Some("answerPage.section.individualBeneficiary.subheading"),
             rows = Seq(
               AnswerRow("individualBeneficiaryName.checkYourAnswersLabel", Html(name.displayFullName), Some(NameController.onPageLoad(index, fakeDraftId).url), "", canEdit),
-              AnswerRow("individualBeneficiary.5mld.mentalCapacityYesNo.checkYourAnswersLabel", Html("No"), Some(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit)
+              AnswerRow("individualBeneficiary.mentalCapacityYesNo.checkYourAnswersLabel", Html("No"), Some(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit)
             ),
             headingArgs = Seq(index + 1)
           )
@@ -173,7 +173,7 @@ class IndividualBeneficiaryAnswersHelperSpec extends SpecBase {
             headingKey = Some("answerPage.section.individualBeneficiary.subheading"),
             rows = Seq(
               AnswerRow("individualBeneficiaryName.checkYourAnswersLabel", Html(name.displayFullName), Some(NameController.onPageLoad(index, fakeDraftId).url), "", canEdit),
-              AnswerRow("individualBeneficiary.5mld.mentalCapacityYesNo.checkYourAnswersLabel", Html("I don’t know"), Some(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit)
+              AnswerRow("individualBeneficiary.mentalCapacityYesNo.checkYourAnswersLabel", Html("I don’t know"), Some(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId).url), arg, canEdit)
             ),
             headingArgs = Seq(index + 1)
           )
