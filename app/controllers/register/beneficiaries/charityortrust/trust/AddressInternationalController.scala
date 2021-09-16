@@ -20,7 +20,6 @@ import config.annotations.TrustBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.register.trust.NameRequiredAction
 import forms.InternationalAddressFormProvider
-import javax.inject.Inject
 import navigation.Navigator
 import pages.register.beneficiaries.charityortrust.trust.AddressInternationalPage
 import play.api.data.Form
@@ -31,6 +30,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.countryOptions.CountryOptionsNonUK
 import views.html.register.beneficiaries.charityortrust.trust.AddressInternationalView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddressInternationalController @Inject()(

@@ -19,7 +19,6 @@ package controllers.register.beneficiaries.companyoremploymentrelated.employment
 import config.annotations.EmploymentRelatedBeneficiary
 import controllers.actions.StandardActionSets
 import forms.EmploymentRelatedBeneficiaryDescriptionFormProvider
-import javax.inject.Inject
 import models.core.pages.Description
 import navigation.Navigator
 import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.LargeBeneficiaryDescriptionPage
@@ -30,6 +29,7 @@ import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.beneficiaries.companyoremploymentrelated.employmentRelated.DescriptionView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class DescriptionController @Inject()(

@@ -18,16 +18,11 @@ package connectors
 
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock._
-import models.{FeatureResponse, TaskStatus}
+import models.TaskStatus
 import org.scalatest.{MustMatchers, OptionValues}
 import play.api.Application
-import play.api.http.Status
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.Json
 import utils.WireMockHelper
-
-import scala.concurrent.Await
-import scala.concurrent.duration.Duration
 
 class TrustsStoreConnectorSpec extends SpecBase with MustMatchers with OptionValues with WireMockHelper {
 
@@ -36,10 +31,6 @@ class TrustsStoreConnectorSpec extends SpecBase with MustMatchers with OptionVal
       "microservice.services.trusts-store.port" -> server.port(),
       "auditing.enabled" -> false): _*
     ).build()
-
-  private lazy val connector = injector.instanceOf[TrustsStoreConnector]
-
-  private val url = s"/trusts-store/features/5mld"
 
   ".updateTaskStatus" must {
 
@@ -92,47 +83,6 @@ class TrustsStoreConnectorSpec extends SpecBase with MustMatchers with OptionVal
       }
 
       application.stop()
-    }
-  }
-
-  "TrustsStoreConnector" must {
-
-    "return a feature flag of true if 5mld is enabled" in {
-
-      server.stubFor(
-        get(urlEqualTo(url))
-          .willReturn(
-            aResponse()
-              .withStatus(Status.OK)
-              .withBody(
-                Json.stringify(
-                Json.toJson(FeatureResponse("5mld", isEnabled = true))
-                )
-              )
-          )
-      )
-
-      val result = Await.result(connector.getFeature("5mld"), Duration.Inf)
-      result mustBe FeatureResponse("5mld", isEnabled = true)
-    }
-
-    "return a feature flag of false if 5mld is not enabled" in {
-
-      server.stubFor(
-        get(urlEqualTo(url))
-          .willReturn(
-            aResponse()
-              .withStatus(Status.OK)
-              .withBody(
-                Json.stringify(
-                  Json.toJson(FeatureResponse("5mld", isEnabled = false))
-                )
-              )
-          )
-      )
-
-      val result = Await.result(connector.getFeature("5mld"), Duration.Inf)
-      result mustBe FeatureResponse("5mld", isEnabled = false)
     }
   }
 }

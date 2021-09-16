@@ -65,7 +65,7 @@ class CharityBeneficiaryMapperSpec extends SpecBase with MustMatchers
           )
         }
 
-        "Country of residence is set to the UK in 5mld mode" in {
+        "Country of residence is set to the UK" in {
           val userAnswers =
             emptyUserAnswers
               .set(CharityNamePage(index), name).success.value
@@ -87,7 +87,7 @@ class CharityBeneficiaryMapperSpec extends SpecBase with MustMatchers
           )
         }
 
-        "Country of residence is set to outside the UK in 5mld mode" in {
+        "Country of residence is set to outside the UK" in {
           val userAnswers =
             emptyUserAnswers
               .set(CharityNamePage(index), "Charity Name").success.value

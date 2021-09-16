@@ -20,7 +20,6 @@ import config.annotations.EmploymentRelatedBeneficiary
 import controllers.actions._
 import controllers.actions.register.employmentRelated.NameRequiredAction
 import forms.InternationalAddressFormProvider
-import javax.inject.Inject
 import navigation.Navigator
 import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.LargeBeneficiaryAddressInternationalPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -30,6 +29,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.countryOptions.CountryOptionsNonUK
 import views.html.register.beneficiaries.companyoremploymentrelated.employmentRelated.NonUkAddressView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class NonUkAddressController @Inject()(

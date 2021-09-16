@@ -19,7 +19,6 @@ package controllers.register.beneficiaries.other
 import config.annotations.OtherBeneficiary
 import controllers.actions.StandardActionSets
 import forms.DescriptionFormProvider
-import javax.inject.Inject
 import navigation.Navigator
 import pages.register.beneficiaries.other.DescriptionPage
 import play.api.data.Form
@@ -29,6 +28,7 @@ import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.beneficiaries.other.DescriptionView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class DescriptionController @Inject()(

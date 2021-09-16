@@ -21,8 +21,7 @@ import controllers.actions.register.trust.NameRequiredAction
 import models.Status.Completed
 import navigation.Navigator
 import pages.entitystatus.TrustBeneficiaryStatus
-import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
-import pages.register.beneficiaries.{AnswersPage, WhatTypeOfBeneficiaryPage}
+import pages.register.beneficiaries.AnswersPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository

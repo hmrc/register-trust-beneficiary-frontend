@@ -23,7 +23,6 @@ import models.Status.Completed
 import models.requests.RegistrationDataRequest
 import navigation.Navigator
 import pages.entitystatus.ClassBeneficiaryStatus
-import pages.register.beneficiaries.WhatTypeOfBeneficiaryPage
 import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}

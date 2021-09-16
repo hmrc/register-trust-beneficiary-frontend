@@ -34,16 +34,16 @@ class CharityBeneficiaryNavigator extends Navigator {
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case CharityNamePage(index) => ua =>
-      if (is5mldNonTaxable(ua)) {
+      if (isNonTaxable(ua)) {
         CountryOfResidenceYesNoController.onPageLoad(index, draftId)
       } else {
         AmountDiscretionYesNoController.onPageLoad(index, draftId)
       }
-    case HowMuchIncomePage(index) => ua => navigateAwayFromShareOfIncomeQuestions(draftId, index, ua.is5mldEnabled)
+    case HowMuchIncomePage(index) => _ => CountryOfResidenceYesNoController.onPageLoad(index, draftId)
     case CharityAddressUKPage(index) => _ => CharityAnswersController.onPageLoad(index, draftId)
     case CharityInternationalAddressPage(index) => _ => CharityAnswersController.onPageLoad(index, draftId)
     case CountryOfResidencePage(index) => ua =>
-      if (is5mldNonTaxable(ua)) {
+      if (isNonTaxable(ua)) {
         CharityAnswersController.onPageLoad(index, draftId)
       } else {
         AddressYesNoController.onPageLoad(index, draftId)
@@ -55,7 +55,7 @@ class CharityBeneficiaryNavigator extends Navigator {
       yesNoNav(
         ua = ua,
         fromPage = page,
-        yesCall = navigateAwayFromShareOfIncomeQuestions(draftId, index, ua.is5mldEnabled),
+        yesCall = CountryOfResidenceYesNoController.onPageLoad(index, draftId),
         noCall = HowMuchIncomeController.onPageLoad(index, draftId)
       )
     case page @ AddressYesNoPage(index) => ua =>
@@ -88,17 +88,9 @@ class CharityBeneficiaryNavigator extends Navigator {
       )
   }
 
-  private def navigateAwayFromShareOfIncomeQuestions(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
-    if (is5mldEnabled) {
-      CountryOfResidenceYesNoController.onPageLoad(index, draftId)
-    } else {
-      AddressYesNoController.onPageLoad(index, draftId)
-    }
-  }
-
   private def navigateToAnswersOrAddressQuestions(draftId: String, index: Int): PartialFunction[ReadableUserAnswers, Call] = {
     case ua =>
-      if (is5mldNonTaxable(ua)) {
+      if (isNonTaxable(ua)) {
         CharityAnswersController.onPageLoad(index, draftId)
       } else {
         AddressYesNoController.onPageLoad(index, draftId)

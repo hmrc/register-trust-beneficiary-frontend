@@ -19,43 +19,21 @@ package controllers.register.beneficiaries
 import base.SpecBase
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.register.beneficiaries.{Info4mldView, Info5mldView}
+import views.html.register.beneficiaries.InfoView
 
 class InfoControllerSpec extends SpecBase {
 
   "Info Controller" must {
 
-    "return OK and the correct view for a GET with 5mld disabled" in {
+    "return OK and the correct view for a GET" in {
 
-      val userAnswers = emptyUserAnswers.copy(is5mldEnabled = false)
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request = FakeRequest(GET, routes.InfoController.onPageLoad(fakeDraftId).url)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[Info4mldView]
-
-      status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(fakeDraftId)(request, messages).toString
-
-      application.stop()
-    }
-
-    "return OK and the correct view for a GET with 5mld enabled" in {
-
-      val userAnswers = emptyUserAnswers.copy(is5mldEnabled = true)
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      val request = FakeRequest(GET, routes.InfoController.onPageLoad(fakeDraftId).url)
-
-      val result = route(application, request).value
-
-      val view = application.injector.instanceOf[Info5mldView]
+      val view = application.injector.instanceOf[InfoView]
 
       status(result) mustEqual OK
 

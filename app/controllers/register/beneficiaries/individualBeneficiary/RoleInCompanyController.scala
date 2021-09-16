@@ -20,7 +20,6 @@ import config.annotations.IndividualBeneficiary
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
 import forms.RoleInCompanyFormProvider
-import javax.inject.Inject
 import models.registration.pages.RoleInCompany
 import navigation.Navigator
 import pages.register.beneficiaries.individual.{NamePage, RoleInCompanyPage}
@@ -31,6 +30,7 @@ import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.beneficiaries.individualBeneficiary.RoleInCompanyView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class RoleInCompanyController @Inject()(

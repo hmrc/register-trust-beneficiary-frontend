@@ -20,7 +20,6 @@ import config.annotations.IndividualBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.register.individual.NameRequiredAction
 import forms.CountryFormProvider
-import javax.inject.Inject
 import navigation.Navigator
 import pages.register.beneficiaries.individual.mld5.CountryOfResidencePage
 import play.api.data.Form
@@ -31,6 +30,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.countryOptions.CountryOptionsNonUK
 import views.html.register.beneficiaries.individualBeneficiary.mld5.CountryOfResidenceView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CountryOfResidenceController @Inject()(

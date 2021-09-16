@@ -19,7 +19,6 @@ package controllers.register.beneficiaries.charityortrust.charity
 import config.annotations.CharityBeneficiary
 import controllers.actions.StandardActionSets
 import forms.StringFormProvider
-import javax.inject.Inject
 import navigation.Navigator
 import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
 import play.api.data.Form
@@ -29,6 +28,7 @@ import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.beneficiaries.charityortrust.charity.CharityNameView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CharityNameController @Inject()(

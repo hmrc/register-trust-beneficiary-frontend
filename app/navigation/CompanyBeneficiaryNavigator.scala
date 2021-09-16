@@ -40,8 +40,8 @@ class CompanyBeneficiaryNavigator extends Navigator {
       } else {
         ntrts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
       }
-    case IncomePage(index) => ua =>
-      navigateAwayFromShareOfIncomeQuestions(draftId, index, ua.is5mldEnabled)
+    case IncomePage(index) => _ =>
+      ntrts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
     case AddressUKPage(index) => _ =>
       rts.CheckDetailsController.onPageLoad(index, draftId)
     case AddressInternationalPage(index) => _ =>
@@ -55,7 +55,7 @@ class CompanyBeneficiaryNavigator extends Navigator {
       yesNoNav(
         ua = ua,
         fromPage = page,
-        yesCall = navigateAwayFromShareOfIncomeQuestions(draftId, index, ua.is5mldEnabled),
+        yesCall = ntrts.CountryOfResidenceYesNoController.onPageLoad(index, draftId),
         noCall = rts.ShareOfIncomeController.onPageLoad(index, draftId)
       )
     case page @ AddressYesNoPage(index) => ua =>
@@ -86,14 +86,6 @@ class CompanyBeneficiaryNavigator extends Navigator {
         yesCall = navigateToAnswersOrAddressQuestions(draftId, index, ua.isTaxable),
         noCall = ntrts.CountryOfResidenceController.onPageLoad(index, draftId)
       )
-  }
-
-  private def navigateAwayFromShareOfIncomeQuestions(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
-    if (is5mldEnabled) {
-      ntrts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
-    } else {
-      rts.AddressYesNoController.onPageLoad(index, draftId)
-    }
   }
 
   private def navigateToAnswersOrAddressQuestions(draftId: String, index: Int, isTaxable: Boolean): Call = {

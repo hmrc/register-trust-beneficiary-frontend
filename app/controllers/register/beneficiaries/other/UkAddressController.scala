@@ -20,7 +20,6 @@ import config.annotations.OtherBeneficiary
 import controllers.actions._
 import controllers.actions.register.other.DescriptionRequiredAction
 import forms.UKAddressFormProvider
-import javax.inject.Inject
 import navigation.Navigator
 import pages.register.beneficiaries.other.AddressUKPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -29,6 +28,7 @@ import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.beneficiaries.other.UkAddressView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class UkAddressController @Inject()(

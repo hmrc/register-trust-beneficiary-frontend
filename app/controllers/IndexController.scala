@@ -33,7 +33,6 @@ class IndexController @Inject()(
                                  val controllerComponents: MessagesControllerComponents,
                                  repository: RegistrationsRepository,
                                  identify: RegistrationIdentifierAction,
-                                 featureFlagService: TrustsStoreService,
                                  submissionDraftConnector: SubmissionDraftConnector,
                                  trustStoreService: TrustsStoreService
                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
@@ -53,17 +52,14 @@ class IndexController @Inject()(
       }
     }
 
-    featureFlagService.is5mldEnabled() flatMap {
-      is5mldEnabled =>
-        submissionDraftConnector.getIsTrustTaxable(draftId) flatMap {
-          isTaxable =>
-            repository.get(draftId) flatMap {
-              case Some(userAnswers) =>
-                redirect(userAnswers.copy(is5mldEnabled = is5mldEnabled, isTaxable = isTaxable))
-              case _ =>
-                val userAnswers = UserAnswers(draftId, Json.obj(), request.identifier, is5mldEnabled, isTaxable)
-                redirect(userAnswers)
-            }
+    submissionDraftConnector.getIsTrustTaxable(draftId) flatMap {
+      isTaxable =>
+        repository.get(draftId) flatMap {
+          case Some(userAnswers) =>
+            redirect(userAnswers.copy(isTaxable = isTaxable))
+          case _ =>
+            val userAnswers = UserAnswers(draftId, Json.obj(), request.identifier, isTaxable)
+            redirect(userAnswers)
         }
     }
   }

@@ -18,12 +18,12 @@ package controllers.actions.register.trust
 
 import controllers.actions
 import controllers.actions.BeneficiaryNameRequest
-import javax.inject.Inject
 import models.requests.RegistrationDataRequest
 import pages.register.beneficiaries.charityortrust.trust.NamePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.ActionTransformer
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class NameRequiredActionAction(index: Int)(implicit val executionContext: ExecutionContext, val messagesApi: MessagesApi)
