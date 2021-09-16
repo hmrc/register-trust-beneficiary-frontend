@@ -21,7 +21,7 @@ import config.FrontendAppConfig
 import controllers.actions.{AffinityGroupIdentifierAction, TrustsAuthorisedFunctions}
 import models.requests.IdentifierRequest
 import play.api.Logging
-import play.api.mvc.{Request, Result, _}
+import play.api.mvc._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import utils.Session

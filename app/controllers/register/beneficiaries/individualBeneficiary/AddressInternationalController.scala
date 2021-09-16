@@ -21,7 +21,6 @@ import controllers.actions.register.{DraftIdRetrievalActionProvider, Registratio
 import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
 import controllers.filters.IndexActionFilterProvider
 import forms.InternationalAddressFormProvider
-import javax.inject.Inject
 import navigation.Navigator
 import pages.register.beneficiaries.individual.{AddressInternationalPage, NamePage}
 import play.api.data.Form
@@ -33,6 +32,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.countryOptions.CountryOptionsNonUK
 import views.html.register.beneficiaries.individualBeneficiary.AddressInternationalView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddressInternationalController @Inject()(

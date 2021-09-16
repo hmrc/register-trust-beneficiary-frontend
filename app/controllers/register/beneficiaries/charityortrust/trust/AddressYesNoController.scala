@@ -17,10 +17,9 @@
 package controllers.register.beneficiaries.charityortrust.trust
 
 import config.annotations.TrustBeneficiary
-import controllers.actions.register.trust.NameRequiredAction
 import controllers.actions.StandardActionSets
+import controllers.actions.register.trust.NameRequiredAction
 import forms.YesNoFormProvider
-import javax.inject.Inject
 import navigation.Navigator
 import pages.register.beneficiaries.charityortrust.trust.AddressYesNoPage
 import play.api.data.Form
@@ -30,6 +29,7 @@ import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.beneficiaries.charityortrust.trust.AddressYesNoView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddressYesNoController @Inject()(

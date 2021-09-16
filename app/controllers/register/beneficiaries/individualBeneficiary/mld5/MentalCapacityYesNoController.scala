@@ -21,8 +21,6 @@ import controllers.actions._
 import controllers.actions.register.individual.NameRequiredAction
 import forms.YesNoDontKnowFormProvider
 import models.YesNoDontKnow
-
-import javax.inject.Inject
 import navigation.Navigator
 import pages.register.beneficiaries.individual.mld5.MentalCapacityYesNoPage
 import play.api.data.Form
@@ -32,6 +30,7 @@ import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.beneficiaries.individualBeneficiary.mld5.MentalCapacityYesNoView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class MentalCapacityYesNoController @Inject()(

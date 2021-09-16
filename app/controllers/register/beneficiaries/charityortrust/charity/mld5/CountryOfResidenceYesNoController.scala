@@ -20,16 +20,16 @@ import config.annotations.CharityBeneficiary
 import controllers.actions._
 import controllers.actions.register.charity.NameRequiredAction
 import forms.YesNoFormProvider
-import javax.inject.Inject
 import navigation.Navigator
+import pages.register.beneficiaries.charityortrust.charity.mld5.CountryOfResidenceYesNoPage
 import play.api.data.Form
 import play.api.i18n._
 import play.api.mvc._
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import pages.register.beneficiaries.charityortrust.charity.mld5.CountryOfResidenceYesNoPage
 import views.html.register.beneficiaries.charityortrust.charity.mld5.CountryOfResidenceYesNoView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CountryOfResidenceYesNoController @Inject()(

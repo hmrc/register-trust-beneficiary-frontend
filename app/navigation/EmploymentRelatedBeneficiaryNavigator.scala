@@ -35,7 +35,7 @@ class EmploymentRelatedBeneficiaryNavigator extends Navigator {
   }
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case LargeBeneficiaryNamePage(index) => ua => navigateAwayFromNameQuestion(draftId, index, ua.is5mldEnabled)
+    case LargeBeneficiaryNamePage(index) => _ => mld5Rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
     case LargeBeneficiaryAddressPage(index) => _ => rts.DescriptionController.onPageLoad(index, draftId)
     case LargeBeneficiaryAddressInternationalPage(index) => _ => rts.DescriptionController.onPageLoad(index, draftId)
     case LargeBeneficiaryDescriptionPage(index) => _ => rts.NumberOfBeneficiariesController.onPageLoad(index, draftId)
@@ -72,14 +72,6 @@ class EmploymentRelatedBeneficiaryNavigator extends Navigator {
         yesCall = navigateAwayFromResidencyQuestions(draftId, index, ua.isTaxable),
         noCall = mld5Rts.CountryOfResidenceController.onPageLoad(index, draftId)
       )
-  }
-
-  private def navigateAwayFromNameQuestion(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
-    if (is5mldEnabled) {
-      mld5Rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
-    } else {
-      rts.AddressYesNoController.onPageLoad(index, draftId)
-    }
   }
 
   private def navigateAwayFromResidencyQuestions(draftId: String, index: Int, isTaxable: Boolean): Call = {

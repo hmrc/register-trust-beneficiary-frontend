@@ -183,7 +183,7 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers with Optio
       }
 
 
-      "Country of residence is set to the UK in 5mld mode" in {
+      "Country of residence is set to the UK" in {
         val userAnswers =
           emptyUserAnswers
             .set(NamePage(index0), "Company Name").success.value
@@ -205,7 +205,7 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers with Optio
         )
       }
 
-      "Country of residence is set to outside the UK in 5mld mode" in {
+      "Country of residence is set to outside the UK" in {
         val userAnswers =
           emptyUserAnswers
             .set(NamePage(index0), "Company Name").success.value

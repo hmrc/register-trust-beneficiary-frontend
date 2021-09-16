@@ -35,16 +35,16 @@ class OtherBeneficiaryNavigator @Inject()() extends Navigator {
 
   private def simpleNavigation(draftId: String):  PartialFunction[Page, ReadableUserAnswers => Call] = {
     case DescriptionPage(index) => ua =>
-      if (is5mldNonTaxable(ua)) {
+      if (isNonTaxable(ua)) {
         other.mld5.routes.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
       } else {
         other.routes.DiscretionYesNoController.onPageLoad(index, draftId)
       }
-    case ShareOfIncomePage(index) => ua => navigateAwayFromIncomeQuestions(draftId, index, ua.is5mldEnabled)
+    case ShareOfIncomePage(index) => _ => controllers.register.beneficiaries.other.mld5.routes.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
     case AddressUKPage(index) => _ => other.routes.CheckDetailsController.onPageLoad(index, draftId)
     case AddressInternationalPage(index) =>_ =>  other.routes.CheckDetailsController.onPageLoad(index, draftId)
     case CountryOfResidencePage(index) => ua =>
-      if (is5mldNonTaxable(ua)) {
+      if (isNonTaxable(ua)) {
         other.routes.CheckDetailsController.onPageLoad(index, draftId)
       } else {
         other.routes.AddressYesNoController.onPageLoad(index, draftId)
@@ -56,7 +56,7 @@ class OtherBeneficiaryNavigator @Inject()() extends Navigator {
       yesNoNav(
         ua = ua,
         fromPage = page,
-        yesCall = navigateAwayFromIncomeQuestions(draftId, index, ua.is5mldEnabled),
+        yesCall = controllers.register.beneficiaries.other.mld5.routes.CountryOfResidenceYesNoController.onPageLoad(index, draftId),
         noCall = other.routes.ShareOfIncomeController.onPageLoad(index, draftId)
       )
     case page @ AddressYesNoPage(index) => ua =>
@@ -89,17 +89,9 @@ class OtherBeneficiaryNavigator @Inject()() extends Navigator {
       )
   }
 
-  private def navigateAwayFromIncomeQuestions(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
-    if (is5mldEnabled) {
-      controllers.register.beneficiaries.other.mld5.routes.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
-    } else {
-      other.routes.AddressYesNoController.onPageLoad(index, draftId)
-    }
-  }
-
   private def navigateToCheckDetailsOrAddressQuestions(draftId: String, index: Int): PartialFunction[ReadableUserAnswers, Call] = {
     case ua =>
-      if (is5mldNonTaxable(ua)) {
+      if (isNonTaxable(ua)) {
         other.routes.CheckDetailsController.onPageLoad(index, draftId)
       } else {
         other.routes.AddressYesNoController.onPageLoad(index, draftId)

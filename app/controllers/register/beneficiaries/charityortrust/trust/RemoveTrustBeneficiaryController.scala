@@ -19,7 +19,6 @@ package controllers.register.beneficiaries.charityortrust.trust
 import controllers.RemoveIndexController
 import controllers.actions._
 import forms.RemoveIndexFormProvider
-import javax.inject.Inject
 import models.requests.RegistrationDataRequest
 import pages.QuestionPage
 import pages.register.beneficiaries.charityortrust.trust.NamePage
@@ -28,6 +27,8 @@ import play.api.mvc.{AnyContent, Call, MessagesControllerComponents}
 import queries.{RemoveTrustBeneficiaryQuery, Settable}
 import repositories.RegistrationsRepository
 import views.html.RemoveIndexView
+
+import javax.inject.Inject
 
 class RemoveTrustBeneficiaryController @Inject()(
                                                   override val messagesApi: MessagesApi,

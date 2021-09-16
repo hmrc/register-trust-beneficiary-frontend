@@ -35,18 +35,18 @@ class TrustBeneficiaryNavigator extends Navigator {
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
     case NamePage(index) => ua =>
-      if (is5mldNonTaxable(ua)) {
+      if (isNonTaxable(ua)) {
         nonTaxRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
       } else {
         rts.DiscretionYesNoController.onPageLoad(index, draftId)
       }
     case CountryOfResidencePage(index) => ua =>
-      if (is5mldNonTaxable(ua)) {
+      if (isNonTaxable(ua)) {
         rts.AnswersController.onPageLoad(index, draftId)
       } else {
         rts.AddressYesNoController.onPageLoad(index, draftId)
       }
-    case ShareOfIncomePage(index) => ua => navigateAwayFromShareOfIncomeQuestions(draftId, index, ua.is5mldEnabled)
+    case ShareOfIncomePage(index) => _ => nonTaxRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
     case AddressUKPage(index) => _ => rts.AnswersController.onPageLoad(index, draftId)
     case AddressInternationalPage(index) => _ => rts.AnswersController.onPageLoad(index, draftId)
   }
@@ -56,7 +56,7 @@ class TrustBeneficiaryNavigator extends Navigator {
       yesNoNav(
         ua = ua,
         fromPage = page,
-        yesCall = navigateAwayFromShareOfIncomeQuestions(draftId, index, ua.is5mldEnabled),
+        yesCall = nonTaxRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId),
         noCall = rts.ShareOfIncomeController.onPageLoad(index, draftId)
       )
     case page @ AddressUKYesNoPage(index) => ua =>
@@ -94,17 +94,9 @@ class TrustBeneficiaryNavigator extends Navigator {
       )
   }
 
-  private def navigateAwayFromShareOfIncomeQuestions(draftId: String, index: Int, is5mldEnabled: Boolean): Call = {
-    if (is5mldEnabled) {
-      nonTaxRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
-    } else {
-      rts.AddressYesNoController.onPageLoad(index, draftId)
-    }
-  }
-
   private def navigateToAnswersOrAddressQuestions(draftId: String, index: Int): PartialFunction[ReadableUserAnswers, Call] = {
     case ua =>
-      if (is5mldNonTaxable(ua)) {
+      if (isNonTaxable(ua)) {
         rts.AnswersController.onPageLoad(index, draftId)
       } else {
         rts.AddressYesNoController.onPageLoad(index, draftId)

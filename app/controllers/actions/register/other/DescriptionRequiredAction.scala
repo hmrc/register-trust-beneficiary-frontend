@@ -16,12 +16,12 @@
 
 package controllers.actions.register.other
 
-import javax.inject.Inject
 import models.requests.RegistrationDataRequest
 import pages.register.beneficiaries.other.DescriptionPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.ActionTransformer
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class DescriptionRequiredActionAction @Inject()(index: Int)(implicit val executionContext: ExecutionContext, val messagesApi: MessagesApi)

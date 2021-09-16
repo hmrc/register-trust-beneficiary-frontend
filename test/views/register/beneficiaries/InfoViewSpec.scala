@@ -18,15 +18,15 @@ package views.register.beneficiaries
 
 import controllers.register.beneficiaries.routes
 import views.behaviours.ViewBehaviours
-import views.html.register.beneficiaries.Info5mldView
+import views.html.register.beneficiaries.InfoView
 
-class Info5mldViewSpec extends ViewBehaviours {
+class InfoViewSpec extends ViewBehaviours {
 
-  "mld5Info view" when {
+  "Info view" when {
 
     "a non-taxable trust" must {
 
-      val view = viewFor[Info5mldView](Some(emptyUserAnswers))
+      val view = viewFor[InfoView](Some(emptyUserAnswers))
       val applyView = view.apply(fakeDraftId, isTaxable = false)(fakeRequest, messages)
 
       behave like normalPageTitleWithSectionSubheading(applyView, "beneficiaryInfo.5mld",
@@ -75,7 +75,7 @@ class Info5mldViewSpec extends ViewBehaviours {
 
     "a taxable trust" must {
 
-      val view = viewFor[Info5mldView](Some(emptyUserAnswers))
+      val view = viewFor[InfoView](Some(emptyUserAnswers))
       val applyView = view.apply(fakeDraftId, isTaxable = true)(fakeRequest, messages)
 
       behave like normalPageTitleWithSectionSubheading(applyView, "beneficiaryInfo.5mld",
