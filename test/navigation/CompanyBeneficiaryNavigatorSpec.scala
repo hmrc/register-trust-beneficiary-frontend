@@ -109,7 +109,7 @@ class CompanyBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
           .set(IncomeYesNoPage(index), true).success.value
 
         navigator.nextPage(IncomeYesNoPage(index), draftId, answers)
-          .mustBe(ntrts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
+          .mustBe(companyRoutes.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
       }
 
       "CountryOfResidence yes no page -> No -> Address yes no page" in {
@@ -125,7 +125,7 @@ class CompanyBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
           .set(CountryOfResidenceYesNoPage(index), true).success.value
 
         navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, answers)
-          .mustBe(ntrts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId))
+          .mustBe(companyRoutes.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId))
       }
 
 
@@ -142,7 +142,7 @@ class CompanyBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
           .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
 
         navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, answers)
-          .mustBe(ntrts.CountryOfResidenceController.onPageLoad(index, draftId))
+          .mustBe(companyRoutes.CountryOfResidenceController.onPageLoad(index, draftId))
       }
 
       "CountryOfResidence page -> Address yes no page" in {
@@ -152,7 +152,7 @@ class CompanyBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
 
       "ShareOfIncome page -> CountryOfResidence Yes No page" in {
         navigator.nextPage(IncomePage(index), draftId, baseAnswers)
-          .mustBe(ntrts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
+          .mustBe(companyRoutes.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
       }
     }
 
@@ -162,7 +162,7 @@ class CompanyBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
 
       "NamePage -> CountryOfResidenceYesNoPage" in {
         navigator.nextPage(NamePage(index), draftId, baseAnswers)
-          .mustBe(ntrts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
+          .mustBe(companyRoutes.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
       }
 
       "CountryOfResidenceYesNoPage" when {
@@ -174,7 +174,7 @@ class CompanyBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
             .set(page, true).success.value
 
           navigator.nextPage(page, draftId, answers)
-            .mustBe(ntrts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId))
+            .mustBe(companyRoutes.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId))
         }
 
         "-> No -> CheckDetails" in {
@@ -203,7 +203,7 @@ class CompanyBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
             .set(page, false).success.value
 
           navigator.nextPage(page, draftId, answers)
-            .mustBe(ntrts.CountryOfResidenceController.onPageLoad(index, draftId))
+            .mustBe(companyRoutes.CountryOfResidenceController.onPageLoad(index, draftId))
         }
       }
 

@@ -96,7 +96,7 @@ class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
           .set(DiscretionYesNoPage(index), true).success.value
 
         navigator.nextPage(DiscretionYesNoPage(index), draftId, answers)
-          .mustBe(ntRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
+          .mustBe(rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
       }
 
       "CountryOfResidence yes no page -> No -> Address yes no page" in {
@@ -112,7 +112,7 @@ class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
           .set(CountryOfResidenceYesNoPage(index), true).success.value
 
         navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, answers)
-          .mustBe(ntRts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId))
+          .mustBe(rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId))
       }
 
 
@@ -129,7 +129,7 @@ class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
           .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
 
         navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, answers)
-          .mustBe(ntRts.CountryOfResidenceController.onPageLoad(index, draftId))
+          .mustBe(rts.CountryOfResidenceController.onPageLoad(index, draftId))
       }
 
       "CountryOfResidence page -> Address yes no page" in {
@@ -139,7 +139,7 @@ class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
       "ShareOfIncome page -> CountryOfResidence Yes No page" in {
         navigator.nextPage(ShareOfIncomePage(index), draftId, baseAnswers)
-          .mustBe(ntRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
+          .mustBe(rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
       }
     }
 
@@ -152,7 +152,7 @@ class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
           .set(NamePage(index), "Trust Name").success.value
 
         navigator.nextPage(NamePage(index), draftId, answers)
-          .mustBe(ntRts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
+          .mustBe(rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
       }
 
       "CountryOfResidence yes no page -> No -> Check your answers page" in {
@@ -168,7 +168,7 @@ class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
           .set(CountryOfResidenceYesNoPage(index), true).success.value
 
         navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, answers)
-          .mustBe(ntRts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId))
+          .mustBe(rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId))
       }
 
 
@@ -185,7 +185,7 @@ class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
           .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
 
         navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, answers)
-          .mustBe(ntRts.CountryOfResidenceController.onPageLoad(index, draftId))
+          .mustBe(rts.CountryOfResidenceController.onPageLoad(index, draftId))
       }
 
       "CountryOfResidence page -> Check your answers page" in {

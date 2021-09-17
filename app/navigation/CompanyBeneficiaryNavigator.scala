@@ -36,10 +36,10 @@ class CompanyBeneficiaryNavigator extends Navigator {
       if (ua.isTaxable) {
         rts.DiscretionYesNoController.onPageLoad(index, draftId)
       } else {
-        ntrts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
+        rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
       }
     case IncomePage(index) => _ =>
-      ntrts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
+      rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
     case AddressUKPage(index) => _ =>
       rts.CheckDetailsController.onPageLoad(index, draftId)
     case AddressInternationalPage(index) => _ =>
@@ -53,7 +53,7 @@ class CompanyBeneficiaryNavigator extends Navigator {
       yesNoNav(
         ua = ua,
         fromPage = page,
-        yesCall = ntrts.CountryOfResidenceYesNoController.onPageLoad(index, draftId),
+        yesCall = rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId),
         noCall = rts.ShareOfIncomeController.onPageLoad(index, draftId)
       )
     case page @ AddressYesNoPage(index) => ua =>
@@ -74,7 +74,7 @@ class CompanyBeneficiaryNavigator extends Navigator {
       yesNoNav(
         ua = ua,
         fromPage = page,
-        yesCall = ntrts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId),
+        yesCall = rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId),
         noCall = navigateToAnswersOrAddressQuestions(draftId, index, ua.isTaxable)
       )
     case page @ CountryOfResidenceInTheUkYesNoPage(index) => ua =>
@@ -82,7 +82,7 @@ class CompanyBeneficiaryNavigator extends Navigator {
         ua = ua,
         fromPage = page,
         yesCall = navigateToAnswersOrAddressQuestions(draftId, index, ua.isTaxable),
-        noCall = ntrts.CountryOfResidenceController.onPageLoad(index, draftId)
+        noCall = rts.CountryOfResidenceController.onPageLoad(index, draftId)
       )
   }
 
