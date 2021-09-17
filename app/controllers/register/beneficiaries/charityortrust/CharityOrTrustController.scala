@@ -18,8 +18,6 @@ package controllers.register.beneficiaries.charityortrust
 
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.CharityOrTrustFormProvider
-
-import javax.inject.Inject
 import models.registration.pages.CharityOrTrust
 import models.requests.RegistrationDataRequest
 import navigation.Navigator
@@ -31,6 +29,7 @@ import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.beneficiaries.charityortrust.CharityOrTrustView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CharityOrTrustController @Inject()(

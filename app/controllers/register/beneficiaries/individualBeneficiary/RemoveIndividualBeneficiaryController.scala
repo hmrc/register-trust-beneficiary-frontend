@@ -20,7 +20,6 @@ import controllers.RemoveIndexController
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.RemoveIndexFormProvider
-import javax.inject.Inject
 import models.core.pages.FullName
 import models.requests.RegistrationDataRequest
 import pages.QuestionPage
@@ -30,6 +29,8 @@ import play.api.mvc.{AnyContent, Call, MessagesControllerComponents}
 import queries.{RemoveIndividualBeneficiaryQuery, Settable}
 import repositories.RegistrationsRepository
 import views.html.RemoveIndexView
+
+import javax.inject.Inject
 
 class RemoveIndividualBeneficiaryController @Inject()(
                                                        override val messagesApi: MessagesApi,

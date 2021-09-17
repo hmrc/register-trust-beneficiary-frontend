@@ -16,13 +16,10 @@
 
 package controllers.register.beneficiaries.individualBeneficiary
 
-import java.time.LocalDate
-
 import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.DateOfBirthFormProvider
-import javax.inject.Inject
 import navigation.Navigator
 import pages.register.beneficiaries.individual.{DateOfBirthPage, NamePage}
 import play.api.data.Form
@@ -32,6 +29,8 @@ import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.beneficiaries.individualBeneficiary.DateOfBirthView
 
+import java.time.LocalDate
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class DateOfBirthController @Inject()(

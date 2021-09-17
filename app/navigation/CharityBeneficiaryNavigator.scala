@@ -37,7 +37,7 @@ class CharityBeneficiaryNavigator extends Navigator {
       } else {
         AmountDiscretionYesNoController.onPageLoad(index, draftId)
       }
-    case HowMuchIncomePage(index) => ua => CountryOfResidenceYesNoController.onPageLoad(index, draftId)
+    case HowMuchIncomePage(index) => _ => CountryOfResidenceYesNoController.onPageLoad(index, draftId)
     case CharityAddressUKPage(index) => _ => CharityAnswersController.onPageLoad(index, draftId)
     case CharityInternationalAddressPage(index) => _ => CharityAnswersController.onPageLoad(index, draftId)
     case CountryOfResidencePage(index) => ua =>

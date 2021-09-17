@@ -44,7 +44,7 @@ class TrustBeneficiaryNavigator extends Navigator {
       } else {
         rts.AddressYesNoController.onPageLoad(index, draftId)
       }
-    case ShareOfIncomePage(index) => ua => rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
+    case ShareOfIncomePage(index) => _ => rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
     case AddressUKPage(index) => _ => rts.AnswersController.onPageLoad(index, draftId)
     case AddressInternationalPage(index) => _ => rts.AnswersController.onPageLoad(index, draftId)
   }

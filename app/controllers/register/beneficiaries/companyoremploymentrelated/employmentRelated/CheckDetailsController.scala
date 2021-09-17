@@ -19,13 +19,10 @@ package controllers.register.beneficiaries.companyoremploymentrelated.employment
 import config.FrontendAppConfig
 import controllers.actions._
 import controllers.actions.register.employmentRelated.NameRequiredAction
-
-import javax.inject.Inject
 import models.Status.Completed
 import navigation.Navigator
 import pages.entitystatus.LargeBeneficiaryStatus
-import pages.register.beneficiaries.companyoremploymentrelated.CompanyOrEmploymentRelatedPage
-import pages.register.beneficiaries.{AnswersPage, WhatTypeOfBeneficiaryPage}
+import pages.register.beneficiaries.AnswersPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
@@ -34,6 +31,7 @@ import utils.print.EmploymentRelatedBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.register.beneficiaries.companyoremploymentrelated.employmentRelated.CheckDetailsView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CheckDetailsController @Inject()(

@@ -21,8 +21,6 @@ import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import forms.NationalInsuranceNumberFormProvider
 import models.requests.RegistrationDataRequest
-
-import javax.inject.Inject
 import navigation.Navigator
 import pages.register.beneficiaries.individual.{NamePage, NationalInsuranceNumberPage}
 import play.api.data.Form
@@ -32,6 +30,7 @@ import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.beneficiaries.individualBeneficiary.NationalInsuranceNumberView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class NationalInsuranceNumberController @Inject()(

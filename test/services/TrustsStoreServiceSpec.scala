@@ -18,7 +18,7 @@ package services
 
 import base.SpecBase
 import connectors.TrustsStoreConnector
-import models.{FeatureResponse, TaskStatus}
+import models.TaskStatus
 import org.mockito.Matchers.{any, eq => eqTo}
 import org.mockito.Mockito.{verify, when}
 import play.api.http.Status.OK
@@ -28,7 +28,7 @@ import scala.concurrent.Future
 
 class TrustsStoreServiceSpec extends SpecBase {
 
-  val mockConnector = mock[TrustsStoreConnector]
+  val mockConnector: TrustsStoreConnector = mock[TrustsStoreConnector]
 
   val trustsStoreService = new TrustsStoreService(mockConnector)
 

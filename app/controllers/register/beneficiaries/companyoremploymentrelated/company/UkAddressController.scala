@@ -20,7 +20,6 @@ import config.annotations.CompanyBeneficiary
 import controllers.actions._
 import controllers.actions.register.company.NameRequiredAction
 import forms.UKAddressFormProvider
-import javax.inject.Inject
 import models.core.pages.UKAddress
 import navigation.Navigator
 import pages.register.beneficiaries.companyoremploymentrelated.company.AddressUKPage
@@ -31,6 +30,7 @@ import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.beneficiaries.companyoremploymentrelated.company.UkAddressView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class UkAddressController @Inject()(

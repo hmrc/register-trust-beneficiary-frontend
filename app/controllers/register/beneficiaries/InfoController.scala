@@ -21,6 +21,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.register.beneficiaries._
+
 import javax.inject.Inject
 
 class InfoController @Inject()(
@@ -34,8 +35,8 @@ class InfoController @Inject()(
 
   def onPageLoad(draftId: String): Action[AnyContent] = (identify andThen getData(draftId) andThen requireData) {
     implicit request =>
-      Ok(view(draftId, request.userAnswers.isTaxable))
-
+      val ua = request.userAnswers
+        Ok(view(draftId, ua.isTaxable))
   }
 
   def onSubmit(draftId: String): Action[AnyContent] = (identify andThen getData(draftId) andThen requireData) {

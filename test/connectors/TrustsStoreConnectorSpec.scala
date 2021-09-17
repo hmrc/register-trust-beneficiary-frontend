@@ -20,9 +20,17 @@ import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock._
 import models.TaskStatus
 import org.scalatest.{MustMatchers, OptionValues}
+import play.api.Application
+import play.api.inject.guice.GuiceApplicationBuilder
 import utils.WireMockHelper
 
 class TrustsStoreConnectorSpec extends SpecBase with MustMatchers with OptionValues with WireMockHelper {
+
+  override lazy val app: Application = new GuiceApplicationBuilder()
+    .configure(Seq(
+      "microservice.services.trusts-store.port" -> server.port(),
+      "auditing.enabled" -> false): _*
+    ).build()
 
   ".updateTaskStatus" must {
 
@@ -77,5 +85,4 @@ class TrustsStoreConnectorSpec extends SpecBase with MustMatchers with OptionVal
       application.stop()
     }
   }
-
 }

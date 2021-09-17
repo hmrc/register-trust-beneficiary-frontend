@@ -16,13 +16,13 @@
 
 package controllers.actions
 
-import javax.inject.Inject
 import models.requests.RegistrationDataRequest
 import play.api.libs.json.Reads
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Call, Result}
 import queries.Gettable
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 final case class RequiredAnswer[T](answer : Gettable[T],

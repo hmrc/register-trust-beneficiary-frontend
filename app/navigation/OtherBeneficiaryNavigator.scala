@@ -39,7 +39,7 @@ class OtherBeneficiaryNavigator @Inject()() extends Navigator {
       } else {
         other.routes.DiscretionYesNoController.onPageLoad(index, draftId)
       }
-    case ShareOfIncomePage(index) => ua => other.routes.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
+    case ShareOfIncomePage(index) => _ => other.routes.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
     case AddressUKPage(index) => _ => other.routes.CheckDetailsController.onPageLoad(index, draftId)
     case AddressInternationalPage(index) =>_ =>  other.routes.CheckDetailsController.onPageLoad(index, draftId)
     case CountryOfResidencePage(index) => ua =>

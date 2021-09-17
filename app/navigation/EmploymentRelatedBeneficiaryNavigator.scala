@@ -33,7 +33,7 @@ class EmploymentRelatedBeneficiaryNavigator extends Navigator {
   }
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case LargeBeneficiaryNamePage(index) => ua => rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
+    case LargeBeneficiaryNamePage(index) => _ => rts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
     case LargeBeneficiaryAddressPage(index) => _ => rts.DescriptionController.onPageLoad(index, draftId)
     case LargeBeneficiaryAddressInternationalPage(index) => _ => rts.DescriptionController.onPageLoad(index, draftId)
     case LargeBeneficiaryDescriptionPage(index) => _ => rts.NumberOfBeneficiariesController.onPageLoad(index, draftId)
