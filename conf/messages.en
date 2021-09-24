@@ -82,7 +82,7 @@ site.address.uk.line2 = Address line 2
 site.address.uk.line3 = Address line 3 (optional)
 site.address.uk.line4 = Address line 4 (optional)
 site.address.uk.postcode = Postcode
-site.address.uk.postcode.hint = For example AB1 1AB.
+site.address.uk.postcode.hint = For example, AB1 1AB.
 site.address.uk.checkYourAnswersLabel = What is {0}’s address?
 
 ukAddress.error.line1.required = Enter address line 1
