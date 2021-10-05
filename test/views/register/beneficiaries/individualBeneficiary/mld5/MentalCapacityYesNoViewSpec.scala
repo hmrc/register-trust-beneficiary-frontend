@@ -41,7 +41,7 @@ class MentalCapacityYesNoViewSpec extends QuestionViewBehaviours[YesNoDontKnow] 
       view.apply(form, fakeDraftId, index, name)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), prefix, name,
-      expectedGuidanceKeys = "p1", "p2", "bulletpoint1", "bulletpoint2", "bulletpoint3", "bulletpoint4", "p3", "p4", "heading2", "p5", "p6"
+      expectedGuidanceKeys = "p1", "p2", "bulletpoint1", "bulletpoint2", "bulletpoint3", "bulletpoint4", "p3", "p4", "under16.p1", "under16.b1", "under16.b2", "heading2", "p5", "p6"
     )
 
     behave like pageWithBackLink(applyView(form))

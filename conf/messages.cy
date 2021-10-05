@@ -367,8 +367,12 @@ individualBeneficiary.5mld.mentalCapacityYesNo.bulletpoint4=methu â chyfathrebu
 individualBeneficiary.5mld.mentalCapacityYesNo.p3 = Bydd CThEM yn cymryd bod gan y buddiolwr alluedd meddyliol, oni roddwch wybod i CThEM nad oes ganddo alluedd meddyliol.
 individualBeneficiary.5mld.mentalCapacityYesNo.p4 = Os nad ydych yn siŵr a oes gan y buddiolwr alluedd meddyliol, dewiswch ‘Nid wyf yn gwybod’.
 individualBeneficiary.5mld.mentalCapacityYesNo.heading2=Pam mae CThEM yn gofyn y cwestiwn hwn
-individualBeneficiary.5mld.mentalCapacityYesNo.p5 = Fel arfer, caiff CThEM rannu data person o dan Reoliadau Gwyngalchu Arian ac Ariannu Terfysgaeth (Diwygiad) 2020.
-individualBeneficiary.5mld.mentalCapacityYesNo.p6 = Pan nad oes gan berson alluedd meddyliol, mae gofyn i CThEM beidio â rhannu data personol y person hwnnw.
+individualBeneficiary.5mld.mentalCapacityYesNo.p5 = O dan amgylchiadau cyfyngedig penodol, caiff CThEM rannu data personol o dan Reoliadau Gwyngalchu Arian ac Ariannu Terfysgaeth (Diwygiad) 2020.
+individualBeneficiary.5mld.mentalCapacityYesNo.p6 = Pan nad oes gan berson alluedd meddyliol, ni fydd CThEM yn rhannu data personol y person hwnnw.
+
+individualBeneficiary.5mld.mentalCapacityYesNo.under16.p1 = Os yw’r buddiolwr o dan 16 oed, mae’n rhaid i chi wneud un o’r canlynol:
+individualBeneficiary.5mld.mentalCapacityYesNo.under16.b1 = dewis ‘Iawn’ neu ‘Na’ os ydych yn gwybod a fydd gan y buddiolwr alluedd meddyliol neu beidio pan fydd yn troi’n 16 oed
+individualBeneficiary.5mld.mentalCapacityYesNo.under16.b2 = dewis ‘Nid wyf yn gwybod’, a dod yn ôl i’r gwasanaeth hwn pan fydd y buddiolwr yn troi’n 16 oed er mwn diweddaru’r wybodaeth hon
 
 individualBeneficiary.roleInCompany.checkYourAnswersLabel=Beth yw rôl {0} yn y cwmni y cafodd yr ymddiriedolaeth ei chreu ar ei gyfer?
 individualBeneficiary.roleInCompany.checkYourAnswersLabel.na=Ddim yn gyfarwyddwr nac yn gyflogai

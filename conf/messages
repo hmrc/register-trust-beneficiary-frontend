@@ -235,8 +235,12 @@ individualBeneficiary.5mld.mentalCapacityYesNo.p3 = HMRC will assume that the be
 individualBeneficiary.5mld.mentalCapacityYesNo.p4 = If you are not certain whether the beneficiary has mental capacity, select ‘I don’t know’.
 
 individualBeneficiary.5mld.mentalCapacityYesNo.heading2 = Why HMRC are asking this question
-individualBeneficiary.5mld.mentalCapacityYesNo.p5 = Normally, HMRC can share a person’s data under the Money Laundering and Terrorist Financing (Amendment) Regulations 2020.
-individualBeneficiary.5mld.mentalCapacityYesNo.p6 = Where a person does not have mental capacity, HMRC are required to not share their personal data.
+individualBeneficiary.5mld.mentalCapacityYesNo.p5 = Under certain limited circumstances, HMRC can share personal data under the Money Laundering and Terrorist Financing (Amendment) Regulations 2020.
+individualBeneficiary.5mld.mentalCapacityYesNo.p6 = Where a person does not have mental capacity, HMRC will not share their personal data.
+
+individualBeneficiary.5mld.mentalCapacityYesNo.under16.p1 = If the beneficiary is under the age of 16, you need to either:
+individualBeneficiary.5mld.mentalCapacityYesNo.under16.b1 = select ‘yes’ or ‘no’ if you know the beneficiary will have mental capacity or not when they turn 16
+individualBeneficiary.5mld.mentalCapacityYesNo.under16.b2 = select ‘I don’t know’, and return to this service when the beneficiary turns 16 to update this information
 
 individualBeneficiaryDateOfBirthYesNo.title = Do you know the individual beneficiary’s date of birth?
 individualBeneficiaryDateOfBirthYesNo.heading = Do you know {0}’s date of birth?
