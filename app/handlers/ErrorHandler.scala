@@ -16,19 +16,24 @@
 
 package handlers
 
-import javax.inject.{Inject, Singleton}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.Request
 import play.twirl.api.Html
 import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
-import views.html.ErrorTemplate
+import views.html.{ErrorTemplate, PageNotFoundView}
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class ErrorHandler @Inject()(
                               val messagesApi: MessagesApi,
-                              view: ErrorTemplate
+                              view: ErrorTemplate,
+                              notFoundView: PageNotFoundView
                             ) extends FrontendErrorHandler with I18nSupport {
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit rh: Request[_]): Html =
     view(pageTitle, heading, message)
+
+  override def notFoundTemplate(implicit request: Request[_]): Html =
+    notFoundView()
 }
