@@ -27,7 +27,7 @@ class OtherBeneficiaryMapper extends Mapper[OtherType, OtherBeneficiary] {
 
   override def beneficiaryType(beneficiary: OtherBeneficiary): OtherType = OtherType(
     description = beneficiary.description,
-    beneficiaryDiscretion = Some(beneficiary.incomeDiscretionYesNo),
+    beneficiaryDiscretion = beneficiary.incomeDiscretionYesNo,
     beneficiaryShareOfIncome = beneficiary.shareOfIncome map(_.toString),
     address = beneficiary.ukOrInternationalAddress,
     countryOfResidence = beneficiary.countryOfResidence

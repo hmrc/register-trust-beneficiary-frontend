@@ -23,7 +23,7 @@ final case class OtherBeneficiary(description: String,
                                   ukAddress: Option[UKAddress],
                                   internationalAddress: Option[InternationalAddress],
                                   shareOfIncome: Option[Int],
-                                  incomeDiscretionYesNo: Boolean,
+                                  incomeDiscretionYesNo: Option[Boolean],
                                   countryOfResidence: Option[String]) extends BeneficiaryWithAddress
 
 object OtherBeneficiary {

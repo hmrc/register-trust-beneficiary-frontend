@@ -27,7 +27,7 @@ class CompanyBeneficiaryMapper extends Mapper[CompanyType, CompanyBeneficiary] {
 
   override def beneficiaryType(beneficiary: CompanyBeneficiary): CompanyType = CompanyType(
     organisationName = beneficiary.name,
-    beneficiaryDiscretion = Some(beneficiary.incomeYesNo),
+    beneficiaryDiscretion = beneficiary.incomeYesNo,
     beneficiaryShareOfIncome = beneficiary.income map(_.toString),
     identification = beneficiary.identification,
     countryOfResidence = beneficiary.countryOfResidence
