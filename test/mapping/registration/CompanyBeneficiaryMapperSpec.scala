@@ -86,6 +86,24 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers with Optio
           )
         }
 
+        "income value is not set" in {
+          val userAnswers =
+            emptyUserAnswers
+              .set(NamePage(index0), "Company Name").success.value
+              .set(CountryOfResidenceYesNoPage(index0), true).success.value
+              .set(CountryOfResidenceInTheUkYesNoPage(index0), true).success.value
+
+          val companies = mapper.build(userAnswers)
+
+          companies mustBe defined
+          companies.value.head mustBe CompanyType(
+            organisationName = "Company Name",
+            beneficiaryDiscretion = None,
+            beneficiaryShareOfIncome = None,
+            identification = None,
+            countryOfResidence = Some("GB")
+          )
+        }
 
         "UK Address is set" in {
           val userAnswers =
@@ -140,6 +158,7 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers with Optio
         }
 
       }
+
       "must be able to create multiple Company beneficiaries" in {
         val userAnswers =
           emptyUserAnswers
@@ -228,12 +247,12 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers with Optio
         )
       }
 
-      "must not be able to create IndividualDetailsType when incomplete data " in {
+      "must be able to create IndividualDetailsType with minimum data" in {
         val userAnswers =
           emptyUserAnswers
             .set(NamePage(index0), "Company Name").success.value
 
-        mapper.build(userAnswers) mustNot be(defined)
+        mapper.build(userAnswers) must be(defined)
       }
     }
   }
