@@ -42,7 +42,8 @@
             field = form("value"),
             legend = messages("individualBeneficiary.roleInCompany.heading", name.toString),
             headingIsLegend = true,
-            inputs = mapRadioOptionsToRadioItems(form("value"), RoleInCompany.options)
+            inputs = mapRadioOptionsToRadioItems(form("value"), RoleInCompany.options),
+            inline = false
         )
 
         @submitButton()
