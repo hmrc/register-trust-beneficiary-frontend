@@ -20,14 +20,12 @@ import mapping.registration.BeneficiariesMapper
 import models._
 import play.api.i18n.Messages
 import play.api.libs.json.Json
-import utils.RegistrationProgress
 import utils.answers._
 import viewmodels.{AnswerRow, AnswerSection}
 
 import javax.inject.Inject
 
 class SubmissionSetFactory @Inject()(
-                                      registrationProgress: RegistrationProgress,
                                       beneficiariesMapper: BeneficiariesMapper,
                                       individualBeneficiaryAnswersHelper: IndividualBeneficiaryAnswersHelper,
                                       classOfBeneficiaryAnswersHelper: ClassOfBeneficiaryAnswersHelper,
@@ -39,31 +37,24 @@ class SubmissionSetFactory @Inject()(
                                     ) {
 
   def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet = {
-    val status = registrationProgress.beneficiariesStatus(userAnswers)
 
     RegistrationSubmission.DataSet(
       Json.toJson(userAnswers),
-      status,
-      mappedDataIfCompleted(userAnswers, status),
-      answerSectionsIfCompleted(userAnswers, status)
+      mappedData(userAnswers),
+      answerSections(userAnswers)
     )
   }
 
-  private def mappedDataIfCompleted(userAnswers: UserAnswers, status: Option[Status]): List[RegistrationSubmission.MappedPiece] = {
-    if (status.contains(Status.Completed)) {
+  private def mappedData(userAnswers: UserAnswers): List[RegistrationSubmission.MappedPiece] = {
       beneficiariesMapper.build(userAnswers) match {
         case Some(assets) => List(RegistrationSubmission.MappedPiece("trust/entities/beneficiary", Json.toJson(assets)))
         case _ => List.empty
       }
-    } else {
-      List.empty
-    }
   }
 
-  def answerSectionsIfCompleted(userAnswers: UserAnswers, status: Option[Status])
+  def answerSections(userAnswers: UserAnswers)
                                (implicit messages: Messages): List[RegistrationSubmission.AnswerSection] = {
 
-    if (status.contains(Status.Completed)) {
 
       val entitySections = List(
         individualBeneficiaryAnswersHelper.beneficiaries(userAnswers),
@@ -75,15 +66,14 @@ class SubmissionSetFactory @Inject()(
         otherBeneficiaryAnswersHelper.beneficiaries(userAnswers)
       ).flatten.flatten
 
-      val updatedFirstSection = entitySections.head.copy(sectionKey = Some("answerPage.section.beneficiaries.heading"))
+     if (entitySections.nonEmpty) {
+       val updatedFirstSection = entitySections.head.copy(sectionKey = Some("answerPage.section.beneficiaries.heading"))
+       val updatedSections = updatedFirstSection :: entitySections.tail
+       updatedSections.map(convertForSubmission)
+     } else {
+       List.empty
+     }
 
-      val updatedSections = updatedFirstSection :: entitySections.tail
-
-      updatedSections.map(convertForSubmission)
-
-    } else {
-      List.empty
-    }
   }
 
   private def convertForSubmission(section: AnswerSection): RegistrationSubmission.AnswerSection = {

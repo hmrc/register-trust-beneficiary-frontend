@@ -108,7 +108,6 @@ class RegistrationRepositorySpec extends SpecBase with MustMatchers with Mockito
 
         val submissionSet = RegistrationSubmission.DataSet(
           Json.obj(),
-          Some(InProgress),
           List.empty,
           List.empty
         )
