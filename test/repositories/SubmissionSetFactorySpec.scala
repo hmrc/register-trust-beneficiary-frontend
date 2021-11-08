@@ -18,7 +18,7 @@ package repositories
 
 import base.SpecBase
 import models.RegistrationSubmission.AnswerSection
-import models.Status.{Completed, InProgress}
+import models.Status.Completed
 import models.UserAnswers
 import pages.entitystatus._
 
@@ -30,9 +30,9 @@ class SubmissionSetFactorySpec extends SpecBase {
 
     val factory = injector.instanceOf[SubmissionSetFactory]
 
-    "return no answer sections if no completed beneficiaries" in {
+    "return no answer sections if there are no answers" in {
 
-      factory.answerSectionsIfCompleted(emptyUserAnswers, Some(InProgress))
+      factory.answerSections(emptyUserAnswers)
         .mustBe(Nil)
     }
 
@@ -44,7 +44,7 @@ class SubmissionSetFactorySpec extends SpecBase {
             val userAnswers: UserAnswers = emptyUserAnswers
               .set(IndividualBeneficiaryStatus(0), Completed).success.value
 
-            factory.answerSectionsIfCompleted(userAnswers, Some(Completed)) mustBe
+            factory.answerSections(userAnswers) mustBe
               List(
                 AnswerSection(
                   headingKey = Some("answerPage.section.individualBeneficiary.subheading"),
@@ -59,7 +59,7 @@ class SubmissionSetFactorySpec extends SpecBase {
             val userAnswers: UserAnswers = emptyUserAnswers
               .set(ClassBeneficiaryStatus(0), Completed).success.value
 
-            factory.answerSectionsIfCompleted(userAnswers, Some(Completed)) mustBe
+            factory.answerSections(userAnswers) mustBe
               List(
                 AnswerSection(
                   headingKey = Some("answerPage.section.classOfBeneficiary.subheading"),
@@ -74,7 +74,7 @@ class SubmissionSetFactorySpec extends SpecBase {
             val userAnswers: UserAnswers = emptyUserAnswers
               .set(CharityBeneficiaryStatus(0), Completed).success.value
 
-            factory.answerSectionsIfCompleted(userAnswers, Some(Completed)) mustBe
+            factory.answerSections(userAnswers) mustBe
               List(
                 AnswerSection(
                   headingKey = Some("answerPage.section.charityBeneficiary.subheading"),
@@ -89,7 +89,7 @@ class SubmissionSetFactorySpec extends SpecBase {
             val userAnswers: UserAnswers = emptyUserAnswers
               .set(TrustBeneficiaryStatus(0), Completed).success.value
 
-            factory.answerSectionsIfCompleted(userAnswers, Some(Completed)) mustBe
+            factory.answerSections(userAnswers) mustBe
               List(
                 AnswerSection(
                   headingKey = Some("answerPage.section.trustBeneficiary.subheading"),
@@ -104,7 +104,7 @@ class SubmissionSetFactorySpec extends SpecBase {
             val userAnswers: UserAnswers = emptyUserAnswers
               .set(CompanyBeneficiaryStatus(0), Completed).success.value
 
-            factory.answerSectionsIfCompleted(userAnswers, Some(Completed)) mustBe
+            factory.answerSections(userAnswers) mustBe
               List(
                 AnswerSection(
                   headingKey = Some("answerPage.section.companyBeneficiary.subheading"),
@@ -119,7 +119,7 @@ class SubmissionSetFactorySpec extends SpecBase {
             val userAnswers: UserAnswers = emptyUserAnswers
               .set(LargeBeneficiaryStatus(0), Completed).success.value
 
-            factory.answerSectionsIfCompleted(userAnswers, Some(Completed)) mustBe
+            factory.answerSections(userAnswers) mustBe
               List(
                 AnswerSection(
                   headingKey = Some("answerPage.section.largeBeneficiary.subheading"),
@@ -134,7 +134,7 @@ class SubmissionSetFactorySpec extends SpecBase {
             val userAnswers: UserAnswers = emptyUserAnswers
               .set(OtherBeneficiaryStatus(0), Completed).success.value
 
-            factory.answerSectionsIfCompleted(userAnswers, Some(Completed)) mustBe
+            factory.answerSections(userAnswers) mustBe
               List(
                 AnswerSection(
                   headingKey = Some("answerPage.section.otherBeneficiary.subheading"),
@@ -154,7 +154,7 @@ class SubmissionSetFactorySpec extends SpecBase {
               .set(IndividualBeneficiaryStatus(0), Completed).success.value
               .set(ClassBeneficiaryStatus(0), Completed).success.value
 
-            factory.answerSectionsIfCompleted(userAnswers, Some(Completed)) mustBe
+            factory.answerSections(userAnswers) mustBe
               List(
                 AnswerSection(
                   headingKey = Some("answerPage.section.individualBeneficiary.subheading"),
@@ -176,7 +176,7 @@ class SubmissionSetFactorySpec extends SpecBase {
               .set(ClassBeneficiaryStatus(0), Completed).success.value
               .set(TrustBeneficiaryStatus(0), Completed).success.value
 
-            factory.answerSectionsIfCompleted(userAnswers, Some(Completed)) mustBe
+            factory.answerSections(userAnswers) mustBe
               List(
                 AnswerSection(
                   headingKey = Some("answerPage.section.classOfBeneficiary.subheading"),
