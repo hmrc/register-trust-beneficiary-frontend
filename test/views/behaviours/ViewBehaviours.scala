@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ trait ViewBehaviours extends ViewSpecBase {
         "have the correct banner title" in {
 
           val doc = asDocument(view)
-            val bannerTitle = doc.getElementsByClass("govuk-header__link govuk-header__link--service-name")
+            val bannerTitle = doc.getElementsByClass("hmrc-header__service-name hmrc-header__service-name--linked")
           bannerTitle.html() mustBe messages("service.name")
         }
 
@@ -77,7 +77,7 @@ trait ViewBehaviours extends ViewSpecBase {
         "have the correct banner title" in {
 
           val doc = asDocument(view)
-          val bannerTitle = doc.getElementsByClass("govuk-header__link govuk-header__link--service-name")
+          val bannerTitle = doc.getElementsByClass("hmrc-header__service-name hmrc-header__service-name--linked")
           bannerTitle.html() mustBe messages("service.name")
         }
 
@@ -120,7 +120,7 @@ trait ViewBehaviours extends ViewSpecBase {
         "have the correct banner title" in {
 
           val doc = asDocument(view)
-          val bannerTitle = doc.getElementsByClass("govuk-header__link govuk-header__link--service-name")
+          val bannerTitle = doc.getElementsByClass("hmrc-header__service-name hmrc-header__service-name--linked")
           bannerTitle.html() mustBe messages("service.name")
         }
 
@@ -164,7 +164,7 @@ trait ViewBehaviours extends ViewSpecBase {
         "have the correct banner title" in {
 
           val doc = asDocument(view)
-          val bannerTitle = doc.getElementsByClass("govuk-header__link govuk-header__link--service-name")
+          val bannerTitle = doc.getElementsByClass("hmrc-header__service-name hmrc-header__service-name--linked")
           bannerTitle.html() mustBe messages("service.name")
         }
 
