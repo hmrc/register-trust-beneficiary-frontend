@@ -63,7 +63,7 @@ class BeneficiaryNavigator @Inject()(config: FrontendAppConfig) extends Navigato
   private def whatTypeOfBeneficiaryRoute(draftId: String)(userAnswers: ReadableUserAnswers): Call = {
     userAnswers.get(WhatTypeOfBeneficiaryPage) match {
       case Some(typeOfBeneficiary) => BeneficiaryNavigator.addBeneficiaryNowRoute(typeOfBeneficiary, userAnswers.beneficiaries, draftId)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case _ => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 
@@ -71,14 +71,14 @@ class BeneficiaryNavigator @Inject()(config: FrontendAppConfig) extends Navigato
     userAnswers.get(CharityOrTrustPage) match {
       case Some(Charity) => BeneficiaryNavigator.routeToCharityBeneficiaryIndex(userAnswers.beneficiaries.charities, draftId)
       case Some(Trust) => BeneficiaryNavigator.routeToTrustBeneficiaryIndex(userAnswers.beneficiaries.trusts, draftId)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case _ => controllers.routes.SessionExpiredController.onPageLoad
     }
 
   private def companyOrEmploymentRelatedRoute(draftId: String)(userAnswers: ReadableUserAnswers): Call =
     userAnswers.get(CompanyOrEmploymentRelatedPage) match {
       case Some(Company) => BeneficiaryNavigator.routeToCompanyBeneficiaryIndex(userAnswers.beneficiaries.companies, draftId)
       case Some(EmploymentRelated) => BeneficiaryNavigator.routeToEmploymentBeneficiaryIndex(userAnswers.beneficiaries.large, draftId)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case _ => controllers.routes.SessionExpiredController.onPageLoad
     }
 
   private def addABeneficiaryYesNoRoute(draftId: String, config: FrontendAppConfig)(answers: ReadableUserAnswers): Call = {
@@ -86,7 +86,7 @@ class BeneficiaryNavigator @Inject()(config: FrontendAppConfig) extends Navigato
       case Some(true) =>
         controllers.register.beneficiaries.routes.WhatTypeOfBeneficiaryController.onPageLoad(draftId)
       case Some(false) => assetsCompletedRoute(draftId, config)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case _ => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 
@@ -97,7 +97,7 @@ class BeneficiaryNavigator @Inject()(config: FrontendAppConfig) extends Navigato
       case Some(_) =>
         assetsCompletedRoute(draftId, config)
       case _ =>
-        controllers.routes.SessionExpiredController.onPageLoad()
+        controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 
