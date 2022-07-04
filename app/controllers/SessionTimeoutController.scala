@@ -37,7 +37,7 @@ class SessionTimeoutController @Inject()(val appConfig: FrontendAppConfig,
   }
 
   val timeout: Action[AnyContent] = Action.async { _ =>
-    Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad().url).withNewSession)
+    Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad.url).withNewSession)
   }
 
 }

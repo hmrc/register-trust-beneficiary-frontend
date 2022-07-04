@@ -1,6 +1,7 @@
 .bloop/
 .metals/
 .vscode/
+.bsp/
 project/.bloop/
 project/metals.sbt
 .cache

@@ -29,7 +29,7 @@ class RegistrationDataRequiredActionImpl @Inject()(implicit val executionContext
 
     request.userAnswers match {
       case None =>
-        Future.successful(Left(Redirect(controllers.routes.SessionExpiredController.onPageLoad())))
+        Future.successful(Left(Redirect(controllers.routes.SessionExpiredController.onPageLoad)))
       case Some(data) =>
         Future.successful(Right(RegistrationDataRequest(request.request, request.internalId, request.sessionId, data, request.affinityGroup, request.enrolments, request.agentARN)))
     }
