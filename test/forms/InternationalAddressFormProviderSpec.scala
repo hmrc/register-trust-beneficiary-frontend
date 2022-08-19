@@ -109,6 +109,21 @@ class InternationalAddressFormProviderSpec extends StringFieldBehaviours {
       validDataGenerator = RegexpGen.from(Validation.addressLineRegex)
     )
 
+    "bind whitespace trim values" in {
+      val result = form.bind(Map("line1" -> "line1", "line2" -> "line2", "line3" -> "  line3  ", "country" -> "country"))
+      result.value.value.line3 shouldBe Some("line3")
+    }
+
+    "bind whitespace blank values" in {
+      val result = form.bind(Map("line1" -> "line1", "line2" -> "line2", "line3" -> "  ", "country" -> "country"))
+      result.value.value.line3 shouldBe None
+    }
+
+    "bind whitespace no values" in {
+      val result = form.bind(Map("line1" -> "line1", "line2" -> "line2", "line3" -> "", "country" -> "country"))
+      result.value.value.line3 shouldBe None
+    }
+
   }
 
   ".country" must {
