@@ -78,6 +78,21 @@ class EmploymentRelatedBeneficiaryDescriptionFormProviderSpec extends StringFiel
       fieldName,
       validDataGenerator = RegexpGen.from(Validation.descriptionRegex)
     )
+
+    "bind whitespace trim values" in {
+      val result = form.bind(Map("description" -> "description", "description1" -> "  description1  "))
+      result.value.value.description1 shouldBe Some("description1")
+    }
+
+    "bind whitespace blank values" in {
+      val result = form.bind(Map("description" -> "description", "description1" -> "  "))
+      result.value.value.description1 shouldBe None
+    }
+
+    "bind whitespace no values" in {
+      val result = form.bind(Map("description" -> "description", "description1" -> ""))
+      result.value.value.description1 shouldBe None
+    }
   }
 
   ".description2" must {
@@ -98,6 +113,21 @@ class EmploymentRelatedBeneficiaryDescriptionFormProviderSpec extends StringFiel
       fieldName,
       validDataGenerator = RegexpGen.from(Validation.descriptionRegex)
     )
+
+    "bind whitespace trim values" in {
+      val result = form.bind(Map("description" -> "description", "description2" -> "  description2  "))
+      result.value.value.description2 shouldBe Some("description2")
+    }
+
+    "bind whitespace blank values" in {
+      val result = form.bind(Map("description" -> "description", "description2" -> "  "))
+      result.value.value.description2 shouldBe None
+    }
+
+    "bind whitespace no values" in {
+      val result = form.bind(Map("description" -> "description", "description2" -> ""))
+      result.value.value.description2 shouldBe None
+    }
   }
 
   ".description3" must {
@@ -118,6 +148,21 @@ class EmploymentRelatedBeneficiaryDescriptionFormProviderSpec extends StringFiel
       fieldName,
       validDataGenerator = RegexpGen.from(Validation.descriptionRegex)
     )
+
+    "bind whitespace trim values" in {
+      val result = form.bind(Map("description" -> "description", "description3" -> "  description3  "))
+      result.value.value.description3 shouldBe Some("description3")
+    }
+
+    "bind whitespace blank values" in {
+      val result = form.bind(Map("description" -> "description", "description3" -> "  "))
+      result.value.value.description3 shouldBe None
+    }
+
+    "bind whitespace no values" in {
+      val result = form.bind(Map("description" -> "description", "description3" -> ""))
+      result.value.value.description3 shouldBe None
+    }
   }
 
   ".description4" must {
@@ -138,5 +183,21 @@ class EmploymentRelatedBeneficiaryDescriptionFormProviderSpec extends StringFiel
       fieldName,
       validDataGenerator = RegexpGen.from(Validation.descriptionRegex)
     )
+
+    "bind whitespace trim values" in {
+      val result = form.bind(Map("description" -> "description", "description4" -> "  description4  "))
+      result.value.value.description4 shouldBe Some("description4")
+    }
+
+    "bind whitespace blank values" in {
+      val result = form.bind(Map("description" -> "description", "description4" -> "  "))
+      result.value.value.description4 shouldBe None
+    }
+
+    "bind whitespace no values" in {
+      val result = form.bind(Map("description" -> "description", "description4" -> ""))
+      result.value.value.description4 shouldBe None
+    }
   }
+
 }
