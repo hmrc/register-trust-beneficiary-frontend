@@ -16,9 +16,11 @@
 
 package controllers.register.beneficiaries.companyoremploymentrelated.company
 
+import cats.data.EitherT
 import config.annotations.CompanyBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.register.company.NameRequiredAction
+import errors.TrustErrors
 import forms.IncomePercentageFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.companyoremploymentrelated.company.IncomePage
@@ -27,6 +29,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.companyoremploymentrelated.company.ShareOfIncomeView
 
 import javax.inject.Inject
@@ -39,7 +42,8 @@ class ShareOfIncomeController @Inject()(
                                          view: ShareOfIncomeView,
                                          repository: RegistrationsRepository,
                                          @CompanyBeneficiary navigator: Navigator,
-                                         nameAction: NameRequiredAction
+                                         nameAction: NameRequiredAction,
+                                         technicalErrorView: TechnicalErrorView
                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form: Form[Int] = formProvider.withPrefix("companyBeneficiary.shareOfIncome")
@@ -64,11 +68,17 @@ class ShareOfIncomeController @Inject()(
           formWithErrors =>
             Future.successful(BadRequest(view(formWithErrors, request.beneficiaryName, index, draftId))),
 
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(IncomePage(index), value))
-              _              <- repository.set(updatedAnswers)
+          value => {
+            val result = for {
+              updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(IncomePage(index), value)))
+              _ <- EitherT.right[TrustErrors](repository.set(updatedAnswers))
             } yield Redirect(navigator.nextPage(IncomePage(index), draftId, updatedAnswers))
+
+            result.value.map {
+              case Right(call) => call
+              case Left(_) => InternalServerError(technicalErrorView())
+            }
+          }
         )
     }
 }

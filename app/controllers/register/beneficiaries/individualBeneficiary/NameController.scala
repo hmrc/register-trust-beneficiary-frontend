@@ -16,8 +16,10 @@
 
 package controllers.register.beneficiaries.individualBeneficiary
 
+import cats.data.EitherT
 import config.annotations.IndividualBeneficiary
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
+import errors.TrustErrors
 import forms.NameFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.individual.NamePage
@@ -26,6 +28,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.individualBeneficiary.NameView
 
 import javax.inject.Inject
@@ -40,7 +43,8 @@ class NameController @Inject()(
                                 requireData: RegistrationDataRequiredAction,
                                 formProvider: NameFormProvider,
                                 val controllerComponents: MessagesControllerComponents,
-                                view: NameView
+                                view: NameView,
+                                technicalErrorView: TechnicalErrorView
                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def actions(draftId: String) = identify andThen getData(draftId) andThen requireData
@@ -66,12 +70,15 @@ class NameController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, draftId, index))),
 
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(NamePage(index), value))
-            _ <- registrationsRepository.set(updatedAnswers)
-            settlorsAnswers <- registrationsRepository.getSettlorsAnswers(draftId)
-          } yield {
-            Redirect(navigator.nextPage(NamePage(index), draftId, settlorsAnswers getOrElse updatedAnswers))
+          val result = for {
+            updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(NamePage(index), value)))
+            _ <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
+            settlorsAnswers <- EitherT.right[TrustErrors](registrationsRepository.getSettlorsAnswers(draftId))
+          } yield Redirect(navigator.nextPage(NamePage(index), draftId, settlorsAnswers getOrElse updatedAnswers))
+
+          result.value.map {
+            case Right(call) => call
+            case Left(_) => InternalServerError(technicalErrorView())
           }
         }
       )

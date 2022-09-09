@@ -65,7 +65,7 @@ class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with ScalaCheck
       "return OK and the correct view for a GET" in {
 
         val userAnswers = emptyUserAnswers.set(NamePage(0),
-          FullName("First", None, "Last")).success.value
+          FullName("First", None, "Last")).right.get
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -88,7 +88,7 @@ class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with ScalaCheck
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers.set(NamePage(0),
-        FullName("First", None, "Last")).success.value
+        FullName("First", None, "Last")).right.get
 
       forAll(arbitrary[Boolean]) {
         value =>
@@ -114,7 +114,7 @@ class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with ScalaCheck
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers.set(NamePage(0),
-        FullName("First", None, "Last")).success.value
+        FullName("First", None, "Last")).right.get
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

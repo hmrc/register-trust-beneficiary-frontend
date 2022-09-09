@@ -52,10 +52,10 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
         "Share In Income is set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(NamePage(index), trustName).success.value
-              .set(DiscretionYesNoPage(index), false).success.value
-              .set(ShareOfIncomePage(index), 100).success.value
-              .set(AddressYesNoPage(index), false).success.value
+              .set(NamePage(index), trustName).right.get
+              .set(DiscretionYesNoPage(index), false).right.get
+              .set(ShareOfIncomePage(index), 100).right.get
+              .set(AddressYesNoPage(index), false).right.get
 
           val trusts = trustBeneficiariesMapper.build(userAnswers)
 
@@ -72,12 +72,12 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
         "Country of residence is set to the UK" in {
           val userAnswers =
             emptyUserAnswers
-              .set(NamePage(index), trustName).success.value
-              .set(DiscretionYesNoPage(index), false).success.value
-              .set(ShareOfIncomePage(index), 100).success.value
-              .set(CountryOfResidenceYesNoPage(index), true).success.value
-              .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
-              .set(AddressYesNoPage(index), false).success.value
+              .set(NamePage(index), trustName).right.get
+              .set(DiscretionYesNoPage(index), false).right.get
+              .set(ShareOfIncomePage(index), 100).right.get
+              .set(CountryOfResidenceYesNoPage(index), true).right.get
+              .set(CountryOfResidenceInTheUkYesNoPage(index), true).right.get
+              .set(AddressYesNoPage(index), false).right.get
 
           val trusts = trustBeneficiariesMapper.build(userAnswers)
 
@@ -94,13 +94,13 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
         "Country of residence is set to outside the UK" in {
           val userAnswers =
             emptyUserAnswers
-              .set(NamePage(index), trustName).success.value
-              .set(DiscretionYesNoPage(index), false).success.value
-              .set(ShareOfIncomePage(index), 100).success.value
-              .set(CountryOfResidenceYesNoPage(index), true).success.value
-              .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
-              .set(CountryOfResidencePage(index), "FR").success.value
-              .set(AddressYesNoPage(index), false).success.value
+              .set(NamePage(index), trustName).right.get
+              .set(DiscretionYesNoPage(index), false).right.get
+              .set(ShareOfIncomePage(index), 100).right.get
+              .set(CountryOfResidenceYesNoPage(index), true).right.get
+              .set(CountryOfResidenceInTheUkYesNoPage(index), false).right.get
+              .set(CountryOfResidencePage(index), "FR").right.get
+              .set(AddressYesNoPage(index), false).right.get
 
           val trusts = trustBeneficiariesMapper.build(userAnswers)
 
@@ -117,12 +117,12 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
         "UK Address is set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(NamePage(index), trustName).success.value
-              .set(DiscretionYesNoPage(index), true).success.value
-              .set(AddressYesNoPage(index), true).success.value
-              .set(AddressUKYesNoPage(index), true).success.value
+              .set(NamePage(index), trustName).right.get
+              .set(DiscretionYesNoPage(index), true).right.get
+              .set(AddressYesNoPage(index), true).right.get
+              .set(AddressUKYesNoPage(index), true).right.get
               .set(AddressUKPage(index),
-                UKAddress("Line1", "Line2", None, Some("Newcastle"), "NE62RT")).success.value
+                UKAddress("Line1", "Line2", None, Some("Newcastle"), "NE62RT")).right.get
 
           val trusts = trustBeneficiariesMapper.build(userAnswers)
 
@@ -144,12 +144,12 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
         "International Address is set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(NamePage(index), trustName).success.value
-              .set(DiscretionYesNoPage(index), true).success.value
-              .set(AddressYesNoPage(index), true).success.value
-              .set(AddressUKYesNoPage(index), false).success.value
+              .set(NamePage(index), trustName).right.get
+              .set(DiscretionYesNoPage(index), true).right.get
+              .set(AddressYesNoPage(index), true).right.get
+              .set(AddressUKYesNoPage(index), false).right.get
               .set(AddressInternationalPage(index),
-                InternationalAddress("Line1", "Line2", Some("Paris"), "FR")).success.value
+                InternationalAddress("Line1", "Line2", Some("Paris"), "FR")).right.get
 
           val trusts = trustBeneficiariesMapper.build(userAnswers)
 
@@ -173,19 +173,19 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
       "must be able to create multiple BeneficiaryTrustType" in {
         val userAnswers =
           emptyUserAnswers
-            .set(NamePage(index), trustName).success.value
-            .set(DiscretionYesNoPage(index), true).success.value
-            .set(AddressYesNoPage(index), true).success.value
-            .set(AddressUKYesNoPage(index), true).success.value
+            .set(NamePage(index), trustName).right.get
+            .set(DiscretionYesNoPage(index), true).right.get
+            .set(AddressYesNoPage(index), true).right.get
+            .set(AddressUKYesNoPage(index), true).right.get
             .set(AddressUKPage(index),
-              UKAddress("Line1", "Line2", None, Some("Newcastle"), "NE62RT")).success.value
+              UKAddress("Line1", "Line2", None, Some("Newcastle"), "NE62RT")).right.get
 
-            .set(NamePage(index1), trustName).success.value
-            .set(DiscretionYesNoPage(index1), true).success.value
-            .set(AddressYesNoPage(index1), true).success.value
-            .set(AddressUKYesNoPage(index1), false).success.value
+            .set(NamePage(index1), trustName).right.get
+            .set(DiscretionYesNoPage(index1), true).right.get
+            .set(AddressYesNoPage(index1), true).right.get
+            .set(AddressUKYesNoPage(index1), false).right.get
             .set(AddressInternationalPage(index1),
-            InternationalAddress("Line1", "Line2", Some("Paris"), "FR")).success.value
+            InternationalAddress("Line1", "Line2", Some("Paris"), "FR")).right.get
 
 
         val individuals = trustBeneficiariesMapper.build(userAnswers)
@@ -223,7 +223,7 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
       "must be able to create BeneficiaryTrustType with minimum NonTaxable data" in {
         val userAnswers =
           emptyUserAnswers
-            .set(NamePage(index), trustName).success.value
+            .set(NamePage(index), trustName).right.get
 
         val trusts = trustBeneficiariesMapper.build(userAnswers)
 
@@ -238,8 +238,8 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
       "must be able to create BeneficiaryTrustType with full NonTaxable data" in {
         val userAnswers =
           emptyUserAnswers
-            .set(NamePage(index), trustName).success.value
-            .set(CountryOfResidencePage(index), GB).success.value
+            .set(NamePage(index), trustName).right.get
+            .set(CountryOfResidencePage(index), GB).right.get
 
         val trusts = trustBeneficiariesMapper.build(userAnswers)
 
@@ -254,7 +254,7 @@ class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
       "must not be able to create BeneficiaryTrustType when incomplete data " in {
         val userAnswers =
           emptyUserAnswers
-            .set(DiscretionYesNoPage(index), true).success.value
+            .set(DiscretionYesNoPage(index), true).right.get
 
         trustBeneficiariesMapper.build(userAnswers) mustNot be(defined)
       }

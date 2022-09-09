@@ -36,7 +36,7 @@ class DateOfBirthYesNoViewSpec extends YesNoViewBehaviours {
   "IndividualBeneficiaryDateOfBirthYesNo view" must {
 
     val userAnswers = emptyUserAnswers
-      .set(NamePage(index), fullName).success.value
+      .set(NamePage(index), fullName).right.get
 
     val view = viewFor[DateOfBirthYesNoView](Some(userAnswers))
 

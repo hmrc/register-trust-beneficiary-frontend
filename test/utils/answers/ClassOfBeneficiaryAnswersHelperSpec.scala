@@ -42,7 +42,7 @@ class ClassOfBeneficiaryAnswersHelperSpec extends SpecBase {
     "return a class of beneficiary answer section" in {
 
       val userAnswers = emptyUserAnswers
-        .set(ClassBeneficiaryDescriptionPage(index), description).success.value
+        .set(ClassBeneficiaryDescriptionPage(index), description).right.get
 
       val result = helper.beneficiaries(userAnswers).get
 

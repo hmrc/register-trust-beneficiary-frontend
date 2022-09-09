@@ -16,9 +16,11 @@
 
 package controllers.register.beneficiaries.other
 
+import cats.data.EitherT
 import config.annotations.OtherBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.register.other.DescriptionRequiredAction
+import errors.TrustErrors
 import forms.YesNoFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.other.AddressYesNoPage
@@ -27,6 +29,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.other.AddressYesNoView
 
 import javax.inject.Inject
@@ -39,36 +42,43 @@ class AddressYesNoController @Inject()(
                                         view: AddressYesNoView,
                                         repository: RegistrationsRepository,
                                         @OtherBeneficiary navigator: Navigator,
-                                        descriptionAction: DescriptionRequiredAction
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                        descriptionAction: DescriptionRequiredAction,
+                                        technicalErrorView: TechnicalErrorView
+                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider.withPrefix("otherBeneficiary.addressYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(descriptionAction(index)) {
-    implicit request =>
+      implicit request =>
 
-      val preparedForm = request.userAnswers.get(AddressYesNoPage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
+        val preparedForm = request.userAnswers.get(AddressYesNoPage(index)) match {
+          case None => form
+          case Some(value) => form.fill(value)
+        }
 
-      Ok(view(preparedForm, request.description, index, draftId))
-  }
+        Ok(view(preparedForm, request.description, index, draftId))
+    }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(descriptionAction(index)).async {
-    implicit request =>
+      implicit request =>
 
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, request.description, index, draftId))),
+        form.bindFromRequest().fold(
+          formWithErrors =>
+            Future.successful(BadRequest(view(formWithErrors, request.description, index, draftId))),
 
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressYesNoPage(index), value))
-            _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddressYesNoPage(index), draftId, updatedAnswers))
-      )
-  }
+          value => {
+            val result = for {
+              updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(AddressYesNoPage(index), value)))
+              _              <- EitherT.right[TrustErrors](repository.set(updatedAnswers))
+            } yield Redirect(navigator.nextPage(AddressYesNoPage(index), draftId, updatedAnswers))
+
+            result.value.map {
+              case Right(call) => call
+              case Left(_) => InternalServerError(technicalErrorView())
+            }
+          }
+        )
+    }
 }

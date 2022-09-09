@@ -49,16 +49,16 @@ class CompanyBeneficiaryAnswersHelperSpec extends SpecBase {
     "return a company beneficiary answer section" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), name).success.value
-        .set(IncomeYesNoPage(index), false).success.value
-        .set(IncomePage(index), amount).success.value
-        .set(CountryOfResidenceYesNoPage(index), true).success.value
-        .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
-        .set(CountryOfResidencePage(index), country).success.value
-        .set(AddressYesNoPage(index), true).success.value
-        .set(AddressUKYesNoPage(index), true).success.value
-        .set(AddressUKPage(index), ukAddress).success.value
-        .set(AddressInternationalPage(index), nonUkAddress).success.value
+        .set(NamePage(index), name).right.get
+        .set(IncomeYesNoPage(index), false).right.get
+        .set(IncomePage(index), amount).right.get
+        .set(CountryOfResidenceYesNoPage(index), true).right.get
+        .set(CountryOfResidenceInTheUkYesNoPage(index), false).right.get
+        .set(CountryOfResidencePage(index), country).right.get
+        .set(AddressYesNoPage(index), true).right.get
+        .set(AddressUKYesNoPage(index), true).right.get
+        .set(AddressUKPage(index), ukAddress).right.get
+        .set(AddressInternationalPage(index), nonUkAddress).right.get
 
       val result = helper.beneficiaries(userAnswers).get
 

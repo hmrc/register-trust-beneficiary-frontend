@@ -35,7 +35,7 @@ class AddressYesNoControllerSpec extends SpecBase with MockitoSugar {
   private val addressYesNoRoute = routes.AddressYesNoController.onPageLoad(index, draftId).url
   private val description = "Other"
 
-  private val baseAnswers = emptyUserAnswers.set(DescriptionPage(index), description).success.value
+  private val baseAnswers = emptyUserAnswers.set(DescriptionPage(index), description).right.get
 
   "AddressYesNo Controller" must {
 
@@ -59,7 +59,7 @@ class AddressYesNoControllerSpec extends SpecBase with MockitoSugar {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = baseAnswers.set(AddressYesNoPage(index), true).success.value
+      val answers = baseAnswers.set(AddressYesNoPage(index), true).right.get
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 

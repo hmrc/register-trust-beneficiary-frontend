@@ -42,7 +42,7 @@ class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
   private val answer = InternationalAddress("Line 1", "Line 2", None, "DE")
   private val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
 
-  private val baseAnswers = emptyUserAnswers.set(LargeBeneficiaryNamePage(index), name).success.value
+  private val baseAnswers = emptyUserAnswers.set(LargeBeneficiaryNamePage(index), name).right.get
 
   "NonUkAddress Controller" must {
 
@@ -66,7 +66,7 @@ class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = baseAnswers.set(LargeBeneficiaryAddressInternationalPage(index), answer).success.value
+      val answers = baseAnswers.set(LargeBeneficiaryAddressInternationalPage(index), answer).right.get
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 

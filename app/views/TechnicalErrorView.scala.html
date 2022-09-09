@@ -1,0 +1,15 @@
+@import views.ViewUtils._
+@import config.FrontendAppConfig
+
+@this(
+        govuk_wrapper: MainTemplate,
+)
+
+@()(implicit request: Request[_], messages: Messages)
+
+@govuk_wrapper(title = messages("serverError.title")) {
+
+    <h1 class="govuk-heading-l">@messages("serverError.heading")</h1>
+
+    <p class="govuk-body">@messages(s"serverError.message")</p>
+}

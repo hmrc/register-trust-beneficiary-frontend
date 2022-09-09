@@ -27,7 +27,7 @@ import play.api.i18n.{Messages, MessagesApi}
 import play.api.mvc.{AnyContent, Call, MessagesControllerComponents}
 import queries.{RemoveOtherBeneficiaryQuery, Settable}
 import repositories.RegistrationsRepository
-import views.html.RemoveIndexView
+import views.html.{RemoveIndexView, TechnicalErrorView}
 
 import javax.inject.Inject
 
@@ -40,7 +40,8 @@ class RemoveOtherBeneficiaryController @Inject()(
                                                        val formProvider: RemoveIndexFormProvider,
                                                        val controllerComponents: MessagesControllerComponents,
                                                        val removeView: RemoveIndexView,
-                                                       require: RequiredAnswerActionProvider
+                                                       require: RequiredAnswerActionProvider,
+                                                       val technicalErrorView: TechnicalErrorView
                                  ) extends RemoveIndexController {
 
   override val messagesPrefix : String = "removeOtherBeneficiaryYesNo"

@@ -16,12 +16,11 @@
 
 package pages.register.beneficiaries.individual
 
+import errors.TrustErrors
 import models.UserAnswers
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.beneficiaries.{Beneficiaries, IndividualBeneficiaries}
-
-import scala.util.Try
 
 final case class PassportDetailsYesNoPage(index : Int) extends QuestionPage[Boolean] {
 
@@ -29,7 +28,7 @@ final case class PassportDetailsYesNoPage(index : Int) extends QuestionPage[Bool
 
   override def toString: String = "passportDetailsYesNo"
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Either[TrustErrors, UserAnswers] =
     value match {
       case Some(true) => userAnswers.remove(IDCardDetailsYesNoPage(index))
         .flatMap(_.remove(IDCardDetailsPage(index)))

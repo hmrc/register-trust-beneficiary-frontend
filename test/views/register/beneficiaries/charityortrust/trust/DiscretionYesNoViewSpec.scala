@@ -34,7 +34,7 @@ class DiscretionYesNoViewSpec extends YesNoViewBehaviours {
   "trustBeneficiaryDiscretionYesNo view" must {
 
     val userAnswers = emptyUserAnswers
-      .set(NamePage(index), name).success.value
+      .set(NamePage(index), name).right.get
 
     val view = viewFor[DiscretionYesNoView](Some(userAnswers))
 

@@ -65,7 +65,7 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
 
       "return OK and the correct view for a GET" in {
 
-        val userAnswers = emptyUserAnswers.set(CharityNamePage(0), "Charity Ltd").success.value
+        val userAnswers = emptyUserAnswers.set(CharityNamePage(0), "Charity Ltd").right.get
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -86,32 +86,32 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(CharityNamePage(0), "Charity Ltd").success.value
+      val userAnswers = emptyUserAnswers.set(CharityNamePage(0), "Charity Ltd").right.get
 
       forAll(arbitrary[Boolean]) {
         value =>
-        val application =
-          applicationBuilder(userAnswers = Some(userAnswers))
-            .build()
+          val application =
+            applicationBuilder(userAnswers = Some(userAnswers))
+              .build()
 
-        val request =
-          FakeRequest(POST, routes.RemoveCharityBeneficiaryController.onSubmit(index, fakeDraftId).url)
-            .withFormUrlEncodedBody(("value", value.toString))
+          val request =
+            FakeRequest(POST, routes.RemoveCharityBeneficiaryController.onSubmit(index, fakeDraftId).url)
+              .withFormUrlEncodedBody(("value", value.toString))
 
-        val result = route(application, request).value
+          val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
+          status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(fakeDraftId).url
+          redirectLocation(result).value mustEqual controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(fakeDraftId).url
 
-        application.stop()
+          application.stop()
       }
 
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(CharityNamePage(0), "Charity Ltd").success.value
+      val userAnswers = emptyUserAnswers.set(CharityNamePage(0), "Charity Ltd").right.get
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

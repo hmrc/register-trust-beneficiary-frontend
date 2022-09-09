@@ -40,8 +40,8 @@ class AddressInTheUkYesNoPageSpec extends PageBehaviours {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
             val result: UserAnswers = userAnswers
-              .set(CharityInternationalAddressPage(0), internationalAddress).success.value
-              .set(AddressInTheUkYesNoPage(0), true).success.value
+              .set(CharityInternationalAddressPage(0), internationalAddress).right.get
+              .set(AddressInTheUkYesNoPage(0), true).right.get
 
             result.get(CharityInternationalAddressPage(0)) mustNot be(defined)
         }
@@ -51,8 +51,8 @@ class AddressInTheUkYesNoPageSpec extends PageBehaviours {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
             val result: UserAnswers = userAnswers
-              .set(CharityAddressUKPage(0), ukAddress).success.value
-              .set(AddressInTheUkYesNoPage(0), false).success.value
+              .set(CharityAddressUKPage(0), ukAddress).right.get
+              .set(AddressInTheUkYesNoPage(0), false).right.get
 
             result.get(CharityAddressUKPage(0)) mustNot be(defined)
         }
@@ -65,8 +65,8 @@ class AddressInTheUkYesNoPageSpec extends PageBehaviours {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
             val result: UserAnswers = userAnswers
-              .set(CharityAddressUKPage(0), ukAddress).success.value
-              .set(AddressInTheUkYesNoPage(0), true).success.value
+              .set(CharityAddressUKPage(0), ukAddress).right.get
+              .set(AddressInTheUkYesNoPage(0), true).right.get
 
             result.get(CharityAddressUKPage(0)).get mustBe ukAddress
         }
@@ -76,8 +76,8 @@ class AddressInTheUkYesNoPageSpec extends PageBehaviours {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
             val result: UserAnswers = userAnswers
-              .set(CharityInternationalAddressPage(0), internationalAddress).success.value
-              .set(AddressInTheUkYesNoPage(0), false).success.value
+              .set(CharityInternationalAddressPage(0), internationalAddress).right.get
+              .set(AddressInTheUkYesNoPage(0), false).right.get
 
             result.get(CharityInternationalAddressPage(0)).get mustBe internationalAddress
         }

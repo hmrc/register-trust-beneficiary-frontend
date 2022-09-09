@@ -16,9 +16,11 @@
 
 package controllers.register.beneficiaries.companyoremploymentrelated.company.mld5
 
+import cats.data.EitherT
 import config.annotations.CompanyBeneficiary
 import controllers.actions._
 import controllers.actions.register.company.NameRequiredAction
+import errors.TrustErrors
 import forms.YesNoFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.companyoremploymentrelated.company.NamePage
@@ -28,6 +30,7 @@ import play.api.i18n._
 import play.api.mvc._
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.companyoremploymentrelated.company.mld5.CountryOfResidenceYesNoView
 
 import javax.inject.Inject
@@ -40,7 +43,8 @@ class CountryOfResidenceYesNoController @Inject()(
                                                    standardActionSets: StandardActionSets,
                                                    nameAction: NameRequiredAction,
                                                    formProvider: YesNoFormProvider,
-                                                   view: CountryOfResidenceYesNoView
+                                                   view: CountryOfResidenceYesNoView,
+                                                   technicalErrorView: TechnicalErrorView
                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form: Form[Boolean] = formProvider.withPrefix("companyBeneficiary.5mld.countryOfResidenceYesNo")
@@ -69,11 +73,17 @@ class CountryOfResidenceYesNoController @Inject()(
           formWithErrors =>
             Future.successful(BadRequest(view(formWithErrors, draftId, index, trustName))),
 
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfResidenceYesNoPage(index), value))
-              _              <- repository.set(updatedAnswers)
+          value => {
+            val result = for {
+              updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(CountryOfResidenceYesNoPage(index), value)))
+              _ <- EitherT.right[TrustErrors](repository.set(updatedAnswers))
             } yield Redirect(navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, updatedAnswers))
+
+            result.value.map {
+              case Right(call) => call
+              case Left(_) => InternalServerError(technicalErrorView())
+            }
+          }
         )
     }
 }

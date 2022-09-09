@@ -16,9 +16,11 @@
 
 package controllers.register.beneficiaries.individualBeneficiary.mld5
 
+import cats.data.EitherT
 import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.register.individual.NameRequiredAction
+import errors.TrustErrors
 import forms.YesNoDontKnowFormProvider
 import models.YesNoDontKnow
 import navigation.Navigator
@@ -28,6 +30,7 @@ import play.api.i18n._
 import play.api.mvc._
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.individualBeneficiary.mld5.MentalCapacityYesNoView
 
 import javax.inject.Inject
@@ -40,7 +43,8 @@ class MentalCapacityYesNoController @Inject()(
                                                    standardActionSets: StandardActionSets,
                                                    nameAction: NameRequiredAction,
                                                    formProvider: YesNoDontKnowFormProvider,
-                                                   view: MentalCapacityYesNoView
+                                                   view: MentalCapacityYesNoView,
+                                                   technicalErrorView: TechnicalErrorView
                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form: Form[YesNoDontKnow] = formProvider.withPrefix("individualBeneficiary.5mld.mentalCapacityYesNo")
@@ -65,11 +69,17 @@ class MentalCapacityYesNoController @Inject()(
           formWithErrors =>
             Future.successful(BadRequest(view(formWithErrors, draftId, index, request.beneficiaryName))),
 
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(MentalCapacityYesNoPage(index), value))
-              _              <- repository.set(updatedAnswers)
+          value => {
+            val result = for {
+              updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(MentalCapacityYesNoPage(index), value)))
+              _ <- EitherT.right[TrustErrors](repository.set(updatedAnswers))
             } yield Redirect(navigator.nextPage(MentalCapacityYesNoPage(index), draftId, updatedAnswers))
+
+            result.value.map {
+              case Right(call) => call
+              case Left(_) => InternalServerError(technicalErrorView())
+            }
+          }
         )
     }
 }

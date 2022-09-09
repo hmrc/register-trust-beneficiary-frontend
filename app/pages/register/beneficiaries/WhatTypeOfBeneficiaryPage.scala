@@ -16,6 +16,7 @@
 
 package pages.register.beneficiaries
 
+import errors.TrustErrors
 import models.UserAnswers
 import models.registration.pages.WhatTypeOfBeneficiary
 import models.registration.pages.WhatTypeOfBeneficiary._
@@ -25,15 +26,13 @@ import pages.register.beneficiaries.companyoremploymentrelated.CompanyOrEmployme
 import play.api.libs.json._
 import sections.beneficiaries._
 
-import scala.util.Try
-
 case object WhatTypeOfBeneficiaryPage extends QuestionPage[WhatTypeOfBeneficiary] with TypeOfBeneficiaryPage {
 
   override def path: JsPath = JsPath \ Beneficiaries \ toString
 
   override def toString: String = "whatTypeOfBeneficiary"
 
-  override def cleanup(value: Option[WhatTypeOfBeneficiary], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[WhatTypeOfBeneficiary], userAnswers: UserAnswers): Either[TrustErrors, UserAnswers] = {
 
     def paths: Seq[JsPath] = Seq(
       IndividualBeneficiaries.path,
@@ -45,10 +44,10 @@ case object WhatTypeOfBeneficiaryPage extends QuestionPage[WhatTypeOfBeneficiary
       OtherBeneficiaries.path
     )
 
-    implicit class RemoveSubTypes(userAnswers: Try[UserAnswers]) {
-      def removeAllSubTypes(): Try[UserAnswers] = userAnswers.removeCharityOrTrustSubType().removeCompanyOrEmploymentSubType()
-      def removeCharityOrTrustSubType(): Try[UserAnswers] = userAnswers.flatMap(_.remove(CharityOrTrustPage))
-      def removeCompanyOrEmploymentSubType(): Try[UserAnswers] = userAnswers.flatMap(_.remove(CompanyOrEmploymentRelatedPage))
+    implicit class RemoveSubTypes(userAnswers: Either[TrustErrors, UserAnswers]) {
+      def removeAllSubTypes(): Either[TrustErrors, UserAnswers] = userAnswers.removeCharityOrTrustSubType().removeCompanyOrEmploymentSubType()
+      def removeCharityOrTrustSubType(): Either[TrustErrors, UserAnswers] = userAnswers.flatMap(_.remove(CharityOrTrustPage))
+      def removeCompanyOrEmploymentSubType(): Either[TrustErrors, UserAnswers] = userAnswers.flatMap(_.remove(CompanyOrEmploymentRelatedPage))
     }
 
     value match {

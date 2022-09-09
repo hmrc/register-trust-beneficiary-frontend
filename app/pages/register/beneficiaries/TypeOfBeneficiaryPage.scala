@@ -16,26 +16,25 @@
 
 package pages.register.beneficiaries
 
+import errors.TrustErrors
 import models.Status.InProgress
 import models.{Status, UserAnswers}
 import play.api.libs.json._
 
-import scala.util.{Success, Try}
-
 trait TypeOfBeneficiaryPage {
 
-  def cleanupLastIfInProgress(userAnswers: UserAnswers, paths: Seq[JsPath]): Try[UserAnswers] = {
+  def cleanupLastIfInProgress(userAnswers: UserAnswers, paths: Seq[JsPath]): Either[TrustErrors, UserAnswers] = {
 
     def status(beneficiary: JsValue) = beneficiary.transform((__ \ "status").json.pick) match {
       case JsSuccess(value, _) => value.as[Status]
       case _ => InProgress
     }
 
-    paths.foldLeft[Try[UserAnswers]](Success(userAnswers))((acc, path) => {
+    paths.foldLeft[Either[TrustErrors, UserAnswers]](Right(userAnswers))((acc, path) => {
       acc match {
-        case Success(value) => value.getAtPath[JsArray](path).getOrElse(JsArray()) match {
+        case Right(value) => value.getAtPath[JsArray](path).getOrElse(JsArray()) match {
           case x if x.value.nonEmpty && status(x.value.last) == InProgress => value.deleteAtPath(path \ (x.value.size - 1))
-          case _ => Success(value)
+          case _ => Right(value)
         }
         case _ => acc
       }

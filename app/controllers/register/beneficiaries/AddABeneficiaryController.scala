@@ -16,8 +16,11 @@
 
 package controllers.register.beneficiaries
 
+import cats.data.EitherT
+import cats.implicits._
 import config.FrontendAppConfig
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
+import errors.TrustErrors
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import models.Status.{Completed, InProgress}
 import models.TaskStatus.TaskStatus
@@ -42,6 +45,7 @@ import uk.gov.hmrc.http.HttpVerbs.GET
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.{AddABeneficiaryViewHelper, RegistrationProgress}
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.{AddABeneficiaryView, AddABeneficiaryYesNoView, MaxedOutBeneficiariesView}
 
 import javax.inject.Inject
@@ -62,7 +66,8 @@ class AddABeneficiaryController @Inject()(
                                            maxedOutView: MaxedOutBeneficiariesView,
                                            config: FrontendAppConfig,
                                            trustsStoreService: TrustsStoreService,
-                                           registrationProgress: RegistrationProgress
+                                           registrationProgress: RegistrationProgress,
+                                           technicalErrorView: TechnicalErrorView
                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with Logging with I18nSupport {
 
   private val addAnotherForm = addAnotherFormProvider()
@@ -87,7 +92,7 @@ class AddABeneficiaryController @Inject()(
     }
     setTaskStatus(draftId, status)
   }
-  
+
   private def setTaskStatus(draftId: String, taskStatus: TaskStatus)
                            (implicit hc: HeaderCarrier): Future[HttpResponse] = {
     trustsStoreService.updateTaskStatus(draftId, taskStatus)
@@ -96,7 +101,7 @@ class AddABeneficiaryController @Inject()(
   def onPageLoad(draftId: String): Action[AnyContent] = routes(draftId).async {
     implicit request =>
 
-      def updateUserAnswers(initialAnswers: UserAnswers): Future[UserAnswers] = {
+      def updateUserAnswers(initialAnswers: UserAnswers): EitherT[Future, TrustErrors, UserAnswers] = {
 
         def setIndividualBeneficiaryStatuses(readOnly: Option[ReadOnlyUserAnswers]): UserAnswers = {
           readOnly match {
@@ -117,29 +122,31 @@ class AddABeneficiaryController @Inject()(
         }
 
         for {
-          settlorsAnswers <- registrationsRepository.getSettlorsAnswers(draftId)
+          settlorsAnswers <- EitherT.right[TrustErrors](registrationsRepository.getSettlorsAnswers(draftId))
           updatedAnswers = setIndividualBeneficiaryStatuses(settlorsAnswers)
-          cleanedAnswers <- Future.fromTry(updatedAnswers.removeBeneficiaryTypeAnswers())
-          _ <- registrationsRepository.set(cleanedAnswers)
+          cleanedAnswers <- EitherT(Future.successful(updatedAnswers.removeBeneficiaryTypeAnswers()))
+          _ <- EitherT.right[TrustErrors](registrationsRepository.set(cleanedAnswers))
         } yield updatedAnswers
       }
 
-      updateUserAnswers(request.userAnswers) map { userAnswers =>
-        val rows = new AddABeneficiaryViewHelper(userAnswers, draftId).rows
+      updateUserAnswers(request.userAnswers).value.map {
+        case Right(userAnswers) =>
+          val rows = new AddABeneficiaryViewHelper(userAnswers, draftId).rows
 
-        if (userAnswers.beneficiaries.nonMaxedOutOptions.isEmpty) {
-          logger.info(s"[AddABeneficiaryController][Session ID: ${request.sessionId}] ${request.internalId} has maxed out beneficiaries")
-          Ok(maxedOutView(draftId, rows.inProgress, rows.complete, heading(rows.count)))
-        } else {
-          if(rows.count > 0) {
-            logger.info(s"[AddABeneficiaryController][Session ID: ${request.sessionId}] ${request.internalId} has not maxed out beneficiaries")
-            val listOfMaxed = userAnswers.beneficiaries.maxedOutOptions.map(_.messageKey)
-            Ok(addAnotherView(addAnotherForm, draftId, rows.inProgress, rows.complete, heading(rows.count), listOfMaxed))
+          if (userAnswers.beneficiaries.nonMaxedOutOptions.isEmpty) {
+            logger.info(s"[AddABeneficiaryController][Session ID: ${request.sessionId}] ${request.internalId} has maxed out beneficiaries")
+            Ok(maxedOutView(draftId, rows.inProgress, rows.complete, heading(rows.count)))
           } else {
-            logger.info(s"[AddABeneficiaryController][Session ID: ${request.sessionId}] ${request.internalId} has added no beneficiaries")
-            Ok(yesNoView(yesNoForm, draftId))
+            if(rows.count > 0) {
+              logger.info(s"[AddABeneficiaryController][Session ID: ${request.sessionId}] ${request.internalId} has not maxed out beneficiaries")
+              val listOfMaxed = userAnswers.beneficiaries.maxedOutOptions.map(_.messageKey)
+              Ok(addAnotherView(addAnotherForm, draftId, rows.inProgress, rows.complete, heading(rows.count), listOfMaxed))
+            } else {
+              logger.info(s"[AddABeneficiaryController][Session ID: ${request.sessionId}] ${request.internalId} has added no beneficiaries")
+              Ok(yesNoView(yesNoForm, draftId))
+            }
           }
-        }
+        case Left(_) => InternalServerError(technicalErrorView())
       }
   }
 
@@ -152,11 +159,13 @@ class AddABeneficiaryController @Inject()(
           )
         },
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddABeneficiaryYesNoPage, value))
-            _              <- registrationsRepository.set(updatedAnswers)
-            _              <- setTaskStatus(draftId, if (value) TaskStatus.InProgress else TaskStatus.Completed)
+          val result = for {
+            updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(AddABeneficiaryYesNoPage, value)))
+            _              <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
+            _              <- EitherT.right[TrustErrors](setTaskStatus(draftId, if (value) TaskStatus.InProgress else TaskStatus.Completed))
           } yield Redirect(navigator.nextPage(AddABeneficiaryYesNoPage, draftId, updatedAnswers))
+
+          handleResponse(result)
         }
       )
   }
@@ -173,22 +182,33 @@ class AddABeneficiaryController @Inject()(
           Future.successful(BadRequest(addAnotherView(formWithErrors, draftId, rows.inProgress, rows.complete, heading(rows.count), listOfMaxed)))
         },
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddABeneficiaryPage, value))
-            _              <- registrationsRepository.set(updatedAnswers)
-            _              <- setTaskStatus(draftId, updatedAnswers, value)
+          val result = for {
+            updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(AddABeneficiaryPage, value)))
+            _              <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
+            _              <- EitherT.right[TrustErrors](setTaskStatus(draftId, updatedAnswers, value))
           } yield Redirect(navigator.nextPage(AddABeneficiaryPage, draftId, updatedAnswers))
+
+          handleResponse(result)
         }
       )
   }
 
   def submitComplete(draftId: String): Action[AnyContent] = routes(draftId).async {
     implicit request =>
-      for {
-        updatedAnswers <- Future.fromTry(request.userAnswers.set(AddABeneficiaryPage, NoComplete))
-        _              <- registrationsRepository.set(updatedAnswers)
-        _              <- setTaskStatus(draftId,updatedAnswers, NoComplete)
+      val result = for {
+        updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(AddABeneficiaryPage, NoComplete)))
+        _              <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
+        _              <- EitherT.right[TrustErrors](setTaskStatus(draftId,updatedAnswers, NoComplete))
       } yield Redirect(Call(GET, config.registrationProgressUrl(draftId)))
+
+      handleResponse(result)
+  }
+
+  def handleResponse(result: EitherT[Future, TrustErrors, Result])(implicit request: Request[AnyContent]): Future[Result] = {
+    result.value.map {
+      case Right(call) => call
+      case Left(_) => InternalServerError(technicalErrorView())
+    }
   }
 
 }

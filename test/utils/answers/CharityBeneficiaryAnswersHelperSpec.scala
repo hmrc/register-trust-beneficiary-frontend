@@ -49,16 +49,16 @@ class CharityBeneficiaryAnswersHelperSpec extends SpecBase {
     "return a charity beneficiary answer section" in {
 
       val userAnswers = emptyUserAnswers
-        .set(CharityNamePage(index), name).success.value
-        .set(AmountDiscretionYesNoPage(index), false).success.value
-        .set(HowMuchIncomePage(index), amount).success.value
-        .set(CountryOfResidenceYesNoPage(index), true).success.value
-        .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
-        .set(CountryOfResidencePage(index), country).success.value
-        .set(AddressYesNoPage(index), true).success.value
-        .set(AddressInTheUkYesNoPage(index), true).success.value
-        .set(CharityAddressUKPage(index), ukAddress).success.value
-        .set(CharityInternationalAddressPage(index), nonUkAddress).success.value
+        .set(CharityNamePage(index), name).right.get
+        .set(AmountDiscretionYesNoPage(index), false).right.get
+        .set(HowMuchIncomePage(index), amount).right.get
+        .set(CountryOfResidenceYesNoPage(index), true).right.get
+        .set(CountryOfResidenceInTheUkYesNoPage(index), false).right.get
+        .set(CountryOfResidencePage(index), country).right.get
+        .set(AddressYesNoPage(index), true).right.get
+        .set(AddressInTheUkYesNoPage(index), true).right.get
+        .set(CharityAddressUKPage(index), ukAddress).right.get
+        .set(CharityInternationalAddressPage(index), nonUkAddress).right.get
 
       val result = helper.beneficiaries(userAnswers).get
 

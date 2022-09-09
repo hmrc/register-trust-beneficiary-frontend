@@ -43,7 +43,7 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase with MockitoSugar {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(CharityNamePage(index), charityName).success.value
+        .set(CharityNamePage(index), charityName).right.get
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -63,8 +63,8 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase with MockitoSugar {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(CharityNamePage(index), charityName).success.value
-        .set(CountryOfResidenceYesNoPage(index), true).success.value
+      val userAnswers = emptyUserAnswers.set(CharityNamePage(index), charityName).right.get
+        .set(CountryOfResidenceYesNoPage(index), true).right.get
 
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -86,7 +86,7 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase with MockitoSugar {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(CharityNamePage(index), charityName).success.value
+        .set(CharityNamePage(index), charityName).right.get
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
@@ -106,10 +106,31 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
 
+    "return an Internal server error when setting the user answers go wrong" in {
+
+      val userAnswers = emptyUserAnswers
+        .set(CharityNamePage(index), charityName).right.get
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(
+          bind[Navigator].qualifiedWith(classOf[CharityBeneficiary]).toInstance(new FakeNavigator)
+        ).build()
+
+      val request =
+        FakeRequest(POST, routes.CountryOfResidenceYesNoController.onPageLoad(2, draftId).url)
+          .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+
+      application.stop()
+    }
+
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(CharityNamePage(index), charityName).success.value
+        .set(CharityNamePage(index), charityName).right.get
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

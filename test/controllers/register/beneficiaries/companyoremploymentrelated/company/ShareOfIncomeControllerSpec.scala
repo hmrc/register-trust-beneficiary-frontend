@@ -39,7 +39,7 @@ class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
   private val onwardRoute = Call("GET", "/foo")
   private val answer = 50
 
-  private val baseAnswers: UserAnswers = emptyUserAnswers.set(NamePage(index), name).success.value
+  private val baseAnswers: UserAnswers = emptyUserAnswers.set(NamePage(index), name).right.get
 
   "ShareOfIncome Controller" must {
 
@@ -63,7 +63,7 @@ class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = baseAnswers.set(IncomePage(index), answer).success.value
+      val answers = baseAnswers.set(IncomePage(index), answer).right.get
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 

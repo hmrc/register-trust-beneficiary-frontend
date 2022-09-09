@@ -37,7 +37,7 @@ class DiscretionYesNoControllerSpec extends SpecBase with MockitoSugar {
   private val name: String = "Company"
   private val onwardRoute = Call("GET", "/foo")
 
-  private val baseAnswers = emptyUserAnswers.set(NamePage(index), name).success.value
+  private val baseAnswers = emptyUserAnswers.set(NamePage(index), name).right.get
 
   "DiscretionYesNo Controller" must {
 
@@ -61,7 +61,7 @@ class DiscretionYesNoControllerSpec extends SpecBase with MockitoSugar {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = baseAnswers.set(IncomeYesNoPage(index), true).success.value
+      val answers = baseAnswers.set(IncomeYesNoPage(index), true).right.get
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 

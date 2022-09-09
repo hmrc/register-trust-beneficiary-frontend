@@ -60,7 +60,7 @@ class NumberOfBeneficiariesControllerSpec extends SpecBase with MockitoSugar {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = emptyUserAnswers.set(LargeBeneficiaryNumberOfBeneficiariesPage(index), numberOfBeneficiaries).success.value
+      val answers = emptyUserAnswers.set(LargeBeneficiaryNumberOfBeneficiariesPage(index), numberOfBeneficiaries).right.get
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 

@@ -58,10 +58,10 @@ class OtherBeneficiaryMapperSpec extends SpecBase with MustMatchers
         "no country of residence, no address and discretion" in {
 
           val userAnswers = emptyUserAnswers
-            .set(DescriptionPage(index), description).success.value
-            .set(IncomeDiscretionYesNoPage(index), true).success.value
-            .set(CountryOfResidenceYesNoPage(index), false).success.value
-            .set(AddressYesNoPage(index), false).success.value
+            .set(DescriptionPage(index), description).right.get
+            .set(IncomeDiscretionYesNoPage(index), true).right.get
+            .set(CountryOfResidenceYesNoPage(index), false).right.get
+            .set(AddressYesNoPage(index), false).right.get
 
           val other = otherBeneficiaryMapper.build(userAnswers)
 
@@ -78,10 +78,10 @@ class OtherBeneficiaryMapperSpec extends SpecBase with MustMatchers
         "for a non-taxable journey" in {
 
           val userAnswers = emptyUserAnswers
-            .set(DescriptionPage(index), description).success.value
-            .set(CountryOfResidenceYesNoPage(index), false).success.value
-            .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
-            .set(CountryOfResidencePage(index), "FR").success.value
+            .set(DescriptionPage(index), description).right.get
+            .set(CountryOfResidenceYesNoPage(index), false).right.get
+            .set(CountryOfResidenceInTheUkYesNoPage(index), false).right.get
+            .set(CountryOfResidencePage(index), "FR").right.get
 
           val other = otherBeneficiaryMapper.build(userAnswers)
 
@@ -100,14 +100,14 @@ class OtherBeneficiaryMapperSpec extends SpecBase with MustMatchers
           "UK country of residence, UK address and no discretion" in {
 
             val userAnswers = emptyUserAnswers
-              .set(DescriptionPage(index), description).success.value
-              .set(IncomeDiscretionYesNoPage(index), false).success.value
-              .set(ShareOfIncomePage(index), percentage).success.value
-              .set(CountryOfResidenceYesNoPage(index), true).success.value
-              .set(UKResidentYesNoPage(index), true).success.value
-              .set(AddressYesNoPage(index), true).success.value
-              .set(AddressUKYesNoPage(index), true).success.value
-              .set(AddressUKPage(index), ukAddress).success.value
+              .set(DescriptionPage(index), description).right.get
+              .set(IncomeDiscretionYesNoPage(index), false).right.get
+              .set(ShareOfIncomePage(index), percentage).right.get
+              .set(CountryOfResidenceYesNoPage(index), true).right.get
+              .set(UKResidentYesNoPage(index), true).right.get
+              .set(AddressYesNoPage(index), true).right.get
+              .set(AddressUKYesNoPage(index), true).right.get
+              .set(AddressUKPage(index), ukAddress).right.get
 
             val other = otherBeneficiaryMapper.build(userAnswers)
 
@@ -124,15 +124,15 @@ class OtherBeneficiaryMapperSpec extends SpecBase with MustMatchers
           "non-UK residence, non-UK address and no discretion" in {
 
             val userAnswers = emptyUserAnswers
-              .set(DescriptionPage(index), description).success.value
-              .set(IncomeDiscretionYesNoPage(index), false).success.value
-              .set(ShareOfIncomePage(index), percentage).success.value
-              .set(CountryOfResidenceYesNoPage(index), true).success.value
-              .set(UKResidentYesNoPage(index), false).success.value
-              .set(CountryOfResidencePage(index), country).success.value
-              .set(AddressYesNoPage(index), true).success.value
-              .set(AddressUKYesNoPage(index), false).success.value
-              .set(AddressInternationalPage(index), internationalAddress).success.value
+              .set(DescriptionPage(index), description).right.get
+              .set(IncomeDiscretionYesNoPage(index), false).right.get
+              .set(ShareOfIncomePage(index), percentage).right.get
+              .set(CountryOfResidenceYesNoPage(index), true).right.get
+              .set(UKResidentYesNoPage(index), false).right.get
+              .set(CountryOfResidencePage(index), country).right.get
+              .set(AddressYesNoPage(index), true).right.get
+              .set(AddressUKYesNoPage(index), false).right.get
+              .set(AddressInternationalPage(index), internationalAddress).right.get
 
             val other = otherBeneficiaryMapper.build(userAnswers)
 

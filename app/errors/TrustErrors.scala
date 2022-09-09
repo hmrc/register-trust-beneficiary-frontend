@@ -14,20 +14,8 @@
  * limitations under the License.
  */
 
-package pages.register.beneficiaries.individual
+package errors
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.beneficiaries.{Beneficiaries, IndividualBeneficiaries}
+sealed trait TrustErrors
 
-final case class NationalInsuranceNumberPage(index: Int) extends QuestionPage[String] {
-
-  override def path: JsPath = JsPath \  Beneficiaries \ IndividualBeneficiaries \ index \ toString
-
-  override def toString: String = NationalInsuranceNumberPage.key
-
-}
-
-object NationalInsuranceNumberPage {
-  val key = "nationalInsuranceNumber"
-}
+final case class ServerError() extends TrustErrors

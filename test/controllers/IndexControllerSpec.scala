@@ -54,7 +54,7 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
       "redirect to add-to page if there is at least one in-progress or completed beneficiary" in {
 
         val userAnswers: UserAnswers = emptyUserAnswers
-          .set(NamePage(0), name).success.value
+          .set(NamePage(0), name).right.get
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[TrustsStoreService].toInstance(mockTrustsStoreService))

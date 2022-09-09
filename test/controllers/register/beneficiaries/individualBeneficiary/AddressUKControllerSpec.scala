@@ -42,7 +42,7 @@ class AddressUKControllerSpec extends SpecBase {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers.set(NamePage(index),
-        name).success.value
+        name).right.get
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -63,8 +63,8 @@ class AddressUKControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(AddressUKPage(index),  UKAddress("line 1", "line 2", Some("line 3"), Some("line 4"),"line 5")).success.value.set(NamePage(index),
-        name).success.value
+        .set(AddressUKPage(index),  UKAddress("line 1", "line 2", Some("line 3"), Some("line 4"),"line 5")).right.get.set(NamePage(index),
+        name).right.get
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -85,7 +85,7 @@ class AddressUKControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers.set(NamePage(index),
-        name).success.value
+        name).right.get
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -109,7 +109,7 @@ class AddressUKControllerSpec extends SpecBase {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers.set(NamePage(index),
-        name).success.value
+        name).right.get
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

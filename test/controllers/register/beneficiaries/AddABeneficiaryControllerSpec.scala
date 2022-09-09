@@ -129,73 +129,73 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
   )
 
   private val userAnswersWithBeneficiariesComplete = emptyUserAnswers
-    .set(individualPages.NamePage(index), FullName("Individual", None, "Name")).success.value
-    .set(IndividualBeneficiaryStatus(index), Completed).success.value
+    .set(individualPages.NamePage(index), FullName("Individual", None, "Name")).right.get
+    .set(IndividualBeneficiaryStatus(index), Completed).right.get
 
-    .set(classOfBeneficiariesPages.ClassBeneficiaryDescriptionPage(index), "Unidentified Description").success.value
-    .set(ClassBeneficiaryStatus(index), Completed).success.value
+    .set(classOfBeneficiariesPages.ClassBeneficiaryDescriptionPage(index), "Unidentified Description").right.get
+    .set(ClassBeneficiaryStatus(index), Completed).right.get
 
-    .set(charityPages.CharityNamePage(index), "Charity Name").success.value
-    .set(CharityBeneficiaryStatus(index), Completed).success.value
+    .set(charityPages.CharityNamePage(index), "Charity Name").right.get
+    .set(CharityBeneficiaryStatus(index), Completed).right.get
 
-    .set(trustPages.NamePage(index), "Trust Name").success.value
-    .set(TrustBeneficiaryStatus(index), Completed).success.value
+    .set(trustPages.NamePage(index), "Trust Name").right.get
+    .set(TrustBeneficiaryStatus(index), Completed).right.get
 
-    .set(companyPages.NamePage(index), "Company Name").success.value
-    .set(CompanyBeneficiaryStatus(index), Completed).success.value
+    .set(companyPages.NamePage(index), "Company Name").right.get
+    .set(CompanyBeneficiaryStatus(index), Completed).right.get
 
-    .set(LargeBeneficiaryNamePage(index), "Large Name").success.value
-    .set(LargeBeneficiaryStatus(index), Completed).success.value
+    .set(LargeBeneficiaryNamePage(index), "Large Name").right.get
+    .set(LargeBeneficiaryStatus(index), Completed).right.get
 
-    .set(otherPages.DescriptionPage(index), "Other Description").success.value
-    .set(OtherBeneficiaryStatus(index), Completed).success.value
+    .set(otherPages.DescriptionPage(index), "Other Description").right.get
+    .set(OtherBeneficiaryStatus(index), Completed).right.get
 
   private def genTrustBeneficiaries(range: Int): UserAnswers = {
     (0 until range)
       .foldLeft(emptyUserAnswers)((ua,index) =>
-        ua.set(trustPages.NamePage(index), "Company Name").success.value
+        ua.set(trustPages.NamePage(index), "Company Name").right.get
       )
   }
 
   private def genCompanyBeneficiaries(range: Int): UserAnswers = {
     (0 until range)
       .foldLeft(emptyUserAnswers)(
-        (ua,index) => ua.set(companyPages.NamePage(index), "Trust Name").success.value
+        (ua,index) => ua.set(companyPages.NamePage(index), "Trust Name").right.get
       )
   }
 
   private def genIndividualBeneficiaries(range: Int): UserAnswers = {
     (0 until range)
       .foldLeft(emptyUserAnswers)(
-        (ua,index) => ua.set(individualPages.NamePage(index), FullName("first name", None, "last name")).success.value
+        (ua,index) => ua.set(individualPages.NamePage(index), FullName("first name", None, "last name")).right.get
       )
   }
 
   private def genUnidentifiedBeneficiaries(range: Int): UserAnswers = {
     (0 until range)
       .foldLeft(emptyUserAnswers)(
-        (ua,index) => ua.set(classOfBeneficiariesPages.ClassBeneficiaryDescriptionPage(index), s"Unidentified Description $index").success.value
+        (ua,index) => ua.set(classOfBeneficiariesPages.ClassBeneficiaryDescriptionPage(index), s"Unidentified Description $index").right.get
       )
   }
 
   private def genCharityBeneficiaries(range: Int): UserAnswers = {
     (0 until range)
       .foldLeft(emptyUserAnswers)(
-        (ua,index) => ua.set(charityPages.CharityNamePage(index), s"Charity Name $index").success.value
+        (ua,index) => ua.set(charityPages.CharityNamePage(index), s"Charity Name $index").right.get
       )
   }
 
   private def genLargeBeneficiaries(range: Int): UserAnswers = {
     (0 until range)
       .foldLeft(emptyUserAnswers)(
-        (ua,index) => ua.set(LargeBeneficiaryDescriptionPage(index), Description(s"Large Name $index", None, None, None, None)).success.value
+        (ua,index) => ua.set(LargeBeneficiaryDescriptionPage(index), Description(s"Large Name $index", None, None, None, None)).right.get
       )
   }
 
   private def genOtherBeneficiaries(range: Int): UserAnswers = {
     (0 until range)
       .foldLeft(emptyUserAnswers)(
-        (ua,index) => ua.set(otherPages.DescriptionPage(index), s"Other Description $index").success.value
+        (ua,index) => ua.set(otherPages.DescriptionPage(index), s"Other Description $index").right.get
       )
   }
 
@@ -250,10 +250,10 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
 
         val settlorsAnswers: ReadOnlyUserAnswers = ReadOnlyUserAnswers(
           emptyUserAnswers
-            .set(KindOfTrustPage, Intervivos).success.value
-            .set(WhatTypeOfBeneficiaryPage, Individual).success.value
-            .set(CharityOrTrustPage, Charity).success.value
-            .set(CompanyOrEmploymentRelatedPage, Company).success.value
+            .set(KindOfTrustPage, Intervivos).right.get
+            .set(WhatTypeOfBeneficiaryPage, Individual).right.get
+            .set(CharityOrTrustPage, Charity).right.get
+            .set(CompanyOrEmploymentRelatedPage, Company).right.get
             .data
         )
 
@@ -357,7 +357,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
       "return OK and the correct view for a GET" in {
 
         val settlorsAnswers: ReadOnlyUserAnswers = ReadOnlyUserAnswers(
-          emptyUserAnswers.set(KindOfTrustPage, Intervivos).success.value.data
+          emptyUserAnswers.set(KindOfTrustPage, Intervivos).right.get.data
         )
 
         when(registrationsRepository.getSettlorsAnswers(any())(any())).thenReturn(Future.successful(Some(settlorsAnswers)))
@@ -381,13 +381,13 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
       "populate the view without value on a GET when the question has previously been answered" in {
 
         val settlorsAnswers: ReadOnlyUserAnswers = ReadOnlyUserAnswers(
-          emptyUserAnswers.set(KindOfTrustPage, Intervivos).success.value.data
+          emptyUserAnswers.set(KindOfTrustPage, Intervivos).right.get.data
         )
 
         when(registrationsRepository.getSettlorsAnswers(any())(any())).thenReturn(Future.successful(Some(settlorsAnswers)))
 
         val userAnswers = userAnswersWithBeneficiariesComplete.
-          set(AddABeneficiaryPage, AddABeneficiary.YesNow).success.value
+          set(AddABeneficiaryPage, AddABeneficiary.YesNow).right.get
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -411,19 +411,19 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
 
           "role in company not previously answered" in {
             val settlorsAnswers: ReadOnlyUserAnswers = ReadOnlyUserAnswers(
-              emptyUserAnswers.set(KindOfTrustPage, Employees).success.value.data
+              emptyUserAnswers.set(KindOfTrustPage, Employees).right.get.data
             )
 
             when(registrationsRepository.getSettlorsAnswers(any())(any())).thenReturn(Future.successful(Some(settlorsAnswers)))
 
             val userAnswers = emptyUserAnswers
-              .set(individualPages.NamePage(0), FullName("Joe", None, "Bloggs")).success.value
-              .set(individualPages.DateOfBirthYesNoPage(0), false).success.value
-              .set(individualPages.IncomeYesNoPage(0), true).success.value
-              .set(individualPages.NationalInsuranceYesNoPage(0), false).success.value
-              .set(individualPages.AddressYesNoPage(0), false).success.value
-              .set(individualPages.VulnerableYesNoPage(0), false).success.value
-              .set(IndividualBeneficiaryStatus(0), Completed).success.value
+              .set(individualPages.NamePage(0), FullName("Joe", None, "Bloggs")).right.get
+              .set(individualPages.DateOfBirthYesNoPage(0), false).right.get
+              .set(individualPages.IncomeYesNoPage(0), true).right.get
+              .set(individualPages.NationalInsuranceYesNoPage(0), false).right.get
+              .set(individualPages.AddressYesNoPage(0), false).right.get
+              .set(individualPages.VulnerableYesNoPage(0), false).right.get
+              .set(IndividualBeneficiaryStatus(0), Completed).right.get
 
             val application =
               applicationBuilder(userAnswers = Some(userAnswers))
@@ -457,28 +457,28 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
 
           "role in company previously answered for some but not others" in {
             val settlorsAnswers: ReadOnlyUserAnswers = ReadOnlyUserAnswers(
-              emptyUserAnswers.set(KindOfTrustPage, Employees).success.value.data
+              emptyUserAnswers.set(KindOfTrustPage, Employees).right.get.data
             )
 
             when(registrationsRepository.getSettlorsAnswers(any())(any())).thenReturn(Future.successful(Some(settlorsAnswers)))
 
             val userAnswers = emptyUserAnswers
-              .set(individualPages.NamePage(0), FullName("Joe", None, "Bloggs")).success.value
-              .set(individualPages.DateOfBirthYesNoPage(0), false).success.value
-              .set(individualPages.IncomeYesNoPage(0), true).success.value
-              .set(individualPages.NationalInsuranceYesNoPage(0), false).success.value
-              .set(individualPages.AddressYesNoPage(0), false).success.value
-              .set(individualPages.VulnerableYesNoPage(0), false).success.value
-              .set(IndividualBeneficiaryStatus(0), Completed).success.value
+              .set(individualPages.NamePage(0), FullName("Joe", None, "Bloggs")).right.get
+              .set(individualPages.DateOfBirthYesNoPage(0), false).right.get
+              .set(individualPages.IncomeYesNoPage(0), true).right.get
+              .set(individualPages.NationalInsuranceYesNoPage(0), false).right.get
+              .set(individualPages.AddressYesNoPage(0), false).right.get
+              .set(individualPages.VulnerableYesNoPage(0), false).right.get
+              .set(IndividualBeneficiaryStatus(0), Completed).right.get
 
-              .set(individualPages.NamePage(1), FullName("John", None, "Doe")).success.value
-              .set(individualPages.RoleInCompanyPage(1), Employee).success.value
-              .set(individualPages.DateOfBirthYesNoPage(1), false).success.value
-              .set(individualPages.IncomeYesNoPage(1), true).success.value
-              .set(individualPages.NationalInsuranceYesNoPage(1), false).success.value
-              .set(individualPages.AddressYesNoPage(1), false).success.value
-              .set(individualPages.VulnerableYesNoPage(1), false).success.value
-              .set(IndividualBeneficiaryStatus(1), Completed).success.value
+              .set(individualPages.NamePage(1), FullName("John", None, "Doe")).right.get
+              .set(individualPages.RoleInCompanyPage(1), Employee).right.get
+              .set(individualPages.DateOfBirthYesNoPage(1), false).right.get
+              .set(individualPages.IncomeYesNoPage(1), true).right.get
+              .set(individualPages.NationalInsuranceYesNoPage(1), false).right.get
+              .set(individualPages.AddressYesNoPage(1), false).right.get
+              .set(individualPages.VulnerableYesNoPage(1), false).right.get
+              .set(IndividualBeneficiaryStatus(1), Completed).right.get
 
             val application =
               applicationBuilder(userAnswers = Some(userAnswers))

@@ -16,9 +16,12 @@
 
 package controllers.register.beneficiaries.charityortrust.charity.mld5
 
+import cats.data.EitherT
+import cats.implicits._
 import config.annotations.CharityBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.register.charity.NameRequiredAction
+import errors.TrustErrors
 import forms.CountryFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.charityortrust.charity.mld5.CountryOfResidencePage
@@ -28,6 +31,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.countryOptions.CountryOptionsNonUK
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.charityortrust.charity.mld5.CountryOfResidenceView
 
 import javax.inject.Inject
@@ -43,7 +47,8 @@ class CountryOfResidenceController @Inject()(
                                                      standardActions: StandardActionSets,
                                                      val controllerComponents: MessagesControllerComponents,
                                                      view: CountryOfResidenceView,
-                                                     val countryOptions: CountryOptionsNonUK
+                                                     val countryOptions: CountryOptionsNonUK,
+                                                     technicalErrorView: TechnicalErrorView
                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form: Form[String] = formProvider.withPrefix("charity.5mld.countryOfResidence")
@@ -69,10 +74,15 @@ class CountryOfResidenceController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, index, request.beneficiaryName))),
 
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfResidencePage(index), value))
-            _              <- registrationsRepository.set(updatedAnswers)
+          val result = for {
+            updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(CountryOfResidencePage(index), value)))
+            _              <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
           } yield Redirect(navigator.nextPage(CountryOfResidencePage(index), draftId, updatedAnswers))
+
+          result.value.map {
+            case Right(call) => call
+            case Left(_) => InternalServerError(technicalErrorView())
+          }
         }
       )
   }

@@ -33,10 +33,10 @@ class CompanyOrEmploymentRelatedPageSpec extends PageBehaviours {
   implicit class UserAnswersSetters(userAnswers: UserAnswers) {
 
     def setWithStatus(status: Status): UserAnswers = userAnswers
-      .set(company.NamePage(0), string).success.value
-      .set(CompanyBeneficiaryStatus(0), status).success.value
-      .set(large.LargeBeneficiaryNamePage(0), string).success.value
-      .set(LargeBeneficiaryStatus(0), status).success.value
+      .set(company.NamePage(0), string).right.get
+      .set(CompanyBeneficiaryStatus(0), status).right.get
+      .set(large.LargeBeneficiaryNamePage(0), string).right.get
+      .set(LargeBeneficiaryStatus(0), status).right.get
   }
 
   "CompanyOrEmploymentRelatedPage" must {
@@ -55,7 +55,7 @@ class CompanyOrEmploymentRelatedPageSpec extends PageBehaviours {
             initial =>
               val answers = initial.setWithStatus(InProgress)
 
-              val result = answers.set(CompanyOrEmploymentRelatedPage, Company).success.value
+              val result = answers.set(CompanyOrEmploymentRelatedPage, Company).right.get
 
               result.get(CompanyBeneficiaries).getOrElse(Nil).size mustBe 1
               result.get(LargeBeneficiaries).getOrElse(Nil).size mustBe 0
@@ -69,7 +69,7 @@ class CompanyOrEmploymentRelatedPageSpec extends PageBehaviours {
             initial =>
               val answers = initial.setWithStatus(InProgress)
 
-              val result = answers.set(CompanyOrEmploymentRelatedPage, EmploymentRelated).success.value
+              val result = answers.set(CompanyOrEmploymentRelatedPage, EmploymentRelated).right.get
 
               result.get(CompanyBeneficiaries).getOrElse(Nil).size mustBe 0
               result.get(LargeBeneficiaries).getOrElse(Nil).size mustBe 1
@@ -87,7 +87,7 @@ class CompanyOrEmploymentRelatedPageSpec extends PageBehaviours {
           "no other beneficiary types" in {
             forAll(arbitrary[UserAnswers]) {
               initial =>
-                val result = initial.set(CompanyOrEmploymentRelatedPage, beneficiaryType).success.value
+                val result = initial.set(CompanyOrEmploymentRelatedPage, beneficiaryType).right.get
 
                 result.get(CompanyBeneficiaries).getOrElse(Nil).size mustBe 0
                 result.get(LargeBeneficiaries).getOrElse(Nil).size mustBe 0
@@ -99,7 +99,7 @@ class CompanyOrEmploymentRelatedPageSpec extends PageBehaviours {
               initial =>
                 val answers = initial.setWithStatus(Completed)
 
-                val result = answers.set(CompanyOrEmploymentRelatedPage, beneficiaryType).success.value
+                val result = answers.set(CompanyOrEmploymentRelatedPage, beneficiaryType).right.get
 
                 result.get(CompanyBeneficiaries).getOrElse(Nil).size mustBe 1
                 result.get(LargeBeneficiaries).getOrElse(Nil).size mustBe 1

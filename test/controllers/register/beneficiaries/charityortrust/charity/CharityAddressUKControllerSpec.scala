@@ -43,7 +43,7 @@ class CharityAddressUKControllerSpec extends SpecBase {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(CharityNamePage(index), "Test").success.value
+        .set(CharityNamePage(index), "Test").right.get
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -63,8 +63,8 @@ class CharityAddressUKControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(CharityNamePage(index), "Test").success.value
-        .set(CharityAddressUKPage(index),  UKAddress("line 1", "line 2", Some("line 3"), Some("line 4"),"line 5")).success.value
+      val userAnswers = emptyUserAnswers.set(CharityNamePage(index), "Test").right.get
+        .set(CharityAddressUKPage(index),  UKAddress("line 1", "line 2", Some("line 3"), Some("line 4"),"line 5")).right.get
 
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -86,7 +86,7 @@ class CharityAddressUKControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(CharityNamePage(index), "Test").success.value
+        .set(CharityNamePage(index), "Test").right.get
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -110,7 +110,7 @@ class CharityAddressUKControllerSpec extends SpecBase {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(CharityNamePage(index), "Test").success.value
+        .set(CharityNamePage(index), "Test").right.get
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

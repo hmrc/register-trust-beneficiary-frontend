@@ -57,30 +57,30 @@ class IndividualBeneficiaryAnswersHelperSpec extends SpecBase {
     "return an individual beneficiary answer section" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), name).success.value
-        .set(RoleInCompanyPage(index), RoleInCompany.Director).success.value
-        .set(DateOfBirthYesNoPage(index), true).success.value
-        .set(DateOfBirthPage(index), date).success.value
-        .set(IncomeYesNoPage(index), false).success.value
-        .set(IncomePage(index), amount).success.value
-        .set(CountryOfNationalityYesNoPage(index), true).success.value
-        .set(CountryOfNationalityInTheUkYesNoPage(index), false).success.value
-        .set(CountryOfNationalityPage(index), country).success.value
-        .set(NationalInsuranceYesNoPage(index), true).success.value
-        .set(NationalInsuranceNumberPage(index), nino).success.value
-        .set(CountryOfResidenceYesNoPage(index), true).success.value
-        .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
-        .set(CountryOfResidencePage(index), country).success.value
-        .set(AddressYesNoPage(index), true).success.value
-        .set(AddressUKYesNoPage(index), true).success.value
-        .set(AddressUKPage(index), ukAddress).success.value
-        .set(AddressInternationalPage(index), nonUkAddress).success.value
-        .set(PassportDetailsYesNoPage(index), true).success.value
-        .set(PassportDetailsPage(index), passportOrIdCard).success.value
-        .set(IDCardDetailsYesNoPage(index), true).success.value
-        .set(IDCardDetailsPage(index), passportOrIdCard).success.value
-        .set(MentalCapacityYesNoPage(index), YesNoDontKnow.Yes).success.value
-        .set(VulnerableYesNoPage(index), false).success.value
+        .set(NamePage(index), name).right.get
+        .set(RoleInCompanyPage(index), RoleInCompany.Director).right.get
+        .set(DateOfBirthYesNoPage(index), true).right.get
+        .set(DateOfBirthPage(index), date).right.get
+        .set(IncomeYesNoPage(index), false).right.get
+        .set(IncomePage(index), amount).right.get
+        .set(CountryOfNationalityYesNoPage(index), true).right.get
+        .set(CountryOfNationalityInTheUkYesNoPage(index), false).right.get
+        .set(CountryOfNationalityPage(index), country).right.get
+        .set(NationalInsuranceYesNoPage(index), true).right.get
+        .set(NationalInsuranceNumberPage(index), nino).right.get
+        .set(CountryOfResidenceYesNoPage(index), true).right.get
+        .set(CountryOfResidenceInTheUkYesNoPage(index), false).right.get
+        .set(CountryOfResidencePage(index), country).right.get
+        .set(AddressYesNoPage(index), true).right.get
+        .set(AddressUKYesNoPage(index), true).right.get
+        .set(AddressUKPage(index), ukAddress).right.get
+        .set(AddressInternationalPage(index), nonUkAddress).right.get
+        .set(PassportDetailsYesNoPage(index), true).right.get
+        .set(PassportDetailsPage(index), passportOrIdCard).right.get
+        .set(IDCardDetailsYesNoPage(index), true).right.get
+        .set(IDCardDetailsPage(index), passportOrIdCard).right.get
+        .set(MentalCapacityYesNoPage(index), YesNoDontKnow.Yes).right.get
+        .set(VulnerableYesNoPage(index), false).right.get
 
       val result = helper.beneficiaries(userAnswers).get
 
@@ -122,8 +122,8 @@ class IndividualBeneficiaryAnswersHelperSpec extends SpecBase {
     "render mental capacity Yes" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), name).success.value
-        .set(MentalCapacityYesNoPage(index), YesNoDontKnow.Yes).success.value
+        .set(NamePage(index), name).right.get
+        .set(MentalCapacityYesNoPage(index), YesNoDontKnow.Yes).right.get
 
       val result = helper.beneficiaries(userAnswers).get
 
@@ -143,8 +143,8 @@ class IndividualBeneficiaryAnswersHelperSpec extends SpecBase {
     "render mental capacity no" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), name).success.value
-        .set(MentalCapacityYesNoPage(index), YesNoDontKnow.No).success.value
+        .set(NamePage(index), name).right.get
+        .set(MentalCapacityYesNoPage(index), YesNoDontKnow.No).right.get
 
       val result = helper.beneficiaries(userAnswers).get
 
@@ -164,8 +164,8 @@ class IndividualBeneficiaryAnswersHelperSpec extends SpecBase {
     "render mental capacity don't know" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), name).success.value
-        .set(MentalCapacityYesNoPage(index), YesNoDontKnow.DontKnow).success.value
+        .set(NamePage(index), name).right.get
+        .set(MentalCapacityYesNoPage(index), YesNoDontKnow.DontKnow).right.get
 
       val result = helper.beneficiaries(userAnswers).get
 

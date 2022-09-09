@@ -16,9 +16,11 @@
 
 package controllers.register.beneficiaries.charityortrust.trust
 
+import cats.data.EitherT
 import config.annotations.TrustBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.register.trust.NameRequiredAction
+import errors.TrustErrors
 import forms.YesNoFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.charityortrust.trust.AddressYesNoPage
@@ -27,6 +29,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.charityortrust.trust.AddressYesNoView
 
 import javax.inject.Inject
@@ -40,7 +43,8 @@ class AddressYesNoController @Inject()(
                                         standardActionSets: StandardActionSets,
                                         nameAction: NameRequiredAction,
                                         formProvider: YesNoFormProvider,
-                                        view: AddressYesNoView
+                                        view: AddressYesNoView,
+                                        technicalErrorView: TechnicalErrorView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider.withPrefix("trustBeneficiaryAddressYesNo")
@@ -61,11 +65,17 @@ class AddressYesNoController @Inject()(
       form.bindFromRequest().fold(
         formWithErrors =>
           Future.successful(BadRequest(view(formWithErrors,  draftId, request.beneficiaryName, index))),
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressYesNoPage(index), value))
-            _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddressYesNoPage(index),  draftId, updatedAnswers))
+        value => {
+          val result = for {
+            updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(AddressYesNoPage(index), value)))
+            _ <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
+          } yield Redirect(navigator.nextPage(AddressYesNoPage(index), draftId, updatedAnswers))
+
+          result.value.map {
+            case Right(call) => call
+            case Left(_) => InternalServerError(technicalErrorView())
+          }
+        }
       )
   }
 }

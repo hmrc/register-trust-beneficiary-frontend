@@ -65,7 +65,7 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
       "return OK and the correct view for a GET" in {
 
         val userAnswers = emptyUserAnswers
-          .set(ClassBeneficiaryDescriptionPage(0), "Future issues of grandchildren").success.value
+          .set(ClassBeneficiaryDescriptionPage(0), "Future issues of grandchildren").right.get
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -86,7 +86,7 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(ClassBeneficiaryDescriptionPage(0), "Future issues of grandchildren").success.value
+        .set(ClassBeneficiaryDescriptionPage(0), "Future issues of grandchildren").right.get
 
       forAll(arbitrary[Boolean]) {
         value =>
@@ -112,7 +112,7 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(ClassBeneficiaryDescriptionPage(0), "Future issues of grandchildren").success.value
+        .set(ClassBeneficiaryDescriptionPage(0), "Future issues of grandchildren").right.get
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

@@ -16,8 +16,10 @@
 
 package controllers.register.beneficiaries.charityortrust.charity
 
+import cats.data.EitherT
 import controllers.actions._
 import controllers.actions.register.charity.NameRequiredAction
+import errors.TrustErrors
 import models.Status.Completed
 import pages.entitystatus.CharityBeneficiaryStatus
 import play.api.i18n.I18nSupport
@@ -26,6 +28,7 @@ import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.print.CharityBeneficiaryPrintHelper
 import viewmodels.AnswerSection
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.charityortrust.charity.CharityAnswersView
 
 import javax.inject.Inject
@@ -37,7 +40,8 @@ class CharityAnswersController @Inject()(
                                           standardActionSets: StandardActionSets,
                                           nameAction: NameRequiredAction,
                                           view: CharityAnswersView,
-                                          printHelper: CharityBeneficiaryPrintHelper
+                                          printHelper: CharityBeneficiaryPrintHelper,
+                                          technicalErrorView: TechnicalErrorView
                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
@@ -51,11 +55,14 @@ class CharityAnswersController @Inject()(
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
     implicit request =>
 
-      val answers = request.userAnswers.set(CharityBeneficiaryStatus(index), Completed)
-
-      for {
-        updatedAnswers <- Future.fromTry(answers)
-        _ <- repository.set(updatedAnswers)
+      val result = for {
+        updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(CharityBeneficiaryStatus(index), Completed)))
+        _ <- EitherT.right[TrustErrors](repository.set(updatedAnswers))
       } yield Redirect(controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId))
+
+      result.value.map {
+        case Right(call) => call
+        case Left(_) => InternalServerError(technicalErrorView())
+      }
   }
 }

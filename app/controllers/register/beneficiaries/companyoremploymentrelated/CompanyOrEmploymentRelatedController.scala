@@ -16,7 +16,9 @@
 
 package controllers.register.beneficiaries.companyoremploymentrelated
 
+import cats.data.EitherT
 import controllers.actions._
+import errors.TrustErrors
 import forms.CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider
 import models.CompanyOrEmploymentRelatedToAdd
 import navigation.Navigator
@@ -26,6 +28,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.companyoremploymentrelated.CompanyOrEmploymentRelatedView
 
 import javax.inject.Inject
@@ -38,7 +41,8 @@ class CompanyOrEmploymentRelatedController @Inject()(
                                                       val controllerComponents: MessagesControllerComponents,
                                                       view: CompanyOrEmploymentRelatedView,
                                                       formProvider: CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider,
-                                                      repository: RegistrationsRepository
+                                                      repository: RegistrationsRepository,
+                                                      technicalErrorView: TechnicalErrorView
                                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form: Form[CompanyOrEmploymentRelatedToAdd] = formProvider()
@@ -61,11 +65,17 @@ class CompanyOrEmploymentRelatedController @Inject()(
         formWithErrors =>
           Future.successful(BadRequest(view(formWithErrors, draftId))),
 
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(CompanyOrEmploymentRelatedPage, value))
-            _ <- repository.set(updatedAnswers)
+        value => {
+          val result = for {
+            updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(CompanyOrEmploymentRelatedPage, value)))
+            _ <- EitherT.right[TrustErrors](repository.set(updatedAnswers))
           } yield Redirect(navigator.nextPage(CompanyOrEmploymentRelatedPage, draftId, updatedAnswers))
+
+          result.value.map {
+            case Right(call) => call
+            case Left(_) => InternalServerError(technicalErrorView())
+          }
+        }
       )
   }
 }

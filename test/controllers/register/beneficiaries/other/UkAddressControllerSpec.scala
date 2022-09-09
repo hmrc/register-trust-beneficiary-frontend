@@ -36,7 +36,7 @@ class UkAddressControllerSpec extends SpecBase with MockitoSugar {
   private val ukAddressRoute: String = routes.UkAddressController.onPageLoad(index, draftId).url
   private val description: String = "Other"
   private val answer = UKAddress("Line 1", "Line 2", None, None, "NE11NE")
-  private val baseAnswers = emptyUserAnswers.set(DescriptionPage(index), description).success.value
+  private val baseAnswers = emptyUserAnswers.set(DescriptionPage(index), description).right.get
 
   "UkAddress Controller" must {
 
@@ -60,7 +60,7 @@ class UkAddressControllerSpec extends SpecBase with MockitoSugar {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = baseAnswers.set(AddressUKPage(index), answer).success.value
+      val answers = baseAnswers.set(AddressUKPage(index), answer).right.get
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 

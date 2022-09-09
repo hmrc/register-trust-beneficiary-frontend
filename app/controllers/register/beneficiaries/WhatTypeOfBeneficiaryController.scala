@@ -16,7 +16,9 @@
 
 package controllers.register.beneficiaries
 
+import cats.data.EitherT
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
+import errors.TrustErrors
 import forms.WhatTypeOfBeneficiaryFormProvider
 import models.requests.RegistrationDataRequest
 import navigation.Navigator
@@ -26,6 +28,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.WhatTypeOfBeneficiaryView
 
 import javax.inject.Inject
@@ -40,7 +43,8 @@ class WhatTypeOfBeneficiaryController @Inject()(
                                                  requireData: RegistrationDataRequiredAction,
                                                  formProvider: WhatTypeOfBeneficiaryFormProvider,
                                                  val controllerComponents: MessagesControllerComponents,
-                                                 view: WhatTypeOfBeneficiaryView
+                                                 view: WhatTypeOfBeneficiaryView,
+                                                 technicalErrorView: TechnicalErrorView
                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def actions(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] = identify andThen getData(draftId) andThen requireData
@@ -76,10 +80,15 @@ class WhatTypeOfBeneficiaryController @Inject()(
           ))),
 
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(WhatTypeOfBeneficiaryPage, value))
-            _              <- registrationsRepository.set(updatedAnswers)
+          val result = for {
+            updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(WhatTypeOfBeneficiaryPage, value)))
+            _              <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
           } yield Redirect(navigator.nextPage(WhatTypeOfBeneficiaryPage, draftId, updatedAnswers))
+
+          result.value.map {
+            case Right(call) => call
+            case Left(_) => InternalServerError(technicalErrorView())
+          }
         }
       )
   }
