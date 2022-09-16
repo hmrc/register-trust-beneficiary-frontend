@@ -204,7 +204,7 @@ class AddABeneficiaryController @Inject()(
       handleResponse(result)
   }
 
-  def handleResponse(result: EitherT[Future, TrustErrors, Result])(implicit request: Request[AnyContent]): Future[Result] = {
+  private def handleResponse(result: EitherT[Future, TrustErrors, Result])(implicit request: Request[AnyContent]): Future[Result] = {
     result.value.map {
       case Right(call) => call
       case Left(_) => InternalServerError(technicalErrorView())
