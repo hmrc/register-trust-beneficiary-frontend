@@ -36,7 +36,7 @@ class RoleInCompanyControllerSpec extends SpecBase with MockitoSugar {
   val name = FullName("FirstName", None, "LastName")
   val index = 0
 
-  val userAnswers = emptyUserAnswers.set(NamePage(index), name).success.value
+  val userAnswers = emptyUserAnswers.set(NamePage(index), name).right.get
 
   def application = applicationBuilder(userAnswers = Some(userAnswers))
     .overrides(
@@ -66,8 +66,8 @@ class RoleInCompanyControllerSpec extends SpecBase with MockitoSugar {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), name).success.value
-        .set(RoleInCompanyPage(index), Director).success.value
+        .set(NamePage(index), name).right.get
+        .set(RoleInCompanyPage(index), Director).right.get
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

@@ -35,7 +35,7 @@ class ShareOfIncomeControllerSpec extends SpecBase {
   val name = "Name"
   val index: Int = 0
   val userAnswers: UserAnswers = emptyUserAnswers
-    .set(NamePage(index), name).success.value
+    .set(NamePage(index), name).right.get
 
   lazy val shareOfIncomeRoute: String = routes.ShareOfIncomeController.onPageLoad(index, fakeDraftId).url
 
@@ -62,7 +62,7 @@ class ShareOfIncomeControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val answers = userAnswers
-        .set(ShareOfIncomePage(index), 5).success.value
+        .set(ShareOfIncomePage(index), 5).right.get
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 

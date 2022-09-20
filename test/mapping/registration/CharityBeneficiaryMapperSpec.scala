@@ -52,9 +52,9 @@ class CharityBeneficiaryMapperSpec extends SpecBase with MustMatchers
 
         "no address" in {
           val userAnswers = emptyUserAnswers
-            .set(CharityNamePage(index), name).success.value
-            .set(AmountDiscretionYesNoPage(index), true).success.value
-            .set(AddressYesNoPage(index), false).success.value
+            .set(CharityNamePage(index), name).right.get
+            .set(AmountDiscretionYesNoPage(index), true).right.get
+            .set(AddressYesNoPage(index), false).right.get
 
           charityBeneficiaryMapper.build(userAnswers).value.head mustBe CharityType(
             organisationName = name,
@@ -68,12 +68,12 @@ class CharityBeneficiaryMapperSpec extends SpecBase with MustMatchers
         "Country of residence is set to the UK" in {
           val userAnswers =
             emptyUserAnswers
-              .set(CharityNamePage(index), name).success.value
-              .set(AmountDiscretionYesNoPage(index), false).success.value
-              .set(HowMuchIncomePage(index),60).success.value
-              .set(CountryOfResidenceYesNoPage(index), true).success.value
-              .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
-              .set(AddressYesNoPage(index), false).success.value
+              .set(CharityNamePage(index), name).right.get
+              .set(AmountDiscretionYesNoPage(index), false).right.get
+              .set(HowMuchIncomePage(index),60).right.get
+              .set(CountryOfResidenceYesNoPage(index), true).right.get
+              .set(CountryOfResidenceInTheUkYesNoPage(index), true).right.get
+              .set(AddressYesNoPage(index), false).right.get
 
           val charities = charityBeneficiaryMapper.build(userAnswers)
 
@@ -90,13 +90,13 @@ class CharityBeneficiaryMapperSpec extends SpecBase with MustMatchers
         "Country of residence is set to outside the UK" in {
           val userAnswers =
             emptyUserAnswers
-              .set(CharityNamePage(index), "Charity Name").success.value
-              .set(AmountDiscretionYesNoPage(index), false).success.value
-              .set(HowMuchIncomePage(index), 100).success.value
-              .set(CountryOfResidenceYesNoPage(index), true).success.value
-              .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
-              .set(CountryOfResidencePage(index), "FR").success.value
-              .set(AddressYesNoPage(index), false).success.value
+              .set(CharityNamePage(index), "Charity Name").right.get
+              .set(AmountDiscretionYesNoPage(index), false).right.get
+              .set(HowMuchIncomePage(index), 100).right.get
+              .set(CountryOfResidenceYesNoPage(index), true).right.get
+              .set(CountryOfResidenceInTheUkYesNoPage(index), false).right.get
+              .set(CountryOfResidencePage(index), "FR").right.get
+              .set(AddressYesNoPage(index), false).right.get
 
           val charities = charityBeneficiaryMapper.build(userAnswers)
 
@@ -113,11 +113,11 @@ class CharityBeneficiaryMapperSpec extends SpecBase with MustMatchers
       "UK address" in {
           val index = 0
           val userAnswers = emptyUserAnswers
-            .set(CharityNamePage(index), name).success.value
-            .set(AmountDiscretionYesNoPage(index), true).success.value
-            .set(AddressYesNoPage(index), true).success.value
-            .set(AddressInTheUkYesNoPage(index), true).success.value
-            .set(CharityAddressUKPage(index), ukAddress).success.value
+            .set(CharityNamePage(index), name).right.get
+            .set(AmountDiscretionYesNoPage(index), true).right.get
+            .set(AddressYesNoPage(index), true).right.get
+            .set(AddressInTheUkYesNoPage(index), true).right.get
+            .set(CharityAddressUKPage(index), ukAddress).right.get
 
           charityBeneficiaryMapper.build(userAnswers).value.head mustBe CharityType(
             organisationName = name,
@@ -136,11 +136,11 @@ class CharityBeneficiaryMapperSpec extends SpecBase with MustMatchers
         "international address" in {
           val index = 0
           val userAnswers = emptyUserAnswers
-            .set(CharityNamePage(index), name).success.value
-            .set(AmountDiscretionYesNoPage(index), true).success.value
-            .set(AddressYesNoPage(index), true).success.value
-            .set(AddressInTheUkYesNoPage(index), false).success.value
-            .set(CharityInternationalAddressPage(index), internationalAddress).success.value
+            .set(CharityNamePage(index), name).right.get
+            .set(AmountDiscretionYesNoPage(index), true).right.get
+            .set(AddressYesNoPage(index), true).right.get
+            .set(AddressInTheUkYesNoPage(index), false).right.get
+            .set(CharityInternationalAddressPage(index), internationalAddress).right.get
 
           charityBeneficiaryMapper.build(userAnswers).value.head mustBe CharityType(
             organisationName = name,
@@ -165,13 +165,13 @@ class CharityBeneficiaryMapperSpec extends SpecBase with MustMatchers
 
         val userAnswers =
           emptyUserAnswers
-            .set(CharityNamePage(index0), name1).success.value
-            .set(AmountDiscretionYesNoPage(index0), true).success.value
-            .set(AddressYesNoPage(index0), false).success.value
+            .set(CharityNamePage(index0), name1).right.get
+            .set(AmountDiscretionYesNoPage(index0), true).right.get
+            .set(AddressYesNoPage(index0), false).right.get
 
-            .set(CharityNamePage(index1), name2).success.value
-            .set(AmountDiscretionYesNoPage(index1), true).success.value
-            .set(AddressYesNoPage(index1), false).success.value
+            .set(CharityNamePage(index1), name2).right.get
+            .set(AmountDiscretionYesNoPage(index1), true).right.get
+            .set(AddressYesNoPage(index1), false).right.get
 
         charityBeneficiaryMapper.build(userAnswers).value mustBe List(
           CharityType(

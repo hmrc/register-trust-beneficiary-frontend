@@ -50,9 +50,9 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers with Optio
         "No address is set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(NamePage(index0), "Company Name").success.value
-              .set(IncomeYesNoPage(index0), true).success.value
-              .set(AddressYesNoPage(index0), false).success.value
+              .set(NamePage(index0), "Company Name").right.get
+              .set(IncomeYesNoPage(index0), true).right.get
+              .set(AddressYesNoPage(index0), false).right.get
 
           val companies = mapper.build(userAnswers)
 
@@ -69,10 +69,10 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers with Optio
         "Income value is set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(NamePage(index0), "Company Name").success.value
-              .set(IncomeYesNoPage(index0), false).success.value
-              .set(IncomePage(index0), 42).success.value
-              .set(AddressYesNoPage(index0), false).success.value
+              .set(NamePage(index0), "Company Name").right.get
+              .set(IncomeYesNoPage(index0), false).right.get
+              .set(IncomePage(index0), 42).right.get
+              .set(AddressYesNoPage(index0), false).right.get
 
           val companies = mapper.build(userAnswers)
 
@@ -89,9 +89,9 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers with Optio
         "income value is not set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(NamePage(index0), "Company Name").success.value
-              .set(CountryOfResidenceYesNoPage(index0), true).success.value
-              .set(CountryOfResidenceInTheUkYesNoPage(index0), true).success.value
+              .set(NamePage(index0), "Company Name").right.get
+              .set(CountryOfResidenceYesNoPage(index0), true).right.get
+              .set(CountryOfResidenceInTheUkYesNoPage(index0), true).right.get
 
           val companies = mapper.build(userAnswers)
 
@@ -108,12 +108,12 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers with Optio
         "UK Address is set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(NamePage(index0), "Company Name").success.value
-              .set(IncomeYesNoPage(index0), true).success.value
-              .set(AddressYesNoPage(index0), true).success.value
-              .set(AddressUKYesNoPage(index0), true).success.value
+              .set(NamePage(index0), "Company Name").right.get
+              .set(IncomeYesNoPage(index0), true).right.get
+              .set(AddressYesNoPage(index0), true).right.get
+              .set(AddressUKYesNoPage(index0), true).right.get
               .set(AddressUKPage(index0),
-                UKAddress("Line1", "Line2", Some("Line3"), Some("Newcastle"), "NE62RT")).success.value
+                UKAddress("Line1", "Line2", Some("Line3"), Some("Newcastle"), "NE62RT")).right.get
 
           val companies = mapper.build(userAnswers)
 
@@ -133,12 +133,12 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers with Optio
         "International Address is set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(NamePage(index0), "Company Name").success.value
-              .set(IncomeYesNoPage(index0), true).success.value
-              .set(AddressYesNoPage(index0), true).success.value
-              .set(AddressUKYesNoPage(index0), false).success.value
+              .set(NamePage(index0), "Company Name").right.get
+              .set(IncomeYesNoPage(index0), true).right.get
+              .set(AddressYesNoPage(index0), true).right.get
+              .set(AddressUKYesNoPage(index0), false).right.get
               .set(AddressInternationalPage(index0),
-                InternationalAddress("Line1", "Line2", Some("Line3"), "US")).success.value
+                InternationalAddress("Line1", "Line2", Some("Line3"), "US")).right.get
 
           val companies = mapper.build(userAnswers)
 
@@ -162,16 +162,16 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers with Optio
       "must be able to create multiple Company beneficiaries" in {
         val userAnswers =
           emptyUserAnswers
-            .set(NamePage(index0), "Company 1").success.value
-            .set(IncomeYesNoPage(index0), false).success.value
-            .set(IncomePage(index0), 100).success.value
+            .set(NamePage(index0), "Company 1").right.get
+            .set(IncomeYesNoPage(index0), false).right.get
+            .set(IncomePage(index0), 100).right.get
 
-            .set(NamePage(index1), "Company 2").success.value
-            .set(IncomeYesNoPage(index1), true).success.value
-            .set(AddressYesNoPage(index1), true).success.value
-            .set(AddressUKYesNoPage(index1), true).success.value
+            .set(NamePage(index1), "Company 2").right.get
+            .set(IncomeYesNoPage(index1), true).right.get
+            .set(AddressYesNoPage(index1), true).right.get
+            .set(AddressUKYesNoPage(index1), true).right.get
             .set(AddressUKPage(index1),
-              UKAddress("line1", "line2", None, None, "NE62RT")).success.value
+              UKAddress("line1", "line2", None, None, "NE62RT")).right.get
 
 
         val individuals = mapper.build(userAnswers)
@@ -205,12 +205,12 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers with Optio
       "Country of residence is set to the UK" in {
         val userAnswers =
           emptyUserAnswers
-            .set(NamePage(index0), "Company Name").success.value
-            .set(IncomeYesNoPage(index0), false).success.value
-            .set(IncomePage(index0),60).success.value
-            .set(CountryOfResidenceYesNoPage(index0), true).success.value
-            .set(CountryOfResidenceInTheUkYesNoPage(index0), true).success.value
-            .set(AddressYesNoPage(index0), false).success.value
+            .set(NamePage(index0), "Company Name").right.get
+            .set(IncomeYesNoPage(index0), false).right.get
+            .set(IncomePage(index0),60).right.get
+            .set(CountryOfResidenceYesNoPage(index0), true).right.get
+            .set(CountryOfResidenceInTheUkYesNoPage(index0), true).right.get
+            .set(AddressYesNoPage(index0), false).right.get
 
         val company = mapper.build(userAnswers)
 
@@ -227,13 +227,13 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers with Optio
       "Country of residence is set to outside the UK" in {
         val userAnswers =
           emptyUserAnswers
-            .set(NamePage(index0), "Company Name").success.value
-            .set(IncomeYesNoPage(index0), false).success.value
-            .set(IncomePage(index0), 100).success.value
-            .set(CountryOfResidenceYesNoPage(index0), true).success.value
-            .set(CountryOfResidenceInTheUkYesNoPage(index0), false).success.value
-            .set(CountryOfResidencePage(index0), "FR").success.value
-            .set(AddressYesNoPage(index0), false).success.value
+            .set(NamePage(index0), "Company Name").right.get
+            .set(IncomeYesNoPage(index0), false).right.get
+            .set(IncomePage(index0), 100).right.get
+            .set(CountryOfResidenceYesNoPage(index0), true).right.get
+            .set(CountryOfResidenceInTheUkYesNoPage(index0), false).right.get
+            .set(CountryOfResidencePage(index0), "FR").right.get
+            .set(AddressYesNoPage(index0), false).right.get
 
         val company = mapper.build(userAnswers)
 
@@ -250,7 +250,7 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers with Optio
       "must be able to create IndividualDetailsType with minimum data" in {
         val userAnswers =
           emptyUserAnswers
-            .set(NamePage(index0), "Company Name").success.value
+            .set(NamePage(index0), "Company Name").right.get
 
         mapper.build(userAnswers) must be(defined)
       }

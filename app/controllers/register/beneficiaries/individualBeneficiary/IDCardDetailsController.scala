@@ -16,10 +16,12 @@
 
 package controllers.register.beneficiaries.individualBeneficiary
 
+import cats.data.EitherT
 import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
+import errors.TrustErrors
 import forms.PassportOrIdCardFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.individual.{IDCardDetailsPage, NamePage}
@@ -30,6 +32,7 @@ import repositories.RegistrationsRepository
 import sections.beneficiaries.IndividualBeneficiaries
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.countryOptions.CountryOptions
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.individualBeneficiary.IDCardDetailsView
 
 import javax.inject.Inject
@@ -47,7 +50,8 @@ class IDCardDetailsController @Inject()(
                                          formProvider: PassportOrIdCardFormProvider,
                                          val controllerComponents: MessagesControllerComponents,
                                          view: IDCardDetailsView,
-                                         val countryOptions: CountryOptions
+                                         val countryOptions: CountryOptions,
+                                         technicalErrorView: TechnicalErrorView
                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form = formProvider("individualBeneficiaryIDCardDetails")
@@ -82,10 +86,15 @@ class IDCardDetailsController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, index, name))),
 
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(IDCardDetailsPage(index), value))
-            _              <- registrationsRepository.set(updatedAnswers)
+          val result = for {
+            updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(IDCardDetailsPage(index), value)))
+            _              <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
           } yield Redirect(navigator.nextPage(IDCardDetailsPage(index), draftId, updatedAnswers))
+
+          result.value.map {
+            case Right(call) => call
+            case Left(_) => InternalServerError(technicalErrorView())
+          }
         }
       )
   }

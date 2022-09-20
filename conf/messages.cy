@@ -747,3 +747,6 @@ pageNotFound.p1 = Os gwnaethoch deipio’r cyfeiriad gwe, gwiriwch ei fod yn gyw
 pageNotFound.p2 = Os gwnaethoch ludo’r cyfeiriad gwe, gwiriwch eich bod wedi copïo’r cyfeiriad yn llawn.
 pageNotFound.p3 = Os yw’r cyfeiriad gwe yn gywir, neu eich bod wedi dewis cysylltiad neu fotwm, {0}.
 pageNotFound.link = cysylltwch â Gwasanaeth Cwsmeriaid Cymraeg CThEM i siarad â rhywun ynghylch ymddiriedolaeth (yn agor tab newydd)
+serverError.title=Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth
+serverError.heading=Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth
+serverError.message=Rhowch gynnig arall arni yn nes ymlaen.

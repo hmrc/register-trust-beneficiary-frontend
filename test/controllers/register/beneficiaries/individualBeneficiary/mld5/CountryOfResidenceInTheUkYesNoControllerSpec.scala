@@ -44,7 +44,7 @@ class CountryOfResidenceInTheUkYesNoControllerSpec extends SpecBase with Mockito
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), name).success.value
+        .set(NamePage(index), name).right.get
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -64,8 +64,8 @@ class CountryOfResidenceInTheUkYesNoControllerSpec extends SpecBase with Mockito
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index), name).success.value
-        .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
+      val userAnswers = emptyUserAnswers.set(NamePage(index), name).right.get
+        .set(CountryOfResidenceInTheUkYesNoPage(index), true).right.get
 
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -87,7 +87,7 @@ class CountryOfResidenceInTheUkYesNoControllerSpec extends SpecBase with Mockito
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), name).success.value
+        .set(NamePage(index), name).right.get
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
@@ -110,7 +110,7 @@ class CountryOfResidenceInTheUkYesNoControllerSpec extends SpecBase with Mockito
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), name).success.value
+        .set(NamePage(index), name).right.get
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

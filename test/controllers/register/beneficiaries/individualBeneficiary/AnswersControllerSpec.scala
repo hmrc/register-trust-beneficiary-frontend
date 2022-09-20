@@ -43,8 +43,8 @@ class AnswersControllerSpec extends SpecBase {
   private lazy val answersRoute = routes.AnswersController.onPageLoad(index, fakeDraftId).url
 
   override def emptyUserAnswers: UserAnswers = super.emptyUserAnswers
-    .set(WhatTypeOfBeneficiaryPage, Individual).success.value
-    .set(NamePage(index), FullName("first name", None, "last name")).success.value
+    .set(WhatTypeOfBeneficiaryPage, Individual).right.get
+    .set(NamePage(index), FullName("first name", None, "last name")).right.get
 
   "IndividualBeneficiaryAnswers Controller" must {
 

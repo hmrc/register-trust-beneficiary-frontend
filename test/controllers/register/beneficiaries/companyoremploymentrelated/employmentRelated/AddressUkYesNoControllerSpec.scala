@@ -37,7 +37,7 @@ class AddressUkYesNoControllerSpec extends SpecBase with MockitoSugar {
   private val name: String = "EmploymentRelated"
   private val onwardRoute = Call("GET", "/foo")
 
-  private val baseAnswers = emptyUserAnswers.set(LargeBeneficiaryNamePage(index), name).success.value
+  private val baseAnswers = emptyUserAnswers.set(LargeBeneficiaryNamePage(index), name).right.get
 
   "AddressUkYesNo Controller" must {
 
@@ -61,7 +61,7 @@ class AddressUkYesNoControllerSpec extends SpecBase with MockitoSugar {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = baseAnswers.set(LargeBeneficiaryAddressUKYesNoPage(index), true).success.value
+      val answers = baseAnswers.set(LargeBeneficiaryAddressUKYesNoPage(index), true).right.get
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 

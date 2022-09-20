@@ -16,8 +16,10 @@
 
 package controllers.register.beneficiaries.companyoremploymentrelated.company
 
+import cats.data.EitherT
 import config.annotations.CompanyBeneficiary
 import controllers.actions.StandardActionSets
+import errors.TrustErrors
 import forms.StringFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.companyoremploymentrelated.company.NamePage
@@ -26,6 +28,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.companyoremploymentrelated.company.NameView
 
 import javax.inject.Inject
@@ -37,7 +40,8 @@ class NameController @Inject()(
                                 formProvider: StringFormProvider,
                                 view: NameView,
                                 repository: RegistrationsRepository,
-                                @CompanyBeneficiary navigator: Navigator
+                                @CompanyBeneficiary navigator: Navigator,
+                                technicalErrorView: TechnicalErrorView
                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[String] = formProvider.withPrefix("companyBeneficiary.name", 105)
@@ -62,11 +66,17 @@ class NameController @Inject()(
         formWithErrors =>
           Future.successful(BadRequest(view(formWithErrors, index, draftId))),
 
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(NamePage(index), value))
-            _ <- repository.set(updatedAnswers)
+        value => {
+          val result = for {
+            updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(NamePage(index), value)))
+            _ <- EitherT.right[TrustErrors](repository.set(updatedAnswers))
           } yield Redirect(navigator.nextPage(NamePage(index), draftId, updatedAnswers))
+
+          result.value.map {
+            case Right(call) => call
+            case Left(_) => InternalServerError(technicalErrorView())
+          }
+        }
       )
   }
 }

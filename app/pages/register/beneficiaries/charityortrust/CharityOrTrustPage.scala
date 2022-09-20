@@ -16,6 +16,7 @@
 
 package pages.register.beneficiaries.charityortrust
 
+import errors.TrustErrors
 import models.UserAnswers
 import models.registration.pages.CharityOrTrust
 import models.registration.pages.CharityOrTrust._
@@ -24,15 +25,13 @@ import pages.register.beneficiaries.TypeOfBeneficiaryPage
 import play.api.libs.json._
 import sections.beneficiaries._
 
-import scala.util.Try
-
 case object CharityOrTrustPage extends QuestionPage[CharityOrTrust] with TypeOfBeneficiaryPage {
 
   override def path: JsPath = JsPath \ Beneficiaries \ toString
 
   override def toString: String = "charityortrust"
 
-  override def cleanup(value: Option[CharityOrTrust], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[CharityOrTrust], userAnswers: UserAnswers): Either[TrustErrors, UserAnswers] = {
 
     def paths: Seq[JsPath] = Seq(
       CharityBeneficiaries.path,

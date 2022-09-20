@@ -16,9 +16,11 @@
 
 package controllers.register.beneficiaries.individualBeneficiary
 
+import cats.data.EitherT
 import config.annotations.IndividualBeneficiary
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
+import errors.TrustErrors
 import forms.RoleInCompanyFormProvider
 import models.registration.pages.RoleInCompany
 import navigation.Navigator
@@ -28,6 +30,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.individualBeneficiary.RoleInCompanyView
 
 import javax.inject.Inject
@@ -43,7 +46,8 @@ class RoleInCompanyController @Inject()(
                                          requiredAnswer: RequiredAnswerActionProvider,
                                          formProvider: RoleInCompanyFormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: RoleInCompanyView
+                                         view: RoleInCompanyView,
+                                         technicalErrorView: TechnicalErrorView
                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[RoleInCompany] = formProvider()
@@ -76,11 +80,17 @@ class RoleInCompanyController @Inject()(
 
             Future.successful(BadRequest(view(formWithErrors, draftId, name, index)))
           },
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(RoleInCompanyPage(index), value))
-            _ <- registrationsRepository.set(updatedAnswers)
+        value => {
+          val result = for {
+            updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(RoleInCompanyPage(index), value)))
+            _ <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
           } yield Redirect(navigator.nextPage(RoleInCompanyPage(index), draftId, updatedAnswers))
+
+          result.value.map {
+            case Right(call) => call
+            case Left(_) => InternalServerError(technicalErrorView())
+          }
+        }
       )
   }
 

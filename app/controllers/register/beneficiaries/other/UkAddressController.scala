@@ -16,9 +16,11 @@
 
 package controllers.register.beneficiaries.other
 
+import cats.data.EitherT
 import config.annotations.OtherBeneficiary
 import controllers.actions._
 import controllers.actions.register.other.DescriptionRequiredAction
+import errors.TrustErrors
 import forms.UKAddressFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.other.AddressUKPage
@@ -26,6 +28,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.other.UkAddressView
 
 import javax.inject.Inject
@@ -39,7 +42,8 @@ class UkAddressController @Inject()(
                                      descriptionAction: DescriptionRequiredAction,
                                      formProvider: UKAddressFormProvider,
                                      val controllerComponents: MessagesControllerComponents,
-                                     view: UkAddressView
+                                     view: UkAddressView,
+                                     technicalErrorView: TechnicalErrorView
                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form = formProvider()
@@ -64,11 +68,17 @@ class UkAddressController @Inject()(
         formWithErrors =>
           Future.successful(BadRequest(view(formWithErrors, request.description, index, draftId))),
 
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressUKPage(index), value))
-            _              <- sessionRepository.set(updatedAnswers)
+        value => {
+          val result = for {
+            updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(AddressUKPage(index), value)))
+            _ <- EitherT.right[TrustErrors](sessionRepository.set(updatedAnswers))
           } yield Redirect(navigator.nextPage(AddressUKPage(index), draftId, updatedAnswers))
+
+          result.value.map {
+            case Right(call) => call
+            case Left(_) => InternalServerError(technicalErrorView())
+          }
+        }
       )
   }
 }

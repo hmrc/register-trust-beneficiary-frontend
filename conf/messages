@@ -905,3 +905,7 @@ pageNotFound.p1 = If you typed the web address, check it is correct.
 pageNotFound.p2 = If you pasted the web address, check that you copied the entire address.
 pageNotFound.p3 = If the web address is correct or you selected a link or button, {0}.
 pageNotFound.link = contact the trust helpline to speak to someone about a trust (opens in a new tab)
+
+serverError.title=Sorry, there is a problem with the service
+serverError.heading=Sorry, there is a problem with the service
+serverError.message=Try again later.

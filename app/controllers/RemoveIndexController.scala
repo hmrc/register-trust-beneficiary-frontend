@@ -16,6 +16,8 @@
 
 package controllers
 
+import cats.data.EitherT
+import errors.TrustErrors
 import forms.RemoveForm
 import models.requests.RegistrationDataRequest
 import pages.QuestionPage
@@ -26,7 +28,7 @@ import play.twirl.api.HtmlFormat
 import queries.Settable
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.RemoveIndexView
+import views.html.{RemoveIndexView, TechnicalErrorView}
 
 import scala.concurrent.Future
 
@@ -37,6 +39,7 @@ trait RemoveIndexController extends FrontendBaseController with I18nSupport {
   val formProvider : RemoveForm
 
   val removeView: RemoveIndexView
+  val technicalErrorView: TechnicalErrorView
 
   lazy val form: Form[Boolean] = formProvider.apply(messagesPrefix)
 
@@ -74,10 +77,15 @@ trait RemoveIndexController extends FrontendBaseController with I18nSupport {
           Future.successful(BadRequest(view(formWithErrors, index, draftId))),
         value => {
           if (value) {
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.remove(removeQuery(index)))
-              _              <- registrationsRepository.set(updatedAnswers)
+            val result = for {
+              updatedAnswers <- EitherT(Future.successful(request.userAnswers.remove(removeQuery(index))))
+              _              <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
             } yield Redirect(redirect(draftId).url)
+
+            result.value.map {
+              case Right(call) => call
+              case Left(_) => InternalServerError(technicalErrorView())
+            }
           } else {
             Future.successful(Redirect(redirect(draftId).url))
           }

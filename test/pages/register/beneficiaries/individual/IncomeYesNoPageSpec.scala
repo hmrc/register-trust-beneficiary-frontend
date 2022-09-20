@@ -35,8 +35,8 @@ class IncomeYesNoPageSpec extends PageBehaviours {
   "remove IndividualBeneficiaryIncome when IndividualBeneficiaryIncomeYesNoPage is set to true" in {
     forAll(arbitrary[UserAnswers]) {
       initial =>
-        val answers: UserAnswers = initial.set(IncomePage(0), 100).success.value
-        val result = answers.set(IncomeYesNoPage(0), true).success.value
+        val answers: UserAnswers = initial.set(IncomePage(0), 100).right.get
+        val result = answers.set(IncomeYesNoPage(0), true).right.get
 
         result.get(IncomePage(0)) mustNot be(defined)
     }

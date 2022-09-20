@@ -16,9 +16,11 @@
 
 package controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.mld5
 
+import cats.data.EitherT
 import config.annotations.EmploymentRelatedBeneficiary
 import controllers.actions._
 import controllers.actions.register.employmentRelated.NameRequiredAction
+import errors.TrustErrors
 import forms.YesNoFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.mld5.CountryOfResidenceYesNoPage
@@ -27,6 +29,7 @@ import play.api.i18n._
 import play.api.mvc._
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.companyoremploymentrelated.employmentRelated.mld5.CountryOfResidenceYesNoView
 
 import javax.inject.Inject
@@ -39,7 +42,8 @@ class CountryOfResidenceYesNoController @Inject()(
                                                    standardActionSets: StandardActionSets,
                                                    nameAction: NameRequiredAction,
                                                    formProvider: YesNoFormProvider,
-                                                   view: CountryOfResidenceYesNoView
+                                                   view: CountryOfResidenceYesNoView,
+                                                   technicalErrorView: TechnicalErrorView
                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form: Form[Boolean] = formProvider.withPrefix("employmentRelatedBeneficiary.5mld.countryOfResidenceYesNo")
@@ -48,28 +52,34 @@ class CountryOfResidenceYesNoController @Inject()(
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index))
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(draftId, index) {
-      implicit request =>
+    implicit request =>
 
-        val preparedForm = request.userAnswers.get(CountryOfResidenceYesNoPage(index)) match {
-          case None => form
-          case Some(value) => form.fill(value)
-        }
+      val preparedForm = request.userAnswers.get(CountryOfResidenceYesNoPage(index)) match {
+        case None => form
+        case Some(value) => form.fill(value)
+      }
 
-        Ok(view(preparedForm, draftId, index, request.beneficiaryName))
-    }
+      Ok(view(preparedForm, draftId, index, request.beneficiaryName))
+  }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(draftId, index).async {
-      implicit request =>
+    implicit request =>
 
-        form.bindFromRequest().fold(
-          formWithErrors =>
-            Future.successful(BadRequest(view(formWithErrors, draftId, index, request.beneficiaryName))),
+      form.bindFromRequest().fold(
+        formWithErrors =>
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.beneficiaryName))),
 
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfResidenceYesNoPage(index), value))
-              _              <- repository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, updatedAnswers))
-        )
-    }
+        value => {
+          val result = for {
+            updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(CountryOfResidenceYesNoPage(index), value)))
+            _              <- EitherT.right[TrustErrors](repository.set(updatedAnswers))
+          } yield Redirect(navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, updatedAnswers))
+
+          result.value.map {
+            case Right(call) => call
+            case Left(_) => InternalServerError(technicalErrorView())
+          }
+        }
+      )
+  }
 }

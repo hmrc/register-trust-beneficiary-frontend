@@ -59,7 +59,7 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = emptyUserAnswers.set(CharityOrTrustPage, validAnswer).success.value
+      val answers = emptyUserAnswers.set(CharityOrTrustPage, validAnswer).right.get
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 

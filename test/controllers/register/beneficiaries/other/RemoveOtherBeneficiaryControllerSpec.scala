@@ -66,7 +66,7 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
       "return OK and the correct view for a GET" in {
 
-        val userAnswers = emptyUserAnswers.set(DescriptionPage(0), "other beneficiary").success.value
+        val userAnswers = emptyUserAnswers.set(DescriptionPage(0), "other beneficiary").right.get
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -87,7 +87,7 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(DescriptionPage(0), "other beneficiary").success.value
+      val userAnswers = emptyUserAnswers.set(DescriptionPage(0), "other beneficiary").right.get
 
       forAll(arbitrary[Boolean]) {
         value =>
@@ -112,7 +112,7 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(DescriptionPage(0), "other beneficiary").success.value
+      val userAnswers = emptyUserAnswers.set(DescriptionPage(0), "other beneficiary").right.get
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

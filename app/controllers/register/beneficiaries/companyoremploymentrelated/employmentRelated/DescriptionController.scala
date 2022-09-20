@@ -16,8 +16,10 @@
 
 package controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated
 
+import cats.data.EitherT
 import config.annotations.EmploymentRelatedBeneficiary
 import controllers.actions.StandardActionSets
+import errors.TrustErrors
 import forms.EmploymentRelatedBeneficiaryDescriptionFormProvider
 import models.core.pages.Description
 import navigation.Navigator
@@ -27,6 +29,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.companyoremploymentrelated.employmentRelated.DescriptionView
 
 import javax.inject.Inject
@@ -38,7 +41,8 @@ class DescriptionController @Inject()(
                                        formProvider: EmploymentRelatedBeneficiaryDescriptionFormProvider,
                                        view: DescriptionView,
                                        repository: RegistrationsRepository,
-                                       @EmploymentRelatedBeneficiary navigator: Navigator
+                                       @EmploymentRelatedBeneficiary navigator: Navigator,
+                                       technicalErrorView: TechnicalErrorView
                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Description] = formProvider.withPrefix("employmentRelatedBeneficiary.description")
@@ -62,11 +66,17 @@ class DescriptionController @Inject()(
         formWithErrors =>
           Future.successful(BadRequest(view(formWithErrors, index, draftId))),
 
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(LargeBeneficiaryDescriptionPage(index), value))
-            _ <- repository.set(updatedAnswers)
+        value => {
+          val result = for {
+            updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(LargeBeneficiaryDescriptionPage(index), value)))
+            _ <- EitherT.right[TrustErrors](repository.set(updatedAnswers))
           } yield Redirect(navigator.nextPage(LargeBeneficiaryDescriptionPage(index), draftId, updatedAnswers))
+
+          result.value.map {
+            case Right(call) => call
+            case Left(_) => InternalServerError(technicalErrorView())
+          }
+        }
       )
   }
 }

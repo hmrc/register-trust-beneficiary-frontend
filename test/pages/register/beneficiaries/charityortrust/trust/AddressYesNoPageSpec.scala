@@ -37,10 +37,10 @@ class AddressYesNoPageSpec extends PageBehaviours {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
             val result: UserAnswers = userAnswers
-              .set(AddressUKYesNoPage(0), true).success.value
-              .set(AddressUKPage(0), UKAddress("Line 1", "Line 2", None, None, "POSTCODE")).success.value
-              .set(AddressInternationalPage(0), InternationalAddress("Line 1", "Line 2", None, "COUNTRY")).success.value
-              .set(AddressYesNoPage(0), false).success.value
+              .set(AddressUKYesNoPage(0), true).right.get
+              .set(AddressUKPage(0), UKAddress("Line 1", "Line 2", None, None, "POSTCODE")).right.get
+              .set(AddressInternationalPage(0), InternationalAddress("Line 1", "Line 2", None, "COUNTRY")).right.get
+              .set(AddressYesNoPage(0), false).right.get
 
             result.get(AddressUKYesNoPage(0)) mustNot be(defined)
             result.get(AddressUKPage(0)) mustNot be(defined)

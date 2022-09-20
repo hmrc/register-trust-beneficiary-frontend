@@ -47,7 +47,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers.set(NamePage(index),
-        name).success.value
+        name).right.get
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -67,8 +67,8 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(DateOfBirthPage(index), validAnswer).success.value
-        .set(NamePage(index),name).success.value
+      val userAnswers = emptyUserAnswers.set(DateOfBirthPage(index), validAnswer).right.get
+        .set(NamePage(index),name).right.get
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -89,7 +89,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers.set(NamePage(index),
-        name).success.value
+        name).right.get
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
@@ -116,7 +116,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers.set(NamePage(index),
-        name).success.value
+        name).right.get
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

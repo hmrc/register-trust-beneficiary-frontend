@@ -42,7 +42,7 @@ class AddressInTheUkYesNoControllerSpec extends SpecBase with MockitoSugar {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(CharityNamePage(index), "Test").success.value
+        .set(CharityNamePage(index), "Test").right.get
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -62,8 +62,8 @@ class AddressInTheUkYesNoControllerSpec extends SpecBase with MockitoSugar {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(CharityNamePage(index), "Test").success.value
-        .set(AddressInTheUkYesNoPage(index), true).success.value
+      val userAnswers = emptyUserAnswers.set(CharityNamePage(index), "Test").right.get
+        .set(AddressInTheUkYesNoPage(index), true).right.get
 
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -85,7 +85,7 @@ class AddressInTheUkYesNoControllerSpec extends SpecBase with MockitoSugar {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(CharityNamePage(index), "Test").success.value
+        .set(CharityNamePage(index), "Test").right.get
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
@@ -108,7 +108,7 @@ class AddressInTheUkYesNoControllerSpec extends SpecBase with MockitoSugar {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(CharityNamePage(index), "Test").success.value
+        .set(CharityNamePage(index), "Test").right.get
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

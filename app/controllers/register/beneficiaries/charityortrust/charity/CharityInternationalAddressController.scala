@@ -16,9 +16,11 @@
 
 package controllers.register.beneficiaries.charityortrust.charity
 
+import cats.data.EitherT
 import config.annotations.CharityBeneficiary
 import controllers.actions._
 import controllers.actions.register.charity.NameRequiredAction
+import errors.TrustErrors
 import forms.InternationalAddressFormProvider
 import models.core.pages.InternationalAddress
 import navigation.Navigator
@@ -29,6 +31,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.countryOptions.CountryOptionsNonUK
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.charityortrust.charity.CharityInternationalAddressView
 
 import javax.inject.Inject
@@ -42,7 +45,8 @@ class CharityInternationalAddressController @Inject()(
                                                        nameAction: NameRequiredAction,
                                                        formProvider: InternationalAddressFormProvider,
                                                        view: CharityInternationalAddressView,
-                                                       val countryOptions: CountryOptionsNonUK
+                                                       val countryOptions: CountryOptionsNonUK,
+                                                       technicalErrorView: TechnicalErrorView
                                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form: Form[InternationalAddress] = formProvider()
@@ -72,10 +76,15 @@ class CharityInternationalAddressController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, index, charityName))),
 
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(CharityInternationalAddressPage(index), value))
-            _              <- repository.set(updatedAnswers)
+          val result = for {
+            updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(CharityInternationalAddressPage(index), value)))
+            _              <- EitherT.right[TrustErrors](repository.set(updatedAnswers))
           } yield Redirect(navigator.nextPage(CharityInternationalAddressPage(index), draftId, updatedAnswers))
+
+          result.value.map {
+            case Right(call) => call
+            case Left(_) => InternalServerError(technicalErrorView())
+          }
         }
       )
   }

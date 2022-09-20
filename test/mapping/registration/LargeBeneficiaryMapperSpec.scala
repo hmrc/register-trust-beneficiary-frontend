@@ -52,12 +52,12 @@ class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
         "UK country of residence set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(LargeBeneficiaryNamePage(index0), "Employment Related Name").success.value
-              .set(CountryOfResidenceYesNoPage(index0), true).success.value
-              .set(CountryOfResidenceInTheUkYesNoPage(index0), true).success.value
-              .set(LargeBeneficiaryAddressYesNoPage(index0), false).success.value
-              .set(LargeBeneficiaryDescriptionPage(index0), Description("Description", None, None, None, None)).success.value
-              .set(LargeBeneficiaryNumberOfBeneficiariesPage(index0), HowManyBeneficiaries.Over1).success.value
+              .set(LargeBeneficiaryNamePage(index0), "Employment Related Name").right.get
+              .set(CountryOfResidenceYesNoPage(index0), true).right.get
+              .set(CountryOfResidenceInTheUkYesNoPage(index0), true).right.get
+              .set(LargeBeneficiaryAddressYesNoPage(index0), false).right.get
+              .set(LargeBeneficiaryDescriptionPage(index0), Description("Description", None, None, None, None)).right.get
+              .set(LargeBeneficiaryNumberOfBeneficiariesPage(index0), HowManyBeneficiaries.Over1).right.get
 
           val large = mapper.build(userAnswers)
 
@@ -80,13 +80,13 @@ class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
         "Non UK country of residence set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(LargeBeneficiaryNamePage(index0), "Employment Related Name").success.value
-              .set(CountryOfResidenceYesNoPage(index0), true).success.value
-              .set(CountryOfResidenceInTheUkYesNoPage(index0), false).success.value
-              .set(CountryOfResidencePage(index0), "FR").success.value
-              .set(LargeBeneficiaryAddressYesNoPage(index0), false).success.value
-              .set(LargeBeneficiaryDescriptionPage(index0), Description("Description", None, None, None, None)).success.value
-              .set(LargeBeneficiaryNumberOfBeneficiariesPage(index0), HowManyBeneficiaries.Over1).success.value
+              .set(LargeBeneficiaryNamePage(index0), "Employment Related Name").right.get
+              .set(CountryOfResidenceYesNoPage(index0), true).right.get
+              .set(CountryOfResidenceInTheUkYesNoPage(index0), false).right.get
+              .set(CountryOfResidencePage(index0), "FR").right.get
+              .set(LargeBeneficiaryAddressYesNoPage(index0), false).right.get
+              .set(LargeBeneficiaryDescriptionPage(index0), Description("Description", None, None, None, None)).right.get
+              .set(LargeBeneficiaryNumberOfBeneficiariesPage(index0), HowManyBeneficiaries.Over1).right.get
 
           val large = mapper.build(userAnswers)
 
@@ -109,10 +109,10 @@ class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
         "No address is set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(LargeBeneficiaryNamePage(index0), "Employment Related Name").success.value
-              .set(LargeBeneficiaryAddressYesNoPage(index0), false).success.value
-              .set(LargeBeneficiaryDescriptionPage(index0), Description("Description", None, None, None, None)).success.value
-              .set(LargeBeneficiaryNumberOfBeneficiariesPage(index0), HowManyBeneficiaries.Over1).success.value
+              .set(LargeBeneficiaryNamePage(index0), "Employment Related Name").right.get
+              .set(LargeBeneficiaryAddressYesNoPage(index0), false).right.get
+              .set(LargeBeneficiaryDescriptionPage(index0), Description("Description", None, None, None, None)).right.get
+              .set(LargeBeneficiaryNumberOfBeneficiariesPage(index0), HowManyBeneficiaries.Over1).right.get
 
           val large = mapper.build(userAnswers)
 
@@ -136,13 +136,13 @@ class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
         "UK Address is set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(LargeBeneficiaryNamePage(index0), "Employment Related Name").success.value
-              .set(LargeBeneficiaryAddressYesNoPage(index0), true).success.value
-              .set(LargeBeneficiaryAddressUKYesNoPage(index0), true).success.value
+              .set(LargeBeneficiaryNamePage(index0), "Employment Related Name").right.get
+              .set(LargeBeneficiaryAddressYesNoPage(index0), true).right.get
+              .set(LargeBeneficiaryAddressUKYesNoPage(index0), true).right.get
               .set(LargeBeneficiaryAddressPage(index0),
-                UKAddress("Line1", "Line2", Some("Line3"), Some("Newcastle"), "NE62RT")).success.value
-              .set(LargeBeneficiaryDescriptionPage(index0), Description("Description", None, None, None, None)).success.value
-              .set(LargeBeneficiaryNumberOfBeneficiariesPage(index0), HowManyBeneficiaries.Over1).success.value
+                UKAddress("Line1", "Line2", Some("Line3"), Some("Newcastle"), "NE62RT")).right.get
+              .set(LargeBeneficiaryDescriptionPage(index0), Description("Description", None, None, None, None)).right.get
+              .set(LargeBeneficiaryNumberOfBeneficiariesPage(index0), HowManyBeneficiaries.Over1).right.get
 
           val large = mapper.build(userAnswers)
 
@@ -170,13 +170,13 @@ class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
         "International Address is set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(LargeBeneficiaryNamePage(index0), "Employment Related Name").success.value
-              .set(LargeBeneficiaryAddressYesNoPage(index0), true).success.value
-              .set(LargeBeneficiaryAddressUKYesNoPage(index0), false).success.value
+              .set(LargeBeneficiaryNamePage(index0), "Employment Related Name").right.get
+              .set(LargeBeneficiaryAddressYesNoPage(index0), true).right.get
+              .set(LargeBeneficiaryAddressUKYesNoPage(index0), false).right.get
               .set(LargeBeneficiaryAddressInternationalPage(index0),
-                InternationalAddress("Line1", "Line2", Some("Line3"), "US")).success.value
-              .set(LargeBeneficiaryDescriptionPage(index0), Description("Description", None, None, None, None)).success.value
-              .set(LargeBeneficiaryNumberOfBeneficiariesPage(index0), HowManyBeneficiaries.Over201).success.value
+                InternationalAddress("Line1", "Line2", Some("Line3"), "US")).right.get
+              .set(LargeBeneficiaryDescriptionPage(index0), Description("Description", None, None, None, None)).right.get
+              .set(LargeBeneficiaryNumberOfBeneficiariesPage(index0), HowManyBeneficiaries.Over201).right.get
 
           val large = mapper.build(userAnswers)
 
@@ -206,18 +206,18 @@ class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
       "must be able to create multiple Large beneficiaries" in {
         val userAnswers =
           emptyUserAnswers
-            .set(LargeBeneficiaryNamePage(index0), "Employment Related Name 1").success.value
-            .set(LargeBeneficiaryAddressYesNoPage(index0), false).success.value
-            .set(LargeBeneficiaryDescriptionPage(index0), Description("Description", None, None, None, None)).success.value
-            .set(LargeBeneficiaryNumberOfBeneficiariesPage(index0), HowManyBeneficiaries.Over1).success.value
+            .set(LargeBeneficiaryNamePage(index0), "Employment Related Name 1").right.get
+            .set(LargeBeneficiaryAddressYesNoPage(index0), false).right.get
+            .set(LargeBeneficiaryDescriptionPage(index0), Description("Description", None, None, None, None)).right.get
+            .set(LargeBeneficiaryNumberOfBeneficiariesPage(index0), HowManyBeneficiaries.Over1).right.get
 
-            .set(LargeBeneficiaryNamePage(index1), "Employment Related Name 2").success.value
-            .set(LargeBeneficiaryAddressYesNoPage(index1), true).success.value
-            .set(LargeBeneficiaryAddressUKYesNoPage(index1), true).success.value
+            .set(LargeBeneficiaryNamePage(index1), "Employment Related Name 2").right.get
+            .set(LargeBeneficiaryAddressYesNoPage(index1), true).right.get
+            .set(LargeBeneficiaryAddressUKYesNoPage(index1), true).right.get
             .set(LargeBeneficiaryAddressPage(index1),
-              UKAddress("Line1", "Line2", Some("Line3"), Some("Newcastle"), "NE62RT")).success.value
-            .set(LargeBeneficiaryDescriptionPage(index1), Description("Description", None, None, None, None)).success.value
-            .set(LargeBeneficiaryNumberOfBeneficiariesPage(index1), HowManyBeneficiaries.Over501).success.value
+              UKAddress("Line1", "Line2", Some("Line3"), Some("Newcastle"), "NE62RT")).right.get
+            .set(LargeBeneficiaryDescriptionPage(index1), Description("Description", None, None, None, None)).right.get
+            .set(LargeBeneficiaryNumberOfBeneficiariesPage(index1), HowManyBeneficiaries.Over501).right.get
 
 
         val large = mapper.build(userAnswers)
@@ -263,7 +263,7 @@ class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
       "must not be able to create LargeBeneficaryType when incomplete data " in {
         val userAnswers =
           emptyUserAnswers
-            .set(LargeBeneficiaryNamePage(index0), "Employment Related Name").success.value
+            .set(LargeBeneficiaryNamePage(index0), "Employment Related Name").right.get
 
         mapper.build(userAnswers) mustNot be(defined)
       }

@@ -16,8 +16,10 @@
 
 package controllers.register.beneficiaries.classofbeneficiaries
 
+import cats.data.EitherT
 import config.annotations.ClassOfBeneficiaries
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
+import errors.TrustErrors
 import forms.ClassBeneficiaryDescriptionFormProvider
 import models.Status.Completed
 import models.requests.RegistrationDataRequest
@@ -29,6 +31,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionView
 
 import javax.inject.Inject
@@ -43,7 +46,8 @@ class ClassBeneficiaryDescriptionController @Inject()(
                                                        requireData: RegistrationDataRequiredAction,
                                                        formProvider: ClassBeneficiaryDescriptionFormProvider,
                                                        val controllerComponents: MessagesControllerComponents,
-                                                       view: ClassBeneficiaryDescriptionView
+                                                       view: ClassBeneficiaryDescriptionView,
+                                                       technicalErrorView: TechnicalErrorView
                                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def actions(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] = identify andThen getData(draftId) andThen requireData
@@ -73,10 +77,15 @@ class ClassBeneficiaryDescriptionController @Inject()(
           val answers = request.userAnswers.set(ClassBeneficiaryDescriptionPage(index), value)
             .flatMap(_.set(ClassBeneficiaryStatus(index), Completed))
 
-          for {
-            updatedAnswers <- Future.fromTry(answers)
-            _              <- registrationsRepository.set(updatedAnswers)
+          val result = for {
+            updatedAnswers <- EitherT(Future.successful(answers))
+            _              <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
           } yield Redirect(navigator.nextPage(ClassBeneficiaryDescriptionPage(index), draftId, updatedAnswers))
+
+          result.value.map {
+            case Right(call) => call
+            case Left(_) => InternalServerError(technicalErrorView())
+          }
         }
       )
   }

@@ -43,7 +43,7 @@ class ClassBeneficiaryDescriptionControllerSpec extends SpecBase {
   lazy val classBeneficiaryDescriptionRoute = routes.ClassBeneficiaryDescriptionController.onPageLoad(index, fakeDraftId).url
 
   override def emptyUserAnswers: UserAnswers = super.emptyUserAnswers
-    .set(WhatTypeOfBeneficiaryPage, ClassOfBeneficiary).success.value
+    .set(WhatTypeOfBeneficiaryPage, ClassOfBeneficiary).right.get
 
   "ClassBeneficiaryDescription Controller" must {
 
@@ -67,7 +67,7 @@ class ClassBeneficiaryDescriptionControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(ClassBeneficiaryDescriptionPage(index), "answer").success.value
+      val userAnswers = emptyUserAnswers.set(ClassBeneficiaryDescriptionPage(index), "answer").right.get
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

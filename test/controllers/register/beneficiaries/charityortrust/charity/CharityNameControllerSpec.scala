@@ -44,7 +44,7 @@ class CharityNameControllerSpec extends SpecBase with MockitoSugar {
   lazy val charityNameRoute: String = routes.CharityNameController.onPageLoad(index, fakeDraftId).url
 
   val userAnswers: UserAnswers = emptyUserAnswers
-    .set(CharityNamePage(index), name).success.value
+    .set(CharityNamePage(index), name).right.get
 
   "CharityName Controller" must {
 
@@ -103,6 +103,27 @@ class CharityNameControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+      application.stop()
+    }
+
+    "return an Internal server error when setting the user answers go wrong" in {
+
+      when(registrationsRepository.getSettlorsAnswers(any())(any()))
+        .thenReturn(Future.successful(Some(ReadOnlyUserAnswers(Json.obj()))))
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[Navigator].qualifiedWith(classOf[CharityBeneficiary]).toInstance(new FakeNavigator)
+        ).build()
+
+      val request =
+        FakeRequest(POST, routes.CharityNameController.onPageLoad(2, fakeDraftId).url)
+          .withFormUrlEncodedBody(("value", "answer"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
 
       application.stop()
     }

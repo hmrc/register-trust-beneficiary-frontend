@@ -36,23 +36,23 @@ class WhatTypeOfBeneficiaryPageSpec extends PageBehaviours {
   implicit class UserAnswersSetters(userAnswers: UserAnswers) {
 
     def setWithStatus(status: Status): UserAnswers = userAnswers
-      .set(CharityOrTrustPage, CharityOrTrust.Charity).success.value
-      .set(CompanyOrEmploymentRelatedPage, CompanyOrEmploymentRelatedToAdd.Company).success.value
+      .set(CharityOrTrustPage, CharityOrTrust.Charity).right.get
+      .set(CompanyOrEmploymentRelatedPage, CompanyOrEmploymentRelatedToAdd.Company).right.get
 
-      .set(ind.NamePage(0), name).success.value
-      .set(IndividualBeneficiaryStatus(0), status).success.value
-      .set(cob.ClassBeneficiaryDescriptionPage(0), string).success.value
-      .set(ClassBeneficiaryStatus(0), status).success.value
-      .set(charity.CharityNamePage(0), string).success.value
-      .set(CharityBeneficiaryStatus(0), status).success.value
-      .set(trust.NamePage(0), string).success.value
-      .set(TrustBeneficiaryStatus(0), status).success.value
-      .set(company.NamePage(0), string).success.value
-      .set(CompanyBeneficiaryStatus(0), status).success.value
-      .set(large.LargeBeneficiaryNamePage(0), string).success.value
-      .set(LargeBeneficiaryStatus(0), status).success.value
-      .set(other.DescriptionPage(0), string).success.value
-      .set(OtherBeneficiaryStatus(0), status).success.value
+      .set(ind.NamePage(0), name).right.get
+      .set(IndividualBeneficiaryStatus(0), status).right.get
+      .set(cob.ClassBeneficiaryDescriptionPage(0), string).right.get
+      .set(ClassBeneficiaryStatus(0), status).right.get
+      .set(charity.CharityNamePage(0), string).right.get
+      .set(CharityBeneficiaryStatus(0), status).right.get
+      .set(trust.NamePage(0), string).right.get
+      .set(TrustBeneficiaryStatus(0), status).right.get
+      .set(company.NamePage(0), string).right.get
+      .set(CompanyBeneficiaryStatus(0), status).right.get
+      .set(large.LargeBeneficiaryNamePage(0), string).right.get
+      .set(LargeBeneficiaryStatus(0), status).right.get
+      .set(other.DescriptionPage(0), string).right.get
+      .set(OtherBeneficiaryStatus(0), status).right.get
   }
 
   "WhatTypeOfBeneficiaryPage" must {
@@ -71,7 +71,7 @@ class WhatTypeOfBeneficiaryPageSpec extends PageBehaviours {
             initial =>
               val answers = initial.setWithStatus(InProgress)
 
-              val result = answers.set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Individual).success.value
+              val result = answers.set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Individual).right.get
 
               result.get(IndividualBeneficiaries).getOrElse(Nil).size mustBe 1
               result.get(ClassOfBeneficiaries).getOrElse(Nil).size mustBe 0
@@ -93,7 +93,7 @@ class WhatTypeOfBeneficiaryPageSpec extends PageBehaviours {
             initial =>
               val answers = initial.setWithStatus(InProgress)
 
-              val result = answers.set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.ClassOfBeneficiary).success.value
+              val result = answers.set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.ClassOfBeneficiary).right.get
 
               result.get(IndividualBeneficiaries).getOrElse(Nil).size mustBe 0
               result.get(ClassOfBeneficiaries).getOrElse(Nil).size mustBe 1
@@ -115,7 +115,7 @@ class WhatTypeOfBeneficiaryPageSpec extends PageBehaviours {
             initial =>
               val answers = initial.setWithStatus(InProgress)
 
-              val result = answers.set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.CharityOrTrust).success.value
+              val result = answers.set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.CharityOrTrust).right.get
 
               result.get(IndividualBeneficiaries).getOrElse(Nil).size mustBe 0
               result.get(ClassOfBeneficiaries).getOrElse(Nil).size mustBe 0
@@ -137,7 +137,7 @@ class WhatTypeOfBeneficiaryPageSpec extends PageBehaviours {
             initial =>
               val answers = initial.setWithStatus(InProgress)
 
-              val result = answers.set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Charity).success.value
+              val result = answers.set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Charity).right.get
 
               result.get(IndividualBeneficiaries).getOrElse(Nil).size mustBe 0
               result.get(ClassOfBeneficiaries).getOrElse(Nil).size mustBe 0
@@ -159,7 +159,7 @@ class WhatTypeOfBeneficiaryPageSpec extends PageBehaviours {
             initial =>
               val answers = initial.setWithStatus(InProgress)
 
-              val result = answers.set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Trust).success.value
+              val result = answers.set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Trust).right.get
 
               result.get(IndividualBeneficiaries).getOrElse(Nil).size mustBe 0
               result.get(ClassOfBeneficiaries).getOrElse(Nil).size mustBe 0
@@ -181,7 +181,7 @@ class WhatTypeOfBeneficiaryPageSpec extends PageBehaviours {
             initial =>
               val answers = initial.setWithStatus(InProgress)
 
-              val result = answers.set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.CompanyOrEmployment).success.value
+              val result = answers.set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.CompanyOrEmployment).right.get
 
               result.get(IndividualBeneficiaries).getOrElse(Nil).size mustBe 0
               result.get(ClassOfBeneficiaries).getOrElse(Nil).size mustBe 0
@@ -203,7 +203,7 @@ class WhatTypeOfBeneficiaryPageSpec extends PageBehaviours {
             initial =>
               val answers = initial.setWithStatus(InProgress)
 
-              val result = answers.set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Company).success.value
+              val result = answers.set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Company).right.get
 
               result.get(IndividualBeneficiaries).getOrElse(Nil).size mustBe 0
               result.get(ClassOfBeneficiaries).getOrElse(Nil).size mustBe 0
@@ -225,7 +225,7 @@ class WhatTypeOfBeneficiaryPageSpec extends PageBehaviours {
             initial =>
               val answers = initial.setWithStatus(InProgress)
 
-              val result = answers.set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Employment).success.value
+              val result = answers.set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Employment).right.get
 
               result.get(IndividualBeneficiaries).getOrElse(Nil).size mustBe 0
               result.get(ClassOfBeneficiaries).getOrElse(Nil).size mustBe 0
@@ -247,7 +247,7 @@ class WhatTypeOfBeneficiaryPageSpec extends PageBehaviours {
             initial =>
               val answers = initial.setWithStatus(InProgress)
 
-              val result = answers.set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Other).success.value
+              val result = answers.set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Other).right.get
 
               result.get(IndividualBeneficiaries).getOrElse(Nil).size mustBe 0
               result.get(ClassOfBeneficiaries).getOrElse(Nil).size mustBe 0
@@ -273,7 +273,7 @@ class WhatTypeOfBeneficiaryPageSpec extends PageBehaviours {
           "no other beneficiary types" in {
             forAll(arbitrary[UserAnswers]) {
               initial =>
-                val result = initial.set(WhatTypeOfBeneficiaryPage, beneficiaryType).success.value
+                val result = initial.set(WhatTypeOfBeneficiaryPage, beneficiaryType).right.get
 
                 result.get(IndividualBeneficiaries).getOrElse(Nil).size mustBe 0
                 result.get(ClassOfBeneficiaries).getOrElse(Nil).size mustBe 0
@@ -290,7 +290,7 @@ class WhatTypeOfBeneficiaryPageSpec extends PageBehaviours {
               initial =>
                 val answers = initial.setWithStatus(Completed)
 
-                val result = answers.set(WhatTypeOfBeneficiaryPage, beneficiaryType).success.value
+                val result = answers.set(WhatTypeOfBeneficiaryPage, beneficiaryType).right.get
 
                 result.get(IndividualBeneficiaries).getOrElse(Nil).size mustBe 1
                 result.get(ClassOfBeneficiaries).getOrElse(Nil).size mustBe 1

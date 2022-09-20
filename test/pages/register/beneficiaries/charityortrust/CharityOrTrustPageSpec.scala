@@ -32,10 +32,10 @@ class CharityOrTrustPageSpec extends PageBehaviours {
   implicit class UserAnswersSetters(userAnswers: UserAnswers) {
 
     def setWithStatus(status: Status): UserAnswers = userAnswers
-      .set(charity.CharityNamePage(0), string).success.value
-      .set(CharityBeneficiaryStatus(0), status).success.value
-      .set(trust.NamePage(0), string).success.value
-      .set(TrustBeneficiaryStatus(0), status).success.value
+      .set(charity.CharityNamePage(0), string).right.get
+      .set(CharityBeneficiaryStatus(0), status).right.get
+      .set(trust.NamePage(0), string).right.get
+      .set(TrustBeneficiaryStatus(0), status).right.get
   }
 
   "CharityOrTrustPage" must {
@@ -54,7 +54,7 @@ class CharityOrTrustPageSpec extends PageBehaviours {
             initial =>
               val answers = initial.setWithStatus(InProgress)
 
-              val result = answers.set(CharityOrTrustPage, Charity).success.value
+              val result = answers.set(CharityOrTrustPage, Charity).right.get
 
               result.get(CharityBeneficiaries).getOrElse(Nil).size mustBe 1
               result.get(TrustBeneficiaries).getOrElse(Nil).size mustBe 0
@@ -68,7 +68,7 @@ class CharityOrTrustPageSpec extends PageBehaviours {
             initial =>
               val answers = initial.setWithStatus(InProgress)
 
-              val result = answers.set(CharityOrTrustPage, Trust).success.value
+              val result = answers.set(CharityOrTrustPage, Trust).right.get
 
               result.get(CharityBeneficiaries).getOrElse(Nil).size mustBe 0
               result.get(TrustBeneficiaries).getOrElse(Nil).size mustBe 1
@@ -86,7 +86,7 @@ class CharityOrTrustPageSpec extends PageBehaviours {
           "no other beneficiary types" in {
             forAll(arbitrary[UserAnswers]) {
               initial =>
-                val result = initial.set(CharityOrTrustPage, beneficiaryType).success.value
+                val result = initial.set(CharityOrTrustPage, beneficiaryType).right.get
 
                 result.get(CharityBeneficiaries).getOrElse(Nil).size mustBe 0
                 result.get(TrustBeneficiaries).getOrElse(Nil).size mustBe 0
@@ -98,7 +98,7 @@ class CharityOrTrustPageSpec extends PageBehaviours {
               initial =>
                 val answers = initial.setWithStatus(Completed)
 
-                val result = answers.set(CharityOrTrustPage, beneficiaryType).success.value
+                val result = answers.set(CharityOrTrustPage, beneficiaryType).right.get
 
                 result.get(CharityBeneficiaries).getOrElse(Nil).size mustBe 1
                 result.get(TrustBeneficiaries).getOrElse(Nil).size mustBe 1

@@ -54,7 +54,7 @@ class CompanyOrEmploymentRelatedControllerSpec extends SpecBase with MockitoSuga
 
     "populate the view without the previous answer when the question has previously been answered" in {
 
-      val answers = emptyUserAnswers.set(CompanyOrEmploymentRelatedPage, validAnswer).success.value
+      val answers = emptyUserAnswers.set(CompanyOrEmploymentRelatedPage, validAnswer).right.get
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 

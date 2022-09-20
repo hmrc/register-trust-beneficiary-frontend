@@ -16,8 +16,10 @@
 
 package controllers.register.beneficiaries.charityortrust.trust
 
+import cats.data.EitherT
 import controllers.actions._
 import controllers.actions.register.trust.NameRequiredAction
+import errors.TrustErrors
 import models.Status.Completed
 import navigation.Navigator
 import pages.entitystatus.TrustBeneficiaryStatus
@@ -28,6 +30,7 @@ import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.print.TrustBeneficiaryPrintHelper
 import viewmodels.AnswerSection
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.charityortrust.trust.AnswersView
 
 import javax.inject.Inject
@@ -41,7 +44,8 @@ class AnswersController @Inject()(
                                    nameAction: NameRequiredAction,
                                    val controllerComponents: MessagesControllerComponents,
                                    view: AnswersView,
-                                   printHelper: TrustBeneficiaryPrintHelper
+                                   printHelper: TrustBeneficiaryPrintHelper,
+                                   technicalErrorView: TechnicalErrorView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
@@ -56,9 +60,14 @@ class AnswersController @Inject()(
 
       val answers = request.userAnswers.set(TrustBeneficiaryStatus(index), Completed)
 
-      for {
-        updatedAnswers <- Future.fromTry(answers)
-        _ <- registrationsRepository.set(updatedAnswers)
+      val result = for {
+        updatedAnswers <- EitherT(Future.successful(answers))
+        _ <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
       } yield Redirect(navigator.nextPage(AnswersPage, draftId, request.userAnswers))
+
+      result.value.map {
+        case Right(call) => call
+        case Left(_) => InternalServerError(technicalErrorView())
+      }
   }
 }

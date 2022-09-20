@@ -16,9 +16,11 @@
 
 package controllers.register.beneficiaries.individualBeneficiary
 
+import cats.data.EitherT
 import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
+import errors.TrustErrors
 import forms.YesNoFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.individual.{NamePage, NationalInsuranceYesNoPage}
@@ -27,6 +29,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.individualBeneficiary.NationalInsuranceYesNoView
 
 import javax.inject.Inject
@@ -42,7 +45,8 @@ class NationalInsuranceYesNoController @Inject()(
                                                   requiredAnswer: RequiredAnswerActionProvider,
                                                   formProvider: YesNoFormProvider,
                                                   val controllerComponents: MessagesControllerComponents,
-                                                  view: NationalInsuranceYesNoView
+                                                  view: NationalInsuranceYesNoView,
+                                                  technicalErrorView: TechnicalErrorView
                                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider.withPrefix("individualBeneficiaryNationalInsuranceYesNo")
@@ -76,10 +80,15 @@ class NationalInsuranceYesNoController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, draftId, name, index))),
 
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(NationalInsuranceYesNoPage(index), value))
-            _ <- registrationsRepository.set(updatedAnswers)
+          val result = for {
+            updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(NationalInsuranceYesNoPage(index), value)))
+            _ <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
           } yield Redirect(navigator.nextPage(NationalInsuranceYesNoPage(index), draftId, updatedAnswers))
+
+          result.value.map {
+            case Right(call) => call
+            case Left(_) => InternalServerError(technicalErrorView())
+          }
         }
       )
   }

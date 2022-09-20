@@ -16,6 +16,7 @@
 
 package models
 
+import errors.{ServerError, TrustErrors}
 import pages.register.beneficiaries.WhatTypeOfBeneficiaryPage
 import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
 import pages.register.beneficiaries.companyoremploymentrelated.CompanyOrEmploymentRelatedPage
@@ -23,8 +24,6 @@ import play.api.Logging
 import play.api.libs.json._
 import queries.{Gettable, Settable}
 import sections.beneficiaries._
-
-import scala.util.{Failure, Success, Try}
 
 trait ReadableUserAnswers {
   val data: JsObject
@@ -73,15 +72,14 @@ final case class UserAnswers(draftId: String,
                              internalAuthId :String,
                              override val isTaxable: Boolean = true) extends ReadableUserAnswers with Logging {
 
-  def set[A](page: Settable[A], value: A)(implicit writes: Writes[A]): Try[UserAnswers] = {
+  def set[A](page: Settable[A], value: A)(implicit writes: Writes[A]): Either[TrustErrors, UserAnswers] = {
 
     val updatedData = data.setObject(page.path, Json.toJson(value)) match {
       case JsSuccess(jsValue, _) =>
-        Success(jsValue)
+        Right(jsValue)
       case JsError(errors) =>
-        val errorPaths = errors.collectFirst{ case (path, e) => s"$path $e"}
-        logger.warn(s"Unable to set path ${page.path} due to errors $errorPaths")
-        Failure(JsResultException(errors))
+        logger.error(s"[ReadableUserAnswers][set] Unable to set path ${page.path} due to errors")
+        Left(ServerError())
     }
 
     updatedData.flatMap {
@@ -91,13 +89,13 @@ final case class UserAnswers(draftId: String,
     }
   }
 
-  def remove[A](query: Settable[A]): Try[UserAnswers] = {
+  def remove[A](query: Settable[A]): Either[TrustErrors, UserAnswers] = {
 
     val updatedData = data.removeObject(query.path) match {
       case JsSuccess(jsValue, _) =>
-        Success(jsValue)
+        Right(jsValue)
       case JsError(_) =>
-        Success(data)
+        Right(data)
     }
 
     updatedData.flatMap {
@@ -107,14 +105,14 @@ final case class UserAnswers(draftId: String,
     }
   }
 
-  def deleteAtPath(path: JsPath): Try[UserAnswers] = {
+  def deleteAtPath(path: JsPath): Either[TrustErrors, UserAnswers] = {
     data.removeObject(path).map(obj => copy(data = obj)).fold(
-      _ => Success(this),
-      result => Success(result)
+      _ => Right(this),
+      result => Right(result)
     )
   }
 
-  def removeBeneficiaryTypeAnswers(): Try[UserAnswers] = this
+  def removeBeneficiaryTypeAnswers(): Either[TrustErrors, UserAnswers] = this
     .remove(WhatTypeOfBeneficiaryPage)
     .flatMap(_.remove(CharityOrTrustPage))
     .flatMap(_.remove(CompanyOrEmploymentRelatedPage))

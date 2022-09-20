@@ -16,9 +16,11 @@
 
 package controllers.register.beneficiaries.charityortrust.charity
 
+import cats.data.EitherT
 import config.annotations.CharityBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.register.charity.NameRequiredAction
+import errors.TrustErrors
 import forms.IncomePercentageFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.charityortrust.charity.{CharityNamePage, HowMuchIncomePage}
@@ -27,6 +29,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.charityortrust.charity.HowMuchIncomeView
 
 import javax.inject.Inject
@@ -39,7 +42,9 @@ class HowMuchIncomeController @Inject()(
                                          standardActionSets: StandardActionSets,
                                          nameAction: NameRequiredAction,
                                          formProvider: IncomePercentageFormProvider,
-                                         view: HowMuchIncomeView)
+                                         view: HowMuchIncomeView,
+                                         technicalErrorView: TechnicalErrorView
+                                       )
                                        (implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form: Form[Int] = formProvider.withPrefix("charity.shareOfIncome")
@@ -69,10 +74,15 @@ class HowMuchIncomeController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, draftId, index, charityName))),
 
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(HowMuchIncomePage(index), value))
-            _              <- repository.set(updatedAnswers)
+          val result = for {
+            updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(HowMuchIncomePage(index), value)))
+            _              <- EitherT.right[TrustErrors](repository.set(updatedAnswers))
           } yield Redirect(navigator.nextPage(HowMuchIncomePage(index), draftId, updatedAnswers))
+
+          result.value.map {
+            case Right(call) => call
+            case Left(_) => InternalServerError(technicalErrorView())
+          }
         }
       )
   }

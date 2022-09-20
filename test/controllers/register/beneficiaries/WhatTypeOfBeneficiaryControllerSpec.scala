@@ -67,7 +67,7 @@ class WhatTypeOfBeneficiaryControllerSpec extends SpecBase {
     }
 
     "return OK and the correct view for a GET when beneficiaries are already added." in {
-     val userAnswer =  emptyUserAnswers.set(ClassBeneficiaryDescriptionPage(0), "description").success.value
+     val userAnswer =  emptyUserAnswers.set(ClassBeneficiaryDescriptionPage(0), "description").right.get
 
       val application = applicationBuilder(userAnswers = Some(userAnswer)).build()
 
@@ -87,7 +87,7 @@ class WhatTypeOfBeneficiaryControllerSpec extends SpecBase {
 
     "populate the view without value on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(WhatTypeOfBeneficiaryPage, validAnswer).success.value
+      val userAnswers = emptyUserAnswers.set(WhatTypeOfBeneficiaryPage, validAnswer).right.get
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

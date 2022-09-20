@@ -35,10 +35,10 @@ class CountryOfNationalityYesNoPageSpec extends PageBehaviours {
   "remove pages when CountryOfNationalityYesNoPage is set to false" in {
     forAll(arbitrary[UserAnswers]) {
       initial =>
-        val answers: UserAnswers = initial.set(CountryOfNationalityInTheUkYesNoPage(0), false).success.value
-          .set(CountryOfNationalityPage(0), ES).success.value
+        val answers: UserAnswers = initial.set(CountryOfNationalityInTheUkYesNoPage(0), false).right.get
+          .set(CountryOfNationalityPage(0), ES).right.get
 
-        val result = answers.set(CountryOfNationalityYesNoPage(0), false).success.value
+        val result = answers.set(CountryOfNationalityYesNoPage(0), false).right.get
 
         result.get(CountryOfNationalityInTheUkYesNoPage(0)) mustNot be(defined)
         result.get(CountryOfNationalityPage(0)) mustNot be(defined)

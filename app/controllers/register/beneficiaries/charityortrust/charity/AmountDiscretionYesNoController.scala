@@ -16,9 +16,11 @@
 
 package controllers.register.beneficiaries.charityortrust.charity
 
+import cats.data.EitherT
 import config.annotations.CharityBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.register.charity.NameRequiredAction
+import errors.TrustErrors
 import forms.YesNoFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.charityortrust.charity.{AmountDiscretionYesNoPage, CharityNamePage}
@@ -27,6 +29,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.charityortrust.charity.AmountDiscretionYesNoView
 
 import javax.inject.Inject
@@ -39,40 +42,47 @@ class AmountDiscretionYesNoController @Inject()(
                                                  standardActionSets: StandardActionSets,
                                                  nameAction: NameRequiredAction,
                                                  formProvider: YesNoFormProvider,
-                                                 view: AmountDiscretionYesNoView
+                                                 view: AmountDiscretionYesNoView,
+                                                 technicalErrorView: TechnicalErrorView
                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form: Form[Boolean] = formProvider.withPrefix("charity.discretionYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
-    implicit request =>
+      implicit request =>
 
-      val charityName = request.userAnswers.get(CharityNamePage(index)).get
+        val charityName = request.userAnswers.get(CharityNamePage(index)).get
 
-      val preparedForm = request.userAnswers.get(AmountDiscretionYesNoPage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
+        val preparedForm = request.userAnswers.get(AmountDiscretionYesNoPage(index)) match {
+          case None => form
+          case Some(value) => form.fill(value)
+        }
 
-      Ok(view(preparedForm, draftId, index, charityName))
-  }
+        Ok(view(preparedForm, draftId, index, charityName))
+    }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
-    implicit request =>
+      implicit request =>
 
-      val charityName = request.userAnswers.get(CharityNamePage(index)).get
+        val charityName = request.userAnswers.get(CharityNamePage(index)).get
 
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, charityName))),
+        form.bindFromRequest().fold(
+          formWithErrors =>
+            Future.successful(BadRequest(view(formWithErrors, draftId, index, charityName))),
 
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AmountDiscretionYesNoPage(index), value))
-            _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AmountDiscretionYesNoPage(index), draftId, updatedAnswers))
-      )
-  }
+          value => {
+            val result = for {
+              updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(AmountDiscretionYesNoPage(index), value)))
+              _              <- EitherT.right[TrustErrors](repository.set(updatedAnswers))
+            } yield Redirect(navigator.nextPage(AmountDiscretionYesNoPage(index), draftId, updatedAnswers))
+
+            result.value.map {
+              case Right(call) => call
+              case Left(_) => InternalServerError(technicalErrorView())
+            }
+          }
+        )
+    }
 }

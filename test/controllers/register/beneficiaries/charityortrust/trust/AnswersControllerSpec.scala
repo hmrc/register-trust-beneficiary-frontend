@@ -42,9 +42,9 @@ class AnswersControllerSpec extends SpecBase {
   private lazy val answersRoute = routes.AnswersController.onPageLoad(index, fakeDraftId).url
 
   override def emptyUserAnswers: UserAnswers = super.emptyUserAnswers
-    .set(WhatTypeOfBeneficiaryPage, CharityOrTrust).success.value
-    .set(CharityOrTrustPage, Trust).success.value
-    .set(NamePage(index), "Trust Name").success.value
+    .set(WhatTypeOfBeneficiaryPage, CharityOrTrust).right.get
+    .set(CharityOrTrustPage, Trust).right.get
+    .set(NamePage(index), "Trust Name").right.get
 
   "TrustBeneficiaryAnswers Controller" must {
 

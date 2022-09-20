@@ -41,7 +41,7 @@ trait PageBehaviours extends WordSpec with MustMatchers with ScalaCheckPropertyC
             val gen = for {
               page        <- genP
               userAnswers <- arbitrary[UserAnswers]
-            } yield (page, userAnswers.remove(page).success.value)
+            } yield (page, userAnswers.remove(page).right.get)
 
             forAll(gen) {
               case (page, userAnswers) =>
@@ -62,7 +62,7 @@ trait PageBehaviours extends WordSpec with MustMatchers with ScalaCheckPropertyC
               page        <- genP
               savedValue  <- arbitrary[A]
               userAnswers <- arbitrary[UserAnswers]
-            } yield (page, savedValue, userAnswers.set(page, savedValue).success.value)
+            } yield (page, savedValue, userAnswers.set(page, savedValue).right.get)
 
             forAll(gen) {
               case (page, savedValue, userAnswers) =>
@@ -89,7 +89,7 @@ trait PageBehaviours extends WordSpec with MustMatchers with ScalaCheckPropertyC
         forAll(gen) {
           case (page, newValue, userAnswers) =>
 
-            val updatedAnswers = userAnswers.set(page, newValue).success.value
+            val updatedAnswers = userAnswers.set(page, newValue).right.get
             updatedAnswers.get(page).value mustEqual newValue
         }
       }
@@ -105,12 +105,12 @@ trait PageBehaviours extends WordSpec with MustMatchers with ScalaCheckPropertyC
           page        <- genP
           savedValue  <- arbitrary[A]
           userAnswers <- arbitrary[UserAnswers]
-        } yield (page, userAnswers.set(page, savedValue).success.value)
+        } yield (page, userAnswers.set(page, savedValue).right.get)
 
         forAll(gen) {
           case (page, userAnswers) =>
 
-            val updatedAnswers = userAnswers.remove(page).success.value
+            val updatedAnswers = userAnswers.remove(page).right.get
             updatedAnswers.get(page) must be(empty)
         }
       }
