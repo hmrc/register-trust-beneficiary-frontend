@@ -20,14 +20,13 @@ import base.SpecBase
 import forms.CharityOrTrustFormProvider
 import models.registration.pages.CharityOrTrust
 import models.registration.pages.CharityOrTrust.Charity
-import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
 import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.charityortrust.CharityOrTrustView
 
-class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
+class CharityOrTrustControllerSpec extends SpecBase {
 
   val formProvider = new CharityOrTrustFormProvider()()
   val form: Form[CharityOrTrust] = formProvider

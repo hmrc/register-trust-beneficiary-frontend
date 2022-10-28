@@ -21,7 +21,6 @@ import config.annotations.EmploymentRelatedBeneficiary
 import forms.EmploymentRelatedBeneficiaryDescriptionFormProvider
 import models.core.pages.Description
 import navigation.{FakeNavigator, Navigator}
-import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.LargeBeneficiaryDescriptionPage
 import play.api.data.Form
 import play.api.inject.bind
@@ -30,7 +29,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.companyoremploymentrelated.employmentRelated.DescriptionView
 
-class DescriptionControllerSpec extends SpecBase with MockitoSugar {
+class DescriptionControllerSpec extends SpecBase {
 
   private val index = 0
   private val form: Form[Description] = new EmploymentRelatedBeneficiaryDescriptionFormProvider().withPrefix("employmentRelatedBeneficiary.description")

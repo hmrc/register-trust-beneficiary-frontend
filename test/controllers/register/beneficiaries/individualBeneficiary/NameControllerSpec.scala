@@ -19,12 +19,12 @@ package controllers.register.beneficiaries.individualBeneficiary
 import base.SpecBase
 import config.annotations.IndividualBeneficiary
 import forms.NameFormProvider
-import models.ReadOnlyUserAnswers
 import models.core.pages.FullName
+import models.{ReadOnlyUserAnswers, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
+import org.mockito.ArgumentMatchers.any
 import pages.register.beneficiaries.individual.NamePage
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
@@ -36,13 +36,13 @@ import scala.concurrent.Future
 class NameControllerSpec extends SpecBase {
 
   val formProvider = new NameFormProvider()
-  val form = formProvider.withPrefix("individualBeneficiaryName")
-  val name = FullName("first name", Some("middle name"), "last name")
+  val form: Form[FullName] = formProvider.withPrefix("individualBeneficiaryName")
+  val name: FullName = FullName("first name", Some("middle name"), "last name")
   val index: Int = 0
 
-  lazy val individualBeneficiaryNameRoute = routes.NameController.onPageLoad(index, fakeDraftId).url
+  lazy val individualBeneficiaryNameRoute: String = routes.NameController.onPageLoad(index, fakeDraftId).url
 
-  val userAnswers = emptyUserAnswers
+  val userAnswers: UserAnswers = emptyUserAnswers
     .set(NamePage(index), name).right.get
 
   "IndividualBeneficiaryName Controller" must {

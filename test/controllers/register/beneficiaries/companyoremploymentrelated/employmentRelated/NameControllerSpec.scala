@@ -20,7 +20,6 @@ import base.SpecBase
 import config.annotations.EmploymentRelatedBeneficiary
 import forms.StringFormProvider
 import navigation.{FakeNavigator, Navigator}
-import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.LargeBeneficiaryNamePage
 import play.api.data.Form
 import play.api.inject.bind
@@ -29,7 +28,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.companyoremploymentrelated.employmentRelated.NameView
 
-class NameControllerSpec extends SpecBase with MockitoSugar {
+class NameControllerSpec extends SpecBase {
 
   private val index = 0
   private val form: Form[String] = new StringFormProvider().withPrefix("employmentRelatedBeneficiary.name", 105)

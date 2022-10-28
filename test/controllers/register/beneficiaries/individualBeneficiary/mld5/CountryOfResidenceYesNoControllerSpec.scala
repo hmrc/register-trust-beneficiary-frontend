@@ -21,7 +21,6 @@ import config.annotations.IndividualBeneficiary
 import forms.YesNoFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
-import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.individual.NamePage
 import pages.register.beneficiaries.individual.mld5.CountryOfResidenceYesNoPage
 import play.api.data.Form
@@ -30,7 +29,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.individualBeneficiary.mld5.CountryOfResidenceYesNoView
 
-class CountryOfResidenceYesNoControllerSpec extends SpecBase with MockitoSugar {
+class CountryOfResidenceYesNoControllerSpec extends SpecBase {
 
   val formProvider = new YesNoFormProvider()
   val form: Form[Boolean] = formProvider.withPrefix("individualBeneficiary.5mld.countryOfResidenceYesNo")

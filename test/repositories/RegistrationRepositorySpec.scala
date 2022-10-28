@@ -16,26 +16,21 @@
 
 package repositories
 
-import java.time.LocalDateTime
-
 import base.SpecBase
 import connectors.SubmissionDraftConnector
-import models.Status.InProgress
 import models._
-import org.mockito.Matchers.any
-import org.mockito.Mockito.{verify, when}
-import org.scalatest.MustMatchers
-import org.scalatestplus.mockito.MockitoSugar
+import org.mockito.ArgumentMatchers.any
 import play.api.http
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
+import java.time.LocalDateTime
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-class RegistrationRepositorySpec extends SpecBase with MustMatchers with MockitoSugar {
+class RegistrationRepositorySpec extends SpecBase {
 
-  private val unusedSubmissionSetFactory = mock[SubmissionSetFactory];
+  private val unusedSubmissionSetFactory = mock[SubmissionSetFactory]
 
   private def createRepository(connector: SubmissionDraftConnector, submissionSetFactory: SubmissionSetFactory) = {
     new DefaultRegistrationsRepository(connector, frontendAppConfig, submissionSetFactory)

@@ -16,31 +16,31 @@
 
 package controllers.register.beneficiaries.individualBeneficiary
 
-import java.time.{LocalDate, ZoneOffset}
-
 import base.SpecBase
 import config.annotations.IndividualBeneficiary
 import forms.DateOfBirthFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
-import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.individual.{DateOfBirthPage, NamePage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.individualBeneficiary.DateOfBirthView
 
-class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
+import java.time.{LocalDate, ZoneOffset}
+
+class DateOfBirthControllerSpec extends SpecBase {
 
   val formProvider = new DateOfBirthFormProvider(frontendAppConfig)
-  val form = formProvider.withPrefix("individualBeneficiaryDateOfBirth")
+  val form: Form[LocalDate] = formProvider.withPrefix("individualBeneficiaryDateOfBirth")
   val index: Int = 0
 
-  val name = FullName("first name", None, "Last name")
+  val name: FullName = FullName("first name", None, "Last name")
 
-  val validAnswer = LocalDate.now(ZoneOffset.UTC)
+  val validAnswer: LocalDate = LocalDate.now(ZoneOffset.UTC)
 
-  lazy val individualBeneficiaryDateOfBirthRoute = routes.DateOfBirthController.onPageLoad(index, fakeDraftId).url
+  lazy val individualBeneficiaryDateOfBirthRoute: String = routes.DateOfBirthController.onPageLoad(index, fakeDraftId).url
 
   "IndividualBeneficiaryDateOfBirth Controller" must {
 

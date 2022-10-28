@@ -19,31 +19,34 @@ package controllers.register.beneficiaries.individualBeneficiary
 import base.SpecBase
 import config.annotations.IndividualBeneficiary
 import forms.RoleInCompanyFormProvider
+import models.UserAnswers
 import models.core.pages.FullName
+import models.registration.pages.RoleInCompany
 import models.registration.pages.RoleInCompany.Director
 import navigation.{FakeNavigator, Navigator}
-import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.individual.{NamePage, RoleInCompanyPage}
+import play.api.Application
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.individualBeneficiary.RoleInCompanyView
 
-class RoleInCompanyControllerSpec extends SpecBase with MockitoSugar {
+class RoleInCompanyControllerSpec extends SpecBase {
 
   val formProvider = new RoleInCompanyFormProvider()
-  val form = formProvider()
-  val name = FullName("FirstName", None, "LastName")
+  val form: Form[RoleInCompany] = formProvider()
+  val name: FullName = FullName("FirstName", None, "LastName")
   val index = 0
 
-  val userAnswers = emptyUserAnswers.set(NamePage(index), name).right.get
+  val userAnswers: UserAnswers = emptyUserAnswers.set(NamePage(index), name).right.get
 
-  def application = applicationBuilder(userAnswers = Some(userAnswers))
+  def application: Application = applicationBuilder(userAnswers = Some(userAnswers))
     .overrides(
       bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
     ).build()
 
-  lazy val roleInCompanyControllerRoute = routes.RoleInCompanyController.onPageLoad(index, draftId).url
+  lazy val roleInCompanyControllerRoute: String = routes.RoleInCompanyController.onPageLoad(index, draftId).url
 
   "AddressYesNo Controller" must {
 

@@ -22,6 +22,7 @@ import forms.NationalInsuranceNumberFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.individual.{NamePage, NationalInsuranceNumberPage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -31,11 +32,11 @@ class NationalInsuranceNumberControllerSpec extends SpecBase {
 
   val formProvider = new NationalInsuranceNumberFormProvider()
   val index: Int = 0
-  val form = formProvider.withPrefix("individualBeneficiaryNationalInsuranceNumber", emptyUserAnswers, index)
+  val form: Form[String] = formProvider.withPrefix("individualBeneficiaryNationalInsuranceNumber", emptyUserAnswers, index)
 
-  val name = FullName("first name", None, "Last name")
+  val name: FullName = FullName("first name", None, "Last name")
 
-  lazy val individualBeneficiaryNationalInsuranceNumberRoute = routes.NationalInsuranceNumberController.onPageLoad(index, fakeDraftId).url
+  lazy val individualBeneficiaryNationalInsuranceNumberRoute: String = routes.NationalInsuranceNumberController.onPageLoad(index, fakeDraftId).url
 
   "IndividualBeneficiaryNationalInsuranceNumber Controller" must {
 

@@ -31,7 +31,7 @@ class CountryOfResidenceViewSpec extends SelectCountryViewBehaviours {
   val index = 0
   val name: String = FullName("FirstName", None, "LastName").toString
 
-  val form = new CountryFormProvider().withPrefix(prefix)
+  val form: Form[String] = new CountryFormProvider().withPrefix(prefix)
 
   "countryOfResidence view" must {
 

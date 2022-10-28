@@ -17,7 +17,7 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
-import play.api.data.FormError
+import play.api.data.{Form, FormError}
 
 class CountryFormProviderSpec extends StringFieldBehaviours {
 
@@ -28,7 +28,7 @@ class CountryFormProviderSpec extends StringFieldBehaviours {
   val regexp = "^[A-Za-z ,.()'-]*$"
   val invalidKey = s"$messagePrefix.error.invalidCharacters"
 
-  val form = new CountryFormProvider().withPrefix(messagePrefix)
+  val form: Form[String] = new CountryFormProvider().withPrefix(messagePrefix)
 
   ".value" must {
 

@@ -19,14 +19,13 @@ package controllers.register.beneficiaries.companyoremploymentrelated
 import base.SpecBase
 import forms.CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider
 import models.CompanyOrEmploymentRelatedToAdd
-import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.companyoremploymentrelated.CompanyOrEmploymentRelatedPage
 import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.companyoremploymentrelated.CompanyOrEmploymentRelatedView
 
-class CompanyOrEmploymentRelatedControllerSpec extends SpecBase with MockitoSugar {
+class CompanyOrEmploymentRelatedControllerSpec extends SpecBase {
 
   private val form: Form[CompanyOrEmploymentRelatedToAdd] = new CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider()()
   private lazy val companyOrEmploymentRelatedRoute: String = routes.CompanyOrEmploymentRelatedController.onPageLoad(draftId).url

@@ -20,7 +20,6 @@ import base.SpecBase
 import config.annotations.EmploymentRelatedBeneficiary
 import forms.YesNoFormProvider
 import navigation.{FakeNavigator, Navigator}
-import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.{LargeBeneficiaryAddressYesNoPage, LargeBeneficiaryNamePage}
 import play.api.data.Form
 import play.api.inject.bind
@@ -29,7 +28,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.companyoremploymentrelated.employmentRelated.AddressYesNoView
 
-class AddressYesNoControllerSpec extends SpecBase with MockitoSugar {
+class AddressYesNoControllerSpec extends SpecBase {
 
   private val index = 0
   private val form: Form[Boolean] = new YesNoFormProvider().withPrefix("employmentRelatedBeneficiary.addressYesNo")

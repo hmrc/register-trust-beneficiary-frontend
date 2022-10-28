@@ -20,13 +20,13 @@ import base.SpecBase
 import generators.Generators
 import models.core.pages.{InternationalAddress, UKAddress}
 import models.{AddressType, OtherType}
-import org.scalatest.{MustMatchers, OptionValues}
+import org.scalatest.OptionValues
 import pages.register.beneficiaries.companyoremploymentrelated.company.mld5.CountryOfResidenceInTheUkYesNoPage
 import pages.register.beneficiaries.other._
 import pages.register.beneficiaries.other.mld5._
 import utils.Constants.GB
 
-class OtherBeneficiaryMapperSpec extends SpecBase with MustMatchers
+class OtherBeneficiaryMapperSpec extends SpecBase
   with OptionValues with Generators {
 
   private val otherBeneficiaryMapper: OtherBeneficiaryMapper = injector.instanceOf[OtherBeneficiaryMapper]

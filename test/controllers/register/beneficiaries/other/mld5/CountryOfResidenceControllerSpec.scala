@@ -20,7 +20,6 @@ import base.SpecBase
 import config.annotations.OtherBeneficiary
 import forms.CountryFormProvider
 import navigation.{FakeNavigator, Navigator}
-import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.other.DescriptionPage
 import pages.register.beneficiaries.other.mld5.CountryOfResidencePage
 import play.api.data.Form
@@ -31,7 +30,7 @@ import utils.InputOption
 import utils.countryOptions.CountryOptionsNonUK
 import views.html.register.beneficiaries.other.mld5.CountryOfResidenceView
 
-class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
+class CountryOfResidenceControllerSpec extends SpecBase {
 
   val formProvider = new CountryFormProvider()
   val form: Form[String] = formProvider.withPrefix("otherBeneficiary.countryOfResidence")

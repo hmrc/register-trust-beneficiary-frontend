@@ -21,19 +21,18 @@ import config.annotations.IndividualBeneficiary
 import forms.CountryFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
-import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.individual.NamePage
 import pages.register.beneficiaries.individual.mld5.CountryOfNationalityPage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import utils.Constants._
 import utils.InputOption
 import utils.countryOptions.CountryOptionsNonUK
-import utils.Constants._
 import views.html.register.beneficiaries.individualBeneficiary.mld5.CountryOfNationalityView
 
-class CountryOfNationalityControllerSpec extends SpecBase with MockitoSugar {
+class CountryOfNationalityControllerSpec extends SpecBase {
 
   val formProvider = new CountryFormProvider()
   val form: Form[String] = formProvider.withPrefix("individualBeneficiary.5mld.countryOfNationality")

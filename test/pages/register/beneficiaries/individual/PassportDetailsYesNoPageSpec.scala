@@ -16,12 +16,12 @@
 
 package pages.register.beneficiaries.individual
 
-import java.time.LocalDate
-
 import models.UserAnswers
 import models.registration.pages.PassportOrIdCardDetails
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
+
+import java.time.LocalDate
 
 class PassportDetailsYesNoPageSpec extends PageBehaviours {
 

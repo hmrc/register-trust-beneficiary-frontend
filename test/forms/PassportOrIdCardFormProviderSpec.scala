@@ -16,12 +16,12 @@
 
 package forms
 
-import java.time.LocalDate
-
 import base.FakeTrustsApp
 import forms.behaviours.{DateBehaviours, PassportOrIDCardBehaviours, StringFieldBehaviours}
 import play.api.data.FormError
 import wolfendale.scalacheck.regexp.RegexpGen
+
+import java.time.LocalDate
 
 class PassportOrIdCardFormProviderSpec extends
   StringFieldBehaviours with PassportOrIDCardBehaviours with DateBehaviours with FakeTrustsApp {

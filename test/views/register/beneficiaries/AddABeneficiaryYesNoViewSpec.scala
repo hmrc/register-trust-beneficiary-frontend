@@ -26,7 +26,7 @@ class AddABeneficiaryYesNoViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "addABeneficiaryYesNo"
 
-  val form = new YesNoFormProvider().withPrefix(messageKeyPrefix)
+  val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
   "AddABeneficiaryYesNo view" must {
 

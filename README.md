@@ -5,15 +5,21 @@ This service is responsible for collecting details about the beneficiaries of a 
 
 To run locally using the micro-service provided by the service manager:
 
-***sm --start TRUSTS_ALL -r***
+```
+sm --start TRUSTS_ALL -r
+```
 
 or
 
-***sm --start REGISTER_TRUST_ALL -r***
+```
+sm --start REGISTER_TRUST_ALL -r
+```
 
 If you want to run your local copy, then stop the frontend ran by the service manager and run your local code by using the following (port number is 8837 but is defaulted to that in build.sbt):
 
-***sbt run***
+```
+sbt run
+```
 
 ### License
 

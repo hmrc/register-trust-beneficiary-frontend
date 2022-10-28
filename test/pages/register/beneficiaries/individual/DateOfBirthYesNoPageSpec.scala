@@ -16,11 +16,11 @@
 
 package pages.register.beneficiaries.individual
 
-import java.time.LocalDate
-
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
+
+import java.time.LocalDate
 
 class DateOfBirthYesNoPageSpec extends PageBehaviours {
 

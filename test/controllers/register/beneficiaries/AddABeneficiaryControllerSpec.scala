@@ -35,8 +35,7 @@ import models.registration.pages.RoleInCompany.Employee
 import models.registration.pages.WhatTypeOfBeneficiary.Individual
 import models.{ReadOnlyUserAnswers, TaskStatus, UserAnswers}
 import org.mockito.ArgumentCaptor
-import org.mockito.Matchers.{any, eq => mEq}
-import org.mockito.Mockito.{reset, verify, when}
+import org.mockito.ArgumentMatchers.{any, eq => mEq}
 import org.scalatest.BeforeAndAfterEach
 import pages.entitystatus._
 import pages.register.KindOfTrustPage
@@ -272,7 +271,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
         contentAsString(result) mustEqual
           view(form, fakeDraftId)(request, messages).toString
 
-        val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+        val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
         verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
         uaCaptor.getValue.get(WhatTypeOfBeneficiaryPage) mustNot be(defined)
 

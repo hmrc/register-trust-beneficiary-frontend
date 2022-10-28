@@ -21,9 +21,7 @@ import config.annotations.CharityBeneficiary
 import forms.StringFormProvider
 import models.{ReadOnlyUserAnswers, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
+import org.mockito.ArgumentMatchers.any
 import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
 import play.api.data.Form
 import play.api.inject.bind
@@ -34,7 +32,7 @@ import views.html.register.beneficiaries.charityortrust.charity.CharityNameView
 
 import scala.concurrent.Future
 
-class CharityNameControllerSpec extends SpecBase with MockitoSugar {
+class CharityNameControllerSpec extends SpecBase {
 
   val formProvider = new StringFormProvider()
   val form: Form[String] = formProvider.withPrefix("charity.name", 105)

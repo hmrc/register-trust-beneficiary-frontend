@@ -21,6 +21,7 @@ import config.annotations.TrustBeneficiary
 import forms.YesNoFormProvider
 import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.charityortrust.trust.{AddressYesNoPage, NamePage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -29,11 +30,11 @@ import views.html.register.beneficiaries.charityortrust.trust.AddressYesNoView
 class AddressYesNoControllerSpec extends SpecBase {
 
   val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix("trustBeneficiaryAddressYesNo")
+  val form: Form[Boolean] = formProvider.withPrefix("trustBeneficiaryAddressYesNo")
   val index: Int = 0
   val name = "Name"
 
-  lazy val trustBeneficiaryAddressYesNoRoute = routes.AddressYesNoController.onPageLoad(index, fakeDraftId).url
+  lazy val trustBeneficiaryAddressYesNoRoute: String = routes.AddressYesNoController.onPageLoad(index, fakeDraftId).url
 
   "TrustBeneficiaryAddressYesNo Controller" must {
 

@@ -19,10 +19,9 @@ package mapping.reads
 import base.SpecBase
 import models.YesNoDontKnow
 import models.core.pages.FullName
-import org.scalatest.{MustMatchers, OptionValues}
 import play.api.libs.json.Json
 
-class IndividualBeneficiarySpec extends SpecBase with MustMatchers with OptionValues {
+class IndividualBeneficiarySpec extends SpecBase {
 
   "IndividualBeneficiary reads" must {
 

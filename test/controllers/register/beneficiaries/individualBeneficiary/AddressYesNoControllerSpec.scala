@@ -22,6 +22,7 @@ import forms.YesNoFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.individual.{AddressYesNoPage, NamePage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -30,11 +31,11 @@ import views.html.register.beneficiaries.individualBeneficiary.AddressYesNoView
 class AddressYesNoControllerSpec extends SpecBase {
 
   val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix("individualBeneficiaryAddressYesNo")
+  val form: Form[Boolean] = formProvider.withPrefix("individualBeneficiaryAddressYesNo")
   val index: Int = 0
-  val name = FullName("first name", None, "Last name")
+  val name: FullName = FullName("first name", None, "Last name")
 
-  lazy val individualBeneficiaryAddressYesNoRoute = routes.AddressYesNoController.onPageLoad(index, fakeDraftId).url
+  lazy val individualBeneficiaryAddressYesNoRoute: String = routes.AddressYesNoController.onPageLoad(index, fakeDraftId).url
 
   "IndividualBeneficiaryAddressYesNo Controller" must {
 

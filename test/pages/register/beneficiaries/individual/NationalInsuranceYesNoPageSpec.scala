@@ -16,13 +16,13 @@
 
 package pages.register.beneficiaries.individual
 
-import java.time.LocalDate
-
 import models.UserAnswers
 import models.core.pages.{InternationalAddress, UKAddress}
 import models.registration.pages.PassportOrIdCardDetails
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
+
+import java.time.LocalDate
 
 class NationalInsuranceYesNoPageSpec extends PageBehaviours {
 
