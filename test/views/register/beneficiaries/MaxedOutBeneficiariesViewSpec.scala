@@ -25,9 +25,9 @@ class MaxedOutBeneficiariesViewSpec extends OptionsViewBehaviours with TabularDa
 
   val messageKeyPrefix = "addABeneficiary"
 
-  val view = viewFor[MaxedOutBeneficiariesView](Some(emptyUserAnswers))
+  val view: MaxedOutBeneficiariesView = viewFor[MaxedOutBeneficiariesView](Some(emptyUserAnswers))
 
-  val rows = List(AddRow("Charity", "", "", ""), AddRow("Trust", "", "", ""))
+  val rows: List[AddRow] = List(AddRow("Charity", "", "", ""), AddRow("Trust", "", "", ""))
 
   def applyView(): HtmlFormat.Appendable =
     view.apply("draftId", rows, rows, "Add a beneficiary")(fakeRequest, messages)

@@ -18,15 +18,15 @@ package mapping.registration
 
 import base.SpecBase
 import generators.Generators
-import models.{AddressType, IdentificationOrgType, LargeType}
 import models.core.pages.{Description, InternationalAddress, UKAddress}
 import models.registration.pages.HowManyBeneficiaries
-import org.scalatest.{MustMatchers, OptionValues}
+import models.{AddressType, IdentificationOrgType, LargeType}
+import org.scalatest.OptionValues
 import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated._
 import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import utils.Constants._
 
-class LargeBeneficiaryMapperSpec extends SpecBase with MustMatchers
+class LargeBeneficiaryMapperSpec extends SpecBase
   with OptionValues with Generators {
 
   private val mapper = injector.instanceOf[LargeBeneficiaryMapper]

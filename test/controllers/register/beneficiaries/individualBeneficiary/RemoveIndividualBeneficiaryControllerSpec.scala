@@ -22,6 +22,8 @@ import models.core.pages.FullName
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.beneficiaries.individual.NamePage
+import play.api.data.Form
+import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.RemoveIndexView
@@ -31,9 +33,9 @@ class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with ScalaCheck
   val messagesPrefix = "removeIndividualBeneficiaryYesNo"
 
   val formProvider = new RemoveIndexFormProvider()
-  val form = formProvider(messagesPrefix)
+  val form: Form[Boolean] = formProvider(messagesPrefix)
 
-  lazy val formRoute = routes.RemoveIndividualBeneficiaryController.onSubmit(0, fakeDraftId)
+  lazy val formRoute: Call = routes.RemoveIndividualBeneficiaryController.onSubmit(0, fakeDraftId)
 
   val index = 0
 

@@ -16,7 +16,6 @@
 
 package views.register.beneficiaries
 
-import controllers.register.beneficiaries.routes
 import views.behaviours.ViewBehaviours
 import views.html.register.beneficiaries.InfoView
 
@@ -69,7 +68,7 @@ class InfoViewSpec extends ViewBehaviours {
       )
 
       behave like pageWithBackLink(applyView)
-      behave like pageWithContinueButton(applyView, routes.WhatTypeOfBeneficiaryController.onPageLoad(fakeDraftId).url )
+      behave like pageWithContinueButton(applyView)
 
     }
 
@@ -129,7 +128,7 @@ class InfoViewSpec extends ViewBehaviours {
       )
 
       behave like pageWithBackLink(applyView)
-      behave like pageWithContinueButton(applyView, routes.WhatTypeOfBeneficiaryController.onPageLoad(fakeDraftId).url )
+      behave like pageWithContinueButton(applyView)
 
     }
 

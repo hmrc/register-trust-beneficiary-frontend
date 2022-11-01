@@ -28,14 +28,14 @@ class AddABeneficiaryViewSpec extends OptionsViewBehaviours with TabularDataView
 
   val featureUnavalible = "/trusts-registration/feature-not-available"
 
-  val completeBeneficiaries = Seq(
+  val completeBeneficiaries: Seq[AddRow] = Seq(
     AddRow("beneficiary one", "Individual Beneficiary", featureUnavalible, featureUnavalible),
     AddRow("beneficiary two", "Individual Beneficiary", featureUnavalible, featureUnavalible),
     AddRow("beneficiary three", "Individual Beneficiary", featureUnavalible, featureUnavalible),
     AddRow("class of beneficiary", "Class of beneficiaries", featureUnavalible, featureUnavalible)
   )
 
-  val inProgressBeneficiaries = Seq(
+  val inProgressBeneficiaries: Seq[AddRow] = Seq(
     AddRow("beneficiary four", "Individual Beneficiary", featureUnavalible, featureUnavalible),
     AddRow("beneficiary five", "Individual Beneficiary", featureUnavalible, featureUnavalible),
     AddRow("beneficiary six", "Individual Beneficiary", featureUnavalible, featureUnavalible),
@@ -45,7 +45,7 @@ class AddABeneficiaryViewSpec extends OptionsViewBehaviours with TabularDataView
 
   val form = new AddABeneficiaryFormProvider()()
 
-  val view = viewFor[AddABeneficiaryView](Some(emptyUserAnswers))
+  val view: AddABeneficiaryView = viewFor[AddABeneficiaryView](Some(emptyUserAnswers))
 
   def applyView(form: Form[_]): HtmlFormat.Appendable =
     view.apply(form, fakeDraftId, Nil, Nil, "Add a beneficiary", Nil)(fakeRequest, messages)

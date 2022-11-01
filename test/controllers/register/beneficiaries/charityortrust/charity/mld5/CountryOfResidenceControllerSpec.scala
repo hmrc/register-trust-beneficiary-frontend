@@ -20,20 +20,18 @@ import base.SpecBase
 import config.annotations.CharityBeneficiary
 import forms.CountryFormProvider
 import navigation.{FakeNavigator, Navigator}
-import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
 import pages.register.beneficiaries.charityortrust.charity.mld5.CountryOfResidencePage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import utils.InputOption
 import utils.Constants._
+import utils.InputOption
 import utils.countryOptions.CountryOptionsNonUK
-
 import views.html.register.beneficiaries.charityortrust.charity.mld5.CountryOfResidenceView
 
-class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
+class CountryOfResidenceControllerSpec extends SpecBase {
 
   val formProvider = new CountryFormProvider()
   val form: Form[String] = formProvider.withPrefix("charity.5mld.countryOfResidence")

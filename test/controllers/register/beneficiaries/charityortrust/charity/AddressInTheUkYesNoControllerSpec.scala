@@ -20,7 +20,6 @@ import base.SpecBase
 import config.annotations.CharityBeneficiary
 import forms.YesNoFormProvider
 import navigation.{FakeNavigator, Navigator}
-import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.charityortrust.charity.{AddressInTheUkYesNoPage, CharityNamePage}
 import play.api.data.Form
 import play.api.inject.bind
@@ -28,7 +27,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.charityortrust.charity.AddressInTheUkYesNoView
 
-class AddressInTheUkYesNoControllerSpec extends SpecBase with MockitoSugar {
+class AddressInTheUkYesNoControllerSpec extends SpecBase {
 
   val formProvider = new YesNoFormProvider()
   val form: Form[Boolean] = formProvider.withPrefix("charity.addressInTheUkYesNo")

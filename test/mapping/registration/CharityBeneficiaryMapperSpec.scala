@@ -18,15 +18,13 @@ package mapping.registration
 
 import base.SpecBase
 import generators.Generators
-import models.{AddressType, CharityType, IdentificationOrgType}
 import models.core.pages.{InternationalAddress, UKAddress}
-import org.scalatest.{MustMatchers, OptionValues}
+import models.{AddressType, CharityType, IdentificationOrgType}
 import pages.register.beneficiaries.charityortrust.charity._
 import pages.register.beneficiaries.charityortrust.charity.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import utils.Constants._
 
-class CharityBeneficiaryMapperSpec extends SpecBase with MustMatchers
-  with OptionValues with Generators {
+class CharityBeneficiaryMapperSpec extends SpecBase with Generators {
 
   val charityBeneficiaryMapper: CharityBeneficiaryMapper = injector.instanceOf[CharityBeneficiaryMapper]
 

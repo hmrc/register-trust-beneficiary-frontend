@@ -16,7 +16,6 @@
 
 package views.register.beneficiaries.charityortrust.charity
 
-import controllers.register.beneficiaries.charityortrust.charity.routes
 import forms.InternationalAddressFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -45,12 +44,7 @@ class CharityInternationalAddressViewSpec extends InternationalAddressViewBehavi
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like internationalAddress(
-      applyView,
-      Some(prefix),
-      routes.CharityInternationalAddressController.onSubmit(index, fakeDraftId).url,
-      charityName
-    )
+    behave like internationalAddress(applyView, Some(prefix), charityName)
 
     behave like pageWithASubmitButton(applyView(form))
 

@@ -24,11 +24,11 @@ import models.UserAnswers
 import models.registration.pages.WhatTypeOfBeneficiary.ClassOfBeneficiary
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
-import org.mockito.Matchers.any
-import org.mockito.Mockito.verify
+import org.mockito.ArgumentMatchers.any
 import pages.entitystatus.ClassBeneficiaryStatus
 import pages.register.beneficiaries.WhatTypeOfBeneficiaryPage
 import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -37,10 +37,10 @@ import views.html.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDe
 class ClassBeneficiaryDescriptionControllerSpec extends SpecBase {
 
   val formProvider = new ClassBeneficiaryDescriptionFormProvider()
-  val form = formProvider()
+  val form: Form[String] = formProvider()
   val index = 0
 
-  lazy val classBeneficiaryDescriptionRoute = routes.ClassBeneficiaryDescriptionController.onPageLoad(index, fakeDraftId).url
+  lazy val classBeneficiaryDescriptionRoute: String = routes.ClassBeneficiaryDescriptionController.onPageLoad(index, fakeDraftId).url
 
   override def emptyUserAnswers: UserAnswers = super.emptyUserAnswers
     .set(WhatTypeOfBeneficiaryPage, ClassOfBeneficiary).right.get
@@ -102,7 +102,7 @@ class ClassBeneficiaryDescriptionControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
-      val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+      val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
       verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
       uaCaptor.getValue.get(ClassBeneficiaryStatus(index)).get mustBe Completed
 

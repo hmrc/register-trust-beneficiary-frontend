@@ -20,12 +20,12 @@ import base.SpecBase
 import generators.Generators
 import models.core.pages.{InternationalAddress, UKAddress}
 import models.{AddressType, BeneficiaryTrustType, IdentificationOrgType}
-import org.scalatest.{MustMatchers, OptionValues}
+import org.scalatest.OptionValues
 import pages.register.beneficiaries.charityortrust.trust._
 import pages.register.beneficiaries.charityortrust.trust.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import utils.Constants._
 
-class TrustBeneficiaryMapperSpec extends SpecBase with MustMatchers
+class TrustBeneficiaryMapperSpec extends SpecBase
   with OptionValues with Generators {
 
   private val trustBeneficiariesMapper: TrustBeneficiaryMapper = injector.instanceOf[TrustBeneficiaryMapper]

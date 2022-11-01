@@ -18,14 +18,13 @@ package mapping.registration
 
 import base.SpecBase
 import generators.Generators
-import models.{AddressType, CompanyType, IdentificationOrgType}
 import models.core.pages.{InternationalAddress, UKAddress}
-import org.scalatest.{MustMatchers, OptionValues}
+import models.{AddressType, CompanyType, IdentificationOrgType}
 import pages.register.beneficiaries.companyoremploymentrelated.company._
 import pages.register.beneficiaries.companyoremploymentrelated.company.mld5._
 import utils.Constants._
 
-class CompanyBeneficiaryMapperSpec extends SpecBase with MustMatchers with OptionValues with Generators {
+class CompanyBeneficiaryMapperSpec extends SpecBase with Generators {
 
   private val mapper = injector.instanceOf[CompanyBeneficiaryMapper]
   private val index0 = 0

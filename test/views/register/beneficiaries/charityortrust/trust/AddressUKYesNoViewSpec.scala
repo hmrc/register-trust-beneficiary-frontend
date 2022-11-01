@@ -28,7 +28,7 @@ class AddressUKYesNoViewSpec extends YesNoViewBehaviours {
   val index = 0
   val name = "First Last"
 
-  val form = new YesNoFormProvider().withPrefix("trustBeneficiaryAddressUKYesNo")
+  val form: Form[Boolean] = new YesNoFormProvider().withPrefix("trustBeneficiaryAddressUKYesNo")
 
   "IndividualBeneficiaryAddressUKYesNo view" must {
 

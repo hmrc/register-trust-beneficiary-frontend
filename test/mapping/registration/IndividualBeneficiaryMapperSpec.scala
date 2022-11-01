@@ -22,14 +22,14 @@ import models.core.pages.{FullName, UKAddress}
 import models.registration.pages.PassportOrIdCardDetails
 import models.registration.pages.RoleInCompany.Director
 import models.{AddressType, IdentificationType, IndividualDetailsType, PassportType, YesNoDontKnow}
-import org.scalatest.{MustMatchers, OptionValues}
+import org.scalatest.OptionValues
 import pages.register.beneficiaries.individual._
 import pages.register.beneficiaries.individual.mld5._
 import utils.Constants._
 
 import java.time.LocalDate
 
-class IndividualBeneficiaryMapperSpec extends SpecBase with MustMatchers
+class IndividualBeneficiaryMapperSpec extends SpecBase
   with OptionValues with Generators {
 
   private val individualBeneficiariesMapper: IndividualBeneficiaryMapper = injector.instanceOf[IndividualBeneficiaryMapper]

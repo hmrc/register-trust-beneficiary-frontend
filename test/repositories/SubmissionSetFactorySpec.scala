@@ -22,8 +22,6 @@ import models.Status.Completed
 import models.UserAnswers
 import pages.entitystatus._
 
-import scala.collection.immutable.Nil
-
 class SubmissionSetFactorySpec extends SpecBase {
 
   "Submission set factory" must {

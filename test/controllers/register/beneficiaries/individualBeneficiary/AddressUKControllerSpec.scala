@@ -22,6 +22,7 @@ import forms.UKAddressFormProvider
 import models.core.pages.{FullName, UKAddress}
 import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.individual.{AddressUKPage, NamePage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -30,12 +31,12 @@ import views.html.register.beneficiaries.individualBeneficiary.AddressUKView
 class AddressUKControllerSpec extends SpecBase {
 
   val formProvider = new UKAddressFormProvider()
-  val form = formProvider()
+  val form: Form[UKAddress] = formProvider()
   val index: Int = 0
 
-  val name = FullName("first name", None, "Last name")
+  val name: FullName = FullName("first name", None, "Last name")
 
-  lazy val individualBeneficiaryAddressUKRoute = routes.AddressUKController.onPageLoad(index, fakeDraftId).url
+  lazy val individualBeneficiaryAddressUKRoute: String = routes.AddressUKController.onPageLoad(index, fakeDraftId).url
 
   "IndividualBeneficiaryAddressUK Controller" must {
 

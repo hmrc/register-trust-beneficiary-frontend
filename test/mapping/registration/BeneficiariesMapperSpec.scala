@@ -20,15 +20,13 @@ import base.SpecBase
 import generators.Generators
 import models.core.pages.{Description, FullName}
 import models.registration.pages.HowManyBeneficiaries
-import org.scalatest.{MustMatchers, OptionValues}
 import pages.register.beneficiaries.charityortrust.{charity, trust}
 import pages.register.beneficiaries.companyoremploymentrelated.{company, employmentRelated}
 import pages.register.beneficiaries.{classofbeneficiaries, individual, other}
 
 import java.time.LocalDate
 
-class BeneficiariesMapperSpec extends SpecBase with MustMatchers
-  with OptionValues with Generators {
+class BeneficiariesMapperSpec extends SpecBase with Generators {
 
   val beneficiariesMapper: BeneficiariesMapper = injector.instanceOf[BeneficiariesMapper]
 

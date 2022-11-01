@@ -16,9 +16,9 @@
 
 package generators
 
-import models.{CompanyOrEmploymentRelatedToAdd, YesNoDontKnow}
 import models.core.pages.{FullName, InternationalAddress, UKAddress}
 import models.registration.pages.{AddABeneficiary, CharityOrTrust, PassportOrIdCardDetails, WhatTypeOfBeneficiary}
+import models.{CompanyOrEmploymentRelatedToAdd, YesNoDontKnow}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 

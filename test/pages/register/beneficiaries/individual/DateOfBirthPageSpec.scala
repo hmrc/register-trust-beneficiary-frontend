@@ -16,9 +16,9 @@
 
 package pages.register.beneficiaries.individual
 
-import java.time.LocalDate
-
 import pages.behaviours.PageBehaviours
+
+import java.time.LocalDate
 
 class DateOfBirthPageSpec extends PageBehaviours {
 

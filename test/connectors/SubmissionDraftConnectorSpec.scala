@@ -16,12 +16,9 @@
 
 package connectors
 
-import java.time.LocalDateTime
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock._
-import models.Status.InProgress
 import models.{RegistrationSubmission, SubmissionDraftResponse}
-import org.scalatest.{MustMatchers, OptionValues}
 import play.api.Application
 import play.api.http.Status
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -29,10 +26,11 @@ import play.api.libs.json.{JsBoolean, Json}
 import play.api.test.Helpers.CONTENT_TYPE
 import utils.WireMockHelper
 
+import java.time.LocalDateTime
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 
-class SubmissionDraftConnectorSpec extends SpecBase with MustMatchers with OptionValues with WireMockHelper {
+class SubmissionDraftConnectorSpec extends SpecBase with WireMockHelper {
 
   override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(Seq(

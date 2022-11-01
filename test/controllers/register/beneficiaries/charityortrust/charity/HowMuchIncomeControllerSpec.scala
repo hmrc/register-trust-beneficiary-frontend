@@ -20,7 +20,6 @@ import base.SpecBase
 import config.annotations.CharityBeneficiary
 import forms.IncomePercentageFormProvider
 import navigation.{FakeNavigator, Navigator}
-import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.charityortrust.charity.{CharityNamePage, HowMuchIncomePage}
 import play.api.data.Form
 import play.api.inject.bind
@@ -28,7 +27,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
 import views.html.register.beneficiaries.charityortrust.charity.HowMuchIncomeView
 
-class HowMuchIncomeControllerSpec extends SpecBase with MockitoSugar {
+class HowMuchIncomeControllerSpec extends SpecBase {
 
   val formProvider = new IncomePercentageFormProvider()
   val form: Form[Int] = formProvider.withPrefix("charity.shareOfIncome")

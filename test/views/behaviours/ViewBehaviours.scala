@@ -227,7 +227,7 @@ trait ViewBehaviours extends ViewSpecBase {
     }
   }
 
-  def pageWithContinueButton(view: HtmlFormat.Appendable, url : String): Unit = {
+  def pageWithContinueButton(view: HtmlFormat.Appendable): Unit = {
 
     "behave like a page with a Continue button" must {
       "have a continue button" in {

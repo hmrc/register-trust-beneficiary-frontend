@@ -21,7 +21,6 @@ import config.annotations.CompanyBeneficiary
 import forms.IncomePercentageFormProvider
 import models.UserAnswers
 import navigation.{FakeNavigator, Navigator}
-import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.companyoremploymentrelated.company.{IncomePage, NamePage}
 import play.api.data.Form
 import play.api.inject.bind
@@ -30,7 +29,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.companyoremploymentrelated.company.ShareOfIncomeView
 
-class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
+class ShareOfIncomeControllerSpec extends SpecBase {
 
   private val index = 0
   private val form: Form[Int] = new IncomePercentageFormProvider().withPrefix("companyBeneficiary.shareOfIncome")

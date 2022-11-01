@@ -21,6 +21,8 @@ import forms.RemoveIndexFormProvider
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
+import play.api.data.Form
+import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.RemoveIndexView
@@ -30,9 +32,9 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
   val messagesPrefix = "removeClassOfBeneficiaryYesNo"
 
   lazy val formProvider = new RemoveIndexFormProvider()
-  lazy val form = formProvider(messagesPrefix)
+  lazy val form: Form[Boolean] = formProvider(messagesPrefix)
 
-  lazy val formRoute = routes.RemoveClassOfBeneficiaryController.onSubmit(0, fakeDraftId)
+  lazy val formRoute: Call = routes.RemoveClassOfBeneficiaryController.onSubmit(0, fakeDraftId)
 
   lazy val content : String = "Future issues of grandchildren"
 

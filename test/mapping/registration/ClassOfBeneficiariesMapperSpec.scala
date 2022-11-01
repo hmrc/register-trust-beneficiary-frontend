@@ -20,11 +20,11 @@ import base.SpecBase
 import generators.Generators
 import models.UnidentifiedType
 import models.registration.pages.WhatTypeOfBeneficiary
-import org.scalatest.{MustMatchers, OptionValues}
+import org.scalatest.OptionValues
 import pages.register.beneficiaries.WhatTypeOfBeneficiaryPage
 import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
 
-class ClassOfBeneficiariesMapperSpec extends SpecBase with MustMatchers
+class ClassOfBeneficiariesMapperSpec extends SpecBase
   with OptionValues with Generators {
 
   val classOfBeneficiariesMapper: ClassOfBeneficiariesMapper = injector.instanceOf[ClassOfBeneficiariesMapper]

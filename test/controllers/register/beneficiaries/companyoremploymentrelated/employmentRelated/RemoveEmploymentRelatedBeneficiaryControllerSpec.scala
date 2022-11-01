@@ -21,6 +21,8 @@ import forms.RemoveIndexFormProvider
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.register.beneficiaries.companyoremploymentrelated.company.NamePage
+import play.api.data.Form
+import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.RemoveIndexView
@@ -30,9 +32,9 @@ class RemoveEmploymentRelatedBeneficiaryControllerSpec extends SpecBase with Sca
   val messagesPrefix = "removeEmploymentRelatedBeneficiaryYesNo"
 
   val formProvider = new RemoveIndexFormProvider()
-  val form = formProvider(messagesPrefix)
+  val form: Form[Boolean] = formProvider(messagesPrefix)
 
-  lazy val formRoute = routes.RemoveEmploymentRelatedBeneficiaryController.onSubmit(0, fakeDraftId)
+  lazy val formRoute: Call = routes.RemoveEmploymentRelatedBeneficiaryController.onSubmit(0, fakeDraftId)
 
   val index = 0
 

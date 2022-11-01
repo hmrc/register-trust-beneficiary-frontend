@@ -18,7 +18,6 @@ package pages.register.beneficiaries.companyoremploymentrelated
 
 import models.CompanyOrEmploymentRelatedToAdd._
 import models.Status._
-import models.registration.pages.CharityOrTrust._
 import models.{CompanyOrEmploymentRelatedToAdd, Status, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours

@@ -18,9 +18,8 @@ package controllers.actions
 
 import controllers.actions.register.{DraftIdDataRetrievalAction, DraftIdRetrievalActionProvider}
 import models.{Status, UserAnswers}
-import org.mockito.Matchers._
-import org.mockito.Mockito._
-import org.scalatestplus.mockito.MockitoSugar
+import org.mockito.ArgumentMatchers._
+import org.mockito.MockitoSugar
 import repositories.RegistrationsRepository
 
 import scala.concurrent.{ExecutionContext, Future}

@@ -24,7 +24,7 @@ import views.ViewSpecBase
 
 trait TabularDataViewBehaviours extends ViewSpecBase {
 
-  private def assertDataList(doc: Document, parentElementId: String, data: Seq[AddRow]) = {
+  private def assertDataList(doc: Document, parentElementId: String, data: Seq[AddRow]): Unit = {
 
     val container = doc.getElementById(parentElementId)
 
@@ -51,7 +51,7 @@ trait TabularDataViewBehaviours extends ViewSpecBase {
     }
   }
 
-  def pageWithNoTabularData(view: HtmlFormat.Appendable) = {
+  def pageWithNoTabularData(view: HtmlFormat.Appendable): Unit = {
 
     "behave like a page with no tabular data" when {
 
@@ -68,7 +68,7 @@ trait TabularDataViewBehaviours extends ViewSpecBase {
     }
   }
 
-  def pageWithInProgressTabularData(view: HtmlFormat.Appendable, data: Seq[AddRow]) = {
+  def pageWithInProgressTabularData(view: HtmlFormat.Appendable, data: Seq[AddRow]): Unit = {
 
     "behave like a page with incomplete tabular data" should {
 
@@ -91,7 +91,7 @@ trait TabularDataViewBehaviours extends ViewSpecBase {
     }
   }
 
-  def pageWithCompleteTabularData(view: HtmlFormat.Appendable, data: Seq[AddRow]) = {
+  def pageWithCompleteTabularData(view: HtmlFormat.Appendable, data: Seq[AddRow]): Unit = {
 
     "behave like a page with complete tabular data" should {
 
@@ -116,7 +116,7 @@ trait TabularDataViewBehaviours extends ViewSpecBase {
 
   def pageWithTabularData(view: HtmlFormat.Appendable,
                           inProgressData: Seq[AddRow],
-                          completeData: Seq[AddRow]) = {
+                          completeData: Seq[AddRow]): Unit = {
 
     "behave like a page with complete and incomplete tabular data" should {
 

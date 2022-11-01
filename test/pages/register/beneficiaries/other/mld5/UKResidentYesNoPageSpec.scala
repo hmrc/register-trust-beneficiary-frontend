@@ -19,8 +19,7 @@ package pages.register.beneficiaries.other.mld5
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-import utils.Constants.ES
-import utils.Constants.GB
+import utils.Constants.{ES, GB}
 
 class UKResidentYesNoPageSpec extends PageBehaviours {
 

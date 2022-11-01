@@ -18,7 +18,7 @@ package generators
 
 import org.scalacheck.Arbitrary
 import pages.register.beneficiaries.charityortrust._
-import pages.register.beneficiaries.charityortrust.charity.{AddressInTheUkYesNoPage, AddressYesNoPage, AmountDiscretionYesNoPage, CharityAddressUKPage, CharityInternationalAddressPage, CharityNamePage, HowMuchIncomePage}
+import pages.register.beneficiaries.charityortrust.charity._
 
 trait PageGenerators {
 

@@ -21,7 +21,6 @@ import config.annotations.OtherBeneficiary
 import forms.UKAddressFormProvider
 import models.core.pages.UKAddress
 import navigation.{FakeNavigator, Navigator}
-import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.other.{AddressUKPage, DescriptionPage}
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -29,7 +28,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.other.UkAddressView
 
-class UkAddressControllerSpec extends SpecBase with MockitoSugar {
+class UkAddressControllerSpec extends SpecBase {
 
   private val index = 0
   private val form = new UKAddressFormProvider()()

@@ -27,14 +27,11 @@ trait InternationalAddressViewBehaviours extends ViewBehaviours {
 
   val errorKey = "value"
   val errorMessage = "error.number"
-  val error = FormError(errorKey, errorMessage)
+  val error: FormError = FormError(errorKey, errorMessage)
 
   val form: Form[InternationalAddress]
 
-  def internationalAddress(createView: Form[InternationalAddress] => HtmlFormat.Appendable,
-                           titleMessagePrefix: Option[String],
-                           expectedFormAction: String,
-                           args: String*) = {
+  def internationalAddress(createView: Form[InternationalAddress] => HtmlFormat.Appendable, titleMessagePrefix: Option[String], args: String*): Unit = {
 
     val titlePrefix = titleMessagePrefix.getOrElse("site.address.international")
 

@@ -22,8 +22,7 @@ import models.UserAnswers
 import models.registration.pages.CharityOrTrust.Trust
 import models.registration.pages.WhatTypeOfBeneficiary.CharityOrTrust
 import org.mockito.ArgumentCaptor
-import org.mockito.Matchers.any
-import org.mockito.Mockito.{verify, when}
+import org.mockito.ArgumentMatchers.any
 import pages.entitystatus.TrustBeneficiaryStatus
 import pages.register.beneficiaries.WhatTypeOfBeneficiaryPage
 import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
@@ -88,7 +87,7 @@ class AnswersControllerSpec extends SpecBase {
 
       redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
-      val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+      val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
       verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
       uaCaptor.getValue.get(TrustBeneficiaryStatus(index)).get mustBe Completed
 

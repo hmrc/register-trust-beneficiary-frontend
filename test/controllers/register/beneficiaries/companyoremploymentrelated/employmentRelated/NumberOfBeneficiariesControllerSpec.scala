@@ -21,7 +21,6 @@ import config.annotations.EmploymentRelatedBeneficiary
 import forms.NumberOfBeneficiariesFormProvider
 import models.registration.pages.HowManyBeneficiaries
 import navigation.{FakeNavigator, Navigator}
-import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.LargeBeneficiaryNumberOfBeneficiariesPage
 import play.api.data.Form
 import play.api.inject.bind
@@ -30,7 +29,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.register.beneficiaries.companyoremploymentrelated.employmentRelated.NumberOfBeneficiariesView
 
-class NumberOfBeneficiariesControllerSpec extends SpecBase with MockitoSugar {
+class NumberOfBeneficiariesControllerSpec extends SpecBase {
 
   private val index = 0
   private val form: Form[HowManyBeneficiaries] = new NumberOfBeneficiariesFormProvider()()

@@ -16,18 +16,20 @@
 
 package forms.mappings
 
-import java.time.LocalDate
-
 import generators.Generators
 import org.scalacheck.Gen
+import org.scalatest.OptionValues
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import org.scalatest.{FreeSpec, MustMatchers, OptionValues}
 import play.api.data.{Form, FormError}
 
-class DateMappingsSpec extends FreeSpec with MustMatchers with ScalaCheckPropertyChecks with Generators with OptionValues
+import java.time.LocalDate
+
+class DateMappingsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with Generators with OptionValues
   with Mappings {
 
-  val form = Form(
+  val form: Form[LocalDate] = Form(
     "value" -> localDate(
       requiredKey    = "error.required",
       allRequiredKey = "error.required.all",

@@ -21,7 +21,6 @@ import config.annotations.CompanyBeneficiary
 import forms.InternationalAddressFormProvider
 import models.core.pages.InternationalAddress
 import navigation.{FakeNavigator, Navigator}
-import org.scalatestplus.mockito.MockitoSugar
 import pages.register.beneficiaries.companyoremploymentrelated.company.{AddressInternationalPage, NamePage}
 import play.api.data.Form
 import play.api.inject.bind
@@ -32,7 +31,7 @@ import utils.InputOption
 import utils.countryOptions.CountryOptionsNonUK
 import views.html.register.beneficiaries.companyoremploymentrelated.company.NonUkAddressView
 
-class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
+class NonUkAddressControllerSpec extends SpecBase {
 
   private val index = 0
   private val form: Form[InternationalAddress] = new InternationalAddressFormProvider()()
