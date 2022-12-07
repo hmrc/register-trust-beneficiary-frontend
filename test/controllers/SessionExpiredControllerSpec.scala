@@ -51,7 +51,7 @@ class SessionExpiredControllerSpec extends SpecBase {
 
       val result = route(application, request).value
 
-      status(result) mustEqual SEE_OTHER
+      status(result) mustEqual OK
 
       redirectLocation(result) mustBe Some(
         s"${frontendAppConfig.loginUrl}?continue=http%3A%2F%2Flocalhost%3A9781%2Ftrusts-registration&origin=register-trust-beneficiary-frontend"
