@@ -34,8 +34,9 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.countryOptions.CountryOptions
 import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.individualBeneficiary.PassportDetailsView
-
 import javax.inject.Inject
+import models.requests.RegistrationDataRequest
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class PassportDetailsController @Inject()(
@@ -56,7 +57,9 @@ class PassportDetailsController @Inject()(
 
   private val className = getClass.getSimpleName
 
-  private val form = formProvider("individualBeneficiaryPassportDetails")
+  private def getForm(index: Int)(implicit request: RegistrationDataRequest[AnyContent]) =
+    formProvider("individualBeneficiaryPassportDetails", request.userAnswers, index)
+
 
   private def actions(index: Int, draftId: String) =
     identify andThen
@@ -70,6 +73,8 @@ class PassportDetailsController @Inject()(
 
       val name = request.userAnswers.get(NamePage(index)).get
 
+      val form = getForm(index)
+
       val preparedForm = request.userAnswers.get(PassportDetailsPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
@@ -82,6 +87,8 @@ class PassportDetailsController @Inject()(
     implicit request =>
 
       val name = request.userAnswers.get(NamePage(index)).get
+
+      val form = getForm(index)
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>

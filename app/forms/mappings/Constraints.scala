@@ -19,7 +19,7 @@ package forms.mappings
 import java.time.LocalDate
 import forms.Validation
 import models.UserAnswers
-import pages.register.beneficiaries.individual.NationalInsuranceNumberPage
+import pages.register.beneficiaries.individual.{NationalInsuranceNumberPage, PassportDetailsPage, IDCardDetailsPage}
 import play.api.data.validation.{Constraint, Invalid, Valid}
 import play.api.libs.json.{JsArray, JsString, JsSuccess}
 import sections.beneficiaries.IndividualBeneficiaries
@@ -128,6 +128,55 @@ trait Constraints {
             )
 
             if (uniqueNino) {
+              Valid
+            } else {
+              Invalid(errorKey)
+            }
+          case _ =>
+            Valid
+        }
+    }
+
+  protected def uniqueNino(errorKey: String, existingSettlorNinos: Seq[String]): Constraint[String] =
+    Constraint {
+      nino =>
+        if (existingSettlorNinos.contains(nino)) {
+          Invalid(errorKey)
+        } else {
+          Valid
+        }
+    }
+
+  protected def isPassportNumberDuplicated(userAnswers: UserAnswers, index: Int, errorKey: String): Constraint[String] =
+    Constraint {
+      passportNumber =>
+        userAnswers.data.transform(IndividualBeneficiaries.path.json.pick[JsArray]) match {
+          case JsSuccess(beneficiaries, _) =>
+            val uniquePassportNumber = beneficiaries.value.zipWithIndex.forall { beneficiary =>
+              !((beneficiary._1 \ PassportDetailsPage.key \ PassportDetailsPage.passportNumberKey).toOption.fold(false)(_.as[String] == (passportNumber)) && beneficiary._2 != index)
+            }
+
+            if (uniquePassportNumber) {
+              Valid
+            } else {
+              Invalid(errorKey)
+            }
+          case _ =>
+            Valid
+        }
+    }
+
+  protected def isIDNumberDuplicated(userAnswers: UserAnswers, index: Int, errorKey: String): Constraint[String] =
+    Constraint {
+      idNumber =>
+        userAnswers.data.transform(IndividualBeneficiaries.path.json.pick[JsArray]) match {
+          case JsSuccess(beneficiaries, _) =>
+
+            val uniqueIDNumber = beneficiaries.value.zipWithIndex.forall { beneficiary =>
+                !((beneficiary._1 \ IDCardDetailsPage.key \ IDCardDetailsPage.idNumberKey).toOption.fold(false)(_.as[String].equals(idNumber)) && beneficiary._2 != index)
+            }
+
+            if (uniqueIDNumber) {
               Valid
             } else {
               Invalid(errorKey)

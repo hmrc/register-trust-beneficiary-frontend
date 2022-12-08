@@ -42,8 +42,8 @@ class IDCardDetailsControllerSpec extends SpecBase {
   private val mockFrontendAppConfig = mock[FrontendAppConfig]
 
   private val formProvider = new PassportOrIdCardFormProvider(mockFrontendAppConfig)
-  private val form: Form[PassportOrIdCardDetails] = formProvider("individualBeneficiaryIDCardDetails")
   private val index: Int = 0
+  private val form: Form[PassportOrIdCardDetails] = formProvider("individualBeneficiaryIDCardDetails", emptyUserAnswers, index)
 
   private val fullName: FullName = FullName("first name", None, "Last name")
   private val validData: PassportOrIdCardDetails = PassportOrIdCardDetails("country", "card number", LocalDate.of(2020, 1, 1))

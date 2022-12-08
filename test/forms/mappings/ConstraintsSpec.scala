@@ -17,11 +17,13 @@
 package forms.mappings
 
 import generators.Generators
+import models.UserAnswers
 import org.scalacheck.Gen
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import play.api.data.validation.{Invalid, Valid}
+import play.api.data.validation.{Invalid, Valid, ValidationError}
+import play.api.libs.json.{JsObject, Json}
 
 import java.time.LocalDate
 
@@ -128,7 +130,7 @@ class ConstraintsSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyC
     "return Valid for a date before or equal to the maximum" in {
 
       val gen: Gen[(LocalDate, LocalDate)] = for {
-        max  <- datesBetween(LocalDate.of(2000, 1, 1), LocalDate.of(3000, 1, 1))
+        max <- datesBetween(LocalDate.of(2000, 1, 1), LocalDate.of(3000, 1, 1))
         date <- datesBetween(LocalDate.of(2000, 1, 1), max)
       } yield (max, date)
 
@@ -143,7 +145,7 @@ class ConstraintsSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyC
     "return Invalid for a date after the maximum" in {
 
       val gen: Gen[(LocalDate, LocalDate)] = for {
-        max  <- datesBetween(LocalDate.of(2000, 1, 1), LocalDate.of(3000, 1, 1))
+        max <- datesBetween(LocalDate.of(2000, 1, 1), LocalDate.of(3000, 1, 1))
         date <- datesBetween(max.plusDays(1), LocalDate.of(3000, 1, 2))
       } yield (max, date)
 
@@ -161,7 +163,7 @@ class ConstraintsSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyC
     "return Valid for a date after or equal to the minimum" in {
 
       val gen: Gen[(LocalDate, LocalDate)] = for {
-        min  <- datesBetween(LocalDate.of(2000, 1, 1), LocalDate.of(3000, 1, 1))
+        min <- datesBetween(LocalDate.of(2000, 1, 1), LocalDate.of(3000, 1, 1))
         date <- datesBetween(min, LocalDate.of(3000, 1, 1))
       } yield (min, date)
 
@@ -176,7 +178,7 @@ class ConstraintsSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyC
     "return Invalid for a date before the minimum" in {
 
       val gen: Gen[(LocalDate, LocalDate)] = for {
-        min  <- datesBetween(LocalDate.of(2000, 1, 2), LocalDate.of(3000, 1, 1))
+        min <- datesBetween(LocalDate.of(2000, 1, 2), LocalDate.of(3000, 1, 1))
         date <- datesBetween(LocalDate.of(2000, 1, 1), min.minusDays(1))
       } yield (min, date)
 
@@ -185,6 +187,128 @@ class ConstraintsSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyC
 
           val result = minDate(min, "error.past", "foo")(date)
           result mustEqual Invalid("error.past", "foo")
+      }
+    }
+
+    "uniquePassportNumber" must {
+      "return valid when isPassportNumberDuplicated is true" in {
+        val userAnswers = UserAnswers(draftId = "", internalAuthId = "")
+        val result = isPassportNumberDuplicated(userAnswers, 0, "number.error.duplicate")("502135326")
+        result mustEqual Valid
+      }
+
+      "return invalid when isPassportNumberDuplicated is false" in {
+        val json =
+          """
+            |{
+            |   "beneficiaries":{
+            |      "individualBeneficiaries":[
+            |         {
+            |            "name":{
+            |               "firstName":"Jon",
+            |               "lastName":"Jameson"
+            |            },
+            |            "dateOfBirthYesNo":false,
+            |            "incomeYesNo":true,
+            |            "countryOfNationalityYesNo":false,
+            |            "nationalInsuranceNumberYesNo":false,
+            |            "countryOfResidenceYesNo":false,
+            |            "addressYesNo":true,
+            |            "addressUKYesNo":true,
+            |            "ukAddress":{
+            |               "line1":"Line 1",
+            |               "line2":"Line 2",
+            |               "line3":"Line 3",
+            |               "line4":"Line 4",
+            |               "postcode":"NE98 1EZ"
+            |            },
+            |            "passportDetailsYesNo":true,
+            |            "passportDetails":{
+            |               "country":"DZ",
+            |               "cardNumber":"502135326",
+            |               "expiryDate":"2029-02-12"
+            |            },
+            |            "mentalCapacityYesNo":"dontKnow",
+            |            "vulnerableYesNo":false,
+            |            "status":"completed"
+            |         }
+            |      ]
+            |   }
+            |}
+            |""".stripMargin
+        val userAnswers = UserAnswers(draftId = "", data = Json.parse(json).as[JsObject], internalAuthId = "")
+        val result = isPassportNumberDuplicated(userAnswers, 1, "number.error.duplicate")("502135326")
+        result mustEqual Invalid(List(ValidationError(List("number.error.duplicate"))))
+      }
+    }
+
+    "uniqueIDNumber" must {
+      "return valid when isPassportNumberDuplicated is true" in {
+        val userAnswers = UserAnswers(draftId = "", internalAuthId = "")
+        val result = isIDNumberDuplicated(userAnswers, 0, "number.error.duplicate")("502135326")
+        result mustEqual Valid
+      }
+
+      "return invalid when isIDNumberDuplicated is false" in {
+        val json =
+          """
+            |{
+            |   "beneficiaries":{
+            |      "individualBeneficiaries":[
+            |         {
+            |            "name":{
+            |               "firstName":"Jon",
+            |               "lastName":"Jameson"
+            |            },
+            |            "dateOfBirthYesNo":false,
+            |            "incomeYesNo":true,
+            |            "countryOfNationalityYesNo":false,
+            |            "nationalInsuranceNumberYesNo":false,
+            |            "countryOfResidenceYesNo":false,
+            |            "addressYesNo":true,
+            |            "addressUKYesNo":true,
+            |            "ukAddress":{
+            |               "line1":"Line 1",
+            |               "line2":"Line 2",
+            |               "line3":"Line 3",
+            |               "line4":"Line 4",
+            |               "postcode":"NE98 1EZ"
+            |            },
+            |            "passportDetailsYesNo":false,
+            |            "idCardDetailsYesNo":false,
+            |            "idCardDetails":{
+            |               "country":"DZ",
+            |               "cardNumber":"018765432",
+            |               "expiryDate":"2029-02-12"
+            |            },
+            |            "mentalCapacityYesNo":"dontKnow",
+            |            "vulnerableYesNo":false,
+            |            "status":"completed"
+            |         }
+            |      ]
+            |   }
+            |}
+            |""".stripMargin
+        val userAnswers = UserAnswers(draftId = "", data = Json.parse(json).as[JsObject], internalAuthId = "")
+        val result = isIDNumberDuplicated(userAnswers, 1, "number.error.duplicate")("018765432")
+        result mustEqual Invalid(List(ValidationError(List("number.error.duplicate"))))
+      }
+    }
+
+    "uniqueNino" should {
+
+      val existingSettlorNinos: Seq[String] = Seq("AA123456C", "AR123456A", "AE123456C")
+
+      "return Valid if the NINO is unique" in {
+
+        val result = uniqueNino("error.duplicate", existingSettlorNinos)("AC123456C")
+        result mustEqual Valid
+      }
+
+      "return Invalid if the NINO is already in the existingSettlorNinos" in {
+
+        val result = uniqueNino("error.duplicate", existingSettlorNinos)("AR123456A")
+        result mustEqual Invalid("error.duplicate")
       }
     }
   }

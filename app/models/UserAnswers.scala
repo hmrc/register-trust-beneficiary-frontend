@@ -69,7 +69,7 @@ object ReadOnlyUserAnswers {
 
 final case class UserAnswers(draftId: String,
                              data: JsObject = Json.obj(),
-                             internalAuthId :String,
+                             internalAuthId: String,
                              override val isTaxable: Boolean = true) extends ReadableUserAnswers with Logging {
 
   def set[A](page: Settable[A], value: A)(implicit writes: Writes[A]): Either[TrustErrors, UserAnswers] = {

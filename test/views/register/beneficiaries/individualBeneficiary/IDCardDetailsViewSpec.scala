@@ -17,6 +17,7 @@
 package views.register.beneficiaries.individualBeneficiary
 
 import forms.PassportOrIdCardFormProvider
+import models.UserAnswers
 import models.core.pages.FullName
 import models.registration.pages.PassportOrIdCardDetails
 import play.api.data.Form
@@ -31,8 +32,10 @@ class IDCardDetailsViewSpec extends QuestionViewBehaviours[PassportOrIdCardDetai
   private val messageKeyPrefix = "individualBeneficiaryIDCardDetails"
   private val index = 0
   private val name = FullName("First", Some("Middle"), "Last")
+  private val userAnswers = UserAnswers(draftId = "", internalAuthId = "")
 
-  override val form = new PassportOrIdCardFormProvider(frontendAppConfig)("individualBeneficiaryIDCardDetails")
+
+  override val form = new PassportOrIdCardFormProvider(frontendAppConfig)(messageKeyPrefix, userAnswers, index)
 
   "IDCardDetailsView" must {
 
