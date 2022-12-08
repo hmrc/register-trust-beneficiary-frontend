@@ -53,9 +53,8 @@ class SessionExpiredControllerSpec extends SpecBase {
 
       status(result) mustEqual OK
 
-      redirectLocation(result) mustBe Some(
+      redirectLocation(result).get mustBe
         s"${frontendAppConfig.loginUrl}?continue=http%3A%2F%2Flocalhost%3A9781%2Ftrusts-registration&origin=register-trust-beneficiary-frontend"
-      )
     }
   }
 }
