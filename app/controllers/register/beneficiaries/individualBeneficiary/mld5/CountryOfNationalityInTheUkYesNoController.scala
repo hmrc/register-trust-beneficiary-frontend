@@ -20,10 +20,10 @@ import cats.data.EitherT
 import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.register.individual.NameRequiredAction
-import errors.TrustErrors
 import forms.YesNoFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.individual.mld5.CountryOfNationalityInTheUkYesNoPage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n._
 import play.api.mvc._
@@ -44,7 +44,9 @@ class CountryOfNationalityInTheUkYesNoController @Inject()(
                                                repository: RegistrationsRepository,
                                                nameAction: NameRequiredAction,
                                                technicalErrorView: TechnicalErrorView
-                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+
+  private val className = getClass.getSimpleName
 
   private val form: Form[Boolean] = formProvider.withPrefix("individualBeneficiary.5mld.countryOfNationalityInTheUkYesNo")
 
@@ -71,12 +73,14 @@ class CountryOfNationalityInTheUkYesNoController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(CountryOfNationalityInTheUkYesNoPage(index), value)))
-            _ <- EitherT.right[TrustErrors](repository.set(updatedAnswers))
+            _ <- repository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(CountryOfNationalityInTheUkYesNoPage(index), draftId, updatedAnswers))
 
           result.value.map {
             case Right(call) => call
-            case Left(_) => InternalServerError(technicalErrorView())
+            case Left(_) =>
+              logger.warn(s"[$className][onSubmit][Session ID: ${request.request.sessionId}] Error while storing user answers")
+              InternalServerError(technicalErrorView())
           }
         }
       )

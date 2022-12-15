@@ -18,6 +18,7 @@ package controllers.register.beneficiaries.individualBeneficiary
 
 import base.SpecBase
 import config.annotations.IndividualBeneficiary
+import errors.{ServerError, TrustErrors}
 import forms.RoleInCompanyFormProvider
 import models.UserAnswers
 import models.core.pages.FullName
@@ -30,23 +31,25 @@ import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.individualBeneficiary.RoleInCompanyView
 
 class RoleInCompanyControllerSpec extends SpecBase {
 
-  val formProvider = new RoleInCompanyFormProvider()
-  val form: Form[RoleInCompany] = formProvider()
-  val name: FullName = FullName("FirstName", None, "LastName")
-  val index = 0
+  private val formProvider = new RoleInCompanyFormProvider()
+  private val form: Form[RoleInCompany] = formProvider()
+  private val name: FullName = FullName("FirstName", None, "LastName")
+  private val index = 0
 
-  val userAnswers: UserAnswers = emptyUserAnswers.set(NamePage(index), name).right.get
+  private val userAnswers: UserAnswers = emptyUserAnswers.set(NamePage(index), name).right.get
 
-  def application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+  private def application(repositorySetResult: Either[TrustErrors, Boolean] = Right(true)): Application =
+    applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = repositorySetResult)
     .overrides(
       bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
     ).build()
 
-  lazy val roleInCompanyControllerRoute: String = routes.RoleInCompanyController.onPageLoad(index, draftId).url
+  private lazy val roleInCompanyControllerRoute: String = routes.RoleInCompanyController.onPageLoad(index, draftId).url
 
   "AddressYesNo Controller" must {
 
@@ -54,16 +57,16 @@ class RoleInCompanyControllerSpec extends SpecBase {
 
       val request = FakeRequest(GET, roleInCompanyControllerRoute)
 
-      val result = route(application, request).value
+      val result = route(application(), request).value
 
-      val view = application.injector.instanceOf[RoleInCompanyView]
+      val view = application().injector.instanceOf[RoleInCompanyView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
         view(form, draftId, name, index)(request, messages).toString
 
-      application.stop()
+      application().stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
@@ -94,13 +97,31 @@ class RoleInCompanyControllerSpec extends SpecBase {
         FakeRequest(POST, roleInCompanyControllerRoute)
           .withFormUrlEncodedBody(("value", Director.toString))
 
-      val result = route(application, request).value
+      val result = route(application(), request).value
 
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
-      application.stop()
+      application().stop()
+    }
+
+    "return an Internal Server Error when setting the user answers goes wrong" in {
+
+      val request =
+        FakeRequest(POST, roleInCompanyControllerRoute)
+          .withFormUrlEncodedBody(("value", Director.toString))
+
+      val result = route(application(Left(ServerError())), request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+
+      val errorPage = application(Left(ServerError())).injector.instanceOf[TechnicalErrorView]
+
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) mustEqual errorPage()(request, messages).toString
+
+      application(Left(ServerError())).stop()
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
@@ -111,16 +132,16 @@ class RoleInCompanyControllerSpec extends SpecBase {
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[RoleInCompanyView]
+      val view = application().injector.instanceOf[RoleInCompanyView]
 
-      val result = route(application, request).value
+      val result = route(application(), request).value
 
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
         view(boundForm, draftId, name, index)(request, messages).toString
 
-      application.stop()
+      application().stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {

@@ -17,6 +17,7 @@
 package controllers.register.beneficiaries.charityortrust.trust
 
 import base.SpecBase
+import errors.ServerError
 import models.Status.Completed
 import models.UserAnswers
 import models.registration.pages.CharityOrTrust.Trust
@@ -32,6 +33,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils.print.TrustBeneficiaryPrintHelper
 import viewmodels.AnswerSection
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.charityortrust.trust.AnswersView
 
 class AnswersControllerSpec extends SpecBase {
@@ -88,8 +90,27 @@ class AnswersControllerSpec extends SpecBase {
       redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
       val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-      verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
+      verify(mockRegistrationsRepository).set(uaCaptor.capture)(any(), any())
       uaCaptor.getValue.get(TrustBeneficiaryStatus(index)).get mustBe Completed
+
+      application.stop()
+    }
+
+    "return an Internal Server Error when setting the user answers goes wrong" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), mockSetResult = Left(ServerError()))
+        .build()
+
+      val request = FakeRequest(POST, answersRoute)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+
+      val errorPage = app.injector.instanceOf[TechnicalErrorView]
+
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) mustEqual errorPage()(request, messages).toString
 
       application.stop()
     }

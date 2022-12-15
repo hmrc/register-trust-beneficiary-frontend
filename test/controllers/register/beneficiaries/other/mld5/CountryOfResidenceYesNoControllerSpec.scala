@@ -18,6 +18,7 @@ package controllers.register.beneficiaries.other.mld5
 
 import base.SpecBase
 import config.annotations.OtherBeneficiary
+import errors.ServerError
 import forms.YesNoFormProvider
 import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.other.DescriptionPage
@@ -25,13 +26,14 @@ import pages.register.beneficiaries.other.mld5.CountryOfResidenceYesNoPage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.other.mld5.CountryOfResidenceYesNoView
 
 class CountryOfResidenceYesNoControllerSpec extends SpecBase {
 
   private val index = 0
   private val form = new YesNoFormProvider().withPrefix("otherBeneficiary.countryOfResidenceYesNo")
-  private val addressUkYesNoRoute = routes.CountryOfResidenceYesNoController.onPageLoad(index, draftId).url
+  private val countryOfResidenceYesNoRoute = routes.CountryOfResidenceYesNoController.onPageLoad(index, draftId).url
   private val description = "Other"
 
   private val baseAnswers = emptyUserAnswers.set(DescriptionPage(index), description).right.get
@@ -42,7 +44,7 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
-      val request = FakeRequest(GET, addressUkYesNoRoute)
+      val request = FakeRequest(GET, countryOfResidenceYesNoRoute)
 
       val view = application.injector.instanceOf[CountryOfResidenceYesNoView]
 
@@ -62,7 +64,7 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 
-      val request = FakeRequest(GET, addressUkYesNoRoute)
+      val request = FakeRequest(GET, countryOfResidenceYesNoRoute)
 
       val view = application.injector.instanceOf[CountryOfResidenceYesNoView]
 
@@ -85,7 +87,7 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase {
           ).build()
 
       val request =
-        FakeRequest(POST, addressUkYesNoRoute)
+        FakeRequest(POST, countryOfResidenceYesNoRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -97,11 +99,35 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase {
       application.stop()
     }
 
+    "return an Internal Server Error when setting the user answers goes wrong" in {
+
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers), mockSetResult = Left(ServerError()))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[OtherBeneficiary]).toInstance(new FakeNavigator())
+          ).build()
+
+      val request =
+        FakeRequest(POST, countryOfResidenceYesNoRoute)
+          .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+
+      val errorPage = application.injector.instanceOf[TechnicalErrorView]
+
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) mustEqual errorPage()(request, messages).toString
+
+      application.stop()
+    }
+
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
-      val request = FakeRequest(POST, addressUkYesNoRoute)
+      val request = FakeRequest(POST, countryOfResidenceYesNoRoute)
 
       val boundForm = form.bind(Map("value" -> ""))
 
@@ -121,7 +147,7 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, addressUkYesNoRoute)
+      val request = FakeRequest(GET, countryOfResidenceYesNoRoute)
 
       val result = route(application, request).value
 
@@ -136,7 +162,7 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, addressUkYesNoRoute)
+        FakeRequest(POST, countryOfResidenceYesNoRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value

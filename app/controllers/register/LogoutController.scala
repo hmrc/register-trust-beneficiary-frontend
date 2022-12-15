@@ -41,7 +41,7 @@ class LogoutController @Inject()(
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
-    logger.info(s"[Session ID: ${utils.Session.id(hc)}] user signed out from the service, asking for feedback")
+    logger.info(s"[LogoutController][Session ID: ${utils.Session.id(hc)}] user signed out from the service, asking for feedback")
 
     if(appConfig.logoutAudit) {
 

@@ -20,10 +20,10 @@ import cats.data.EitherT
 import config.annotations.CompanyBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.register.company.NameRequiredAction
-import errors.TrustErrors
 import forms.YesNoFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.companyoremploymentrelated.company.IncomeYesNoPage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -44,8 +44,9 @@ class DiscretionYesNoController @Inject()(
                                            @CompanyBeneficiary navigator: Navigator,
                                            nameAction: NameRequiredAction,
                                            technicalErrorView: TechnicalErrorView
-                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
+  private val className = getClass.getSimpleName
   private val form: Form[Boolean] = formProvider.withPrefix("companyBeneficiary.discretionYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
@@ -71,12 +72,14 @@ class DiscretionYesNoController @Inject()(
           value => {
             val result = for {
               updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(IncomeYesNoPage(index), value)))
-              _ <- EitherT.right[TrustErrors](repository.set(updatedAnswers))
+              _ <- repository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(IncomeYesNoPage(index), draftId, updatedAnswers))
 
             result.value.map {
               case Right(call) => call
-              case Left(_) => InternalServerError(technicalErrorView())
+              case Left(_) =>
+                logger.warn(s"[$className][onSubmit][Session ID: ${request.request.sessionId}] Error while storing user answers")
+                InternalServerError(technicalErrorView())
             }
           }
         )

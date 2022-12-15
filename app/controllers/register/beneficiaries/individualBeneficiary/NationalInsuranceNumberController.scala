@@ -20,11 +20,11 @@ import cats.data.EitherT
 import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import errors.TrustErrors
 import forms.NationalInsuranceNumberFormProvider
 import models.requests.RegistrationDataRequest
 import navigation.Navigator
 import pages.register.beneficiaries.individual.{NamePage, NationalInsuranceNumberPage}
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -48,7 +48,9 @@ class NationalInsuranceNumberController @Inject()(
                                                    val controllerComponents: MessagesControllerComponents,
                                                    view: NationalInsuranceNumberView,
                                                    technicalErrorView: TechnicalErrorView
-                                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+
+  private val className = getClass.getSimpleName
 
   private def form(index: Int)(implicit request: RegistrationDataRequest[AnyContent]) =
     formProvider.withPrefix("individualBeneficiaryNationalInsuranceNumber", request.userAnswers, index)
@@ -84,12 +86,14 @@ class NationalInsuranceNumberController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(NationalInsuranceNumberPage(index), value)))
-            _ <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
+            _ <- registrationsRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(NationalInsuranceNumberPage(index), draftId, updatedAnswers))
 
           result.value.map {
             case Right(call) => call
-            case Left(_) => InternalServerError(technicalErrorView())
+            case Left(_) =>
+              logger.warn(s"[$className][onSubmit][Session ID: ${request.sessionId}] Error while storing user answers")
+              InternalServerError(technicalErrorView())
           }
         }
       )

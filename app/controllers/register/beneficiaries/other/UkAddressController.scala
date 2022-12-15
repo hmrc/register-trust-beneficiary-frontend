@@ -20,10 +20,10 @@ import cats.data.EitherT
 import config.annotations.OtherBeneficiary
 import controllers.actions._
 import controllers.actions.register.other.DescriptionRequiredAction
-import errors.TrustErrors
 import forms.UKAddressFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.other.AddressUKPage
+import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
@@ -44,8 +44,9 @@ class UkAddressController @Inject()(
                                      val controllerComponents: MessagesControllerComponents,
                                      view: UkAddressView,
                                      technicalErrorView: TechnicalErrorView
-                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
+  private val className = getClass.getSimpleName
   private val form = formProvider()
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
@@ -71,12 +72,14 @@ class UkAddressController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(AddressUKPage(index), value)))
-            _ <- EitherT.right[TrustErrors](sessionRepository.set(updatedAnswers))
+            _ <-  sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(AddressUKPage(index), draftId, updatedAnswers))
 
           result.value.map {
             case Right(call) => call
-            case Left(_) => InternalServerError(technicalErrorView())
+            case Left(_) =>
+              logger.warn(s"[$className][onSubmit][Session ID: ${request.request.sessionId}] Error while storing user answers")
+              InternalServerError(technicalErrorView())
           }
         }
       )

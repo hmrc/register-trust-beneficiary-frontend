@@ -18,6 +18,7 @@ package controllers.register.beneficiaries.charityortrust.charity
 
 import base.SpecBase
 import config.annotations.CharityBeneficiary
+import errors.ServerError
 import forms.YesNoFormProvider
 import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.charityortrust.charity.{AmountDiscretionYesNoPage, CharityNamePage}
@@ -25,16 +26,17 @@ import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.charityortrust.charity.AmountDiscretionYesNoView
 
 class AmountDiscretionYesNoControllerSpec extends SpecBase {
 
-  val formProvider = new YesNoFormProvider()
-  val form: Form[Boolean] = formProvider.withPrefix("charity.discretionYesNo")
-  val index: Int = 0
-  val charityName = "Test"
+  private val formProvider = new YesNoFormProvider()
+  private val form: Form[Boolean] = formProvider.withPrefix("charity.discretionYesNo")
+  private val index: Int = 0
+  private val charityName = "Test"
 
-  lazy val amountDiscretionYesNo: String = routes.AmountDiscretionYesNoController.onPageLoad(index, draftId).url
+  private lazy val amountDiscretionYesNo: String = routes.AmountDiscretionYesNoController.onPageLoad(index, draftId).url
 
   "AmountDiscretionYesNo Controller" must {
 
@@ -124,6 +126,32 @@ class AmountDiscretionYesNoControllerSpec extends SpecBase {
 
       contentAsString(result) mustEqual
         view(boundForm, draftId, index, charityName)(request, messages).toString
+
+      application.stop()
+    }
+
+    "return an Internal Server Error when setting the user answers goes wrong" in {
+
+      val userAnswers = emptyUserAnswers
+        .set(CharityNamePage(index), "Test").right.get
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
+        .overrides(
+          bind[Navigator].qualifiedWith(classOf[CharityBeneficiary]).toInstance(new FakeNavigator)
+        ).build()
+
+      val request =
+        FakeRequest(POST, amountDiscretionYesNo)
+          .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+
+      val errorPage = application.injector.instanceOf[TechnicalErrorView]
+
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) mustEqual errorPage()(request, messages).toString
 
       application.stop()
     }

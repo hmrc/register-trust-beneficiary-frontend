@@ -18,15 +18,16 @@ package services
 
 import connectors.TrustsStoreConnector
 import models.TaskStatus.TaskStatus
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import uk.gov.hmrc.http.HeaderCarrier
+import utils.TrustEnvelope.TrustEnvelope
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class TrustsStoreService @Inject()(trustsStoreConnector: TrustsStoreConnector) {
 
   def updateTaskStatus(draftId: String, taskStatus: TaskStatus)
-                      (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+                      (implicit hc: HeaderCarrier, ec: ExecutionContext): TrustEnvelope[Boolean] = {
     trustsStoreConnector.updateTaskStatus(draftId, taskStatus)
   }
 }

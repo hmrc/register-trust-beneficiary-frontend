@@ -20,10 +20,10 @@ import cats.data.EitherT
 import config.annotations.IndividualBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.register.individual.NameRequiredAction
-import errors.TrustErrors
 import forms.CountryFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.individual.mld5.CountryOfNationalityPage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -48,7 +48,9 @@ class CountryOfNationalityController @Inject()(
                                                      view: CountryOfNationalityView,
                                                      val countryOptions: CountryOptionsNonUK,
                                                      technicalErrorView: TechnicalErrorView
-                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+
+  private val className = getClass.getSimpleName
 
   private val form: Form[String] = formProvider.withPrefix("individualBeneficiary.5mld.countryOfNationality")
 
@@ -75,12 +77,14 @@ class CountryOfNationalityController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(CountryOfNationalityPage(index), value)))
-            _              <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
+            _              <- registrationsRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(CountryOfNationalityPage(index), draftId, updatedAnswers))
 
           result.value.map {
             case Right(call) => call
-            case Left(_) => InternalServerError(technicalErrorView())
+            case Left(_) =>
+              logger.warn(s"[$className][onSubmit][Session ID: ${request.request.sessionId}] Error while storing user answers")
+              InternalServerError(technicalErrorView())
           }
         }
       )

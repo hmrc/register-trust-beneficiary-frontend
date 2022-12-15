@@ -18,12 +18,15 @@ package connectors
 
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock._
+import errors.ServerError
 import models.TaskStatus
+import org.scalatest.EitherValues
 import play.api.Application
+import play.api.http.Status.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND, OK, UNAUTHORIZED}
 import play.api.inject.guice.GuiceApplicationBuilder
 import utils.WireMockHelper
 
-class TrustsStoreConnectorSpec extends SpecBase with WireMockHelper {
+class TrustsStoreConnectorSpec extends SpecBase with WireMockHelper with EitherValues {
 
   override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(Seq(
@@ -48,40 +51,43 @@ class TrustsStoreConnectorSpec extends SpecBase with WireMockHelper {
 
       server.stubFor(
         post(urlEqualTo(url))
-          .willReturn(ok())
+          .willReturn(aResponse().withStatus(OK))
       )
 
       val futureResult = connector.updateTaskStatus(fakeDraftId, TaskStatus.Completed)
 
-      whenReady(futureResult) {
+      whenReady(futureResult.value) {
         r =>
-          r.status mustBe 200
+          r mustBe Right(true)
       }
 
       application.stop()
     }
 
-    "return default tasks when a failure occurs" in {
-      val application = applicationBuilder()
-        .configure(
-          Seq(
-            "microservice.services.trusts-store.port" -> server.port(),
-            "auditing.enabled" -> false
-          ): _*
-        ).build()
+    Seq(INTERNAL_SERVER_ERROR, BAD_REQUEST, UNAUTHORIZED, NOT_FOUND).foreach( errorStatus =>
+      s"return default tasks when a failure occurs (e.g. ${errorStatus.toString})" in {
 
-      val connector = application.injector.instanceOf[TrustsStoreConnector]
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts-store.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
 
-      server.stubFor(
-        post(urlEqualTo(url))
-          .willReturn(serverError())
-      )
+        val connector = application.injector.instanceOf[TrustsStoreConnector]
 
-      connector.updateTaskStatus(fakeDraftId, TaskStatus.Completed) map { response =>
-        response.status mustBe 500
+        server.stubFor(
+          post(urlEqualTo(url))
+            .willReturn(aResponse().withStatus(errorStatus))
+        )
+
+        connector.updateTaskStatus(fakeDraftId, TaskStatus.Completed) map { response =>
+          response mustBe Left(ServerError())
+        }
+
+        application.stop()
       }
-
-      application.stop()
-    }
+    )
   }
 }

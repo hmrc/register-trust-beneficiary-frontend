@@ -16,32 +16,57 @@
 
 package connectors
 
+import cats.data.EitherT
 import config.FrontendAppConfig
-import javax.inject.Inject
+import errors.{ServerError, TrustErrors}
 import models._
+import play.api.http.Status.OK
 import play.api.libs.json.{JsValue, Json}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpException, HttpResponse, UpstreamErrorResponse}
+import utils.TrustEnvelope.TrustEnvelope
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class SubmissionDraftConnector @Inject()(http: HttpClient, config : FrontendAppConfig) {
+class SubmissionDraftConnector @Inject()(http: HttpClient, config: FrontendAppConfig) extends ConnectorErrorResponseHandler {
 
-  val submissionsBaseUrl = s"${config.trustsUrl}/trusts/register/submission-drafts"
+  override val className: String = getClass.getName
+
+  private val submissionsBaseUrl = s"${config.trustsUrl}/trusts/register/submission-drafts"
 
   def setDraftSectionSet(draftId: String, section: String, data: RegistrationSubmission.DataSet)
-                        (implicit hc: HeaderCarrier, ec : ExecutionContext): Future[HttpResponse] = {
-    http.POST[JsValue, HttpResponse](s"$submissionsBaseUrl/$draftId/set/$section", Json.toJson(data))
+                        (implicit hc: HeaderCarrier, ec: ExecutionContext): TrustEnvelope[Boolean] = {
+    EitherT {
+      http.POST[JsValue, HttpResponse](s"$submissionsBaseUrl/$draftId/set/$section", Json.toJson(data)).map(
+        _.status match {
+          case OK => Right(true)
+          case status => Left(handleError(status, "setDraftSectionSet"))
+        }
+      ).recover {
+        case ex => Left(handleError(ex, "setDraftSectionSet"))
+      }
+    }
   }
 
-  def getDraftSection(draftId: String, section: String)(implicit hc: HeaderCarrier, ec : ExecutionContext): Future[SubmissionDraftResponse] = {
-    http.GET[SubmissionDraftResponse](s"$submissionsBaseUrl/$draftId/$section")
+  def getDraftSection(draftId: String, section: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): TrustEnvelope[SubmissionDraftResponse] = {
+    EitherT {
+      http.GET[SubmissionDraftResponse](s"$submissionsBaseUrl/$draftId/$section").map(Right(_)).recover {
+        case ex: HttpException =>
+          logger.error(s"[$className][getDraftSection] Error with status: ${ex.responseCode}, and message: ${ex.message}")
+          Left(ServerError())
+        case ex: UpstreamErrorResponse =>
+          logger.error(s"[$className][getDraftSection] Error with status: ${ex.statusCode}, and message: ${ex.message}")
+          Left(ServerError())
+      }
+    }
   }
 
-  // TODO - once the trust matching journey has been fixed to set a value for trustTaxable the recover can be removed
-  def getIsTrustTaxable(draftId: String)(implicit hc: HeaderCarrier, ec : ExecutionContext): Future[Boolean] = {
-    http.GET[Boolean](s"$submissionsBaseUrl/$draftId/is-trust-taxable").recover {
-      case _ => true
+  def getIsTrustTaxable(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): TrustEnvelope[Boolean] = {
+    EitherT[Future, TrustErrors, Boolean] {
+      http.GET[Boolean](s"$submissionsBaseUrl/$draftId/is-trust-taxable").map(Right(_)).recover {
+        case _ => Right(true)
+      }
     }
   }
 }

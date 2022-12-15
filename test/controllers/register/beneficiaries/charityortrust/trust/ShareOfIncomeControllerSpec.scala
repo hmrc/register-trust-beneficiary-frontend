@@ -18,6 +18,7 @@ package controllers.register.beneficiaries.charityortrust.trust
 
 import base.SpecBase
 import config.annotations.TrustBeneficiary
+import errors.ServerError
 import forms.IncomePercentageFormProvider
 import models.UserAnswers
 import navigation.{FakeNavigator, Navigator}
@@ -26,18 +27,19 @@ import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.charityortrust.trust.ShareOfIncomeView
 
 class ShareOfIncomeControllerSpec extends SpecBase {
 
-  val formProvider = new IncomePercentageFormProvider()
-  val form: Form[Int] = formProvider.withPrefix("trustBeneficiaryShareOfIncome")
-  val name = "Name"
-  val index: Int = 0
-  val userAnswers: UserAnswers = emptyUserAnswers
+  private val formProvider = new IncomePercentageFormProvider()
+  private val form: Form[Int] = formProvider.withPrefix("trustBeneficiaryShareOfIncome")
+  private val name = "Name"
+  private val index: Int = 0
+  private val userAnswers: UserAnswers = emptyUserAnswers
     .set(NamePage(index), name).right.get
 
-  lazy val shareOfIncomeRoute: String = routes.ShareOfIncomeController.onPageLoad(index, fakeDraftId).url
+  private lazy val shareOfIncomeRoute: String = routes.ShareOfIncomeController.onPageLoad(index, fakeDraftId).url
 
   "ShareOfIncome Controller" must {
 
@@ -97,6 +99,30 @@ class ShareOfIncomeControllerSpec extends SpecBase {
         status(result) mustEqual SEE_OTHER
 
         redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+        application.stop()
+    }
+
+    "return an Internal Server Error when setting the user answers goes wrong" in {
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(new FakeNavigator)
+          ).build()
+
+      val request =
+        FakeRequest(POST, shareOfIncomeRoute)
+          .withFormUrlEncodedBody(("value", "5"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+
+      val errorPage = app.injector.instanceOf[TechnicalErrorView]
+
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) mustEqual errorPage()(request, messages).toString
 
         application.stop()
     }

@@ -19,13 +19,13 @@ package controllers.register.beneficiaries.classofbeneficiaries
 import cats.data.EitherT
 import config.annotations.ClassOfBeneficiaries
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import errors.TrustErrors
 import forms.ClassBeneficiaryDescriptionFormProvider
 import models.Status.Completed
 import models.requests.RegistrationDataRequest
 import navigation.Navigator
 import pages.entitystatus.ClassBeneficiaryStatus
 import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
@@ -48,7 +48,8 @@ class ClassBeneficiaryDescriptionController @Inject()(
                                                        val controllerComponents: MessagesControllerComponents,
                                                        view: ClassBeneficiaryDescriptionView,
                                                        technicalErrorView: TechnicalErrorView
-                                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+  private val className = getClass.getSimpleName
 
   private def actions(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] = identify andThen getData(draftId) andThen requireData
 
@@ -79,12 +80,14 @@ class ClassBeneficiaryDescriptionController @Inject()(
 
           val result = for {
             updatedAnswers <- EitherT(Future.successful(answers))
-            _              <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
+            _              <- registrationsRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(ClassBeneficiaryDescriptionPage(index), draftId, updatedAnswers))
 
           result.value.map {
             case Right(call) => call
-            case Left(_) => InternalServerError(technicalErrorView())
+            case Left(_) =>
+              logger.warn(s"[$className][onSubmit][Session ID: ${request.sessionId}] Error while storing user answers")
+              InternalServerError(technicalErrorView())
           }
         }
       )

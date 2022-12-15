@@ -17,7 +17,9 @@
 package controllers.register.beneficiaries.individualBeneficiary
 
 import base.SpecBase
+import cats.data.EitherT
 import config.annotations.IndividualBeneficiary
+import errors.{ServerError, TrustErrors}
 import forms.NameFormProvider
 import models.core.pages.FullName
 import models.{ReadOnlyUserAnswers, UserAnswers}
@@ -29,20 +31,21 @@ import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.individualBeneficiary.NameView
 
 import scala.concurrent.Future
 
 class NameControllerSpec extends SpecBase {
 
-  val formProvider = new NameFormProvider()
-  val form: Form[FullName] = formProvider.withPrefix("individualBeneficiaryName")
-  val name: FullName = FullName("first name", Some("middle name"), "last name")
-  val index: Int = 0
+  private val formProvider = new NameFormProvider()
+  private val form: Form[FullName] = formProvider.withPrefix("individualBeneficiaryName")
+  private val name: FullName = FullName("first name", Some("middle name"), "last name")
+  private val index: Int = 0
 
-  lazy val individualBeneficiaryNameRoute: String = routes.NameController.onPageLoad(index, fakeDraftId).url
+  private lazy val individualBeneficiaryNameRoute: String = routes.NameController.onPageLoad(index, fakeDraftId).url
 
-  val userAnswers: UserAnswers = emptyUserAnswers
+  private val userAnswers: UserAnswers = emptyUserAnswers
     .set(NamePage(index), name).right.get
 
   "IndividualBeneficiaryName Controller" must {
@@ -86,8 +89,8 @@ class NameControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" when {
       "using main answers" in {
 
-        when(registrationsRepository.getSettlorsAnswers(any())(any()))
-          .thenReturn(Future.successful(Some(ReadOnlyUserAnswers(Json.obj()))))
+        when(mockRegistrationsRepository.getSettlorsAnswers(any())(any()))
+          .thenReturn(EitherT[Future, TrustErrors, Option[ReadOnlyUserAnswers]](Future.successful(Right(Some(ReadOnlyUserAnswers(Json.obj()))))))
 
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
@@ -108,8 +111,8 @@ class NameControllerSpec extends SpecBase {
       }
       "using section answers" in {
 
-        when(registrationsRepository.getSettlorsAnswers(any())(any()))
-          .thenReturn(Future.successful(None))
+        when(mockRegistrationsRepository.getSettlorsAnswers(any())(any()))
+          .thenReturn(EitherT[Future, TrustErrors, Option[ReadOnlyUserAnswers]](Future.successful(Right(None))))
 
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
@@ -125,6 +128,59 @@ class NameControllerSpec extends SpecBase {
         status(result) mustEqual SEE_OTHER
 
         redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+        application.stop()
+      }
+    }
+
+    "return an Internal Server Error when setting the user answers goes wrong" when {
+      "using main answers" in {
+
+        when(mockRegistrationsRepository.getSettlorsAnswers(any())(any()))
+          .thenReturn(EitherT[Future, TrustErrors, Option[ReadOnlyUserAnswers]](Future.successful(Right(Some(ReadOnlyUserAnswers(Json.obj()))))))
+
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), mockSetResult = Left(ServerError()))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
+          ).build()
+
+        val request =
+          FakeRequest(POST, individualBeneficiaryNameRoute)
+            .withFormUrlEncodedBody(("firstName", "first"), ("middleName", "middle"), ("lastName", "last"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual INTERNAL_SERVER_ERROR
+
+        val errorPage = application.injector.instanceOf[TechnicalErrorView]
+
+        contentType(result) mustBe Some("text/html")
+        contentAsString(result) mustEqual errorPage()(request, messages).toString
+
+        application.stop()
+      }
+      "using section answers" in {
+
+        when(mockRegistrationsRepository.getSettlorsAnswers(any())(any()))
+          .thenReturn(EitherT[Future, TrustErrors, Option[ReadOnlyUserAnswers]](Future.successful(Right(None))))
+
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), mockSetResult = Left(ServerError()))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
+          ).build()
+
+        val request =
+          FakeRequest(POST, individualBeneficiaryNameRoute)
+            .withFormUrlEncodedBody(("firstName", "first"), ("middleName", "middle"), ("lastName", "last"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual INTERNAL_SERVER_ERROR
+
+        val errorPage = application.injector.instanceOf[TechnicalErrorView]
+
+        contentType(result) mustBe Some("text/html")
+        contentAsString(result) mustEqual errorPage()(request, messages).toString
 
         application.stop()
       }

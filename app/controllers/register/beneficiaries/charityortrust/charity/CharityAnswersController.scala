@@ -19,9 +19,9 @@ package controllers.register.beneficiaries.charityortrust.charity
 import cats.data.EitherT
 import controllers.actions._
 import controllers.actions.register.charity.NameRequiredAction
-import errors.TrustErrors
 import models.Status.Completed
 import pages.entitystatus.CharityBeneficiaryStatus
+import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
@@ -42,7 +42,9 @@ class CharityAnswersController @Inject()(
                                           view: CharityAnswersView,
                                           printHelper: CharityBeneficiaryPrintHelper,
                                           technicalErrorView: TechnicalErrorView
-                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+
+  private val className = getClass.getSimpleName
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
     implicit request =>
@@ -57,12 +59,14 @@ class CharityAnswersController @Inject()(
 
       val result = for {
         updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(CharityBeneficiaryStatus(index), Completed)))
-        _ <- EitherT.right[TrustErrors](repository.set(updatedAnswers))
+        _ <- repository.set(updatedAnswers)
       } yield Redirect(controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId))
 
       result.value.map {
         case Right(call) => call
-        case Left(_) => InternalServerError(technicalErrorView())
+        case Left(_) =>
+          logger.warn(s"[$className][onSubmit][Session ID: ${request.request.sessionId}] Error while storing user answers")
+          InternalServerError(technicalErrorView())
       }
   }
 }

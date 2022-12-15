@@ -18,11 +18,11 @@ package controllers.register.beneficiaries
 
 import cats.data.EitherT
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import errors.TrustErrors
 import forms.WhatTypeOfBeneficiaryFormProvider
 import models.requests.RegistrationDataRequest
 import navigation.Navigator
 import pages.register.beneficiaries.WhatTypeOfBeneficiaryPage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
@@ -45,7 +45,9 @@ class WhatTypeOfBeneficiaryController @Inject()(
                                                  val controllerComponents: MessagesControllerComponents,
                                                  view: WhatTypeOfBeneficiaryView,
                                                  technicalErrorView: TechnicalErrorView
-                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+
+  private val className = getClass.getSimpleName
 
   private def actions(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] = identify andThen getData(draftId) andThen requireData
 
@@ -82,12 +84,14 @@ class WhatTypeOfBeneficiaryController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(WhatTypeOfBeneficiaryPage, value)))
-            _              <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
+            _              <- registrationsRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(WhatTypeOfBeneficiaryPage, draftId, updatedAnswers))
 
           result.value.map {
             case Right(call) => call
-            case Left(_) => InternalServerError(technicalErrorView())
+            case Left(_) =>
+              logger.warn(s"[$className][onSubmit][Session ID: ${request.sessionId}] Error while storing user answers")
+              InternalServerError(technicalErrorView())
           }
         }
       )

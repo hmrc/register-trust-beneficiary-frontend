@@ -19,10 +19,10 @@ package controllers.register.beneficiaries.other
 import cats.data.EitherT
 import config.annotations.OtherBeneficiary
 import controllers.actions.StandardActionSets
-import errors.TrustErrors
 import forms.DescriptionFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.other.DescriptionPage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -42,9 +42,11 @@ class DescriptionController @Inject()(
                                        repository: RegistrationsRepository,
                                        @OtherBeneficiary navigator: Navigator,
                                        technicalErrorView: TechnicalErrorView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
-  val form: Form[String] = formProvider.withPrefix("otherBeneficiary.description", 70)
+  private val className = getClass.getSimpleName
+  private val maximumLength = 70
+  private val form: Form[String] = formProvider.withPrefix("otherBeneficiary.description", maximumLength)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId) {
     implicit request =>
@@ -67,12 +69,14 @@ class DescriptionController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(DescriptionPage(index), value)))
-            _ <- EitherT.right[TrustErrors](repository.set(updatedAnswers))
+            _ <- repository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(DescriptionPage(index), draftId, updatedAnswers))
 
           result.value.map {
             case Right(call) => call
-            case Left(_) => InternalServerError(technicalErrorView())
+            case Left(_) =>
+              logger.warn(s"[$className][onSubmit][Session ID: ${request.sessionId}] Error while storing user answers")
+              InternalServerError(technicalErrorView())
           }
         }
       )

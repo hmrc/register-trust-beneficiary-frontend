@@ -18,6 +18,7 @@ package controllers.register.beneficiaries.other
 
 import base.SpecBase
 import config.annotations.OtherBeneficiary
+import errors.ServerError
 import forms.IncomePercentageFormProvider
 import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.other.{DescriptionPage, ShareOfIncomePage}
@@ -25,6 +26,7 @@ import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.other.ShareOfIncomeView
 
 class ShareOfIncomeControllerSpec extends SpecBase {
@@ -95,6 +97,32 @@ class ShareOfIncomeControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual onwardRoute.url
+
+      application.stop()
+    }
+
+    "return an Internal Server Error when setting the user answers goes wrong" in {
+
+      val onwardRoute = Call("GET", "/foo")
+
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers), mockSetResult = Left(ServerError()))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[OtherBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
+          ).build()
+
+      val request =
+        FakeRequest(POST, shareOfIncomeRoute)
+          .withFormUrlEncodedBody(("value", answer.toString))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+
+      val errorPage = application.injector.instanceOf[TechnicalErrorView]
+
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) mustEqual errorPage()(request, messages).toString
 
       application.stop()
     }
