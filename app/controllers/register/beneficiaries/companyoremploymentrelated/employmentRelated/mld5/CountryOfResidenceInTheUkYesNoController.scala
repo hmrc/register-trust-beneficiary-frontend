@@ -20,7 +20,6 @@ import cats.data.EitherT
 import config.annotations.EmploymentRelatedBeneficiary
 import controllers.actions._
 import controllers.actions.register.employmentRelated.NameRequiredAction
-import errors.TrustErrors
 import forms.YesNoFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.mld5.CountryOfResidenceInTheUkYesNoPage
@@ -72,7 +71,7 @@ class CountryOfResidenceInTheUkYesNoController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(CountryOfResidenceInTheUkYesNoPage(index), value)))
-            _ <- EitherT.right[TrustErrors](repository.set(updatedAnswers))
+            _ <- repository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, updatedAnswers))
 
           result.value.map {

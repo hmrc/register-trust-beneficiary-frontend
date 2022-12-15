@@ -21,7 +21,6 @@ import config.annotations.IndividualBeneficiary
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
 import controllers.filters.IndexActionFilterProvider
-import errors.TrustErrors
 import forms.InternationalAddressFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.individual.{AddressInternationalPage, NamePage}
@@ -88,7 +87,7 @@ class AddressInternationalController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(AddressInternationalPage(index), value)))
-            _ <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
+            _ <- registrationsRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(AddressInternationalPage(index), draftId, updatedAnswers))
 
           result.value.map {

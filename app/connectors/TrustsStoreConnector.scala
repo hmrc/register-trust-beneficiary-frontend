@@ -16,23 +16,29 @@
 
 package connectors
 
+import cats.data.EitherT
 import config.FrontendAppConfig
+import errors.ServerError
 import models.TaskStatus.TaskStatus
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import utils.TrustResult.TResult
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
-class TrustsStoreConnector @Inject()(http: HttpClient, config : FrontendAppConfig) {
+class TrustsStoreConnector @Inject()(http: HttpClient, config: FrontendAppConfig) {
 
   private val baseUrl: String = s"${config.trustsStoreUrl}/trusts-store"
 
   def updateTaskStatus(identifier: String, taskStatus: TaskStatus)
-                      (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
-    val url: String = s"$baseUrl/register/tasks/update-beneficiaries/$identifier"
-    http.POST[TaskStatus, HttpResponse](url, taskStatus)
-  }
+                      (implicit hc: HeaderCarrier, ec: ExecutionContext): TResult[HttpResponse] =
+    EitherT {
+      val url: String = s"$baseUrl/register/tasks/update-beneficiaries/$identifier"
+      http.POST[TaskStatus, HttpResponse](url, taskStatus).map(Right(_)).recover {
+        case ex => Left(ServerError()) //TODO - add logging here
+      }
+    }
 
 }
 

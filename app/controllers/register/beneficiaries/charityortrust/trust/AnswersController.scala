@@ -19,7 +19,6 @@ package controllers.register.beneficiaries.charityortrust.trust
 import cats.data.EitherT
 import controllers.actions._
 import controllers.actions.register.trust.NameRequiredAction
-import errors.TrustErrors
 import models.Status.Completed
 import navigation.Navigator
 import pages.entitystatus.TrustBeneficiaryStatus
@@ -62,7 +61,7 @@ class AnswersController @Inject()(
 
       val result = for {
         updatedAnswers <- EitherT(Future.successful(answers))
-        _ <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
+        _ <- registrationsRepository.set(updatedAnswers)
       } yield Redirect(navigator.nextPage(AnswersPage, draftId, request.userAnswers))
 
       result.value.map {

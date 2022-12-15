@@ -20,7 +20,6 @@ import cats.data.EitherT
 import config.annotations.TrustBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.register.trust.NameRequiredAction
-import errors.TrustErrors
 import forms.YesNoFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.charityortrust.trust.AddressYesNoPage
@@ -68,7 +67,7 @@ class AddressYesNoController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(AddressYesNoPage(index), value)))
-            _ <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
+            _ <- registrationsRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(AddressYesNoPage(index), draftId, updatedAnswers))
 
           result.value.map {

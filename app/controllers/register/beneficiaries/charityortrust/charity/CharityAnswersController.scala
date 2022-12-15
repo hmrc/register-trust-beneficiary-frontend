@@ -19,7 +19,6 @@ package controllers.register.beneficiaries.charityortrust.charity
 import cats.data.EitherT
 import controllers.actions._
 import controllers.actions.register.charity.NameRequiredAction
-import errors.TrustErrors
 import models.Status.Completed
 import pages.entitystatus.CharityBeneficiaryStatus
 import play.api.i18n.I18nSupport
@@ -57,7 +56,7 @@ class CharityAnswersController @Inject()(
 
       val result = for {
         updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(CharityBeneficiaryStatus(index), Completed)))
-        _ <- EitherT.right[TrustErrors](repository.set(updatedAnswers))
+        _ <- repository.set(updatedAnswers)
       } yield Redirect(controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId))
 
       result.value.map {

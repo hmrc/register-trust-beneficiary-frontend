@@ -19,7 +19,6 @@ package controllers.register.beneficiaries.classofbeneficiaries
 import cats.data.EitherT
 import config.annotations.ClassOfBeneficiaries
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import errors.TrustErrors
 import forms.ClassBeneficiaryDescriptionFormProvider
 import models.Status.Completed
 import models.requests.RegistrationDataRequest
@@ -79,7 +78,7 @@ class ClassBeneficiaryDescriptionController @Inject()(
 
           val result = for {
             updatedAnswers <- EitherT(Future.successful(answers))
-            _              <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
+            _              <- registrationsRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(ClassBeneficiaryDescriptionPage(index), draftId, updatedAnswers))
 
           result.value.map {

@@ -20,7 +20,6 @@ import cats.data.EitherT
 import cats.implicits._
 import config.annotations.CharityBeneficiary
 import controllers.actions.StandardActionSets
-import errors.TrustErrors
 import forms.StringFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
@@ -71,7 +70,7 @@ class CharityNameController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(CharityNamePage(index), value)))
-            _ <- EitherT.right[TrustErrors](repository.set(updatedAnswers))
+            _ <- repository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(CharityNamePage(index), draftId, updatedAnswers))
 
           result.value.map {

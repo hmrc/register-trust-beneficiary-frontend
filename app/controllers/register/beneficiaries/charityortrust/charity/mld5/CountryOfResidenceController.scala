@@ -21,7 +21,6 @@ import cats.implicits._
 import config.annotations.CharityBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.register.charity.NameRequiredAction
-import errors.TrustErrors
 import forms.CountryFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.charityortrust.charity.mld5.CountryOfResidencePage
@@ -76,7 +75,7 @@ class CountryOfResidenceController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(CountryOfResidencePage(index), value)))
-            _              <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
+            _              <- registrationsRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(CountryOfResidencePage(index), draftId, updatedAnswers))
 
           result.value.map {

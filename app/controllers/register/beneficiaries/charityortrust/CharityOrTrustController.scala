@@ -18,7 +18,6 @@ package controllers.register.beneficiaries.charityortrust
 
 import cats.data.EitherT
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import errors.TrustErrors
 import forms.CharityOrTrustFormProvider
 import models.registration.pages.CharityOrTrust
 import models.requests.RegistrationDataRequest
@@ -75,7 +74,7 @@ class CharityOrTrustController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(CharityOrTrustPage, value)))
-            _ <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
+            _ <- registrationsRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(CharityOrTrustPage, draftId, updatedAnswers))
 
           result.value.map {

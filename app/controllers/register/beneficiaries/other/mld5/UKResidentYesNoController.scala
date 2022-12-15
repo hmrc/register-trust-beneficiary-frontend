@@ -21,7 +21,6 @@ import cats.implicits._
 import config.annotations.OtherBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.register.other.DescriptionRequiredAction
-import errors.TrustErrors
 import forms.YesNoFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.other.mld5.UKResidentYesNoPage
@@ -72,7 +71,7 @@ class UKResidentYesNoController @Inject()(
           value => {
             val result = for {
               updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(UKResidentYesNoPage(index), value)))
-              _ <- EitherT.right[TrustErrors](repository.set(updatedAnswers))
+              _ <- repository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(UKResidentYesNoPage(index), draftId, updatedAnswers))
 
             result.value.map {

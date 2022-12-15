@@ -17,7 +17,6 @@
 package controllers
 
 import cats.data.EitherT
-import errors.TrustErrors
 import forms.RemoveForm
 import models.requests.RegistrationDataRequest
 import pages.QuestionPage
@@ -79,7 +78,7 @@ trait RemoveIndexController extends FrontendBaseController with I18nSupport {
           if (value) {
             val result = for {
               updatedAnswers <- EitherT(Future.successful(request.userAnswers.remove(removeQuery(index))))
-              _              <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
+              _              <- registrationsRepository.set(updatedAnswers)
             } yield Redirect(redirect(draftId).url)
 
             result.value.map {

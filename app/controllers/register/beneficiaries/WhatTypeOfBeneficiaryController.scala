@@ -18,7 +18,6 @@ package controllers.register.beneficiaries
 
 import cats.data.EitherT
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import errors.TrustErrors
 import forms.WhatTypeOfBeneficiaryFormProvider
 import models.requests.RegistrationDataRequest
 import navigation.Navigator
@@ -82,7 +81,7 @@ class WhatTypeOfBeneficiaryController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(WhatTypeOfBeneficiaryPage, value)))
-            _              <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
+            _              <- registrationsRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(WhatTypeOfBeneficiaryPage, draftId, updatedAnswers))
 
           result.value.map {

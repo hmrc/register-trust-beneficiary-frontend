@@ -20,7 +20,6 @@ import cats.data.EitherT
 import config.annotations.CompanyBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.register.company.NameRequiredAction
-import errors.TrustErrors
 import forms.IncomePercentageFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.companyoremploymentrelated.company.IncomePage
@@ -71,7 +70,7 @@ class ShareOfIncomeController @Inject()(
           value => {
             val result = for {
               updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(IncomePage(index), value)))
-              _ <- EitherT.right[TrustErrors](repository.set(updatedAnswers))
+              _ <- repository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(IncomePage(index), draftId, updatedAnswers))
 
             result.value.map {

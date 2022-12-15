@@ -18,7 +18,6 @@ package controllers.register.beneficiaries.companyoremploymentrelated
 
 import cats.data.EitherT
 import controllers.actions._
-import errors.TrustErrors
 import forms.CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider
 import models.CompanyOrEmploymentRelatedToAdd
 import navigation.Navigator
@@ -68,7 +67,7 @@ class CompanyOrEmploymentRelatedController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(CompanyOrEmploymentRelatedPage, value)))
-            _ <- EitherT.right[TrustErrors](repository.set(updatedAnswers))
+            _ <- repository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(CompanyOrEmploymentRelatedPage, draftId, updatedAnswers))
 
           result.value.map {
