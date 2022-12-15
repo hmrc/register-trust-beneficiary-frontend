@@ -30,9 +30,10 @@ import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.{RemoveIndexView, TechnicalErrorView}
 
-import scala.concurrent.Future
+import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
-trait RemoveIndexController extends FrontendBaseController with I18nSupport {
+trait RemoveIndexController @Inject() (implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val messagesPrefix : String
 
@@ -69,8 +70,6 @@ trait RemoveIndexController extends FrontendBaseController with I18nSupport {
 
   def onSubmit(index: Int, draftId : String): Action[AnyContent] = actions(draftId, index).async {
     implicit request =>
-
-      import scala.concurrent.ExecutionContext.Implicits._
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
