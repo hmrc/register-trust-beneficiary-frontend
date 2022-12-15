@@ -20,7 +20,6 @@ import cats.data.EitherT
 import config.annotations.EmploymentRelatedBeneficiary
 import controllers.actions._
 import controllers.actions.register.employmentRelated.NameRequiredAction
-import errors.TrustErrors
 import forms.InternationalAddressFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.LargeBeneficiaryAddressInternationalPage
@@ -78,7 +77,7 @@ class NonUkAddressController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(LargeBeneficiaryAddressInternationalPage(index), value)))
-            _ <- EitherT.right[TrustErrors](sessionRepository.set(updatedAnswers))
+            _ <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(LargeBeneficiaryAddressInternationalPage(index), draftId, updatedAnswers))
 
           result.value.map {

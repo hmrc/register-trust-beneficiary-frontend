@@ -14,21 +14,24 @@
  * limitations under the License.
  */
 
-package base
+package utils
 
 import cats.data.EitherT
+import cats.implicits.catsSyntaxEitherId
 import errors.TrustErrors
-import models.UserAnswers
-import org.mockito.ArgumentMatchers.any
-import org.mockito.MockitoSugar
-import repositories.RegistrationsRepository
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-trait Mocked extends MockitoSugar {
+object TrustEnvelope {
+  type TrustEnvelope[T] = EitherT[Future, TrustErrors, T]
 
-  val registrationsRepository : RegistrationsRepository = mock[RegistrationsRepository]
+  //DDCE-3618 - Examples from other HMRC repos - these methods might not be needed
 
-  when(registrationsRepository.get(any())(any())).thenReturn(EitherT[Future, TrustErrors, Option[UserAnswers]](Future.successful(Right(None))))
-  when(registrationsRepository.set(any())(any(), any())).thenReturn(EitherT[Future, TrustErrors, Boolean](Future.successful(Right(true))))
+  def apply[T](arg: T)(implicit ec: ExecutionContext): TrustEnvelope[T] =
+    EitherT.pure[Future, TrustErrors](arg)
+
+  def apply[T](value: T): TrustEnvelope[T] =
+    EitherT[Future, TrustErrors, T](Future.successful(value.asRight[TrustErrors]))
+
 }
+

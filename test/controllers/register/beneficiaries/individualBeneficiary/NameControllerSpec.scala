@@ -17,7 +17,9 @@
 package controllers.register.beneficiaries.individualBeneficiary
 
 import base.SpecBase
+import cats.data.EitherT
 import config.annotations.IndividualBeneficiary
+import errors.TrustErrors
 import forms.NameFormProvider
 import models.core.pages.FullName
 import models.{ReadOnlyUserAnswers, UserAnswers}
@@ -87,7 +89,7 @@ class NameControllerSpec extends SpecBase {
       "using main answers" in {
 
         when(registrationsRepository.getSettlorsAnswers(any())(any()))
-          .thenReturn(Future.successful(Some(ReadOnlyUserAnswers(Json.obj()))))
+          .thenReturn(EitherT[Future, TrustErrors, Option[ReadOnlyUserAnswers]](Future.successful(Right(Some(ReadOnlyUserAnswers(Json.obj()))))))
 
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
@@ -109,7 +111,7 @@ class NameControllerSpec extends SpecBase {
       "using section answers" in {
 
         when(registrationsRepository.getSettlorsAnswers(any())(any()))
-          .thenReturn(Future.successful(None))
+          .thenReturn(EitherT[Future, TrustErrors, Option[ReadOnlyUserAnswers]](Future.successful(Right(None))))
 
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(

@@ -20,7 +20,6 @@ import cats.data.EitherT
 import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import errors.TrustErrors
 import forms.DateOfBirthFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.individual.{DateOfBirthPage, NamePage}
@@ -83,7 +82,7 @@ class DateOfBirthController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(DateOfBirthPage(index), value)))
-            _ <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
+            _ <- registrationsRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(DateOfBirthPage(index), draftId, updatedAnswers))
 
           result.value.map {

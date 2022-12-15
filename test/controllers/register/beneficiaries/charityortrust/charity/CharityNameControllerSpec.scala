@@ -17,7 +17,9 @@
 package controllers.register.beneficiaries.charityortrust.charity
 
 import base.SpecBase
+import cats.data.EitherT
 import config.annotations.CharityBeneficiary
+import errors.TrustErrors
 import forms.StringFormProvider
 import models.{ReadOnlyUserAnswers, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -28,6 +30,7 @@ import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.HttpResponse
 import views.html.register.beneficiaries.charityortrust.charity.CharityNameView
 
 import scala.concurrent.Future
@@ -85,7 +88,7 @@ class CharityNameControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       when(registrationsRepository.getSettlorsAnswers(any())(any()))
-        .thenReturn(Future.successful(Some(ReadOnlyUserAnswers(Json.obj()))))
+        .thenReturn(EitherT[Future, TrustErrors, Option[ReadOnlyUserAnswers]](Future.successful(Right(Some(ReadOnlyUserAnswers(Json.obj()))))))
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
@@ -108,7 +111,7 @@ class CharityNameControllerSpec extends SpecBase {
     "return an Internal server error when setting the user answers go wrong" in {
 
       when(registrationsRepository.getSettlorsAnswers(any())(any()))
-        .thenReturn(Future.successful(Some(ReadOnlyUserAnswers(Json.obj()))))
+        .thenReturn(EitherT[Future, TrustErrors, Option[ReadOnlyUserAnswers]](Future.successful(Right(Some(ReadOnlyUserAnswers(Json.obj()))))))
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(

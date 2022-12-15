@@ -20,7 +20,6 @@ import cats.data.EitherT
 import config.annotations.EmploymentRelatedBeneficiary
 import controllers.actions._
 import controllers.actions.register.employmentRelated.NameRequiredAction
-import errors.TrustErrors
 import forms.UKAddressFormProvider
 import models.core.pages.UKAddress
 import navigation.Navigator
@@ -73,7 +72,7 @@ class UkAddressController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(LargeBeneficiaryAddressPage(index), value)))
-            _ <- EitherT.right[TrustErrors](sessionRepository.set(updatedAnswers))
+            _ <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(LargeBeneficiaryAddressPage(index), draftId, updatedAnswers))
 
           result.value.map {

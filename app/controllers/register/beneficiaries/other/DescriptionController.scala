@@ -19,7 +19,6 @@ package controllers.register.beneficiaries.other
 import cats.data.EitherT
 import config.annotations.OtherBeneficiary
 import controllers.actions.StandardActionSets
-import errors.TrustErrors
 import forms.DescriptionFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.other.DescriptionPage
@@ -67,7 +66,7 @@ class DescriptionController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(DescriptionPage(index), value)))
-            _ <- EitherT.right[TrustErrors](repository.set(updatedAnswers))
+            _ <- repository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(DescriptionPage(index), draftId, updatedAnswers))
 
           result.value.map {

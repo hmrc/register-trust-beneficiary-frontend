@@ -47,12 +47,14 @@ class DraftIdDataRetrievalAction(
                                 )
   extends ActionTransformer[IdentifierRequest, OptionalRegistrationDataRequest] {
 
+  //TODO - work out how to handle the error
   override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalRegistrationDataRequest[A]] = {
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
-    registrationsRepository.get(draftId).map {
+    registrationsRepository.get(draftId).value.map {
       userAnswers =>
-        OptionalRegistrationDataRequest(request.request, request.identifier, Session.id(hc), userAnswers, request.affinityGroup, request.enrolments, request.agentARN)
+        val optUserAnswers = userAnswers.toOption.flatten
+        OptionalRegistrationDataRequest(request.request, request.identifier, Session.id(hc), optUserAnswers, request.affinityGroup, request.enrolments, request.agentARN)
     }
   }
 

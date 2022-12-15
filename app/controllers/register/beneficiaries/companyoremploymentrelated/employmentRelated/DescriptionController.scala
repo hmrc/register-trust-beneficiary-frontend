@@ -19,7 +19,6 @@ package controllers.register.beneficiaries.companyoremploymentrelated.employment
 import cats.data.EitherT
 import config.annotations.EmploymentRelatedBeneficiary
 import controllers.actions.StandardActionSets
-import errors.TrustErrors
 import forms.EmploymentRelatedBeneficiaryDescriptionFormProvider
 import models.core.pages.Description
 import navigation.Navigator
@@ -69,7 +68,7 @@ class DescriptionController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(LargeBeneficiaryDescriptionPage(index), value)))
-            _ <- EitherT.right[TrustErrors](repository.set(updatedAnswers))
+            _ <- repository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(LargeBeneficiaryDescriptionPage(index), draftId, updatedAnswers))
 
           result.value.map {

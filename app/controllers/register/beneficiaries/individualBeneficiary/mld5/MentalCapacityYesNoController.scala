@@ -20,7 +20,6 @@ import cats.data.EitherT
 import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.register.individual.NameRequiredAction
-import errors.TrustErrors
 import forms.YesNoDontKnowFormProvider
 import models.YesNoDontKnow
 import navigation.Navigator
@@ -72,7 +71,7 @@ class MentalCapacityYesNoController @Inject()(
           value => {
             val result = for {
               updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(MentalCapacityYesNoPage(index), value)))
-              _ <- EitherT.right[TrustErrors](repository.set(updatedAnswers))
+              _ <- repository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(MentalCapacityYesNoPage(index), draftId, updatedAnswers))
 
             result.value.map {

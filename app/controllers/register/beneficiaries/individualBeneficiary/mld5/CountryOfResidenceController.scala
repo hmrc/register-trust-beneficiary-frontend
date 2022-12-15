@@ -20,7 +20,6 @@ import cats.data.EitherT
 import config.annotations.IndividualBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.register.individual.NameRequiredAction
-import errors.TrustErrors
 import forms.CountryFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.individual.mld5.CountryOfResidencePage
@@ -75,7 +74,7 @@ class CountryOfResidenceController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(CountryOfResidencePage(index), value)))
-            _              <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
+            _              <- registrationsRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(CountryOfResidencePage(index), draftId, updatedAnswers))
 
           result.value.map {

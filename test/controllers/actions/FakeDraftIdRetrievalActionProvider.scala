@@ -16,7 +16,9 @@
 
 package controllers.actions
 
+import cats.data.EitherT
 import controllers.actions.register.{DraftIdDataRetrievalAction, DraftIdRetrievalActionProvider}
+import errors.TrustErrors
 import models.{Status, UserAnswers}
 import org.mockito.ArgumentMatchers._
 import org.mockito.MockitoSugar
@@ -35,7 +37,8 @@ class FakeDraftIdRetrievalActionProvider(draftId: String,
 
   val mockedRepository: RegistrationsRepository = mock[RegistrationsRepository]
 
-  when(mockedRepository.get(any())(any())).thenReturn(Future.successful(dataToReturn))
+  when(mockedRepository.get(any())(any()))
+    .thenReturn(EitherT[Future, TrustErrors, Option[UserAnswers]](Future.successful(Right(dataToReturn))))
 
   override def apply(draftId : String) = new DraftIdDataRetrievalAction(draftId, mockedRepository, executionContext)
 

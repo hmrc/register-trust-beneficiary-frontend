@@ -20,7 +20,6 @@ import cats.data.EitherT
 import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import errors.TrustErrors
 import models.Status.Completed
 import models.requests.RegistrationDataRequest
 import navigation.Navigator
@@ -75,7 +74,7 @@ class AnswersController @Inject()(
 
       val result = for {
         updatedAnswers <- EitherT(Future.successful(answers))
-        _ <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
+        _ <- registrationsRepository.set(updatedAnswers)
       } yield Redirect(navigator.nextPage(AnswersPage, draftId, request.userAnswers))
 
       result.value.map {

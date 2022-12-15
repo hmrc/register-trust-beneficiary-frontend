@@ -21,7 +21,6 @@ import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.filters.IndexActionFilterProvider
-import errors.TrustErrors
 import forms.PassportOrIdCardFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.individual.{IDCardDetailsPage, NamePage}
@@ -88,7 +87,7 @@ class IDCardDetailsController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(IDCardDetailsPage(index), value)))
-            _              <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
+            _              <- registrationsRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(IDCardDetailsPage(index), draftId, updatedAnswers))
 
           result.value.map {

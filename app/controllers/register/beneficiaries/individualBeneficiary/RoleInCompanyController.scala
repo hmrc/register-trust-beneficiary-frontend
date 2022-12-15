@@ -20,7 +20,6 @@ import cats.data.EitherT
 import config.annotations.IndividualBeneficiary
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
 import controllers.actions.{RequiredAnswer, RequiredAnswerActionProvider}
-import errors.TrustErrors
 import forms.RoleInCompanyFormProvider
 import models.registration.pages.RoleInCompany
 import navigation.Navigator
@@ -83,7 +82,7 @@ class RoleInCompanyController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(RoleInCompanyPage(index), value)))
-            _ <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
+            _ <- registrationsRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(RoleInCompanyPage(index), draftId, updatedAnswers))
 
           result.value.map {

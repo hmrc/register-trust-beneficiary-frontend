@@ -20,7 +20,6 @@ import cats.data.EitherT
 import config.annotations.OtherBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.register.other.DescriptionRequiredAction
-import errors.TrustErrors
 import forms.YesNoFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.other.IncomeDiscretionYesNoPage
@@ -71,7 +70,7 @@ class DiscretionYesNoController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(IncomeDiscretionYesNoPage(index), value)))
-            _ <- EitherT.right[TrustErrors](repository.set(updatedAnswers))
+            _ <- repository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(IncomeDiscretionYesNoPage(index), draftId, updatedAnswers))
 
           result.value.map {

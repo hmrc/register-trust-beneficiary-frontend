@@ -20,7 +20,6 @@ import cats.data.EitherT
 import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import errors.TrustErrors
 import forms.NationalInsuranceNumberFormProvider
 import models.requests.RegistrationDataRequest
 import navigation.Navigator
@@ -84,7 +83,7 @@ class NationalInsuranceNumberController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(NationalInsuranceNumberPage(index), value)))
-            _ <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
+            _ <- registrationsRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(NationalInsuranceNumberPage(index), draftId, updatedAnswers))
 
           result.value.map {

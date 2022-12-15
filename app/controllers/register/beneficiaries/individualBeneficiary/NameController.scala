@@ -19,7 +19,6 @@ package controllers.register.beneficiaries.individualBeneficiary
 import cats.data.EitherT
 import config.annotations.IndividualBeneficiary
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import errors.TrustErrors
 import forms.NameFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.individual.NamePage
@@ -72,8 +71,8 @@ class NameController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(NamePage(index), value)))
-            _ <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
-            settlorsAnswers <- EitherT.right[TrustErrors](registrationsRepository.getSettlorsAnswers(draftId))
+            _ <- registrationsRepository.set(updatedAnswers)
+            settlorsAnswers <- registrationsRepository.getSettlorsAnswers(draftId)
           } yield Redirect(navigator.nextPage(NamePage(index), draftId, settlorsAnswers getOrElse updatedAnswers))
 
           result.value.map {

@@ -17,17 +17,20 @@
 package connectors
 
 import base.SpecBase
+import cats.data.EitherT
 import com.github.tomakehurst.wiremock.client.WireMock._
+import errors.TrustErrors
 import models.{RegistrationSubmission, SubmissionDraftResponse}
 import play.api.Application
 import play.api.http.Status
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsBoolean, Json}
 import play.api.test.Helpers.CONTENT_TYPE
+import uk.gov.hmrc.http.HttpResponse
 import utils.WireMockHelper
 
 import java.time.LocalDateTime
-import scala.concurrent.Await
+import scala.concurrent.{Await, Future}
 import scala.concurrent.duration.Duration
 
 class SubmissionDraftConnectorSpec extends SpecBase with WireMockHelper {
@@ -75,7 +78,7 @@ class SubmissionDraftConnectorSpec extends SpecBase with WireMockHelper {
             )
         )
 
-        val result = Await.result(connector.setDraftSectionSet(testDraftId, testSection, submissionDraftSetData), Duration.Inf)
+        val result: HttpResponse = Await.result(connector.setDraftSectionSet(testDraftId, testSection, submissionDraftSetData)[EitherT[Future, TrustErrors, HttpResponse]], Duration.Inf)
         result.status mustBe Status.OK
       }
 
@@ -109,7 +112,7 @@ class SubmissionDraftConnectorSpec extends SpecBase with WireMockHelper {
             )
         )
 
-        val result: SubmissionDraftResponse = Await.result(connector.getDraftSection(testDraftId, testSection), Duration.Inf)
+        val result: SubmissionDraftResponse = Await.result(connector.getDraftSection(testDraftId, testSection)[EitherT[Future, TrustErrors, SubmissionDraftResponse]], Duration.Inf)
         result.createdAt mustBe LocalDateTime.of(2012, 2, 3, 9, 30)
         result.data mustBe draftData
       }
@@ -127,7 +130,7 @@ class SubmissionDraftConnectorSpec extends SpecBase with WireMockHelper {
             )
         )
 
-        val result: Boolean = Await.result(connector.getIsTrustTaxable(testDraftId), Duration.Inf)
+        val result: Boolean = Await.result(connector.getIsTrustTaxable(testDraftId)[EitherT[Future, TrustErrors, Boolean]], Duration.Inf)
         result.booleanValue() mustBe true
       }
 
@@ -141,7 +144,7 @@ class SubmissionDraftConnectorSpec extends SpecBase with WireMockHelper {
             )
         )
 
-        val result: Boolean = Await.result(connector.getIsTrustTaxable(testDraftId), Duration.Inf)
+        val result: Boolean = Await.result(connector.getIsTrustTaxable(testDraftId)[EitherT[Future, TrustErrors, Boolean]], Duration.Inf)
         result.booleanValue() mustBe false
       }
 
@@ -154,7 +157,7 @@ class SubmissionDraftConnectorSpec extends SpecBase with WireMockHelper {
             )
         )
 
-        val result: Boolean = Await.result(connector.getIsTrustTaxable(testDraftId), Duration.Inf)
+        val result: Boolean = Await.result(connector.getIsTrustTaxable(testDraftId)[EitherT[Future, TrustErrors, Boolean]], Duration.Inf)
         result.booleanValue() mustBe true
       }
     }
