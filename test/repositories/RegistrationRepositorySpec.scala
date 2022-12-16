@@ -17,7 +17,9 @@
 package repositories
 
 import base.SpecBase
+import cats.data.EitherT
 import connectors.SubmissionDraftConnector
+import errors.TrustErrors
 import models._
 import org.mockito.ArgumentMatchers.any
 import play.api.http
@@ -51,9 +53,10 @@ class RegistrationRepositorySpec extends SpecBase {
 
         val response = SubmissionDraftResponse(LocalDateTime.now, Json.toJson(userAnswers), None)
 
-        when(mockConnector.getDraftSection(any(), any())(any(), any())).thenReturn(Future.successful(response))
+        when(mockConnector.getDraftSection(any(), any())(any(), any()))
+          .thenReturn(EitherT[Future, TrustErrors, SubmissionDraftResponse](Future.successful(Right(response))))
 
-        val result = Await.result(repository.get(draftId), Duration.Inf)
+        val result = Await.result(repository.get(draftId).value, Duration.Inf)
 
         result mustBe Some(userAnswers)
         verify(mockConnector).getDraftSection(draftId, frontendAppConfig.repositoryKey)(hc, executionContext)
@@ -78,9 +81,10 @@ class RegistrationRepositorySpec extends SpecBase {
 
         val response = SubmissionDraftResponse(LocalDateTime.now, Json.toJson(dummyData), None)
 
-        when(mockConnector.getDraftSection(any(), any())(any(), any())).thenReturn(Future.successful(response))
+        when(mockConnector.getDraftSection(any(), any())(any(), any()))
+          .thenReturn(EitherT[Future, TrustErrors, SubmissionDraftResponse](Future.successful(Right(response))))
 
-        val result = Await.result(repository.getSettlorsAnswers(draftId), Duration.Inf)
+        val result = Await.result(repository.getSettlorsAnswers(draftId).value, Duration.Inf)
 
         val expectedAnswers = Json.obj("someField" -> "someValue")
         val expectedUserAnswers = ReadOnlyUserAnswers(expectedAnswers)
@@ -112,9 +116,10 @@ class RegistrationRepositorySpec extends SpecBase {
 
         val repository = createRepository(mockConnector, mockSubmissionSetFactory)
 
-        when(mockConnector.setDraftSectionSet(any(), any(), any())(any(), any())).thenReturn(Future.successful(HttpResponse(http.Status.OK, "")))
+        when(mockConnector.setDraftSectionSet(any(), any(), any())(any(), any()))
+          .thenReturn(EitherT[Future, TrustErrors, HttpResponse](Future.successful(Right(HttpResponse(http.Status.OK, "")))))
 
-        val result = Await.result(repository.set(userAnswers), Duration.Inf)
+        val result = Await.result(repository.set(userAnswers).value, Duration.Inf)
 
         result mustBe true
         verify(mockConnector).setDraftSectionSet(draftId, frontendAppConfig.repositoryKey, submissionSet)(hc, executionContext)

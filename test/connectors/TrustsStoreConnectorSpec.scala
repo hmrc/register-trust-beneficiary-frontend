@@ -23,6 +23,8 @@ import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import utils.WireMockHelper
 
+import scala.concurrent.Future
+
 class TrustsStoreConnectorSpec extends SpecBase with WireMockHelper {
 
   override lazy val app: Application = new GuiceApplicationBuilder()
@@ -51,7 +53,7 @@ class TrustsStoreConnectorSpec extends SpecBase with WireMockHelper {
           .willReturn(ok())
       )
 
-      val futureResult = connector.updateTaskStatus(fakeDraftId, TaskStatus.Completed)
+      val futureResult = connector.updateTaskStatus(fakeDraftId, TaskStatus.Completed).value
 
       whenReady(futureResult) {
         r =>

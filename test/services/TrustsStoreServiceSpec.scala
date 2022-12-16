@@ -17,11 +17,14 @@
 package services
 
 import base.SpecBase
+import cats.data.EitherT
 import connectors.TrustsStoreConnector
+import errors.TrustErrors
 import models.TaskStatus
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.HttpResponse
+import utils.TrustResult
 
 import scala.concurrent.Future
 
@@ -35,7 +38,7 @@ class TrustsStoreServiceSpec extends SpecBase {
     "call trusts store connector" in {
 
       when(mockConnector.updateTaskStatus(any(), any())(any(), any()))
-        .thenReturn(Future.successful(HttpResponse(OK, "")))
+        .thenReturn(EitherT[Future, TrustErrors, HttpResponse](Future.successful(Right(HttpResponse(OK, "")))))
 
       val result = trustsStoreService.updateTaskStatus(draftId, TaskStatus.Completed)
 

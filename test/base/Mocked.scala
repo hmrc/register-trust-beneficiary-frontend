@@ -16,6 +16,9 @@
 
 package base
 
+import cats.data.EitherT
+import errors.TrustErrors
+import models.UserAnswers
 import org.mockito.ArgumentMatchers.any
 import org.mockito.MockitoSugar
 import repositories.RegistrationsRepository
@@ -26,6 +29,6 @@ trait Mocked extends MockitoSugar {
 
   val registrationsRepository : RegistrationsRepository = mock[RegistrationsRepository]
 
-  when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(None))
-  when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
+  when(registrationsRepository.get(any())(any())).thenReturn(EitherT[Future, TrustErrors, Option[UserAnswers]](Future.successful(Right(None))))
+  when(registrationsRepository.set(any())(any(), any())).thenReturn(EitherT[Future, TrustErrors, Boolean](Future.successful(Right(true))))
 }
