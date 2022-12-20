@@ -20,6 +20,7 @@ import cats.data.EitherT
 import forms.RemoveForm
 import models.requests.RegistrationDataRequest
 import pages.QuestionPage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, ActionBuilder, AnyContent, Call}
@@ -27,11 +28,14 @@ import play.twirl.api.HtmlFormat
 import queries.Settable
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.Session
 import views.html.{RemoveIndexView, TechnicalErrorView}
 
 import scala.concurrent.Future
 
-trait RemoveIndexController extends FrontendBaseController with I18nSupport {
+trait RemoveIndexController extends FrontendBaseController with I18nSupport with Logging {
+
+  val className: String = getClass.getName
 
   val messagesPrefix : String
 
@@ -83,7 +87,9 @@ trait RemoveIndexController extends FrontendBaseController with I18nSupport {
 
             result.value.map {
               case Right(call) => call
-              case Left(_) => InternalServerError(technicalErrorView())
+              case Left(_) =>
+                logger.warn(s"[$className][onSubmit][Session ID: ${Session.id(hc)}] Error while storing user answers")
+                InternalServerError(technicalErrorView())
             }
           } else {
             Future.successful(Redirect(redirect(draftId).url))

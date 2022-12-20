@@ -24,7 +24,7 @@ import models.TaskStatus
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.HttpResponse
-import utils.TrustResult
+import utils.TrustEnvelope
 
 import scala.concurrent.Future
 

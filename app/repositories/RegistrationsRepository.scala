@@ -23,7 +23,7 @@ import play.api.http
 import play.api.i18n.Messages
 import play.api.libs.json._
 import uk.gov.hmrc.http.HeaderCarrier
-import utils.TrustResult.TResult
+import utils.TrustEnvelope.TrustEnvelope
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
@@ -36,7 +36,7 @@ class DefaultRegistrationsRepository @Inject()(submissionDraftConnector: Submiss
   private val userAnswersSection = config.repositoryKey
   private val settlorsAnswersSection = "settlors"
 
-  override def set(userAnswers: UserAnswers)(implicit hc: HeaderCarrier, messages: Messages): TResult[Boolean] = {
+  override def set(userAnswers: UserAnswers)(implicit hc: HeaderCarrier, messages: Messages): TrustEnvelope[Boolean] = {
     submissionDraftConnector.setDraftSectionSet(
       userAnswers.draftId,
       userAnswersSection,
@@ -46,7 +46,7 @@ class DefaultRegistrationsRepository @Inject()(submissionDraftConnector: Submiss
     }
   }
 
-  override def get(draftId: String)(implicit hc: HeaderCarrier): TResult[Option[UserAnswers]] = {
+  override def get(draftId: String)(implicit hc: HeaderCarrier): TrustEnvelope[Option[UserAnswers]] = {
     submissionDraftConnector.getDraftSection(draftId, userAnswersSection).map {
       response =>
         response.data.validate[UserAnswers] match {
@@ -56,7 +56,7 @@ class DefaultRegistrationsRepository @Inject()(submissionDraftConnector: Submiss
     }
   }
 
-  override def getSettlorsAnswers(draftId: String)(implicit hc: HeaderCarrier): TResult[Option[ReadOnlyUserAnswers]] = {
+  override def getSettlorsAnswers(draftId: String)(implicit hc: HeaderCarrier): TrustEnvelope[Option[ReadOnlyUserAnswers]] = {
     submissionDraftConnector.getDraftSection(draftId, settlorsAnswersSection).map {
       response =>
         response.data.validate[ReadOnlyUserAnswers] match {
@@ -69,9 +69,9 @@ class DefaultRegistrationsRepository @Inject()(submissionDraftConnector: Submiss
 
 trait RegistrationsRepository {
 
-  def set(userAnswers: UserAnswers)(implicit hc: HeaderCarrier, messages: Messages): TResult[Boolean]
+  def set(userAnswers: UserAnswers)(implicit hc: HeaderCarrier, messages: Messages): TrustEnvelope[Boolean]
 
-  def get(draftId: String)(implicit hc: HeaderCarrier): TResult[Option[UserAnswers]]
+  def get(draftId: String)(implicit hc: HeaderCarrier): TrustEnvelope[Option[UserAnswers]]
 
-  def getSettlorsAnswers(draftId: String)(implicit hc: HeaderCarrier): TResult[Option[ReadOnlyUserAnswers]]
+  def getSettlorsAnswers(draftId: String)(implicit hc: HeaderCarrier): TrustEnvelope[Option[ReadOnlyUserAnswers]]
 }

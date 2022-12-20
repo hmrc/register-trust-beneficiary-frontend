@@ -23,6 +23,7 @@ import controllers.actions.register.trust.NameRequiredAction
 import forms.YesNoFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.charityortrust.trust.mld5.CountryOfResidenceInTheUkYesNoPage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n._
 import play.api.mvc._
@@ -43,8 +44,9 @@ class CountryOfResidenceInTheUkYesNoController @Inject()(
                                                           repository: RegistrationsRepository,
                                                           nameAction: NameRequiredAction,
                                                           technicalErrorView: TechnicalErrorView
-                                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
+  private val className = getClass.getName
   private val form: Form[Boolean] = formProvider.withPrefix("trust.5mld.countryOfResidenceInTheUkYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
@@ -75,7 +77,9 @@ class CountryOfResidenceInTheUkYesNoController @Inject()(
 
             result.value.map {
               case Right(call) => call
-              case Left(_) => InternalServerError(technicalErrorView())
+              case Left(_) =>
+                logger.warn(s"[$className][onSubmit][Session ID: ${request.request.sessionId}] Error while storing user answers")
+                InternalServerError(technicalErrorView())
             }
           }
         )

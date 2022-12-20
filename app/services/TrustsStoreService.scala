@@ -19,7 +19,7 @@ package services
 import connectors.TrustsStoreConnector
 import models.TaskStatus.TaskStatus
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import utils.TrustResult.TResult
+import utils.TrustEnvelope.TrustEnvelope
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
@@ -28,7 +28,7 @@ class TrustsStoreService @Inject()(trustsStoreConnector: TrustsStoreConnector) {
 
   //TODO - check if this is a fire and forget call (making the call but we don't care about the response)
   def updateTaskStatus(draftId: String, taskStatus: TaskStatus)
-                      (implicit hc: HeaderCarrier, ec: ExecutionContext): TResult[HttpResponse] = {
+                      (implicit hc: HeaderCarrier, ec: ExecutionContext): TrustEnvelope[HttpResponse] = {
     trustsStoreConnector.updateTaskStatus(draftId, taskStatus)
   }
 }

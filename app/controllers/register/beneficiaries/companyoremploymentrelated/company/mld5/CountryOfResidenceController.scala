@@ -24,6 +24,7 @@ import forms.CountryFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.companyoremploymentrelated.company.NamePage
 import pages.register.beneficiaries.companyoremploymentrelated.company.mld5.CountryOfResidencePage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -48,8 +49,9 @@ class CountryOfResidenceController @Inject()(
                                                      view: CountryOfResidenceView,
                                                      val countryOptions: CountryOptionsNonUK,
                                                      technicalErrorView: TechnicalErrorView
-                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
+  private val className = getClass.getName
   private def actions(draftId: String) = standardActions.identifiedUserWithData(draftId)
 
   private val form: Form[String] = formProvider.withPrefix("companyBeneficiary.5mld.countryOfResidence")
@@ -85,7 +87,9 @@ class CountryOfResidenceController @Inject()(
 
           result.value.map{
             case Right(call) => call
-            case Left(_) => InternalServerError(technicalErrorView())
+            case Left(_) =>
+              logger.warn(s"[$className][onSubmit][Session ID: ${request.sessionId}] Error while storing user answers")
+              InternalServerError(technicalErrorView())
           }
         }
       )

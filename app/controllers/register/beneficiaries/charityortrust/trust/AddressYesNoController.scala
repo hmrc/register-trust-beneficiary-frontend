@@ -23,6 +23,7 @@ import controllers.actions.register.trust.NameRequiredAction
 import forms.YesNoFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.charityortrust.trust.AddressYesNoPage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -44,9 +45,10 @@ class AddressYesNoController @Inject()(
                                         formProvider: YesNoFormProvider,
                                         view: AddressYesNoView,
                                         technicalErrorView: TechnicalErrorView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
-  val form: Form[Boolean] = formProvider.withPrefix("trustBeneficiaryAddressYesNo")
+  private val className = getClass.getName
+  private val form: Form[Boolean] = formProvider.withPrefix("trustBeneficiaryAddressYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
     implicit request =>
@@ -72,7 +74,9 @@ class AddressYesNoController @Inject()(
 
           result.value.map {
             case Right(call) => call
-            case Left(_) => InternalServerError(technicalErrorView())
+            case Left(_) =>
+              logger.warn(s"[$className][onSubmit][Session ID: ${request.request.sessionId}] Error while storing user answers")
+              InternalServerError(technicalErrorView())
           }
         }
       )

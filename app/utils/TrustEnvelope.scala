@@ -17,13 +17,21 @@
 package utils
 
 import cats.data.EitherT
+import cats.implicits.catsSyntaxEitherId
 import errors.TrustErrors
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-object TrustResult {
+object TrustEnvelope {
+  type TrustEnvelope[T] = EitherT[Future, TrustErrors, T]
 
-  type TResult[T] = EitherT[Future, TrustErrors, T]
+  //DDCE-3618 - Examples from other HMRC repos - these methods might not be needed
+
+  def apply[T](arg: T)(implicit ec: ExecutionContext): TrustEnvelope[T] =
+    EitherT.pure[Future, TrustErrors](arg)
+
+  def apply[T](value: T): TrustEnvelope[T] =
+    EitherT[Future, TrustErrors, T](Future.successful(value.asRight[TrustErrors]))
 
 }
 

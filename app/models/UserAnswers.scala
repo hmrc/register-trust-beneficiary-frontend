@@ -78,7 +78,7 @@ final case class UserAnswers(draftId: String,
       case JsSuccess(jsValue, _) =>
         Right(jsValue)
       case JsError(_) =>
-        logger.error(s"[ReadableUserAnswers][set] Unable to set path ${page.path} due to errors")
+        logger.error(s"[UserAnswers][set] Unable to set path ${page.path} due to errors")
         Left(ServerError())
     }
 

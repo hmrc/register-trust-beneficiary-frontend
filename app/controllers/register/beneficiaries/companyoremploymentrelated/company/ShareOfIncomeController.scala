@@ -23,6 +23,7 @@ import controllers.actions.register.company.NameRequiredAction
 import forms.IncomePercentageFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.companyoremploymentrelated.company.IncomePage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -43,8 +44,9 @@ class ShareOfIncomeController @Inject()(
                                          @CompanyBeneficiary navigator: Navigator,
                                          nameAction: NameRequiredAction,
                                          technicalErrorView: TechnicalErrorView
-                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
+  private val className = getClass.getName
   private val form: Form[Int] = formProvider.withPrefix("companyBeneficiary.shareOfIncome")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
@@ -75,7 +77,9 @@ class ShareOfIncomeController @Inject()(
 
             result.value.map {
               case Right(call) => call
-              case Left(_) => InternalServerError(technicalErrorView())
+              case Left(_) =>
+                logger.warn(s"[$className][onSubmit][Session ID: ${request.request.sessionId}] Error while storing user answers")
+                InternalServerError(technicalErrorView())
             }
           }
         )
