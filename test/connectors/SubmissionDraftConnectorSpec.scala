@@ -78,7 +78,8 @@ class SubmissionDraftConnectorSpec extends SpecBase with WireMockHelper {
             )
         )
 
-        val result: HttpResponse = Await.result(connector.setDraftSectionSet(testDraftId, testSection, submissionDraftSetData)[EitherT[Future, TrustErrors, HttpResponse]], Duration.Inf)
+        val result: HttpResponse = Await.result(connector.setDraftSectionSet(testDraftId, testSection, submissionDraftSetData)
+          .value, Duration.Inf).getOrElse(throw new RuntimeException(""))
         result.status mustBe Status.OK
       }
 
@@ -112,7 +113,7 @@ class SubmissionDraftConnectorSpec extends SpecBase with WireMockHelper {
             )
         )
 
-        val result: SubmissionDraftResponse = Await.result(connector.getDraftSection(testDraftId, testSection)[EitherT[Future, TrustErrors, SubmissionDraftResponse]], Duration.Inf)
+        val result: SubmissionDraftResponse = Await.result(connector.getDraftSection(testDraftId, testSection).value, Duration.Inf).getOrElse(throw new RuntimeException(""))
         result.createdAt mustBe LocalDateTime.of(2012, 2, 3, 9, 30)
         result.data mustBe draftData
       }
@@ -130,7 +131,7 @@ class SubmissionDraftConnectorSpec extends SpecBase with WireMockHelper {
             )
         )
 
-        val result: Boolean = Await.result(connector.getIsTrustTaxable(testDraftId)[EitherT[Future, TrustErrors, Boolean]], Duration.Inf)
+        val result: Boolean = Await.result(connector.getIsTrustTaxable(testDraftId).value, Duration.Inf).getOrElse(throw new RuntimeException(""))
         result.booleanValue() mustBe true
       }
 
@@ -144,7 +145,7 @@ class SubmissionDraftConnectorSpec extends SpecBase with WireMockHelper {
             )
         )
 
-        val result: Boolean = Await.result(connector.getIsTrustTaxable(testDraftId)[EitherT[Future, TrustErrors, Boolean]], Duration.Inf)
+        val result: Boolean = Await.result(connector.getIsTrustTaxable(testDraftId).value, Duration.Inf).getOrElse(throw new RuntimeException(""))
         result.booleanValue() mustBe false
       }
 
@@ -157,7 +158,7 @@ class SubmissionDraftConnectorSpec extends SpecBase with WireMockHelper {
             )
         )
 
-        val result: Boolean = Await.result(connector.getIsTrustTaxable(testDraftId)[EitherT[Future, TrustErrors, Boolean]], Duration.Inf)
+        val result: Boolean = Await.result(connector.getIsTrustTaxable(testDraftId).value, Duration.Inf).getOrElse(throw new RuntimeException(""))
         result.booleanValue() mustBe true
       }
     }

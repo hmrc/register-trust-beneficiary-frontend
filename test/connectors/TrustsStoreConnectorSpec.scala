@@ -57,7 +57,7 @@ class TrustsStoreConnectorSpec extends SpecBase with WireMockHelper {
 
       whenReady(futureResult) {
         r =>
-          r.status mustBe 200
+          r.getOrElse(throw new RuntimeException("")).status mustBe 200
       }
 
       application.stop()

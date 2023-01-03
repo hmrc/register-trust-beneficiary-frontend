@@ -42,8 +42,8 @@ class TrustsStoreServiceSpec extends SpecBase {
 
       val result = trustsStoreService.updateTaskStatus(draftId, TaskStatus.Completed)
 
-      whenReady(result) { res =>
-        res.status mustBe OK
+      whenReady(result.value) { res =>
+        res.getOrElse(throw new RuntimeException("")).status mustBe OK
         verify(mockConnector).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.Completed))(any(), any())
       }
     }
