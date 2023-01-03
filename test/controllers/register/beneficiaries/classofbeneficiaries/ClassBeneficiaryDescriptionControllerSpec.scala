@@ -18,6 +18,7 @@ package controllers.register.beneficiaries.classofbeneficiaries
 
 import base.SpecBase
 import config.annotations.ClassOfBeneficiaries
+import errors.ServerError
 import forms.ClassBeneficiaryDescriptionFormProvider
 import models.Status.Completed
 import models.UserAnswers
@@ -32,15 +33,16 @@ import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionView
 
 class ClassBeneficiaryDescriptionControllerSpec extends SpecBase {
 
-  val formProvider = new ClassBeneficiaryDescriptionFormProvider()
-  val form: Form[String] = formProvider()
-  val index = 0
+  private val formProvider = new ClassBeneficiaryDescriptionFormProvider()
+  private val form: Form[String] = formProvider()
+  private val index = 0
 
-  lazy val classBeneficiaryDescriptionRoute: String = routes.ClassBeneficiaryDescriptionController.onPageLoad(index, fakeDraftId).url
+  private lazy val classBeneficiaryDescriptionRoute: String = routes.ClassBeneficiaryDescriptionController.onPageLoad(index, fakeDraftId).url
 
   override def emptyUserAnswers: UserAnswers = super.emptyUserAnswers
     .set(WhatTypeOfBeneficiaryPage, ClassOfBeneficiary).right.get
@@ -103,8 +105,32 @@ class ClassBeneficiaryDescriptionControllerSpec extends SpecBase {
       redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
       val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-      verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
+      verify(mockRegistrationsRepository).set(uaCaptor.capture)(any(), any())
       uaCaptor.getValue.get(ClassBeneficiaryStatus(index)).get mustBe Completed
+
+      application.stop()
+    }
+
+    "return an Internal Server Error when setting the user answers goes wrong" in {
+
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers), mockSetResult = Left(ServerError()))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[ClassOfBeneficiaries]).toInstance(new FakeNavigator)
+          ).build()
+
+      val request =
+        FakeRequest(POST, classBeneficiaryDescriptionRoute)
+          .withFormUrlEncodedBody(("value", "answer"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+
+      val errorPage = application.injector.instanceOf[TechnicalErrorView]
+
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) mustEqual errorPage()(request, messages).toString
 
       application.stop()
     }

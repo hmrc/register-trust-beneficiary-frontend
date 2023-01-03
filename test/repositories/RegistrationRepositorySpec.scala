@@ -22,15 +22,15 @@ import connectors.SubmissionDraftConnector
 import errors.TrustErrors
 import models._
 import org.mockito.ArgumentMatchers.any
-import play.api.http
+import org.scalatest.EitherValues
 import play.api.libs.json.Json
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import uk.gov.hmrc.http.HeaderCarrier
 
 import java.time.LocalDateTime
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-class RegistrationRepositorySpec extends SpecBase {
+class RegistrationRepositorySpec extends SpecBase with EitherValues {
 
   private val unusedSubmissionSetFactory = mock[SubmissionSetFactory]
 
@@ -58,7 +58,7 @@ class RegistrationRepositorySpec extends SpecBase {
 
         val result = Await.result(repository.get(draftId).value, Duration.Inf)
 
-        result mustBe Some(userAnswers)
+        result.value mustBe Some(userAnswers)
         verify(mockConnector).getDraftSection(draftId, frontendAppConfig.repositoryKey)(hc, executionContext)
       }
       "read answers from main section" in {
@@ -89,7 +89,7 @@ class RegistrationRepositorySpec extends SpecBase {
         val expectedAnswers = Json.obj("someField" -> "someValue")
         val expectedUserAnswers = ReadOnlyUserAnswers(expectedAnswers)
 
-        result mustBe Some(expectedUserAnswers)
+        result.value mustBe Some(expectedUserAnswers)
         verify(mockConnector).getDraftSection(draftId, "settlors")(hc, executionContext)
       }
 
@@ -117,11 +117,11 @@ class RegistrationRepositorySpec extends SpecBase {
         val repository = createRepository(mockConnector, mockSubmissionSetFactory)
 
         when(mockConnector.setDraftSectionSet(any(), any(), any())(any(), any()))
-          .thenReturn(EitherT[Future, TrustErrors, HttpResponse](Future.successful(Right(HttpResponse(http.Status.OK, "")))))
+          .thenReturn(EitherT[Future, TrustErrors, Boolean](Future.successful(Right(true))))
 
         val result = Await.result(repository.set(userAnswers).value, Duration.Inf)
 
-        result mustBe true
+        result.value mustBe true
         verify(mockConnector).setDraftSectionSet(draftId, frontendAppConfig.repositoryKey, submissionSet)(hc, executionContext)
       }
     }

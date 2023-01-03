@@ -19,7 +19,6 @@ package repositories
 import config.FrontendAppConfig
 import connectors.SubmissionDraftConnector
 import models.{ReadOnlyUserAnswers, UserAnswers}
-import play.api.http
 import play.api.i18n.Messages
 import play.api.libs.json._
 import uk.gov.hmrc.http.HeaderCarrier
@@ -41,9 +40,7 @@ class DefaultRegistrationsRepository @Inject()(submissionDraftConnector: Submiss
       userAnswers.draftId,
       userAnswersSection,
       submissionSetFactory.createFrom(userAnswers)
-    ) map {
-      response => response.status == http.Status.OK
-    }
+    )
   }
 
   override def get(draftId: String)(implicit hc: HeaderCarrier): TrustEnvelope[Option[UserAnswers]] = {

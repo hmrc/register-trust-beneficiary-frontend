@@ -35,7 +35,7 @@ import scala.concurrent.Future
 
 trait RemoveIndexController extends FrontendBaseController with I18nSupport with Logging {
 
-  val className: String = getClass.getName
+  val className: String = getClass.getSimpleName
 
   val messagesPrefix : String
 

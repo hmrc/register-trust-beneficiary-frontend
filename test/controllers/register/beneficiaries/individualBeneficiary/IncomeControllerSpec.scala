@@ -18,6 +18,7 @@ package controllers.register.beneficiaries.individualBeneficiary
 
 import base.SpecBase
 import config.annotations.IndividualBeneficiary
+import errors.ServerError
 import forms.IncomePercentageFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
@@ -26,18 +27,19 @@ import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.individualBeneficiary.IncomeView
 
 class IncomeControllerSpec extends SpecBase {
 
-  val formProvider = new IncomePercentageFormProvider()
-  val form: Form[Int] = formProvider.withPrefix("individualBeneficiaryIncome")
-  val index: Int = 0
+  private val formProvider = new IncomePercentageFormProvider()
+  private val form: Form[Int] = formProvider.withPrefix("individualBeneficiaryIncome")
+  private val index: Int = 0
 
-  val name: FullName = FullName("first name", None, "Last name")
-  val validAnswer: Int = 60
+  private val name: FullName = FullName("first name", None, "Last name")
+  private val validAnswer: Int = 60
 
-  lazy val individualBeneficiaryIncomeRoute: String = routes.IncomeController.onPageLoad(index, fakeDraftId).url
+  private lazy val individualBeneficiaryIncomeRoute: String = routes.IncomeController.onPageLoad(index, fakeDraftId).url
 
   "IndividualBeneficiaryIncome Controller" must {
 
@@ -103,6 +105,33 @@ class IncomeControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+      application.stop()
+    }
+
+    "return an Internal Server Error when setting the user answers goes wrong" in {
+
+      val userAnswers = emptyUserAnswers.set(NamePage(0),
+        name).right.get
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
+          ).build()
+
+      val request =
+        FakeRequest(POST, individualBeneficiaryIncomeRoute)
+          .withFormUrlEncodedBody(("value", "100"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+
+      val errorPage = application.injector.instanceOf[TechnicalErrorView]
+
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) mustEqual errorPage()(request, messages).toString
 
       application.stop()
     }

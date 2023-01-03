@@ -47,7 +47,7 @@ class AddressYesNoController @Inject()(
                                         technicalErrorView: TechnicalErrorView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
-  private val className = getClass.getName
+  private val className = getClass.getSimpleName
   private val form: Form[Boolean] = formProvider.withPrefix("trustBeneficiaryAddressYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {

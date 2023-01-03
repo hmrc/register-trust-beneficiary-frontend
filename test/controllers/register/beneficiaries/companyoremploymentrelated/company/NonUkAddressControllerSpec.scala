@@ -18,6 +18,7 @@ package controllers.register.beneficiaries.companyoremploymentrelated.company
 
 import base.SpecBase
 import config.annotations.CompanyBeneficiary
+import errors.ServerError
 import forms.InternationalAddressFormProvider
 import models.core.pages.InternationalAddress
 import navigation.{FakeNavigator, Navigator}
@@ -29,6 +30,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils.InputOption
 import utils.countryOptions.CountryOptionsNonUK
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.companyoremploymentrelated.company.NonUkAddressView
 
 class NonUkAddressControllerSpec extends SpecBase {
@@ -100,6 +102,30 @@ class NonUkAddressControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual onwardRoute.url
+
+      application.stop()
+    }
+
+    "return an Internal Server Error when setting the user answers goes wrong" in {
+
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers), mockSetResult = Left(ServerError()))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[CompanyBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
+          ).build()
+
+      val request =
+        FakeRequest(POST, nonUkAddressRoute)
+          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"), ("country", "DE"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+
+      val errorPage = application.injector.instanceOf[TechnicalErrorView]
+
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) mustEqual errorPage()(request, messages).toString
 
       application.stop()
     }

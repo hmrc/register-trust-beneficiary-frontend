@@ -50,7 +50,7 @@ class NationalInsuranceNumberController @Inject()(
                                                    technicalErrorView: TechnicalErrorView
                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
-  private val className = getClass.getName
+  private val className = getClass.getSimpleName
 
   private def form(index: Int)(implicit request: RegistrationDataRequest[AnyContent]) =
     formProvider.withPrefix("individualBeneficiaryNationalInsuranceNumber", request.userAnswers, index)

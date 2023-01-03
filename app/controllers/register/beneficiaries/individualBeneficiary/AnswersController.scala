@@ -53,7 +53,7 @@ class AnswersController @Inject()(
                                    technicalErrorView: TechnicalErrorView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
-  private val className = getClass.getName
+  private val className = getClass.getSimpleName
 
   private def actions(index: Int, draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
     identify andThen

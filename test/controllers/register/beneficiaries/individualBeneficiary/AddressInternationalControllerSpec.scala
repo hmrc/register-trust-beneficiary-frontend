@@ -18,6 +18,7 @@ package controllers.register.beneficiaries.individualBeneficiary
 
 import base.SpecBase
 import config.annotations.IndividualBeneficiary
+import errors.ServerError
 import forms.InternationalAddressFormProvider
 import models.UserAnswers
 import models.core.pages.{FullName, InternationalAddress}
@@ -31,18 +32,19 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils._
 import utils.countryOptions.CountryOptionsNonUK
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.individualBeneficiary.AddressInternationalView
 
 import scala.concurrent.Future
 
 class AddressInternationalControllerSpec extends SpecBase {
 
-  val formProvider = new InternationalAddressFormProvider()
-  val form: Form[InternationalAddress] = formProvider()
-  val index = 0
-  val name: FullName = FullName("First Name", None, "Last Name")
+  private val formProvider = new InternationalAddressFormProvider()
+  private val form: Form[InternationalAddress] = formProvider()
+  private val index = 0
+  private val name: FullName = FullName("First Name", None, "Last Name")
 
-  lazy val addressInternationalRoute: String = routes.AddressInternationalController.onPageLoad(index, fakeDraftId).url
+  private lazy val addressInternationalRoute: String = routes.AddressInternationalController.onPageLoad(index, fakeDraftId).url
 
   "IndividualBeneficiaryAddressInternational Controller" must {
 
@@ -116,6 +118,33 @@ class AddressInternationalControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+      application.stop()
+    }
+
+    "return an Internal Server Error when setting the user answers goes wrong" in {
+
+      val userAnswers = emptyUserAnswers.set(NamePage(index), name).right.get
+        .set(AddressInternationalPage(index), InternationalAddress("line 1", "line 2", Some("line 3"), "country")).right.get
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
+          ).build()
+
+      val request =
+        FakeRequest(POST, addressInternationalRoute)
+          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"), ("country", "IN"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+
+      val errorPage = application.injector.instanceOf[TechnicalErrorView]
+
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) mustEqual errorPage()(request, messages).toString
 
       application.stop()
     }

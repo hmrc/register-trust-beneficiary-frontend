@@ -47,7 +47,7 @@ class CountryOfResidenceInTheUkYesNoController @Inject()(
                                                technicalErrorView: TechnicalErrorView
                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
-  private val className = getClass.getName
+  private val className = getClass.getSimpleName
   private val form: Form[Boolean] = formProvider.withPrefix("companyBeneficiary.5mld.countryOfResidenceInTheUkYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =

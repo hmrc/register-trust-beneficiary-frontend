@@ -25,7 +25,7 @@ import controllers.register.beneficiaries.companyoremploymentrelated.company.{ro
 import controllers.register.beneficiaries.companyoremploymentrelated.employmentRelated.{routes => largeRoutes}
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRoutes}
 import controllers.register.beneficiaries.other.{routes => otherRoutes}
-import errors.TrustErrors
+import errors.{ServerError, TrustErrors}
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import models.CompanyOrEmploymentRelatedToAdd.Company
 import models.Status.{Completed, InProgress}
@@ -50,9 +50,9 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.TrustsStoreService
-import uk.gov.hmrc.http.HttpResponse
 import utils.{AddABeneficiaryViewHelper, RegistrationProgress}
 import viewmodels.AddRow
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.{AddABeneficiaryView, AddABeneficiaryYesNoView, MaxedOutBeneficiariesView}
 
 import scala.concurrent.Future
@@ -153,7 +153,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
 
   private def genTrustBeneficiaries(range: Int): UserAnswers = {
     (0 until range)
-      .foldLeft(emptyUserAnswers)((ua,index) =>
+      .foldLeft(emptyUserAnswers)((ua, index) =>
         ua.set(trustPages.NamePage(index), "Company Name").right.get
       )
   }
@@ -161,42 +161,42 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
   private def genCompanyBeneficiaries(range: Int): UserAnswers = {
     (0 until range)
       .foldLeft(emptyUserAnswers)(
-        (ua,index) => ua.set(companyPages.NamePage(index), "Trust Name").right.get
+        (ua, index) => ua.set(companyPages.NamePage(index), "Trust Name").right.get
       )
   }
 
   private def genIndividualBeneficiaries(range: Int): UserAnswers = {
     (0 until range)
       .foldLeft(emptyUserAnswers)(
-        (ua,index) => ua.set(individualPages.NamePage(index), FullName("first name", None, "last name")).right.get
+        (ua, index) => ua.set(individualPages.NamePage(index), FullName("first name", None, "last name")).right.get
       )
   }
 
   private def genUnidentifiedBeneficiaries(range: Int): UserAnswers = {
     (0 until range)
       .foldLeft(emptyUserAnswers)(
-        (ua,index) => ua.set(classOfBeneficiariesPages.ClassBeneficiaryDescriptionPage(index), s"Unidentified Description $index").right.get
+        (ua, index) => ua.set(classOfBeneficiariesPages.ClassBeneficiaryDescriptionPage(index), s"Unidentified Description $index").right.get
       )
   }
 
   private def genCharityBeneficiaries(range: Int): UserAnswers = {
     (0 until range)
       .foldLeft(emptyUserAnswers)(
-        (ua,index) => ua.set(charityPages.CharityNamePage(index), s"Charity Name $index").right.get
+        (ua, index) => ua.set(charityPages.CharityNamePage(index), s"Charity Name $index").right.get
       )
   }
 
   private def genLargeBeneficiaries(range: Int): UserAnswers = {
     (0 until range)
       .foldLeft(emptyUserAnswers)(
-        (ua,index) => ua.set(LargeBeneficiaryDescriptionPage(index), Description(s"Large Name $index", None, None, None, None)).right.get
+        (ua, index) => ua.set(LargeBeneficiaryDescriptionPage(index), Description(s"Large Name $index", None, None, None, None)).right.get
       )
   }
 
   private def genOtherBeneficiaries(range: Int): UserAnswers = {
     (0 until range)
       .foldLeft(emptyUserAnswers)(
-        (ua,index) => ua.set(otherPages.DescriptionPage(index), s"Other Description $index").right.get
+        (ua, index) => ua.set(otherPages.DescriptionPage(index), s"Other Description $index").right.get
       )
   }
 
@@ -207,7 +207,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
     reset(mockTrustsStoreService, mockRegistrationProgress)
 
     when(mockTrustsStoreService.updateTaskStatus(any(), any())(any(), any()))
-      .thenReturn(EitherT[Future, TrustErrors, HttpResponse](Future.successful(Right(HttpResponse(OK, "")))))
+      .thenReturn(EitherT[Future, TrustErrors, Boolean](Future.successful(Right(true))))
   }
 
   "AddABeneficiary Controller" when {
@@ -258,10 +258,12 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
             .data
         )
 
-        when(registrationsRepository.getSettlorsAnswers(any())(any()))
-          .thenReturn(EitherT[Future, TrustErrors, Option[ReadOnlyUserAnswers]](Future.successful(Right(Some(settlorsAnswers)))))
+        mockRegistrationsRepositoryBuilder(getSettlorsAnswersResult = Right(Some(settlorsAnswers)))
 
-        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+        val application = applicationBuilder(
+            userAnswers = Some(emptyUserAnswers),
+            mockGetSettlorsAnswersResult = Right(Some(settlorsAnswers))
+        ).build()
 
         val request = FakeRequest(GET, addABeneficiaryRoute)
 
@@ -275,7 +277,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
           view(form, fakeDraftId)(request, messages).toString
 
         val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-        verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
+        verify(mockRegistrationsRepository).set(uaCaptor.capture)(any(), any())
         uaCaptor.getValue.get(WhatTypeOfBeneficiaryPage) mustNot be(defined)
 
         application.stop()
@@ -330,6 +332,31 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
         }
       }
 
+      "return an Internal Server Error when setting the user answers goes wrong" in {
+
+        val application =
+          applicationBuilder(userAnswers = Some(emptyUserAnswers), mockSetResult = Left(ServerError()))
+            .overrides(
+              bind[TrustsStoreService].to(mockTrustsStoreService)
+            )
+            .build()
+
+        val request =
+          FakeRequest(POST, addOnePostRoute)
+            .withFormUrlEncodedBody(("value", "true"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual INTERNAL_SERVER_ERROR
+
+        val errorPage = application.injector.instanceOf[TechnicalErrorView]
+
+        contentType(result) mustBe Some("text/html")
+        contentAsString(result) mustEqual errorPage()(request, messages).toString
+
+        application.stop()
+      }
+
       "return a Bad Request and errors when invalid data is submitted" in {
 
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
@@ -362,8 +389,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
           emptyUserAnswers.set(KindOfTrustPage, Intervivos).right.get.data
         )
 
-        when(registrationsRepository.getSettlorsAnswers(any())(any()))
-          .thenReturn(EitherT[Future, TrustErrors, Option[ReadOnlyUserAnswers]](Future.successful(Right(Some(settlorsAnswers)))))
+        mockRegistrationsRepositoryBuilder(getSettlorsAnswersResult = Right(Some(settlorsAnswers)))
 
         val application = applicationBuilder(userAnswers = Some(userAnswersWithBeneficiariesComplete)).build()
 
@@ -387,13 +413,15 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
           emptyUserAnswers.set(KindOfTrustPage, Intervivos).right.get.data
         )
 
-        when(registrationsRepository.getSettlorsAnswers(any())(any()))
-          .thenReturn(EitherT[Future, TrustErrors, Option[ReadOnlyUserAnswers]](Future.successful(Right(Some(settlorsAnswers)))))
+        mockRegistrationsRepositoryBuilder(getSettlorsAnswersResult = Right(Some(settlorsAnswers)))
 
         val userAnswers = userAnswersWithBeneficiariesComplete.
           set(AddABeneficiaryPage, AddABeneficiary.YesNow).right.get
 
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val application = applicationBuilder(
+          userAnswers = Some(userAnswers),
+          mockGetSettlorsAnswersResult = Right(Some(settlorsAnswers))
+        ).build()
 
         val request = FakeRequest(GET, addABeneficiaryRoute)
 
@@ -418,8 +446,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
               emptyUserAnswers.set(KindOfTrustPage, Employees).right.get.data
             )
 
-            when(registrationsRepository.getSettlorsAnswers(any())(any()))
-              .thenReturn(EitherT[Future, TrustErrors, Option[ReadOnlyUserAnswers]](Future.successful(Right(Some(settlorsAnswers)))))
+            mockRegistrationsRepositoryBuilder(getSettlorsAnswersResult = Right(Some(settlorsAnswers)))
 
             val userAnswers = emptyUserAnswers
               .set(individualPages.NamePage(0), FullName("Joe", None, "Bloggs")).right.get
@@ -431,11 +458,11 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
               .set(IndividualBeneficiaryStatus(0), Completed).right.get
 
             val application =
-              applicationBuilder(userAnswers = Some(userAnswers))
+              applicationBuilder(userAnswers = Some(userAnswers), mockGetSettlorsAnswersResult = Right(Some(settlorsAnswers)))
                 .build()
 
             when(mockTrustsStoreService.updateTaskStatus(any(), mEq(TaskStatus.InProgress))(any(), any()))
-              .thenReturn(EitherT[Future, TrustErrors, HttpResponse](Future.successful(Right(HttpResponse.apply(OK, "")))))
+              .thenReturn(EitherT[Future, TrustErrors, Boolean](Future.successful(Right(true))))
 
             val request = FakeRequest(GET, addABeneficiaryRoute)
 
@@ -465,8 +492,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
               emptyUserAnswers.set(KindOfTrustPage, Employees).right.get.data
             )
 
-            when(registrationsRepository.getSettlorsAnswers(any())(any()))
-              .thenReturn(EitherT[Future, TrustErrors, Option[ReadOnlyUserAnswers]](Future.successful(Right(Some(settlorsAnswers)))))
+            mockRegistrationsRepositoryBuilder(getSettlorsAnswersResult = Right(Some(settlorsAnswers)))
 
             val userAnswers = emptyUserAnswers
               .set(individualPages.NamePage(0), FullName("Joe", None, "Bloggs")).right.get
@@ -487,11 +513,11 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
               .set(IndividualBeneficiaryStatus(1), Completed).right.get
 
             val application =
-              applicationBuilder(userAnswers = Some(userAnswers))
+              applicationBuilder(userAnswers = Some(userAnswers), mockGetSettlorsAnswersResult = Right(Some(settlorsAnswers)))
                 .build()
 
             when(mockTrustsStoreService.updateTaskStatus(any(), mEq(TaskStatus.InProgress))(any(), any()))
-              .thenReturn(EitherT[Future, TrustErrors, HttpResponse](Future.successful(Right(HttpResponse.apply(OK, "")))))
+              .thenReturn(EitherT[Future, TrustErrors, Boolean](Future.successful(Right(true))))
 
             val request = FakeRequest(GET, addABeneficiaryRoute)
 
@@ -849,7 +875,6 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
 
           application.stop()
         }
-
 
 
       }

@@ -18,6 +18,7 @@ package controllers.register.beneficiaries.other.mld5
 
 import base.SpecBase
 import config.annotations.OtherBeneficiary
+import errors.ServerError
 import forms.CountryFormProvider
 import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.other.DescriptionPage
@@ -28,16 +29,17 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils.InputOption
 import utils.countryOptions.CountryOptionsNonUK
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.other.mld5.CountryOfResidenceView
 
 class CountryOfResidenceControllerSpec extends SpecBase {
 
-  val formProvider = new CountryFormProvider()
-  val form: Form[String] = formProvider.withPrefix("otherBeneficiary.countryOfResidence")
-  val index: Int = 0
+  private val formProvider = new CountryFormProvider()
+  private val form: Form[String] = formProvider.withPrefix("otherBeneficiary.countryOfResidence")
+  private val index: Int = 0
   private val description = "Other"
 
-  lazy val countryOfResidence: String = routes.CountryOfResidenceController.onPageLoad(index, draftId).url
+  private lazy val countryOfResidence: String = routes.CountryOfResidenceController.onPageLoad(index, draftId).url
 
   "CountryOfResidence Controller" must {
 
@@ -106,6 +108,32 @@ class CountryOfResidenceControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+      application.stop()
+    }
+
+    "return an Internal Server Error when setting the user answers goes wrong" in {
+
+      val userAnswers = emptyUserAnswers
+        .set(DescriptionPage(index), description).right.get
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
+        .overrides(
+          bind[Navigator].qualifiedWith(classOf[OtherBeneficiary]).toInstance(new FakeNavigator())
+        ).build()
+
+      val request =
+        FakeRequest(POST, countryOfResidence)
+          .withFormUrlEncodedBody(("value", "ES"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+
+      val errorPage = application.injector.instanceOf[TechnicalErrorView]
+
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) mustEqual errorPage()(request, messages).toString
 
       application.stop()
     }

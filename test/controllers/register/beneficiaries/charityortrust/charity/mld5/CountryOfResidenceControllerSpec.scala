@@ -18,6 +18,7 @@ package controllers.register.beneficiaries.charityortrust.charity.mld5
 
 import base.SpecBase
 import config.annotations.CharityBeneficiary
+import errors.ServerError
 import forms.CountryFormProvider
 import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
@@ -29,16 +30,17 @@ import play.api.test.Helpers._
 import utils.Constants._
 import utils.InputOption
 import utils.countryOptions.CountryOptionsNonUK
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.charityortrust.charity.mld5.CountryOfResidenceView
 
 class CountryOfResidenceControllerSpec extends SpecBase {
 
-  val formProvider = new CountryFormProvider()
-  val form: Form[String] = formProvider.withPrefix("charity.5mld.countryOfResidence")
-  val index: Int = 0
-  val charityName = "Name"
+  private val formProvider = new CountryFormProvider()
+  private val form: Form[String] = formProvider.withPrefix("charity.5mld.countryOfResidence")
+  private val index: Int = 0
+  private val charityName = "Name"
 
-  lazy val countryOfResidence: String = routes.CountryOfResidenceController.onPageLoad(index, draftId).url
+  private lazy val countryOfResidence: String = routes.CountryOfResidenceController.onPageLoad(index, draftId).url
 
   "CountryOfResidence Controller" must {
 
@@ -111,23 +113,27 @@ class CountryOfResidenceControllerSpec extends SpecBase {
       application.stop()
     }
 
-    "return an Internal server error when setting the user answers go wrong" in {
-
+    "return an Internal Server Error when setting the user answers goes wrong" in {
       val userAnswers = emptyUserAnswers
         .set(CharityNamePage(index), charityName).right.get
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers))
+      val application = applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
         .overrides(
           bind[Navigator].qualifiedWith(classOf[CharityBeneficiary]).toInstance(new FakeNavigator)
         ).build()
 
       val request =
-        FakeRequest(POST, routes.CountryOfResidenceController.onPageLoad(2, draftId).url)
+        FakeRequest(POST, countryOfResidence)
           .withFormUrlEncodedBody(("value", ES))
 
       val result = route(application, request).value
 
       status(result) mustEqual INTERNAL_SERVER_ERROR
+
+      val errorPage = application.injector.instanceOf[TechnicalErrorView]
+
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) mustEqual errorPage()(request, messages).toString
 
       application.stop()
     }

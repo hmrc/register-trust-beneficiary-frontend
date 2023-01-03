@@ -41,8 +41,8 @@ import play.api.mvc._
 import repositories.RegistrationsRepository
 import sections.beneficiaries.IndividualBeneficiaries
 import services.TrustsStoreService
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpVerbs.GET
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.TrustEnvelope.TrustEnvelope
 import utils.{AddABeneficiaryViewHelper, RegistrationProgress}
@@ -71,7 +71,7 @@ class AddABeneficiaryController @Inject()(
                                            technicalErrorView: TechnicalErrorView
                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with Logging with I18nSupport {
 
-  private val className = getClass.getName
+  private val className = getClass.getSimpleName
 
   private val addAnotherForm = addAnotherFormProvider()
 
@@ -88,7 +88,7 @@ class AddABeneficiaryController @Inject()(
   }
 
   private def setTaskStatus(draftId: String, userAnswers: UserAnswers, action: AddABeneficiary)
-                           (implicit hc: HeaderCarrier): TrustEnvelope[HttpResponse] = {
+                           (implicit hc: HeaderCarrier): TrustEnvelope[Boolean] = {
     val status = (action, registrationProgress.beneficiariesStatus(userAnswers)) match {
       case (NoComplete, Some(Completed)) => TaskStatus.Completed
       case _ => TaskStatus.InProgress
@@ -97,7 +97,7 @@ class AddABeneficiaryController @Inject()(
   }
 
   private def setTaskStatus(draftId: String, taskStatus: TaskStatus)
-                           (implicit hc: HeaderCarrier): TrustEnvelope[HttpResponse] = {
+                           (implicit hc: HeaderCarrier): TrustEnvelope[Boolean] = {
     trustsStoreService.updateTaskStatus(draftId, taskStatus)
   }
 

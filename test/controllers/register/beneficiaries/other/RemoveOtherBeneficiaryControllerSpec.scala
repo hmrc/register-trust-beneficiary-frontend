@@ -17,6 +17,7 @@
 package controllers.register.beneficiaries.other
 
 import base.SpecBase
+import errors.ServerError
 import forms.RemoveIndexFormProvider
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -25,18 +26,18 @@ import play.api.data.Form
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.RemoveIndexView
+import views.html.{RemoveIndexView, TechnicalErrorView}
 
 class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
-  val messagesPrefix = "removeOtherBeneficiaryYesNo"
+  private val messagesPrefix = "removeOtherBeneficiaryYesNo"
 
-  val formProvider = new RemoveIndexFormProvider()
-  val form: Form[Boolean] = formProvider(messagesPrefix)
+  private val formProvider = new RemoveIndexFormProvider()
+  private val form: Form[Boolean] = formProvider(messagesPrefix)
+  private val index = 0
 
-  lazy val formRoute: Call = routes.RemoveOtherBeneficiaryController.onSubmit(0, fakeDraftId)
-
-  val index = 0
+  private lazy val getRoute: Call = routes.RemoveOtherBeneficiaryController.onPageLoad(index, fakeDraftId)
+  private lazy val formRoute: Call = routes.RemoveOtherBeneficiaryController.onSubmit(index, fakeDraftId)
 
   "RemoveOtherBeneficiary Controller" when {
 
@@ -48,7 +49,7 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-        val request = FakeRequest(GET, routes.RemoveOtherBeneficiaryController.onPageLoad(index, fakeDraftId).url)
+        val request = FakeRequest(GET, getRoute.url)
 
         val result = route(application, request).value
 
@@ -68,11 +69,11 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
       "return OK and the correct view for a GET" in {
 
-        val userAnswers = emptyUserAnswers.set(DescriptionPage(0), "other beneficiary").right.get
+        val userAnswers = emptyUserAnswers.set(DescriptionPage(index), "other beneficiary").right.get
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-        val request = FakeRequest(GET, routes.RemoveOtherBeneficiaryController.onPageLoad(index, fakeDraftId).url)
+        val request = FakeRequest(GET, getRoute.url)
 
         val result = route(application, request).value
 
@@ -89,37 +90,61 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(DescriptionPage(0), "other beneficiary").right.get
+      val userAnswers = emptyUserAnswers.set(DescriptionPage(index), "other beneficiary").right.get
 
       forAll(arbitrary[Boolean]) {
         value =>
-        val application =
-          applicationBuilder(userAnswers = Some(userAnswers))
-            .build()
+          val application =
+            applicationBuilder(userAnswers = Some(userAnswers))
+              .build()
 
-        val request =
-          FakeRequest(POST, routes.RemoveOtherBeneficiaryController.onSubmit(index, fakeDraftId).url)
-            .withFormUrlEncodedBody(("value", value.toString))
+          val request =
+            FakeRequest(POST, formRoute.url)
+              .withFormUrlEncodedBody(("value", value.toString))
 
-        val result = route(application, request).value
+          val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
+          status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(fakeDraftId).url
+          redirectLocation(result).value mustEqual controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(fakeDraftId).url
 
-        application.stop()
+          application.stop()
       }
 
     }
 
+    "return an Internal Server Error when setting the user answers goes wrong" in {
+
+      val userAnswers = emptyUserAnswers.set(DescriptionPage(index), "other beneficiary").right.get
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
+          .build()
+
+      val request =
+        FakeRequest(POST, formRoute.url)
+          .withFormUrlEncodedBody(("value", true.toString))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+
+      val errorPage = application.injector.instanceOf[TechnicalErrorView]
+
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) mustEqual errorPage()(request, messages).toString
+
+      application.stop()
+    }
+
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(DescriptionPage(0), "other beneficiary").right.get
+      val userAnswers = emptyUserAnswers.set(DescriptionPage(index), "other beneficiary").right.get
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, routes.RemoveOtherBeneficiaryController.onSubmit(index, fakeDraftId).url)
+        FakeRequest(POST, formRoute.url)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
@@ -140,7 +165,7 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, routes.RemoveOtherBeneficiaryController.onPageLoad(index, fakeDraftId).url)
+      val request = FakeRequest(GET, getRoute.url)
 
       val result = route(application, request).value
 
@@ -156,7 +181,7 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, routes.RemoveOtherBeneficiaryController.onSubmit(index, fakeDraftId).url)
+        FakeRequest(POST, formRoute.url)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value

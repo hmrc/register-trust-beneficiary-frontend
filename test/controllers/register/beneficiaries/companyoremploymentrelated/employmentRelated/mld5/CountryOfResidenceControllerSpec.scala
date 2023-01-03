@@ -18,6 +18,7 @@ package controllers.register.beneficiaries.companyoremploymentrelated.employment
 
 import base.SpecBase
 import config.annotations.EmploymentRelatedBeneficiary
+import errors.ServerError
 import forms.CountryFormProvider
 import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.LargeBeneficiaryNamePage
@@ -29,16 +30,17 @@ import play.api.test.Helpers._
 import utils.Constants._
 import utils.InputOption
 import utils.countryOptions.CountryOptionsNonUK
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.companyoremploymentrelated.employmentRelated.mld5.CountryOfResidenceView
 
 class CountryOfResidenceControllerSpec extends SpecBase {
 
-  val formProvider = new CountryFormProvider()
-  val form: Form[String] = formProvider.withPrefix("employmentRelatedBeneficiary.5mld.countryOfResidence")
-  val index: Int = 0
-  val name = "Test"
+  private val formProvider = new CountryFormProvider()
+  private val form: Form[String] = formProvider.withPrefix("employmentRelatedBeneficiary.5mld.countryOfResidence")
+  private val index: Int = 0
+  private val name = "Test"
 
-  lazy val countryOfResidence: String = routes.CountryOfResidenceController.onPageLoad(index, draftId).url
+  private lazy val countryOfResidence: String = routes.CountryOfResidenceController.onPageLoad(index, draftId).url
 
   "CountryOfResidence Controller" must {
 
@@ -107,6 +109,32 @@ class CountryOfResidenceControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+      application.stop()
+    }
+
+    "return an Internal Server Error when setting the user answers goes wrong" in {
+
+      val userAnswers = emptyUserAnswers
+        .set(LargeBeneficiaryNamePage(index), name).right.get
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
+        .overrides(
+          bind[Navigator].qualifiedWith(classOf[EmploymentRelatedBeneficiary]).toInstance(new FakeNavigator)
+        ).build()
+
+      val request =
+        FakeRequest(POST, countryOfResidence)
+          .withFormUrlEncodedBody(("value", ES))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+
+      val errorPage = application.injector.instanceOf[TechnicalErrorView]
+
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) mustEqual errorPage()(request, messages).toString
 
       application.stop()
     }

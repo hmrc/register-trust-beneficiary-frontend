@@ -18,6 +18,7 @@ package controllers.register.beneficiaries.individualBeneficiary.mld5
 
 import base.SpecBase
 import config.annotations.IndividualBeneficiary
+import errors.ServerError
 import forms.YesNoDontKnowFormProvider
 import models.YesNoDontKnow
 import models.core.pages.FullName
@@ -28,16 +29,17 @@ import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.individualBeneficiary.mld5.MentalCapacityYesNoView
 
 class MentalCapacityYesNoControllerSpec extends SpecBase {
 
-  val formProvider = new YesNoDontKnowFormProvider()
-  val form: Form[YesNoDontKnow] = formProvider.withPrefix("individualBeneficiary.5mld.mentalCapacityYesNo")
-  val index: Int = 0
-  val name: FullName = FullName("FirstName", None, "LastName")
+  private val formProvider = new YesNoDontKnowFormProvider()
+  private val form: Form[YesNoDontKnow] = formProvider.withPrefix("individualBeneficiary.5mld.mentalCapacityYesNo")
+  private val index: Int = 0
+  private val name: FullName = FullName("FirstName", None, "LastName")
 
-  lazy val mentalCapacityYesNo: String = routes.MentalCapacityYesNoController.onPageLoad(index, draftId).url
+  private lazy val mentalCapacityYesNo: String = routes.MentalCapacityYesNoController.onPageLoad(index, draftId).url
 
   "MentalCapacityYesNo Controller" must {
 
@@ -103,6 +105,32 @@ class MentalCapacityYesNoControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+      application.stop()
+    }
+
+    "return an Internal Server Error when setting the user answers goes wrong" in {
+
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(index), name).right.get
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
+        .overrides(
+          bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
+        ).build()
+
+      val request =
+        FakeRequest(POST, mentalCapacityYesNo)
+          .withFormUrlEncodedBody(("value", "yes"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+
+      val errorPage = application.injector.instanceOf[TechnicalErrorView]
+
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) mustEqual errorPage()(request, messages).toString
 
       application.stop()
     }

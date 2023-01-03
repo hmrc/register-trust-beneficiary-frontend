@@ -17,6 +17,7 @@
 package controllers.register.beneficiaries.charityortrust
 
 import base.SpecBase
+import errors.ServerError
 import forms.CharityOrTrustFormProvider
 import models.registration.pages.CharityOrTrust
 import models.registration.pages.CharityOrTrust.Charity
@@ -24,17 +25,17 @@ import pages.register.beneficiaries.charityortrust.CharityOrTrustPage
 import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.charityortrust.CharityOrTrustView
 
 class CharityOrTrustControllerSpec extends SpecBase {
 
-  val formProvider = new CharityOrTrustFormProvider()()
-  val form: Form[CharityOrTrust] = formProvider
-  val index: Int = 0
+  private val formProvider = new CharityOrTrustFormProvider()()
+  private val form: Form[CharityOrTrust] = formProvider
 
-  lazy val charityOrTrustRoute: String = routes.CharityOrTrustController.onPageLoad(draftId).url
+  private lazy val charityOrTrustRoute: String = routes.CharityOrTrustController.onPageLoad(draftId).url
 
-  val validAnswer: CharityOrTrust = Charity
+  private val validAnswer: CharityOrTrust = Charity
 
   "CharityOrTrust Controller" must {
 
@@ -89,6 +90,26 @@ class CharityOrTrustControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+      application.stop()
+    }
+
+    "return an Internal Server Error when setting the user answers goes wrong" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), mockSetResult = Left(ServerError())).build()
+
+      val request =
+        FakeRequest(POST, charityOrTrustRoute)
+          .withFormUrlEncodedBody(("value", validAnswer.toString))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+
+      val errorPage = app.injector.instanceOf[TechnicalErrorView]
+
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) mustEqual errorPage()(request, messages).toString
 
       application.stop()
     }

@@ -17,6 +17,7 @@
 package controllers.register.beneficiaries
 
 import base.SpecBase
+import errors.ServerError
 import forms.WhatTypeOfBeneficiaryFormProvider
 import models.registration.pages.WhatTypeOfBeneficiary
 import pages.register.beneficiaries.WhatTypeOfBeneficiaryPage
@@ -25,18 +26,19 @@ import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import viewmodels.RadioOption
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.WhatTypeOfBeneficiaryView
 
 class WhatTypeOfBeneficiaryControllerSpec extends SpecBase {
 
-  lazy val whatTypeOfBeneficiaryRoute: String = routes.WhatTypeOfBeneficiaryController.onPageLoad(fakeDraftId).url
+  private lazy val whatTypeOfBeneficiaryRoute: String = routes.WhatTypeOfBeneficiaryController.onPageLoad(fakeDraftId).url
 
-  val formProvider = new WhatTypeOfBeneficiaryFormProvider()
-  val form: Form[WhatTypeOfBeneficiary] = formProvider()
+  private val formProvider = new WhatTypeOfBeneficiaryFormProvider()
+  private val form: Form[WhatTypeOfBeneficiary] = formProvider()
 
-  val roPrefix: String = "whatTypeOfBeneficiary"
+  private val roPrefix: String = "whatTypeOfBeneficiary"
 
-  val defaultOptions: List[RadioOption] = List(
+  private val defaultOptions: List[RadioOption] = List(
     RadioOption(roPrefix, WhatTypeOfBeneficiary.Individual.toString),
     RadioOption(roPrefix, WhatTypeOfBeneficiary.ClassOfBeneficiary.toString),
     RadioOption(roPrefix, WhatTypeOfBeneficiary.CharityOrTrust.toString),
@@ -44,7 +46,7 @@ class WhatTypeOfBeneficiaryControllerSpec extends SpecBase {
     RadioOption(roPrefix, WhatTypeOfBeneficiary.Other.toString)
   )
 
-  val validAnswer: WhatTypeOfBeneficiary = WhatTypeOfBeneficiary.values.head
+  private val validAnswer: WhatTypeOfBeneficiary = WhatTypeOfBeneficiary.values.head
 
   "WhatTypeOfBeneficiary Controller" must {
 
@@ -119,6 +121,27 @@ class WhatTypeOfBeneficiaryControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+      application.stop()
+    }
+
+    "return an Internal Server Error when setting the user answers goes wrong" in {
+
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers), mockSetResult = Left(ServerError())).build()
+
+      val request =
+        FakeRequest(POST, whatTypeOfBeneficiaryRoute)
+          .withFormUrlEncodedBody(("value", validAnswer.toString))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+
+      val errorPage = application.injector.instanceOf[TechnicalErrorView]
+
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) mustEqual errorPage()(request, messages).toString
 
       application.stop()
     }

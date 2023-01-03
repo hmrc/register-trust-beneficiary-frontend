@@ -18,7 +18,8 @@ package base
 
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationDataRequiredActionImpl, RegistrationIdentifierAction}
 import controllers.actions.{FakeDraftIdRetrievalActionProvider, FakeIdentifyForRegistration}
-import models.{Status, UserAnswers}
+import errors.TrustErrors
+import models.{ReadOnlyUserAnswers, Status, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.MockitoSugar
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
@@ -63,13 +64,16 @@ trait SpecBase extends PlaySpec
       draftId,
       Status.InProgress,
       userAnswers,
-      registrationsRepository
+      mockRegistrationsRepository
     )
 
   protected def applicationBuilder(userAnswers: Option[UserAnswers] = None,
                                    affinityGroup: AffinityGroup = AffinityGroup.Organisation,
                                    enrolments: Enrolments = Enrolments(Set.empty[Enrolment]),
-                                   navigator: Navigator = fakeNavigator
+                                   navigator: Navigator = fakeNavigator,
+                                   mockGetResult: Either[TrustErrors, Option[UserAnswers]] = Right(None),
+                                   mockSetResult: Either[TrustErrors, Boolean] = Right(true),
+                                   mockGetSettlorsAnswersResult: Either[TrustErrors, Option[ReadOnlyUserAnswers]] = Right(None)
                                   ): GuiceApplicationBuilder =
     new GuiceApplicationBuilder()
       .overrides(
@@ -79,7 +83,7 @@ trait SpecBase extends PlaySpec
           new FakeIdentifyForRegistration(affinityGroup, frontendAppConfig)(injectedParsers, trustsAuth, enrolments)
         ),
         bind[DraftIdRetrievalActionProvider].toInstance(fakeDraftIdAction(userAnswers)),
-        bind[RegistrationsRepository].toInstance(registrationsRepository),
+        bind[RegistrationsRepository].toInstance(mockRegistrationsRepositoryBuilder(mockGetResult, mockSetResult, mockGetSettlorsAnswersResult)),
         bind[AffinityGroup].toInstance(Organisation)
       )
 }

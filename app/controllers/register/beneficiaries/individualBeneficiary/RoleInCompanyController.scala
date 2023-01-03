@@ -50,7 +50,7 @@ class RoleInCompanyController @Inject()(
                                          technicalErrorView: TechnicalErrorView
                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
-  private val className = getClass.getName
+  private val className = getClass.getSimpleName
 
   private val form: Form[RoleInCompany] = formProvider()
 

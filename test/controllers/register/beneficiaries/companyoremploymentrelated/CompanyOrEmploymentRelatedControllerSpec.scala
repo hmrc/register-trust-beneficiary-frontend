@@ -17,12 +17,14 @@
 package controllers.register.beneficiaries.companyoremploymentrelated
 
 import base.SpecBase
+import errors.ServerError
 import forms.CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider
 import models.CompanyOrEmploymentRelatedToAdd
 import pages.register.beneficiaries.companyoremploymentrelated.CompanyOrEmploymentRelatedPage
 import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.companyoremploymentrelated.CompanyOrEmploymentRelatedView
 
 class CompanyOrEmploymentRelatedControllerSpec extends SpecBase {
@@ -85,6 +87,27 @@ class CompanyOrEmploymentRelatedControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+      application.stop()
+    }
+
+    "return an Internal Server Error when setting the user answers goes wrong" in {
+
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers), mockSetResult = Left(ServerError())).build()
+
+      val request =
+        FakeRequest(POST, companyOrEmploymentRelatedRoute)
+          .withFormUrlEncodedBody(("value", validAnswer.toString))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+
+      val errorPage = application.injector.instanceOf[TechnicalErrorView]
+
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) mustEqual errorPage()(request, messages).toString
 
       application.stop()
     }
