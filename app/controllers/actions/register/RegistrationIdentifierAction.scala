@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,10 +41,10 @@ class RegistrationIdentifierAction @Inject()(val parser: BodyParsers.Default,
 
     request match {
       case req: IdentifierRequest[A] =>
-        logger.debug(s"[Session ID: ${Session.id(hc)}] Request is already an IdentifierRequest")
+        logger.debug(s"[RegistrationIdentifierAction][invokeBlock][Session ID: ${Session.id(hc)}] Request is already an IdentifierRequest")
         block(req)
       case _ =>
-        logger.debug(s"[Session ID: ${Session.id(hc)}] Redirect to Login")
+        logger.debug(s"[RegistrationIdentifierAction][invokeBlock][Session ID: ${Session.id(hc)}] Redirect to Login")
         Future.successful(trustsAuth.redirectToLogin)
     }
   }
