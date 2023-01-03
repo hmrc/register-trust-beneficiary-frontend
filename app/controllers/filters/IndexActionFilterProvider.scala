@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,12 +35,12 @@ class IndexActionFilter[T](index : Int, entity : Gettable[List[T]], errorHandler
 
     lazy val entities = request.userAnswers.get(entity).getOrElse(List.empty)
 
-    logger.info(s"[Session ID: ${request.sessionId}] Validating index on ${entity.path} for entities ${entities.size}")
+    logger.info(s"[IndexActionFilter][filter][Session ID: ${request.sessionId}] Validating index on ${entity.path} for entities ${entities.size}")
 
     if (index >= 0 && index <= entities.size) {
       Future.successful(None)
     } else {
-      logger.info(s"[Session ID: ${request.sessionId}] Out of bounds index for entity ${entity.path} index $index")
+      logger.info(s"[IndexActionFilter][filter][Session ID: ${request.sessionId}] Out of bounds index for entity ${entity.path} index $index")
       errorHandler.onClientError(request, Status.NOT_FOUND).map(Some(_))
     }
 

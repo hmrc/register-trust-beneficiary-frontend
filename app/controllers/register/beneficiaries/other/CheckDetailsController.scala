@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import models.Status.Completed
 import navigation.Navigator
 import pages.entitystatus.OtherBeneficiaryStatus
 import pages.register.beneficiaries.AnswersPage
+import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
@@ -47,7 +48,9 @@ class CheckDetailsController @Inject()(
                                         descriptionRequiredAction: DescriptionRequiredAction,
                                         printHelper: OtherBeneficiaryPrintHelper,
                                         technicalErrorView: TechnicalErrorView
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+
+  private val className = getClass.getName
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(descriptionRequiredAction(index)) {
@@ -70,7 +73,9 @@ class CheckDetailsController @Inject()(
 
         result.value.map {
           case Right(call) => call
-          case Left(_) => InternalServerError(technicalErrorView())
+          case Left(_) =>
+            logger.warn(s"[$className][onSubmit][Session ID: ${request.sessionId}] Error while storing user answers")
+            InternalServerError(technicalErrorView())
         }
     }
 }

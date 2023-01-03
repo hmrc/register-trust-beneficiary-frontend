@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ class AffinityGroupIdentifierAction[A] @Inject()(action: Action[A],
     val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
     def redirectToCreateAgentServicesAccount(reason: String): Future[Result] = {
-      logger.info(s"[authoriseAgent][Session ID: ${Session.id(hc)}]: Agent services account required - $reason")
+      logger.info(logMessage(methodName = "authoriseAgent", sessionId = Session.id(hc), message = s"Agent services account required - $reason"))
       Future.successful(Redirect(config.createAgentServicesAccountUrl))
     }
 
@@ -89,11 +89,19 @@ class AffinityGroupIdentifierAction[A] @Inject()(action: Action[A],
     } yield enrolment
 
     enrolment.fold {
-      logger.info(s"[Session ID: ${Session.id(hc)}] user is not enrolled for Trusts, continuing to register online")
+      logger.info(logMessage(
+        methodName = "authoriseOrg",
+        sessionId = Session.id(hc),
+        message = "user is not enrolled for Trusts, continuing to register online"
+      ))
       continueWithoutEnrolment
     } {
       x =>
-        logger.info(s"[Session ID: ${Session.id(hc)}] user is already enrolled with ${x.key}, redirecting to maintain")
+        logger.info(logMessage(
+          methodName = "authoriseOrg",
+          sessionId = Session.id(hc),
+          message = s"user is already enrolled with ${x.key}, redirecting to maintain"
+        ))
         Future.successful(Redirect(config.maintainATrustFrontendUrl))
     }
 
@@ -114,15 +122,18 @@ class AffinityGroupIdentifierAction[A] @Inject()(action: Action[A],
       case Some(internalId) ~ Some(Organisation) ~ enrolments =>
         authoriseOrg(request, enrolments, internalId, action)
       case Some(_) ~ _ ~ _ =>
-        logger.info(s"[Session ID: ${Session.id(hc)}] Unauthorised due to affinityGroup being Individual")
+        logger.info(logMessage(methodName = "apply", sessionId = Session.id(hc), message = "Unauthorised due to affinityGroup being Individual"))
         Future.successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad))
       case _ =>
-        logger.warn(s"[Session ID: ${Session.id(hc)}] Unable to retrieve internal id")
+        logger.warn(logMessage(methodName = "apply", sessionId = Session.id(hc), message = "Unable to retrieve internal id"))
         throw new UnauthorizedException("Unable to retrieve internal Id")
     } recover trustsAuthFunctions.recoverFromAuthorisation
   }
 
   override def parser: BodyParser[A] = action.parser
   override implicit def executionContext: ExecutionContext = action.executionContext
+
+  private def logMessage(methodName: String, sessionId:String, message: String): String =
+    s"[AffinityGroupIdentifierAction][$methodName][Session ID: $sessionId] $message"
 
 }

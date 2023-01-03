@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import connectors.SubmissionDraftConnector
 import controllers.actions.register.RegistrationIdentifierAction
 import controllers.register.beneficiaries.routes._
 import models.{TaskStatus, UserAnswers}
+import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -38,7 +39,9 @@ class IndexController @Inject()(
                                  submissionDraftConnector: SubmissionDraftConnector,
                                  trustStoreService: TrustsStoreService,
                                  technicalErrorView: TechnicalErrorView
-                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+
+  private val className = getClass.getName
 
   def onPageLoad(draftId: String): Action[AnyContent] = identify.async { implicit request =>
 
@@ -58,7 +61,9 @@ class IndexController @Inject()(
 
     result.value.map {
       case Right(call) => call
-      case Left(_) => InternalServerError(technicalErrorView()) //TODO - add a warning log here to track where it came from
+      case Left(_) =>
+        logger.warn(s"[$className][onSubmit] Error while storing user answers")
+        InternalServerError(technicalErrorView())
     }
   }
 

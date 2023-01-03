@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import models.requests.RegistrationDataRequest
 import pages.QuestionPage
 import pages.register.beneficiaries.other.DescriptionPage
 import play.api.i18n.{Messages, MessagesApi}
-import play.api.mvc.{AnyContent, Call, MessagesControllerComponents}
+import play.api.mvc.{ActionBuilder, AnyContent, Call, MessagesControllerComponents}
 import queries.{RemoveOtherBeneficiaryQuery, Settable}
 import repositories.RegistrationsRepository
 import views.html.{RemoveIndexView, TechnicalErrorView}
@@ -48,7 +48,7 @@ class RemoveOtherBeneficiaryController @Inject()(
 
   override def page(index: Int): QuestionPage[String] = DescriptionPage(index)
 
-  override def actions(draftId : String, index: Int) =
+  override def actions(draftId : String, index: Int): ActionBuilder[RegistrationDataRequest, AnyContent] =
     identify andThen getData(draftId) andThen requireData
 
   override def redirect(draftId : String) : Call =

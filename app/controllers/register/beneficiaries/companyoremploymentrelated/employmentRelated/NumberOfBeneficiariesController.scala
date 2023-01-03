@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import forms.NumberOfBeneficiariesFormProvider
 import models.registration.pages.HowManyBeneficiaries
 import navigation.Navigator
 import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.LargeBeneficiaryNumberOfBeneficiariesPage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -42,9 +43,11 @@ class NumberOfBeneficiariesController @Inject()(
                                                  repository: RegistrationsRepository,
                                                  @EmploymentRelatedBeneficiary navigator: Navigator,
                                                  technicalErrorView: TechnicalErrorView
-                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
-  val form: Form[HowManyBeneficiaries] = formProvider.apply()
+  private val className = getClass.getName
+
+  private val form: Form[HowManyBeneficiaries] = formProvider.apply()
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId) {
     implicit request =>
@@ -55,7 +58,6 @@ class NumberOfBeneficiariesController @Inject()(
       }
 
       Ok(view(preparedForm, index, draftId))
-
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).async {
@@ -73,7 +75,9 @@ class NumberOfBeneficiariesController @Inject()(
 
           result.value.map {
             case Right(call) => call
-            case Left(_) => InternalServerError(technicalErrorView())
+            case Left(_) =>
+              logger.warn(s"[$className][onSubmit][Session ID: ${request.sessionId}] Error while storing user answers")
+              InternalServerError(technicalErrorView())
           }
         }
       )

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -170,7 +170,7 @@ class AddABeneficiaryController @Inject()(
             _              <- setTaskStatus(draftId, if (value) TaskStatus.InProgress else TaskStatus.Completed)
           } yield Redirect(navigator.nextPage(AddABeneficiaryYesNoPage, draftId, updatedAnswers))
 
-          handleResponse(result, methodName = "submitOne", sessionId = request.sessionId)
+          handleResponse(result = result, methodName = "submitOne", sessionId = request.sessionId)
         }
       )
   }
