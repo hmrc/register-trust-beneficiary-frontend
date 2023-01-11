@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ class DateOfBirthController @Inject()(
                                        technicalErrorView: TechnicalErrorView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[LocalDate] = formProvider.withPrefix("individualBeneficiaryDateOfBirth")
+  def form: Form[LocalDate] = formProvider.withPrefix("individualBeneficiaryDateOfBirth")
 
   private def actions(index: Int, draftId: String) =
     identify andThen
