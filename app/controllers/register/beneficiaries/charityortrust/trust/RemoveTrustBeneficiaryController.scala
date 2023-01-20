@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,9 @@ import play.api.mvc.{AnyContent, Call, MessagesControllerComponents}
 import queries.{RemoveTrustBeneficiaryQuery, Settable}
 import repositories.RegistrationsRepository
 import views.html.{RemoveIndexView, TechnicalErrorView}
-
 import javax.inject.Inject
+
+import scala.concurrent.ExecutionContext
 
 class RemoveTrustBeneficiaryController @Inject()(
                                                   override val messagesApi: MessagesApi,
@@ -38,7 +39,9 @@ class RemoveTrustBeneficiaryController @Inject()(
                                                   val controllerComponents: MessagesControllerComponents,
                                                   val removeView: RemoveIndexView,
                                                   val technicalErrorView: TechnicalErrorView
-                                                ) extends RemoveIndexController {
+                                                )(implicit executionContext: ExecutionContext) extends RemoveIndexController {
+
+  val ec: ExecutionContext = executionContext
 
   override val messagesPrefix: String = "removeTrustBeneficiaryYesNo"
 
