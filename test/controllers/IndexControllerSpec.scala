@@ -17,7 +17,9 @@
 package controllers
 
 import base.SpecBase
+import cats.data.EitherT
 import connectors.SubmissionDraftConnector
+import errors.{ServerError, TrustErrors}
 import models.core.pages.FullName
 import models.{TaskStatus, UserAnswers}
 import org.mockito.ArgumentCaptor
@@ -28,7 +30,7 @@ import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.TrustsStoreService
-import uk.gov.hmrc.http.HttpResponse
+import views.html.TechnicalErrorView
 
 import scala.concurrent.Future
 
@@ -37,13 +39,13 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
   private val name: FullName = FullName("Joe", None, "Bloggs")
 
   private val mockTrustsStoreService: TrustsStoreService = mock[TrustsStoreService]
-  private val submissionDraftConnector: SubmissionDraftConnector = mock[SubmissionDraftConnector]
+  private val mockSubmissionDraftConnector: SubmissionDraftConnector = mock[SubmissionDraftConnector]
 
   override protected def beforeEach(): Unit = {
     reset(mockTrustsStoreService)
 
     when(mockTrustsStoreService.updateTaskStatus(any(), any())(any(), any()))
-      .thenReturn(Future.successful(HttpResponse(OK, "")))
+      .thenReturn(EitherT[Future, TrustErrors, Boolean](Future.successful(Right(true))))
   }
 
   "Index Controller" when {
@@ -57,11 +59,14 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[TrustsStoreService].toInstance(mockTrustsStoreService))
-          .overrides(bind[SubmissionDraftConnector].toInstance(submissionDraftConnector))
+          .overrides(bind[SubmissionDraftConnector].toInstance(mockSubmissionDraftConnector))
           .build()
 
-        when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(Some(userAnswers)))
-        when(submissionDraftConnector.getIsTrustTaxable(any())(any(), any())).thenReturn(Future.successful(false))
+        when(mockRegistrationsRepository.get(any())(any()))
+          .thenReturn(EitherT[Future, TrustErrors, Option[UserAnswers]](Future.successful(Right(Some(userAnswers)))))
+
+        when(mockSubmissionDraftConnector.getIsTrustTaxable(any())(any(), any()))
+          .thenReturn(EitherT[Future, TrustErrors, Boolean](Future.successful(Right(false))))
 
         val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
 
@@ -76,19 +81,60 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
         application.stop()
       }
 
+      "return an Internal Server Error when setting the user answers goes wrong" in {
+
+        reset(mockRegistrationsRepository)
+
+        val userAnswers: UserAnswers = emptyUserAnswers
+          .set(NamePage(0), name).right.get
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
+          .overrides(bind[TrustsStoreService].toInstance(mockTrustsStoreService))
+          .overrides(bind[SubmissionDraftConnector].toInstance(mockSubmissionDraftConnector))
+          .build()
+
+        mockRegistrationsRepositoryBuilder(setResult = Left(ServerError()))
+
+        when(mockRegistrationsRepository.set(any())(any(), any()))
+          .thenReturn(EitherT[Future, TrustErrors, Boolean](Future.successful(Left(ServerError()))))
+
+        val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual INTERNAL_SERVER_ERROR
+
+        val errorPage = application.injector.instanceOf[TechnicalErrorView]
+
+        contentType(result) mustBe Some("text/html")
+        contentAsString(result) mustEqual errorPage()(request, messages).toString
+
+        application.stop()
+      }
+
       "redirect to info page if there are no in-progress or completed beneficiaries" in {
+
+        reset(mockRegistrationsRepository)
 
         val userAnswers: UserAnswers = emptyUserAnswers
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
             bind[TrustsStoreService].toInstance(mockTrustsStoreService),
-            bind[SubmissionDraftConnector].toInstance(submissionDraftConnector)
+            bind[SubmissionDraftConnector].toInstance(mockSubmissionDraftConnector)
           )
           .build()
 
-        when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(Some(userAnswers)))
-        when(submissionDraftConnector.getIsTrustTaxable(any())(any(), any())).thenReturn(Future.successful(false))
+        mockRegistrationsRepositoryBuilder(Right(Some(userAnswers)))
+
+//        when(mockRegistrationsRepository.get(any())(any()))
+//          .thenReturn(EitherT[Future, TrustErrors, Option[UserAnswers]](Future.successful(Right(Some(userAnswers)))))
+//
+//        when(mockRegistrationsRepository
+//          .set(any())(any(), any())).thenReturn(EitherT[Future, TrustErrors, Boolean](Future.successful(Right(true))))
+
+        when(mockSubmissionDraftConnector.getIsTrustTaxable(any())(any(), any()))
+          .thenReturn(EitherT[Future, TrustErrors, Boolean](Future.successful(Right(false))))
 
         val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
 
@@ -105,26 +151,33 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
 
       "update value of isTaxable in user answers" in {
 
-        reset(registrationsRepository)
+        reset(mockRegistrationsRepository)
 
         val userAnswers = emptyUserAnswers.copy(isTaxable = false)
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
             bind[TrustsStoreService].toInstance(mockTrustsStoreService),
-            bind[SubmissionDraftConnector].toInstance(submissionDraftConnector)
+            bind[SubmissionDraftConnector].toInstance(mockSubmissionDraftConnector)
           )
           .build()
 
-        when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(Some(userAnswers)))
-        when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
-        when(submissionDraftConnector.getIsTrustTaxable(any())(any(), any())).thenReturn(Future.successful(true))
+        mockRegistrationsRepositoryBuilder(Right(Some(userAnswers)))
+
+//        when(mockRegistrationsRepository.get(any())(any()))
+//          .thenReturn(EitherT[Future, TrustErrors, Option[UserAnswers]](Future.successful(Right(Some(userAnswers)))))
+//
+//        when(mockRegistrationsRepository.set(any())(any(), any()))
+//          .thenReturn(EitherT[Future, TrustErrors, Boolean](Future.successful(Right(true))))
+
+        when(mockSubmissionDraftConnector.getIsTrustTaxable(any())(any(), any()))
+          .thenReturn(EitherT[Future, TrustErrors, Boolean](Future.successful(Right(true))))
 
         val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
 
         route(application, request).value.map { _ =>
           val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-          verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
+          verify(mockRegistrationsRepository).set(uaCaptor.capture)(any(), any())
 
           uaCaptor.getValue.isTaxable mustBe true
 
@@ -140,24 +193,31 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
 
           "add isTaxable = true value to user answers" in {
 
-            reset(registrationsRepository)
+            reset(mockRegistrationsRepository)
 
             val application = applicationBuilder(userAnswers = None)
               .overrides(
                 bind[TrustsStoreService].toInstance(mockTrustsStoreService),
-                bind[SubmissionDraftConnector].toInstance(submissionDraftConnector)
+                bind[SubmissionDraftConnector].toInstance(mockSubmissionDraftConnector)
               )
               .build()
 
-            when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(None))
-            when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
-            when(submissionDraftConnector.getIsTrustTaxable(any())(any(), any())).thenReturn(Future.successful(true))
+            mockRegistrationsRepositoryBuilder()
+
+//            when(mockRegistrationsRepository.get(any())(any()))
+//              .thenReturn(EitherT[Future, TrustErrors, Option[UserAnswers]](Future.successful(Right(None))))
+//
+//            when(mockRegistrationsRepository.set(any())(any(), any()))
+//              .thenReturn(EitherT[Future, TrustErrors, Boolean](Future.successful(Right(true))))
+
+            when(mockSubmissionDraftConnector.getIsTrustTaxable(any())(any(), any()))
+              .thenReturn(EitherT[Future, TrustErrors, Boolean](Future.successful(Right(true))))
 
             val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
 
             route(application, request).value.map { _ =>
               val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-              verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
+              verify(mockRegistrationsRepository).set(uaCaptor.capture)(any(), any())
 
               uaCaptor.getValue.isTaxable mustBe true
               uaCaptor.getValue.draftId mustBe fakeDraftId
@@ -172,24 +232,31 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
 
           "add isTaxable = false value to user answers" in {
 
-            reset(registrationsRepository)
+            reset(mockRegistrationsRepository)
 
             val application = applicationBuilder(userAnswers = None)
               .overrides(
                 bind[TrustsStoreService].toInstance(mockTrustsStoreService),
-                bind[SubmissionDraftConnector].toInstance(submissionDraftConnector)
+                bind[SubmissionDraftConnector].toInstance(mockSubmissionDraftConnector)
               )
               .build()
 
-            when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(None))
-            when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
-            when(submissionDraftConnector.getIsTrustTaxable(any())(any(), any())).thenReturn(Future.successful(false))
+            mockRegistrationsRepositoryBuilder()
+
+//            when(mockRegistrationsRepository.get(any())(any()))
+//              .thenReturn(EitherT[Future, TrustErrors, Option[UserAnswers]](Future.successful(Right(None))))
+//
+//            when(mockRegistrationsRepository.set(any())(any(), any()))
+//              .thenReturn(EitherT[Future, TrustErrors, Boolean](Future.successful(Right(true))))
+
+            when(mockSubmissionDraftConnector.getIsTrustTaxable(any())(any(), any()))
+              .thenReturn(EitherT[Future, TrustErrors, Boolean](Future.successful(Right(false))))
 
             val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
 
             route(application, request).value.map { _ =>
               val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-              verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
+              verify(mockRegistrationsRepository).set(uaCaptor.capture)(any(), any())
 
               uaCaptor.getValue.isTaxable mustBe false
               uaCaptor.getValue.draftId mustBe fakeDraftId

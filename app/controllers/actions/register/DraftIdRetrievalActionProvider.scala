@@ -50,9 +50,11 @@ class DraftIdDataRetrievalAction(
   override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalRegistrationDataRequest[A]] = {
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
-    registrationsRepository.get(draftId).map {
-      userAnswers =>
-        OptionalRegistrationDataRequest(request.request, request.identifier, Session.id(hc), userAnswers, request.affinityGroup, request.enrolments, request.agentARN)
+    registrationsRepository.get(draftId).value.map {
+      eitherResult =>
+        val optionalUserAnswers = eitherResult.toOption.flatten
+        OptionalRegistrationDataRequest(request.request, request.identifier, Session.id(hc), optionalUserAnswers, request.affinityGroup,
+          request.enrolments, request.agentARN)
     }
   }
 

@@ -77,8 +77,8 @@ final case class UserAnswers(draftId: String,
     val updatedData = data.setObject(page.path, Json.toJson(value)) match {
       case JsSuccess(jsValue, _) =>
         Right(jsValue)
-      case JsError(errors) =>
-        logger.error(s"[ReadableUserAnswers][set] Unable to set path ${page.path} due to errors")
+      case JsError(_) =>
+        logger.error(s"[UserAnswers][set] Unable to set path ${page.path} due to errors")
         Left(ServerError())
     }
 

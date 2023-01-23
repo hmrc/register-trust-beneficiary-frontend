@@ -20,11 +20,11 @@ import cats.data.EitherT
 import config.FrontendAppConfig
 import controllers.actions._
 import controllers.actions.register.employmentRelated.NameRequiredAction
-import errors.TrustErrors
 import models.Status.Completed
 import navigation.Navigator
 import pages.entitystatus.LargeBeneficiaryStatus
 import pages.register.beneficiaries.AnswersPage
+import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
@@ -48,7 +48,9 @@ class CheckDetailsController @Inject()(
                                         printHelper: EmploymentRelatedBeneficiaryPrintHelper,
                                         nameAction: NameRequiredAction,
                                         technicalErrorView: TechnicalErrorView
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+
+  private val className = getClass.getSimpleName
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
     implicit request =>
@@ -64,12 +66,14 @@ class CheckDetailsController @Inject()(
 
       val result = for {
         updatedAnswers <- EitherT(Future.successful(answers))
-        _ <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
+        _ <- registrationsRepository.set(updatedAnswers)
       } yield Redirect(navigator.nextPage(AnswersPage, draftId, request.userAnswers))
 
       result.value.map {
         case Right(call) => call
-        case Left(_) => InternalServerError(technicalErrorView())
+        case Left(_) =>
+          logger.warn(s"[$className][onSubmit][Session ID: ${request.sessionId}] Error while storing user answers")
+          InternalServerError(technicalErrorView())
       }
   }
 }

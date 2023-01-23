@@ -20,10 +20,10 @@ import cats.data.EitherT
 import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import errors.TrustErrors
 import forms.YesNoFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.individual.{NamePage, VulnerableYesNoPage}
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -47,9 +47,11 @@ class VulnerableYesNoController @Inject()(
                                            val controllerComponents: MessagesControllerComponents,
                                            view: VulnerableYesNoView,
                                            technicalErrorView: TechnicalErrorView
-                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
-  val form: Form[Boolean] = yesNoFormProvider.withPrefix("individualBeneficiaryVulnerableYesNo")
+  private val className = getClass.getSimpleName
+
+  private val form: Form[Boolean] = yesNoFormProvider.withPrefix("individualBeneficiaryVulnerableYesNo")
 
   private def actions(index: Int, draftId: String) =
     identify andThen
@@ -82,12 +84,14 @@ class VulnerableYesNoController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(VulnerableYesNoPage(index), value)))
-            _ <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
+            _ <- registrationsRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(VulnerableYesNoPage(index), draftId, updatedAnswers))
 
           result.value.map {
             case Right(call) => call
-            case Left(_) => InternalServerError(technicalErrorView())
+            case Left(_) =>
+              logger.warn(s"[$className][onSubmit][Session ID: ${request.sessionId}] Error while storing user answers")
+              InternalServerError(technicalErrorView())
           }
         }
       )

@@ -17,6 +17,7 @@
 package controllers.register.beneficiaries.charityortrust.trust
 
 import base.SpecBase
+import errors.ServerError
 import forms.RemoveIndexFormProvider
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -25,18 +26,18 @@ import play.api.data.Form
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.RemoveIndexView
+import views.html.{RemoveIndexView, TechnicalErrorView}
 
 class RemoveTrustBeneficiaryControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
-  val messagesPrefix = "removeTrustBeneficiaryYesNo"
+  private val messagesPrefix = "removeTrustBeneficiaryYesNo"
 
-  val formProvider = new RemoveIndexFormProvider()
-  val form: Form[Boolean] = formProvider(messagesPrefix)
+  private val formProvider = new RemoveIndexFormProvider()
+  private val form: Form[Boolean] = formProvider(messagesPrefix)
 
-  lazy val formRoute: Call = routes.RemoveTrustBeneficiaryController.onSubmit(0, fakeDraftId)
+  private lazy val formRoute: Call = routes.RemoveTrustBeneficiaryController.onSubmit(0, fakeDraftId)
 
-  val index = 0
+  private val index = 0
 
   "RemoveTrustBeneficiary Controller" when {
 
@@ -109,6 +110,30 @@ class RemoveTrustBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
         application.stop()
       }
 
+    }
+
+    "return an Internal Server Error when setting the user answers goes wrong" in {
+
+      val userAnswers = emptyUserAnswers.set(NamePage(0), "Trust Ltd").right.get
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
+          .build()
+
+      val request =
+        FakeRequest(POST, routes.RemoveTrustBeneficiaryController.onSubmit(index, fakeDraftId).url)
+          .withFormUrlEncodedBody(("value", true.toString))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+
+      val errorPage = app.injector.instanceOf[TechnicalErrorView]
+
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) mustEqual errorPage()(request, messages).toString
+
+      application.stop()
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {

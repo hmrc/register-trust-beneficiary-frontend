@@ -17,6 +17,7 @@
 package controllers.register.beneficiaries.individualBeneficiary
 
 import base.SpecBase
+import errors.ServerError
 import forms.RemoveIndexFormProvider
 import models.core.pages.FullName
 import org.scalacheck.Arbitrary.arbitrary
@@ -26,18 +27,18 @@ import play.api.data.Form
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.RemoveIndexView
+import views.html.{RemoveIndexView, TechnicalErrorView}
 
 class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
-  val messagesPrefix = "removeIndividualBeneficiaryYesNo"
+  private val messagesPrefix = "removeIndividualBeneficiaryYesNo"
 
-  val formProvider = new RemoveIndexFormProvider()
-  val form: Form[Boolean] = formProvider(messagesPrefix)
+  private val formProvider = new RemoveIndexFormProvider()
+  private val form: Form[Boolean] = formProvider(messagesPrefix)
 
-  lazy val formRoute: Call = routes.RemoveIndividualBeneficiaryController.onSubmit(0, fakeDraftId)
+  private lazy val formRoute: Call = routes.RemoveIndividualBeneficiaryController.onSubmit(0, fakeDraftId)
 
-  val index = 0
+  private val index = 0
 
   "RemoveIndividualBeneficiary Controller" when {
 
@@ -94,23 +95,48 @@ class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with ScalaCheck
 
       forAll(arbitrary[Boolean]) {
         value =>
-        val application =
-          applicationBuilder(userAnswers = Some(userAnswers))
-            .build()
+          val application =
+            applicationBuilder(userAnswers = Some(userAnswers))
+              .build()
 
-        val request =
-          FakeRequest(POST, routes.RemoveIndividualBeneficiaryController.onSubmit(index, fakeDraftId).url)
-            .withFormUrlEncodedBody(("value", value.toString))
+          val request =
+            FakeRequest(POST, routes.RemoveIndividualBeneficiaryController.onSubmit(index, fakeDraftId).url)
+              .withFormUrlEncodedBody(("value", value.toString))
 
-        val result = route(application, request).value
+          val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
+          status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(fakeDraftId).url
+          redirectLocation(result).value mustEqual controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(fakeDraftId).url
 
-        application.stop()
+          application.stop()
       }
 
+    }
+
+    "return an Internal Server Error when setting the user answers goes wrong" in {
+
+      val userAnswers = emptyUserAnswers.set(NamePage(0),
+        FullName("First", None, "Last")).right.get
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
+          .build()
+
+      val request =
+        FakeRequest(POST, routes.RemoveIndividualBeneficiaryController.onSubmit(index, fakeDraftId).url)
+          .withFormUrlEncodedBody(("value", true.toString))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+
+      val errorPage = application.injector.instanceOf[TechnicalErrorView]
+
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) mustEqual errorPage()(request, messages).toString
+
+      application.stop()
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {

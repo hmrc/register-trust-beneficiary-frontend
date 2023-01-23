@@ -17,7 +17,9 @@
 package controllers.register.beneficiaries.charityortrust.charity
 
 import base.SpecBase
+import cats.data.EitherT
 import config.annotations.CharityBeneficiary
+import errors.{ServerError, TrustErrors}
 import forms.StringFormProvider
 import models.{ReadOnlyUserAnswers, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -28,20 +30,21 @@ import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.charityortrust.charity.CharityNameView
 
 import scala.concurrent.Future
 
 class CharityNameControllerSpec extends SpecBase {
 
-  val formProvider = new StringFormProvider()
-  val form: Form[String] = formProvider.withPrefix("charity.name", 105)
-  val name = "Test"
-  val index: Int = 0
+  private val formProvider = new StringFormProvider()
+  private val form: Form[String] = formProvider.withPrefix("charity.name", 105)
+  private val name = "Test"
+  private val index: Int = 0
 
-  lazy val charityNameRoute: String = routes.CharityNameController.onPageLoad(index, fakeDraftId).url
+  private lazy val charityNameRoute: String = routes.CharityNameController.onPageLoad(index, fakeDraftId).url
 
-  val userAnswers: UserAnswers = emptyUserAnswers
+  private val userAnswers: UserAnswers = emptyUserAnswers
     .set(CharityNamePage(index), name).right.get
 
   "CharityName Controller" must {
@@ -84,8 +87,8 @@ class CharityNameControllerSpec extends SpecBase {
 
     "redirect to the next page when valid data is submitted" in {
 
-      when(registrationsRepository.getSettlorsAnswers(any())(any()))
-        .thenReturn(Future.successful(Some(ReadOnlyUserAnswers(Json.obj()))))
+      when(mockRegistrationsRepository.getSettlorsAnswers(any())(any()))
+        .thenReturn(EitherT[Future, TrustErrors, Option[ReadOnlyUserAnswers]](Future.successful(Right(Some(ReadOnlyUserAnswers(Json.obj()))))))
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
@@ -105,23 +108,28 @@ class CharityNameControllerSpec extends SpecBase {
       application.stop()
     }
 
-    "return an Internal server error when setting the user answers go wrong" in {
+    "return an Internal Server Error when setting the user answers goes wrong" in {
 
-      when(registrationsRepository.getSettlorsAnswers(any())(any()))
-        .thenReturn(Future.successful(Some(ReadOnlyUserAnswers(Json.obj()))))
+      when(mockRegistrationsRepository.getSettlorsAnswers(any())(any()))
+        .thenReturn(EitherT[Future, TrustErrors, Option[ReadOnlyUserAnswers]](Future.successful(Right(Some(ReadOnlyUserAnswers(Json.obj()))))))
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), mockSetResult = Left(ServerError()))
         .overrides(
           bind[Navigator].qualifiedWith(classOf[CharityBeneficiary]).toInstance(new FakeNavigator)
         ).build()
 
       val request =
-        FakeRequest(POST, routes.CharityNameController.onPageLoad(2, fakeDraftId).url)
+        FakeRequest(POST, charityNameRoute)
           .withFormUrlEncodedBody(("value", "answer"))
 
       val result = route(application, request).value
 
       status(result) mustEqual INTERNAL_SERVER_ERROR
+
+      val errorPage = application.injector.instanceOf[TechnicalErrorView]
+
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) mustEqual errorPage()(request, messages).toString
 
       application.stop()
     }

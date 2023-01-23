@@ -17,6 +17,7 @@
 package controllers.register.beneficiaries.charityortrust.charity
 
 import base.SpecBase
+import errors.ServerError
 import forms.RemoveIndexFormProvider
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -25,18 +26,17 @@ import play.api.data.Form
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.RemoveIndexView
+import views.html.{RemoveIndexView, TechnicalErrorView}
 
 class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPropertyChecks {
 
-  val messagesPrefix = "removeCharityBeneficiaryYesNo"
+  private val messagesPrefix = "removeCharityBeneficiaryYesNo"
 
-  val formProvider = new RemoveIndexFormProvider()
-  val form: Form[Boolean] = formProvider(messagesPrefix)
+  private val formProvider = new RemoveIndexFormProvider()
+  private val form: Form[Boolean] = formProvider(messagesPrefix)
+  private val index = 0
 
-  lazy val formRoute: Call = routes.RemoveCharityBeneficiaryController.onSubmit(0, fakeDraftId)
-
-  val index = 0
+  private lazy val formRoute: Call = routes.RemoveCharityBeneficiaryController.onSubmit(0, fakeDraftId)
 
   "RemoveCharityBeneficiary Controller" when {
 
@@ -60,7 +60,6 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
 
         application.stop()
       }
-
     }
 
     "name is provided" must {
@@ -83,7 +82,6 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
 
         application.stop()
       }
-
     }
 
     "redirect to the next page when valid data is submitted" in {
@@ -108,7 +106,30 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
 
           application.stop()
       }
+    }
 
+    "return an Internal Server Error when setting the user answers goes wrong" in {
+
+      val userAnswers = emptyUserAnswers.set(CharityNamePage(0), "Charity Ltd").right.get
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
+          .build()
+
+      val request =
+        FakeRequest(POST, routes.RemoveCharityBeneficiaryController.onSubmit(index, fakeDraftId).url)
+          .withFormUrlEncodedBody(("value", true.toString))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+
+      val errorPage = application.injector.instanceOf[TechnicalErrorView]
+
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) mustEqual errorPage()(request, messages).toString
+
+      application.stop()
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {

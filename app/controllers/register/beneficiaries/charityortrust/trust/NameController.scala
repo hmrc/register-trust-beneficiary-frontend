@@ -18,12 +18,11 @@ package controllers.register.beneficiaries.charityortrust.trust
 
 import cats.data.EitherT
 import config.annotations.TrustBeneficiary
-import connectors.SubmissionDraftConnector
 import controllers.actions.StandardActionSets
-import errors.TrustErrors
 import forms.StringFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.charityortrust.trust.NamePage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -42,14 +41,14 @@ class NameController @Inject()(
                                 @TrustBeneficiary navigator: Navigator,
                                 formProvider: StringFormProvider,
                                 standardActionSets: StandardActionSets,
-                                submissionDraftConnector: SubmissionDraftConnector,
                                 view: NameView,
                                 technicalErrorView: TechnicalErrorView
-                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
-  private val length: Int = 105
+  private val className = getClass.getSimpleName
+  private val maximumLength: Int = 105
 
-  val form: Form[String] = formProvider.withPrefix("trustBeneficiaryName", length)
+  private val form: Form[String] = formProvider.withPrefix("trustBeneficiaryName", maximumLength)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId) {
     implicit request =>
@@ -72,12 +71,14 @@ class NameController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(NamePage(index), value)))
-            _ <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
+            _ <- registrationsRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(NamePage(index), draftId, updatedAnswers))
 
           result.value.map {
             case Right(call) => call
-            case Left(_) => InternalServerError(technicalErrorView())
+            case Left(_) =>
+              logger.warn(s"[$className][onSubmit][Session ID: ${request.sessionId}] Error while storing user answers")
+              InternalServerError(technicalErrorView())
           }
         }
       )

@@ -41,9 +41,10 @@ import play.api.mvc._
 import repositories.RegistrationsRepository
 import sections.beneficiaries.IndividualBeneficiaries
 import services.TrustsStoreService
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpVerbs.GET
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.TrustEnvelope.TrustEnvelope
 import utils.{AddABeneficiaryViewHelper, RegistrationProgress}
 import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.{AddABeneficiaryView, AddABeneficiaryYesNoView, MaxedOutBeneficiariesView}
@@ -70,6 +71,8 @@ class AddABeneficiaryController @Inject()(
                                            technicalErrorView: TechnicalErrorView
                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with Logging with I18nSupport {
 
+  private val className = getClass.getSimpleName
+
   private val addAnotherForm = addAnotherFormProvider()
 
   private val yesNoForm = yesNoFormProvider.withPrefix("addABeneficiaryYesNo")
@@ -85,7 +88,7 @@ class AddABeneficiaryController @Inject()(
   }
 
   private def setTaskStatus(draftId: String, userAnswers: UserAnswers, action: AddABeneficiary)
-                           (implicit hc: HeaderCarrier): Future[HttpResponse] = {
+                           (implicit hc: HeaderCarrier): TrustEnvelope[Boolean] = {
     val status = (action, registrationProgress.beneficiariesStatus(userAnswers)) match {
       case (NoComplete, Some(Completed)) => TaskStatus.Completed
       case _ => TaskStatus.InProgress
@@ -94,7 +97,7 @@ class AddABeneficiaryController @Inject()(
   }
 
   private def setTaskStatus(draftId: String, taskStatus: TaskStatus)
-                           (implicit hc: HeaderCarrier): Future[HttpResponse] = {
+                           (implicit hc: HeaderCarrier): TrustEnvelope[Boolean] = {
     trustsStoreService.updateTaskStatus(draftId, taskStatus)
   }
 
@@ -122,10 +125,10 @@ class AddABeneficiaryController @Inject()(
         }
 
         for {
-          settlorsAnswers <- EitherT.right[TrustErrors](registrationsRepository.getSettlorsAnswers(draftId))
+          settlorsAnswers <- registrationsRepository.getSettlorsAnswers(draftId)
           updatedAnswers = setIndividualBeneficiaryStatuses(settlorsAnswers)
           cleanedAnswers <- EitherT(Future.successful(updatedAnswers.removeBeneficiaryTypeAnswers()))
-          _ <- EitherT.right[TrustErrors](registrationsRepository.set(cleanedAnswers))
+          _ <- registrationsRepository.set(cleanedAnswers)
         } yield updatedAnswers
       }
 
@@ -134,19 +137,21 @@ class AddABeneficiaryController @Inject()(
           val rows = new AddABeneficiaryViewHelper(userAnswers, draftId).rows
 
           if (userAnswers.beneficiaries.nonMaxedOutOptions.isEmpty) {
-            logger.info(s"[AddABeneficiaryController][Session ID: ${request.sessionId}] ${request.internalId} has maxed out beneficiaries")
+            logger.info(s"[$className][onPageLoad][Session ID: ${request.sessionId}] ${request.internalId} has maxed out beneficiaries")
             Ok(maxedOutView(draftId, rows.inProgress, rows.complete, heading(rows.count)))
           } else {
             if(rows.count > 0) {
-              logger.info(s"[AddABeneficiaryController][Session ID: ${request.sessionId}] ${request.internalId} has not maxed out beneficiaries")
+              logger.info(s"[$className][onPageLoad][Session ID: ${request.sessionId}] ${request.internalId} has not maxed out beneficiaries")
               val listOfMaxed = userAnswers.beneficiaries.maxedOutOptions.map(_.messageKey)
               Ok(addAnotherView(addAnotherForm, draftId, rows.inProgress, rows.complete, heading(rows.count), listOfMaxed))
             } else {
-              logger.info(s"[AddABeneficiaryController][Session ID: ${request.sessionId}] ${request.internalId} has added no beneficiaries")
+              logger.info(s"[$className][onPageLoad][Session ID: ${request.sessionId}] ${request.internalId} has added no beneficiaries")
               Ok(yesNoView(yesNoForm, draftId))
             }
           }
-        case Left(_) => InternalServerError(technicalErrorView())
+        case Left(_) =>
+          logger.warn(s"[$className][onPageLoad][Session ID: ${request.sessionId}] Error while storing user answers")
+          InternalServerError(technicalErrorView())
       }
   }
 
@@ -161,11 +166,11 @@ class AddABeneficiaryController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(AddABeneficiaryYesNoPage, value)))
-            _              <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
-            _              <- EitherT.right[TrustErrors](setTaskStatus(draftId, if (value) TaskStatus.InProgress else TaskStatus.Completed))
+            _              <- registrationsRepository.set(updatedAnswers)
+            _              <- setTaskStatus(draftId, if (value) TaskStatus.InProgress else TaskStatus.Completed)
           } yield Redirect(navigator.nextPage(AddABeneficiaryYesNoPage, draftId, updatedAnswers))
 
-          handleResponse(result)
+          handleResponse(result = result, methodName = "submitOne", sessionId = request.sessionId)
         }
       )
   }
@@ -184,11 +189,11 @@ class AddABeneficiaryController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(AddABeneficiaryPage, value)))
-            _              <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
-            _              <- EitherT.right[TrustErrors](setTaskStatus(draftId, updatedAnswers, value))
+            _              <- registrationsRepository.set(updatedAnswers)
+            _              <- setTaskStatus(draftId, updatedAnswers, value)
           } yield Redirect(navigator.nextPage(AddABeneficiaryPage, draftId, updatedAnswers))
 
-          handleResponse(result)
+          handleResponse(result, methodName = "submitAnother", sessionId = request.sessionId)
         }
       )
   }
@@ -197,17 +202,20 @@ class AddABeneficiaryController @Inject()(
     implicit request =>
       val result = for {
         updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(AddABeneficiaryPage, NoComplete)))
-        _              <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
-        _              <- EitherT.right[TrustErrors](setTaskStatus(draftId,updatedAnswers, NoComplete))
+        _              <- registrationsRepository.set(updatedAnswers)
+        _              <- setTaskStatus(draftId,updatedAnswers, NoComplete)
       } yield Redirect(Call(GET, config.registrationProgressUrl(draftId)))
 
-      handleResponse(result)
+      handleResponse(result, methodName = "submitComplete", sessionId = request.sessionId)
   }
 
-  private def handleResponse(result: EitherT[Future, TrustErrors, Result])(implicit request: Request[AnyContent]): Future[Result] = {
+  private def handleResponse(result: EitherT[Future, TrustErrors, Result], methodName: String, sessionId: String)
+                            (implicit request: Request[AnyContent]): Future[Result] = {
     result.value.map {
       case Right(call) => call
-      case Left(_) => InternalServerError(technicalErrorView())
+      case Left(_) =>
+        logger.warn(s"[$className][$methodName][Session ID: $sessionId] Error while storing user answers")
+        InternalServerError(technicalErrorView())
     }
   }
 

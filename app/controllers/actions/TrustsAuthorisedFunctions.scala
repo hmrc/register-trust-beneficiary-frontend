@@ -32,7 +32,7 @@ class TrustsAuthorisedFunctions @Inject()(override val authConnector: AuthConnec
   }
 
   def redirectToLogin: Result = {
-    logger.debug("Redirecting to Login")
+    logger.debug(s"[TrustsAuthorisedFunctions][redirectToLogin] Redirecting to Login")
     Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl), "origin" -> Seq(config.appName)))
   }
 }

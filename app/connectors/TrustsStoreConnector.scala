@@ -16,23 +16,37 @@
 
 package connectors
 
+import cats.data.EitherT
 import config.FrontendAppConfig
 import models.TaskStatus.TaskStatus
+import play.api.http.Status.OK
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import utils.TrustEnvelope.TrustEnvelope
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
-class TrustsStoreConnector @Inject()(http: HttpClient, config : FrontendAppConfig) {
+class TrustsStoreConnector @Inject()(http: HttpClient, config: FrontendAppConfig) extends ConnectorErrorResponseHandler {
+
+  override val className: String = getClass.getSimpleName
 
   private val baseUrl: String = s"${config.trustsStoreUrl}/trusts-store"
 
   def updateTaskStatus(identifier: String, taskStatus: TaskStatus)
-                      (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
-    val url: String = s"$baseUrl/register/tasks/update-beneficiaries/$identifier"
-    http.POST[TaskStatus, HttpResponse](url, taskStatus)
-  }
+                      (implicit hc: HeaderCarrier, ec: ExecutionContext): TrustEnvelope[Boolean] = {
+    EitherT {
+      val url: String = s"$baseUrl/register/tasks/update-beneficiaries/$identifier"
+      http.POST[TaskStatus, HttpResponse](url, taskStatus).map(
+        _.status match {
+          case OK => Right(true)
+          case status => Left(handleError(status, "updateTaskStatus"))
+        }
 
+      ).recover {
+        case ex => Left(handleError(ex, "updateTaskStatus"))
+      }
+    }
+  }
 }
 

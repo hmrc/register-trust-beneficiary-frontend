@@ -41,10 +41,10 @@ class RegistrationIdentifierAction @Inject()(val parser: BodyParsers.Default,
 
     request match {
       case req: IdentifierRequest[A] =>
-        logger.debug(s"[Session ID: ${Session.id(hc)}] Request is already an IdentifierRequest")
+        logger.debug(s"[RegistrationIdentifierAction][invokeBlock][Session ID: ${Session.id(hc)}] Request is already an IdentifierRequest")
         block(req)
       case _ =>
-        logger.debug(s"[Session ID: ${Session.id(hc)}] Redirect to Login")
+        logger.debug(s"[RegistrationIdentifierAction][invokeBlock][Session ID: ${Session.id(hc)}] Redirect to Login")
         Future.successful(trustsAuth.redirectToLogin)
     }
   }

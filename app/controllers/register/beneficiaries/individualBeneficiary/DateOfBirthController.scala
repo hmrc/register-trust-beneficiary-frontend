@@ -20,10 +20,10 @@ import cats.data.EitherT
 import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
-import errors.TrustErrors
 import forms.DateOfBirthFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.individual.{DateOfBirthPage, NamePage}
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -48,9 +48,11 @@ class DateOfBirthController @Inject()(
                                        val controllerComponents: MessagesControllerComponents,
                                        view: DateOfBirthView,
                                        technicalErrorView: TechnicalErrorView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
-  def form: Form[LocalDate] = formProvider.withPrefix("individualBeneficiaryDateOfBirth")
+  private val className = getClass.getSimpleName
+
+  private val form: Form[LocalDate] = formProvider.withPrefix("individualBeneficiaryDateOfBirth")
 
   private def actions(index: Int, draftId: String) =
     identify andThen
@@ -83,12 +85,14 @@ class DateOfBirthController @Inject()(
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(DateOfBirthPage(index), value)))
-            _ <- EitherT.right[TrustErrors](registrationsRepository.set(updatedAnswers))
+            _ <- registrationsRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(DateOfBirthPage(index), draftId, updatedAnswers))
 
           result.value.map {
             case Right(call) => call
-            case Left(_) => InternalServerError(technicalErrorView())
+            case Left(_) =>
+              logger.warn(s"[$className][onSubmit][Session ID: ${request.sessionId}] Error while storing user answers")
+              InternalServerError(technicalErrorView())
           }
         }
       )
