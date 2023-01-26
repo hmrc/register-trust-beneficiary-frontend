@@ -52,7 +52,7 @@ class DateOfBirthController @Inject()(
 
   private val className = getClass.getSimpleName
 
-  private val form: Form[LocalDate] = formProvider.withPrefix("individualBeneficiaryDateOfBirth")
+  private def form: Form[LocalDate] = formProvider.withPrefix("individualBeneficiaryDateOfBirth")
 
   private def actions(index: Int, draftId: String) =
     identify andThen
