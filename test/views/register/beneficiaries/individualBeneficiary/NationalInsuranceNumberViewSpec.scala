@@ -27,11 +27,12 @@ class NationalInsuranceNumberViewSpec extends StringViewBehaviours {
 
   val messageKeyPrefix = "individualBeneficiaryNationalInsuranceNumber"
   val index = 0
+  val existingSettlorNinos = Seq("")
   val fullName: FullName = FullName("First", None, "Last")
   val name: String = fullName.toString
 
   val form: Form[String] =
-    new NationalInsuranceNumberFormProvider().withPrefix("individualBeneficiaryNationalInsuranceNumber", emptyUserAnswers, index)
+    new NationalInsuranceNumberFormProvider().withPrefix("individualBeneficiaryNationalInsuranceNumber", emptyUserAnswers, index, existingSettlorNinos)
 
   "IndividualBeneficiaryNationalInsuranceNumberView view" must {
 

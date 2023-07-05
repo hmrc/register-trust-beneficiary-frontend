@@ -27,3 +27,8 @@ final case class PassportDetailsPage(index : Int) extends QuestionPage[PassportO
 
   override def toString: String = "passportDetails"
 }
+
+object PassportDetailsPage {
+  val key = "passportDetails"
+  val passportNumberKey = "cardNumber"
+}

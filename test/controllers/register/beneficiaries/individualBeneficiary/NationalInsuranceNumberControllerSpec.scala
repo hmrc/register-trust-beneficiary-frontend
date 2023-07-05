@@ -17,25 +17,30 @@
 package controllers.register.beneficiaries.individualBeneficiary
 
 import base.SpecBase
+import cats.data.EitherT
 import config.annotations.IndividualBeneficiary
-import errors.ServerError
+import errors.{ServerError, TrustErrors}
 import forms.NationalInsuranceNumberFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.ArgumentMatchers.any
 import pages.register.beneficiaries.individual.{NamePage, NationalInsuranceNumberPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.TechnicalErrorView
+import services.DraftRegistrationService
 import views.html.register.beneficiaries.individualBeneficiary.NationalInsuranceNumberView
+
+import scala.concurrent.Future
 
 class NationalInsuranceNumberControllerSpec extends SpecBase {
 
   private val formProvider = new NationalInsuranceNumberFormProvider()
   private val index: Int = 0
-  private val form: Form[String] = formProvider.withPrefix("individualBeneficiaryNationalInsuranceNumber", emptyUserAnswers, index)
-
+  private val existingSettlorNinos = Seq("")
+  private val form: Form[String] = formProvider.withPrefix("individualBeneficiaryNationalInsuranceNumber", emptyUserAnswers, index, existingSettlorNinos)
   private val name: FullName = FullName("first name", None, "Last name")
 
   private lazy val individualBeneficiaryNationalInsuranceNumberRoute: String = routes.NationalInsuranceNumberController.onPageLoad(index, fakeDraftId).url
@@ -47,7 +52,11 @@ class NationalInsuranceNumberControllerSpec extends SpecBase {
       val userAnswers = emptyUserAnswers.set(NamePage(index),
         name).right.get
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val mockDraftRegistrationService = mock[DraftRegistrationService]
+
+      when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(EitherT[Future, TrustErrors, String](Future.successful(Right(""))))
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService)).build()
 
       val request = FakeRequest(GET, individualBeneficiaryNationalInsuranceNumberRoute)
 
@@ -63,12 +72,41 @@ class NationalInsuranceNumberControllerSpec extends SpecBase {
       application.stop()
     }
 
+    "return internal server error when there is a problem retrieving settlor ninos for GET" in {
+
+      val userAnswers = emptyUserAnswers.set(NamePage(index),
+        name).right.get
+
+      val mockDraftRegistrationService = mock[DraftRegistrationService]
+
+      when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(EitherT[Future, TrustErrors, String](Future.successful(Left(ServerError()))))
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService)).build()
+
+      val request = FakeRequest(GET, individualBeneficiaryNationalInsuranceNumberRoute)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+
+      val errorPage = application.injector.instanceOf[TechnicalErrorView]
+
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) mustEqual errorPage()(request, messages).toString
+
+      application.stop()
+    }
+
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers.set(NationalInsuranceNumberPage(index), "answer").right.get
         .set(NamePage(index),name).right.get
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val mockDraftRegistrationService = mock[DraftRegistrationService]
+
+      when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(EitherT[Future, TrustErrors, String](Future.successful(Right(""))))
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService)).build()
 
       val request = FakeRequest(GET, individualBeneficiaryNationalInsuranceNumberRoute)
 
@@ -89,9 +127,14 @@ class NationalInsuranceNumberControllerSpec extends SpecBase {
       val userAnswers = emptyUserAnswers.set(NamePage(index),
         name).right.get
 
+      val mockDraftRegistrationService = mock[DraftRegistrationService]
+
+      when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(EitherT[Future, TrustErrors, String](Future.successful(Right(""))))
+
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
+            bind[DraftRegistrationService].toInstance(mockDraftRegistrationService),
             bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
           ).build()
 
@@ -106,15 +149,51 @@ class NationalInsuranceNumberControllerSpec extends SpecBase {
 
       application.stop()
     }
+    "return internal server error when there is a problem retrieving settlor ninos for POST" in {
+
+      val userAnswers = emptyUserAnswers.set(NamePage(index),
+        name).right.get
+
+      val mockDraftRegistrationService = mock[DraftRegistrationService]
+
+      when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(EitherT[Future, TrustErrors, String](Future.successful(Left(ServerError()))))
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[DraftRegistrationService].toInstance(mockDraftRegistrationService),
+            bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
+          ).build()
+
+      val request =
+        FakeRequest(POST, individualBeneficiaryNationalInsuranceNumberRoute)
+          .withFormUrlEncodedBody(("value", "JP123456A"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+
+      val errorPage = application.injector.instanceOf[TechnicalErrorView]
+
+      contentType(result) mustBe Some("text/html")
+      contentAsString(result) mustEqual errorPage()(request, messages).toString
+
+      application.stop()
+    }
 
     "return an Internal Server Error when setting the user answers goes wrong" in {
 
       val userAnswers = emptyUserAnswers.set(NamePage(index),
         name).right.get
 
+      val mockDraftRegistrationService = mock[DraftRegistrationService]
+
+      when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(EitherT[Future, TrustErrors, String](Future.successful(Right(""))))
+
       val application =
         applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
           .overrides(
+            bind[DraftRegistrationService].toInstance(mockDraftRegistrationService),
             bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
           ).build()
 
@@ -140,7 +219,11 @@ class NationalInsuranceNumberControllerSpec extends SpecBase {
         val userAnswers = emptyUserAnswers.set(NamePage(index),
           name).right.get
 
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val mockDraftRegistrationService = mock[DraftRegistrationService]
+
+        when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(EitherT[Future, TrustErrors, String](Future.successful(Right(""))))
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService)).build()
 
         val request =
           FakeRequest(POST, individualBeneficiaryNationalInsuranceNumberRoute)
@@ -168,7 +251,11 @@ class NationalInsuranceNumberControllerSpec extends SpecBase {
           .set(NamePage(index), name).right.get
           .set(NationalInsuranceNumberPage(index + 1), nino).right.get
 
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val mockDraftRegistrationService = mock[DraftRegistrationService]
+
+        when(mockDraftRegistrationService.retrieveSettlorNinos(any())(any())).thenReturn(EitherT[Future, TrustErrors, String](Future.successful(Right(""))))
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(bind[DraftRegistrationService].toInstance(mockDraftRegistrationService)).build()
 
         val request =
           FakeRequest(POST, individualBeneficiaryNationalInsuranceNumberRoute)

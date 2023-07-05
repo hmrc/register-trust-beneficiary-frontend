@@ -32,6 +32,7 @@ class FrontendAppConfig @Inject() (val configuration: Configuration, contactFron
   final val WELSH = "cy"
 
   val repositoryKey: String = "beneficiaries"
+  val repositoryKeySettlors: String = "settlors"
 
   lazy val authUrl: String = configuration.get[Service]("auth").baseUrl
   lazy val loginUrl: String = configuration.get[String]("urls.login")

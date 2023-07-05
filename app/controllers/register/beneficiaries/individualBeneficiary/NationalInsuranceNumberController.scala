@@ -29,7 +29,9 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
+import services.DraftRegistrationService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.TrustEnvelope.TrustEnvelope
 import views.html.TechnicalErrorView
 import views.html.register.beneficiaries.individualBeneficiary.NationalInsuranceNumberView
 
@@ -47,13 +49,24 @@ class NationalInsuranceNumberController @Inject()(
                                                    formProvider: NationalInsuranceNumberFormProvider,
                                                    val controllerComponents: MessagesControllerComponents,
                                                    view: NationalInsuranceNumberView,
-                                                   technicalErrorView: TechnicalErrorView
+                                                   technicalErrorView: TechnicalErrorView,
+                                                   draftRegistrationService: DraftRegistrationService
                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val className = getClass.getSimpleName
 
-  private def form(index: Int)(implicit request: RegistrationDataRequest[AnyContent]) =
-    formProvider.withPrefix("individualBeneficiaryNationalInsuranceNumber", request.userAnswers, index)
+  private def getForm(draftId: String, index: Int)(implicit request: RegistrationDataRequest[AnyContent]):TrustEnvelope[Form[String]]  = {
+    for {
+      existingSettlorNinos <- getSettlorNinos(draftId)
+
+    } yield {
+      formProvider.withPrefix("individualBeneficiaryNationalInsuranceNumber", request.userAnswers, index, Seq(existingSettlorNinos))
+    }
+  }
+
+  private def getSettlorNinos(draftId: String)(implicit request: RegistrationDataRequest[AnyContent]): TrustEnvelope[String]  = {
+    draftRegistrationService.retrieveSettlorNinos(draftId)
+  }
 
   private def actions(index: Int, draftId: String) =
     identify andThen
@@ -61,41 +74,55 @@ class NationalInsuranceNumberController @Inject()(
       requireData andThen
       requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(index, draftId)))
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
       val name = request.userAnswers.get(NamePage(index)).get
 
-      val preparedForm = request.userAnswers.get(NationalInsuranceNumberPage(index)) match {
-        case None => form(index)
-        case Some(value) => form(index).fill(value)
-      }
+      getForm(draftId, index).value.map {
 
-      Ok(view(preparedForm, draftId, name, index))
+        case Left(_) => logger.warn(s"[$className][onPageLoad][Session ID: ${request.sessionId}] Error while retrieving settlor ninos")
+          InternalServerError(technicalErrorView())
+        case Right(form) =>
+            val preparedForm = request.userAnswers.get(NationalInsuranceNumberPage(index)) match {
+              case None => form
+              case Some(value) => form.fill(value)
+            }
+
+            Ok(view(preparedForm, draftId, name, index))
+      }
   }
+
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
       val name = request.userAnswers.get(NamePage(index)).get
 
-      form(index).bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, name, index))),
+      getForm(draftId, index).value.flatMap {
 
-        value => {
-          val result = for {
-            updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(NationalInsuranceNumberPage(index), value)))
-            _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(NationalInsuranceNumberPage(index), draftId, updatedAnswers))
+        case Left(_) => logger.warn(s"[$className][onPageLoad][Session ID: ${request.sessionId}] Error while retrieving settlor ninos")
+          Future.successful(InternalServerError(technicalErrorView()))
+        case Right(form) =>
 
-          result.value.map {
-            case Right(call) => call
-            case Left(_) =>
-              logger.warn(s"[$className][onSubmit][Session ID: ${request.sessionId}] Error while storing user answers")
-              InternalServerError(technicalErrorView())
-          }
-        }
-      )
+          form.bindFromRequest().fold(
+            (formWithErrors: Form[_]) =>
+              Future.successful(BadRequest(view(formWithErrors, draftId, name, index))),
+
+            value => {
+              val result = for {
+                updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(NationalInsuranceNumberPage(index), value)))
+                _ <- registrationsRepository.set(updatedAnswers)
+              } yield Redirect(navigator.nextPage(NationalInsuranceNumberPage(index), draftId, updatedAnswers))
+
+              result.value.map {
+                case Right(call) => call
+                case Left(_) =>
+                  logger.warn(s"[$className][onSubmit][Session ID: ${request.sessionId}] Error while storing user answers")
+                  InternalServerError(technicalErrorView())
+              }
+            }
+          )
+      }
   }
 }

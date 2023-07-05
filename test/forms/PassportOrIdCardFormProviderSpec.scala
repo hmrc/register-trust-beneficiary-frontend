@@ -18,6 +18,7 @@ package forms
 
 import base.FakeTrustsApp
 import forms.behaviours.{DateBehaviours, PassportOrIDCardBehaviours, StringFieldBehaviours}
+import models.UserAnswers
 import play.api.data.FormError
 import wolfendale.scalacheck.regexp.RegexpGen
 
@@ -27,8 +28,9 @@ class PassportOrIdCardFormProviderSpec extends
   StringFieldBehaviours with PassportOrIDCardBehaviours with DateBehaviours with FakeTrustsApp {
 
   val prefix = "passport"
-
-  val form = new PassportOrIdCardFormProvider(frontendAppConfig)(prefix)
+  val index = 0
+  val userAnswers = UserAnswers(draftId = "", internalAuthId = "")
+  val form = new PassportOrIdCardFormProvider(frontendAppConfig)(prefix, userAnswers, index)
 
   ".country" must {
 
