@@ -36,7 +36,7 @@ class ShareOfIncomeControllerSpec extends SpecBase {
   private val shareOfIncomeRoute = routes.ShareOfIncomeController.onPageLoad(index, draftId).url
   private val description = "Other"
   private val answer = 50
-  private val baseAnswers = emptyUserAnswers.set(DescriptionPage(index), description).right.get
+  private val baseAnswers = emptyUserAnswers.set(DescriptionPage(index), description).value
 
   "ShareOfIncome Controller" must {
 
@@ -60,7 +60,7 @@ class ShareOfIncomeControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = baseAnswers.set(ShareOfIncomePage(index), answer).right.get
+      val answers = baseAnswers.set(ShareOfIncomePage(index), answer).value
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 

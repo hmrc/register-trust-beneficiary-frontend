@@ -43,11 +43,11 @@ class OtherBeneficiaryAnswersHelperSpec extends SpecBase {
       "minimum data" in {
 
         val userAnswers = emptyUserAnswers
-          .set(DescriptionPage(index), description).right.get
-          .set(CountryOfResidenceYesNoPage(index), false).right.get
-          .set(AddressYesNoPage(index), true).right.get
-          .set(AddressUKYesNoPage(index), true).right.get
-          .set(AddressUKPage(index), ukAddress).right.get
+          .set(DescriptionPage(index), description).value
+          .set(CountryOfResidenceYesNoPage(index), false).value
+          .set(AddressYesNoPage(index), true).value
+          .set(AddressUKYesNoPage(index), true).value
+          .set(AddressUKPage(index), ukAddress).value
 
         val result = helper.beneficiaries(userAnswers)
 
@@ -69,13 +69,13 @@ class OtherBeneficiaryAnswersHelperSpec extends SpecBase {
       "full data with international address" in {
 
         val userAnswers = emptyUserAnswers
-          .set(DescriptionPage(index), description).right.get
-          .set(CountryOfResidenceYesNoPage(index), true).right.get
-          .set(UKResidentYesNoPage(index), false).right.get
-          .set(CountryOfResidencePage(index), nonUkCountry).right.get
-          .set(AddressYesNoPage(index), true).right.get
-          .set(AddressUKYesNoPage(index), true).right.get
-          .set(AddressInternationalPage(index), nonUkAddress).right.get
+          .set(DescriptionPage(index), description).value
+          .set(CountryOfResidenceYesNoPage(index), true).value
+          .set(UKResidentYesNoPage(index), false).value
+          .set(CountryOfResidencePage(index), nonUkCountry).value
+          .set(AddressYesNoPage(index), true).value
+          .set(AddressUKYesNoPage(index), true).value
+          .set(AddressInternationalPage(index), nonUkAddress).value
 
         val result = helper.beneficiaries(userAnswers)
 

@@ -34,7 +34,7 @@
     showBackLink = true
 ) {
 
-    @formHelper(action = CharityAnswersController.onSubmit(index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = CharityAnswersController.onSubmit(index, draftId), Symbol("autoComplete") -> "off") {
 
         @heading("charity.answers.heading")
 

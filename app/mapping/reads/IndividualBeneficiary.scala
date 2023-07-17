@@ -51,10 +51,10 @@ final case class IndividualBeneficiary(name: FullName,
 object IndividualBeneficiary extends Beneficiary {
 
   def readMentalCapacity: Reads[Option[YesNoDontKnow]] =
-    (__ \ 'mentalCapacityYesNo).readNullable[Boolean].flatMap[Option[YesNoDontKnow]] { x: Option[Boolean] =>
+    (__ \ Symbol("mentalCapacityYesNo")).readNullable[Boolean].flatMap[Option[YesNoDontKnow]] { x: Option[Boolean] =>
       Reads(_ => JsSuccess(YesNoDontKnow.fromBoolean(x)))
     }.orElse {
-      (__ \ 'mentalCapacityYesNo).readNullable[YesNoDontKnow]
+      (__ \ Symbol("mentalCapacityYesNo")).readNullable[YesNoDontKnow]
     }
 
   implicit val individualBeneficiaryReads: Reads[IndividualBeneficiary] =

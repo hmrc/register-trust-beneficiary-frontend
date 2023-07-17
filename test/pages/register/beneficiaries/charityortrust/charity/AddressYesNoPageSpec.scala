@@ -34,9 +34,9 @@ class AddressYesNoPageSpec extends PageBehaviours {
   "remove pages when AddressYesNoPage is set to false" in {
     forAll(arbitrary[UserAnswers]) {
       initial =>
-        val answers: UserAnswers = initial.set(AddressInTheUkYesNoPage(0), true).right.get
+        val answers: UserAnswers = initial.set(AddressInTheUkYesNoPage(0), true).value
 
-        val result = answers.set(AddressYesNoPage(0), false).right.get
+        val result = answers.set(AddressYesNoPage(0), false).value
 
         result.get(AddressInTheUkYesNoPage(0)) mustNot be(defined)
     }

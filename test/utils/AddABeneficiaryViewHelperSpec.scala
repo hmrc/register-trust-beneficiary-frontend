@@ -44,10 +44,10 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
         val index: Int = 0
 
         val userAnswers = emptyUserAnswers
-          .set(CharityNamePage(index), name).right.get
-          .set(AmountDiscretionYesNoPage(index), true).right.get
-          .set(AddressYesNoPage(index), false).right.get
-          .set(CharityBeneficiaryStatus(index), Completed).right.get
+          .set(CharityNamePage(index), name).value
+          .set(AmountDiscretionYesNoPage(index), true).value
+          .set(AddressYesNoPage(index), false).value
+          .set(CharityBeneficiaryStatus(index), Completed).value
 
         helper(userAnswers).rows mustEqual AddToRows(
           inProgress = Nil,
@@ -69,8 +69,8 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
           val index: Int = 0
 
           val userAnswers = emptyUserAnswers
-            .set(CharityNamePage(index), name).right.get
-            .set(CharityBeneficiaryStatus(index), InProgress).right.get
+            .set(CharityNamePage(index), name).value
+            .set(CharityBeneficiaryStatus(index), InProgress).value
 
           helper(userAnswers).rows mustEqual AddToRows(
             inProgress = List(
@@ -90,7 +90,7 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
           val index: Int = 0
 
           val userAnswers = emptyUserAnswers
-            .set(CharityBeneficiaryStatus(index), InProgress).right.get
+            .set(CharityBeneficiaryStatus(index), InProgress).value
 
           helper(userAnswers).rows mustEqual AddToRows(
             inProgress = List(
@@ -113,20 +113,20 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
         val name3 = "Name 3"
 
         val userAnswers = emptyUserAnswers
-          .set(CharityNamePage(0), name1).right.get
-          .set(AmountDiscretionYesNoPage(0), true).right.get
-          .set(AddressYesNoPage(0), false).right.get
-          .set(CharityBeneficiaryStatus(0), Completed).right.get
+          .set(CharityNamePage(0), name1).value
+          .set(AmountDiscretionYesNoPage(0), true).value
+          .set(AddressYesNoPage(0), false).value
+          .set(CharityBeneficiaryStatus(0), Completed).value
 
-          .set(CharityNamePage(1), name2).right.get
-          .set(AmountDiscretionYesNoPage(1), true).right.get
-          .set(AddressYesNoPage(1), false).right.get
-          .set(CharityBeneficiaryStatus(1), Completed).right.get
+          .set(CharityNamePage(1), name2).value
+          .set(AmountDiscretionYesNoPage(1), true).value
+          .set(AddressYesNoPage(1), false).value
+          .set(CharityBeneficiaryStatus(1), Completed).value
 
-          .set(CharityNamePage(2), name3).right.get
-          .set(CharityBeneficiaryStatus(2), InProgress).right.get
+          .set(CharityNamePage(2), name3).value
+          .set(CharityBeneficiaryStatus(2), InProgress).value
 
-          .set(CharityBeneficiaryStatus(3), InProgress).right.get
+          .set(CharityBeneficiaryStatus(3), InProgress).value
 
         helper(userAnswers).rows mustEqual AddToRows(
           inProgress = List(

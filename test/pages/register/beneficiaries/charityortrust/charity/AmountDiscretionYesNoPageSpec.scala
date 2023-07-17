@@ -34,10 +34,10 @@ class AmountDiscretionYesNoPageSpec extends PageBehaviours {
   "remove pages when AmountDiscretionYesNoPage is set to true" in {
     forAll(arbitrary[UserAnswers]) {
       initial =>
-        val answers: UserAnswers = initial.set(AmountDiscretionYesNoPage(0), true).right.get
-          .set(HowMuchIncomePage(0), 100).right.get
+        val answers: UserAnswers = initial.set(AmountDiscretionYesNoPage(0), true).value
+          .set(HowMuchIncomePage(0), 100).value
 
-        val cleaned = answers.set(AmountDiscretionYesNoPage(0), true).right.get
+        val cleaned = answers.set(AmountDiscretionYesNoPage(0), true).value
 
         cleaned.get(HowMuchIncomePage(0)) mustNot be(defined)
     }

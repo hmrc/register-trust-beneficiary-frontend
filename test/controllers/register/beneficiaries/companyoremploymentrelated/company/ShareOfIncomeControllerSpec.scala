@@ -40,7 +40,7 @@ class ShareOfIncomeControllerSpec extends SpecBase {
   private val onwardRoute = Call("GET", "/foo")
   private val answer = 50
 
-  private val baseAnswers: UserAnswers = emptyUserAnswers.set(NamePage(index), name).right.get
+  private val baseAnswers: UserAnswers = emptyUserAnswers.set(NamePage(index), name).value
 
   "ShareOfIncome Controller" must {
 
@@ -64,7 +64,7 @@ class ShareOfIncomeControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = baseAnswers.set(IncomePage(index), answer).right.get
+      val answers = baseAnswers.set(IncomePage(index), answer).value
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 

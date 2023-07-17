@@ -66,7 +66,7 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
 
       "return OK and the correct view for a GET" in {
 
-        val userAnswers = emptyUserAnswers.set(CharityNamePage(0), "Charity Ltd").right.get
+        val userAnswers = emptyUserAnswers.set(CharityNamePage(0), "Charity Ltd").value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -86,7 +86,7 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(CharityNamePage(0), "Charity Ltd").right.get
+      val userAnswers = emptyUserAnswers.set(CharityNamePage(0), "Charity Ltd").value
 
       forAll(arbitrary[Boolean]) {
         value =>
@@ -110,7 +110,7 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
 
     "return an Internal Server Error when setting the user answers goes wrong" in {
 
-      val userAnswers = emptyUserAnswers.set(CharityNamePage(0), "Charity Ltd").right.get
+      val userAnswers = emptyUserAnswers.set(CharityNamePage(0), "Charity Ltd").value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
@@ -134,7 +134,7 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(CharityNamePage(0), "Charity Ltd").right.get
+      val userAnswers = emptyUserAnswers.set(CharityNamePage(0), "Charity Ltd").value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

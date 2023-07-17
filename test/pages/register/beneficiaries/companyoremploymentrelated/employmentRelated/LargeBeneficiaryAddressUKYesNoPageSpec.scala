@@ -36,10 +36,10 @@ class LargeBeneficiaryAddressUKYesNoPageSpec extends PageBehaviours {
     forAll(arbitrary[UserAnswers]) {
       initial =>
         val answers: UserAnswers =
-          initial.set(LargeBeneficiaryAddressPage(0), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB")).right.get
-          .set(LargeBeneficiaryAddressInternationalPage(0), InternationalAddress("line1", "line2", Some("line3"), "AP")).right.get
+          initial.set(LargeBeneficiaryAddressPage(0), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB")).value
+          .set(LargeBeneficiaryAddressInternationalPage(0), InternationalAddress("line1", "line2", Some("line3"), "AP")).value
 
-        val result = answers.set(LargeBeneficiaryAddressUKYesNoPage(0), false).right.get
+        val result = answers.set(LargeBeneficiaryAddressUKYesNoPage(0), false).value
 
         result.get(LargeBeneficiaryAddressInternationalPage(0)) must be(defined)
         result.get(LargeBeneficiaryAddressPage(0)) mustNot be(defined)
@@ -49,10 +49,10 @@ class LargeBeneficiaryAddressUKYesNoPageSpec extends PageBehaviours {
     forAll(arbitrary[UserAnswers]) {
       initial =>
         val answers: UserAnswers =
-          initial.set(LargeBeneficiaryAddressPage(0), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB")).right.get
-            .set(LargeBeneficiaryAddressInternationalPage(0), InternationalAddress("line1", "line2", Some("line3"), "AP")).right.get
+          initial.set(LargeBeneficiaryAddressPage(0), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB")).value
+            .set(LargeBeneficiaryAddressInternationalPage(0), InternationalAddress("line1", "line2", Some("line3"), "AP")).value
 
-        val result = answers.set(LargeBeneficiaryAddressUKYesNoPage(0), true).right.get
+        val result = answers.set(LargeBeneficiaryAddressUKYesNoPage(0), true).value
 
         result.get(LargeBeneficiaryAddressInternationalPage(0)) mustNot be(defined)
         result.get(LargeBeneficiaryAddressPage(0)) must be(defined)

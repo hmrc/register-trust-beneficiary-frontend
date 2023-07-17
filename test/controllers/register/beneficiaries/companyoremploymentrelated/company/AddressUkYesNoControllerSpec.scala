@@ -38,7 +38,7 @@ class AddressUkYesNoControllerSpec extends SpecBase {
   private val name: String = "Company"
   private val onwardRoute = Call("GET", "/foo")
 
-  private val baseAnswers = emptyUserAnswers.set(NamePage(index), name).right.get
+  private val baseAnswers = emptyUserAnswers.set(NamePage(index), name).value
 
   "AddressUkYesNo Controller" must {
 
@@ -62,7 +62,7 @@ class AddressUkYesNoControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = baseAnswers.set(AddressUKYesNoPage(index), true).right.get
+      val answers = baseAnswers.set(AddressUKYesNoPage(index), true).value
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 

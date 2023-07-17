@@ -40,8 +40,8 @@ class AddressUKYesNoPageSpec extends PageBehaviours {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
             val result: UserAnswers = userAnswers
-              .set(AddressInternationalPage(0), internationalAddress).right.get
-              .set(AddressUKYesNoPage(0), true).right.get
+              .set(AddressInternationalPage(0), internationalAddress).value
+              .set(AddressUKYesNoPage(0), true).value
 
             result.get(AddressInternationalPage(0)) mustNot be(defined)
         }
@@ -51,8 +51,8 @@ class AddressUKYesNoPageSpec extends PageBehaviours {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
             val result: UserAnswers = userAnswers
-              .set(AddressUKPage(0), ukAddress).right.get
-              .set(AddressUKYesNoPage(0), false).right.get
+              .set(AddressUKPage(0), ukAddress).value
+              .set(AddressUKYesNoPage(0), false).value
 
             result.get(AddressUKPage(0)) mustNot be(defined)
         }
@@ -65,8 +65,8 @@ class AddressUKYesNoPageSpec extends PageBehaviours {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
             val result: UserAnswers = userAnswers
-              .set(AddressUKPage(0), ukAddress).right.get
-              .set(AddressUKYesNoPage(0), true).right.get
+              .set(AddressUKPage(0), ukAddress).value
+              .set(AddressUKYesNoPage(0), true).value
 
             result.get(AddressUKPage(0)).get mustBe ukAddress
         }
@@ -76,8 +76,8 @@ class AddressUKYesNoPageSpec extends PageBehaviours {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
             val result: UserAnswers = userAnswers
-              .set(AddressInternationalPage(0), internationalAddress).right.get
-              .set(AddressUKYesNoPage(0), false).right.get
+              .set(AddressInternationalPage(0), internationalAddress).value
+              .set(AddressUKYesNoPage(0), false).value
 
             result.get(AddressInternationalPage(0)).get mustBe internationalAddress
         }

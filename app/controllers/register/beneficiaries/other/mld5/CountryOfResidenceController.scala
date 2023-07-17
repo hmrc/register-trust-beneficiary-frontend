@@ -62,7 +62,7 @@ class CountryOfResidenceController @Inject()(
           case Some(value) => form.fill(value)
         }
 
-        Ok(view(preparedForm, countryOptions.options, draftId, index, request.description))
+        Ok(view(preparedForm, countryOptions.options(), draftId, index, request.description))
     }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
@@ -71,7 +71,7 @@ class CountryOfResidenceController @Inject()(
 
         form.bindFromRequest().fold(
           (formWithErrors: Form[_]) =>
-            Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, index, request.description))),
+            Future.successful(BadRequest(view(formWithErrors, countryOptions.options(), draftId, index, request.description))),
 
           value => {
             val result = for {

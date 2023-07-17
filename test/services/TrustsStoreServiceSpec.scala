@@ -22,11 +22,10 @@ import connectors.TrustsStoreConnector
 import errors.TrustErrors
 import models.TaskStatus
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
-import org.scalatest.EitherValues
 
 import scala.concurrent.Future
 
-class TrustsStoreServiceSpec extends SpecBase with EitherValues {
+class TrustsStoreServiceSpec extends SpecBase {
 
   val mockConnector: TrustsStoreConnector = mock[TrustsStoreConnector]
 

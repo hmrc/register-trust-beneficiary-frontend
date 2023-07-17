@@ -60,7 +60,7 @@ class NonUkAddressController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, countryOptions.options, request.beneficiaryName, index, draftId))
+      Ok(view(preparedForm, countryOptions.options(), request.beneficiaryName, index, draftId))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
@@ -71,7 +71,7 @@ class NonUkAddressController @Inject()(
         formWithErrors =>
           Future.successful(BadRequest(view(
             formWithErrors,
-            countryOptions.options,
+            countryOptions.options(),
             request.beneficiaryName,
             index,
             draftId))),

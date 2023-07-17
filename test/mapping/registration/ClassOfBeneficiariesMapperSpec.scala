@@ -45,7 +45,7 @@ class ClassOfBeneficiariesMapperSpec extends SpecBase
         val index = 0
         val userAnswers =
           emptyUserAnswers
-            .set(ClassBeneficiaryDescriptionPage(index), "class of ben").right.get
+            .set(ClassBeneficiaryDescriptionPage(index), "class of ben").value
 
         classOfBeneficiariesMapper.build(userAnswers).value.head mustBe UnidentifiedType(
             description = "class of ben",
@@ -59,8 +59,8 @@ class ClassOfBeneficiariesMapperSpec extends SpecBase
 
         val userAnswers =
           emptyUserAnswers
-            .set(ClassBeneficiaryDescriptionPage(index0), "class of ben 1").right.get
-            .set(ClassBeneficiaryDescriptionPage(index1), "class of ben 2").right.get
+            .set(ClassBeneficiaryDescriptionPage(index0), "class of ben 1").value
+            .set(ClassBeneficiaryDescriptionPage(index1), "class of ben 2").value
 
         classOfBeneficiariesMapper.build(userAnswers).value mustBe List(UnidentifiedType(
           description = "class of ben 1",
@@ -77,7 +77,7 @@ class ClassOfBeneficiariesMapperSpec extends SpecBase
 
         val userAnswers =
           emptyUserAnswers
-            .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Individual).right.get
+            .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Individual).value
 
         classOfBeneficiariesMapper.build(userAnswers) mustBe None
 

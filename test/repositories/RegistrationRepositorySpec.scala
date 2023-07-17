@@ -22,7 +22,6 @@ import connectors.SubmissionDraftConnector
 import errors.TrustErrors
 import models._
 import org.mockito.ArgumentMatchers.any
-import org.scalatest.EitherValues
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -30,7 +29,7 @@ import java.time.LocalDateTime
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-class RegistrationRepositorySpec extends SpecBase with EitherValues {
+class RegistrationRepositorySpec extends SpecBase {
 
   private val unusedSubmissionSetFactory = mock[SubmissionSetFactory]
 

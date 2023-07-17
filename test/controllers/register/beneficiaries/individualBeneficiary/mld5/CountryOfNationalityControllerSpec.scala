@@ -48,7 +48,7 @@ class CountryOfNationalityControllerSpec extends SpecBase {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), name).right.get
+        .set(NamePage(index), name).value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -58,7 +58,7 @@ class CountryOfNationalityControllerSpec extends SpecBase {
 
       val view = application.injector.instanceOf[CountryOfNationalityView]
 
-      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
       status(result) mustEqual OK
 
@@ -70,8 +70,8 @@ class CountryOfNationalityControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index), name).right.get
-        .set(CountryOfNationalityPage(index), SPAIN).right.get
+      val userAnswers = emptyUserAnswers.set(NamePage(index), name).value
+        .set(CountryOfNationalityPage(index), SPAIN).value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -79,7 +79,7 @@ class CountryOfNationalityControllerSpec extends SpecBase {
 
       val view = application.injector.instanceOf[CountryOfNationalityView]
 
-      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
       val result = route(application, request).value
 
@@ -94,7 +94,7 @@ class CountryOfNationalityControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), name).right.get
+        .set(NamePage(index), name).value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
@@ -117,7 +117,7 @@ class CountryOfNationalityControllerSpec extends SpecBase {
     "return an Internal Server Error when setting the user answers goes wrong" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), name).right.get
+        .set(NamePage(index), name).value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
         .overrides(
@@ -143,7 +143,7 @@ class CountryOfNationalityControllerSpec extends SpecBase {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), name).right.get
+        .set(NamePage(index), name).value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -155,7 +155,7 @@ class CountryOfNationalityControllerSpec extends SpecBase {
 
       val view = application.injector.instanceOf[CountryOfNationalityView]
 
-      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
       val result = route(application, request).value
 

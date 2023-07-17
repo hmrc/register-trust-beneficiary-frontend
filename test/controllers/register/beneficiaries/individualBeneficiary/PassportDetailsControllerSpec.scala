@@ -53,7 +53,7 @@ class PassportDetailsControllerSpec extends SpecBase {
 
     "return OK and the correct view for a GET" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index), fullName).right.get
+      val userAnswers = emptyUserAnswers.set(NamePage(index), fullName).value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -76,8 +76,8 @@ class PassportDetailsControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), fullName).right.get
-        .set(PassportDetailsPage(index), validData).right.get
+        .set(NamePage(index), fullName).value
+        .set(PassportDetailsPage(index), validData).value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -99,7 +99,7 @@ class PassportDetailsControllerSpec extends SpecBase {
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index), fullName).right.get
+      val userAnswers = emptyUserAnswers.set(NamePage(index), fullName).value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -127,7 +127,7 @@ class PassportDetailsControllerSpec extends SpecBase {
 
     "return an Internal Server Error when setting the user answers goes wrong" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index), fullName).right.get
+      val userAnswers = emptyUserAnswers.set(NamePage(index), fullName).value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
@@ -159,7 +159,7 @@ class PassportDetailsControllerSpec extends SpecBase {
 
     "return a Bad Request when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index), fullName).right.get
+      val userAnswers = emptyUserAnswers.set(NamePage(index), fullName).value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

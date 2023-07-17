@@ -67,7 +67,7 @@ class CountryOfResidenceController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, countryOptions.options, draftId, index, trustName))
+      Ok(view(preparedForm, countryOptions.options(), draftId, index, trustName))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(draftId).async {
@@ -77,7 +77,7 @@ class CountryOfResidenceController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, index, trustName))),
+          Future.successful(BadRequest(view(formWithErrors, countryOptions.options(), draftId, index, trustName))),
 
         value => {
           val result = for {

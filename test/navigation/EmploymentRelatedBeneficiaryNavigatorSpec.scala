@@ -36,7 +36,7 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
     "go to AddressUkYesNo from AddressYesNo if Yes" in {
       forAll(arbitrary[UserAnswers]) {
         baseAnswers =>
-          val answers = baseAnswers.set(LargeBeneficiaryAddressYesNoPage(index), true).right.get
+          val answers = baseAnswers.set(LargeBeneficiaryAddressYesNoPage(index), true).value
           navigator.nextPage(LargeBeneficiaryAddressYesNoPage(index), fakeDraftId, answers)
             .mustBe(rts.AddressUkYesNoController.onPageLoad(index, fakeDraftId))
       }
@@ -45,7 +45,7 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
     "go to Description from AddressYesNo if No" in {
       forAll(arbitrary[UserAnswers]) {
         baseAnswers =>
-          val answers = baseAnswers.set(LargeBeneficiaryAddressYesNoPage(index), false).right.get
+          val answers = baseAnswers.set(LargeBeneficiaryAddressYesNoPage(index), false).value
           navigator.nextPage(LargeBeneficiaryAddressYesNoPage(index), fakeDraftId, answers)
             .mustBe(rts.DescriptionController.onPageLoad(index, fakeDraftId))
       }
@@ -54,7 +54,7 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
     "go to UkAddress from AddressYesUkNo if Yes" in {
       forAll(arbitrary[UserAnswers]) {
         baseAnswers =>
-          val answers = baseAnswers.set(LargeBeneficiaryAddressUKYesNoPage(index), true).right.get
+          val answers = baseAnswers.set(LargeBeneficiaryAddressUKYesNoPage(index), true).value
           navigator.nextPage(LargeBeneficiaryAddressUKYesNoPage(index), fakeDraftId, answers)
             .mustBe(rts.UkAddressController.onPageLoad(index, fakeDraftId))
       }
@@ -63,7 +63,7 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
     "go to NonUkAddress from AddressYesUkNo if No" in {
       forAll(arbitrary[UserAnswers]) {
         baseAnswers =>
-          val answers = baseAnswers.set(LargeBeneficiaryAddressUKYesNoPage(index), false).right.get
+          val answers = baseAnswers.set(LargeBeneficiaryAddressUKYesNoPage(index), false).value
           navigator.nextPage(LargeBeneficiaryAddressUKYesNoPage(index), fakeDraftId, answers)
             .mustBe(rts.NonUkAddressController.onPageLoad(index, fakeDraftId))
       }
@@ -111,7 +111,7 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
 
       "CountryOfResidence yes no page -> No -> Address yes no page" in {
         val answers = baseAnswers
-          .set(CountryOfResidenceYesNoPage(index), false).right.get
+          .set(CountryOfResidenceYesNoPage(index), false).value
 
         navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, answers)
           .mustBe(rts.AddressYesNoController.onPageLoad(index, draftId))
@@ -119,7 +119,7 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
 
       "CountryOfResidence yes no page -> Yes -> CountryOfResidence Uk yes no page" in {
         val answers = baseAnswers
-          .set(CountryOfResidenceYesNoPage(index), true).right.get
+          .set(CountryOfResidenceYesNoPage(index), true).value
 
         navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, answers)
           .mustBe(mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId))
@@ -128,7 +128,7 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
 
       "CountryOfResidence Uk yes no page -> Yes -> Address yes no page" in {
         val answers = baseAnswers
-          .set(CountryOfResidenceInTheUkYesNoPage(index), true).right.get
+          .set(CountryOfResidenceInTheUkYesNoPage(index), true).value
 
         navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, answers)
           .mustBe(rts.AddressYesNoController.onPageLoad(index, draftId))
@@ -136,7 +136,7 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
 
       "CountryOfResidence Uk yes no page -> No -> CountryOfResidence page" in {
         val answers = baseAnswers
-          .set(CountryOfResidenceInTheUkYesNoPage(index), false).right.get
+          .set(CountryOfResidenceInTheUkYesNoPage(index), false).value
 
         navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, answers)
           .mustBe(mld5Rts.CountryOfResidenceController.onPageLoad(index, draftId))
@@ -158,7 +158,7 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
 
       "CountryOfResidence yes no page -> No -> Description page" in {
         val answers = baseAnswers
-          .set(CountryOfResidenceYesNoPage(index), false).right.get
+          .set(CountryOfResidenceYesNoPage(index), false).value
 
         navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, answers)
           .mustBe(rts.DescriptionController.onPageLoad(index, fakeDraftId))
@@ -166,7 +166,7 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
 
       "CountryOfResidence yes no page -> Yes -> CountryOfResidence Uk yes no page" in {
         val answers = baseAnswers
-          .set(CountryOfResidenceYesNoPage(index), true).right.get
+          .set(CountryOfResidenceYesNoPage(index), true).value
 
         navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, answers)
           .mustBe(mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId))
@@ -175,7 +175,7 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
 
       "CountryOfResidence Uk yes no page -> Yes -> Description page" in {
         val answers = baseAnswers
-          .set(CountryOfResidenceInTheUkYesNoPage(index), true).right.get
+          .set(CountryOfResidenceInTheUkYesNoPage(index), true).value
 
         navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, answers)
           .mustBe(rts.DescriptionController.onPageLoad(index, fakeDraftId))
@@ -183,7 +183,7 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
 
       "CountryOfResidence Uk yes no page -> No -> CountryOfResidence page" in {
         val answers = baseAnswers
-          .set(CountryOfResidenceInTheUkYesNoPage(index), false).right.get
+          .set(CountryOfResidenceInTheUkYesNoPage(index), false).value
 
         navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, answers)
           .mustBe(mld5Rts.CountryOfResidenceController.onPageLoad(index, draftId))

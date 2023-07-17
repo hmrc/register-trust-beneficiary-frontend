@@ -63,7 +63,7 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         "redirect to WhatTypeOfBeneficiaryController" in {
           forAll(arbitrary[UserAnswers]) {
             userAnswers =>
-              val answers = userAnswers.set(AddABeneficiaryYesNoPage, true).right.get
+              val answers = userAnswers.set(AddABeneficiaryYesNoPage, true).value
 
               navigator.nextPage(AddABeneficiaryYesNoPage, fakeDraftId, answers)
                 .mustBe(controllers.register.beneficiaries.routes.WhatTypeOfBeneficiaryController.onPageLoad(fakeDraftId))
@@ -75,7 +75,7 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         "redirect to task list" in {
           forAll(arbitrary[UserAnswers]) {
             userAnswers =>
-              val answers = userAnswers.set(AddABeneficiaryYesNoPage, false).right.get
+              val answers = userAnswers.set(AddABeneficiaryYesNoPage, false).value
 
               navigator.nextPage(AddABeneficiaryYesNoPage, fakeDraftId, answers)
                 .mustBe(taskListRoute)
@@ -94,13 +94,13 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
               userAnswers =>
                 val answers = (0 until MAX).foldLeft(userAnswers)((acc, i) => {
                   acc
-                    .set(ClassBeneficiaryDescriptionPage(i), "description").right.get
-                    .set(company.NamePage(i), "Name").right.get
-                    .set(LargeBeneficiaryNamePage(i), "Name").right.get
-                    .set(CharityNamePage(i), "Name").right.get
-                    .set(trust.NamePage(i), "Name").right.get
-                    .set(DescriptionPage(i), "Other description").right.get
-                }).set(AddABeneficiaryPage, AddABeneficiary.YesNow).right.get
+                    .set(ClassBeneficiaryDescriptionPage(i), "description").value
+                    .set(company.NamePage(i), "Name").value
+                    .set(LargeBeneficiaryNamePage(i), "Name").value
+                    .set(CharityNamePage(i), "Name").value
+                    .set(trust.NamePage(i), "Name").value
+                    .set(DescriptionPage(i), "Other description").value
+                }).set(AddABeneficiaryPage, AddABeneficiary.YesNow).value
 
                 navigator.nextPage(AddABeneficiaryPage, fakeDraftId, answers)
                   .mustBe(individualRoutes.NameController.onPageLoad(0, fakeDraftId))
@@ -114,13 +114,13 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
               userAnswers =>
                 val answers = (0 until MAX).foldLeft(userAnswers)((acc, i) => {
                   acc
-                    .set(NamePage(i), FullName("First", None, "Last")).right.get
-                    .set(company.NamePage(i), "Name").right.get
-                    .set(LargeBeneficiaryNamePage(i), "Name").right.get
-                    .set(CharityNamePage(i), "Name").right.get
-                    .set(trust.NamePage(i), "Name").right.get
-                    .set(DescriptionPage(i), "Other description").right.get
-                }).set(AddABeneficiaryPage, AddABeneficiary.YesNow).right.get
+                    .set(NamePage(i), FullName("First", None, "Last")).value
+                    .set(company.NamePage(i), "Name").value
+                    .set(LargeBeneficiaryNamePage(i), "Name").value
+                    .set(CharityNamePage(i), "Name").value
+                    .set(trust.NamePage(i), "Name").value
+                    .set(DescriptionPage(i), "Other description").value
+                }).set(AddABeneficiaryPage, AddABeneficiary.YesNow).value
 
                 navigator.nextPage(AddABeneficiaryPage, fakeDraftId, answers)
                   .mustBe(classOfBeneficiariesRoutes.ClassBeneficiaryDescriptionController.onPageLoad(0, fakeDraftId))
@@ -134,13 +134,13 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
               userAnswers =>
                 val answers = (0 until MAX).foldLeft(userAnswers)((acc, i) => {
                   acc
-                    .set(NamePage(i), FullName("First", None, "Last")).right.get
-                    .set(ClassBeneficiaryDescriptionPage(i), "description").right.get
-                    .set(LargeBeneficiaryNamePage(i), "Name").right.get
-                    .set(CharityNamePage(i), "Name").right.get
-                    .set(trust.NamePage(i), "Name").right.get
-                    .set(DescriptionPage(i), "Other description").right.get
-                }).set(AddABeneficiaryPage, AddABeneficiary.YesNow).right.get
+                    .set(NamePage(i), FullName("First", None, "Last")).value
+                    .set(ClassBeneficiaryDescriptionPage(i), "description").value
+                    .set(LargeBeneficiaryNamePage(i), "Name").value
+                    .set(CharityNamePage(i), "Name").value
+                    .set(trust.NamePage(i), "Name").value
+                    .set(DescriptionPage(i), "Other description").value
+                }).set(AddABeneficiaryPage, AddABeneficiary.YesNow).value
 
                 navigator.nextPage(AddABeneficiaryPage, fakeDraftId, answers)
                   .mustBe(companyRoutes.NameController.onPageLoad(0, fakeDraftId))
@@ -154,13 +154,13 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
               userAnswers =>
                 val answers = (0 until MAX).foldLeft(userAnswers)((acc, i) => {
                   acc
-                    .set(NamePage(i), FullName("First", None, "Last")).right.get
-                    .set(ClassBeneficiaryDescriptionPage(i), "description").right.get
-                    .set(company.NamePage(i), "Name").right.get
-                    .set(CharityNamePage(i), "Name").right.get
-                    .set(trust.NamePage(i), "Name").right.get
-                    .set(DescriptionPage(i), "Other description").right.get
-                }).set(AddABeneficiaryPage, AddABeneficiary.YesNow).right.get
+                    .set(NamePage(i), FullName("First", None, "Last")).value
+                    .set(ClassBeneficiaryDescriptionPage(i), "description").value
+                    .set(company.NamePage(i), "Name").value
+                    .set(CharityNamePage(i), "Name").value
+                    .set(trust.NamePage(i), "Name").value
+                    .set(DescriptionPage(i), "Other description").value
+                }).set(AddABeneficiaryPage, AddABeneficiary.YesNow).value
 
                 navigator.nextPage(AddABeneficiaryPage, fakeDraftId, answers)
                   .mustBe(largeRoutes.NameController.onPageLoad(0, fakeDraftId))
@@ -174,12 +174,12 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
               userAnswers =>
                 val answers = (0 until MAX).foldLeft(userAnswers)((acc, i) => {
                   acc
-                    .set(NamePage(i), FullName("First", None, "Last")).right.get
-                    .set(ClassBeneficiaryDescriptionPage(i), "description").right.get
-                    .set(CharityNamePage(i), "Name").right.get
-                    .set(trust.NamePage(i), "Name").right.get
-                    .set(DescriptionPage(i), "Other description").right.get
-                }).set(AddABeneficiaryPage, AddABeneficiary.YesNow).right.get
+                    .set(NamePage(i), FullName("First", None, "Last")).value
+                    .set(ClassBeneficiaryDescriptionPage(i), "description").value
+                    .set(CharityNamePage(i), "Name").value
+                    .set(trust.NamePage(i), "Name").value
+                    .set(DescriptionPage(i), "Other description").value
+                }).set(AddABeneficiaryPage, AddABeneficiary.YesNow).value
 
                 navigator.nextPage(AddABeneficiaryPage, fakeDraftId, answers)
                   .mustBe(companyOrEmploymentRelatedRoutes.CompanyOrEmploymentRelatedController.onPageLoad(fakeDraftId))
@@ -193,13 +193,13 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
               userAnswers =>
                 val answers = (0 until MAX).foldLeft(userAnswers)((acc, i) => {
                   acc
-                    .set(NamePage(i), FullName("First", None, "Last")).right.get
-                    .set(ClassBeneficiaryDescriptionPage(i), "description").right.get
-                    .set(company.NamePage(i), "Name").right.get
-                    .set(LargeBeneficiaryNamePage(i), "Name").right.get
-                    .set(CharityNamePage(i), "Name").right.get
-                    .set(DescriptionPage(i), "Other description").right.get
-                }).set(AddABeneficiaryPage, AddABeneficiary.YesNow).right.get
+                    .set(NamePage(i), FullName("First", None, "Last")).value
+                    .set(ClassBeneficiaryDescriptionPage(i), "description").value
+                    .set(company.NamePage(i), "Name").value
+                    .set(LargeBeneficiaryNamePage(i), "Name").value
+                    .set(CharityNamePage(i), "Name").value
+                    .set(DescriptionPage(i), "Other description").value
+                }).set(AddABeneficiaryPage, AddABeneficiary.YesNow).value
 
                 navigator.nextPage(AddABeneficiaryPage, fakeDraftId, answers)
                   .mustBe(trustRoutes.NameController.onPageLoad(0, fakeDraftId))
@@ -213,13 +213,13 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
               userAnswers =>
                 val answers = (0 until MAX).foldLeft(userAnswers)((acc, i) => {
                   acc
-                    .set(NamePage(i), FullName("First", None, "Last")).right.get
-                    .set(ClassBeneficiaryDescriptionPage(i), "description").right.get
-                    .set(company.NamePage(i), "Name").right.get
-                    .set(LargeBeneficiaryNamePage(i), "Name").right.get
-                    .set(trust.NamePage(i), "Name").right.get
-                    .set(DescriptionPage(i), "Other description").right.get
-                }).set(AddABeneficiaryPage, AddABeneficiary.YesNow).right.get
+                    .set(NamePage(i), FullName("First", None, "Last")).value
+                    .set(ClassBeneficiaryDescriptionPage(i), "description").value
+                    .set(company.NamePage(i), "Name").value
+                    .set(LargeBeneficiaryNamePage(i), "Name").value
+                    .set(trust.NamePage(i), "Name").value
+                    .set(DescriptionPage(i), "Other description").value
+                }).set(AddABeneficiaryPage, AddABeneficiary.YesNow).value
 
                 navigator.nextPage(AddABeneficiaryPage, fakeDraftId, answers)
                   .mustBe(charityRoutes.CharityNameController.onPageLoad(0, fakeDraftId))
@@ -233,12 +233,12 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
               userAnswers =>
                 val answers = (0 until MAX).foldLeft(userAnswers)((acc, i) => {
                   acc
-                    .set(NamePage(i), FullName("First", None, "Last")).right.get
-                    .set(ClassBeneficiaryDescriptionPage(i), "description").right.get
-                    .set(company.NamePage(i), "Name").right.get
-                    .set(LargeBeneficiaryNamePage(i), "Name").right.get
-                    .set(DescriptionPage(i), "Other description").right.get
-                }).set(AddABeneficiaryPage, AddABeneficiary.YesNow).right.get
+                    .set(NamePage(i), FullName("First", None, "Last")).value
+                    .set(ClassBeneficiaryDescriptionPage(i), "description").value
+                    .set(company.NamePage(i), "Name").value
+                    .set(LargeBeneficiaryNamePage(i), "Name").value
+                    .set(DescriptionPage(i), "Other description").value
+                }).set(AddABeneficiaryPage, AddABeneficiary.YesNow).value
 
                 navigator.nextPage(AddABeneficiaryPage, fakeDraftId, answers)
                   .mustBe(charityortrustRoutes.CharityOrTrustController.onPageLoad(fakeDraftId))
@@ -252,13 +252,13 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
               userAnswers =>
                 val answers = (0 until MAX).foldLeft(userAnswers)((acc, i) => {
                   acc
-                    .set(NamePage(i), FullName("First", None, "Last")).right.get
-                    .set(ClassBeneficiaryDescriptionPage(i), "description").right.get
-                    .set(company.NamePage(i), "Name").right.get
-                    .set(LargeBeneficiaryNamePage(i), "Name").right.get
-                    .set(CharityNamePage(i), "Name").right.get
-                    .set(trust.NamePage(i), "Name").right.get
-                }).set(AddABeneficiaryPage, AddABeneficiary.YesNow).right.get
+                    .set(NamePage(i), FullName("First", None, "Last")).value
+                    .set(ClassBeneficiaryDescriptionPage(i), "description").value
+                    .set(company.NamePage(i), "Name").value
+                    .set(LargeBeneficiaryNamePage(i), "Name").value
+                    .set(CharityNamePage(i), "Name").value
+                    .set(trust.NamePage(i), "Name").value
+                }).set(AddABeneficiaryPage, AddABeneficiary.YesNow).value
 
                 navigator.nextPage(AddABeneficiaryPage, fakeDraftId, answers)
                   .mustBe(otherRoutes.DescriptionController.onPageLoad(0, fakeDraftId))
@@ -270,7 +270,7 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           "go to WhatTypeOfBeneficiaryPage" in {
             forAll(arbitrary[UserAnswers]) {
               userAnswers =>
-                val answers = userAnswers.set(AddABeneficiaryPage, AddABeneficiary.YesNow).right.get
+                val answers = userAnswers.set(AddABeneficiaryPage, AddABeneficiary.YesNow).value
 
                 navigator.nextPage(AddABeneficiaryPage, fakeDraftId, answers)
                   .mustBe(controllers.register.beneficiaries.routes.WhatTypeOfBeneficiaryController.onPageLoad(fakeDraftId))
@@ -284,8 +284,8 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
               userAnswers =>
                 val answers = (0 until MAX).foldLeft(userAnswers)((acc, i) => {
                   acc
-                    .set(NamePage(i), FullName("First", None, "Last")).right.get
-                }).set(AddABeneficiaryPage, AddABeneficiary.YesNow).right.get
+                    .set(NamePage(i), FullName("First", None, "Last")).value
+                }).set(AddABeneficiaryPage, AddABeneficiary.YesNow).value
 
                 navigator.nextPage(AddABeneficiaryPage, fakeDraftId, answers)
                   .mustBe(controllers.register.beneficiaries.routes.WhatTypeOfBeneficiaryController.onPageLoad(fakeDraftId))
@@ -299,12 +299,12 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
               userAnswers =>
                 val answers = (0 until MAX).foldLeft(userAnswers)((acc, i) => {
                   acc
-                    .set(NamePage(i), FullName("First", None, "Last")).right.get
-                    .set(ClassBeneficiaryDescriptionPage(i), "description").right.get
-                    .set(company.NamePage(i), "Name").right.get
-                    .set(LargeBeneficiaryNamePage(i), "Name").right.get
-                    .set(CharityNamePage(i), "Name").right.get
-                }).set(AddABeneficiaryPage, AddABeneficiary.YesNow).right.get
+                    .set(NamePage(i), FullName("First", None, "Last")).value
+                    .set(ClassBeneficiaryDescriptionPage(i), "description").value
+                    .set(company.NamePage(i), "Name").value
+                    .set(LargeBeneficiaryNamePage(i), "Name").value
+                    .set(CharityNamePage(i), "Name").value
+                }).set(AddABeneficiaryPage, AddABeneficiary.YesNow).value
 
                 navigator.nextPage(AddABeneficiaryPage, fakeDraftId, answers)
                   .mustBe(controllers.register.beneficiaries.routes.WhatTypeOfBeneficiaryController.onPageLoad(fakeDraftId))
@@ -317,7 +317,7 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         "redirect to task list" in {
           forAll(arbitrary[UserAnswers]) {
             userAnswers =>
-              val answers = userAnswers.set(AddABeneficiaryPage, AddABeneficiary.YesLater).right.get
+              val answers = userAnswers.set(AddABeneficiaryPage, AddABeneficiary.YesLater).value
 
               navigator.nextPage(AddABeneficiaryPage, fakeDraftId, answers)
                 .mustBe(taskListRoute)
@@ -329,7 +329,7 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         "redirect to task list" in {
           forAll(arbitrary[UserAnswers]) {
             userAnswers =>
-              val answers = userAnswers.set(AddABeneficiaryPage, AddABeneficiary.NoComplete).right.get
+              val answers = userAnswers.set(AddABeneficiaryPage, AddABeneficiary.NoComplete).value
 
               navigator.nextPage(AddABeneficiaryPage, fakeDraftId, answers)
                 .mustBe(taskListRoute)
@@ -347,8 +347,8 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
             forAll(arbitrary[UserAnswers]) {
               userAnswers =>
                 val answers = userAnswers
-                  .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Individual).right.get
-                  .remove(IndividualBeneficiaries).right.get
+                  .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Individual).value
+                  .remove(IndividualBeneficiaries).value
                 navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
                   .mustBe(individualRoutes.NameController.onPageLoad(0, fakeDraftId))
             }
@@ -359,9 +359,9 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           "go to the next IndividualBeneficiaryNamePage from WhatTypeOfBeneficiaryPage when Individual option selected" in {
 
             val answers = emptyUserAnswers
-              .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Individual).right.get
-              .set(NamePage(0), FullName("First", None, "Last")).right.get
-              .set(IndividualBeneficiaryStatus(0), Completed).right.get
+              .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Individual).value
+              .set(NamePage(0), FullName("First", None, "Last")).value
+              .set(IndividualBeneficiaryStatus(0), Completed).value
 
             navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
               .mustBe(individualRoutes.NameController.onPageLoad(1, fakeDraftId))
@@ -376,8 +376,8 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
             forAll(arbitrary[UserAnswers]) {
               userAnswers =>
                 val answers = userAnswers
-                  .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.ClassOfBeneficiary).right.get
-                  .remove(ClassOfBeneficiaries).right.get
+                  .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.ClassOfBeneficiary).value
+                  .remove(ClassOfBeneficiaries).value
                 navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
                   .mustBe(classOfBeneficiariesRoutes.ClassBeneficiaryDescriptionController.onPageLoad(0, fakeDraftId))
             }
@@ -388,9 +388,9 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           "go to the next ClassBeneficiaryDescriptionPage from WhatTypeOfBeneficiaryPage when ClassOfBeneficiary option selected" in {
 
             val answers = emptyUserAnswers
-              .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.ClassOfBeneficiary).right.get
-              .set(ClassBeneficiaryDescriptionPage(0), "description").right.get
-              .set(ClassBeneficiaryStatus(0), Completed).right.get
+              .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.ClassOfBeneficiary).value
+              .set(ClassBeneficiaryDescriptionPage(0), "description").value
+              .set(ClassBeneficiaryStatus(0), Completed).value
 
             navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
               .mustBe(classOfBeneficiariesRoutes.ClassBeneficiaryDescriptionController.onPageLoad(1, fakeDraftId))
@@ -402,7 +402,7 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
         "go to CompanyOrEmploymentRelated from WhatTypeOfBeneficiaryPage when CompanyOrEmploymentRelated option selected" in {
           forAll(arbitrary[UserAnswers]) {
             userAnswers =>
-              val answers = userAnswers.set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.CompanyOrEmployment).right.get
+              val answers = userAnswers.set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.CompanyOrEmployment).value
 
               navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
                 .mustBe(companyOrEmploymentRelatedRoutes.CompanyOrEmploymentRelatedController.onPageLoad(fakeDraftId))
@@ -415,15 +415,15 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
               forAll(arbitrary[UserAnswers]) {
                 userAnswers =>
                   val answers = userAnswers
-                    .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Company).right.get
-                    .remove(CompanyBeneficiaries).right.get
+                    .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Company).value
+                    .remove(CompanyBeneficiaries).value
 
                   navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
                     .mustBe(companyRoutes.NameController.onPageLoad(0, fakeDraftId))
               }
             }
             "go to CompanyNamePage from CompanyOrEmploymentRelatedPage when 'company' selected" in {
-              val answers = emptyUserAnswers.set(CompanyOrEmploymentRelatedPage, CompanyOrEmploymentRelatedToAdd.Company).right.get
+              val answers = emptyUserAnswers.set(CompanyOrEmploymentRelatedPage, CompanyOrEmploymentRelatedToAdd.Company).value
 
               navigator.nextPage(CompanyOrEmploymentRelatedPage, fakeDraftId, answers)
                 .mustBe(companyRoutes.NameController.onPageLoad(0, fakeDraftId))
@@ -434,9 +434,9 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
             "go to CompanyNamePage from WhatTypeOfBeneficiaryPage when 'company' option selected" in {
               val answers = emptyUserAnswers
-                .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Company).right.get
-                .set(company.NamePage(0), "Name").right.get
-                .set(CompanyBeneficiaryStatus(0), Completed).right.get
+                .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Company).value
+                .set(company.NamePage(0), "Name").value
+                .set(CompanyBeneficiaryStatus(0), Completed).value
 
               navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
                 .mustBe(companyRoutes.NameController.onPageLoad(1, fakeDraftId))
@@ -444,10 +444,10 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
             "go to CompanyNamePage from CompanyOrEmploymentRelatedPage when 'company' selected" in {
               val answers = emptyUserAnswers
-                .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.CompanyOrEmployment).right.get
-                .set(CompanyOrEmploymentRelatedPage, CompanyOrEmploymentRelatedToAdd.Company).right.get
-                .set(company.NamePage(0), "Name").right.get
-                .set(CompanyBeneficiaryStatus(0), Completed).right.get
+                .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.CompanyOrEmployment).value
+                .set(CompanyOrEmploymentRelatedPage, CompanyOrEmploymentRelatedToAdd.Company).value
+                .set(company.NamePage(0), "Name").value
+                .set(CompanyBeneficiaryStatus(0), Completed).value
 
               navigator.nextPage(CompanyOrEmploymentRelatedPage, fakeDraftId, answers)
                 .mustBe(companyRoutes.NameController.onPageLoad(1, fakeDraftId))
@@ -461,15 +461,15 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
               forAll(arbitrary[UserAnswers]) {
                 userAnswers =>
                   val answers = userAnswers
-                    .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Employment).right.get
-                    .remove(LargeBeneficiaries).right.get
+                    .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Employment).value
+                    .remove(LargeBeneficiaries).value
 
                   navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
                     .mustBe(largeRoutes.NameController.onPageLoad(0, fakeDraftId))
               }
             }
             "go to LargeBeneficiaryNamePage from CompanyOrEmploymentRelatedPage when 'employment related' selected" in {
-              val answers = emptyUserAnswers.set(CompanyOrEmploymentRelatedPage, CompanyOrEmploymentRelatedToAdd.EmploymentRelated).right.get
+              val answers = emptyUserAnswers.set(CompanyOrEmploymentRelatedPage, CompanyOrEmploymentRelatedToAdd.EmploymentRelated).value
 
               navigator.nextPage(CompanyOrEmploymentRelatedPage, fakeDraftId, answers)
                 .mustBe(largeRoutes.NameController.onPageLoad(0, fakeDraftId))
@@ -480,9 +480,9 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
             "go to LargeBeneficiaryNamePage from WhatTypeOfBeneficiaryPage when 'employment related' option selected" in {
               val answers = emptyUserAnswers
-                .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Employment).right.get
-                .set(LargeBeneficiaryNamePage(0), "Name").right.get
-                .set(LargeBeneficiaryStatus(0), Completed).right.get
+                .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Employment).value
+                .set(LargeBeneficiaryNamePage(0), "Name").value
+                .set(LargeBeneficiaryStatus(0), Completed).value
 
               navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
                 .mustBe(largeRoutes.NameController.onPageLoad(1, fakeDraftId))
@@ -490,10 +490,10 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
             "go to LargeBeneficiaryNamePage from CompanyOrEmploymentRelatedPage when 'employment related' selected" in {
               val answers = emptyUserAnswers
-                .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.CompanyOrEmployment).right.get
-                .set(CompanyOrEmploymentRelatedPage, CompanyOrEmploymentRelatedToAdd.EmploymentRelated).right.get
-                .set(LargeBeneficiaryNamePage(0), "Name").right.get
-                .set(LargeBeneficiaryStatus(0), Completed).right.get
+                .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.CompanyOrEmployment).value
+                .set(CompanyOrEmploymentRelatedPage, CompanyOrEmploymentRelatedToAdd.EmploymentRelated).value
+                .set(LargeBeneficiaryNamePage(0), "Name").value
+                .set(LargeBeneficiaryStatus(0), Completed).value
 
               navigator.nextPage(CompanyOrEmploymentRelatedPage, fakeDraftId, answers)
                 .mustBe(largeRoutes.NameController.onPageLoad(1, fakeDraftId))
@@ -504,7 +504,7 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
       "Charity or trust" when {
         "go to CharityOrTrustPage from WhatTypeOfBeneficiaryPage when 'charity or trust' selected" in {
-          val answers = emptyUserAnswers.set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.CharityOrTrust).right.get
+          val answers = emptyUserAnswers.set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.CharityOrTrust).value
 
           navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
             .mustBe(charityortrustRoutes.CharityOrTrustController.onPageLoad(fakeDraftId))
@@ -514,14 +514,14 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           "no existing charity beneficiaries" must {
             "go to CharityNamePage from WhatTypeOfBeneficiaryPage when 'charity' selected" in {
               val answers = emptyUserAnswers
-                .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Charity).right.get
-                .remove(CharityBeneficiaries).right.get
+                .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Charity).value
+                .remove(CharityBeneficiaries).value
 
               navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
                 .mustBe(charityRoutes.CharityNameController.onPageLoad(0, fakeDraftId))
             }
             "go to CharityNamePage from CharityOrTrustPage when 'charity' selected" in {
-              val answers = emptyUserAnswers.set(CharityOrTrustPage, CharityOrTrust.Charity).right.get
+              val answers = emptyUserAnswers.set(CharityOrTrustPage, CharityOrTrust.Charity).value
 
               navigator.nextPage(CharityOrTrustPage, fakeDraftId, answers)
                 .mustBe(charityRoutes.CharityNameController.onPageLoad(0, fakeDraftId))
@@ -532,9 +532,9 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
             "go to CharityNamePage from WhatTypeOfBeneficiaryPage when 'charity' selected" in {
               val answers = emptyUserAnswers
-                .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Charity).right.get
-                .set(CharityNamePage(0), "Name").right.get
-                .set(CharityBeneficiaryStatus(0), Completed).right.get
+                .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Charity).value
+                .set(CharityNamePage(0), "Name").value
+                .set(CharityBeneficiaryStatus(0), Completed).value
 
               navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
                 .mustBe(charityRoutes.CharityNameController.onPageLoad(1, fakeDraftId))
@@ -542,10 +542,10 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
             "go to CharityNamePage from CharityOrTrustPage when 'charity' selected" in {
               val answers = emptyUserAnswers
-                .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.CharityOrTrust).right.get
-                .set(CharityOrTrustPage, CharityOrTrust.Charity).right.get
-                .set(CharityNamePage(0), "Name").right.get
-                .set(CharityBeneficiaryStatus(0), Completed).right.get
+                .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.CharityOrTrust).value
+                .set(CharityOrTrustPage, CharityOrTrust.Charity).value
+                .set(CharityNamePage(0), "Name").value
+                .set(CharityBeneficiaryStatus(0), Completed).value
 
               navigator.nextPage(CharityOrTrustPage, fakeDraftId, answers)
                 .mustBe(charityRoutes.CharityNameController.onPageLoad(1, fakeDraftId))
@@ -557,14 +557,14 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
           "no existing trust beneficiaries" must {
             "go to TrustNamePage from WhatTypeOfBeneficiaryPage when 'trust' selected" in {
               val answers = emptyUserAnswers
-                .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Trust).right.get
-                .remove(TrustBeneficiaries).right.get
+                .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Trust).value
+                .remove(TrustBeneficiaries).value
 
               navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
                 .mustBe(trustRoutes.NameController.onPageLoad(0, fakeDraftId))
             }
             "go to TrustNamePage from CharityOrTrustPage when 'trust' selected" in {
-              val answers = emptyUserAnswers.set(CharityOrTrustPage, CharityOrTrust.Trust).right.get
+              val answers = emptyUserAnswers.set(CharityOrTrustPage, CharityOrTrust.Trust).value
 
               navigator.nextPage(CharityOrTrustPage, fakeDraftId, answers)
                 .mustBe(trustRoutes.NameController.onPageLoad(0, fakeDraftId))
@@ -575,9 +575,9 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
             "go to TrustNamePage from WhatTypeOfBeneficiaryPage when 'trust' selected" in {
               val answers = emptyUserAnswers
-                .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Trust).right.get
-                .set(trust.NamePage(0), "Name").right.get
-                .set(TrustBeneficiaryStatus(0), Completed).right.get
+                .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Trust).value
+                .set(trust.NamePage(0), "Name").value
+                .set(TrustBeneficiaryStatus(0), Completed).value
 
               navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
                 .mustBe(trustRoutes.NameController.onPageLoad(1, fakeDraftId))
@@ -585,10 +585,10 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
             "go to TrustNamePage from CharityOrTrustPage when 'trust' selected" in {
               val answers = emptyUserAnswers
-                .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.CharityOrTrust).right.get
-                .set(CharityOrTrustPage, CharityOrTrust.Trust).right.get
-                .set(trust.NamePage(0), "Name").right.get
-                .set(TrustBeneficiaryStatus(0), Completed).right.get
+                .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.CharityOrTrust).value
+                .set(CharityOrTrustPage, CharityOrTrust.Trust).value
+                .set(trust.NamePage(0), "Name").value
+                .set(TrustBeneficiaryStatus(0), Completed).value
 
               navigator.nextPage(CharityOrTrustPage, fakeDraftId, answers)
                 .mustBe(trustRoutes.NameController.onPageLoad(1, fakeDraftId))
@@ -603,8 +603,8 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
               forAll(arbitrary[UserAnswers]) {
                 userAnswers =>
                   val answers = userAnswers
-                    .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Other).right.get
-                    .remove(OtherBeneficiaries).right.get
+                    .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Other).value
+                    .remove(OtherBeneficiaries).value
 
                   navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
                     .mustBe(otherRoutes.DescriptionController.onPageLoad(0, fakeDraftId))
@@ -616,9 +616,9 @@ class BeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks wi
             "go to the next description page from WhatTypeOfBeneficiaryPage when Other option selected" in {
 
               val answers = emptyUserAnswers
-                .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Other).right.get
-                .set(DescriptionPage(0), "Other description").right.get
-                .set(OtherBeneficiaryStatus(0), Completed).right.get
+                .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Other).value
+                .set(DescriptionPage(0), "Other description").value
+                .set(OtherBeneficiaryStatus(0), Completed).value
 
               navigator.nextPage(WhatTypeOfBeneficiaryPage, fakeDraftId, answers)
                 .mustBe(otherRoutes.DescriptionController.onPageLoad(1, fakeDraftId))

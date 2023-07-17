@@ -38,7 +38,7 @@
     showBackLink = true
     ) {
 
-    @formHelper(action = AddABeneficiaryController.submitComplete(draftId), 'autoComplete -> "off") {
+    @formHelper(action = AddABeneficiaryController.submitComplete(draftId), Symbol("autoComplete") -> "off") {
 
         @headingComp(heading)
 

@@ -45,8 +45,8 @@ class IncomeControllerSpec extends SpecBase {
 
     "return OK and the correct view for a GET" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(0),
-        name).right.get
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(0), name).value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -67,8 +67,8 @@ class IncomeControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IncomePage(index), validAnswer).right.get
-        .set(NamePage(index),name).right.get
+        .set(IncomePage(index), validAnswer).value
+        .set(NamePage(index),name).value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -88,8 +88,8 @@ class IncomeControllerSpec extends SpecBase {
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(0),
-        name).right.get
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(0), name).value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -111,8 +111,8 @@ class IncomeControllerSpec extends SpecBase {
 
     "return an Internal Server Error when setting the user answers goes wrong" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(0),
-        name).right.get
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(0), name).value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
@@ -138,8 +138,8 @@ class IncomeControllerSpec extends SpecBase {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(0),
-        name).right.get
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(0), name).value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

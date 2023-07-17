@@ -33,7 +33,7 @@
     showBackLink = true
     ) {
 
-    @formHelper(action = NumberOfBeneficiariesController.onSubmit(index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = NumberOfBeneficiariesController.onSubmit(index, draftId), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors, HowManyBeneficiaries.options.toSeq)
 
