@@ -24,7 +24,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.MockitoSugar
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.matchers.must.Matchers
-import org.scalatest.{OptionValues, TryValues}
+import org.scalatest.{EitherValues, OptionValues, TryValues}
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice._
 import play.api.inject.bind
@@ -44,7 +44,8 @@ trait SpecBase extends PlaySpec
   with FakeTrustsApp
   with Matchers
   with MockitoSugar
-  with OptionValues {
+  with OptionValues
+  with EitherValues {
 
   final val ENGLISH = "en"
   final val WELSH = "cy"

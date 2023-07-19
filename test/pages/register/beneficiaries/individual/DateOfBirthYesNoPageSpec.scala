@@ -37,8 +37,8 @@ class DateOfBirthYesNoPageSpec extends PageBehaviours {
   "remove IndividualBeneficiaryDateOfBirth when IndividualBeneficiaryDateOfBirthYesNoPage is set to false" in {
     forAll(arbitrary[UserAnswers]) {
       initial =>
-        val answers: UserAnswers = initial.set(DateOfBirthPage(0), LocalDate.now).right.get
-        val result = answers.set(DateOfBirthYesNoPage(0), false).right.get
+        val answers: UserAnswers = initial.set(DateOfBirthPage(0), LocalDate.now).value
+        val result = answers.set(DateOfBirthYesNoPage(0), false).value
 
         result.get(DateOfBirthPage(0)) mustNot be(defined)
     }

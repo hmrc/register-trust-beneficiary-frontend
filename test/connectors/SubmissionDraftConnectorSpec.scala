@@ -20,7 +20,6 @@ import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock._
 import errors.ServerError
 import models.{RegistrationSubmission, SubmissionDraftResponse}
-import org.scalatest.EitherValues
 import play.api.Application
 import play.api.http.Status
 import play.api.http.Status.{BAD_GATEWAY, BAD_REQUEST, CONFLICT, INTERNAL_SERVER_ERROR, METHOD_NOT_ALLOWED, SERVICE_UNAVAILABLE, UNAUTHORIZED}
@@ -33,7 +32,7 @@ import java.time.LocalDateTime
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 
-class SubmissionDraftConnectorSpec extends SpecBase with WireMockHelper with EitherValues {
+class SubmissionDraftConnectorSpec extends SpecBase with WireMockHelper {
 
   override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(Seq(

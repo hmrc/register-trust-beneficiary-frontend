@@ -36,7 +36,7 @@ class IncomeYesNoViewSpec extends YesNoViewBehaviours {
   "IndividualBeneficiaryIncomeYesNo view" must {
 
     val userAnswers = emptyUserAnswers
-      .set(NamePage(index), fullName).right.get
+      .set(NamePage(index), fullName).value
 
     val view = viewFor[IncomeYesNoView](Some(userAnswers))
 

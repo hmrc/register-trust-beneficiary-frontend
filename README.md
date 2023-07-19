@@ -3,6 +3,10 @@
 
 This service is responsible for collecting details about the beneficiaries of a trust when registering a trust.
 
+---
+
+### Running the service locally
+
 To run locally using the micro-service provided by the service manager:
 
 ```
@@ -20,6 +24,29 @@ If you want to run your local copy, then stop the frontend ran by the service ma
 ```
 sbt run
 ```
+
+Use the following command to run your local copy with the test-only routes:
+
+```
+sbt run -Dapplication.router=testOnlyDoNotUseInAppConf.Routes
+```
+
+---
+
+### Testing the service
+
+This service uses [sbt-scoverage](https://github.com/scoverage/sbt-scoverage) to
+provide test coverage reports.
+
+Use the following commands to run the tests with coverage and generate a report.
+
+Run this script before raising a PR to ensure your code changes pass the Jenkins pipeline. This runs all the unit tests with scalastyle and checks for dependency updates:
+
+```
+./run_all_tests.sh
+```
+
+---
 
 ### License
 

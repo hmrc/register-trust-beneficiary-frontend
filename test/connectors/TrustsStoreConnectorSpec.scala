@@ -20,13 +20,12 @@ import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock._
 import errors.ServerError
 import models.TaskStatus
-import org.scalatest.EitherValues
 import play.api.Application
 import play.api.http.Status.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND, OK, UNAUTHORIZED}
 import play.api.inject.guice.GuiceApplicationBuilder
 import utils.WireMockHelper
 
-class TrustsStoreConnectorSpec extends SpecBase with WireMockHelper with EitherValues {
+class TrustsStoreConnectorSpec extends SpecBase with WireMockHelper {
 
   override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(Seq(

@@ -34,7 +34,7 @@
     showBackLink = true
     ) {
 
-    @formHelper(action = RoleInCompanyController.onSubmit(index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = RoleInCompanyController.onSubmit(index, draftId), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors, RoleInCompany.options)
 

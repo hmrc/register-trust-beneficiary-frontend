@@ -40,7 +40,7 @@ trait ReadableUserAnswers {
     }
   }
 
-  val beneficiaries: Beneficiaries = Beneficiaries(
+  val beneficiaries: Beneficiaries = models.Beneficiaries(
     this.get(IndividualBeneficiaries).getOrElse(List.empty),
     this.get(ClassOfBeneficiaries).getOrElse(List.empty),
     this.get(CharityBeneficiaries).getOrElse(List.empty),

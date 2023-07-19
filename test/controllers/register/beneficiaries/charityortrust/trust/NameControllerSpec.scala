@@ -61,7 +61,7 @@ class NameControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val answers = emptyUserAnswers
-        .set(NamePage(index), name).right.get
+        .set(NamePage(index), name).value
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 

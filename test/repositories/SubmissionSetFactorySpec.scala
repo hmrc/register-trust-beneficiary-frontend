@@ -40,7 +40,7 @@ class SubmissionSetFactorySpec extends SpecBase {
         "have 'Beneficiaries' as section key" when {
           "individual beneficiary only" in {
             val userAnswers: UserAnswers = emptyUserAnswers
-              .set(IndividualBeneficiaryStatus(0), Completed).right.get
+              .set(IndividualBeneficiaryStatus(0), Completed).value
 
             factory.answerSections(userAnswers) mustBe
               List(
@@ -55,7 +55,7 @@ class SubmissionSetFactorySpec extends SpecBase {
 
           "class of beneficiary only" in {
             val userAnswers: UserAnswers = emptyUserAnswers
-              .set(ClassBeneficiaryStatus(0), Completed).right.get
+              .set(ClassBeneficiaryStatus(0), Completed).value
 
             factory.answerSections(userAnswers) mustBe
               List(
@@ -70,7 +70,7 @@ class SubmissionSetFactorySpec extends SpecBase {
 
           "charity beneficiary only" in {
             val userAnswers: UserAnswers = emptyUserAnswers
-              .set(CharityBeneficiaryStatus(0), Completed).right.get
+              .set(CharityBeneficiaryStatus(0), Completed).value
 
             factory.answerSections(userAnswers) mustBe
               List(
@@ -85,7 +85,7 @@ class SubmissionSetFactorySpec extends SpecBase {
 
           "trust beneficiary only" in {
             val userAnswers: UserAnswers = emptyUserAnswers
-              .set(TrustBeneficiaryStatus(0), Completed).right.get
+              .set(TrustBeneficiaryStatus(0), Completed).value
 
             factory.answerSections(userAnswers) mustBe
               List(
@@ -100,7 +100,7 @@ class SubmissionSetFactorySpec extends SpecBase {
 
           "company beneficiary only" in {
             val userAnswers: UserAnswers = emptyUserAnswers
-              .set(CompanyBeneficiaryStatus(0), Completed).right.get
+              .set(CompanyBeneficiaryStatus(0), Completed).value
 
             factory.answerSections(userAnswers) mustBe
               List(
@@ -115,7 +115,7 @@ class SubmissionSetFactorySpec extends SpecBase {
 
           "large beneficiary only" in {
             val userAnswers: UserAnswers = emptyUserAnswers
-              .set(LargeBeneficiaryStatus(0), Completed).right.get
+              .set(LargeBeneficiaryStatus(0), Completed).value
 
             factory.answerSections(userAnswers) mustBe
               List(
@@ -130,7 +130,7 @@ class SubmissionSetFactorySpec extends SpecBase {
 
           "other beneficiary only" in {
             val userAnswers: UserAnswers = emptyUserAnswers
-              .set(OtherBeneficiaryStatus(0), Completed).right.get
+              .set(OtherBeneficiaryStatus(0), Completed).value
 
             factory.answerSections(userAnswers) mustBe
               List(
@@ -149,8 +149,8 @@ class SubmissionSetFactorySpec extends SpecBase {
         "have 'Beneficiaries' as section key of the topmost section" when {
           "individual beneficiary and class of beneficiary" in {
             val userAnswers: UserAnswers = emptyUserAnswers
-              .set(IndividualBeneficiaryStatus(0), Completed).right.get
-              .set(ClassBeneficiaryStatus(0), Completed).right.get
+              .set(IndividualBeneficiaryStatus(0), Completed).value
+              .set(ClassBeneficiaryStatus(0), Completed).value
 
             factory.answerSections(userAnswers) mustBe
               List(
@@ -171,8 +171,8 @@ class SubmissionSetFactorySpec extends SpecBase {
 
           "class of beneficiary and trust beneficiary" in {
             val userAnswers: UserAnswers = emptyUserAnswers
-              .set(ClassBeneficiaryStatus(0), Completed).right.get
-              .set(TrustBeneficiaryStatus(0), Completed).right.get
+              .set(ClassBeneficiaryStatus(0), Completed).value
+              .set(TrustBeneficiaryStatus(0), Completed).value
 
             factory.answerSections(userAnswers) mustBe
               List(

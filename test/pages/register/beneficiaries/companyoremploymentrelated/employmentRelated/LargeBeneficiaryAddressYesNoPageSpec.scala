@@ -35,10 +35,10 @@ class LargeBeneficiaryAddressYesNoPageSpec extends PageBehaviours {
   "remove pages when LargeBeneficiaryAddressYesNoPage is set to false" in {
     forAll(arbitrary[UserAnswers]) {
       initial =>
-        val answers: UserAnswers = initial.set(LargeBeneficiaryAddressUKYesNoPage(0), true).right.get
-          .set(LargeBeneficiaryAddressPage(0), UKAddress("line 1", "line 2", Some("line 3"), Some("line 4"),"line 5")).right.get
+        val answers: UserAnswers = initial.set(LargeBeneficiaryAddressUKYesNoPage(0), true).value
+          .set(LargeBeneficiaryAddressPage(0), UKAddress("line 1", "line 2", Some("line 3"), Some("line 4"),"line 5")).value
 
-        val result = answers.set(LargeBeneficiaryAddressYesNoPage(0), false).right.get
+        val result = answers.set(LargeBeneficiaryAddressYesNoPage(0), false).value
 
         result.get(LargeBeneficiaryAddressUKYesNoPage(0)) mustNot be(defined)
         result.get(LargeBeneficiaryAddressPage(0)) mustNot be(defined)

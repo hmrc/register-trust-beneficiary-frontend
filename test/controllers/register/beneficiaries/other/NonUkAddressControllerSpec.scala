@@ -39,9 +39,9 @@ class NonUkAddressControllerSpec extends SpecBase {
   private val nonUkAddressRoute = routes.NonUkAddressController.onPageLoad(index, draftId).url
   private val description = "Other"
   private val answer = InternationalAddress("Line 1", "Line 2", None, "DE")
-  private val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+  private val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
-  private val baseAnswers = emptyUserAnswers.set(DescriptionPage(index), description).right.get
+  private val baseAnswers = emptyUserAnswers.set(DescriptionPage(index), description).value
 
   "NonUkAddress Controller" must {
 
@@ -65,7 +65,7 @@ class NonUkAddressControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = baseAnswers.set(AddressInternationalPage(index), answer).right.get
+      val answers = baseAnswers.set(AddressInternationalPage(index), answer).value
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 

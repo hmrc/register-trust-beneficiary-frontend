@@ -69,7 +69,7 @@ class RemoveEmploymentRelatedBeneficiaryControllerSpec extends SpecBase with Sca
 
       "return OK and the correct view for a GET" in {
 
-        val userAnswers = emptyUserAnswers.set(NamePage(0), "Employment Related").right.get
+        val userAnswers = emptyUserAnswers.set(NamePage(0), "Employment Related").value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -90,7 +90,7 @@ class RemoveEmploymentRelatedBeneficiaryControllerSpec extends SpecBase with Sca
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(0), "Employment Related").right.get
+      val userAnswers = emptyUserAnswers.set(NamePage(0), "Employment Related").value
 
       forAll(arbitrary[Boolean]) {
         value =>
@@ -115,7 +115,7 @@ class RemoveEmploymentRelatedBeneficiaryControllerSpec extends SpecBase with Sca
 
     "return an Internal Server Error when setting the user answers goes wrong" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(0), "Employment Related").right.get
+      val userAnswers = emptyUserAnswers.set(NamePage(0), "Employment Related").value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
@@ -139,7 +139,7 @@ class RemoveEmploymentRelatedBeneficiaryControllerSpec extends SpecBase with Sca
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(0), "Employment related").right.get
+      val userAnswers = emptyUserAnswers.set(NamePage(0), "Employment related").value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

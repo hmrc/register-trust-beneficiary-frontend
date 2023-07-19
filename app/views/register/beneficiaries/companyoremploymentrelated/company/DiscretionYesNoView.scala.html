@@ -32,7 +32,7 @@
     showBackLink = true
 ) {
 
-    @formHelper(action = DiscretionYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = DiscretionYesNoController.onSubmit(index, draftId), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 

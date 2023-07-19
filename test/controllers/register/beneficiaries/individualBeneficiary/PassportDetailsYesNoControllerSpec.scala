@@ -45,7 +45,7 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
 
     "return OK and the correct view for a GET" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index), fullName).right.get
+      val userAnswers = emptyUserAnswers.set(NamePage(index), fullName).value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -66,8 +66,8 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), fullName).right.get
-        .set(PassportDetailsYesNoPage(index), true).right.get
+        .set(NamePage(index), fullName).value
+        .set(PassportDetailsYesNoPage(index), true).value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -87,7 +87,7 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index), fullName).right.get
+      val userAnswers = emptyUserAnswers.set(NamePage(index), fullName).value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -110,7 +110,7 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
 
     "return an Internal Server Error when setting the user answers goes wrong" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index), fullName).right.get
+      val userAnswers = emptyUserAnswers.set(NamePage(index), fullName).value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
@@ -136,7 +136,7 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
 
     "return a Bad Request when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index), fullName).right.get
+      val userAnswers = emptyUserAnswers.set(NamePage(index), fullName).value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

@@ -37,10 +37,10 @@ class AddressUKYesNoPageSpec extends PageBehaviours {
     forAll(arbitrary[UserAnswers], arbitrary[String]) {
       (initial, str) =>
         val answers: UserAnswers =
-          initial.set(AddressUKPage(index), UKAddress(str, str, Some(str), Some(str), str)).right.get
-          .set(AddressInternationalPage(index), InternationalAddress(str, str, Some(str), str)).right.get
+          initial.set(AddressUKPage(index), UKAddress(str, str, Some(str), Some(str), str)).value
+          .set(AddressInternationalPage(index), InternationalAddress(str, str, Some(str), str)).value
 
-        val result = answers.set(AddressUKYesNoPage(index), false).right.get
+        val result = answers.set(AddressUKYesNoPage(index), false).value
 
         result.get(AddressInternationalPage(index)) must be(defined)
         result.get(AddressUKPage(index)) mustNot be(defined)
@@ -51,10 +51,10 @@ class AddressUKYesNoPageSpec extends PageBehaviours {
     forAll(arbitrary[UserAnswers], arbitrary[String]) {
       (initial, str) =>
         val answers: UserAnswers =
-          initial.set(AddressUKPage(index), UKAddress(str, str, Some(str), Some(str), str)).right.get
-            .set(AddressInternationalPage(index), InternationalAddress(str, str, Some(str), str)).right.get
+          initial.set(AddressUKPage(index), UKAddress(str, str, Some(str), Some(str), str)).value
+            .set(AddressInternationalPage(index), InternationalAddress(str, str, Some(str), str)).value
 
-        val result = answers.set(AddressUKYesNoPage(index), true).right.get
+        val result = answers.set(AddressUKYesNoPage(index), true).value
 
         result.get(AddressInternationalPage(index)) mustNot be(defined)
         result.get(AddressUKPage(index)) must be(defined)

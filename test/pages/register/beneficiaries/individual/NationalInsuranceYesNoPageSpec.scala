@@ -40,8 +40,8 @@ class NationalInsuranceYesNoPageSpec extends PageBehaviours {
     val index = 0
     forAll(arbitrary[UserAnswers], arbitrary[String]) {
       (initial, str) =>
-        val answers: UserAnswers = initial.set(NationalInsuranceNumberPage(index), str).right.get
-        val result = answers.set(NationalInsuranceYesNoPage(index), false).right.get
+        val answers: UserAnswers = initial.set(NationalInsuranceNumberPage(index), str).value
+        val result = answers.set(NationalInsuranceYesNoPage(index), false).value
 
         result.get(NationalInsuranceNumberPage(index)) mustNot be(defined)
     }
@@ -51,16 +51,16 @@ class NationalInsuranceYesNoPageSpec extends PageBehaviours {
     val index = 0
     forAll(arbitrary[UserAnswers], arbitrary[String]) {
       (initial, str) =>
-        val answers: UserAnswers = initial.set(AddressYesNoPage(index), true).right.get
-          .set(AddressUKYesNoPage(index), true).right.get
-          .set(AddressUKPage(index), UKAddress(str, str, Some(str), Some(str), str)).right.get
-          .set(AddressInternationalPage(index), InternationalAddress(str, str, Some(str), str)).right.get
-          .set(PassportDetailsYesNoPage(index), true).right.get
-          .set(IDCardDetailsYesNoPage(index), true).right.get
-          .set(PassportDetailsPage(index), PassportOrIdCardDetails("a", "b", LocalDate.now)).right.get
-          .set(IDCardDetailsPage(index), PassportOrIdCardDetails("c", "d", LocalDate.now)).right.get
+        val answers: UserAnswers = initial.set(AddressYesNoPage(index), true).value
+          .set(AddressUKYesNoPage(index), true).value
+          .set(AddressUKPage(index), UKAddress(str, str, Some(str), Some(str), str)).value
+          .set(AddressInternationalPage(index), InternationalAddress(str, str, Some(str), str)).value
+          .set(PassportDetailsYesNoPage(index), true).value
+          .set(IDCardDetailsYesNoPage(index), true).value
+          .set(PassportDetailsPage(index), PassportOrIdCardDetails("a", "b", LocalDate.now)).value
+          .set(IDCardDetailsPage(index), PassportOrIdCardDetails("c", "d", LocalDate.now)).value
 
-        val result = answers.set(NationalInsuranceYesNoPage(index), true).right.get
+        val result = answers.set(NationalInsuranceYesNoPage(index), true).value
 
         result.get(AddressYesNoPage(index)) mustNot be(defined)
         result.get(AddressUKYesNoPage(index)) mustNot be(defined)

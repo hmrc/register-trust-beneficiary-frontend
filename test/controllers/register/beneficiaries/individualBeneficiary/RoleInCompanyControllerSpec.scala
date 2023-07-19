@@ -41,7 +41,7 @@ class RoleInCompanyControllerSpec extends SpecBase {
   private val name: FullName = FullName("FirstName", None, "LastName")
   private val index = 0
 
-  private val userAnswers: UserAnswers = emptyUserAnswers.set(NamePage(index), name).right.get
+  private val userAnswers: UserAnswers = emptyUserAnswers.set(NamePage(index), name).value
 
   private def application(repositorySetResult: Either[TrustErrors, Boolean] = Right(true)): Application =
     applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = repositorySetResult)
@@ -72,8 +72,8 @@ class RoleInCompanyControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), name).right.get
-        .set(RoleInCompanyPage(index), Director).right.get
+        .set(NamePage(index), name).value
+        .set(RoleInCompanyPage(index), Director).value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

@@ -38,9 +38,9 @@ class IDCardDetailsYesNoPageSpec extends PageBehaviours {
       forAll(arbitrary[UserAnswers]) {
         initial =>
           val answers: UserAnswers =
-          initial.set(IDCardDetailsPage(index), PassportOrIdCardDetails("c", "d", LocalDate.now)).right.get
+          initial.set(IDCardDetailsPage(index), PassportOrIdCardDetails("c", "d", LocalDate.now)).value
 
-          val result = answers.set(IDCardDetailsYesNoPage(index), false).right.get
+          val result = answers.set(IDCardDetailsYesNoPage(index), false).value
 
           result.get(IDCardDetailsPage(index)) mustNot be(defined)
       }

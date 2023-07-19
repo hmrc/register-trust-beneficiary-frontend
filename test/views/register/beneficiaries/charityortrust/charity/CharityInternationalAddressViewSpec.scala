@@ -37,7 +37,7 @@ class CharityInternationalAddressViewSpec extends InternationalAddressViewBehavi
 
     val view = viewFor[CharityInternationalAddressView](Some(emptyUserAnswers))
 
-    val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+    val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, countryOptions, fakeDraftId, index, charityName)(fakeRequest, messages)

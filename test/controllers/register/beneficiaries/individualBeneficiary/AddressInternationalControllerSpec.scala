@@ -50,7 +50,7 @@ class AddressInternationalControllerSpec extends SpecBase {
 
     "return OK and the correct view for a GET" in {
 
-      val userAnswers: UserAnswers = emptyUserAnswers.set(NamePage(index), name).right.get
+      val userAnswers: UserAnswers = emptyUserAnswers.set(NamePage(index), name).value
 
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -60,7 +60,7 @@ class AddressInternationalControllerSpec extends SpecBase {
 
       val result: Future[Result] = route(application, request).value
 
-      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
       status(result) mustEqual OK
 
@@ -72,8 +72,9 @@ class AddressInternationalControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index), name).right.get
-        .set(AddressInternationalPage(index), InternationalAddress("line 1", "line 2", Some("line 3"), "country")).right.get
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(index), name).value
+        .set(AddressInternationalPage(index), InternationalAddress("line 1", "line 2", Some("line 3"), "country")).value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -83,7 +84,7 @@ class AddressInternationalControllerSpec extends SpecBase {
 
       val result = route(application, request).value
 
-      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
       status(result) mustEqual OK
 
@@ -100,8 +101,9 @@ class AddressInternationalControllerSpec extends SpecBase {
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index), name).right.get
-        .set(AddressInternationalPage(index), InternationalAddress("line 1", "line 2", Some("line 3"), "country")).right.get
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(index), name).value
+        .set(AddressInternationalPage(index), InternationalAddress("line 1", "line 2", Some("line 3"), "country")).value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -124,8 +126,9 @@ class AddressInternationalControllerSpec extends SpecBase {
 
     "return an Internal Server Error when setting the user answers goes wrong" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index), name).right.get
-        .set(AddressInternationalPage(index), InternationalAddress("line 1", "line 2", Some("line 3"), "country")).right.get
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(index), name).value
+        .set(AddressInternationalPage(index), InternationalAddress("line 1", "line 2", Some("line 3"), "country")).value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
@@ -151,7 +154,7 @@ class AddressInternationalControllerSpec extends SpecBase {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index), name).right.get
+      val userAnswers = emptyUserAnswers.set(NamePage(index), name).value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -165,7 +168,7 @@ class AddressInternationalControllerSpec extends SpecBase {
 
       val result = route(application, request).value
 
-      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
       status(result) mustEqual BAD_REQUEST
 

@@ -30,10 +30,10 @@ class RemoveClassOfBeneficiaryQuerySpec extends PageBehaviours {
         initial =>
 
           val answers: UserAnswers = initial
-            .set(ClassBeneficiaryDescriptionPage(0), "Future issue of grandchildren").right.get
-            .set(ClassBeneficiaryDescriptionPage(1), "Grandchildren of Sister").right.get
+            .set(ClassBeneficiaryDescriptionPage(0), "Future issue of grandchildren").value
+            .set(ClassBeneficiaryDescriptionPage(1), "Grandchildren of Sister").value
 
-          val result = answers.remove(RemoveClassOfBeneficiaryQuery(0)).right.get
+          val result = answers.remove(RemoveClassOfBeneficiaryQuery(0)).value
 
           result.get(ClassBeneficiaryDescriptionPage(0)).value mustBe "Grandchildren of Sister"
 

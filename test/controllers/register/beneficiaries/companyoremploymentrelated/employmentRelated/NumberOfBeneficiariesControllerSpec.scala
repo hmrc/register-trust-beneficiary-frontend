@@ -61,7 +61,7 @@ class NumberOfBeneficiariesControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = emptyUserAnswers.set(LargeBeneficiaryNumberOfBeneficiariesPage(index), numberOfBeneficiaries).right.get
+      val answers = emptyUserAnswers.set(LargeBeneficiaryNumberOfBeneficiariesPage(index), numberOfBeneficiaries).value
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 

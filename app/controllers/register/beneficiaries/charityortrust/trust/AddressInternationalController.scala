@@ -60,7 +60,7 @@ class AddressInternationalController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, countryOptions.options,  index, draftId, request.beneficiaryName))
+      Ok(view(preparedForm, countryOptions.options(),  index, draftId, request.beneficiaryName))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
@@ -68,7 +68,7 @@ class AddressInternationalController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options,  index, draftId, request.beneficiaryName))),
+          Future.successful(BadRequest(view(formWithErrors, countryOptions.options(),  index, draftId, request.beneficiaryName))),
 
         value => {
           val result = for {

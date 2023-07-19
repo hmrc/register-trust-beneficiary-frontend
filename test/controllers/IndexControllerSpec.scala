@@ -55,7 +55,7 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
       "redirect to add-to page if there is at least one in-progress or completed beneficiary" in {
 
         val userAnswers: UserAnswers = emptyUserAnswers
-          .set(NamePage(0), name).right.get
+          .set(NamePage(0), name).value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[TrustsStoreService].toInstance(mockTrustsStoreService))
@@ -86,7 +86,7 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
         reset(mockRegistrationsRepository)
 
         val userAnswers: UserAnswers = emptyUserAnswers
-          .set(NamePage(0), name).right.get
+          .set(NamePage(0), name).value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
           .overrides(bind[TrustsStoreService].toInstance(mockTrustsStoreService))

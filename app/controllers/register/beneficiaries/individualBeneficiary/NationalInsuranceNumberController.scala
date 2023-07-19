@@ -80,7 +80,6 @@ class NationalInsuranceNumberController @Inject()(
       val name = request.userAnswers.get(NamePage(index)).get
 
       getForm(draftId, index).value.map {
-
         case Left(_) => logger.warn(s"[$className][onPageLoad][Session ID: ${request.sessionId}] Error while retrieving settlor ninos")
           InternalServerError(technicalErrorView())
         case Right(form) =>
@@ -100,7 +99,6 @@ class NationalInsuranceNumberController @Inject()(
       val name = request.userAnswers.get(NamePage(index)).get
 
       getForm(draftId, index).value.flatMap {
-
         case Left(_) => logger.warn(s"[$className][onPageLoad][Session ID: ${request.sessionId}] Error while retrieving settlor ninos")
           Future.successful(InternalServerError(technicalErrorView()))
         case Right(form) =>

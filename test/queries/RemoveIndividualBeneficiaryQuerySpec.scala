@@ -33,13 +33,13 @@ class RemoveIndividualBeneficiaryQuerySpec extends PageBehaviours {
         initial =>
 
           val answers: UserAnswers = initial
-            .set(NamePage(0), FullName("First", None, "Last")).right.get
-            .set(AddressYesNoPage(0), true).right.get
-            .set(AddressUKYesNoPage(0), true).right.get
-            .set(AddressUKPage(0), UKAddress("1", "2", Some("3"), Some("4"), "5")).right.get
-            .set(NamePage(1), FullName("Second", None, "Last")).right.get
+            .set(NamePage(0), FullName("First", None, "Last")).value
+            .set(AddressYesNoPage(0), true).value
+            .set(AddressUKYesNoPage(0), true).value
+            .set(AddressUKPage(0), UKAddress("1", "2", Some("3"), Some("4"), "5")).value
+            .set(NamePage(1), FullName("Second", None, "Last")).value
 
-          val result = answers.remove(RemoveIndividualBeneficiaryQuery(index)).right.get
+          val result = answers.remove(RemoveIndividualBeneficiaryQuery(index)).value
 
           result.get(NamePage(0)).value mustBe FullName("Second", None, "Last")
           result.get(AddressYesNoPage(0)) mustNot be(defined)

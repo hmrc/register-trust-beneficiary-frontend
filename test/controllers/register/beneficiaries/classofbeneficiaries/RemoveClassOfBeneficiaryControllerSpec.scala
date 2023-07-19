@@ -68,7 +68,7 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
       "return OK and the correct view for a GET" in {
 
         val userAnswers = emptyUserAnswers
-          .set(ClassBeneficiaryDescriptionPage(0), "Future issues of grandchildren").right.get
+          .set(ClassBeneficiaryDescriptionPage(0), "Future issues of grandchildren").value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -89,7 +89,7 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(ClassBeneficiaryDescriptionPage(0), "Future issues of grandchildren").right.get
+        .set(ClassBeneficiaryDescriptionPage(0), "Future issues of grandchildren").value
 
       forAll(arbitrary[Boolean]) {
         value =>
@@ -115,7 +115,7 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
     "return an Internal Server Error when setting the user answers goes wrong" in {
 
       val userAnswers = emptyUserAnswers
-        .set(ClassBeneficiaryDescriptionPage(0), "Future issues of grandchildren").right.get
+        .set(ClassBeneficiaryDescriptionPage(0), "Future issues of grandchildren").value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
@@ -140,7 +140,7 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(ClassBeneficiaryDescriptionPage(0), "Future issues of grandchildren").right.get
+        .set(ClassBeneficiaryDescriptionPage(0), "Future issues of grandchildren").value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

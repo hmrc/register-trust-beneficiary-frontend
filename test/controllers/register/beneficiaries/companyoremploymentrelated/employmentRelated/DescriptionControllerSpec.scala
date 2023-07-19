@@ -61,7 +61,7 @@ class DescriptionControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = emptyUserAnswers.set(LargeBeneficiaryDescriptionPage(index), description).right.get
+      val answers = emptyUserAnswers.set(LargeBeneficiaryDescriptionPage(index), description).value
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 

@@ -49,8 +49,8 @@ class NationalInsuranceNumberControllerSpec extends SpecBase {
 
     "return OK and the correct view for a GET" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index),
-        name).right.get
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(index), name).value
 
       val mockDraftRegistrationService = mock[DraftRegistrationService]
 
@@ -74,8 +74,8 @@ class NationalInsuranceNumberControllerSpec extends SpecBase {
 
     "return internal server error when there is a problem retrieving settlor ninos for GET" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index),
-        name).right.get
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(index), name).value
 
       val mockDraftRegistrationService = mock[DraftRegistrationService]
 
@@ -99,8 +99,9 @@ class NationalInsuranceNumberControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(NationalInsuranceNumberPage(index), "answer").right.get
-        .set(NamePage(index),name).right.get
+      val userAnswers = emptyUserAnswers
+        .set(NationalInsuranceNumberPage(index), "answer").value
+        .set(NamePage(index),name).value
 
       val mockDraftRegistrationService = mock[DraftRegistrationService]
 
@@ -124,8 +125,8 @@ class NationalInsuranceNumberControllerSpec extends SpecBase {
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index),
-        name).right.get
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(index), name).value
 
       val mockDraftRegistrationService = mock[DraftRegistrationService]
 
@@ -151,8 +152,8 @@ class NationalInsuranceNumberControllerSpec extends SpecBase {
     }
     "return internal server error when there is a problem retrieving settlor ninos for POST" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index),
-        name).right.get
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(index), name).value
 
       val mockDraftRegistrationService = mock[DraftRegistrationService]
 
@@ -183,8 +184,8 @@ class NationalInsuranceNumberControllerSpec extends SpecBase {
 
     "return an Internal Server Error when setting the user answers goes wrong" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index),
-        name).right.get
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(index), name).value
 
       val mockDraftRegistrationService = mock[DraftRegistrationService]
 
@@ -216,8 +217,8 @@ class NationalInsuranceNumberControllerSpec extends SpecBase {
     "return a Bad Request and errors" when {
       "invalid data is submitted" in {
 
-        val userAnswers = emptyUserAnswers.set(NamePage(index),
-          name).right.get
+        val userAnswers = emptyUserAnswers
+          .set(NamePage(index), name).value
 
         val mockDraftRegistrationService = mock[DraftRegistrationService]
 
@@ -248,8 +249,8 @@ class NationalInsuranceNumberControllerSpec extends SpecBase {
         val nino = "JH123456C"
 
         val userAnswers = emptyUserAnswers
-          .set(NamePage(index), name).right.get
-          .set(NationalInsuranceNumberPage(index + 1), nino).right.get
+          .set(NamePage(index), name).value
+          .set(NationalInsuranceNumberPage(index + 1), nino).value
 
         val mockDraftRegistrationService = mock[DraftRegistrationService]
 

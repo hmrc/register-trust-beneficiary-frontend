@@ -40,11 +40,11 @@ class PassportDetailsYesNoPageSpec extends PageBehaviours {
       "set to true" in {
         forAll(arbitrary[UserAnswers]) {
           initial =>
-            val answers: UserAnswers = initial.set(page, false).right.get
-              .set(IDCardDetailsYesNoPage(0), true).right.get
-              .set(IDCardDetailsPage(0), PassportOrIdCardDetails("France", "98765546", LocalDate.now())).right.get
+            val answers: UserAnswers = initial.set(page, false).value
+              .set(IDCardDetailsYesNoPage(0), true).value
+              .set(IDCardDetailsPage(0), PassportOrIdCardDetails("France", "98765546", LocalDate.now())).value
 
-            val result = answers.set(page, true).right.get
+            val result = answers.set(page, true).value
 
             result.get(IDCardDetailsYesNoPage(0)) must not be defined
             result.get(IDCardDetailsPage(0)) must not be defined
@@ -54,10 +54,10 @@ class PassportDetailsYesNoPageSpec extends PageBehaviours {
       "set to false" in {
         forAll(arbitrary[UserAnswers]) {
           initial =>
-            val answers: UserAnswers = initial.set(page, true).right.get
-              .set(PassportDetailsPage(0), PassportOrIdCardDetails("France", "234323", LocalDate.now())).right.get
+            val answers: UserAnswers = initial.set(page, true).value
+              .set(PassportDetailsPage(0), PassportOrIdCardDetails("France", "234323", LocalDate.now())).value
 
-            val result = answers.set(page, false).right.get
+            val result = answers.set(page, false).value
 
             result.get(PassportDetailsPage(0)) must not be defined
         }

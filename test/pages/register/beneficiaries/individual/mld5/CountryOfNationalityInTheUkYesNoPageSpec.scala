@@ -35,10 +35,10 @@ class CountryOfNationalityInTheUkYesNoPageSpec extends PageBehaviours {
     "Yes selected - set CountryOfNationalityPage to 'GB' " in {
       forAll(arbitrary[UserAnswers]) {
         initial =>
-          val answers: UserAnswers = initial.set(CountryOfNationalityYesNoPage(0), true).right.get
-            .set(CountryOfNationalityPage(0), ES).right.get
+          val answers: UserAnswers = initial.set(CountryOfNationalityYesNoPage(0), true).value
+            .set(CountryOfNationalityPage(0), ES).value
 
-          val result = answers.set(CountryOfNationalityInTheUkYesNoPage(0), true).right.get
+          val result = answers.set(CountryOfNationalityInTheUkYesNoPage(0), true).value
 
           result.get(CountryOfNationalityPage(0)).get mustBe GB
       }
@@ -47,10 +47,10 @@ class CountryOfNationalityInTheUkYesNoPageSpec extends PageBehaviours {
     "No selected" in {
       forAll(arbitrary[UserAnswers]) {
         initial =>
-          val answers: UserAnswers = initial.set(CountryOfNationalityYesNoPage(0), true).right.get
-            .set(CountryOfNationalityPage(0), ES).right.get
+          val answers: UserAnswers = initial.set(CountryOfNationalityYesNoPage(0), true).value
+            .set(CountryOfNationalityPage(0), ES).value
 
-          val result = answers.set(CountryOfNationalityInTheUkYesNoPage(0), false).right.get
+          val result = answers.set(CountryOfNationalityInTheUkYesNoPage(0), false).value
 
           result.get(CountryOfNationalityPage(0)).get mustBe ES
       }

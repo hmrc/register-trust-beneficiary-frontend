@@ -45,7 +45,7 @@ class CharityNameControllerSpec extends SpecBase {
   private lazy val charityNameRoute: String = routes.CharityNameController.onPageLoad(index, fakeDraftId).url
 
   private val userAnswers: UserAnswers = emptyUserAnswers
-    .set(CharityNamePage(index), name).right.get
+    .set(CharityNamePage(index), name).value
 
   "CharityName Controller" must {
 

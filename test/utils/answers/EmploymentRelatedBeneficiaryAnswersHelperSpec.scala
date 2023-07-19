@@ -50,16 +50,16 @@ class EmploymentRelatedBeneficiaryAnswersHelperSpec extends SpecBase {
     "return an employment-related beneficiary answer section" in {
 
       val userAnswers = emptyUserAnswers
-        .set(LargeBeneficiaryNamePage(index), name).right.get
-        .set(CountryOfResidenceYesNoPage(index), true).right.get
-        .set(CountryOfResidenceInTheUkYesNoPage(index), false).right.get
-        .set(CountryOfResidencePage(index), country).right.get
-        .set(LargeBeneficiaryAddressYesNoPage(index), true).right.get
-        .set(LargeBeneficiaryAddressUKYesNoPage(index), true).right.get
-        .set(LargeBeneficiaryAddressPage(index), ukAddress).right.get
-        .set(LargeBeneficiaryAddressInternationalPage(index), nonUkAddress).right.get
-        .set(LargeBeneficiaryDescriptionPage(index), description).right.get
-        .set(LargeBeneficiaryNumberOfBeneficiariesPage(index), HowManyBeneficiaries.Over201).right.get
+        .set(LargeBeneficiaryNamePage(index), name).value
+        .set(CountryOfResidenceYesNoPage(index), true).value
+        .set(CountryOfResidenceInTheUkYesNoPage(index), false).value
+        .set(CountryOfResidencePage(index), country).value
+        .set(LargeBeneficiaryAddressYesNoPage(index), true).value
+        .set(LargeBeneficiaryAddressUKYesNoPage(index), true).value
+        .set(LargeBeneficiaryAddressPage(index), ukAddress).value
+        .set(LargeBeneficiaryAddressInternationalPage(index), nonUkAddress).value
+        .set(LargeBeneficiaryDescriptionPage(index), description).value
+        .set(LargeBeneficiaryNumberOfBeneficiariesPage(index), HowManyBeneficiaries.Over201).value
 
       val result = helper.beneficiaries(userAnswers).get
 

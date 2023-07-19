@@ -44,10 +44,10 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
         "minimum data" in {
 
           val userAnswers = emptyUserAnswers
-            .set(NamePage(index), name).right.get
-            .set(DiscretionYesNoPage(index), true).right.get
-            .set(CountryOfResidenceYesNoPage(index), false).right.get
-            .set(AddressYesNoPage(index), false).right.get
+            .set(NamePage(index), name).value
+            .set(DiscretionYesNoPage(index), true).value
+            .set(CountryOfResidenceYesNoPage(index), false).value
+            .set(AddressYesNoPage(index), false).value
 
           val result = helper.beneficiaries(userAnswers)
 
@@ -68,15 +68,15 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
         "full data with international address" in {
 
           val userAnswers = emptyUserAnswers
-            .set(NamePage(index), name).right.get
-            .set(DiscretionYesNoPage(index), false).right.get
-            .set(ShareOfIncomePage(index), 10).right.get
-            .set(CountryOfResidenceYesNoPage(index), true).right.get
-            .set(CountryOfResidenceInTheUkYesNoPage(index), false).right.get
-            .set(CountryOfResidencePage(index), nonUkCountry).right.get
-            .set(AddressYesNoPage(index), true).right.get
-            .set(AddressUKYesNoPage(index), false).right.get
-            .set(AddressInternationalPage(index), nonUkAddress).right.get
+            .set(NamePage(index), name).value
+            .set(DiscretionYesNoPage(index), false).value
+            .set(ShareOfIncomePage(index), 10).value
+            .set(CountryOfResidenceYesNoPage(index), true).value
+            .set(CountryOfResidenceInTheUkYesNoPage(index), false).value
+            .set(CountryOfResidencePage(index), nonUkCountry).value
+            .set(AddressYesNoPage(index), true).value
+            .set(AddressUKYesNoPage(index), false).value
+            .set(AddressInternationalPage(index), nonUkAddress).value
 
           val result = helper.beneficiaries(userAnswers)
 
@@ -102,14 +102,14 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
         "full data with UK address" in {
 
           val userAnswers = emptyUserAnswers
-            .set(NamePage(index), name).right.get
-            .set(DiscretionYesNoPage(index), false).right.get
-            .set(ShareOfIncomePage(index), 10).right.get
-            .set(CountryOfResidenceYesNoPage(index), true).right.get
-            .set(CountryOfResidenceInTheUkYesNoPage(index), true).right.get
-            .set(AddressYesNoPage(index), true).right.get
-            .set(AddressUKYesNoPage(index), true).right.get
-            .set(AddressUKPage(index), ukAddress).right.get
+            .set(NamePage(index), name).value
+            .set(DiscretionYesNoPage(index), false).value
+            .set(ShareOfIncomePage(index), 10).value
+            .set(CountryOfResidenceYesNoPage(index), true).value
+            .set(CountryOfResidenceInTheUkYesNoPage(index), true).value
+            .set(AddressYesNoPage(index), true).value
+            .set(AddressUKYesNoPage(index), true).value
+            .set(AddressUKPage(index), ukAddress).value
 
           val result = helper.beneficiaries(userAnswers)
 
@@ -136,8 +136,8 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
         "minimum data" in {
 
           val userAnswers = emptyUserAnswers
-            .set(NamePage(index), name).right.get
-            .set(CountryOfResidenceYesNoPage(index), false).right.get
+            .set(NamePage(index), name).value
+            .set(CountryOfResidenceYesNoPage(index), false).value
 
           val result = helper.beneficiaries(userAnswers)
 
@@ -156,10 +156,10 @@ class TrustBeneficiaryAnswersHelperSpec extends SpecBase {
         "maximum data" in {
 
           val userAnswers = emptyUserAnswers
-            .set(NamePage(index), name).right.get
-            .set(CountryOfResidenceYesNoPage(index), true).right.get
-            .set(CountryOfResidenceInTheUkYesNoPage(index), false).right.get
-            .set(CountryOfResidencePage(index), nonUkCountry).right.get
+            .set(NamePage(index), name).value
+            .set(CountryOfResidenceYesNoPage(index), true).value
+            .set(CountryOfResidenceInTheUkYesNoPage(index), false).value
+            .set(CountryOfResidencePage(index), nonUkCountry).value
 
           val result = helper.beneficiaries(userAnswers)
 

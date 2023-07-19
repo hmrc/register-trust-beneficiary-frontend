@@ -81,7 +81,7 @@ class IDCardDetailsController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, countryOptions.options, draftId, index, name))
+      Ok(view(preparedForm, countryOptions.options(), draftId, index, name))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
@@ -93,7 +93,7 @@ class IDCardDetailsController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, index, name))),
+          Future.successful(BadRequest(view(formWithErrors, countryOptions.options(), draftId, index, name))),
 
         value => {
           val result = for {

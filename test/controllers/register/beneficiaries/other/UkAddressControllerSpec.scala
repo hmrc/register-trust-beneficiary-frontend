@@ -37,7 +37,7 @@ class UkAddressControllerSpec extends SpecBase {
   private val ukAddressRoute: String = routes.UkAddressController.onPageLoad(index, draftId).url
   private val description: String = "Other"
   private val answer = UKAddress("Line 1", "Line 2", None, None, "NE11NE")
-  private val baseAnswers = emptyUserAnswers.set(DescriptionPage(index), description).right.get
+  private val baseAnswers = emptyUserAnswers.set(DescriptionPage(index), description).value
 
   "UkAddress Controller" must {
 
@@ -61,7 +61,7 @@ class UkAddressControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = baseAnswers.set(AddressUKPage(index), answer).right.get
+      val answers = baseAnswers.set(AddressUKPage(index), answer).value
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 

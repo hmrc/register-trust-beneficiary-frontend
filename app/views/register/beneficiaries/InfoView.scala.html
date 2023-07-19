@@ -142,7 +142,7 @@
         <p>@messages("beneficiaryInfo.5mld.paragraph72.nonTaxable")</p>
     }
 
-    @formHelper(action = InfoController.onSubmit(draftId), 'autoComplete -> "off") {
+    @formHelper(action = InfoController.onSubmit(draftId), Symbol("autoComplete") -> "off") {
         @submitButton(Some(messages("site.onlyContinue")))
     }
 }

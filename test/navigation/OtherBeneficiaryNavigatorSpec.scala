@@ -40,7 +40,7 @@ class OtherBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
       "DiscretionYesNoPage -> Yes -> CountryOfResidenceYesNo Page" in {
         val answers = baseAnswers
-          .set(IncomeDiscretionYesNoPage(index), true).right.get
+          .set(IncomeDiscretionYesNoPage(index), true).value
 
         navigator.nextPage(IncomeDiscretionYesNoPage(index), draftId, answers)
           .mustBe(controllers.register.beneficiaries.other.mld5.routes.CountryOfResidenceYesNoController.onPageLoad(index, draftId))
@@ -48,7 +48,7 @@ class OtherBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
       "Discretion yes no page -> No -> Share of income page" in {
         val answers = baseAnswers
-          .set(IncomeDiscretionYesNoPage(index), false).right.get
+          .set(IncomeDiscretionYesNoPage(index), false).value
 
         navigator.nextPage(IncomeDiscretionYesNoPage(index), draftId, answers)
           .mustBe(ShareOfIncomeController.onPageLoad(index, draftId))
@@ -61,7 +61,7 @@ class OtherBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
       "CountryOfResidenceYesNo -> No -> AddressYesNo Page" in {
         val answers = baseAnswers
-          .set(CountryOfResidenceYesNoPage(index), false).right.get
+          .set(CountryOfResidenceYesNoPage(index), false).value
 
         navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, answers)
           .mustBe(controllers.register.beneficiaries.other.routes.AddressYesNoController.onPageLoad(index, draftId))
@@ -69,7 +69,7 @@ class OtherBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
       "CountryOfResidenceYesNo -> Yes -> BeneficiariesAddressInUKYesNo Page" in {
         val answers = baseAnswers
-          .set(CountryOfResidenceYesNoPage(index), true).right.get
+          .set(CountryOfResidenceYesNoPage(index), true).value
 
         navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, answers)
           .mustBe(controllers.register.beneficiaries.other.mld5.routes.UKResidentYesNoController.onPageLoad(index, draftId))
@@ -77,7 +77,7 @@ class OtherBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
       "UKResidentYesNo -> No -> CountryOfResidence Page" in {
         val answers = baseAnswers
-          .set(UKResidentYesNoPage(index), false).right.get
+          .set(UKResidentYesNoPage(index), false).value
 
         navigator.nextPage(UKResidentYesNoPage(index), draftId, answers)
           .mustBe(controllers.register.beneficiaries.other.mld5.routes.CountryOfResidenceController.onPageLoad(index, draftId))
@@ -85,7 +85,7 @@ class OtherBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
       "UKResidentYesNoYesNo -> Yes -> AddressYesNo Page" in {
         val answers = baseAnswers
-          .set(UKResidentYesNoPage(index), true).right.get
+          .set(UKResidentYesNoPage(index), true).value
 
         navigator.nextPage(UKResidentYesNoPage(index), draftId, answers)
           .mustBe(controllers.register.beneficiaries.other.routes.AddressYesNoController.onPageLoad(index, draftId))
@@ -98,7 +98,7 @@ class OtherBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
       "Address yes no page -> No -> Check your answers page" in {
         val answers = baseAnswers
-          .set(AddressYesNoPage(index), false).right.get
+          .set(AddressYesNoPage(index), false).value
 
         navigator.nextPage(AddressYesNoPage(index), draftId, answers)
           .mustBe(CheckDetailsController.onPageLoad(index, draftId))
@@ -106,7 +106,7 @@ class OtherBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
       "Address yes no page -> Yes -> Address in the UK yes no page" in {
         val answers = baseAnswers
-          .set(AddressYesNoPage(index), true).right.get
+          .set(AddressYesNoPage(index), true).value
 
         navigator.nextPage(AddressYesNoPage(index), draftId, answers)
           .mustBe(AddressUkYesNoController.onPageLoad(index, draftId))
@@ -114,7 +114,7 @@ class OtherBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
       "Address in the UK yes no page -> Yes -> UK address page" in {
         val answers = baseAnswers
-          .set(AddressUKYesNoPage(index), true).right.get
+          .set(AddressUKYesNoPage(index), true).value
 
         navigator.nextPage(AddressUKYesNoPage(index), draftId, answers)
           .mustBe(UkAddressController.onPageLoad(index, draftId))
@@ -122,7 +122,7 @@ class OtherBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
       "Address in the UK yes no page -> No -> Non-UK address page" in {
         val answers = baseAnswers
-          .set(AddressUKYesNoPage(index), false).right.get
+          .set(AddressUKYesNoPage(index), false).value
 
         navigator.nextPage(AddressUKYesNoPage(index), draftId, answers)
           .mustBe(NonUkAddressController.onPageLoad(index, draftId))
@@ -151,7 +151,7 @@ class OtherBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
       "CountryOfResidenceYesNo -> No -> Check Details Page" in {
         val answers = baseAnswers
-          .set(CountryOfResidenceYesNoPage(index), false).right.get
+          .set(CountryOfResidenceYesNoPage(index), false).value
 
         navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, answers)
           .mustBe(CheckDetailsController.onPageLoad(index, draftId))
@@ -159,7 +159,7 @@ class OtherBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
       "CountryOfResidenceYesNo -> Yes -> UKResidentYesNo Page" in {
         val answers = baseAnswers
-          .set(CountryOfResidenceYesNoPage(index), true).right.get
+          .set(CountryOfResidenceYesNoPage(index), true).value
 
         navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, answers)
           .mustBe(controllers.register.beneficiaries.other.mld5.routes.UKResidentYesNoController.onPageLoad(index, draftId))
@@ -167,7 +167,7 @@ class OtherBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
       "UKResidentYesNo -> No -> CountryOfResidence Page" in {
         val answers = baseAnswers
-          .set(UKResidentYesNoPage(index), false).right.get
+          .set(UKResidentYesNoPage(index), false).value
 
         navigator.nextPage(UKResidentYesNoPage(index), draftId, answers)
           .mustBe(controllers.register.beneficiaries.other.mld5.routes.CountryOfResidenceController.onPageLoad(index, draftId))
@@ -175,7 +175,7 @@ class OtherBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
       "UKResidentYesNoYesNo -> Yes -> Check Details Page" in {
         val answers = baseAnswers
-          .set(UKResidentYesNoPage(index), true).right.get
+          .set(UKResidentYesNoPage(index), true).value
 
         navigator.nextPage(UKResidentYesNoPage(index), draftId, answers)
           .mustBe(CheckDetailsController.onPageLoad(index, draftId))

@@ -43,9 +43,9 @@ class CharityAnswersControllerSpec extends SpecBase {
   private lazy val charityAnswersRoute = routes.CharityAnswersController.onPageLoad(index, fakeDraftId).url
 
   override def emptyUserAnswers: UserAnswers = super.emptyUserAnswers
-    .set(WhatTypeOfBeneficiaryPage, CharityOrTrust).right.get
-    .set(CharityOrTrustPage, Charity).right.get
-    .set(CharityNamePage(index),"Test").right.get
+    .set(WhatTypeOfBeneficiaryPage, CharityOrTrust).value
+    .set(CharityOrTrustPage, Charity).value
+    .set(CharityNamePage(index),"Test").value
 
   "CharityAnswers Controller" must {
 
