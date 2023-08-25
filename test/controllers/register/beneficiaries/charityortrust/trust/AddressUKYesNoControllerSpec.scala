@@ -186,6 +186,6 @@ class AddressUKYesNoControllerSpec extends SpecBase {
 
       application.stop()
     }
-    
+
   }
 }
