@@ -27,7 +27,7 @@ import controllers.register.beneficiaries.companyoremploymentrelated.{routes => 
 import controllers.register.beneficiaries.individualBeneficiary.{routes => individualRts}
 import controllers.register.beneficiaries.other.{routes => otherRoutes}
 import models.CompanyOrEmploymentRelatedToAdd.{Company, _}
-import models.registration.pages.CharityOrTrust.{Charity, Trust, _}
+import models.registration.pages.CharityOrTrust.{Charity, Trust}
 import models.registration.pages.WhatTypeOfBeneficiary._
 import models.registration.pages.{AddABeneficiary, WhatTypeOfBeneficiary}
 import models.{Beneficiaries, ReadableUserAnswers}

@@ -17,7 +17,6 @@
 @import config.FrontendAppConfig
 @import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
 @import resources._
-@import views.html.helper.CSPNonce
 
 @this(
     appConfig: FrontendAppConfig,
@@ -79,16 +78,13 @@
 
 @govukLayout(
     pageTitle = Some(breadcrumbTitle(title)),
-    headBlock = Some(hmrcHead(
-        nonce = CSPNonce.get,
-        headBlock = Some(headScripts)
-    )),
+    headBlock = Some(hmrcHead(headBlock = Some(headScripts))),
     headerBlock = Some(hmrcStandardHeader(
         serviceUrl = Some(appConfig.loginContinueUrl),
         signOutUrl = if(canSignOut) Some(controllers.register.routes.LogoutController.logout().url) else None,
         phaseBanner = None
     )),
     beforeContentBlock = Some(beforeContentBlock),
-    scriptsBlock = Some(hmrcScripts(nonce = CSPNonce.get)),
+    scriptsBlock = Some(hmrcScripts()),
     footerBlock = Some(hmrcStandardFooter())
 )(mainContentWithGetHelp)
