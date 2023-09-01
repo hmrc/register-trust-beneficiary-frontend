@@ -1,5 +1,4 @@
-import sbt._
-import play.core.PlayVersion
+import sbt.*
 
 object AppDependencies {
 
@@ -16,11 +15,9 @@ object AppDependencies {
 
   private lazy val test: Seq[ModuleID] = Seq(
     "uk.gov.hmrc"                 %% "bootstrap-test-play-28"   % bootstrapVersion,
-    "com.typesafe.play"           %% "play-test"                % PlayVersion.current,
-    "org.scalatestplus.play"      %% "scalatestplus-play"       % "5.1.0",
-    "org.scalatestplus"           %% "scalatestplus-scalacheck" % "3.1.0.0-RC2",
     "org.jsoup"                   %  "jsoup"                    % "1.16.1",
     "org.scalatest"               %% "scalatest"                % "3.2.16",
+    "org.scalatestplus"           %% "scalacheck-1-17"          % "3.2.16.0",
     "org.mockito"                 %% "mockito-scala-scalatest"  % "1.17.14",
     "com.github.tomakehurst"      %  "wiremock-standalone"      % "2.27.2",
     "wolfendale"                  %% "scalacheck-gen-regexp"    % "0.1.2",
