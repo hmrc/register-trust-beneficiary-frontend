@@ -22,7 +22,7 @@ import forms.mappings.Mappings
 import javax.inject.Inject
 import models.core.pages.UKAddress
 import play.api.data.Forms._
-import play.api.data.{Form, Forms}
+import play.api.data.{Form}
 
 class UKAddressFormProvider @Inject() extends Mappings {
 

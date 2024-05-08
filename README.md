@@ -50,7 +50,7 @@ Run this script before raising a PR to ensure your code changes pass the Jenkins
 Start up service in SM2 as shown above then:
 
 ```
-../run_local_register_beneficiaries.sh
+./run_suite.sh RegisterBeneficiariesRunner
 ```
 from trusts-acceptance-tests repository.
 
