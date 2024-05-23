@@ -2,7 +2,7 @@ import sbt.*
 
 object AppDependencies {
 
-  val bootstrapVersion = "8.5.0"
+  val bootstrapVersion = "8.6.0"
 
   private lazy val compile = Seq(
     play.sbt.PlayImport.ws,
@@ -19,7 +19,7 @@ object AppDependencies {
     "org.scalatest"               %% "scalatest"                % "3.2.18",
     "org.scalatestplus"           %% "scalacheck-1-17"          % "3.2.18.0",
     "org.mockito"                 %% "mockito-scala-scalatest"  % "1.17.31",
-    "org.wiremock"                %  "wiremock-standalone"      % "3.5.4",
+    "org.wiremock"                %  "wiremock-standalone"      % "3.6.0",
     "wolfendale"                  %% "scalacheck-gen-regexp"    % "0.1.2",
     "com.vladsch.flexmark"        %  "flexmark-all"             % "0.64.8"
   ).map(_ % Test)

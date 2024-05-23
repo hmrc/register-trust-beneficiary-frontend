@@ -29,6 +29,8 @@ class EmploymentRelatedBeneficiaryDescriptionFormProviderSpec extends StringFiel
   val maxLength = 70
   val minLength = 1
 
+  val seventyOneChars: String = "a"*71
+
   ".description" must {
 
     val fieldName = "description"
@@ -59,12 +61,22 @@ class EmploymentRelatedBeneficiaryDescriptionFormProviderSpec extends StringFiel
       fieldName,
       requiredError = FormError(fieldName, requiredKey, Seq(fieldName))
     )
+
+    "not bind when field contains invalid characters" in {
+      val result = form.bind(Map("description" -> "/"))
+      result.errors.head.message shouldBe "employmentRelatedBeneficiary.description.error.invalid"
+    }
+
+    "not bind when field longer than 70 characters" in {
+      val result = form.bind(Map("description" -> seventyOneChars))
+      result.errors.head.message shouldBe "employmentRelatedBeneficiary.description.error.length"
+    }
   }
 
   ".description1" must {
 
     val fieldName = "description1"
-    val lengthKey = s"$messageKeyPrefix.error.length"
+    val lengthKey = s"$messageKeyPrefix.error.length1"
     val maxLength = 70
 
     behave like fieldWithMaxLength(
@@ -94,12 +106,22 @@ class EmploymentRelatedBeneficiaryDescriptionFormProviderSpec extends StringFiel
       val result = form.bind(Map("description" -> "description", "description1" -> ""))
       result.value.value.description1 shouldBe None
     }
+
+    "not bind when field contains invalid characters" in {
+      val result = form.bind(Map("description" -> "description", "description1" -> "/"))
+      result.errors.head.message shouldBe "employmentRelatedBeneficiary.description.error.invalid1"
+    }
+
+    "not bind when field longer than 70 characters" in {
+      val result = form.bind(Map("description" -> "description", "description1" -> seventyOneChars))
+      result.errors.head.message shouldBe "employmentRelatedBeneficiary.description.error.length1"
+    }
   }
 
   ".description2" must {
 
     val fieldName = "description2"
-    val lengthKey = s"$messageKeyPrefix.error.length"
+    val lengthKey = s"$messageKeyPrefix.error.length2"
     val maxLength = 70
 
     behave like fieldWithMaxLength(
@@ -129,12 +151,22 @@ class EmploymentRelatedBeneficiaryDescriptionFormProviderSpec extends StringFiel
       val result = form.bind(Map("description" -> "description", "description2" -> ""))
       result.value.value.description2 shouldBe None
     }
+
+    "not bind when field contains invalid characters" in {
+      val result = form.bind(Map("description" -> "description", "description2" -> "/"))
+      result.errors.head.message shouldBe "employmentRelatedBeneficiary.description.error.invalid2"
+    }
+
+    "not bind when field longer than 70 characters" in {
+      val result = form.bind(Map("description" -> "description", "description2" -> seventyOneChars))
+      result.errors.head.message shouldBe "employmentRelatedBeneficiary.description.error.length2"
+    }
   }
 
   ".description3" must {
 
     val fieldName = "description3"
-    val lengthKey = s"$messageKeyPrefix.error.length"
+    val lengthKey = s"$messageKeyPrefix.error.length3"
     val maxLength = 70
 
     behave like fieldWithMaxLength(
@@ -164,12 +196,22 @@ class EmploymentRelatedBeneficiaryDescriptionFormProviderSpec extends StringFiel
       val result = form.bind(Map("description" -> "description", "description3" -> ""))
       result.value.value.description3 shouldBe None
     }
+
+    "not bind when field contains invalid characters" in {
+      val result = form.bind(Map("description" -> "description", "description3" -> "/"))
+      result.errors.head.message shouldBe "employmentRelatedBeneficiary.description.error.invalid3"
+    }
+
+    "not bind when field longer than 70 characters" in {
+      val result = form.bind(Map("description" -> "description", "description3" -> seventyOneChars))
+      result.errors.head.message shouldBe "employmentRelatedBeneficiary.description.error.length3"
+    }
   }
 
   ".description4" must {
 
     val fieldName = "description4"
-    val lengthKey = s"$messageKeyPrefix.error.length"
+    val lengthKey = s"$messageKeyPrefix.error.length4"
     val maxLength = 70
 
     behave like fieldWithMaxLength(
@@ -198,6 +240,16 @@ class EmploymentRelatedBeneficiaryDescriptionFormProviderSpec extends StringFiel
     "bind whitespace no values" in {
       val result = form.bind(Map("description" -> "description", "description4" -> ""))
       result.value.value.description4 shouldBe None
+    }
+
+    "not bind when field contains invalid characters" in {
+      val result = form.bind(Map("description" -> "description", "description4" -> "/"))
+      result.errors.head.message shouldBe "employmentRelatedBeneficiary.description.error.invalid4"
+    }
+
+    "not bind when field longer than 70 characters" in {
+      val result = form.bind(Map("description" -> "description", "description4" -> seventyOneChars))
+      result.errors.head.message shouldBe "employmentRelatedBeneficiary.description.error.length4"
     }
   }
 
