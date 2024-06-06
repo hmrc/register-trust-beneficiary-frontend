@@ -39,11 +39,12 @@
 
     <fieldset class="govuk-fieldset" aria-describedby="form-hint">
 
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-            @heading("employmentRelatedBeneficiary.description.heading")
-        </legend>
+        <h1 class="govuk-heading-l">
+            <span class="govuk-caption-l">@messages("employmentRelatedBeneficiary.description.caption")</span>
+            @messages("employmentRelatedBeneficiary.description.heading")
+        </h1>
 
-        <span id="form-hint" class="govuk-hint">@messages("employmentRelatedBeneficiary.description.hint")</span>
+        <div id="form-hint" class="govuk-hint">@messages("employmentRelatedBeneficiary.description.hint")</div>
 
         @characterCount(
             field = form("description"),
