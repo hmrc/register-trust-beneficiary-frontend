@@ -4,8 +4,6 @@ import scoverage.ScoverageKeys
 import uk.gov.hmrc.DefaultBuildSettings
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
-lazy val appName: String = "register-trust-beneficiary-frontend"
-
 lazy val microservice = (project in file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
@@ -14,13 +12,12 @@ lazy val microservice = (project in file("."))
   .settings(inConfig(Test)(testSettings) *)
   .settings(majorVersion := 0)
   .settings(
-    scalaVersion := "2.13.13",
-
+    scalaVersion := "2.13.14",
     scalacOptions += "-Wconf:src=routes/.*:s",
     scalacOptions += "-Wconf:cat=unused-imports&src=html/.*:s"
   )
   .settings(
-    name := appName,
+    name := "register-trust-beneficiary-frontend",
     RoutesKeys.routesImport += "models._",
     TwirlKeys.templateImports ++= Seq(
       "play.twirl.api.HtmlFormat",
