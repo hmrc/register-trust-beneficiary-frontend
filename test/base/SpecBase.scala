@@ -86,5 +86,7 @@ trait SpecBase extends PlaySpec
         bind[DraftIdRetrievalActionProvider].toInstance(fakeDraftIdAction(userAnswers)),
         bind[RegistrationsRepository].toInstance(mockRegistrationsRepositoryBuilder(mockGetResult, mockSetResult, mockGetSettlorsAnswersResult)),
         bind[AffinityGroup].toInstance(Organisation)
+      ).configure(
+        "play.filters.disabled" -> List("play.filters.csrf.CSRFFilter", "play.filters.csp.CSPFilter")
       )
 }

@@ -54,14 +54,21 @@ class CountryOfResidenceYesNoController @Inject()(
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
       implicit request =>
 
-        val trustName = request.userAnswers.get(NamePage(index)).get
+        request.userAnswers.get(NamePage(index)) match {
+          case Some(trustName) =>
+            val preparedForm = request.userAnswers.get(CountryOfResidenceYesNoPage(index)) match {
+              case None =>
+                form
+              case Some(value) =>
+                form.fill(value)
+            }
 
-        val preparedForm = request.userAnswers.get(CountryOfResidenceYesNoPage(index)) match {
-          case None => form
-          case Some(value) => form.fill(value)
+            Ok(view(preparedForm, draftId, index, trustName))
+          case None =>
+            logger.warn(s"[$className][onPageLoad][Session ID: ${request.request.sessionId}] Error while getting trust name")
+            InternalServerError(technicalErrorView())
         }
 
-        Ok(view(preparedForm, draftId, index, trustName))
     }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
