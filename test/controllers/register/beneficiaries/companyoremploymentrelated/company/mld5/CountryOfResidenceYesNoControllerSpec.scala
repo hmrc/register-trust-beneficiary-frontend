@@ -195,7 +195,7 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase {
       application.stop()
     }
 
-    "redirect to PageNotFoundView given no user answers are found for NamePage " in {
+    "redirect to PageNotFoundView given no user answers are found for NamePage" in {
       val pageNotFoundView = app.injector.instanceOf[PageNotFoundView]
 
       val fakeRequest = FakeRequest(GET, countryOfResidenceYesNo)
@@ -203,18 +203,17 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase {
         RegistrationDataRequest(
           fakeRequest,
           "internalId",
-          "1",
-          emptyUserAnswers,
+          "sessionId",
+          userAnswers = emptyUserAnswers,
           AffinityGroup.Agent,
           Enrolments(Set.empty[Enrolment])
         )
 
-      val beneficiaryNameRequest = BeneficiaryNameRequest(registrationDataRequest, "beneficiaryName")
-
       val controller = app.injector.instanceOf[CountryOfResidenceYesNoController]
-      val index = 1
+      val beneficiaryNameRequest = BeneficiaryNameRequest(registrationDataRequest, "beneficiaryName")
+      val index = 0
 
-      val result = Future.successful(controller.handlePageLoad(index, draftId)(beneficiaryNameRequest))
+      val result = Future.successful(controller.handlePageLoad(index, "draftId")(beneficiaryNameRequest))
 
       status(result) mustEqual NOT_FOUND
       contentAsString(result) mustEqual pageNotFoundView()(fakeRequest, messages).toString()
