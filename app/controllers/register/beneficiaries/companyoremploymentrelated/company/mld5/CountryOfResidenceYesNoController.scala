@@ -21,6 +21,7 @@ import config.annotations.CompanyBeneficiary
 import controllers.actions._
 import controllers.actions.register.company.NameRequiredAction
 import forms.YesNoFormProvider
+import handlers.ErrorHandler
 import navigation.Navigator
 import pages.register.beneficiaries.companyoremploymentrelated.company.NamePage
 import pages.register.beneficiaries.companyoremploymentrelated.company.mld5.CountryOfResidenceYesNoPage
@@ -44,7 +45,8 @@ class CountryOfResidenceYesNoController @Inject()(
                                                    nameAction: NameRequiredAction,
                                                    formProvider: YesNoFormProvider,
                                                    view: CountryOfResidenceYesNoView,
-                                                   technicalErrorView: TechnicalErrorView
+                                                   technicalErrorView: TechnicalErrorView,
+                                                   errorHandler: ErrorHandler
                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val className = getClass.getSimpleName
@@ -53,23 +55,25 @@ class CountryOfResidenceYesNoController @Inject()(
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
       implicit request =>
+        handlePageLoad(index, draftId)
+    }
 
-        request.userAnswers.get(NamePage(index)) match {
-          case Some(trustName) =>
-            val preparedForm = request.userAnswers.get(CountryOfResidenceYesNoPage(index)) match {
-              case None =>
-                form
-              case Some(value) =>
-                form.fill(value)
-            }
-
-            Ok(view(preparedForm, draftId, index, trustName))
+  def handlePageLoad(index: Int, draftId: String)(implicit request: BeneficiaryNameRequest[_]): Result = {
+    request.userAnswers.get(NamePage(index)) match {
+      case Some(trustName) =>
+        val preparedForm = request.userAnswers.get(CountryOfResidenceYesNoPage(index)) match {
           case None =>
-            logger.warn(s"[$className][onPageLoad][Session ID: ${request.request.sessionId}] Error while getting trust name")
-            InternalServerError(technicalErrorView())
+            form
+          case Some(value) =>
+            form.fill(value)
         }
 
+        Ok(view(preparedForm, draftId, index, trustName))
+      case None =>
+        logger.warn(s"[$className][handlePageLoad][Session ID: ${request.request.sessionId}] Error while getting trust name")
+        NotFound(errorHandler.notFoundTemplate)
     }
+  }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
     standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
