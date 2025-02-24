@@ -18,8 +18,10 @@ package controllers.register.beneficiaries.companyoremploymentrelated.company.ml
 
 import base.SpecBase
 import config.annotations.CompanyBeneficiary
+import controllers.actions.BeneficiaryNameRequest
 import errors.ServerError
 import forms.YesNoFormProvider
+import models.requests.RegistrationDataRequest
 import navigation.{FakeNavigator, Navigator}
 import pages.register.beneficiaries.companyoremploymentrelated.company.NamePage
 import pages.register.beneficiaries.companyoremploymentrelated.company.mld5.CountryOfResidenceYesNoPage
@@ -27,8 +29,11 @@ import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.TechnicalErrorView
+import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, Enrolments}
 import views.html.register.beneficiaries.companyoremploymentrelated.company.mld5.CountryOfResidenceYesNoView
+import views.html.{PageNotFoundView, TechnicalErrorView}
+
+import scala.concurrent.Future
 
 class CountryOfResidenceYesNoControllerSpec extends SpecBase {
 
@@ -189,6 +194,31 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase {
 
       application.stop()
     }
+
+    "redirect to PageNotFoundView given no user answers are found for NamePage" in {
+      val pageNotFoundView = app.injector.instanceOf[PageNotFoundView]
+
+      val fakeRequest = FakeRequest(GET, countryOfResidenceYesNo)
+      val registrationDataRequest =
+        RegistrationDataRequest(
+          fakeRequest,
+          "internalId",
+          "sessionId",
+          userAnswers = emptyUserAnswers,
+          AffinityGroup.Agent,
+          Enrolments(Set.empty[Enrolment])
+        )
+
+      val controller = app.injector.instanceOf[CountryOfResidenceYesNoController]
+      val beneficiaryNameRequest = BeneficiaryNameRequest(registrationDataRequest, "beneficiaryName")
+      val index = 0
+
+      val result = Future.successful(controller.handlePageLoad(index, "draftId")(beneficiaryNameRequest))
+
+      status(result) mustEqual NOT_FOUND
+      contentAsString(result) mustEqual pageNotFoundView()(fakeRequest, messages).toString()
+    }
+
   }
 }
 
