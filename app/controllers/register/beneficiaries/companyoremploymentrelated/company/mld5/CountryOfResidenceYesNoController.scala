@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,12 +53,12 @@ class CountryOfResidenceYesNoController @Inject()(
   private val form: Form[Boolean] = formProvider.withPrefix("companyBeneficiary.5mld.countryOfResidenceYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
-    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
+    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
       implicit request =>
         handlePageLoad(index, draftId)
     }
 
-  def handlePageLoad(index: Int, draftId: String)(implicit request: BeneficiaryNameRequest[_]): Result = {
+  def handlePageLoad(index: Int, draftId: String)(implicit request: BeneficiaryNameRequest[_]): Future[Result] = {
     request.userAnswers.get(NamePage(index)) match {
       case Some(trustName) =>
         val preparedForm = request.userAnswers.get(CountryOfResidenceYesNoPage(index)) match {
@@ -68,10 +68,10 @@ class CountryOfResidenceYesNoController @Inject()(
             form.fill(value)
         }
 
-        Ok(view(preparedForm, draftId, index, trustName))
+        Future.successful(Ok(view(preparedForm, draftId, index, trustName)))
       case None =>
         logger.warn(s"[$className][handlePageLoad][Session ID: ${request.request.sessionId}] Error while getting trust name")
-        NotFound(errorHandler.notFoundTemplate)
+        errorHandler.notFoundTemplate.map(NotFound(_))
     }
   }
 

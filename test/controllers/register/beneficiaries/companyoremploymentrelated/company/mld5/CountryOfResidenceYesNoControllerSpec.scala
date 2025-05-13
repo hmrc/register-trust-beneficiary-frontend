@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,8 +32,6 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, Enrolments}
 import views.html.register.beneficiaries.companyoremploymentrelated.company.mld5.CountryOfResidenceYesNoView
 import views.html.{PageNotFoundView, TechnicalErrorView}
-
-import scala.concurrent.Future
 
 class CountryOfResidenceYesNoControllerSpec extends SpecBase {
 
@@ -213,7 +211,7 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase {
       val beneficiaryNameRequest = BeneficiaryNameRequest(registrationDataRequest, "beneficiaryName")
       val index = 0
 
-      val result = Future.successful(controller.handlePageLoad(index, "draftId")(beneficiaryNameRequest))
+      val result = controller.handlePageLoad(index, "draftId")(beneficiaryNameRequest)
 
       status(result) mustEqual NOT_FOUND
       contentAsString(result) mustEqual pageNotFoundView()(fakeRequest, messages).toString()
