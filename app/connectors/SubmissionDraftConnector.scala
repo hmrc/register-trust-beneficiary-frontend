@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,15 +21,17 @@ import config.FrontendAppConfig
 import errors.{ServerError, TrustErrors}
 import models._
 import play.api.http.Status.OK
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpException, HttpResponse, UpstreamErrorResponse}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 import utils.TrustEnvelope.TrustEnvelope
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success, Try}
 
-class SubmissionDraftConnector @Inject()(http: HttpClient, config: FrontendAppConfig) extends ConnectorErrorResponseHandler {
+class SubmissionDraftConnector @Inject()(http: HttpClientV2, config: FrontendAppConfig) extends ConnectorErrorResponseHandler {
 
   override val className: String = getClass.getName
 
@@ -38,35 +40,56 @@ class SubmissionDraftConnector @Inject()(http: HttpClient, config: FrontendAppCo
   def setDraftSectionSet(draftId: String, section: String, data: RegistrationSubmission.DataSet)
                         (implicit hc: HeaderCarrier, ec: ExecutionContext): TrustEnvelope[Boolean] = {
     EitherT {
-      http.POST[JsValue, HttpResponse](s"$submissionsBaseUrl/$draftId/set/$section", Json.toJson(data)).map(
-        _.status match {
-          case OK => Right(true)
-          case status => Left(handleError(status, "setDraftSectionSet"))
+      http
+        .post(url"$submissionsBaseUrl/$draftId/set/$section")
+        .withBody(Json.toJson(data))
+        .execute[HttpResponse]
+        .map(response => {
+          response.status match {
+            case OK => Right(true)
+            case status => Left(handleError(status, "setDraftSectionSet"))
+          }
+        })
+        .recover {
+          case ex => Left(handleError(ex, "setDraftSectionSet"))
         }
-      ).recover {
-        case ex => Left(handleError(ex, "setDraftSectionSet"))
-      }
     }
   }
 
   def getDraftSection(draftId: String, section: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): TrustEnvelope[SubmissionDraftResponse] = {
     EitherT {
-      http.GET[SubmissionDraftResponse](s"$submissionsBaseUrl/$draftId/$section").map(Right(_)).recover {
-        case ex: HttpException =>
-          logger.error(s"[$className][getDraftSection] Error with status: ${ex.responseCode}, and message: ${ex.message}")
-          Left(ServerError())
-        case ex: UpstreamErrorResponse =>
-          logger.error(s"[$className][getDraftSection] Error with status: ${ex.statusCode}, and message: ${ex.message}")
-          Left(ServerError())
-      }
+      http
+        .get(url"$submissionsBaseUrl/$draftId/$section")
+        .execute[HttpResponse]
+        .map(response =>
+          response.status match {
+            case OK =>
+              Try(response.json.as[SubmissionDraftResponse]) match {
+                case Success(submissionDraftResponse) => Right(submissionDraftResponse)
+                case Failure(e) =>
+                  logger.error(s"[$className][getDraftSection] Error parsing JSON, status: ${response.status}, " +
+                    s"and body: ${response.body}, exception: ${e.getMessage}")
+
+                  Left(ServerError())
+              }
+            case _ =>
+              logger.error(s"[$className][getDraftSection] Error with status: ${response.status}, and body: ${response.body}")
+              Left(ServerError())
+          }
+        )
     }
   }
 
   def getIsTrustTaxable(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): TrustEnvelope[Boolean] = {
+
     EitherT[Future, TrustErrors, Boolean] {
-      http.GET[Boolean](s"$submissionsBaseUrl/$draftId/is-trust-taxable").map(Right(_)).recover {
-        case _ => Right(true)
-      }
+      http
+        .get(url"$submissionsBaseUrl/$draftId/is-trust-taxable")
+        .execute[Boolean]
+        .map(Right(_))
+        .recover {
+          case _ => Right(true)
+        }
     }
   }
 }

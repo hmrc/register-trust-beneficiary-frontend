@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package connectors
 
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.http.Fault
 import errors.ServerError
 import models.{RegistrationSubmission, SubmissionDraftResponse}
 import play.api.Application
@@ -115,6 +116,20 @@ class SubmissionDraftConnectorSpec extends SpecBase with WireMockHelper {
         result.createdAt mustBe LocalDateTime.of(2012, 2, 3, 9, 30)
         result.data mustBe draftData
       }
+
+      "return server error if response JSON is unparsable" in {
+        server.stubFor(
+          get(urlEqualTo(submissionUrl))
+            .willReturn(
+              aResponse()
+                .withStatus(Status.OK)
+                .withBody("this is not JSON")
+            )
+        )
+
+        val result = Await.result(connector.getDraftSection(testDraftId, testSection).value, Duration.Inf)
+        result mustBe Left(ServerError())
+      }
     }
 
     "getIsTrustTaxable" must {
@@ -191,8 +206,37 @@ class SubmissionDraftConnectorSpec extends SpecBase with WireMockHelper {
           val result = Await.result(connector.setDraftSectionSet(testDraftId, testSection, submissionDraftSetData).value, Duration.Inf)
           result mustBe Left(ServerError())
         }
-
       }
+
+        "return Left(ServerError()) if an invalid HTTP response is returned" in {
+          server.stubFor(
+            post(urlEqualTo(setSubmissionUrl))
+              .withHeader(CONTENT_TYPE, containing("application/json"))
+              .willReturn(
+                aResponse()
+                  .withFault(Fault.RANDOM_DATA_THEN_CLOSE)
+              )
+          )
+
+          val sectionData = Json.parse(
+            """
+              |{
+              | "field1": "value1",
+              | "field2": "value2"
+              |}
+              |""".stripMargin)
+
+
+          val submissionDraftSetData = RegistrationSubmission.DataSet(
+            sectionData,
+            List.empty,
+            List.empty)
+
+          val result = Await.result(connector.setDraftSectionSet(testDraftId, testSection, submissionDraftSetData).value, Duration.Inf)
+          result mustBe Left(ServerError())
+
+        }
+
     }
 
     "handling get draft section call errors" must {

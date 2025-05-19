@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,24 +16,25 @@
 
 package handlers
 
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.Request
+import play.api.i18n.MessagesApi
+import play.api.mvc.RequestHeader
 import play.twirl.api.Html
 import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
 import views.html.{ErrorTemplate, PageNotFoundView}
 
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
+
 
 @Singleton
-class ErrorHandler @Inject()(
-                              val messagesApi: MessagesApi,
-                              view: ErrorTemplate,
-                              notFoundView: PageNotFoundView
-                            ) extends FrontendErrorHandler with I18nSupport {
+class ErrorHandler @Inject()(override val messagesApi: MessagesApi,
+                             view: ErrorTemplate,
+                             notFoundView: PageNotFoundView)(implicit val ec: ExecutionContext) extends FrontendErrorHandler {
 
-  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit rh: Request[_]): Html =
-    view(pageTitle, heading, message)
+  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit request: RequestHeader): Future[Html] =
+    Future.successful(view(pageTitle, heading, message))
 
-  override def notFoundTemplate(implicit request: Request[_]): Html =
-    notFoundView()
+  override def notFoundTemplate(implicit request: RequestHeader): Future[Html] = {
+    Future.successful(notFoundView())
+  }
 }

@@ -12,7 +12,7 @@ lazy val microservice = (project in file("."))
   .settings(inConfig(Test)(testSettings) *)
   .settings(majorVersion := 0)
   .settings(
-    scalaVersion := "2.13.14",
+    scalaVersion := "2.13.16",
     scalacOptions += "-Wconf:src=routes/.*:s",
     scalacOptions += "-Wconf:cat=unused-imports&src=html/.*:s"
   )
@@ -52,6 +52,7 @@ lazy val microservice = (project in file("."))
     ),
     // prevent removal of unused code which generates warning errors due to use of third-party libs
     uglifyCompressOptions := Seq("unused=false", "dead_code=false"),
+    uglifyOps := UglifyOps.singleFile,
     pipelineStages := Seq(digest),
     // below line required to force asset pipeline to operate in dev rather than only prod
     Assets / pipelineStages := Seq(concat,uglify),

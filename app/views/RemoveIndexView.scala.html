@@ -1,5 +1,5 @@
 @*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@
     inputYesNo: InputYesNo
 )
 
-@(prefix : String, form: Form[_], index: Int, draftId: String, nameOrDescription : String, route : Call)(implicit request: Request[_], messages: Messages)
+@(prefix : String, form: Form[_], index: Int, draftId: String, nameOrDescription : String, route : Call)(implicit request: RequestHeader, messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages(s"$prefix.title", nameOrDescription)}",

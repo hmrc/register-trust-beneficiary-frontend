@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,16 @@ import cats.data.EitherT
 import config.FrontendAppConfig
 import models.TaskStatus.TaskStatus
 import play.api.http.Status.OK
+import play.api.libs.json._
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 import utils.TrustEnvelope.TrustEnvelope
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class TrustsStoreConnector @Inject()(http: HttpClient, config: FrontendAppConfig) extends ConnectorErrorResponseHandler {
+class TrustsStoreConnector @Inject()(http: HttpClientV2, config: FrontendAppConfig) extends ConnectorErrorResponseHandler {
 
   override val className: String = getClass.getSimpleName
 
@@ -36,16 +38,19 @@ class TrustsStoreConnector @Inject()(http: HttpClient, config: FrontendAppConfig
   def updateTaskStatus(identifier: String, taskStatus: TaskStatus)
                       (implicit hc: HeaderCarrier, ec: ExecutionContext): TrustEnvelope[Boolean] = {
     EitherT {
-      val url: String = s"$baseUrl/register/tasks/update-beneficiaries/$identifier"
-      http.POST[TaskStatus, HttpResponse](url, taskStatus).map(
-        _.status match {
-          case OK => Right(true)
-          case status => Left(handleError(status, "updateTaskStatus"))
+      http
+        .post(url"$baseUrl/register/tasks/update-beneficiaries/$identifier")
+        .withBody(Json.toJson(taskStatus))
+        .execute[HttpResponse]
+        .map(response => {
+          response.status match {
+            case OK => Right(true)
+            case status => Left(handleError(status, "updateTaskStatus"))
+          }
+        })
+        .recover {
+          case ex => Left(handleError(ex, "updateTaskStatus"))
         }
-
-      ).recover {
-        case ex => Left(handleError(ex, "updateTaskStatus"))
-      }
     }
   }
 }
