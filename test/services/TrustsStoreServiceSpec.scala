@@ -22,6 +22,7 @@ import connectors.TrustsStoreConnector
 import errors.TrustErrors
 import models.TaskStatus
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
+import org.mockito.Mockito.{verify, when}
 
 import scala.concurrent.Future
 

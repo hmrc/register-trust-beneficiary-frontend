@@ -21,10 +21,10 @@ import controllers.actions.{FakeDraftIdRetrievalActionProvider, FakeIdentifyForR
 import errors.TrustErrors
 import models.{ReadOnlyUserAnswers, Status, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.mockito.MockitoSugar
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.{EitherValues, OptionValues, TryValues}
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice._
 import play.api.inject.bind

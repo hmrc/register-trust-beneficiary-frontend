@@ -21,6 +21,7 @@ import config.FrontendAppConfig
 import controllers.actions.register.RegistrationIdentifierAction
 import models.requests.IdentifierRequest
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import play.api.mvc.{Action, AnyContent, Results}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core._

@@ -24,6 +24,7 @@ import forms.StringFormProvider
 import models.{ReadOnlyUserAnswers, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import pages.register.beneficiaries.charityortrust.charity.CharityNamePage
 import play.api.data.Form
 import play.api.inject.bind

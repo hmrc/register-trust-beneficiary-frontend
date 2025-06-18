@@ -24,6 +24,7 @@ import models.registration.pages.CharityOrTrust.Trust
 import models.registration.pages.WhatTypeOfBeneficiary.CharityOrTrust
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.{verify, when}
 import pages.entitystatus.TrustBeneficiaryStatus
 import pages.register.beneficiaries.WhatTypeOfBeneficiaryPage
 import pages.register.beneficiaries.charityortrust.CharityOrTrustPage

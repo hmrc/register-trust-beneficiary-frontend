@@ -24,6 +24,7 @@ import forms.NationalInsuranceNumberFormProvider
 import models.core.pages.FullName
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import pages.register.beneficiaries.individual.{NamePage, NationalInsuranceNumberPage}
 import play.api.data.Form
 import play.api.inject.bind

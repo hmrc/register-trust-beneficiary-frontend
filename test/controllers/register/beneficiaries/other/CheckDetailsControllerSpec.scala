@@ -23,6 +23,7 @@ import models.UserAnswers
 import models.registration.pages.WhatTypeOfBeneficiary.Other
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.{verify, when}
 import pages.entitystatus.OtherBeneficiaryStatus
 import pages.register.beneficiaries.WhatTypeOfBeneficiaryPage
 import pages.register.beneficiaries.other.DescriptionPage

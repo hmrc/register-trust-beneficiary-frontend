@@ -22,6 +22,7 @@ import connectors.SubmissionDraftConnector
 import errors.TrustErrors
 import models._
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.{verify, when}
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HeaderCarrier
 
