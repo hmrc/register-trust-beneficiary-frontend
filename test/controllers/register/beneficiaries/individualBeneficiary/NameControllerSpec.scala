@@ -25,6 +25,7 @@ import models.core.pages.FullName
 import models.{ReadOnlyUserAnswers, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import pages.register.beneficiaries.individual.NamePage
 import play.api.data.Form
 import play.api.inject.bind

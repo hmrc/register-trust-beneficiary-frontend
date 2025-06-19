@@ -24,6 +24,7 @@ import models.UserAnswers
 import models.registration.pages.WhatTypeOfBeneficiary.CompanyOrEmployment
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.{verify, when}
 import pages.entitystatus.CompanyBeneficiaryStatus
 import pages.register.beneficiaries.WhatTypeOfBeneficiaryPage
 import pages.register.beneficiaries.companyoremploymentrelated.CompanyOrEmploymentRelatedPage

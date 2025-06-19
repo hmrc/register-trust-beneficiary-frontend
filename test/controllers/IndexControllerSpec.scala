@@ -24,6 +24,7 @@ import models.core.pages.FullName
 import models.{TaskStatus, UserAnswers}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.{any, eq => mEq}
+import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
 import pages.register.beneficiaries.individual.NamePage
 import play.api.inject.bind

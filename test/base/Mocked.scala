@@ -20,7 +20,8 @@ import cats.data.EitherT
 import errors.TrustErrors
 import models.{ReadOnlyUserAnswers, UserAnswers}
 import org.mockito.ArgumentMatchers.any
-import org.mockito.MockitoSugar
+import org.mockito.Mockito.when
+import org.scalatestplus.mockito.MockitoSugar
 import repositories.RegistrationsRepository
 
 import scala.concurrent.Future
@@ -40,5 +41,7 @@ trait Mocked extends MockitoSugar {
 
     when(mockRegistrationsRepository.getSettlorsAnswers(any())(any()))
       .thenReturn(EitherT[Future, TrustErrors, Option[ReadOnlyUserAnswers]](Future.successful(getSettlorsAnswersResult)))
+
+    mockRegistrationsRepository
   }
 }
