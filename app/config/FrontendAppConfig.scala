@@ -22,11 +22,13 @@ import play.api.Configuration
 import play.api.i18n.{Lang, Messages}
 import play.api.mvc.Call
 import uk.gov.hmrc.hmrcfrontend.config.ContactFrontendConfig
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import java.time.LocalDate
 
 @Singleton
-class FrontendAppConfig @Inject() (val configuration: Configuration, contactFrontendConfig: ContactFrontendConfig) {
+class FrontendAppConfig @Inject() (val configuration: Configuration, contactFrontendConfig: ContactFrontendConfig,
+                                   servicesConfig: ServicesConfig) {
 
   final val ENGLISH = "en"
   final val WELSH = "cy"
@@ -34,7 +36,7 @@ class FrontendAppConfig @Inject() (val configuration: Configuration, contactFron
   val repositoryKey: String = "beneficiaries"
   val repositoryKeySettlors: String = "settlors"
 
-  lazy val authUrl: String = configuration.get[Service]("auth").baseUrl
+  lazy val authUrl: String = servicesConfig.baseUrl("auth")
   lazy val loginUrl: String = configuration.get[String]("urls.login")
   lazy val loginContinueUrl: String = configuration.get[String]("urls.loginContinue")
   lazy val logoutUrl: String = configuration.get[String]("urls.logout")
@@ -45,9 +47,9 @@ class FrontendAppConfig @Inject() (val configuration: Configuration, contactFron
   lazy val logoutAudit: Boolean =
     configuration.get[Boolean]("microservice.services.features.auditing.logout")
 
-  lazy val trustsUrl: String = configuration.get[Service]("microservice.services.trusts").baseUrl
+  lazy val trustsUrl: String = servicesConfig.baseUrl("trusts")
 
-  lazy val trustsStoreUrl: String = configuration.get[Service]("microservice.services.trusts-store").baseUrl
+  lazy val trustsStoreUrl: String = servicesConfig.baseUrl("trusts-store")
 
   lazy val registrationStartUrl: String = configuration.get[String]("urls.registrationStart")
   lazy val registrationProgressUrlTemplate: String = configuration.get[String]("urls.registrationProgress")

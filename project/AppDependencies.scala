@@ -2,7 +2,7 @@ import sbt.*
 
 object AppDependencies {
 
-  val bootstrapVersion = "9.13.0"
+  val bootstrapVersion = "9.19.0"
 
   private lazy val compile = Seq(
     play.sbt.PlayImport.ws,
@@ -15,9 +15,9 @@ object AppDependencies {
 
   private lazy val test: Seq[ModuleID] = Seq(
     "uk.gov.hmrc"                 %% "bootstrap-test-play-30"   % bootstrapVersion,
-    "org.jsoup"                   %  "jsoup"                    % "1.20.1",
+    "org.jsoup"                   %  "jsoup"                    % "1.21.1",
     "org.scalatest"               %% "scalatest"                % "3.2.19",
-    "org.scalatestplus"           %% "scalacheck-1-17"          % "3.2.18.0",
+    "org.scalatestplus"           %% "scalacheck-1-18"          % "3.2.19.0",
     "org.wiremock"                %  "wiremock-standalone"      % "3.13.1",
     "wolfendale"                  %% "scalacheck-gen-regexp"    % "0.1.2",
     "com.vladsch.flexmark"         %  "flexmark-all"              % "0.64.8"
