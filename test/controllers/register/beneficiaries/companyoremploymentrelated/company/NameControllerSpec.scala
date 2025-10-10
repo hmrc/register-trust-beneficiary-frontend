@@ -127,7 +127,7 @@ class NameControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(POST, nameRoute)
+      val request = FakeRequest(POST, nameRoute).withFormUrlEncodedBody(("value" -> ""))
 
       val boundForm = form.bind(Map("value" -> ""))
 

@@ -131,7 +131,7 @@ class ShareOfIncomeControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
-      val request = FakeRequest(POST, shareOfIncomeRoute)
+      val request = FakeRequest(POST, shareOfIncomeRoute).withFormUrlEncodedBody("value" -> "")
 
       val boundForm = form.bind(Map("value" -> ""))
 
