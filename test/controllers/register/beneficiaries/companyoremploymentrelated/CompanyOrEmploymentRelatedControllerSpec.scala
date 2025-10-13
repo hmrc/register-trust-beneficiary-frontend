@@ -116,7 +116,7 @@ class CompanyOrEmploymentRelatedControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(POST, companyOrEmploymentRelatedRoute)
+      val request = FakeRequest(POST, companyOrEmploymentRelatedRoute).withFormUrlEncodedBody(("value" -> ""))
 
       val boundForm = form.bind(Map("value" -> ""))
 

@@ -128,7 +128,7 @@ class DescriptionControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(POST, descriptionRoute)
+      val request = FakeRequest(POST, descriptionRoute).withFormUrlEncodedBody("description" -> "")
 
       val boundForm = form.bind(Map("description" -> ""))
 
