@@ -22,8 +22,8 @@ import views.ViewSpecBase
 
 trait ViewBehaviours extends ViewSpecBase {
 
-  private def bannerTitleText(view: HtmlFormat.Appendable): String = 
-      asDocument(view).getElementsByClass("govuk-header__link govuk-header__service-name").html()
+  private def bannerTitleText(view: HtmlFormat.Appendable): String =
+      asDocument(view).getElementsByClass("govuk-service-navigation__service-name").text().trim
 
   def normalPage(view: HtmlFormat.Appendable,
                  messageKeyPrefix: String,
