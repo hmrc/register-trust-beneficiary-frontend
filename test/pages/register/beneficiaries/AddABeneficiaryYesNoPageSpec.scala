@@ -28,4 +28,5 @@ class AddABeneficiaryYesNoPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](AddABeneficiaryYesNoPage)
   }
+
 }

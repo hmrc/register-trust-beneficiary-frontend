@@ -28,4 +28,5 @@ class VulnerableYesNoPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](VulnerableYesNoPage(0))
   }
+
 }

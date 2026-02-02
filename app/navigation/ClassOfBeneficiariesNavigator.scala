@@ -27,11 +27,11 @@ class ClassOfBeneficiariesNavigator extends Navigator {
     routes(draftId)(page)(userAnswers)
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, Call] = {
-    case ClassBeneficiaryDescriptionPage(_) => controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
+    case ClassBeneficiaryDescriptionPage(_) =>
+      controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
   }
 
-  private def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    simpleNavigation(draftId) andThen (c => (_:ReadableUserAnswers) => c)
-  }
+  private def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] =
+    simpleNavigation(draftId) andThen (c => (_: ReadableUserAnswers) => c)
 
 }

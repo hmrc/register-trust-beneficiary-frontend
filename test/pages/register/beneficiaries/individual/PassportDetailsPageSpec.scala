@@ -29,4 +29,5 @@ class PassportDetailsPageSpec extends PageBehaviours {
 
     beRemovable[PassportOrIdCardDetails](PassportDetailsPage(0))
   }
+
 }

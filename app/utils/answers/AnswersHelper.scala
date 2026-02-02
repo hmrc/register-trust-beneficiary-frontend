@@ -28,14 +28,12 @@ abstract class AnswersHelper[T <: ViewModel](printHelper: PrintHelper) {
 
   val beneficiaryType: QuestionPage[List[T]]
 
-  def beneficiaries(userAnswers: UserAnswers)
-                   (implicit messages: Messages, rds: Reads[T]): Option[Seq[AnswerSection]] = {
+  def beneficiaries(userAnswers: UserAnswers)(implicit messages: Messages, rds: Reads[T]): Option[Seq[AnswerSection]] =
     for {
       beneficiaries <- userAnswers.get(beneficiaryType)
-      indexed = beneficiaries.zipWithIndex
-    } yield indexed.map {
-      case (beneficiary, index) =>
-        printHelper.printSection(userAnswers, beneficiary.label, index, userAnswers.draftId)
+      indexed        = beneficiaries.zipWithIndex
+    } yield indexed.map { case (beneficiary, index) =>
+      printHelper.printSection(userAnswers, beneficiary.label, index, userAnswers.draftId)
     }
-  }
+
 }

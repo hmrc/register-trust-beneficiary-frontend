@@ -19,8 +19,7 @@ package viewmodels.addAnother
 import models.Status
 import play.api.libs.json.{Reads, __}
 
-case class TrustBeneficiaryViewModel(label: Option[String],
-                                     status: Status) extends ViewModel
+case class TrustBeneficiaryViewModel(label: Option[String], status: Status) extends ViewModel
 
 object TrustBeneficiaryViewModel {
 
@@ -29,5 +28,6 @@ object TrustBeneficiaryViewModel {
   implicit val reads: Reads[TrustBeneficiaryViewModel] = (
     (__ \ "name").readNullable[String] and
       (__ \ "status").readWithDefault[Status](Status.InProgress)
-    )(TrustBeneficiaryViewModel.apply _)
+  )(TrustBeneficiaryViewModel.apply _)
+
 }

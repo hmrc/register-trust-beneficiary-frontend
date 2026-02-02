@@ -25,16 +25,16 @@ import scala.concurrent.duration.DurationInt
 
 class ErrorHandlerSpec extends SpecBase {
 
-  private val messageApi: MessagesApi = app.injector.instanceOf[MessagesApi]
-  private val errorTemplate: ErrorTemplate = app.injector.instanceOf[ErrorTemplate]
+  private val messageApi: MessagesApi                 = app.injector.instanceOf[MessagesApi]
+  private val errorTemplate: ErrorTemplate            = app.injector.instanceOf[ErrorTemplate]
   private val errorNotFoundTemplate: PageNotFoundView = app.injector.instanceOf[PageNotFoundView]
-  private val errorHandler: ErrorHandler = new ErrorHandler(messageApi,errorTemplate, errorNotFoundTemplate)
+  private val errorHandler: ErrorHandler              = new ErrorHandler(messageApi, errorTemplate, errorNotFoundTemplate)
 
   "ErrorHandler" must {
 
     "return an error page" in {
-      val result =  Await.result(errorHandler.standardErrorTemplate("title","heading","message")
-      (fakeRequest), 1.seconds)
+      val result =
+        Await.result(errorHandler.standardErrorTemplate("title", "heading", "message")(fakeRequest), 1.seconds)
 
       result.body must include("title")
       result.body must include("message")
@@ -43,8 +43,8 @@ class ErrorHandlerSpec extends SpecBase {
     "return a not found template" in {
       val result = Await.result(errorHandler.notFoundTemplate(fakeRequest), 1.seconds)
 
-      val pageNotFoundTitle = Messages("pageNotFound.title")(messages)
-      val pageNotFoundHeading = Messages("pageNotFound.heading")(messages)
+      val pageNotFoundTitle    = Messages("pageNotFound.title")(messages)
+      val pageNotFoundHeading  = Messages("pageNotFound.heading")(messages)
       val pageNotFoundMessage1 = Messages("pageNotFound.p1")(messages)
       val pageNotFoundMessage2 = Messages("pageNotFound.p2")(messages)
 
@@ -55,4 +55,5 @@ class ErrorHandlerSpec extends SpecBase {
     }
 
   }
+
 }

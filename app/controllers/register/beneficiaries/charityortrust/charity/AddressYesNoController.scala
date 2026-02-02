@@ -35,57 +35,57 @@ import views.html.register.beneficiaries.charityortrust.charity.AddressYesNoView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddressYesNoController @Inject()(
-                                        val controllerComponents: MessagesControllerComponents,
-                                        repository: RegistrationsRepository,
-                                        @CharityBeneficiary navigator: Navigator,
-                                        standardActionSets: StandardActionSets,
-                                        nameAction: NameRequiredAction,
-                                        formProvider: YesNoFormProvider,
-                                        view: AddressYesNoView,
-                                        technicalErrorView: TechnicalErrorView
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class AddressYesNoController @Inject() (
+  val controllerComponents: MessagesControllerComponents,
+  repository: RegistrationsRepository,
+  @CharityBeneficiary navigator: Navigator,
+  standardActionSets: StandardActionSets,
+  nameAction: NameRequiredAction,
+  formProvider: YesNoFormProvider,
+  view: AddressYesNoView,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
-  private val className = getClass.getSimpleName
+  private val className           = getClass.getSimpleName
   private val form: Form[Boolean] = formProvider.withPrefix("charity.addressYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
-    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
-    implicit request =>
-
+    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) { implicit request =>
       val charityName = request.userAnswers.get(CharityNamePage(index)).get
 
       val preparedForm = request.userAnswers.get(AddressYesNoPage(index)) match {
-        case None => form
+        case None        => form
         case Some(value) => form.fill(value)
       }
 
       Ok(view(preparedForm, draftId, index, charityName))
-  }
+    }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
-    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
-    implicit request =>
-
+    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async { implicit request =>
       val charityName = request.userAnswers.get(CharityNamePage(index)).get
 
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, charityName))),
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, draftId, index, charityName))),
+          value => {
+            val result = for {
+              updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(AddressYesNoPage(index), value)))
+              _              <- repository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(AddressYesNoPage(index), draftId, updatedAnswers))
 
-        value => {
-          val result = for {
-            updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(AddressYesNoPage(index), value)))
-            _ <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddressYesNoPage(index), draftId, updatedAnswers))
-
-          result.value.map {
-            case Right(call) => call
-            case Left(_) =>
-              logger.warn(s"[$className][onSubmit][Session ID: ${request.request.sessionId}] Error while storing user answers")
-              InternalServerError(technicalErrorView())
+            result.value.map {
+              case Right(call) => call
+              case Left(_)     =>
+                logger.warn(
+                  s"[$className][onSubmit][Session ID: ${request.request.sessionId}] Error while storing user answers"
+                )
+                InternalServerError(technicalErrorView())
+            }
           }
-        }
-      )
-  }
+        )
+    }
+
 }

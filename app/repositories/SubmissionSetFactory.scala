@@ -25,68 +25,64 @@ import viewmodels.{AnswerRow, AnswerSection}
 
 import javax.inject.Inject
 
-class SubmissionSetFactory @Inject()(
-                                      beneficiariesMapper: BeneficiariesMapper,
-                                      individualBeneficiaryAnswersHelper: IndividualBeneficiaryAnswersHelper,
-                                      classOfBeneficiaryAnswersHelper: ClassOfBeneficiaryAnswersHelper,
-                                      charityBeneficiaryAnswersHelper: CharityBeneficiaryAnswersHelper,
-                                      trustBeneficiaryAnswersHelper: TrustBeneficiaryAnswersHelper,
-                                      companyBeneficiaryAnswersHelper: CompanyBeneficiaryAnswersHelper,
-                                      largeBeneficiaryAnswersHelper: EmploymentRelatedBeneficiaryAnswersHelper,
-                                      otherBeneficiaryAnswersHelper: OtherBeneficiaryAnswersHelper
-                                    ) {
+class SubmissionSetFactory @Inject() (
+  beneficiariesMapper: BeneficiariesMapper,
+  individualBeneficiaryAnswersHelper: IndividualBeneficiaryAnswersHelper,
+  classOfBeneficiaryAnswersHelper: ClassOfBeneficiaryAnswersHelper,
+  charityBeneficiaryAnswersHelper: CharityBeneficiaryAnswersHelper,
+  trustBeneficiaryAnswersHelper: TrustBeneficiaryAnswersHelper,
+  companyBeneficiaryAnswersHelper: CompanyBeneficiaryAnswersHelper,
+  largeBeneficiaryAnswersHelper: EmploymentRelatedBeneficiaryAnswersHelper,
+  otherBeneficiaryAnswersHelper: OtherBeneficiaryAnswersHelper
+) {
 
-  def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet = {
+  def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet =
 
     RegistrationSubmission.DataSet(
       Json.toJson(userAnswers),
       mappedData(userAnswers),
       answerSections(userAnswers)
     )
-  }
 
-  private def mappedData(userAnswers: UserAnswers): List[RegistrationSubmission.MappedPiece] = {
-      beneficiariesMapper.build(userAnswers) match {
-        case Some(assets) => List(RegistrationSubmission.MappedPiece("trust/entities/beneficiary", Json.toJson(assets)))
-        case _ => List.empty
-      }
-  }
+  private def mappedData(userAnswers: UserAnswers): List[RegistrationSubmission.MappedPiece] =
+    beneficiariesMapper.build(userAnswers) match {
+      case Some(assets) => List(RegistrationSubmission.MappedPiece("trust/entities/beneficiary", Json.toJson(assets)))
+      case _            => List.empty
+    }
 
-  def answerSections(userAnswers: UserAnswers)
-                               (implicit messages: Messages): List[RegistrationSubmission.AnswerSection] = {
+  def answerSections(
+    userAnswers: UserAnswers
+  )(implicit messages: Messages): List[RegistrationSubmission.AnswerSection] = {
 
+    val entitySections = List(
+      individualBeneficiaryAnswersHelper.beneficiaries(userAnswers),
+      classOfBeneficiaryAnswersHelper.beneficiaries(userAnswers),
+      charityBeneficiaryAnswersHelper.beneficiaries(userAnswers),
+      trustBeneficiaryAnswersHelper.beneficiaries(userAnswers),
+      companyBeneficiaryAnswersHelper.beneficiaries(userAnswers),
+      largeBeneficiaryAnswersHelper.beneficiaries(userAnswers),
+      otherBeneficiaryAnswersHelper.beneficiaries(userAnswers)
+    ).flatten.flatten
 
-      val entitySections = List(
-        individualBeneficiaryAnswersHelper.beneficiaries(userAnswers),
-        classOfBeneficiaryAnswersHelper.beneficiaries(userAnswers),
-        charityBeneficiaryAnswersHelper.beneficiaries(userAnswers),
-        trustBeneficiaryAnswersHelper.beneficiaries(userAnswers),
-        companyBeneficiaryAnswersHelper.beneficiaries(userAnswers),
-        largeBeneficiaryAnswersHelper.beneficiaries(userAnswers),
-        otherBeneficiaryAnswersHelper.beneficiaries(userAnswers)
-      ).flatten.flatten
-
-     if (entitySections.nonEmpty) {
-       val updatedFirstSection = entitySections.head.copy(sectionKey = Some("answerPage.section.beneficiaries.heading"))
-       val updatedSections = updatedFirstSection :: entitySections.tail
-       updatedSections.map(convertForSubmission)
-     } else {
-       List.empty
-     }
+    if (entitySections.nonEmpty) {
+      val updatedFirstSection = entitySections.head.copy(sectionKey = Some("answerPage.section.beneficiaries.heading"))
+      val updatedSections     = updatedFirstSection :: entitySections.tail
+      updatedSections.map(convertForSubmission)
+    } else {
+      List.empty
+    }
 
   }
 
-  private def convertForSubmission(section: AnswerSection): RegistrationSubmission.AnswerSection = {
+  private def convertForSubmission(section: AnswerSection): RegistrationSubmission.AnswerSection =
     RegistrationSubmission.AnswerSection(
       headingKey = section.headingKey,
       rows = section.rows.map(convertForSubmission),
       sectionKey = section.sectionKey,
       headingArgs = section.headingArgs.map(_.toString)
     )
-  }
 
-  private def convertForSubmission(row: AnswerRow): RegistrationSubmission.AnswerRow = {
+  private def convertForSubmission(row: AnswerRow): RegistrationSubmission.AnswerRow =
     RegistrationSubmission.AnswerRow(row.label, row.answer.toString, row.labelArg)
-  }
 
 }

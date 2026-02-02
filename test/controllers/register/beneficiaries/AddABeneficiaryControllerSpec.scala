@@ -43,9 +43,14 @@ import org.scalatest.BeforeAndAfterEach
 import pages.entitystatus._
 import pages.register.KindOfTrustPage
 import pages.register.beneficiaries.charityortrust.{CharityOrTrustPage, charity => charityPages, trust => trustPages}
-import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.{LargeBeneficiaryDescriptionPage, LargeBeneficiaryNamePage}
+import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.{
+  LargeBeneficiaryDescriptionPage, LargeBeneficiaryNamePage
+}
 import pages.register.beneficiaries.companyoremploymentrelated.{CompanyOrEmploymentRelatedPage, company => companyPages}
-import pages.register.beneficiaries.{AddABeneficiaryPage, WhatTypeOfBeneficiaryPage, classofbeneficiaries => classOfBeneficiariesPages, individual => individualPages, other => otherPages}
+import pages.register.beneficiaries.{
+  AddABeneficiaryPage, WhatTypeOfBeneficiaryPage, classofbeneficiaries => classOfBeneficiariesPages,
+  individual => individualPages, other => otherPages
+}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -63,7 +68,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
   private def onwardRoute: Call = Call("GET", "/foo")
 
   private val index: Int = 0
-  private val max: Int = 25
+  private val max: Int   = 25
 
   private lazy val removeIndividualRoute: String =
     individualRoutes.RemoveIndividualBeneficiaryController.onPageLoad(index, fakeDraftId).url
@@ -116,13 +121,18 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
   private lazy val submitCompleteRoute = routes.AddABeneficiaryController.submitComplete(fakeDraftId).url
 
   private val formProvider = new AddABeneficiaryFormProvider()
-  private val form = formProvider()
+  private val form         = formProvider()
 
   private val yesNoForm = new YesNoFormProvider().withPrefix("addABeneficiaryYesNo")
 
   private lazy val beneficiariesComplete = List(
     AddRow("Individual Name", typeLabel = "Named individual", changeIndividualRoute, removeIndividualRoute),
-    AddRow("Unidentified Description", typeLabel = "Class of beneficiaries", changeClassOfBeneficiariesRoute, removeClassRoute),
+    AddRow(
+      "Unidentified Description",
+      typeLabel = "Class of beneficiaries",
+      changeClassOfBeneficiariesRoute,
+      removeClassRoute
+    ),
     AddRow("Charity Name", typeLabel = "Named charity", changeCharityRoute, removeCharityRoute),
     AddRow("Trust Name", typeLabel = "Named trust", changeTrustRoute, removeTrustRoute),
     AddRow("Company Name", typeLabel = "Named company", changeCompanyRoute, removeCompanyRoute),
@@ -131,77 +141,75 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
   )
 
   private val userAnswersWithBeneficiariesComplete = emptyUserAnswers
-    .set(individualPages.NamePage(index), FullName("Individual", None, "Name")).value
-    .set(IndividualBeneficiaryStatus(index), Completed).value
+    .set(individualPages.NamePage(index), FullName("Individual", None, "Name"))
+    .value
+    .set(IndividualBeneficiaryStatus(index), Completed)
+    .value
+    .set(classOfBeneficiariesPages.ClassBeneficiaryDescriptionPage(index), "Unidentified Description")
+    .value
+    .set(ClassBeneficiaryStatus(index), Completed)
+    .value
+    .set(charityPages.CharityNamePage(index), "Charity Name")
+    .value
+    .set(CharityBeneficiaryStatus(index), Completed)
+    .value
+    .set(trustPages.NamePage(index), "Trust Name")
+    .value
+    .set(TrustBeneficiaryStatus(index), Completed)
+    .value
+    .set(companyPages.NamePage(index), "Company Name")
+    .value
+    .set(CompanyBeneficiaryStatus(index), Completed)
+    .value
+    .set(LargeBeneficiaryNamePage(index), "Large Name")
+    .value
+    .set(LargeBeneficiaryStatus(index), Completed)
+    .value
+    .set(otherPages.DescriptionPage(index), "Other Description")
+    .value
+    .set(OtherBeneficiaryStatus(index), Completed)
+    .value
 
-    .set(classOfBeneficiariesPages.ClassBeneficiaryDescriptionPage(index), "Unidentified Description").value
-    .set(ClassBeneficiaryStatus(index), Completed).value
+  private def genTrustBeneficiaries(range: Int): UserAnswers =
+    (0 until range)
+      .foldLeft(emptyUserAnswers)((ua, index) => ua.set(trustPages.NamePage(index), "Company Name").value)
 
-    .set(charityPages.CharityNamePage(index), "Charity Name").value
-    .set(CharityBeneficiaryStatus(index), Completed).value
+  private def genCompanyBeneficiaries(range: Int): UserAnswers =
+    (0 until range)
+      .foldLeft(emptyUserAnswers)((ua, index) => ua.set(companyPages.NamePage(index), "Trust Name").value)
 
-    .set(trustPages.NamePage(index), "Trust Name").value
-    .set(TrustBeneficiaryStatus(index), Completed).value
-
-    .set(companyPages.NamePage(index), "Company Name").value
-    .set(CompanyBeneficiaryStatus(index), Completed).value
-
-    .set(LargeBeneficiaryNamePage(index), "Large Name").value
-    .set(LargeBeneficiaryStatus(index), Completed).value
-
-    .set(otherPages.DescriptionPage(index), "Other Description").value
-    .set(OtherBeneficiaryStatus(index), Completed).value
-
-  private def genTrustBeneficiaries(range: Int): UserAnswers = {
+  private def genIndividualBeneficiaries(range: Int): UserAnswers =
     (0 until range)
       .foldLeft(emptyUserAnswers)((ua, index) =>
-        ua.set(trustPages.NamePage(index), "Company Name").value
+        ua.set(individualPages.NamePage(index), FullName("first name", None, "last name")).value
       )
-  }
 
-  private def genCompanyBeneficiaries(range: Int): UserAnswers = {
+  private def genUnidentifiedBeneficiaries(range: Int): UserAnswers =
     (0 until range)
-      .foldLeft(emptyUserAnswers)(
-        (ua, index) => ua.set(companyPages.NamePage(index), "Trust Name").value
+      .foldLeft(emptyUserAnswers)((ua, index) =>
+        ua.set(classOfBeneficiariesPages.ClassBeneficiaryDescriptionPage(index), s"Unidentified Description $index")
+          .value
       )
-  }
 
-  private def genIndividualBeneficiaries(range: Int): UserAnswers = {
+  private def genCharityBeneficiaries(range: Int): UserAnswers =
     (0 until range)
-      .foldLeft(emptyUserAnswers)(
-        (ua, index) => ua.set(individualPages.NamePage(index), FullName("first name", None, "last name")).value
+      .foldLeft(emptyUserAnswers)((ua, index) =>
+        ua.set(charityPages.CharityNamePage(index), s"Charity Name $index").value
       )
-  }
 
-  private def genUnidentifiedBeneficiaries(range: Int): UserAnswers = {
+  private def genLargeBeneficiaries(range: Int): UserAnswers =
     (0 until range)
-      .foldLeft(emptyUserAnswers)(
-        (ua, index) => ua.set(classOfBeneficiariesPages.ClassBeneficiaryDescriptionPage(index), s"Unidentified Description $index").value
+      .foldLeft(emptyUserAnswers)((ua, index) =>
+        ua.set(LargeBeneficiaryDescriptionPage(index), Description(s"Large Name $index", None, None, None, None)).value
       )
-  }
 
-  private def genCharityBeneficiaries(range: Int): UserAnswers = {
+  private def genOtherBeneficiaries(range: Int): UserAnswers =
     (0 until range)
-      .foldLeft(emptyUserAnswers)(
-        (ua, index) => ua.set(charityPages.CharityNamePage(index), s"Charity Name $index").value
+      .foldLeft(emptyUserAnswers)((ua, index) =>
+        ua.set(otherPages.DescriptionPage(index), s"Other Description $index").value
       )
-  }
 
-  private def genLargeBeneficiaries(range: Int): UserAnswers = {
-    (0 until range)
-      .foldLeft(emptyUserAnswers)(
-        (ua, index) => ua.set(LargeBeneficiaryDescriptionPage(index), Description(s"Large Name $index", None, None, None, None)).value
-      )
-  }
-
-  private def genOtherBeneficiaries(range: Int): UserAnswers = {
-    (0 until range)
-      .foldLeft(emptyUserAnswers)(
-        (ua, index) => ua.set(otherPages.DescriptionPage(index), s"Other Description $index").value
-      )
-  }
-
-  private val mockTrustsStoreService = mock[TrustsStoreService]
+  private val mockTrustsStoreService   = mock[TrustsStoreService]
   private val mockRegistrationProgress = mock[RegistrationProgress]
 
   override def beforeEach(): Unit = {
@@ -252,18 +260,22 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
 
         val settlorsAnswers: ReadOnlyUserAnswers = ReadOnlyUserAnswers(
           emptyUserAnswers
-            .set(KindOfTrustPage, Intervivos).value
-            .set(WhatTypeOfBeneficiaryPage, Individual).value
-            .set(CharityOrTrustPage, Charity).value
-            .set(CompanyOrEmploymentRelatedPage, Company).value
+            .set(KindOfTrustPage, Intervivos)
+            .value
+            .set(WhatTypeOfBeneficiaryPage, Individual)
+            .value
+            .set(CharityOrTrustPage, Charity)
+            .value
+            .set(CompanyOrEmploymentRelatedPage, Company)
+            .value
             .data
         )
 
         mockRegistrationsRepositoryBuilder(getSettlorsAnswersResult = Right(Some(settlorsAnswers)))
 
         val application = applicationBuilder(
-            userAnswers = Some(emptyUserAnswers),
-            mockGetSettlorsAnswersResult = Right(Some(settlorsAnswers))
+          userAnswers = Some(emptyUserAnswers),
+          mockGetSettlorsAnswersResult = Right(Some(settlorsAnswers))
         ).build()
 
         val request = FakeRequest(GET, addABeneficiaryRoute)
@@ -403,7 +415,10 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form, fakeDraftId, Nil, beneficiariesComplete, "You have added 7 beneficiaries", Nil)(request, messages).toString
+          view(form, fakeDraftId, Nil, beneficiariesComplete, "You have added 7 beneficiaries", Nil)(
+            request,
+            messages
+          ).toString
 
         application.stop()
       }
@@ -416,8 +431,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
 
         mockRegistrationsRepositoryBuilder(getSettlorsAnswersResult = Right(Some(settlorsAnswers)))
 
-        val userAnswers = userAnswersWithBeneficiariesComplete.
-          set(AddABeneficiaryPage, AddABeneficiary.YesNow).value
+        val userAnswers = userAnswersWithBeneficiariesComplete.set(AddABeneficiaryPage, AddABeneficiary.YesNow).value
 
         val application = applicationBuilder(
           userAnswers = Some(userAnswers),
@@ -433,7 +447,10 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form, fakeDraftId, Nil, beneficiariesComplete, "You have added 7 beneficiaries", Nil)(request, messages).toString
+          view(form, fakeDraftId, Nil, beneficiariesComplete, "You have added 7 beneficiaries", Nil)(
+            request,
+            messages
+          ).toString
 
         application.stop()
       }
@@ -450,16 +467,26 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
             mockRegistrationsRepositoryBuilder(getSettlorsAnswersResult = Right(Some(settlorsAnswers)))
 
             val userAnswers = emptyUserAnswers
-              .set(individualPages.NamePage(0), FullName("Joe", None, "Bloggs")).value
-              .set(individualPages.DateOfBirthYesNoPage(0), false).value
-              .set(individualPages.IncomeYesNoPage(0), true).value
-              .set(individualPages.NationalInsuranceYesNoPage(0), false).value
-              .set(individualPages.AddressYesNoPage(0), false).value
-              .set(individualPages.VulnerableYesNoPage(0), false).value
-              .set(IndividualBeneficiaryStatus(0), Completed).value
+              .set(individualPages.NamePage(0), FullName("Joe", None, "Bloggs"))
+              .value
+              .set(individualPages.DateOfBirthYesNoPage(0), false)
+              .value
+              .set(individualPages.IncomeYesNoPage(0), true)
+              .value
+              .set(individualPages.NationalInsuranceYesNoPage(0), false)
+              .value
+              .set(individualPages.AddressYesNoPage(0), false)
+              .value
+              .set(individualPages.VulnerableYesNoPage(0), false)
+              .value
+              .set(IndividualBeneficiaryStatus(0), Completed)
+              .value
 
             val application =
-              applicationBuilder(userAnswers = Some(userAnswers), mockGetSettlorsAnswersResult = Right(Some(settlorsAnswers)))
+              applicationBuilder(
+                userAnswers = Some(userAnswers),
+                mockGetSettlorsAnswersResult = Right(Some(settlorsAnswers))
+              )
                 .build()
 
             when(mockTrustsStoreService.updateTaskStatus(any(), mEq(TaskStatus.InProgress))(any(), any()))
@@ -496,25 +523,42 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
             mockRegistrationsRepositoryBuilder(getSettlorsAnswersResult = Right(Some(settlorsAnswers)))
 
             val userAnswers = emptyUserAnswers
-              .set(individualPages.NamePage(0), FullName("Joe", None, "Bloggs")).value
-              .set(individualPages.DateOfBirthYesNoPage(0), false).value
-              .set(individualPages.IncomeYesNoPage(0), true).value
-              .set(individualPages.NationalInsuranceYesNoPage(0), false).value
-              .set(individualPages.AddressYesNoPage(0), false).value
-              .set(individualPages.VulnerableYesNoPage(0), false).value
-              .set(IndividualBeneficiaryStatus(0), Completed).value
-
-              .set(individualPages.NamePage(1), FullName("John", None, "Doe")).value
-              .set(individualPages.RoleInCompanyPage(1), Employee).value
-              .set(individualPages.DateOfBirthYesNoPage(1), false).value
-              .set(individualPages.IncomeYesNoPage(1), true).value
-              .set(individualPages.NationalInsuranceYesNoPage(1), false).value
-              .set(individualPages.AddressYesNoPage(1), false).value
-              .set(individualPages.VulnerableYesNoPage(1), false).value
-              .set(IndividualBeneficiaryStatus(1), Completed).value
+              .set(individualPages.NamePage(0), FullName("Joe", None, "Bloggs"))
+              .value
+              .set(individualPages.DateOfBirthYesNoPage(0), false)
+              .value
+              .set(individualPages.IncomeYesNoPage(0), true)
+              .value
+              .set(individualPages.NationalInsuranceYesNoPage(0), false)
+              .value
+              .set(individualPages.AddressYesNoPage(0), false)
+              .value
+              .set(individualPages.VulnerableYesNoPage(0), false)
+              .value
+              .set(IndividualBeneficiaryStatus(0), Completed)
+              .value
+              .set(individualPages.NamePage(1), FullName("John", None, "Doe"))
+              .value
+              .set(individualPages.RoleInCompanyPage(1), Employee)
+              .value
+              .set(individualPages.DateOfBirthYesNoPage(1), false)
+              .value
+              .set(individualPages.IncomeYesNoPage(1), true)
+              .value
+              .set(individualPages.NationalInsuranceYesNoPage(1), false)
+              .value
+              .set(individualPages.AddressYesNoPage(1), false)
+              .value
+              .set(individualPages.VulnerableYesNoPage(1), false)
+              .value
+              .set(IndividualBeneficiaryStatus(1), Completed)
+              .value
 
             val application =
-              applicationBuilder(userAnswers = Some(userAnswers), mockGetSettlorsAnswersResult = Right(Some(settlorsAnswers)))
+              applicationBuilder(
+                userAnswers = Some(userAnswers),
+                mockGetSettlorsAnswersResult = Right(Some(settlorsAnswers))
+              )
                 .build()
 
             when(mockTrustsStoreService.updateTaskStatus(any(), mEq(TaskStatus.InProgress))(any(), any()))
@@ -547,7 +591,10 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
             )
 
             contentAsString(result) mustEqual
-              view(form, fakeDraftId, inProgressRows, completeRows, "You have added 2 beneficiaries", Nil)(request, messages).toString
+              view(form, fakeDraftId, inProgressRows, completeRows, "You have added 2 beneficiaries", Nil)(
+                request,
+                messages
+              ).toString
 
             application.stop()
           }
@@ -629,7 +676,8 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
                 .overrides(
                   bind[TrustsStoreService].to(mockTrustsStoreService),
                   bind[RegistrationProgress].to(mockRegistrationProgress)
-                ).build()
+                )
+                .build()
 
             val request =
               FakeRequest(POST, addAnotherPostRoute)
@@ -661,7 +709,8 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
                 .overrides(
                   bind[TrustsStoreService].to(mockTrustsStoreService),
                   bind[RegistrationProgress].to(mockRegistrationProgress)
-                ).build()
+                )
+                .build()
 
             val request =
               FakeRequest(POST, addAnotherPostRoute)
@@ -718,7 +767,8 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
           genOtherBeneficiaries(max)
         )
 
-        val userAnswers = beneficiaries.foldLeft(emptyUserAnswers)((x, acc) => acc.copy(data = x.data.deepMerge(acc.data)))
+        val userAnswers =
+          beneficiaries.foldLeft(emptyUserAnswers)((x, acc) => acc.copy(data = x.data.deepMerge(acc.data)))
 
         val beneficiaryRows = new AddABeneficiaryViewHelper(userAnswers, fakeDraftId).rows
 
@@ -760,7 +810,8 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
           genOtherBeneficiaries(0)
         )
 
-        val userAnswers = beneficiaries.foldLeft(emptyUserAnswers)((x, acc) => acc.copy(data = x.data.deepMerge(acc.data)))
+        val userAnswers =
+          beneficiaries.foldLeft(emptyUserAnswers)((x, acc) => acc.copy(data = x.data.deepMerge(acc.data)))
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -769,7 +820,9 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
         val result = route(application, request).value
 
         contentAsString(result) must include("You cannot add another charity as you have entered a maximum of 25.")
-        contentAsString(result) must include("If you have further beneficiaries to add within this type, write to HMRC with their details.")
+        contentAsString(result) must include(
+          "If you have further beneficiaries to add within this type, write to HMRC with their details."
+        )
 
         application.stop()
       }
@@ -786,7 +839,8 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
           genOtherBeneficiaries(0)
         )
 
-        val userAnswers = beneficiaries.foldLeft(emptyUserAnswers)((x, acc) => acc.copy(data = x.data.deepMerge(acc.data)))
+        val userAnswers =
+          beneficiaries.foldLeft(emptyUserAnswers)((x, acc) => acc.copy(data = x.data.deepMerge(acc.data)))
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -795,7 +849,9 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
         val result = route(application, request).value
 
         contentAsString(result) must include("You have entered the maximum number of beneficiaries for:")
-        contentAsString(result) must include("If you have further beneficiaries to add within these types, write to HMRC with their details.")
+        contentAsString(result) must include(
+          "If you have further beneficiaries to add within these types, write to HMRC with their details."
+        )
 
         application.stop()
 
@@ -815,7 +871,8 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
             genOtherBeneficiaries(max)
           )
 
-          val userAnswers = beneficiaries.foldLeft(emptyUserAnswers)((x, acc) => acc.copy(data = x.data.deepMerge(acc.data)))
+          val userAnswers =
+            beneficiaries.foldLeft(emptyUserAnswers)((x, acc) => acc.copy(data = x.data.deepMerge(acc.data)))
 
           val application =
             applicationBuilder(userAnswers = Some(userAnswers))
@@ -833,7 +890,9 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
 
           status(result) mustEqual SEE_OTHER
 
-          redirectLocation(result).value mustEqual "http://localhost:9781/trusts-registration/draftId/registration-progress"
+          redirectLocation(
+            result
+          ).value mustEqual "http://localhost:9781/trusts-registration/draftId/registration-progress"
 
           verify(mockTrustsStoreService).updateTaskStatus(mEq(draftId), mEq(TaskStatus.Completed))(any(), any())
 
@@ -852,7 +911,8 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
             genOtherBeneficiaries(max)
           )
 
-          val userAnswers = beneficiaries.foldLeft(emptyUserAnswers)((x, acc) => acc.copy(data = x.data.deepMerge(acc.data)))
+          val userAnswers =
+            beneficiaries.foldLeft(emptyUserAnswers)((x, acc) => acc.copy(data = x.data.deepMerge(acc.data)))
 
           val application =
             applicationBuilder(userAnswers = Some(userAnswers))
@@ -870,17 +930,19 @@ class AddABeneficiaryControllerSpec extends SpecBase with BeforeAndAfterEach {
 
           status(result) mustEqual SEE_OTHER
 
-          redirectLocation(result).value mustEqual "http://localhost:9781/trusts-registration/draftId/registration-progress"
+          redirectLocation(
+            result
+          ).value mustEqual "http://localhost:9781/trusts-registration/draftId/registration-progress"
 
           verify(mockTrustsStoreService).updateTaskStatus(mEq(draftId), mEq(TaskStatus.InProgress))(any(), any())
 
           application.stop()
         }
 
-
       }
 
     }
 
   }
+
 }

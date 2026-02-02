@@ -23,8 +23,8 @@ import viewmodels.addAnother.CharityBeneficiaryViewModel
 
 import javax.inject.Inject
 
-class CharityBeneficiaryAnswersHelper @Inject()(printHelper: CharityBeneficiaryPrintHelper)
-  extends AnswersHelper[CharityBeneficiaryViewModel](printHelper) {
+class CharityBeneficiaryAnswersHelper @Inject() (printHelper: CharityBeneficiaryPrintHelper)
+    extends AnswersHelper[CharityBeneficiaryViewModel](printHelper) {
 
   override val beneficiaryType: QuestionPage[List[CharityBeneficiaryViewModel]] = CharityBeneficiaries
 }

@@ -45,4 +45,5 @@ trait PageGenerators {
 
   implicit lazy val arbitraryCharityOrTrustPage: Arbitrary[CharityOrTrustPage.type] =
     Arbitrary(CharityOrTrustPage)
+
 }

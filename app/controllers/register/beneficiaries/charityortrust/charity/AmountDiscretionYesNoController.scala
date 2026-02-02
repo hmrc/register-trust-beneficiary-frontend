@@ -35,57 +35,58 @@ import views.html.register.beneficiaries.charityortrust.charity.AmountDiscretion
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AmountDiscretionYesNoController @Inject()(
-                                                 val controllerComponents: MessagesControllerComponents,
-                                                 repository: RegistrationsRepository,
-                                                 @CharityBeneficiary navigator: Navigator,
-                                                 standardActionSets: StandardActionSets,
-                                                 nameAction: NameRequiredAction,
-                                                 formProvider: YesNoFormProvider,
-                                                 view: AmountDiscretionYesNoView,
-                                                 technicalErrorView: TechnicalErrorView
-                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class AmountDiscretionYesNoController @Inject() (
+  val controllerComponents: MessagesControllerComponents,
+  repository: RegistrationsRepository,
+  @CharityBeneficiary navigator: Navigator,
+  standardActionSets: StandardActionSets,
+  nameAction: NameRequiredAction,
+  formProvider: YesNoFormProvider,
+  view: AmountDiscretionYesNoView,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
-  private val className = getClass.getSimpleName
+  private val className           = getClass.getSimpleName
   private val form: Form[Boolean] = formProvider.withPrefix("charity.discretionYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
-    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
-      implicit request =>
+    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) { implicit request =>
+      val charityName = request.userAnswers.get(CharityNamePage(index)).get
 
-        val charityName = request.userAnswers.get(CharityNamePage(index)).get
+      val preparedForm = request.userAnswers.get(AmountDiscretionYesNoPage(index)) match {
+        case None        => form
+        case Some(value) => form.fill(value)
+      }
 
-        val preparedForm = request.userAnswers.get(AmountDiscretionYesNoPage(index)) match {
-          case None => form
-          case Some(value) => form.fill(value)
-        }
-
-        Ok(view(preparedForm, draftId, index, charityName))
+      Ok(view(preparedForm, draftId, index, charityName))
     }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
-    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
-      implicit request =>
+    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async { implicit request =>
+      val charityName = request.userAnswers.get(CharityNamePage(index)).get
 
-        val charityName = request.userAnswers.get(CharityNamePage(index)).get
-
-        form.bindFromRequest().fold(
-          formWithErrors =>
-            Future.successful(BadRequest(view(formWithErrors, draftId, index, charityName))),
-
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, draftId, index, charityName))),
           value => {
             val result = for {
-              updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(AmountDiscretionYesNoPage(index), value)))
+              updatedAnswers <-
+                EitherT(Future.successful(request.userAnswers.set(AmountDiscretionYesNoPage(index), value)))
               _              <- repository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(AmountDiscretionYesNoPage(index), draftId, updatedAnswers))
 
             result.value.map {
               case Right(call) => call
-              case Left(_) =>
-                logger.warn(s"[$className][onSubmit][Session ID: ${request.request.sessionId}] Error while storing user answers")
+              case Left(_)     =>
+                logger.warn(
+                  s"[$className][onSubmit][Session ID: ${request.request.sessionId}] Error while storing user answers"
+                )
                 InternalServerError(technicalErrorView())
             }
           }
         )
     }
+
 }

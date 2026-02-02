@@ -27,8 +27,8 @@ import views.html.register.beneficiaries.individualBeneficiary.mld5.CountryOfNat
 
 class CountryOfNationailtyViewSpec extends SelectCountryViewBehaviours {
 
-  val prefix = "individualBeneficiary.5mld.countryOfNationality"
-  val index = 0
+  val prefix       = "individualBeneficiary.5mld.countryOfNationality"
+  val index        = 0
   val name: String = FullName("FirstName", None, "LastName").toString
 
   val form: Form[String] = new CountryFormProvider().withPrefix(prefix)
@@ -50,4 +50,5 @@ class CountryOfNationailtyViewSpec extends SelectCountryViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

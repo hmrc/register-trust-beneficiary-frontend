@@ -27,41 +27,41 @@ import utils.TrustEnvelope.TrustEnvelope
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class DefaultRegistrationsRepository @Inject()(submissionDraftConnector: SubmissionDraftConnector,
-                                               config: FrontendAppConfig,
-                                               submissionSetFactory: SubmissionSetFactory
-                                        )(implicit ec: ExecutionContext) extends RegistrationsRepository {
+class DefaultRegistrationsRepository @Inject() (
+  submissionDraftConnector: SubmissionDraftConnector,
+  config: FrontendAppConfig,
+  submissionSetFactory: SubmissionSetFactory
+)(implicit ec: ExecutionContext)
+    extends RegistrationsRepository {
 
-  private val userAnswersSection = config.repositoryKey
+  private val userAnswersSection     = config.repositoryKey
   private val settlorsAnswersSection = "settlors"
 
-  override def set(userAnswers: UserAnswers)(implicit hc: HeaderCarrier, messages: Messages): TrustEnvelope[Boolean] = {
+  override def set(userAnswers: UserAnswers)(implicit hc: HeaderCarrier, messages: Messages): TrustEnvelope[Boolean] =
     submissionDraftConnector.setDraftSectionSet(
       userAnswers.draftId,
       userAnswersSection,
       submissionSetFactory.createFrom(userAnswers)
     )
-  }
 
-  override def get(draftId: String)(implicit hc: HeaderCarrier): TrustEnvelope[Option[UserAnswers]] = {
-    submissionDraftConnector.getDraftSection(draftId, userAnswersSection).map {
-      response =>
-        response.data.validate[UserAnswers] match {
-          case JsSuccess(userAnswers, _) => Some(userAnswers)
-          case _ => None
-        }
+  override def get(draftId: String)(implicit hc: HeaderCarrier): TrustEnvelope[Option[UserAnswers]] =
+    submissionDraftConnector.getDraftSection(draftId, userAnswersSection).map { response =>
+      response.data.validate[UserAnswers] match {
+        case JsSuccess(userAnswers, _) => Some(userAnswers)
+        case _                         => None
+      }
     }
-  }
 
-  override def getSettlorsAnswers(draftId: String)(implicit hc: HeaderCarrier): TrustEnvelope[Option[ReadOnlyUserAnswers]] = {
-    submissionDraftConnector.getDraftSection(draftId, settlorsAnswersSection).map {
-      response =>
-        response.data.validate[ReadOnlyUserAnswers] match {
-          case JsSuccess(userAnswers, _) => Some(userAnswers)
-          case _ => None
-        }
+  override def getSettlorsAnswers(
+    draftId: String
+  )(implicit hc: HeaderCarrier): TrustEnvelope[Option[ReadOnlyUserAnswers]] =
+    submissionDraftConnector.getDraftSection(draftId, settlorsAnswersSection).map { response =>
+      response.data.validate[ReadOnlyUserAnswers] match {
+        case JsSuccess(userAnswers, _) => Some(userAnswers)
+        case _                         => None
+      }
     }
-  }
+
 }
 
 trait RegistrationsRepository {

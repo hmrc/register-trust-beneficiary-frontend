@@ -24,10 +24,10 @@ import views.html.register.beneficiaries.charityortrust.charity.CharityNameView
 
 class CharityNameViewSpec extends StringViewBehaviours {
 
-  val prefix = "charity.name"
-  val index = 0
+  val prefix                      = "charity.name"
+  val index                       = 0
   override val form: Form[String] = new StringFormProvider().withPrefix(prefix, 105)
-  val view: CharityNameView = viewFor[CharityNameView](Some(emptyUserAnswers))
+  val view: CharityNameView       = viewFor[CharityNameView](Some(emptyUserAnswers))
 
   "CharityNameView" must {
 
@@ -43,4 +43,5 @@ class CharityNameViewSpec extends StringViewBehaviours {
     behave like pageWithASubmitButton(applyView(form))
 
   }
+
 }

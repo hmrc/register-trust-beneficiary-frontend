@@ -21,7 +21,9 @@ import config.annotations.EmploymentRelatedBeneficiary
 import errors.ServerError
 import forms.YesNoFormProvider
 import navigation.{FakeNavigator, Navigator}
-import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.{LargeBeneficiaryAddressYesNoPage, LargeBeneficiaryNamePage}
+import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.{
+  LargeBeneficiaryAddressYesNoPage, LargeBeneficiaryNamePage
+}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -32,11 +34,11 @@ import views.html.register.beneficiaries.companyoremploymentrelated.employmentRe
 
 class AddressYesNoControllerSpec extends SpecBase {
 
-  private val index = 0
-  private val form: Form[Boolean] = new YesNoFormProvider().withPrefix("employmentRelatedBeneficiary.addressYesNo")
+  private val index                     = 0
+  private val form: Form[Boolean]       = new YesNoFormProvider().withPrefix("employmentRelatedBeneficiary.addressYesNo")
   private val addressYesNoRoute: String = routes.AddressYesNoController.onPageLoad(index, draftId).url
-  private val name: String = "EmploymentRelated"
-  private val onwardRoute = Call("GET", "/foo")
+  private val name: String              = "EmploymentRelated"
+  private val onwardRoute               = Call("GET", "/foo")
 
   private val baseAnswers = emptyUserAnswers.set(LargeBeneficiaryNamePage(index), name).value
 
@@ -85,8 +87,11 @@ class AddressYesNoControllerSpec extends SpecBase {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[EmploymentRelatedBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+            bind[Navigator]
+              .qualifiedWith(classOf[EmploymentRelatedBeneficiary])
+              .toInstance(new FakeNavigator(onwardRoute))
+          )
+          .build()
 
       val request =
         FakeRequest(POST, addressYesNoRoute)
@@ -106,8 +111,11 @@ class AddressYesNoControllerSpec extends SpecBase {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers), mockSetResult = Left(ServerError()))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[EmploymentRelatedBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+            bind[Navigator]
+              .qualifiedWith(classOf[EmploymentRelatedBeneficiary])
+              .toInstance(new FakeNavigator(onwardRoute))
+          )
+          .build()
 
       val request =
         FakeRequest(POST, addressYesNoRoute)
@@ -142,7 +150,7 @@ class AddressYesNoControllerSpec extends SpecBase {
       contentAsString(result) mustEqual
         view(boundForm, name, index, draftId)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -176,4 +184,5 @@ class AddressYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

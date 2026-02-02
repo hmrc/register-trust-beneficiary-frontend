@@ -33,20 +33,23 @@ class AddressYesNoPageSpec extends PageBehaviours {
 
     "implement cleanup logic when decision changed" when {
 
-      "NO selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            val result: UserAnswers = userAnswers
-              .set(AddressUKYesNoPage(0), true).value
-              .set(AddressUKPage(0), UKAddress("Line 1", "Line 2", None, None, "POSTCODE")).value
-              .set(AddressInternationalPage(0), InternationalAddress("Line 1", "Line 2", None, "COUNTRY")).value
-              .set(AddressYesNoPage(0), false).value
+      "NO selected" in
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val result: UserAnswers = userAnswers
+            .set(AddressUKYesNoPage(0), true)
+            .value
+            .set(AddressUKPage(0), UKAddress("Line 1", "Line 2", None, None, "POSTCODE"))
+            .value
+            .set(AddressInternationalPage(0), InternationalAddress("Line 1", "Line 2", None, "COUNTRY"))
+            .value
+            .set(AddressYesNoPage(0), false)
+            .value
 
-            result.get(AddressUKYesNoPage(0)) mustNot be(defined)
-            result.get(AddressUKPage(0)) mustNot be(defined)
-            result.get(AddressInternationalPage(0)) mustNot be(defined)
+          result.get(AddressUKYesNoPage(0)) mustNot be(defined)
+          result.get(AddressUKPage(0)) mustNot be(defined)
+          result.get(AddressInternationalPage(0)) mustNot be(defined)
         }
-      }
     }
   }
+
 }

@@ -20,14 +20,16 @@ import models.core.pages.{Description, InternationalAddress, UKAddress}
 import models.registration.pages.HowManyBeneficiaries
 import play.api.libs.json.{Format, Json}
 
-final case class LargeBeneficiary(name: String,
-                                  description: Description,
-                                  numberOfBeneficiaries: HowManyBeneficiaries,
-                                  address: Option[UKAddress],
-                                  internationalAddress: Option[InternationalAddress],
-                                  discretionYesNo: Option[Boolean],
-                                  shareOfIncome: Option[String],
-                                  countryOfResidence: Option[String]) extends OrgBeneficiaryWithAddress {
+final case class LargeBeneficiary(
+  name: String,
+  description: Description,
+  numberOfBeneficiaries: HowManyBeneficiaries,
+  address: Option[UKAddress],
+  internationalAddress: Option[InternationalAddress],
+  discretionYesNo: Option[Boolean],
+  shareOfIncome: Option[String],
+  countryOfResidence: Option[String]
+) extends OrgBeneficiaryWithAddress {
 
   override def ukAddress: Option[UKAddress] = address
 }

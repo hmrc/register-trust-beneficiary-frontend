@@ -31,15 +31,17 @@ class AmountDiscretionYesNoPageSpec extends PageBehaviours {
     beRemovable[Boolean](AmountDiscretionYesNoPage(0))
   }
 
-  "remove pages when AmountDiscretionYesNoPage is set to true" in {
-    forAll(arbitrary[UserAnswers]) {
-      initial =>
-        val answers: UserAnswers = initial.set(AmountDiscretionYesNoPage(0), true).value
-          .set(HowMuchIncomePage(0), 100).value
+  "remove pages when AmountDiscretionYesNoPage is set to true" in
+    forAll(arbitrary[UserAnswers]) { initial =>
+      val answers: UserAnswers = initial
+        .set(AmountDiscretionYesNoPage(0), true)
+        .value
+        .set(HowMuchIncomePage(0), 100)
+        .value
 
-        val cleaned = answers.set(AmountDiscretionYesNoPage(0), true).value
+      val cleaned = answers.set(AmountDiscretionYesNoPage(0), true).value
 
-        cleaned.get(HowMuchIncomePage(0)) mustNot be(defined)
+      cleaned.get(HowMuchIncomePage(0)) mustNot be(defined)
     }
-  }
+
 }

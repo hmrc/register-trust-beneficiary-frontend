@@ -31,30 +31,32 @@ class CountryOfNationalityInTheUkYesNoPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](CountryOfNationalityInTheUkYesNoPage(0))
 
+    "Yes selected - set CountryOfNationalityPage to 'GB' " in
+      forAll(arbitrary[UserAnswers]) { initial =>
+        val answers: UserAnswers = initial
+          .set(CountryOfNationalityYesNoPage(0), true)
+          .value
+          .set(CountryOfNationalityPage(0), ES)
+          .value
 
-    "Yes selected - set CountryOfNationalityPage to 'GB' " in {
-      forAll(arbitrary[UserAnswers]) {
-        initial =>
-          val answers: UserAnswers = initial.set(CountryOfNationalityYesNoPage(0), true).value
-            .set(CountryOfNationalityPage(0), ES).value
+        val result = answers.set(CountryOfNationalityInTheUkYesNoPage(0), true).value
 
-          val result = answers.set(CountryOfNationalityInTheUkYesNoPage(0), true).value
-
-          result.get(CountryOfNationalityPage(0)).get mustBe GB
+        result.get(CountryOfNationalityPage(0)).get mustBe GB
       }
-    }
 
-    "No selected" in {
-      forAll(arbitrary[UserAnswers]) {
-        initial =>
-          val answers: UserAnswers = initial.set(CountryOfNationalityYesNoPage(0), true).value
-            .set(CountryOfNationalityPage(0), ES).value
+    "No selected" in
+      forAll(arbitrary[UserAnswers]) { initial =>
+        val answers: UserAnswers = initial
+          .set(CountryOfNationalityYesNoPage(0), true)
+          .value
+          .set(CountryOfNationalityPage(0), ES)
+          .value
 
-          val result = answers.set(CountryOfNationalityInTheUkYesNoPage(0), false).value
+        val result = answers.set(CountryOfNationalityInTheUkYesNoPage(0), false).value
 
-          result.get(CountryOfNationalityPage(0)).get mustBe ES
+        result.get(CountryOfNationalityPage(0)).get mustBe ES
       }
-    }
 
   }
+
 }

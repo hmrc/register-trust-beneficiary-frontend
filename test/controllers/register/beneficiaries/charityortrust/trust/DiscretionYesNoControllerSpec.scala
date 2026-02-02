@@ -31,13 +31,14 @@ import views.html.register.beneficiaries.charityortrust.trust.DiscretionYesNoVie
 
 class DiscretionYesNoControllerSpec extends SpecBase {
 
-  private val formProvider = new YesNoFormProvider()
+  private val formProvider        = new YesNoFormProvider()
   private val form: Form[Boolean] = formProvider.withPrefix("trustBeneficiaryDiscretionYesNo")
-  private val index: Int = 0
+  private val index: Int          = 0
 
   private val name = "Name"
 
-  private lazy val trustBeneficiaryDiscretionYesNoRoute: String = routes.DiscretionYesNoController.onPageLoad(index, fakeDraftId).url
+  private lazy val trustBeneficiaryDiscretionYesNoRoute: String =
+    routes.DiscretionYesNoController.onPageLoad(index, fakeDraftId).url
 
   "DiscretionYesNo Controller" must {
 
@@ -64,8 +65,10 @@ class DiscretionYesNoControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(DiscretionYesNoPage(index), true).value
-        .set(NamePage(index), name).value
+        .set(DiscretionYesNoPage(index), true)
+        .value
+        .set(NamePage(index), name)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -91,7 +94,8 @@ class DiscretionYesNoControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, trustBeneficiaryDiscretionYesNoRoute)
@@ -114,7 +118,8 @@ class DiscretionYesNoControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, trustBeneficiaryDiscretionYesNoRoute)
@@ -189,4 +194,5 @@ class DiscretionYesNoControllerSpec extends SpecBase {
     }
 
   }
+
 }

@@ -27,7 +27,7 @@ import views.html.register.beneficiaries.individualBeneficiary.NameView
 class NameViewSpec extends QuestionViewBehaviours[FullName] with Generators {
 
   val messageKeyPrefix = "individualBeneficiaryName"
-  val index = 0
+  val index            = 0
 
   override val form: Form[FullName] = new NameFormProvider().withPrefix("individualBeneficiaryName")
 
@@ -38,7 +38,6 @@ class NameViewSpec extends QuestionViewBehaviours[FullName] with Generators {
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, fakeDraftId, index)(fakeRequest, messages)
 
-
     behave like normalPage(applyView(form), messageKeyPrefix)
 
     behave like pageWithBackLink(applyView(form))
@@ -47,7 +46,8 @@ class NameViewSpec extends QuestionViewBehaviours[FullName] with Generators {
       form,
       applyView,
       messageKeyPrefix,
-      Seq(("firstName",None), ("middleName",None), ("lastName",None))
+      Seq(("firstName", None), ("middleName", None), ("lastName", None))
     )
   }
+
 }

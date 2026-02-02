@@ -25,26 +25,65 @@ import pages.register.beneficiaries.companyoremploymentrelated.company.mld5._
 import play.api.i18n.Messages
 import viewmodels.AnswerRow
 
-class CompanyBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter) extends PrintHelper {
+class CompanyBeneficiaryPrintHelper @Inject() (answerRowConverter: AnswerRowConverter) extends PrintHelper {
 
   override val beneficiaryType: String = "companyBeneficiary"
 
-  override def answers(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
-                      (implicit messages: Messages): Seq[AnswerRow] = {
+  override def answers(userAnswers: UserAnswers, name: String, index: Int, draftId: String)(implicit
+    messages: Messages
+  ): Seq[AnswerRow] = {
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
 
     Seq(
       bound.stringQuestion(NamePage(index), "companyBeneficiary.name", NameController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(IncomeYesNoPage(index), "companyBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad(index, draftId).url),
-      bound.percentageQuestion(IncomePage(index), "companyBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(CountryOfResidenceYesNoPage(index), "companyBeneficiary.5mld.countryOfResidenceYesNo", CountryOfResidenceYesNoController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(CountryOfResidenceInTheUkYesNoPage(index), "companyBeneficiary.5mld.countryOfResidenceInTheUkYesNo", CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId).url),
-      bound.countryQuestion(CountryOfResidenceInTheUkYesNoPage(index), CountryOfResidencePage(index), "companyBeneficiary.5mld.countryOfResidence", CountryOfResidenceController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(AddressYesNoPage(index), "companyBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(AddressUKYesNoPage(index), "companyBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(index, draftId).url),
-      bound.addressQuestion(AddressUKPage(index), "companyBeneficiary.ukAddress", UkAddressController.onPageLoad(index, draftId).url),
-      bound.addressQuestion(AddressInternationalPage(index), "companyBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad(index, draftId).url)
+      bound.yesNoQuestion(
+        IncomeYesNoPage(index),
+        "companyBeneficiary.discretionYesNo",
+        DiscretionYesNoController.onPageLoad(index, draftId).url
+      ),
+      bound.percentageQuestion(
+        IncomePage(index),
+        "companyBeneficiary.shareOfIncome",
+        ShareOfIncomeController.onPageLoad(index, draftId).url
+      ),
+      bound.yesNoQuestion(
+        CountryOfResidenceYesNoPage(index),
+        "companyBeneficiary.5mld.countryOfResidenceYesNo",
+        CountryOfResidenceYesNoController.onPageLoad(index, draftId).url
+      ),
+      bound.yesNoQuestion(
+        CountryOfResidenceInTheUkYesNoPage(index),
+        "companyBeneficiary.5mld.countryOfResidenceInTheUkYesNo",
+        CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId).url
+      ),
+      bound.countryQuestion(
+        CountryOfResidenceInTheUkYesNoPage(index),
+        CountryOfResidencePage(index),
+        "companyBeneficiary.5mld.countryOfResidence",
+        CountryOfResidenceController.onPageLoad(index, draftId).url
+      ),
+      bound.yesNoQuestion(
+        AddressYesNoPage(index),
+        "companyBeneficiary.addressYesNo",
+        AddressYesNoController.onPageLoad(index, draftId).url
+      ),
+      bound.yesNoQuestion(
+        AddressUKYesNoPage(index),
+        "companyBeneficiary.addressUkYesNo",
+        AddressUkYesNoController.onPageLoad(index, draftId).url
+      ),
+      bound.addressQuestion(
+        AddressUKPage(index),
+        "companyBeneficiary.ukAddress",
+        UkAddressController.onPageLoad(index, draftId).url
+      ),
+      bound.addressQuestion(
+        AddressInternationalPage(index),
+        "companyBeneficiary.nonUkAddress",
+        NonUkAddressController.onPageLoad(index, draftId).url
+      )
     ).flatten
 
   }
+
 }

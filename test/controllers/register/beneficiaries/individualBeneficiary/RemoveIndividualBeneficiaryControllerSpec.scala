@@ -33,7 +33,7 @@ class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with ScalaCheck
 
   private val messagesPrefix = "removeIndividualBeneficiaryYesNo"
 
-  private val formProvider = new RemoveIndexFormProvider()
+  private val formProvider        = new RemoveIndexFormProvider()
   private val form: Form[Boolean] = formProvider(messagesPrefix)
 
   private lazy val formRoute: Call = routes.RemoveIndividualBeneficiaryController.onSubmit(0, fakeDraftId)
@@ -57,7 +57,14 @@ class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with ScalaCheck
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(messagesPrefix, form, index, fakeDraftId, "the individual beneficiary", formRoute)(request, messages).toString
+        contentAsString(result) mustEqual view(
+          messagesPrefix,
+          form,
+          index,
+          fakeDraftId,
+          "the individual beneficiary",
+          formRoute
+        )(request, messages).toString
 
         application.stop()
       }
@@ -67,8 +74,7 @@ class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with ScalaCheck
     "name is provided" must {
       "return OK and the correct view for a GET" in {
 
-        val userAnswers = emptyUserAnswers.set(NamePage(0),
-          FullName("First", None, "Last")).value
+        val userAnswers = emptyUserAnswers.set(NamePage(0), FullName("First", None, "Last")).value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -80,44 +86,45 @@ class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with ScalaCheck
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(messagesPrefix, form, index, fakeDraftId, "First Last", formRoute)(request, messages).toString
+        contentAsString(result) mustEqual view(messagesPrefix, form, index, fakeDraftId, "First Last", formRoute)(
+          request,
+          messages
+        ).toString
 
         application.stop()
       }
 
     }
 
-
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(0),
-        FullName("First", None, "Last")).value
+      val userAnswers = emptyUserAnswers.set(NamePage(0), FullName("First", None, "Last")).value
 
-      forAll(arbitrary[Boolean]) {
-        value =>
-          val application =
-            applicationBuilder(userAnswers = Some(userAnswers))
-              .build()
+      forAll(arbitrary[Boolean]) { value =>
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswers))
+            .build()
 
-          val request =
-            FakeRequest(POST, routes.RemoveIndividualBeneficiaryController.onSubmit(index, fakeDraftId).url)
-              .withFormUrlEncodedBody(("value", value.toString))
+        val request =
+          FakeRequest(POST, routes.RemoveIndividualBeneficiaryController.onSubmit(index, fakeDraftId).url)
+            .withFormUrlEncodedBody(("value", value.toString))
 
-          val result = route(application, request).value
+        val result = route(application, request).value
 
-          status(result) mustEqual SEE_OTHER
+        status(result) mustEqual SEE_OTHER
 
-          redirectLocation(result).value mustEqual controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(fakeDraftId).url
+        redirectLocation(result).value mustEqual controllers.register.beneficiaries.routes.AddABeneficiaryController
+          .onPageLoad(fakeDraftId)
+          .url
 
-          application.stop()
+        application.stop()
       }
 
     }
 
     "return an Internal Server Error when setting the user answers goes wrong" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(0),
-        FullName("First", None, "Last")).value
+      val userAnswers = emptyUserAnswers.set(NamePage(0), FullName("First", None, "Last")).value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
@@ -141,8 +148,7 @@ class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with ScalaCheck
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(0),
-        FullName("First", None, "Last")).value
+      val userAnswers = emptyUserAnswers.set(NamePage(0), FullName("First", None, "Last")).value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -196,4 +202,5 @@ class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with ScalaCheck
       application.stop()
     }
   }
+
 }

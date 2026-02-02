@@ -29,4 +29,5 @@ class AddABeneficiaryPageSpec extends PageBehaviours {
 
     beRemovable[AddABeneficiary](AddABeneficiaryPage)
   }
+
 }

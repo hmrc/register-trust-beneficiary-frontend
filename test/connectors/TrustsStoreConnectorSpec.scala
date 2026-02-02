@@ -28,10 +28,8 @@ import utils.WireMockHelper
 class TrustsStoreConnectorSpec extends SpecBase with WireMockHelper {
 
   override lazy val app: Application = new GuiceApplicationBuilder()
-    .configure(Seq(
-      "microservice.services.trusts-store.port" -> server.port(),
-      "auditing.enabled" -> false): _*
-    ).build()
+    .configure(Seq("microservice.services.trusts-store.port" -> server.port(), "auditing.enabled" -> false): _*)
+    .build()
 
   ".updateTaskStatus" must {
 
@@ -42,9 +40,10 @@ class TrustsStoreConnectorSpec extends SpecBase with WireMockHelper {
         .configure(
           Seq(
             "microservice.services.trusts-store.port" -> server.port(),
-            "auditing.enabled" -> false
+            "auditing.enabled"                        -> false
           ): _*
-        ).build()
+        )
+        .build()
 
       val connector = application.injector.instanceOf[TrustsStoreConnector]
 
@@ -55,24 +54,24 @@ class TrustsStoreConnectorSpec extends SpecBase with WireMockHelper {
 
       val futureResult = connector.updateTaskStatus(fakeDraftId, TaskStatus.Completed)
 
-      whenReady(futureResult.value) {
-        r =>
-          r mustBe Right(true)
+      whenReady(futureResult.value) { r =>
+        r mustBe Right(true)
       }
 
       application.stop()
     }
 
-    Seq(INTERNAL_SERVER_ERROR, BAD_REQUEST, UNAUTHORIZED, NOT_FOUND).foreach( errorStatus =>
+    Seq(INTERNAL_SERVER_ERROR, BAD_REQUEST, UNAUTHORIZED, NOT_FOUND).foreach(errorStatus =>
       s"return default tasks when a failure occurs (e.g. ${errorStatus.toString})" in {
 
         val application = applicationBuilder()
           .configure(
             Seq(
               "microservice.services.trusts-store.port" -> server.port(),
-              "auditing.enabled" -> false
+              "auditing.enabled"                        -> false
             ): _*
-          ).build()
+          )
+          .build()
 
         val connector = application.injector.instanceOf[TrustsStoreConnector]
 
@@ -89,4 +88,5 @@ class TrustsStoreConnectorSpec extends SpecBase with WireMockHelper {
       }
     )
   }
+
 }

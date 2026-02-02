@@ -25,10 +25,10 @@ import views.html.register.beneficiaries.individualBeneficiary.AddressUKView
 
 class AddressUKViewSpec extends UkAddressViewBehaviours {
 
-  val messageKeyPrefix = "individualBeneficiaryAddressUK"
-  val index = 0
+  val messageKeyPrefix   = "individualBeneficiaryAddressUK"
+  val index              = 0
   val fullName: FullName = FullName("First", None, "Last")
-  val name: String = fullName.toString
+  val name: String       = fullName.toString
 
   override val form = new UKAddressFormProvider()()
 
@@ -52,4 +52,5 @@ class AddressUKViewSpec extends UkAddressViewBehaviours {
     behave like pageWithASubmitButton(applyView(form))
 
   }
+
 }

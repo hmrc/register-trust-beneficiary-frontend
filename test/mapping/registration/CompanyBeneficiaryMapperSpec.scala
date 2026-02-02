@@ -49,13 +49,16 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with Generators {
         "No address is set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(NamePage(index0), "Company Name").value
-              .set(IncomeYesNoPage(index0), true).value
-              .set(AddressYesNoPage(index0), false).value
+              .set(NamePage(index0), "Company Name")
+              .value
+              .set(IncomeYesNoPage(index0), true)
+              .value
+              .set(AddressYesNoPage(index0), false)
+              .value
 
           val companies = mapper.build(userAnswers)
 
-          companies mustBe defined
+          companies            mustBe defined
           companies.value.head mustBe CompanyType(
             organisationName = "Company Name",
             beneficiaryDiscretion = Some(true),
@@ -68,14 +71,18 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with Generators {
         "Income value is set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(NamePage(index0), "Company Name").value
-              .set(IncomeYesNoPage(index0), false).value
-              .set(IncomePage(index0), 42).value
-              .set(AddressYesNoPage(index0), false).value
+              .set(NamePage(index0), "Company Name")
+              .value
+              .set(IncomeYesNoPage(index0), false)
+              .value
+              .set(IncomePage(index0), 42)
+              .value
+              .set(AddressYesNoPage(index0), false)
+              .value
 
           val companies = mapper.build(userAnswers)
 
-          companies mustBe defined
+          companies            mustBe defined
           companies.value.head mustBe CompanyType(
             organisationName = "Company Name",
             beneficiaryDiscretion = Some(false),
@@ -88,13 +95,16 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with Generators {
         "income value is not set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(NamePage(index0), "Company Name").value
-              .set(CountryOfResidenceYesNoPage(index0), true).value
-              .set(CountryOfResidenceInTheUkYesNoPage(index0), true).value
+              .set(NamePage(index0), "Company Name")
+              .value
+              .set(CountryOfResidenceYesNoPage(index0), true)
+              .value
+              .set(CountryOfResidenceInTheUkYesNoPage(index0), true)
+              .value
 
           val companies = mapper.build(userAnswers)
 
-          companies mustBe defined
+          companies            mustBe defined
           companies.value.head mustBe CompanyType(
             organisationName = "Company Name",
             beneficiaryDiscretion = None,
@@ -107,51 +117,64 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with Generators {
         "UK Address is set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(NamePage(index0), "Company Name").value
-              .set(IncomeYesNoPage(index0), true).value
-              .set(AddressYesNoPage(index0), true).value
-              .set(AddressUKYesNoPage(index0), true).value
-              .set(AddressUKPage(index0),
-                UKAddress("Line1", "Line2", Some("Line3"), Some("Newcastle"), "NE62RT")).value
+              .set(NamePage(index0), "Company Name")
+              .value
+              .set(IncomeYesNoPage(index0), true)
+              .value
+              .set(AddressYesNoPage(index0), true)
+              .value
+              .set(AddressUKYesNoPage(index0), true)
+              .value
+              .set(AddressUKPage(index0), UKAddress("Line1", "Line2", Some("Line3"), Some("Newcastle"), "NE62RT"))
+              .value
 
           val companies = mapper.build(userAnswers)
 
-          companies mustBe defined
+          companies            mustBe defined
           companies.value.head mustBe CompanyType(
             organisationName = "Company Name",
             beneficiaryDiscretion = Some(true),
             beneficiaryShareOfIncome = None,
-            identification = Some(IdentificationOrgType(
-              None,
-              address = Some(
-                AddressType("Line1", "Line2", Some("Line3"), Some("Newcastle"), Some("NE62RT"), GB)
-              ))),
+            identification = Some(
+              IdentificationOrgType(
+                None,
+                address = Some(
+                  AddressType("Line1", "Line2", Some("Line3"), Some("Newcastle"), Some("NE62RT"), GB)
+                )
+              )
+            ),
             countryOfResidence = None
           )
         }
         "International Address is set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(NamePage(index0), "Company Name").value
-              .set(IncomeYesNoPage(index0), true).value
-              .set(AddressYesNoPage(index0), true).value
-              .set(AddressUKYesNoPage(index0), false).value
-              .set(AddressInternationalPage(index0),
-                InternationalAddress("Line1", "Line2", Some("Line3"), "US")).value
+              .set(NamePage(index0), "Company Name")
+              .value
+              .set(IncomeYesNoPage(index0), true)
+              .value
+              .set(AddressYesNoPage(index0), true)
+              .value
+              .set(AddressUKYesNoPage(index0), false)
+              .value
+              .set(AddressInternationalPage(index0), InternationalAddress("Line1", "Line2", Some("Line3"), "US"))
+              .value
 
           val companies = mapper.build(userAnswers)
 
-          companies mustBe defined
+          companies            mustBe defined
           companies.value.head mustBe CompanyType(
             organisationName = "Company Name",
             beneficiaryDiscretion = Some(true),
             beneficiaryShareOfIncome = None,
-            identification = Some(IdentificationOrgType(
-              None,
-              address = Some(
-                AddressType("Line1", "Line2", Some("Line3"), None, None, "US")
+            identification = Some(
+              IdentificationOrgType(
+                None,
+                address = Some(
+                  AddressType("Line1", "Line2", Some("Line3"), None, None, "US")
+                )
               )
-            )),
+            ),
             countryOfResidence = None
           )
         }
@@ -161,21 +184,26 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with Generators {
       "must be able to create multiple Company beneficiaries" in {
         val userAnswers =
           emptyUserAnswers
-            .set(NamePage(index0), "Company 1").value
-            .set(IncomeYesNoPage(index0), false).value
-            .set(IncomePage(index0), 100).value
-
-            .set(NamePage(index1), "Company 2").value
-            .set(IncomeYesNoPage(index1), true).value
-            .set(AddressYesNoPage(index1), true).value
-            .set(AddressUKYesNoPage(index1), true).value
-            .set(AddressUKPage(index1),
-              UKAddress("line1", "line2", None, None, "NE62RT")).value
-
+            .set(NamePage(index0), "Company 1")
+            .value
+            .set(IncomeYesNoPage(index0), false)
+            .value
+            .set(IncomePage(index0), 100)
+            .value
+            .set(NamePage(index1), "Company 2")
+            .value
+            .set(IncomeYesNoPage(index1), true)
+            .value
+            .set(AddressYesNoPage(index1), true)
+            .value
+            .set(AddressUKYesNoPage(index1), true)
+            .value
+            .set(AddressUKPage(index1), UKAddress("line1", "line2", None, None, "NE62RT"))
+            .value
 
         val individuals = mapper.build(userAnswers)
 
-        individuals mustBe defined
+        individuals       mustBe defined
         individuals.value mustBe
           List(
             CompanyType(
@@ -183,8 +211,8 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with Generators {
               beneficiaryDiscretion = Some(false),
               beneficiaryShareOfIncome = Some("100"),
               identification = None,
-              countryOfResidence = None),
-
+              countryOfResidence = None
+            ),
             CompanyType(
               organisationName = "Company 2",
               beneficiaryDiscretion = Some(true),
@@ -194,26 +222,33 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with Generators {
                   None,
                   address = Some(
                     AddressType("line1", "line2", None, None, Some("NE62RT"), GB)
-                  ))),
+                  )
+                )
+              ),
               countryOfResidence = None
             )
           )
       }
 
-
       "Country of residence is set to the UK" in {
         val userAnswers =
           emptyUserAnswers
-            .set(NamePage(index0), "Company Name").value
-            .set(IncomeYesNoPage(index0), false).value
-            .set(IncomePage(index0),60).value
-            .set(CountryOfResidenceYesNoPage(index0), true).value
-            .set(CountryOfResidenceInTheUkYesNoPage(index0), true).value
-            .set(AddressYesNoPage(index0), false).value
+            .set(NamePage(index0), "Company Name")
+            .value
+            .set(IncomeYesNoPage(index0), false)
+            .value
+            .set(IncomePage(index0), 60)
+            .value
+            .set(CountryOfResidenceYesNoPage(index0), true)
+            .value
+            .set(CountryOfResidenceInTheUkYesNoPage(index0), true)
+            .value
+            .set(AddressYesNoPage(index0), false)
+            .value
 
         val company = mapper.build(userAnswers)
 
-        company mustBe defined
+        company            mustBe defined
         company.value.head mustBe CompanyType(
           organisationName = "Company Name",
           beneficiaryDiscretion = Some(false),
@@ -226,17 +261,24 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with Generators {
       "Country of residence is set to outside the UK" in {
         val userAnswers =
           emptyUserAnswers
-            .set(NamePage(index0), "Company Name").value
-            .set(IncomeYesNoPage(index0), false).value
-            .set(IncomePage(index0), 100).value
-            .set(CountryOfResidenceYesNoPage(index0), true).value
-            .set(CountryOfResidenceInTheUkYesNoPage(index0), false).value
-            .set(CountryOfResidencePage(index0), "FR").value
-            .set(AddressYesNoPage(index0), false).value
+            .set(NamePage(index0), "Company Name")
+            .value
+            .set(IncomeYesNoPage(index0), false)
+            .value
+            .set(IncomePage(index0), 100)
+            .value
+            .set(CountryOfResidenceYesNoPage(index0), true)
+            .value
+            .set(CountryOfResidenceInTheUkYesNoPage(index0), false)
+            .value
+            .set(CountryOfResidencePage(index0), "FR")
+            .value
+            .set(AddressYesNoPage(index0), false)
+            .value
 
         val company = mapper.build(userAnswers)
 
-        company mustBe defined
+        company            mustBe defined
         company.value.head mustBe CompanyType(
           organisationName = "Company Name",
           beneficiaryDiscretion = Some(false),
@@ -249,11 +291,12 @@ class CompanyBeneficiaryMapperSpec extends SpecBase with Generators {
       "must be able to create IndividualDetailsType with minimum data" in {
         val userAnswers =
           emptyUserAnswers
-            .set(NamePage(index0), "Company Name").value
+            .set(NamePage(index0), "Company Name")
+            .value
 
         mapper.build(userAnswers) must be(defined)
       }
     }
   }
-}
 
+}

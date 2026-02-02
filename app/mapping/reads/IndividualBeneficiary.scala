@@ -25,37 +25,46 @@ import play.api.libs.json._
 
 import java.time.LocalDate
 
+final case class IndividualBeneficiary(
+  name: FullName,
+  roleInCompany: Option[RoleInCompany],
+  dateOfBirth: Option[LocalDate],
+  nationalInsuranceNumber: Option[String],
+  passportDetails: Option[PassportOrIdCardDetails],
+  idCardDetails: Option[PassportOrIdCardDetails],
+  ukAddress: Option[UKAddress],
+  internationalAddress: Option[InternationalAddress],
+  vulnerableYesNo: Option[Boolean],
+  income: Option[Int],
+  incomeYesNo: Option[Boolean],
+  countryOfResidence: Option[String],
+  countryOfNationality: Option[String],
+  mentalCapacityYesNo: Option[YesNoDontKnow]
+) extends BeneficiaryWithAddress {
 
-final case class IndividualBeneficiary(name: FullName,
-                                       roleInCompany: Option[RoleInCompany],
-                                       dateOfBirth: Option[LocalDate],
-                                       nationalInsuranceNumber: Option[String],
-                                       passportDetails: Option[PassportOrIdCardDetails],
-                                       idCardDetails: Option[PassportOrIdCardDetails],
-                                       ukAddress: Option[UKAddress],
-                                       internationalAddress: Option[InternationalAddress],
-                                       vulnerableYesNo: Option[Boolean],
-                                       income: Option[Int] ,
-                                       incomeYesNo: Option[Boolean],
-                                       countryOfResidence: Option[String],
-                                       countryOfNationality: Option[String],
-                                       mentalCapacityYesNo: Option[YesNoDontKnow]) extends BeneficiaryWithAddress {
+  val identification: Option[IdentificationType] =
+    (nationalInsuranceNumber, ukOrInternationalAddress, passportDetails, idCardDetails) match {
+      case (None, None, None, None) => None
+      case (Some(_), _, _, _)       => Some(IdentificationType(nationalInsuranceNumber, None, None))
+      case _                        =>
+        Some(
+          IdentificationType(None, buildValue(passportDetails, idCardDetails)(buildPassport), ukOrInternationalAddress)
+        )
+    }
 
-  val identification: Option[IdentificationType] = (nationalInsuranceNumber, ukOrInternationalAddress, passportDetails, idCardDetails) match {
-    case (None, None, None, None) => None
-    case (Some(_), _, _, _) => Some(IdentificationType(nationalInsuranceNumber, None, None))
-    case _ => Some(IdentificationType(None, buildValue(passportDetails, idCardDetails)(buildPassport), ukOrInternationalAddress))
-  }
 }
 
 object IndividualBeneficiary extends Beneficiary {
 
   def readMentalCapacity: Reads[Option[YesNoDontKnow]] =
-    (__ \ Symbol("mentalCapacityYesNo")).readNullable[Boolean].flatMap[Option[YesNoDontKnow]] { x: Option[Boolean] =>
-      Reads(_ => JsSuccess(YesNoDontKnow.fromBoolean(x)))
-    }.orElse {
-      (__ \ Symbol("mentalCapacityYesNo")).readNullable[YesNoDontKnow]
-    }
+    (__ \ Symbol("mentalCapacityYesNo"))
+      .readNullable[Boolean]
+      .flatMap[Option[YesNoDontKnow]] { x: Option[Boolean] =>
+        Reads(_ => JsSuccess(YesNoDontKnow.fromBoolean(x)))
+      }
+      .orElse {
+        (__ \ Symbol("mentalCapacityYesNo")).readNullable[YesNoDontKnow]
+      }
 
   implicit val individualBeneficiaryReads: Reads[IndividualBeneficiary] =
     (

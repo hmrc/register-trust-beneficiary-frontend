@@ -27,8 +27,8 @@ class NameViewSpec extends StringViewBehaviours {
   val messageKeyPrefix = "employmentRelatedBeneficiary.name"
 
   val form: Form[String] = new StringFormProvider().withPrefix(messageKeyPrefix, 105)
-  val view: NameView = viewFor[NameView](Some(emptyUserAnswers))
-  val index = 0
+  val view: NameView     = viewFor[NameView](Some(emptyUserAnswers))
+  val index              = 0
 
   "Name view" must {
 

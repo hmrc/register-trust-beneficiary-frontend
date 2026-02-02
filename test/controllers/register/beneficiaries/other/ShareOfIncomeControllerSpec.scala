@@ -31,12 +31,12 @@ import views.html.register.beneficiaries.other.ShareOfIncomeView
 
 class ShareOfIncomeControllerSpec extends SpecBase {
 
-  private val index = 0
-  private val form = new IncomePercentageFormProvider().withPrefix("otherBeneficiary.shareOfIncome")
+  private val index              = 0
+  private val form               = new IncomePercentageFormProvider().withPrefix("otherBeneficiary.shareOfIncome")
   private val shareOfIncomeRoute = routes.ShareOfIncomeController.onPageLoad(index, draftId).url
-  private val description = "Other"
-  private val answer = 50
-  private val baseAnswers = emptyUserAnswers.set(DescriptionPage(index), description).value
+  private val description        = "Other"
+  private val answer             = 50
+  private val baseAnswers        = emptyUserAnswers.set(DescriptionPage(index), description).value
 
   "ShareOfIncome Controller" must {
 
@@ -86,7 +86,8 @@ class ShareOfIncomeControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[OtherBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, shareOfIncomeRoute)
@@ -109,7 +110,8 @@ class ShareOfIncomeControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(emptyUserAnswers), mockSetResult = Left(ServerError()))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[OtherBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, shareOfIncomeRoute)
@@ -144,7 +146,7 @@ class ShareOfIncomeControllerSpec extends SpecBase {
       contentAsString(result) mustEqual
         view(boundForm, description, index, draftId)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -178,4 +180,5 @@ class ShareOfIncomeControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

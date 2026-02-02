@@ -31,15 +31,16 @@ import javax.inject.Inject
 
 import scala.concurrent.ExecutionContext
 
-class RemoveTrustBeneficiaryController @Inject()(
-                                                  override val messagesApi: MessagesApi,
-                                                  override val registrationsRepository: RegistrationsRepository,
-                                                  standardActionSets: StandardActionSets,
-                                                  val formProvider: RemoveIndexFormProvider,
-                                                  val controllerComponents: MessagesControllerComponents,
-                                                  val removeView: RemoveIndexView,
-                                                  val technicalErrorView: TechnicalErrorView
-                                                )(implicit executionContext: ExecutionContext) extends RemoveIndexController {
+class RemoveTrustBeneficiaryController @Inject() (
+  override val messagesApi: MessagesApi,
+  override val registrationsRepository: RegistrationsRepository,
+  standardActionSets: StandardActionSets,
+  val formProvider: RemoveIndexFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  val removeView: RemoveIndexView,
+  val technicalErrorView: TechnicalErrorView
+)(implicit executionContext: ExecutionContext)
+    extends RemoveIndexController {
 
   val ec: ExecutionContext = executionContext
 

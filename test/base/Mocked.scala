@@ -28,20 +28,29 @@ import scala.concurrent.Future
 
 trait Mocked extends MockitoSugar {
 
-  val mockRegistrationsRepository : RegistrationsRepository = mock[RegistrationsRepository]
+  val mockRegistrationsRepository: RegistrationsRepository = mock[RegistrationsRepository]
 
-  def mockRegistrationsRepositoryBuilder(getResult: Either[TrustErrors, Option[UserAnswers]] = Right(None),
-                                         setResult: Either[TrustErrors, Boolean] = Right(true),
-                                         getSettlorsAnswersResult: Either[TrustErrors, Option[ReadOnlyUserAnswers]] = Right(None)): RegistrationsRepository = {
-    when(mockRegistrationsRepository
-      .get(any())(any())).thenReturn(EitherT[Future, TrustErrors, Option[UserAnswers]](Future.successful(getResult)))
+  def mockRegistrationsRepositoryBuilder(
+    getResult: Either[TrustErrors, Option[UserAnswers]] = Right(None),
+    setResult: Either[TrustErrors, Boolean] = Right(true),
+    getSettlorsAnswersResult: Either[TrustErrors, Option[ReadOnlyUserAnswers]] = Right(None)
+  ): RegistrationsRepository = {
+    when(
+      mockRegistrationsRepository
+        .get(any())(any())
+    ).thenReturn(EitherT[Future, TrustErrors, Option[UserAnswers]](Future.successful(getResult)))
 
-    when(mockRegistrationsRepository
-      .set(any())(any(), any())).thenReturn(EitherT[Future, TrustErrors, Boolean](Future.successful(setResult)))
+    when(
+      mockRegistrationsRepository
+        .set(any())(any(), any())
+    ).thenReturn(EitherT[Future, TrustErrors, Boolean](Future.successful(setResult)))
 
     when(mockRegistrationsRepository.getSettlorsAnswers(any())(any()))
-      .thenReturn(EitherT[Future, TrustErrors, Option[ReadOnlyUserAnswers]](Future.successful(getSettlorsAnswersResult)))
+      .thenReturn(
+        EitherT[Future, TrustErrors, Option[ReadOnlyUserAnswers]](Future.successful(getSettlorsAnswersResult))
+      )
 
     mockRegistrationsRepository
   }
+
 }

@@ -34,15 +34,16 @@ import java.time.{LocalDate, ZoneOffset}
 
 class DateOfBirthControllerSpec extends SpecBase {
 
-  private val formProvider = new DateOfBirthFormProvider(frontendAppConfig)
+  private val formProvider          = new DateOfBirthFormProvider(frontendAppConfig)
   private val form: Form[LocalDate] = formProvider.withPrefix("individualBeneficiaryDateOfBirth")
-  private val index: Int = 0
+  private val index: Int            = 0
 
   private val name: FullName = FullName("first name", None, "Last name")
 
   private val validAnswer: LocalDate = LocalDate.now(ZoneOffset.UTC)
 
-  private lazy val individualBeneficiaryDateOfBirthRoute: String = routes.DateOfBirthController.onPageLoad(index, fakeDraftId).url
+  private lazy val individualBeneficiaryDateOfBirthRoute: String =
+    routes.DateOfBirthController.onPageLoad(index, fakeDraftId).url
 
   "IndividualBeneficiaryDateOfBirth Controller" must {
 
@@ -69,8 +70,10 @@ class DateOfBirthControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(DateOfBirthPage(index), validAnswer).value
-        .set(NamePage(index),name).value
+        .set(DateOfBirthPage(index), validAnswer)
+        .value
+        .set(NamePage(index), name)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -91,12 +94,14 @@ class DateOfBirthControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), name).value
+        .set(NamePage(index), name)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
           bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
-        ).build()
+        )
+        .build()
 
       val request =
         FakeRequest(POST, individualBeneficiaryDateOfBirthRoute)
@@ -118,12 +123,14 @@ class DateOfBirthControllerSpec extends SpecBase {
     "return an Internal Server Error when setting the user answers goes wrong" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), name).value
+        .set(NamePage(index), name)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
         .overrides(
           bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
-        ).build()
+        )
+        .build()
 
       val request =
         FakeRequest(POST, individualBeneficiaryDateOfBirthRoute)
@@ -148,7 +155,8 @@ class DateOfBirthControllerSpec extends SpecBase {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), name).value
+        .set(NamePage(index), name)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -205,4 +213,5 @@ class DateOfBirthControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

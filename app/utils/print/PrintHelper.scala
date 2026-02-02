@@ -24,23 +24,24 @@ trait PrintHelper {
 
   val beneficiaryType: String
 
-  def answers(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
-             (implicit messages: Messages): Seq[AnswerRow]
+  def answers(userAnswers: UserAnswers, name: String, index: Int, draftId: String)(implicit
+    messages: Messages
+  ): Seq[AnswerRow]
 
-  def printSection(userAnswers: UserAnswers, name: Option[String], index: Int, draftId: String)
-                  (implicit messages: Messages): AnswerSection = {
+  def printSection(userAnswers: UserAnswers, name: Option[String], index: Int, draftId: String)(implicit
+    messages: Messages
+  ): AnswerSection =
     AnswerSection(
       headingKey = Some(s"answerPage.section.$beneficiaryType.subheading"),
       rows = answers(userAnswers, name.getOrElse(""), index, draftId),
       headingArgs = Seq(index + 1)
     )
-  }
 
-  def checkDetailsSection(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
-                         (implicit messages: Messages): AnswerSection = {
+  def checkDetailsSection(userAnswers: UserAnswers, name: String, index: Int, draftId: String)(implicit
+    messages: Messages
+  ): AnswerSection =
     AnswerSection(
       rows = answers(userAnswers, name, index, draftId)
     )
-  }
 
 }

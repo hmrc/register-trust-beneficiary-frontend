@@ -28,14 +28,14 @@ final case class LargeBeneficiaryAddressYesNoPage(index: Int) extends QuestionPa
 
   override def toString: String = "addressYesNo"
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Either[TrustErrors, UserAnswers] = {
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Either[TrustErrors, UserAnswers] =
     value match {
       case Some(false) =>
-        userAnswers.remove(LargeBeneficiaryAddressUKYesNoPage(index))
+        userAnswers
+          .remove(LargeBeneficiaryAddressUKYesNoPage(index))
           .flatMap(_.remove(LargeBeneficiaryAddressPage(index)))
           .flatMap(_.remove(LargeBeneficiaryAddressInternationalPage(index)))
-      case _ => super.cleanup(value, userAnswers)
+      case _           => super.cleanup(value, userAnswers)
     }
-  }
 
 }

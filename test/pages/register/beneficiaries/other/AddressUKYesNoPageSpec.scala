@@ -34,30 +34,35 @@ class AddressUKYesNoPageSpec extends PageBehaviours {
 
   "remove UK address when AddressUKYesNoPage is set to false" in {
     val index = 0
-    forAll(arbitrary[UserAnswers], arbitrary[String]) {
-      (initial, str) =>
-        val answers: UserAnswers =
-          initial.set(AddressUKPage(index), UKAddress(str, str, Some(str), Some(str), str)).value
-          .set(AddressInternationalPage(index), InternationalAddress(str, str, Some(str), str)).value
+    forAll(arbitrary[UserAnswers], arbitrary[String]) { (initial, str) =>
+      val answers: UserAnswers =
+        initial
+          .set(AddressUKPage(index), UKAddress(str, str, Some(str), Some(str), str))
+          .value
+          .set(AddressInternationalPage(index), InternationalAddress(str, str, Some(str), str))
+          .value
 
-        val result = answers.set(AddressUKYesNoPage(index), false).value
+      val result = answers.set(AddressUKYesNoPage(index), false).value
 
-        result.get(AddressInternationalPage(index)) must be(defined)
-        result.get(AddressUKPage(index)) mustNot be(defined)
+      result.get(AddressInternationalPage(index)) must be(defined)
+      result.get(AddressUKPage(index)) mustNot be(defined)
     }
   }
+
   "remove international address page when AddressUKYesNoPage is set to true" in {
     val index = 0
-    forAll(arbitrary[UserAnswers], arbitrary[String]) {
-      (initial, str) =>
-        val answers: UserAnswers =
-          initial.set(AddressUKPage(index), UKAddress(str, str, Some(str), Some(str), str)).value
-            .set(AddressInternationalPage(index), InternationalAddress(str, str, Some(str), str)).value
+    forAll(arbitrary[UserAnswers], arbitrary[String]) { (initial, str) =>
+      val answers: UserAnswers =
+        initial
+          .set(AddressUKPage(index), UKAddress(str, str, Some(str), Some(str), str))
+          .value
+          .set(AddressInternationalPage(index), InternationalAddress(str, str, Some(str), str))
+          .value
 
-        val result = answers.set(AddressUKYesNoPage(index), true).value
+      val result = answers.set(AddressUKYesNoPage(index), true).value
 
-        result.get(AddressInternationalPage(index)) mustNot be(defined)
-        result.get(AddressUKPage(index)) must be(defined)
+      result.get(AddressInternationalPage(index)) mustNot be(defined)
+      result.get(AddressUKPage(index)) must be(defined)
     }
   }
 

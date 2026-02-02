@@ -32,17 +32,19 @@ class LargeBeneficiaryAddressYesNoPageSpec extends PageBehaviours {
     beRemovable[Boolean](LargeBeneficiaryAddressYesNoPage(0))
   }
 
-  "remove pages when LargeBeneficiaryAddressYesNoPage is set to false" in {
-    forAll(arbitrary[UserAnswers]) {
-      initial =>
-        val answers: UserAnswers = initial.set(LargeBeneficiaryAddressUKYesNoPage(0), true).value
-          .set(LargeBeneficiaryAddressPage(0), UKAddress("line 1", "line 2", Some("line 3"), Some("line 4"),"line 5")).value
+  "remove pages when LargeBeneficiaryAddressYesNoPage is set to false" in
+    forAll(arbitrary[UserAnswers]) { initial =>
+      val answers: UserAnswers = initial
+        .set(LargeBeneficiaryAddressUKYesNoPage(0), true)
+        .value
+        .set(LargeBeneficiaryAddressPage(0), UKAddress("line 1", "line 2", Some("line 3"), Some("line 4"), "line 5"))
+        .value
 
-        val result = answers.set(LargeBeneficiaryAddressYesNoPage(0), false).value
+      val result = answers.set(LargeBeneficiaryAddressYesNoPage(0), false).value
 
-        result.get(LargeBeneficiaryAddressUKYesNoPage(0)) mustNot be(defined)
-        result.get(LargeBeneficiaryAddressPage(0)) mustNot be(defined)
-        result.get(LargeBeneficiaryAddressInternationalPage(0)) mustNot be(defined)
+      result.get(LargeBeneficiaryAddressUKYesNoPage(0)) mustNot be(defined)
+      result.get(LargeBeneficiaryAddressPage(0)) mustNot be(defined)
+      result.get(LargeBeneficiaryAddressInternationalPage(0)) mustNot be(defined)
     }
-  }
+
 }

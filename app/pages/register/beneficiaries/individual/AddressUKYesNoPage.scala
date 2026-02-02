@@ -22,20 +22,19 @@ import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.beneficiaries.{Beneficiaries, IndividualBeneficiaries}
 
-final case class AddressUKYesNoPage(index : Int) extends QuestionPage[Boolean] {
+final case class AddressUKYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
-  override def path: JsPath = JsPath \  Beneficiaries \ IndividualBeneficiaries \ index \ toString
+  override def path: JsPath = JsPath \ Beneficiaries \ IndividualBeneficiaries \ index \ toString
 
   override def toString: String = "addressUKYesNo"
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Either[TrustErrors, UserAnswers] = {
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Either[TrustErrors, UserAnswers] =
     value match {
-      case Some(true) =>
+      case Some(true)  =>
         userAnswers.remove(AddressInternationalPage(index))
       case Some(false) =>
         userAnswers.remove(AddressUKPage(index))
-      case _ => super.cleanup(value, userAnswers)
+      case _           => super.cleanup(value, userAnswers)
     }
-  }
 
 }

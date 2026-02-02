@@ -24,8 +24,7 @@ import org.scalatest.OptionValues
 import pages.register.beneficiaries.WhatTypeOfBeneficiaryPage
 import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescriptionPage
 
-class ClassOfBeneficiariesMapperSpec extends SpecBase
-  with OptionValues with Generators {
+class ClassOfBeneficiariesMapperSpec extends SpecBase with OptionValues with Generators {
 
   val classOfBeneficiariesMapper: ClassOfBeneficiariesMapper = injector.instanceOf[ClassOfBeneficiariesMapper]
 
@@ -42,15 +41,17 @@ class ClassOfBeneficiariesMapperSpec extends SpecBase
     "when user answers is not empty" must {
 
       "must be able to create a beneficiary of 'class of beneficiary' (UnidentifiedType)" in {
-        val index = 0
+        val index       = 0
         val userAnswers =
           emptyUserAnswers
-            .set(ClassBeneficiaryDescriptionPage(index), "class of ben").value
+            .set(ClassBeneficiaryDescriptionPage(index), "class of ben")
+            .value
 
         classOfBeneficiariesMapper.build(userAnswers).value.head mustBe UnidentifiedType(
-            description = "class of ben",
-            beneficiaryDiscretion = None,
-            beneficiaryShareOfIncome = None)
+          description = "class of ben",
+          beneficiaryDiscretion = None,
+          beneficiaryShareOfIncome = None
+        )
       }
 
       "must be able to list of 'class of beneficiary' (UnidentifiedType)" in {
@@ -59,17 +60,22 @@ class ClassOfBeneficiariesMapperSpec extends SpecBase
 
         val userAnswers =
           emptyUserAnswers
-            .set(ClassBeneficiaryDescriptionPage(index0), "class of ben 1").value
-            .set(ClassBeneficiaryDescriptionPage(index1), "class of ben 2").value
+            .set(ClassBeneficiaryDescriptionPage(index0), "class of ben 1")
+            .value
+            .set(ClassBeneficiaryDescriptionPage(index1), "class of ben 2")
+            .value
 
-        classOfBeneficiariesMapper.build(userAnswers).value mustBe List(UnidentifiedType(
-          description = "class of ben 1",
-          beneficiaryDiscretion = None,
-          beneficiaryShareOfIncome = None),
+        classOfBeneficiariesMapper.build(userAnswers).value mustBe List(
           UnidentifiedType(
-          description = "class of ben 2",
-          beneficiaryDiscretion = None,
-          beneficiaryShareOfIncome = None)
+            description = "class of ben 1",
+            beneficiaryDiscretion = None,
+            beneficiaryShareOfIncome = None
+          ),
+          UnidentifiedType(
+            description = "class of ben 2",
+            beneficiaryDiscretion = None,
+            beneficiaryShareOfIncome = None
+          )
         )
       }
 
@@ -77,12 +83,12 @@ class ClassOfBeneficiariesMapperSpec extends SpecBase
 
         val userAnswers =
           emptyUserAnswers
-            .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Individual).value
+            .set(WhatTypeOfBeneficiaryPage, WhatTypeOfBeneficiary.Individual)
+            .value
 
         classOfBeneficiariesMapper.build(userAnswers) mustBe None
 
       }
-
 
     }
 

@@ -24,9 +24,9 @@ import views.html.register.beneficiaries.other.DiscretionYesNoView
 
 class DiscretionYesNoViewSpec extends YesNoViewBehaviours {
 
-  private val index = 0
+  private val index            = 0
   private val messageKeyPrefix = "otherBeneficiary.discretionYesNo"
-  private val description = "Other"
+  private val description      = "Other"
 
   override val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
@@ -45,4 +45,5 @@ class DiscretionYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

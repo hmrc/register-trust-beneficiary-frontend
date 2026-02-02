@@ -25,9 +25,9 @@ import views.html.register.beneficiaries.other.UkAddressView
 
 class UkAddressViewSpec extends UkAddressViewBehaviours {
 
-  private val index = 0
+  private val index            = 0
   private val messageKeyPrefix = "site.address.uk"
-  private val description = "Other"
+  private val description      = "Other"
 
   override val form: Form[UKAddress] = new UKAddressFormProvider().apply()
 
@@ -50,4 +50,5 @@ class UkAddressViewSpec extends UkAddressViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

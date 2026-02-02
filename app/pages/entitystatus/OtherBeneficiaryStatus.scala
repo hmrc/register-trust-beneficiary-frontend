@@ -21,9 +21,9 @@ import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.beneficiaries.{Beneficiaries, OtherBeneficiaries}
 
-final case class OtherBeneficiaryStatus(index : Int) extends QuestionPage[Status] {
+final case class OtherBeneficiaryStatus(index: Int) extends QuestionPage[Status] {
 
-  override def path: JsPath = JsPath \  Beneficiaries \ OtherBeneficiaries \ index \ toString
+  override def path: JsPath = JsPath \ Beneficiaries \ OtherBeneficiaries \ index \ toString
 
   override def toString: String = "status"
 }

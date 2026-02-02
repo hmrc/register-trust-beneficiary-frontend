@@ -27,8 +27,7 @@ import play.api.libs.json.{JsObject, Json}
 
 import java.time.LocalDate
 
-class ConstraintsSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyChecks with Generators  with Constraints {
-
+class ConstraintsSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyChecks with Generators with Constraints {
 
   "firstError" must {
 
@@ -130,30 +129,28 @@ class ConstraintsSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyC
     "return Valid for a date before or equal to the maximum" in {
 
       val gen: Gen[(LocalDate, LocalDate)] = for {
-        max <- datesBetween(LocalDate.of(2000, 1, 1), LocalDate.of(3000, 1, 1))
+        max  <- datesBetween(LocalDate.of(2000, 1, 1), LocalDate.of(3000, 1, 1))
         date <- datesBetween(LocalDate.of(2000, 1, 1), max)
       } yield (max, date)
 
-      forAll(gen) {
-        case (max, date) =>
+      forAll(gen) { case (max, date) =>
 
-          val result = maxDate(max, "error.future")(date)
-          result mustEqual Valid
+        val result = maxDate(max, "error.future")(date)
+        result mustEqual Valid
       }
     }
 
     "return Invalid for a date after the maximum" in {
 
       val gen: Gen[(LocalDate, LocalDate)] = for {
-        max <- datesBetween(LocalDate.of(2000, 1, 1), LocalDate.of(3000, 1, 1))
+        max  <- datesBetween(LocalDate.of(2000, 1, 1), LocalDate.of(3000, 1, 1))
         date <- datesBetween(max.plusDays(1), LocalDate.of(3000, 1, 2))
       } yield (max, date)
 
-      forAll(gen) {
-        case (max, date) =>
+      forAll(gen) { case (max, date) =>
 
-          val result = maxDate(max, "error.future", "foo")(date)
-          result mustEqual Invalid("error.future", "foo")
+        val result = maxDate(max, "error.future", "foo")(date)
+        result mustEqual Invalid("error.future", "foo")
       }
     }
   }
@@ -163,42 +160,40 @@ class ConstraintsSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyC
     "return Valid for a date after or equal to the minimum" in {
 
       val gen: Gen[(LocalDate, LocalDate)] = for {
-        min <- datesBetween(LocalDate.of(2000, 1, 1), LocalDate.of(3000, 1, 1))
+        min  <- datesBetween(LocalDate.of(2000, 1, 1), LocalDate.of(3000, 1, 1))
         date <- datesBetween(min, LocalDate.of(3000, 1, 1))
       } yield (min, date)
 
-      forAll(gen) {
-        case (min, date) =>
+      forAll(gen) { case (min, date) =>
 
-          val result = minDate(min, "error.past", "foo")(date)
-          result mustEqual Valid
+        val result = minDate(min, "error.past", "foo")(date)
+        result mustEqual Valid
       }
     }
 
     "return Invalid for a date before the minimum" in {
 
       val gen: Gen[(LocalDate, LocalDate)] = for {
-        min <- datesBetween(LocalDate.of(2000, 1, 2), LocalDate.of(3000, 1, 1))
+        min  <- datesBetween(LocalDate.of(2000, 1, 2), LocalDate.of(3000, 1, 1))
         date <- datesBetween(LocalDate.of(2000, 1, 1), min.minusDays(1))
       } yield (min, date)
 
-      forAll(gen) {
-        case (min, date) =>
+      forAll(gen) { case (min, date) =>
 
-          val result = minDate(min, "error.past", "foo")(date)
-          result mustEqual Invalid("error.past", "foo")
+        val result = minDate(min, "error.past", "foo")(date)
+        result mustEqual Invalid("error.past", "foo")
       }
     }
 
     "uniquePassportNumber" must {
       "return valid when isPassportNumberDuplicated is true" in {
         val userAnswers = UserAnswers(draftId = "", internalAuthId = "")
-        val result = isPassportNumberDuplicated(userAnswers, 0, "number.error.duplicate")("502135326")
+        val result      = isPassportNumberDuplicated(userAnswers, 0, "number.error.duplicate")("502135326")
         result mustEqual Valid
       }
 
       "return invalid when isPassportNumberDuplicated is false" in {
-        val json =
+        val json        =
           """
             |{
             |   "beneficiaries":{
@@ -237,7 +232,7 @@ class ConstraintsSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyC
             |}
             |""".stripMargin
         val userAnswers = UserAnswers(draftId = "", data = Json.parse(json).as[JsObject], internalAuthId = "")
-        val result = isPassportNumberDuplicated(userAnswers, 1, "number.error.duplicate")("502135326")
+        val result      = isPassportNumberDuplicated(userAnswers, 1, "number.error.duplicate")("502135326")
         result mustEqual Invalid(List(ValidationError(List("number.error.duplicate"))))
       }
     }
@@ -245,12 +240,12 @@ class ConstraintsSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyC
     "uniqueIDNumber" must {
       "return valid when isPassportNumberDuplicated is true" in {
         val userAnswers = UserAnswers(draftId = "", internalAuthId = "")
-        val result = isIDNumberDuplicated(userAnswers, 0, "number.error.duplicate")("502135326")
+        val result      = isIDNumberDuplicated(userAnswers, 0, "number.error.duplicate")("502135326")
         result mustEqual Valid
       }
 
       "return invalid when isIDNumberDuplicated is false" in {
-        val json =
+        val json        =
           """
             |{
             |   "beneficiaries":{
@@ -290,7 +285,7 @@ class ConstraintsSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyC
             |}
             |""".stripMargin
         val userAnswers = UserAnswers(draftId = "", data = Json.parse(json).as[JsObject], internalAuthId = "")
-        val result = isIDNumberDuplicated(userAnswers, 1, "number.error.duplicate")("018765432")
+        val result      = isIDNumberDuplicated(userAnswers, 1, "number.error.duplicate")("018765432")
         result mustEqual Invalid(List(ValidationError(List("number.error.duplicate"))))
       }
     }
@@ -312,4 +307,5 @@ class ConstraintsSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyC
       }
     }
   }
+
 }

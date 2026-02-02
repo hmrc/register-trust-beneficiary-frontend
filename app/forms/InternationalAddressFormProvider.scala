@@ -22,35 +22,39 @@ import forms.mappings.Mappings
 import javax.inject.Inject
 import models.core.pages.InternationalAddress
 import play.api.data.Forms._
-import play.api.data.{Form}
+import play.api.data.Form
 
 class InternationalAddressFormProvider @Inject() extends Mappings {
 
   def apply(): Form[InternationalAddress] = Form(
     mapping(
-      "line1" ->
+      "line1"   ->
         text("internationalAddress.error.line1.required")
           .verifying(
             firstError(
               isNotEmpty("line1", "internationalAddress.error.line1.required"),
               maxLength(35, "internationalAddress.error.line1.length"),
               regexp(Validation.addressLineRegex, "internationalAddress.error.line1.invalidCharacters")
-            )),
-      "line2" ->
+            )
+          ),
+      "line2"   ->
         text("internationalAddress.error.line2.required")
           .verifying(
             firstError(
               isNotEmpty("line2", "internationalAddress.error.line2.required"),
               maxLength(35, "internationalAddress.error.line2.length"),
               regexp(Validation.addressLineRegex, "internationalAddress.error.line2.invalidCharacters")
-            )),
-      "line3" ->
-        optional(text()
-          .verifying(
-            firstError(
-              maxLength(35, "internationalAddress.error.line3.length"),
-              regexp(Validation.addressLineRegex, "internationalAddress.error.line3.invalidCharacters")
-            ))
+            )
+          ),
+      "line3"   ->
+        optional(
+          text()
+            .verifying(
+              firstError(
+                maxLength(35, "internationalAddress.error.line3.length"),
+                regexp(Validation.addressLineRegex, "internationalAddress.error.line3.invalidCharacters")
+              )
+            )
         ).transform(emptyToNone, identity[Option[String]]),
       "country" ->
         text("internationalAddress.error.country.required")
@@ -58,7 +62,9 @@ class InternationalAddressFormProvider @Inject() extends Mappings {
             firstError(
               maxLength(35, "internationalAddress.error.country.length"),
               isNotEmpty("country", "internationalAddress.error.country.required")
-            ))
+            )
+          )
     )(InternationalAddress.apply)(InternationalAddress.unapply)
   )
+
 }

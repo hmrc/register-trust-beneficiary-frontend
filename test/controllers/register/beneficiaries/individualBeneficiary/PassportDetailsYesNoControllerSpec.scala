@@ -33,13 +33,14 @@ import views.html.register.beneficiaries.individualBeneficiary.PassportDetailsYe
 
 class PassportDetailsYesNoControllerSpec extends SpecBase {
 
-  private val formProvider = new YesNoFormProvider()
+  private val formProvider        = new YesNoFormProvider()
   private val form: Form[Boolean] = formProvider.withPrefix("individualBeneficiaryPassportDetailsYesNo")
-  private val index: Int = 0
+  private val index: Int          = 0
 
   private val fullName: FullName = FullName("first name", None, "Last name")
 
-  private lazy val passportDetailsYesNoControllerRoute: String = routes.PassportDetailsYesNoController.onPageLoad(index, fakeDraftId).url
+  private lazy val passportDetailsYesNoControllerRoute: String =
+    routes.PassportDetailsYesNoController.onPageLoad(index, fakeDraftId).url
 
   "IDCardDetailsYesNo Controller" must {
 
@@ -66,8 +67,10 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), fullName).value
-        .set(PassportDetailsYesNoPage(index), true).value
+        .set(NamePage(index), fullName)
+        .value
+        .set(PassportDetailsYesNoPage(index), true)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -93,7 +96,8 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, passportDetailsYesNoControllerRoute)
@@ -116,7 +120,8 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, passportDetailsYesNoControllerRoute)
@@ -189,4 +194,5 @@ class PassportDetailsYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

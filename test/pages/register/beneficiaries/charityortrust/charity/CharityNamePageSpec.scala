@@ -28,4 +28,5 @@ class CharityNamePageSpec extends PageBehaviours {
 
     beRemovable[String](CharityNamePage(0))
   }
+
 }

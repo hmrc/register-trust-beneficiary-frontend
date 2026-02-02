@@ -23,7 +23,9 @@ import errors.ServerError
 import models.{RegistrationSubmission, SubmissionDraftResponse}
 import play.api.Application
 import play.api.http.Status
-import play.api.http.Status.{BAD_GATEWAY, BAD_REQUEST, CONFLICT, INTERNAL_SERVER_ERROR, METHOD_NOT_ALLOWED, SERVICE_UNAVAILABLE, UNAUTHORIZED}
+import play.api.http.Status.{
+  BAD_GATEWAY, BAD_REQUEST, CONFLICT, INTERNAL_SERVER_ERROR, METHOD_NOT_ALLOWED, SERVICE_UNAVAILABLE, UNAUTHORIZED
+}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsBoolean, Json}
 import play.api.test.Helpers.CONTENT_TYPE
@@ -36,17 +38,15 @@ import scala.concurrent.duration.Duration
 class SubmissionDraftConnectorSpec extends SpecBase with WireMockHelper {
 
   override lazy val app: Application = new GuiceApplicationBuilder()
-    .configure(Seq(
-      "microservice.services.trusts.port" -> server.port(),
-      "auditing.enabled" -> false): _*
-    ).build()
+    .configure(Seq("microservice.services.trusts.port" -> server.port(), "auditing.enabled" -> false): _*)
+    .build()
 
   private lazy val connector = injector.instanceOf[SubmissionDraftConnector]
 
-  private val testDraftId = "draftId"
-  private val testSection = "section"
-  private val submissionsUrl = s"/trusts/register/submission-drafts"
-  private val submissionUrl = s"$submissionsUrl/$testDraftId/$testSection"
+  private val testDraftId      = "draftId"
+  private val testSection      = "section"
+  private val submissionsUrl   = s"/trusts/register/submission-drafts"
+  private val submissionUrl    = s"$submissionsUrl/$testDraftId/$testSection"
   private val setSubmissionUrl = s"$submissionsUrl/$testDraftId/set/$testSection"
 
   "SubmissionDraftConnector" when {
@@ -55,18 +55,14 @@ class SubmissionDraftConnectorSpec extends SpecBase with WireMockHelper {
 
       "set data for section set" in {
 
-        val sectionData = Json.parse(
-          """
+        val sectionData = Json.parse("""
             |{
             | "field1": "value1",
             | "field2": "value2"
             |}
             |""".stripMargin)
 
-        val submissionDraftSetData = RegistrationSubmission.DataSet(
-          sectionData,
-          List.empty,
-          List.empty)
+        val submissionDraftSetData = RegistrationSubmission.DataSet(sectionData, List.empty, List.empty)
 
         server.stubFor(
           post(urlEqualTo(setSubmissionUrl))
@@ -78,14 +74,16 @@ class SubmissionDraftConnectorSpec extends SpecBase with WireMockHelper {
             )
         )
 
-        val result = Await.result(connector.setDraftSectionSet(testDraftId, testSection, submissionDraftSetData).value, Duration.Inf)
+        val result = Await.result(
+          connector.setDraftSectionSet(testDraftId, testSection, submissionDraftSetData).value,
+          Duration.Inf
+        )
         result mustBe Right(true)
       }
 
       "get data for section" in {
 
-        val draftData = Json.parse(
-          """
+        val draftData = Json.parse("""
             |{
             | "field1": "value1",
             | "field2": "value2"
@@ -112,9 +110,10 @@ class SubmissionDraftConnectorSpec extends SpecBase with WireMockHelper {
             )
         )
 
-        val result: SubmissionDraftResponse = Await.result(connector.getDraftSection(testDraftId, testSection).value, Duration.Inf).value
+        val result: SubmissionDraftResponse =
+          Await.result(connector.getDraftSection(testDraftId, testSection).value, Duration.Inf).value
         result.createdAt mustBe LocalDateTime.of(2012, 2, 3, 9, 30)
-        result.data mustBe draftData
+        result.data      mustBe draftData
       }
 
       "return server error if response JSON is unparsable" in {
@@ -178,85 +177,83 @@ class SubmissionDraftConnectorSpec extends SpecBase with WireMockHelper {
 
     "handling submission draft errors" must {
 
-      Seq(SERVICE_UNAVAILABLE, BAD_REQUEST, UNAUTHORIZED, CONFLICT, INTERNAL_SERVER_ERROR, BAD_GATEWAY).foreach { httpStatus =>
-        s"return Left(ServerError()) for $httpStatus" in {
-          val sectionData = Json.parse(
-            """
+      Seq(SERVICE_UNAVAILABLE, BAD_REQUEST, UNAUTHORIZED, CONFLICT, INTERNAL_SERVER_ERROR, BAD_GATEWAY).foreach {
+        httpStatus =>
+          s"return Left(ServerError()) for $httpStatus" in {
+            val sectionData = Json.parse("""
               |{
               | "field1": "value1",
               | "field2": "value2"
               |}
               |""".stripMargin)
 
-          val submissionDraftSetData = RegistrationSubmission.DataSet(
-            sectionData,
-            List.empty,
-            List.empty)
+            val submissionDraftSetData = RegistrationSubmission.DataSet(sectionData, List.empty, List.empty)
 
-          server.stubFor(
-            post(urlEqualTo(setSubmissionUrl))
-              .withHeader(CONTENT_TYPE, containing("application/json"))
-              .withRequestBody(equalTo(Json.toJson(submissionDraftSetData).toString()))
-              .willReturn(
-                aResponse()
-                  .withStatus(httpStatus)
-              )
-          )
+            server.stubFor(
+              post(urlEqualTo(setSubmissionUrl))
+                .withHeader(CONTENT_TYPE, containing("application/json"))
+                .withRequestBody(equalTo(Json.toJson(submissionDraftSetData).toString()))
+                .willReturn(
+                  aResponse()
+                    .withStatus(httpStatus)
+                )
+            )
 
-          val result = Await.result(connector.setDraftSectionSet(testDraftId, testSection, submissionDraftSetData).value, Duration.Inf)
-          result mustBe Left(ServerError())
-        }
+            val result = Await.result(
+              connector.setDraftSectionSet(testDraftId, testSection, submissionDraftSetData).value,
+              Duration.Inf
+            )
+            result mustBe Left(ServerError())
+          }
       }
 
-        "return Left(ServerError()) if an invalid HTTP response is returned" in {
-          server.stubFor(
-            post(urlEqualTo(setSubmissionUrl))
-              .withHeader(CONTENT_TYPE, containing("application/json"))
-              .willReturn(
-                aResponse()
-                  .withFault(Fault.RANDOM_DATA_THEN_CLOSE)
-              )
-          )
+      "return Left(ServerError()) if an invalid HTTP response is returned" in {
+        server.stubFor(
+          post(urlEqualTo(setSubmissionUrl))
+            .withHeader(CONTENT_TYPE, containing("application/json"))
+            .willReturn(
+              aResponse()
+                .withFault(Fault.RANDOM_DATA_THEN_CLOSE)
+            )
+        )
 
-          val sectionData = Json.parse(
-            """
+        val sectionData = Json.parse("""
               |{
               | "field1": "value1",
               | "field2": "value2"
               |}
               |""".stripMargin)
 
+        val submissionDraftSetData = RegistrationSubmission.DataSet(sectionData, List.empty, List.empty)
 
-          val submissionDraftSetData = RegistrationSubmission.DataSet(
-            sectionData,
-            List.empty,
-            List.empty)
-
-          val result = Await.result(connector.setDraftSectionSet(testDraftId, testSection, submissionDraftSetData).value, Duration.Inf)
-          result mustBe Left(ServerError())
-
-        }
-
-    }
-
-    "handling get draft section call errors" must {
-
-      Seq(SERVICE_UNAVAILABLE, BAD_REQUEST, METHOD_NOT_ALLOWED, INTERNAL_SERVER_ERROR, BAD_GATEWAY).foreach { httpStatus =>
-        s"return Left(ServerError()) for $httpStatus" in {
-
-          server.stubFor(
-            get(urlEqualTo(submissionUrl))
-              .willReturn(
-                aResponse()
-                  .withStatus(httpStatus)
-              )
-          )
-
-          val result = Await.result(connector.getDraftSection(testDraftId, testSection).value, Duration.Inf)
-          result mustBe Left(ServerError())
-        }
+        val result = Await.result(
+          connector.setDraftSectionSet(testDraftId, testSection, submissionDraftSetData).value,
+          Duration.Inf
+        )
+        result mustBe Left(ServerError())
 
       }
+
     }
+
+    "handling get draft section call errors" must
+      Seq(SERVICE_UNAVAILABLE, BAD_REQUEST, METHOD_NOT_ALLOWED, INTERNAL_SERVER_ERROR, BAD_GATEWAY).foreach {
+        httpStatus =>
+          s"return Left(ServerError()) for $httpStatus" in {
+
+            server.stubFor(
+              get(urlEqualTo(submissionUrl))
+                .willReturn(
+                  aResponse()
+                    .withStatus(httpStatus)
+                )
+            )
+
+            val result = Await.result(connector.getDraftSection(testDraftId, testSection).value, Duration.Inf)
+            result mustBe Left(ServerError())
+          }
+
+      }
   }
+
 }

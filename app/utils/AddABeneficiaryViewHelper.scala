@@ -29,18 +29,18 @@ import sections.beneficiaries._
 import viewmodels.addAnother._
 import viewmodels.{AddRow, AddToRows}
 
-class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(implicit messages: Messages) {
+class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId: String)(implicit messages: Messages) {
 
-  private case class InProgressComplete(inProgress : List[AddRow], complete: List[AddRow])
+  private case class InProgressComplete(inProgress: List[AddRow], complete: List[AddRow])
 
-  private def parseName(name : Option[String]) : String = {
+  private def parseName(name: Option[String]): String = {
     val defaultValue = messages("entities.no.name.added")
     name.getOrElse(defaultValue)
   }
 
-  private def parseIndividualBeneficiary(individualBeneficiary : (IndividualBeneficiaryViewModel, Int)) : AddRow = {
+  private def parseIndividualBeneficiary(individualBeneficiary: (IndividualBeneficiaryViewModel, Int)): AddRow = {
 
-    val vm = individualBeneficiary._1
+    val vm    = individualBeneficiary._1
     val index = individualBeneficiary._2
 
     AddRow(
@@ -55,9 +55,9 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
     )
   }
 
-  private def parseClassOfBeneficiary(classOfBeneficiary : (ClassOfBeneficiaryViewModel, Int)) : AddRow = {
+  private def parseClassOfBeneficiary(classOfBeneficiary: (ClassOfBeneficiaryViewModel, Int)): AddRow = {
 
-    val vm = classOfBeneficiary._1
+    val vm    = classOfBeneficiary._1
     val index = classOfBeneficiary._2
 
     val defaultValue = messages("entities.no.description.added")
@@ -71,7 +71,7 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
 
   private def parseCharityBeneficiary(charityBeneficiary: (CharityBeneficiaryViewModel, Int)): AddRow = {
 
-    val vm = charityBeneficiary._1
+    val vm    = charityBeneficiary._1
     val index = charityBeneficiary._2
 
     AddRow(
@@ -88,7 +88,7 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
 
   private def parseTrustBeneficiary(trustBeneficiary: (TrustBeneficiaryViewModel, Int)): AddRow = {
 
-    val vm = trustBeneficiary._1
+    val vm    = trustBeneficiary._1
     val index = trustBeneficiary._2
 
     AddRow(
@@ -103,9 +103,9 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
     )
   }
 
-  private def parseCompanyBeneficiary(companyBeneficiary : (CompanyBeneficiaryViewModel, Int)) : AddRow = {
+  private def parseCompanyBeneficiary(companyBeneficiary: (CompanyBeneficiaryViewModel, Int)): AddRow = {
 
-    val vm = companyBeneficiary._1
+    val vm    = companyBeneficiary._1
     val index = companyBeneficiary._2
 
     AddRow(
@@ -122,7 +122,7 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
 
   private def parseLargeBeneficiary(largeBeneficiary: (EmploymentRelatedBeneficiaryViewModel, Int)): AddRow = {
 
-    val vm = largeBeneficiary._1
+    val vm    = largeBeneficiary._1
     val index = largeBeneficiary._2
 
     AddRow(
@@ -137,9 +137,9 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
     )
   }
 
-  private def parseOtherBeneficiary(companyBeneficiary : (OtherBeneficiaryViewModel, Int)) : AddRow = {
+  private def parseOtherBeneficiary(companyBeneficiary: (OtherBeneficiaryViewModel, Int)): AddRow = {
 
-    val vm = companyBeneficiary._1
+    val vm    = companyBeneficiary._1
     val index = companyBeneficiary._2
 
     AddRow(
@@ -224,7 +224,7 @@ class AddABeneficiaryViewHelper(userAnswers: UserAnswers, draftId : String)(impl
     InProgressComplete(inProgress = progress, complete = completed)
   }
 
-  def rows : AddToRows =
+  def rows: AddToRows =
     AddToRows(
       inProgress = individualBeneficiaries.inProgress :::
         classOfBeneficiaries.inProgress :::

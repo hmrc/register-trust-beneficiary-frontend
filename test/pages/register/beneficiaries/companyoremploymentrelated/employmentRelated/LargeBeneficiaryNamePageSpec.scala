@@ -28,4 +28,5 @@ class LargeBeneficiaryNamePageSpec extends PageBehaviours {
 
     beRemovable[String](LargeBeneficiaryNamePage(0))
   }
+
 }

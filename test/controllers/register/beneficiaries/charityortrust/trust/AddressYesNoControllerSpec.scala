@@ -31,12 +31,13 @@ import views.html.register.beneficiaries.charityortrust.trust.AddressYesNoView
 
 class AddressYesNoControllerSpec extends SpecBase {
 
-  private val formProvider = new YesNoFormProvider()
+  private val formProvider        = new YesNoFormProvider()
   private val form: Form[Boolean] = formProvider.withPrefix("trustBeneficiaryAddressYesNo")
-  private val index: Int = 0
-  private val name = "Name"
+  private val index: Int          = 0
+  private val name                = "Name"
 
-  private lazy val trustBeneficiaryAddressYesNoRoute: String = routes.AddressYesNoController.onPageLoad(index, fakeDraftId).url
+  private lazy val trustBeneficiaryAddressYesNoRoute: String =
+    routes.AddressYesNoController.onPageLoad(index, fakeDraftId).url
 
   "TrustBeneficiaryAddressYesNo Controller" must {
 
@@ -62,8 +63,11 @@ class AddressYesNoControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(AddressYesNoPage(index), true).value
-        .set(NamePage(index),name).value
+      val userAnswers = emptyUserAnswers
+        .set(AddressYesNoPage(index), true)
+        .value
+        .set(NamePage(index), name)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -89,7 +93,8 @@ class AddressYesNoControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, trustBeneficiaryAddressYesNoRoute)
@@ -112,7 +117,8 @@ class AddressYesNoControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, trustBeneficiaryAddressYesNoRoute)
@@ -186,4 +192,5 @@ class AddressYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

@@ -32,31 +32,34 @@ class LargeBeneficiaryAddressUKYesNoPageSpec extends PageBehaviours {
     beRemovable[Boolean](LargeBeneficiaryAddressUKYesNoPage(0))
   }
 
-  "remove UK address when LargeBeneficiaryAddressUKYesNoPage is set to false" in {
-    forAll(arbitrary[UserAnswers]) {
-      initial =>
-        val answers: UserAnswers =
-          initial.set(LargeBeneficiaryAddressPage(0), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB")).value
-          .set(LargeBeneficiaryAddressInternationalPage(0), InternationalAddress("line1", "line2", Some("line3"), "AP")).value
+  "remove UK address when LargeBeneficiaryAddressUKYesNoPage is set to false" in
+    forAll(arbitrary[UserAnswers]) { initial =>
+      val answers: UserAnswers =
+        initial
+          .set(LargeBeneficiaryAddressPage(0), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB"))
+          .value
+          .set(LargeBeneficiaryAddressInternationalPage(0), InternationalAddress("line1", "line2", Some("line3"), "AP"))
+          .value
 
-        val result = answers.set(LargeBeneficiaryAddressUKYesNoPage(0), false).value
+      val result = answers.set(LargeBeneficiaryAddressUKYesNoPage(0), false).value
 
-        result.get(LargeBeneficiaryAddressInternationalPage(0)) must be(defined)
-        result.get(LargeBeneficiaryAddressPage(0)) mustNot be(defined)
+      result.get(LargeBeneficiaryAddressInternationalPage(0)) must be(defined)
+      result.get(LargeBeneficiaryAddressPage(0)) mustNot be(defined)
     }
-  }
-  "remove international address page when LargeBeneficiaryAddressUKYesNoPage is set to true" in {
-    forAll(arbitrary[UserAnswers]) {
-      initial =>
-        val answers: UserAnswers =
-          initial.set(LargeBeneficiaryAddressPage(0), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB")).value
-            .set(LargeBeneficiaryAddressInternationalPage(0), InternationalAddress("line1", "line2", Some("line3"), "AP")).value
 
-        val result = answers.set(LargeBeneficiaryAddressUKYesNoPage(0), true).value
+  "remove international address page when LargeBeneficiaryAddressUKYesNoPage is set to true" in
+    forAll(arbitrary[UserAnswers]) { initial =>
+      val answers: UserAnswers =
+        initial
+          .set(LargeBeneficiaryAddressPage(0), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB"))
+          .value
+          .set(LargeBeneficiaryAddressInternationalPage(0), InternationalAddress("line1", "line2", Some("line3"), "AP"))
+          .value
 
-        result.get(LargeBeneficiaryAddressInternationalPage(0)) mustNot be(defined)
-        result.get(LargeBeneficiaryAddressPage(0)) must be(defined)
+      val result = answers.set(LargeBeneficiaryAddressUKYesNoPage(0), true).value
+
+      result.get(LargeBeneficiaryAddressInternationalPage(0)) mustNot be(defined)
+      result.get(LargeBeneficiaryAddressPage(0)) must be(defined)
     }
-  }
 
 }

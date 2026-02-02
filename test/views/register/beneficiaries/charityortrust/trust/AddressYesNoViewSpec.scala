@@ -26,15 +26,16 @@ import views.html.register.beneficiaries.charityortrust.trust.AddressYesNoView
 class AddressYesNoViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "trustBeneficiaryAddressYesNo"
-  val index = 0
-  val name = "First Last"
+  val index            = 0
+  val name             = "First Last"
 
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
   "TrustBeneficiaryAddressYesNo view" must {
 
     val userAnswers = emptyUserAnswers
-      .set(NamePage(index), name).value
+      .set(NamePage(index), name)
+      .value
 
     val view = viewFor[AddressYesNoView](Some(userAnswers))
 
@@ -45,8 +46,9 @@ class AddressYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix,  None, Seq(name))
+    behave like yesNoPage(form, applyView, messageKeyPrefix, None, Seq(name))
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

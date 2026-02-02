@@ -24,14 +24,22 @@ import play.api.data.Form
 
 class NationalInsuranceNumberFormProvider @Inject() extends Mappings {
 
-  def withPrefix(prefix: String, userAnswers: UserAnswers, index: Int, existingSettlorNinos: Seq[String]): Form[String] =
-    Form("value" -> nino(s"$prefix.error.required")
-      .verifying(
-        firstError(
-          isNotEmpty("value", s"$prefix.error.required"),
-          isNinoValid("value", s"$prefix.error.invalid"),
-          isNinoDuplicated(userAnswers, index, s"$prefix.error.duplicate"),
-          uniqueNino(s"$prefix.error.unique", existingSettlorNinos)
+  def withPrefix(
+    prefix: String,
+    userAnswers: UserAnswers,
+    index: Int,
+    existingSettlorNinos: Seq[String]
+  ): Form[String] =
+    Form(
+      "value" -> nino(s"$prefix.error.required")
+        .verifying(
+          firstError(
+            isNotEmpty("value", s"$prefix.error.required"),
+            isNinoValid("value", s"$prefix.error.invalid"),
+            isNinoDuplicated(userAnswers, index, s"$prefix.error.duplicate"),
+            uniqueNino(s"$prefix.error.unique", existingSettlorNinos)
+          )
+        )
+    )
 
-    )))
 }

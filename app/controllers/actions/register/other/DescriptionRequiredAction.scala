@@ -24,25 +24,25 @@ import play.api.mvc.ActionTransformer
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DescriptionRequiredActionAction @Inject()(index: Int)(implicit val executionContext: ExecutionContext, val messagesApi: MessagesApi)
-  extends ActionTransformer[RegistrationDataRequest, DescriptionRequest] with I18nSupport {
+class DescriptionRequiredActionAction @Inject() (index: Int)(implicit
+  val executionContext: ExecutionContext,
+  val messagesApi: MessagesApi
+) extends ActionTransformer[RegistrationDataRequest, DescriptionRequest] with I18nSupport {
 
-  override protected def transform[A](request: RegistrationDataRequest[A]): Future[DescriptionRequest[A]] = {
-    Future.successful(DescriptionRequest[A](request,
-      getDescription(request)
-    ))
-  }
+  override protected def transform[A](request: RegistrationDataRequest[A]): Future[DescriptionRequest[A]] =
+    Future.successful(DescriptionRequest[A](request, getDescription(request)))
 
-  private def getDescription[A](request: RegistrationDataRequest[A]): String = {
+  private def getDescription[A](request: RegistrationDataRequest[A]): String =
     request.userAnswers.get(DescriptionPage(index)) match {
       case Some(description) => description
-      case None => request.messages(messagesApi)("otherBeneficiary.description.default")
+      case None              => request.messages(messagesApi)("otherBeneficiary.description.default")
     }
-  }
+
 }
 
-class DescriptionRequiredAction @Inject()()
-                                  (implicit val executionContext: ExecutionContext, val messagesApi: MessagesApi) {
+class DescriptionRequiredAction @Inject() ()(implicit
+  val executionContext: ExecutionContext,
+  val messagesApi: MessagesApi
+) {
   def apply(index: Int): DescriptionRequiredActionAction = new DescriptionRequiredActionAction(index)
 }
-

@@ -25,7 +25,7 @@ import views.html.register.beneficiaries.charityortrust.CharityOrTrustView
 class CharityOrTrustViewSpec extends ViewBehaviours {
 
   val messageKeyPrefix = "charityOrTrust"
-  val index = 0
+  val index            = 0
 
   val form = new CharityOrTrustFormProvider()()
 
@@ -42,4 +42,5 @@ class CharityOrTrustViewSpec extends ViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

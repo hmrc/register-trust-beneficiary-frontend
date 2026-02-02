@@ -21,25 +21,25 @@ import play.api.Logging
 
 import javax.inject.Inject
 
-class BeneficiariesMapper @Inject()(
-                                     individualBeneficiaryMapper: IndividualBeneficiaryMapper,
-                                     unidentifiedBeneficiaryMapper: ClassOfBeneficiariesMapper,
-                                     charityBeneficiaryMapper: CharityBeneficiaryMapper,
-                                     trustBeneficiaryMapper: TrustBeneficiaryMapper,
-                                     companyBeneficiaryMapper: CompanyBeneficiaryMapper,
-                                     largeBeneficiaryMapper: LargeBeneficiaryMapper,
-                                     otherBeneficiaryMapper: OtherBeneficiaryMapper
-                                   ) extends Logging {
+class BeneficiariesMapper @Inject() (
+  individualBeneficiaryMapper: IndividualBeneficiaryMapper,
+  unidentifiedBeneficiaryMapper: ClassOfBeneficiariesMapper,
+  charityBeneficiaryMapper: CharityBeneficiaryMapper,
+  trustBeneficiaryMapper: TrustBeneficiaryMapper,
+  companyBeneficiaryMapper: CompanyBeneficiaryMapper,
+  largeBeneficiaryMapper: LargeBeneficiaryMapper,
+  otherBeneficiaryMapper: OtherBeneficiaryMapper
+) extends Logging {
 
   def build(userAnswers: UserAnswers): Option[BeneficiaryType] = {
 
-    val individuals = individualBeneficiaryMapper.build(userAnswers)
+    val individuals  = individualBeneficiaryMapper.build(userAnswers)
     val unidentified = unidentifiedBeneficiaryMapper.build(userAnswers)
-    val charity = charityBeneficiaryMapper.build(userAnswers)
-    val trust = trustBeneficiaryMapper.build(userAnswers)
-    val company = companyBeneficiaryMapper.build(userAnswers)
-    val large = largeBeneficiaryMapper.build(userAnswers)
-    val other = otherBeneficiaryMapper.build(userAnswers)
+    val charity      = charityBeneficiaryMapper.build(userAnswers)
+    val trust        = trustBeneficiaryMapper.build(userAnswers)
+    val company      = companyBeneficiaryMapper.build(userAnswers)
+    val large        = largeBeneficiaryMapper.build(userAnswers)
+    val other        = otherBeneficiaryMapper.build(userAnswers)
 
     val all = Seq(individuals, unidentified, charity, trust, company, large, other).flatten.flatten
 
@@ -60,4 +60,5 @@ class BeneficiariesMapper @Inject()(
       None
     }
   }
+
 }

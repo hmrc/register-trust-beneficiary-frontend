@@ -33,19 +33,21 @@ class CharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
 
     val baseAnswers = emptyUserAnswers.copy(isTaxable = true)
 
-    "Name page -> Do you know date of birth page" in {
-      navigator.nextPage(CharityNamePage(index), fakeDraftId, baseAnswers)
+    "Name page -> Do you know date of birth page" in
+      navigator
+        .nextPage(CharityNamePage(index), fakeDraftId, baseAnswers)
         .mustBe(AmountDiscretionYesNoController.onPageLoad(index, fakeDraftId))
-    }
 
     "Do trustees have discretion page" when {
 
       "Yes" must {
         "-> Country of residence yes no page" in {
           val answers = baseAnswers
-            .set(AmountDiscretionYesNoPage(index), true).value
+            .set(AmountDiscretionYesNoPage(index), true)
+            .value
 
-          navigator.nextPage(AmountDiscretionYesNoPage(index), fakeDraftId, answers)
+          navigator
+            .nextPage(AmountDiscretionYesNoPage(index), fakeDraftId, answers)
             .mustBe(CountryOfResidenceYesNoController.onPageLoad(index, draftId))
         }
       }
@@ -53,9 +55,11 @@ class CharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
       "No" must {
         "-> How much income page" in {
           val answers = baseAnswers
-            .set(AmountDiscretionYesNoPage(index), false).value
+            .set(AmountDiscretionYesNoPage(index), false)
+            .value
 
-          navigator.nextPage(AmountDiscretionYesNoPage(index), fakeDraftId, answers)
+          navigator
+            .nextPage(AmountDiscretionYesNoPage(index), fakeDraftId, answers)
             .mustBe(HowMuchIncomeController.onPageLoad(index, fakeDraftId))
         }
       }
@@ -66,9 +70,11 @@ class CharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
       "Yes" must {
         "-> Is address in UK page" in {
           val answers = baseAnswers
-            .set(AddressYesNoPage(index), true).value
+            .set(AddressYesNoPage(index), true)
+            .value
 
-          navigator.nextPage(AddressYesNoPage(index), fakeDraftId, answers)
+          navigator
+            .nextPage(AddressYesNoPage(index), fakeDraftId, answers)
             .mustBe(AddressInTheUkYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
@@ -76,9 +82,11 @@ class CharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
       "No" must {
         "-> Check answers page" in {
           val answers = baseAnswers
-            .set(AddressYesNoPage(index), false).value
+            .set(AddressYesNoPage(index), false)
+            .value
 
-          navigator.nextPage(AddressYesNoPage(index), fakeDraftId, answers)
+          navigator
+            .nextPage(AddressYesNoPage(index), fakeDraftId, answers)
             .mustBe(CharityAnswersController.onPageLoad(index, fakeDraftId))
         }
       }
@@ -89,9 +97,11 @@ class CharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
       "Yes" must {
         "-> UK address page" in {
           val answers = baseAnswers
-            .set(AddressInTheUkYesNoPage(index), true).value
+            .set(AddressInTheUkYesNoPage(index), true)
+            .value
 
-          navigator.nextPage(AddressInTheUkYesNoPage(index), fakeDraftId, answers)
+          navigator
+            .nextPage(AddressInTheUkYesNoPage(index), fakeDraftId, answers)
             .mustBe(CharityAddressUKController.onPageLoad(index, fakeDraftId))
         }
       }
@@ -99,69 +109,77 @@ class CharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
       "No" must {
         "-> International address page" in {
           val answers = baseAnswers
-            .set(AddressInTheUkYesNoPage(index), false).value
+            .set(AddressInTheUkYesNoPage(index), false)
+            .value
 
-          navigator.nextPage(AddressInTheUkYesNoPage(index), fakeDraftId, answers)
+          navigator
+            .nextPage(AddressInTheUkYesNoPage(index), fakeDraftId, answers)
             .mustBe(CharityInternationalAddressController.onPageLoad(index, fakeDraftId))
         }
       }
     }
 
-    "UK address page -> Check answers page" in {
-      navigator.nextPage(CharityAddressUKPage(index), fakeDraftId, baseAnswers)
+    "UK address page -> Check answers page" in
+      navigator
+        .nextPage(CharityAddressUKPage(index), fakeDraftId, baseAnswers)
         .mustBe(CharityAnswersController.onPageLoad(index, fakeDraftId))
-    }
 
-    "International address page -> Check answers page" in {
-      navigator.nextPage(CharityInternationalAddressPage(index), fakeDraftId, baseAnswers)
+    "International address page -> Check answers page" in
+      navigator
+        .nextPage(CharityInternationalAddressPage(index), fakeDraftId, baseAnswers)
         .mustBe(CharityAnswersController.onPageLoad(index, fakeDraftId))
-    }
 
     "a taxable trust" must {
 
       "CountryOfResidence yes no page -> No -> Address yes no page" in {
         val answers = baseAnswers
-          .set(CountryOfResidenceYesNoPage(index), false).value
+          .set(CountryOfResidenceYesNoPage(index), false)
+          .value
 
-        navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, answers)
+        navigator
+          .nextPage(CountryOfResidenceYesNoPage(index), draftId, answers)
           .mustBe(AddressYesNoController.onPageLoad(index, draftId))
       }
 
       "CountryOfResidence yes no page -> Yes -> CountryOfResidence Uk yes no page" in {
         val answers = baseAnswers
-          .set(CountryOfResidenceYesNoPage(index), true).value
+          .set(CountryOfResidenceYesNoPage(index), true)
+          .value
 
-        navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, answers)
+        navigator
+          .nextPage(CountryOfResidenceYesNoPage(index), draftId, answers)
           .mustBe(CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId))
       }
 
-
       "CountryOfResidence Uk yes no page -> Yes -> Address yes no page" in {
         val answers = baseAnswers
-          .set(CountryOfResidenceInTheUkYesNoPage(index), true).value
+          .set(CountryOfResidenceInTheUkYesNoPage(index), true)
+          .value
 
-        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, answers)
+        navigator
+          .nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, answers)
           .mustBe(AddressYesNoController.onPageLoad(index, draftId))
       }
 
       "CountryOfResidence Uk yes no page -> No -> Address yes no page" in {
         val answers = baseAnswers
-          .set(CountryOfResidenceInTheUkYesNoPage(index), false).value
+          .set(CountryOfResidenceInTheUkYesNoPage(index), false)
+          .value
 
-        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, answers)
+        navigator
+          .nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, answers)
           .mustBe(CountryOfResidenceController.onPageLoad(index, draftId))
       }
 
-      "CountryOfResidence page -> Address yes no page" in {
-        navigator.nextPage(CountryOfResidencePage(index), draftId, baseAnswers)
+      "CountryOfResidence page -> Address yes no page" in
+        navigator
+          .nextPage(CountryOfResidencePage(index), draftId, baseAnswers)
           .mustBe(AddressYesNoController.onPageLoad(index, draftId))
-      }
 
-      "ShareOfIncome page -> CountryOfResidence Yes No page" in {
-
-        navigator.nextPage(HowMuchIncomePage(index), draftId, baseAnswers)
+      "ShareOfIncome page -> CountryOfResidence Yes No page" in
+        navigator
+          .nextPage(HowMuchIncomePage(index), draftId, baseAnswers)
           .mustBe(CountryOfResidenceYesNoController.onPageLoad(index, draftId))
-      }
     }
 
     "a non taxable trust" must {
@@ -170,49 +188,59 @@ class CharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyCh
 
       "Charity Name page -> CountryOfResidence Yes No page" in {
         val answers = baseAnswers
-          .set(CharityNamePage(index), "Charity Name").value
+          .set(CharityNamePage(index), "Charity Name")
+          .value
 
-        navigator.nextPage(CharityNamePage(index), draftId, answers)
+        navigator
+          .nextPage(CharityNamePage(index), draftId, answers)
           .mustBe(CountryOfResidenceYesNoController.onPageLoad(index, draftId))
       }
 
       "CountryOfResidence yes no page -> No -> Check your answers page" in {
         val answers = baseAnswers
-          .set(CountryOfResidenceYesNoPage(index), false).value
+          .set(CountryOfResidenceYesNoPage(index), false)
+          .value
 
-        navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, answers)
+        navigator
+          .nextPage(CountryOfResidenceYesNoPage(index), draftId, answers)
           .mustBe(CharityAnswersController.onPageLoad(index, draftId))
       }
 
       "CountryOfResidence yes no page -> Yes -> CountryOfResidence Uk yes no page" in {
         val answers = baseAnswers
-          .set(CountryOfResidenceYesNoPage(index), true).value
+          .set(CountryOfResidenceYesNoPage(index), true)
+          .value
 
-        navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, answers)
+        navigator
+          .nextPage(CountryOfResidenceYesNoPage(index), draftId, answers)
           .mustBe(CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId))
       }
 
-
       "CountryOfResidence Uk yes no page -> Yes -> Check your answers page" in {
         val answers = baseAnswers
-          .set(CountryOfResidenceInTheUkYesNoPage(index), true).value
+          .set(CountryOfResidenceInTheUkYesNoPage(index), true)
+          .value
 
-        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, answers)
+        navigator
+          .nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, answers)
           .mustBe(CharityAnswersController.onPageLoad(index, draftId))
       }
 
       "CountryOfResidence Uk yes no page -> No -> CountryOfResidence page" in {
         val answers = baseAnswers
-          .set(CountryOfResidenceInTheUkYesNoPage(index), false).value
+          .set(CountryOfResidenceInTheUkYesNoPage(index), false)
+          .value
 
-        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, answers)
+        navigator
+          .nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, answers)
           .mustBe(CountryOfResidenceController.onPageLoad(index, draftId))
       }
 
-      "CountryOfResidence page -> Check your answers page" in {
-        navigator.nextPage(CountryOfResidencePage(index), draftId, baseAnswers)
+      "CountryOfResidence page -> Check your answers page" in
+        navigator
+          .nextPage(CountryOfResidencePage(index), draftId, baseAnswers)
           .mustBe(CharityAnswersController.onPageLoad(index, draftId))
-      }
     }
   }
+
 }

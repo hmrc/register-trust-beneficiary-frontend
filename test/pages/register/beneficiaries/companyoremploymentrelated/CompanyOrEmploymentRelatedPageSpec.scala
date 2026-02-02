@@ -32,10 +32,15 @@ class CompanyOrEmploymentRelatedPageSpec extends PageBehaviours {
   implicit class UserAnswersSetters(userAnswers: UserAnswers) {
 
     def setWithStatus(status: Status): UserAnswers = userAnswers
-      .set(company.NamePage(0), string).value
-      .set(CompanyBeneficiaryStatus(0), status).value
-      .set(large.LargeBeneficiaryNamePage(0), string).value
-      .set(LargeBeneficiaryStatus(0), status).value
+      .set(company.NamePage(0), string)
+      .value
+      .set(CompanyBeneficiaryStatus(0), status)
+      .value
+      .set(large.LargeBeneficiaryNamePage(0), string)
+      .value
+      .set(LargeBeneficiaryStatus(0), status)
+      .value
+
   }
 
   "CompanyOrEmploymentRelatedPage" must {
@@ -49,66 +54,58 @@ class CompanyOrEmploymentRelatedPageSpec extends PageBehaviours {
     "implement cleanup" when {
 
       "company selected" when {
-        "last of other beneficiary types are in progress" in {
-          forAll(arbitrary[UserAnswers]) {
-            initial =>
-              val answers = initial.setWithStatus(InProgress)
+        "last of other beneficiary types are in progress" in
+          forAll(arbitrary[UserAnswers]) { initial =>
+            val answers = initial.setWithStatus(InProgress)
 
-              val result = answers.set(CompanyOrEmploymentRelatedPage, Company).value
+            val result = answers.set(CompanyOrEmploymentRelatedPage, Company).value
 
-              result.get(CompanyBeneficiaries).getOrElse(Nil).size mustBe 1
-              result.get(LargeBeneficiaries).getOrElse(Nil).size mustBe 0
+            result.get(CompanyBeneficiaries).getOrElse(Nil).size mustBe 1
+            result.get(LargeBeneficiaries).getOrElse(Nil).size   mustBe 0
           }
-        }
       }
 
       "employment-related selected" when {
-        "last of other beneficiary types are in progress" in {
-          forAll(arbitrary[UserAnswers]) {
-            initial =>
-              val answers = initial.setWithStatus(InProgress)
+        "last of other beneficiary types are in progress" in
+          forAll(arbitrary[UserAnswers]) { initial =>
+            val answers = initial.setWithStatus(InProgress)
 
-              val result = answers.set(CompanyOrEmploymentRelatedPage, EmploymentRelated).value
+            val result = answers.set(CompanyOrEmploymentRelatedPage, EmploymentRelated).value
 
-              result.get(CompanyBeneficiaries).getOrElse(Nil).size mustBe 0
-              result.get(LargeBeneficiaries).getOrElse(Nil).size mustBe 1
+            result.get(CompanyBeneficiaries).getOrElse(Nil).size mustBe 0
+            result.get(LargeBeneficiaries).getOrElse(Nil).size   mustBe 1
           }
-        }
       }
     }
 
     "not implement cleanup" when {
 
-      def runTestsForType(beneficiaryType: CompanyOrEmploymentRelatedToAdd): Unit = {
+      def runTestsForType(beneficiaryType: CompanyOrEmploymentRelatedToAdd): Unit =
 
         s"$beneficiaryType selected" when {
 
-          "no other beneficiary types" in {
-            forAll(arbitrary[UserAnswers]) {
-              initial =>
-                val result = initial.set(CompanyOrEmploymentRelatedPage, beneficiaryType).value
+          "no other beneficiary types" in
+            forAll(arbitrary[UserAnswers]) { initial =>
+              val result = initial.set(CompanyOrEmploymentRelatedPage, beneficiaryType).value
 
-                result.get(CompanyBeneficiaries).getOrElse(Nil).size mustBe 0
-                result.get(LargeBeneficiaries).getOrElse(Nil).size mustBe 0
+              result.get(CompanyBeneficiaries).getOrElse(Nil).size mustBe 0
+              result.get(LargeBeneficiaries).getOrElse(Nil).size   mustBe 0
             }
-          }
 
-          "last of other beneficiary types is complete" in {
-            forAll(arbitrary[UserAnswers]) {
-              initial =>
-                val answers = initial.setWithStatus(Completed)
+          "last of other beneficiary types is complete" in
+            forAll(arbitrary[UserAnswers]) { initial =>
+              val answers = initial.setWithStatus(Completed)
 
-                val result = answers.set(CompanyOrEmploymentRelatedPage, beneficiaryType).value
+              val result = answers.set(CompanyOrEmploymentRelatedPage, beneficiaryType).value
 
-                result.get(CompanyBeneficiaries).getOrElse(Nil).size mustBe 1
-                result.get(LargeBeneficiaries).getOrElse(Nil).size mustBe 1
+              result.get(CompanyBeneficiaries).getOrElse(Nil).size mustBe 1
+              result.get(LargeBeneficiaries).getOrElse(Nil).size   mustBe 1
             }
-          }
         }
-      }
 
       runTestsForType(Company)
       runTestsForType(EmploymentRelated)
     }
   }
+
 }

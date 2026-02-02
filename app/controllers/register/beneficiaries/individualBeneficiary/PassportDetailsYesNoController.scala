@@ -19,7 +19,9 @@ package controllers.register.beneficiaries.individualBeneficiary
 import cats.data.EitherT
 import config.annotations.IndividualBeneficiary
 import controllers.actions._
-import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
+import controllers.actions.register.{
+  DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction
+}
 import controllers.filters.IndexActionFilterProvider
 import forms.YesNoFormProvider
 import navigation.Navigator
@@ -37,66 +39,65 @@ import views.html.register.beneficiaries.individualBeneficiary.PassportDetailsYe
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PassportDetailsYesNoController @Inject()(
-                                                override val messagesApi: MessagesApi,
-                                                registrationsRepository: RegistrationsRepository,
-                                                @IndividualBeneficiary navigator: Navigator,
-                                                identify: RegistrationIdentifierAction,
-                                                getData: DraftIdRetrievalActionProvider,
-                                                validateIndex: IndexActionFilterProvider,
-                                                requireData: RegistrationDataRequiredAction,
-                                                requiredAnswer: RequiredAnswerActionProvider,
-                                                yesNoFormProvider: YesNoFormProvider,
-                                                val controllerComponents: MessagesControllerComponents,
-                                                view: PassportDetailsYesNoView,
-                                                technicalErrorView: TechnicalErrorView
-                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class PassportDetailsYesNoController @Inject() (
+  override val messagesApi: MessagesApi,
+  registrationsRepository: RegistrationsRepository,
+  @IndividualBeneficiary navigator: Navigator,
+  identify: RegistrationIdentifierAction,
+  getData: DraftIdRetrievalActionProvider,
+  validateIndex: IndexActionFilterProvider,
+  requireData: RegistrationDataRequiredAction,
+  requiredAnswer: RequiredAnswerActionProvider,
+  yesNoFormProvider: YesNoFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: PassportDetailsYesNoView,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private val className = getClass.getSimpleName
-  private val form = yesNoFormProvider.withPrefix("individualBeneficiaryPassportDetailsYesNo")
+  private val form      = yesNoFormProvider.withPrefix("individualBeneficiaryPassportDetailsYesNo")
 
   private def actions(index: Int, draftId: String) =
-    identify andThen
-      getData(draftId) andThen
-      requireData andThen
+    identify                                        andThen
+      getData(draftId)                              andThen
+      requireData                                   andThen
       validateIndex(index, IndividualBeneficiaries) andThen
       requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(index, draftId)))
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
-    implicit request =>
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) { implicit request =>
+    val name = request.userAnswers.get(NamePage(index)).get
 
-      val name = request.userAnswers.get(NamePage(index)).get
+    val preparedForm = request.userAnswers.get(PassportDetailsYesNoPage(index)) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(PassportDetailsYesNoPage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, draftId, index, name))
+    Ok(view(preparedForm, draftId, index, name))
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
-    implicit request =>
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async { implicit request =>
+    val name = request.userAnswers.get(NamePage(index)).get
 
-      val name = request.userAnswers.get(NamePage(index)).get
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, name))),
-
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId, index, name))),
         value => {
           val result = for {
-            updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(PassportDetailsYesNoPage(index), value)))
+            updatedAnswers <-
+              EitherT(Future.successful(request.userAnswers.set(PassportDetailsYesNoPage(index), value)))
             _              <- registrationsRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PassportDetailsYesNoPage(index), draftId, updatedAnswers))
 
           result.value.map {
             case Right(call) => call
-            case Left(_) =>
+            case Left(_)     =>
               logger.warn(s"[$className][onSubmit][Session ID: ${request.sessionId}] Error while storing user answers")
               InternalServerError(technicalErrorView())
           }
         }
       )
   }
+
 }

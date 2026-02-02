@@ -32,12 +32,14 @@ import views.html.register.beneficiaries.charityortrust.trust.ShareOfIncomeView
 
 class ShareOfIncomeControllerSpec extends SpecBase {
 
-  private val formProvider = new IncomePercentageFormProvider()
+  private val formProvider    = new IncomePercentageFormProvider()
   private val form: Form[Int] = formProvider.withPrefix("trustBeneficiaryShareOfIncome")
-  private val name = "Name"
-  private val index: Int = 0
+  private val name            = "Name"
+  private val index: Int      = 0
+
   private val userAnswers: UserAnswers = emptyUserAnswers
-    .set(NamePage(index), name).value
+    .set(NamePage(index), name)
+    .value
 
   private lazy val shareOfIncomeRoute: String = routes.ShareOfIncomeController.onPageLoad(index, fakeDraftId).url
 
@@ -64,7 +66,8 @@ class ShareOfIncomeControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val answers = userAnswers
-        .set(ShareOfIncomePage(index), 5).value
+        .set(ShareOfIncomePage(index), 5)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 
@@ -88,19 +91,20 @@ class ShareOfIncomeControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
-        val request =
-          FakeRequest(POST, shareOfIncomeRoute)
-            .withFormUrlEncodedBody(("value", "5"))
+      val request =
+        FakeRequest(POST, shareOfIncomeRoute)
+          .withFormUrlEncodedBody(("value", "5"))
 
-        val result = route(application, request).value
+      val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
+      status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+      redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
-        application.stop()
+      application.stop()
     }
 
     "return an Internal Server Error when setting the user answers goes wrong" in {
@@ -109,7 +113,8 @@ class ShareOfIncomeControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, shareOfIncomeRoute)
@@ -124,7 +129,7 @@ class ShareOfIncomeControllerSpec extends SpecBase {
       contentType(result) mustBe Some("text/html")
       contentAsString(result) mustEqual errorPage()(request, messages).toString
 
-        application.stop()
+      application.stop()
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
@@ -180,4 +185,5 @@ class ShareOfIncomeControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

@@ -31,14 +31,12 @@ class IncomeYesNoPageSpec extends PageBehaviours {
     beRemovable[Boolean](IncomeYesNoPage(0))
   }
 
+  "remove IndividualBeneficiaryIncome when IndividualBeneficiaryIncomeYesNoPage is set to true" in
+    forAll(arbitrary[UserAnswers]) { initial =>
+      val answers: UserAnswers = initial.set(IncomePage(0), 100).value
+      val result               = answers.set(IncomeYesNoPage(0), true).value
 
-  "remove IndividualBeneficiaryIncome when IndividualBeneficiaryIncomeYesNoPage is set to true" in {
-    forAll(arbitrary[UserAnswers]) {
-      initial =>
-        val answers: UserAnswers = initial.set(IncomePage(0), 100).value
-        val result = answers.set(IncomeYesNoPage(0), true).value
-
-        result.get(IncomePage(0)) mustNot be(defined)
+      result.get(IncomePage(0)) mustNot be(defined)
     }
-  }
+
 }

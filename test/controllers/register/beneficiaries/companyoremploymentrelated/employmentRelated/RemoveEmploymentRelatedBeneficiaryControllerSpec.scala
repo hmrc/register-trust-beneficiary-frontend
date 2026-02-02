@@ -32,7 +32,7 @@ class RemoveEmploymentRelatedBeneficiaryControllerSpec extends SpecBase with Sca
 
   private val messagesPrefix = "removeEmploymentRelatedBeneficiaryYesNo"
 
-  private val formProvider = new RemoveIndexFormProvider()
+  private val formProvider        = new RemoveIndexFormProvider()
   private val form: Form[Boolean] = formProvider(messagesPrefix)
 
   private lazy val formRoute: Call = routes.RemoveEmploymentRelatedBeneficiaryController.onSubmit(0, fakeDraftId)
@@ -49,7 +49,8 @@ class RemoveEmploymentRelatedBeneficiaryControllerSpec extends SpecBase with Sca
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-        val request = FakeRequest(GET, routes.RemoveEmploymentRelatedBeneficiaryController.onPageLoad(index, fakeDraftId).url)
+        val request =
+          FakeRequest(GET, routes.RemoveEmploymentRelatedBeneficiaryController.onPageLoad(index, fakeDraftId).url)
 
         val result = route(application, request).value
 
@@ -58,7 +59,10 @@ class RemoveEmploymentRelatedBeneficiaryControllerSpec extends SpecBase with Sca
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(messagesPrefix, form, index, fakeDraftId, "the employment related beneficiary", formRoute)(request, messages).toString
+          view(messagesPrefix, form, index, fakeDraftId, "the employment related beneficiary", formRoute)(
+            request,
+            messages
+          ).toString
 
         application.stop()
       }
@@ -73,7 +77,8 @@ class RemoveEmploymentRelatedBeneficiaryControllerSpec extends SpecBase with Sca
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-        val request = FakeRequest(GET, routes.RemoveEmploymentRelatedBeneficiaryController.onPageLoad(index, fakeDraftId).url)
+        val request =
+          FakeRequest(GET, routes.RemoveEmploymentRelatedBeneficiaryController.onPageLoad(index, fakeDraftId).url)
 
         val result = route(application, request).value
 
@@ -81,7 +86,14 @@ class RemoveEmploymentRelatedBeneficiaryControllerSpec extends SpecBase with Sca
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(messagesPrefix, form, index, fakeDraftId, "Employment Related", formRoute)(request, messages).toString
+        contentAsString(result) mustEqual view(
+          messagesPrefix,
+          form,
+          index,
+          fakeDraftId,
+          "Employment Related",
+          formRoute
+        )(request, messages).toString
 
         application.stop()
       }
@@ -92,23 +104,24 @@ class RemoveEmploymentRelatedBeneficiaryControllerSpec extends SpecBase with Sca
 
       val userAnswers = emptyUserAnswers.set(NamePage(0), "Employment Related").value
 
-      forAll(arbitrary[Boolean]) {
-        value =>
-          val application =
-            applicationBuilder(userAnswers = Some(userAnswers))
-              .build()
+      forAll(arbitrary[Boolean]) { value =>
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswers))
+            .build()
 
-          val request =
-            FakeRequest(POST, routes.RemoveEmploymentRelatedBeneficiaryController.onSubmit(index, fakeDraftId).url)
-              .withFormUrlEncodedBody(("value", value.toString))
+        val request =
+          FakeRequest(POST, routes.RemoveEmploymentRelatedBeneficiaryController.onSubmit(index, fakeDraftId).url)
+            .withFormUrlEncodedBody(("value", value.toString))
 
-          val result = route(application, request).value
+        val result = route(application, request).value
 
-          status(result) mustEqual SEE_OTHER
+        status(result) mustEqual SEE_OTHER
 
-          redirectLocation(result).value mustEqual controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(fakeDraftId).url
+        redirectLocation(result).value mustEqual controllers.register.beneficiaries.routes.AddABeneficiaryController
+          .onPageLoad(fakeDraftId)
+          .url
 
-          application.stop()
+        application.stop()
       }
 
     }
@@ -165,7 +178,8 @@ class RemoveEmploymentRelatedBeneficiaryControllerSpec extends SpecBase with Sca
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, routes.RemoveEmploymentRelatedBeneficiaryController.onPageLoad(index, fakeDraftId).url)
+      val request =
+        FakeRequest(GET, routes.RemoveEmploymentRelatedBeneficiaryController.onPageLoad(index, fakeDraftId).url)
 
       val result = route(application, request).value
 
@@ -193,4 +207,5 @@ class RemoveEmploymentRelatedBeneficiaryControllerSpec extends SpecBase with Sca
       application.stop()
     }
   }
+
 }

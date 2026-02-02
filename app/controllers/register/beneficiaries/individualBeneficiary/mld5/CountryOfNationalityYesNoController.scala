@@ -35,54 +35,56 @@ import views.html.register.beneficiaries.individualBeneficiary.mld5.CountryOfNat
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CountryOfNationalityYesNoController @Inject()(
-                                                   val controllerComponents: MessagesControllerComponents,
-                                                   repository: RegistrationsRepository,
-                                                   @IndividualBeneficiary navigator: Navigator,
-                                                   standardActionSets: StandardActionSets,
-                                                   nameAction: NameRequiredAction,
-                                                   formProvider: YesNoFormProvider,
-                                                   view: CountryOfNationalityYesNoView,
-                                                   technicalErrorView: TechnicalErrorView
-                                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class CountryOfNationalityYesNoController @Inject() (
+  val controllerComponents: MessagesControllerComponents,
+  repository: RegistrationsRepository,
+  @IndividualBeneficiary navigator: Navigator,
+  standardActionSets: StandardActionSets,
+  nameAction: NameRequiredAction,
+  formProvider: YesNoFormProvider,
+  view: CountryOfNationalityYesNoView,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private val className = getClass.getSimpleName
 
   private val form: Form[Boolean] = formProvider.withPrefix("individualBeneficiary.5mld.countryOfNationalityYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
-    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
-      implicit request =>
+    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) { implicit request =>
+      val preparedForm = request.userAnswers.get(CountryOfNationalityYesNoPage(index)) match {
+        case None        => form
+        case Some(value) => form.fill(value)
+      }
 
-        val preparedForm = request.userAnswers.get(CountryOfNationalityYesNoPage(index)) match {
-          case None => form
-          case Some(value) => form.fill(value)
-        }
-
-        Ok(view(preparedForm, draftId, index, request.beneficiaryName))
+      Ok(view(preparedForm, draftId, index, request.beneficiaryName))
     }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
-    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
-      implicit request =>
-
-        form.bindFromRequest().fold(
+    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
           formWithErrors =>
             Future.successful(BadRequest(view(formWithErrors, draftId, index, request.beneficiaryName))),
-
           value => {
             val result = for {
-              updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(CountryOfNationalityYesNoPage(index), value)))
-              _ <- repository.set(updatedAnswers)
+              updatedAnswers <-
+                EitherT(Future.successful(request.userAnswers.set(CountryOfNationalityYesNoPage(index), value)))
+              _              <- repository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(CountryOfNationalityYesNoPage(index), draftId, updatedAnswers))
 
             result.value.map {
               case Right(call) => call
-              case Left(_) =>
-                logger.warn(s"[$className][onSubmit][Session ID: ${request.request.sessionId}] Error while storing user answers")
+              case Left(_)     =>
+                logger.warn(
+                  s"[$className][onSubmit][Session ID: ${request.request.sessionId}] Error while storing user answers"
+                )
                 InternalServerError(technicalErrorView())
             }
           }
         )
     }
+
 }

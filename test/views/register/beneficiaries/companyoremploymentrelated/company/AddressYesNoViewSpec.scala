@@ -24,9 +24,9 @@ import views.html.register.beneficiaries.companyoremploymentrelated.company.Addr
 
 class AddressYesNoViewSpec extends YesNoViewBehaviours {
 
-  private val index = 0
+  private val index    = 0
   val messageKeyPrefix = "companyBeneficiary.addressYesNo"
-  val name: String = "Company"
+  val name: String     = "Company"
 
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
@@ -45,4 +45,5 @@ class AddressYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

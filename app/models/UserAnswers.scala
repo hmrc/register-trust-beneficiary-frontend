@@ -29,16 +29,14 @@ trait ReadableUserAnswers {
   val data: JsObject
   val isTaxable: Boolean = true
 
-  def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] = {
+  def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] =
     getAtPath(page.path)
-  }
 
-  def getAtPath[A](path: JsPath)(implicit rds: Reads[A]): Option[A] = {
+  def getAtPath[A](path: JsPath)(implicit rds: Reads[A]): Option[A] =
     Reads.at(path).reads(data) match {
       case JsSuccess(value, _) => Some(value)
-      case JsError(_) => None
+      case JsError(_)          => None
     }
-  }
 
   val beneficiaries: Beneficiaries = models.Beneficiaries(
     this.get(IndividualBeneficiaries).getOrElse(List.empty),
@@ -50,7 +48,7 @@ trait ReadableUserAnswers {
     this.get(OtherBeneficiaries).getOrElse(List.empty)
   )
 
-  val isAnyBeneficiaryAdded: Boolean = {
+  val isAnyBeneficiaryAdded: Boolean =
     beneficiaries.individuals.nonEmpty ||
       beneficiaries.unidentified.nonEmpty ||
       beneficiaries.charities.nonEmpty ||
@@ -58,7 +56,7 @@ trait ReadableUserAnswers {
       beneficiaries.companies.nonEmpty ||
       beneficiaries.large.nonEmpty ||
       beneficiaries.other.nonEmpty
-  }
+
 }
 
 case class ReadOnlyUserAnswers(data: JsObject) extends ReadableUserAnswers
@@ -67,25 +65,26 @@ object ReadOnlyUserAnswers {
   implicit lazy val formats: OFormat[ReadOnlyUserAnswers] = Json.format[ReadOnlyUserAnswers]
 }
 
-final case class UserAnswers(draftId: String,
-                             data: JsObject = Json.obj(),
-                             internalAuthId: String,
-                             override val isTaxable: Boolean = true) extends ReadableUserAnswers with Logging {
+final case class UserAnswers(
+  draftId: String,
+  data: JsObject = Json.obj(),
+  internalAuthId: String,
+  override val isTaxable: Boolean = true
+) extends ReadableUserAnswers with Logging {
 
   def set[A](page: Settable[A], value: A)(implicit writes: Writes[A]): Either[TrustErrors, UserAnswers] = {
 
     val updatedData = data.setObject(page.path, Json.toJson(value)) match {
       case JsSuccess(jsValue, _) =>
         Right(jsValue)
-      case JsError(_) =>
+      case JsError(_)            =>
         logger.error(s"[UserAnswers][set] Unable to set path ${page.path} due to errors")
         Left(ServerError())
     }
 
-    updatedData.flatMap {
-      d =>
-        val updatedAnswers = copy (data = d)
-        page.cleanup(Some(value), updatedAnswers)
+    updatedData.flatMap { d =>
+      val updatedAnswers = copy(data = d)
+      page.cleanup(Some(value), updatedAnswers)
     }
   }
 
@@ -94,28 +93,30 @@ final case class UserAnswers(draftId: String,
     val updatedData = data.removeObject(query.path) match {
       case JsSuccess(jsValue, _) =>
         Right(jsValue)
-      case JsError(_) =>
+      case JsError(_)            =>
         Right(data)
     }
 
-    updatedData.flatMap {
-      d =>
-        val updatedAnswers = copy (data = d)
-        query.cleanup(None, updatedAnswers)
+    updatedData.flatMap { d =>
+      val updatedAnswers = copy(data = d)
+      query.cleanup(None, updatedAnswers)
     }
   }
 
-  def deleteAtPath(path: JsPath): Either[TrustErrors, UserAnswers] = {
-    data.removeObject(path).map(obj => copy(data = obj)).fold(
-      _ => Right(this),
-      result => Right(result)
-    )
-  }
+  def deleteAtPath(path: JsPath): Either[TrustErrors, UserAnswers] =
+    data
+      .removeObject(path)
+      .map(obj => copy(data = obj))
+      .fold(
+        _ => Right(this),
+        result => Right(result)
+      )
 
   def removeBeneficiaryTypeAnswers(): Either[TrustErrors, UserAnswers] = this
     .remove(WhatTypeOfBeneficiaryPage)
     .flatMap(_.remove(CharityOrTrustPage))
     .flatMap(_.remove(CompanyOrEmploymentRelatedPage))
+
 }
 
 object UserAnswers {
@@ -129,7 +130,7 @@ object UserAnswers {
         (__ \ "data").read[JsObject] and
         (__ \ "internalId").read[String] and
         (__ \ "isTaxable").readWithDefault[Boolean](true)
-      ) (UserAnswers.apply _)
+    )(UserAnswers.apply _)
   }
 
   implicit lazy val writes: OWrites[UserAnswers] = {
@@ -141,6 +142,7 @@ object UserAnswers {
         (__ \ "data").write[JsObject] and
         (__ \ "internalId").write[String] and
         (__ \ "isTaxable").write[Boolean]
-      ) (unlift(UserAnswers.unapply))
+    )(unlift(UserAnswers.unapply))
   }
+
 }

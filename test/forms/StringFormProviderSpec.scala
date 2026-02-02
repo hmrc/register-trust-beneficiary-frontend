@@ -21,11 +21,11 @@ import play.api.data.Form
 
 class StringFormProviderSpec extends StringFieldBehaviours {
 
-  val prefix: String = "charity.name"
-  val requiredKey = s"$prefix.error.required"
-  val lengthKey = s"$prefix.error.length"
+  val prefix: String   = "charity.name"
+  val requiredKey      = s"$prefix.error.required"
+  val lengthKey        = s"$prefix.error.length"
   val invalidFormatKey = s"$prefix.error.invalid"
-  val maxLength = 105
+  val maxLength        = 105
 
   val form: Form[String] = new StringFormProvider().withPrefix(prefix, maxLength)
 
@@ -36,10 +36,10 @@ class StringFormProviderSpec extends StringFieldBehaviours {
 
     val prefix = "classOfBeneficiary.description"
 
-    val requiredKey = s"$prefix.error.required"
-    val lengthKey = s"$prefix.error.length"
+    val requiredKey      = s"$prefix.error.required"
+    val lengthKey        = s"$prefix.error.length"
     val invalidFormatKey = s"$prefix.error.invalidFormat"
-    val maxLength = 56
+    val maxLength        = 56
 
     val form: Form[String] = new StringFormProvider().withPrefix(prefix, maxLength)
 
@@ -80,6 +80,7 @@ class StringFormProviderSpec extends StringFieldBehaviours {
         error = FormError(fieldName, invalidFormatKey, Seq(Validation.nameRegex))
       )
     }
+
   }
 
 }

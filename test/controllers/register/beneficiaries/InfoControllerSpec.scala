@@ -57,4 +57,5 @@ class InfoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

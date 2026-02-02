@@ -22,8 +22,8 @@ import sections.beneficiaries.OtherBeneficiaries
 import utils.print.OtherBeneficiaryPrintHelper
 import viewmodels.addAnother.OtherBeneficiaryViewModel
 
-class OtherBeneficiaryAnswersHelper @Inject()(printHelper: OtherBeneficiaryPrintHelper)
-  extends AnswersHelper[OtherBeneficiaryViewModel](printHelper) {
+class OtherBeneficiaryAnswersHelper @Inject() (printHelper: OtherBeneficiaryPrintHelper)
+    extends AnswersHelper[OtherBeneficiaryViewModel](printHelper) {
 
   override val beneficiaryType: QuestionPage[List[OtherBeneficiaryViewModel]] = OtherBeneficiaries
 }

@@ -31,10 +31,10 @@ import views.html.register.beneficiaries.other.DescriptionView
 
 class DescriptionControllerSpec extends SpecBase {
 
-  private val index = 0
-  private val form = new DescriptionFormProvider().withPrefix("otherBeneficiary.description", 70)
+  private val index                 = 0
+  private val form                  = new DescriptionFormProvider().withPrefix("otherBeneficiary.description", 70)
   private lazy val descriptionRoute = routes.DescriptionController.onPageLoad(index, draftId).url
-  private val description = "Description"
+  private val description           = "Description"
 
   "Description Controller" must {
 
@@ -84,7 +84,8 @@ class DescriptionControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[OtherBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, descriptionRoute)
@@ -107,7 +108,8 @@ class DescriptionControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(emptyUserAnswers), mockSetResult = Left(ServerError()))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[OtherBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, descriptionRoute)
@@ -142,7 +144,7 @@ class DescriptionControllerSpec extends SpecBase {
       contentAsString(result) mustEqual
         view(boundForm, index, draftId)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -176,4 +178,5 @@ class DescriptionControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

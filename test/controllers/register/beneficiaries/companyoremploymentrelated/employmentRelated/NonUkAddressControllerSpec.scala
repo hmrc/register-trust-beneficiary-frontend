@@ -22,7 +22,9 @@ import errors.ServerError
 import forms.InternationalAddressFormProvider
 import models.core.pages.InternationalAddress
 import navigation.{FakeNavigator, Navigator}
-import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.{LargeBeneficiaryAddressInternationalPage, LargeBeneficiaryNamePage}
+import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.{
+  LargeBeneficiaryAddressInternationalPage, LargeBeneficiaryNamePage
+}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -35,12 +37,12 @@ import views.html.register.beneficiaries.companyoremploymentrelated.employmentRe
 
 class NonUkAddressControllerSpec extends SpecBase {
 
-  private val index = 0
+  private val index                            = 0
   private val form: Form[InternationalAddress] = new InternationalAddressFormProvider()()
-  private val nonUkAddressRoute: String = routes.NonUkAddressController.onPageLoad(index, draftId).url
-  private val name: String = "EmploymentRelated"
-  private val onwardRoute = Call("GET", "/foo")
-  private val answer = InternationalAddress("Line 1", "Line 2", None, "DE")
+  private val nonUkAddressRoute: String        = routes.NonUkAddressController.onPageLoad(index, draftId).url
+  private val name: String                     = "EmploymentRelated"
+  private val onwardRoute                      = Call("GET", "/foo")
+  private val answer                           = InternationalAddress("Line 1", "Line 2", None, "DE")
   private val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
   private val baseAnswers = emptyUserAnswers.set(LargeBeneficiaryNamePage(index), name).value
@@ -90,8 +92,11 @@ class NonUkAddressControllerSpec extends SpecBase {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[EmploymentRelatedBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+            bind[Navigator]
+              .qualifiedWith(classOf[EmploymentRelatedBeneficiary])
+              .toInstance(new FakeNavigator(onwardRoute))
+          )
+          .build()
 
       val request =
         FakeRequest(POST, nonUkAddressRoute)
@@ -111,8 +116,11 @@ class NonUkAddressControllerSpec extends SpecBase {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers), mockSetResult = Left(ServerError()))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[EmploymentRelatedBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+            bind[Navigator]
+              .qualifiedWith(classOf[EmploymentRelatedBeneficiary])
+              .toInstance(new FakeNavigator(onwardRoute))
+          )
+          .build()
 
       val request =
         FakeRequest(POST, nonUkAddressRoute)
@@ -147,7 +155,7 @@ class NonUkAddressControllerSpec extends SpecBase {
       contentAsString(result) mustEqual
         view(boundForm, countryOptions, name, index, draftId)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -181,4 +189,5 @@ class NonUkAddressControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

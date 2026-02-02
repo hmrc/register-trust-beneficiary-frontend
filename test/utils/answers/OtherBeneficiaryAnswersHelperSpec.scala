@@ -21,18 +21,20 @@ import controllers.register.beneficiaries.other.mld5.{routes => mld5}
 import controllers.register.beneficiaries.other.routes._
 import models.core.pages.{InternationalAddress, UKAddress}
 import pages.register.beneficiaries.other._
-import pages.register.beneficiaries.other.mld5.{CountryOfResidencePage, CountryOfResidenceYesNoPage, UKResidentYesNoPage}
+import pages.register.beneficiaries.other.mld5.{
+  CountryOfResidencePage, CountryOfResidenceYesNoPage, UKResidentYesNoPage
+}
 import play.twirl.api.Html
 import viewmodels.{AnswerRow, AnswerSection}
 
 class OtherBeneficiaryAnswersHelperSpec extends SpecBase {
 
-  private val index: Int = 0
-  private val description: String = "Description"
-  private val ukAddress: UKAddress = UKAddress("Line 1", "Line 2", Some("Line 3"), Some("Line 4"), "AB11AB")
+  private val index: Int                         = 0
+  private val description: String                = "Description"
+  private val ukAddress: UKAddress               = UKAddress("Line 1", "Line 2", Some("Line 3"), Some("Line 4"), "AB11AB")
   private val nonUkAddress: InternationalAddress = InternationalAddress("Line 1", "Line 2", Some("Line 3"), "FR")
-  private val nonUkCountry: String = "FR"
-  private val canEdit: Boolean = true
+  private val nonUkCountry: String               = "FR"
+  private val canEdit: Boolean                   = true
 
   private val helper: OtherBeneficiaryAnswersHelper = injector.instanceOf[OtherBeneficiaryAnswersHelper]
 
@@ -43,59 +45,148 @@ class OtherBeneficiaryAnswersHelperSpec extends SpecBase {
       "minimum data" in {
 
         val userAnswers = emptyUserAnswers
-          .set(DescriptionPage(index), description).value
-          .set(CountryOfResidenceYesNoPage(index), false).value
-          .set(AddressYesNoPage(index), true).value
-          .set(AddressUKYesNoPage(index), true).value
-          .set(AddressUKPage(index), ukAddress).value
+          .set(DescriptionPage(index), description)
+          .value
+          .set(CountryOfResidenceYesNoPage(index), false)
+          .value
+          .set(AddressYesNoPage(index), true)
+          .value
+          .set(AddressUKYesNoPage(index), true)
+          .value
+          .set(AddressUKPage(index), ukAddress)
+          .value
 
         val result = helper.beneficiaries(userAnswers)
 
-        result mustBe Some(Seq(
-          AnswerSection(
-            headingKey = Some("answerPage.section.otherBeneficiary.subheading"),
-            rows = Seq(
-              AnswerRow(label = "otherBeneficiary.description.checkYourAnswersLabel", answer = Html(description), changeUrl = Some(DescriptionController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = description),
-              AnswerRow(label = "otherBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(mld5.CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = description),
-              AnswerRow(label = "otherBeneficiary.addressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(AddressYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = description),
-              AnswerRow(label = "otherBeneficiary.addressUkYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(AddressUkYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = description),
-              AnswerRow(label = "otherBeneficiary.ukAddress.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"), changeUrl = Some(UkAddressController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = description)
-            ),
-            headingArgs = Seq(index + 1)
+        result mustBe Some(
+          Seq(
+            AnswerSection(
+              headingKey = Some("answerPage.section.otherBeneficiary.subheading"),
+              rows = Seq(
+                AnswerRow(
+                  label = "otherBeneficiary.description.checkYourAnswersLabel",
+                  answer = Html(description),
+                  changeUrl = Some(DescriptionController.onPageLoad(index, fakeDraftId).url),
+                  canEdit = canEdit,
+                  labelArg = description
+                ),
+                AnswerRow(
+                  label = "otherBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel",
+                  answer = Html("No"),
+                  changeUrl = Some(mld5.CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url),
+                  canEdit = canEdit,
+                  labelArg = description
+                ),
+                AnswerRow(
+                  label = "otherBeneficiary.addressYesNo.checkYourAnswersLabel",
+                  answer = Html("Yes"),
+                  changeUrl = Some(AddressYesNoController.onPageLoad(index, fakeDraftId).url),
+                  canEdit = canEdit,
+                  labelArg = description
+                ),
+                AnswerRow(
+                  label = "otherBeneficiary.addressUkYesNo.checkYourAnswersLabel",
+                  answer = Html("Yes"),
+                  changeUrl = Some(AddressUkYesNoController.onPageLoad(index, fakeDraftId).url),
+                  canEdit = canEdit,
+                  labelArg = description
+                ),
+                AnswerRow(
+                  label = "otherBeneficiary.ukAddress.checkYourAnswersLabel",
+                  answer = Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"),
+                  changeUrl = Some(UkAddressController.onPageLoad(index, fakeDraftId).url),
+                  canEdit = canEdit,
+                  labelArg = description
+                )
+              ),
+              headingArgs = Seq(index + 1)
+            )
           )
-        ))
+        )
       }
 
       "full data with international address" in {
 
         val userAnswers = emptyUserAnswers
-          .set(DescriptionPage(index), description).value
-          .set(CountryOfResidenceYesNoPage(index), true).value
-          .set(UKResidentYesNoPage(index), false).value
-          .set(CountryOfResidencePage(index), nonUkCountry).value
-          .set(AddressYesNoPage(index), true).value
-          .set(AddressUKYesNoPage(index), true).value
-          .set(AddressInternationalPage(index), nonUkAddress).value
+          .set(DescriptionPage(index), description)
+          .value
+          .set(CountryOfResidenceYesNoPage(index), true)
+          .value
+          .set(UKResidentYesNoPage(index), false)
+          .value
+          .set(CountryOfResidencePage(index), nonUkCountry)
+          .value
+          .set(AddressYesNoPage(index), true)
+          .value
+          .set(AddressUKYesNoPage(index), true)
+          .value
+          .set(AddressInternationalPage(index), nonUkAddress)
+          .value
 
         val result = helper.beneficiaries(userAnswers)
 
-        result mustBe Some(Seq(
-          AnswerSection(
-            headingKey = Some("answerPage.section.otherBeneficiary.subheading"),
-            rows = Seq(
-              AnswerRow(label = "otherBeneficiary.description.checkYourAnswersLabel", answer = Html(description), changeUrl = Some(DescriptionController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = description),
-              AnswerRow(label = "otherBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(mld5.CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = description),
-              AnswerRow(label = "otherBeneficiary.ukResidentYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(mld5.UKResidentYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = description),
-              AnswerRow(label = "otherBeneficiary.countryOfResidence.checkYourAnswersLabel", answer = Html("France"), changeUrl = Some(mld5.CountryOfResidenceController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = description),
-              AnswerRow(label = "otherBeneficiary.addressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(AddressYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = description),
-              AnswerRow(label = "otherBeneficiary.addressUkYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(AddressUkYesNoController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = description),
-              AnswerRow(label = "otherBeneficiary.nonUkAddress.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />France"), changeUrl = Some(NonUkAddressController.onPageLoad(index, fakeDraftId).url), canEdit = canEdit, labelArg = description)
-            ),
-            headingArgs = Seq(index + 1)
+        result mustBe Some(
+          Seq(
+            AnswerSection(
+              headingKey = Some("answerPage.section.otherBeneficiary.subheading"),
+              rows = Seq(
+                AnswerRow(
+                  label = "otherBeneficiary.description.checkYourAnswersLabel",
+                  answer = Html(description),
+                  changeUrl = Some(DescriptionController.onPageLoad(index, fakeDraftId).url),
+                  canEdit = canEdit,
+                  labelArg = description
+                ),
+                AnswerRow(
+                  label = "otherBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel",
+                  answer = Html("Yes"),
+                  changeUrl = Some(mld5.CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url),
+                  canEdit = canEdit,
+                  labelArg = description
+                ),
+                AnswerRow(
+                  label = "otherBeneficiary.ukResidentYesNo.checkYourAnswersLabel",
+                  answer = Html("No"),
+                  changeUrl = Some(mld5.UKResidentYesNoController.onPageLoad(index, fakeDraftId).url),
+                  canEdit = canEdit,
+                  labelArg = description
+                ),
+                AnswerRow(
+                  label = "otherBeneficiary.countryOfResidence.checkYourAnswersLabel",
+                  answer = Html("France"),
+                  changeUrl = Some(mld5.CountryOfResidenceController.onPageLoad(index, fakeDraftId).url),
+                  canEdit = canEdit,
+                  labelArg = description
+                ),
+                AnswerRow(
+                  label = "otherBeneficiary.addressYesNo.checkYourAnswersLabel",
+                  answer = Html("Yes"),
+                  changeUrl = Some(AddressYesNoController.onPageLoad(index, fakeDraftId).url),
+                  canEdit = canEdit,
+                  labelArg = description
+                ),
+                AnswerRow(
+                  label = "otherBeneficiary.addressUkYesNo.checkYourAnswersLabel",
+                  answer = Html("Yes"),
+                  changeUrl = Some(AddressUkYesNoController.onPageLoad(index, fakeDraftId).url),
+                  canEdit = canEdit,
+                  labelArg = description
+                ),
+                AnswerRow(
+                  label = "otherBeneficiary.nonUkAddress.checkYourAnswersLabel",
+                  answer = Html("Line 1<br />Line 2<br />Line 3<br />France"),
+                  changeUrl = Some(NonUkAddressController.onPageLoad(index, fakeDraftId).url),
+                  canEdit = canEdit,
+                  labelArg = description
+                )
+              ),
+              headingArgs = Seq(index + 1)
+            )
           )
-        ))
+        )
       }
 
     }
   }
+
 }

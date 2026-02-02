@@ -24,9 +24,9 @@ import views.html.register.beneficiaries.charityortrust.charity.AmountDiscretion
 
 class AmountOfDiscretionYesNoViewSpec extends YesNoViewBehaviours {
 
-  val prefix = "charity.discretionYesNo"
-  val index = 0
-  val charityName = "Test"
+  val prefix              = "charity.discretionYesNo"
+  val index               = 0
+  val charityName         = "Test"
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(prefix)
 
   "amountDiscretionYesNo view" must {
@@ -44,4 +44,5 @@ class AmountOfDiscretionYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

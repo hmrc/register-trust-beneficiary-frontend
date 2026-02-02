@@ -25,26 +25,69 @@ import pages.register.beneficiaries.charityortrust.charity.mld5._
 import play.api.i18n.Messages
 import viewmodels.AnswerRow
 
-class CharityBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter) extends PrintHelper {
+class CharityBeneficiaryPrintHelper @Inject() (answerRowConverter: AnswerRowConverter) extends PrintHelper {
 
   override val beneficiaryType: String = "charityBeneficiary"
 
-  override def answers(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
-                      (implicit messages: Messages): Seq[AnswerRow] = {
+  override def answers(userAnswers: UserAnswers, name: String, index: Int, draftId: String)(implicit
+    messages: Messages
+  ): Seq[AnswerRow] = {
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
 
     Seq(
-      bound.stringQuestion(CharityNamePage(index), "charity.name", CharityNameController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(AmountDiscretionYesNoPage(index), "charity.discretionYesNo", AmountDiscretionYesNoController.onPageLoad(index, draftId).url),
-      bound.percentageQuestion(HowMuchIncomePage(index), "charity.shareOfIncome", HowMuchIncomeController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(CountryOfResidenceYesNoPage(index), "charity.5mld.countryOfResidenceYesNo", CountryOfResidenceYesNoController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(CountryOfResidenceInTheUkYesNoPage(index), "charity.5mld.countryOfResidenceInTheUkYesNo", CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId).url),
-      bound.countryQuestion(CountryOfResidenceInTheUkYesNoPage(index), CountryOfResidencePage(index), "charity.5mld.countryOfResidence", CountryOfResidenceController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(AddressYesNoPage(index), "charity.addressYesNo", AddressYesNoController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(AddressInTheUkYesNoPage(index), "charity.addressInTheUkYesNo", AddressInTheUkYesNoController.onPageLoad(index, draftId).url),
-      bound.addressQuestion(CharityAddressUKPage(index), "charity.ukAddress", CharityAddressUKController.onPageLoad(index, draftId).url),
-      bound.addressQuestion(CharityInternationalAddressPage(index), "charity.internationalAddress", CharityInternationalAddressController.onPageLoad(index, draftId).url)
+      bound.stringQuestion(
+        CharityNamePage(index),
+        "charity.name",
+        CharityNameController.onPageLoad(index, draftId).url
+      ),
+      bound.yesNoQuestion(
+        AmountDiscretionYesNoPage(index),
+        "charity.discretionYesNo",
+        AmountDiscretionYesNoController.onPageLoad(index, draftId).url
+      ),
+      bound.percentageQuestion(
+        HowMuchIncomePage(index),
+        "charity.shareOfIncome",
+        HowMuchIncomeController.onPageLoad(index, draftId).url
+      ),
+      bound.yesNoQuestion(
+        CountryOfResidenceYesNoPage(index),
+        "charity.5mld.countryOfResidenceYesNo",
+        CountryOfResidenceYesNoController.onPageLoad(index, draftId).url
+      ),
+      bound.yesNoQuestion(
+        CountryOfResidenceInTheUkYesNoPage(index),
+        "charity.5mld.countryOfResidenceInTheUkYesNo",
+        CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId).url
+      ),
+      bound.countryQuestion(
+        CountryOfResidenceInTheUkYesNoPage(index),
+        CountryOfResidencePage(index),
+        "charity.5mld.countryOfResidence",
+        CountryOfResidenceController.onPageLoad(index, draftId).url
+      ),
+      bound.yesNoQuestion(
+        AddressYesNoPage(index),
+        "charity.addressYesNo",
+        AddressYesNoController.onPageLoad(index, draftId).url
+      ),
+      bound.yesNoQuestion(
+        AddressInTheUkYesNoPage(index),
+        "charity.addressInTheUkYesNo",
+        AddressInTheUkYesNoController.onPageLoad(index, draftId).url
+      ),
+      bound.addressQuestion(
+        CharityAddressUKPage(index),
+        "charity.ukAddress",
+        CharityAddressUKController.onPageLoad(index, draftId).url
+      ),
+      bound.addressQuestion(
+        CharityInternationalAddressPage(index),
+        "charity.internationalAddress",
+        CharityInternationalAddressController.onPageLoad(index, draftId).url
+      )
     ).flatten
 
   }
+
 }

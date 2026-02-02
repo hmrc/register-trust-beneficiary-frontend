@@ -39,7 +39,7 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
 
   private val name: FullName = FullName("Joe", None, "Bloggs")
 
-  private val mockTrustsStoreService: TrustsStoreService = mock[TrustsStoreService]
+  private val mockTrustsStoreService: TrustsStoreService             = mock[TrustsStoreService]
   private val mockSubmissionDraftConnector: SubmissionDraftConnector = mock[SubmissionDraftConnector]
 
   override protected def beforeEach(): Unit = {
@@ -56,7 +56,8 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
       "redirect to add-to page if there is at least one in-progress or completed beneficiary" in {
 
         val userAnswers: UserAnswers = emptyUserAnswers
-          .set(NamePage(0), name).value
+          .set(NamePage(0), name)
+          .value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[TrustsStoreService].toInstance(mockTrustsStoreService))
@@ -75,7 +76,9 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).get mustBe controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(fakeDraftId).url
+        redirectLocation(result).get mustBe controllers.register.beneficiaries.routes.AddABeneficiaryController
+          .onPageLoad(fakeDraftId)
+          .url
 
         verify(mockTrustsStoreService).updateTaskStatus(mEq(draftId), mEq(TaskStatus.InProgress))(any(), any())
 
@@ -87,7 +90,8 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
         reset(mockRegistrationsRepository)
 
         val userAnswers: UserAnswers = emptyUserAnswers
-          .set(NamePage(0), name).value
+          .set(NamePage(0), name)
+          .value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
           .overrides(bind[TrustsStoreService].toInstance(mockTrustsStoreService))
@@ -143,7 +147,9 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).get mustBe controllers.register.beneficiaries.routes.InfoController.onPageLoad(fakeDraftId).url
+        redirectLocation(result).get mustBe controllers.register.beneficiaries.routes.InfoController
+          .onPageLoad(fakeDraftId)
+          .url
 
         verify(mockTrustsStoreService).updateTaskStatus(mEq(draftId), mEq(TaskStatus.InProgress))(any(), any())
 
@@ -220,8 +226,8 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
               val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
               verify(mockRegistrationsRepository).set(uaCaptor.capture)(any(), any())
 
-              uaCaptor.getValue.isTaxable mustBe true
-              uaCaptor.getValue.draftId mustBe fakeDraftId
+              uaCaptor.getValue.isTaxable      mustBe true
+              uaCaptor.getValue.draftId        mustBe fakeDraftId
               uaCaptor.getValue.internalAuthId mustBe "id"
 
               application.stop()
@@ -259,8 +265,8 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
               val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
               verify(mockRegistrationsRepository).set(uaCaptor.capture)(any(), any())
 
-              uaCaptor.getValue.isTaxable mustBe false
-              uaCaptor.getValue.draftId mustBe fakeDraftId
+              uaCaptor.getValue.isTaxable      mustBe false
+              uaCaptor.getValue.draftId        mustBe fakeDraftId
               uaCaptor.getValue.internalAuthId mustBe "id"
 
               application.stop()
@@ -270,4 +276,5 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
       }
     }
   }
+
 }

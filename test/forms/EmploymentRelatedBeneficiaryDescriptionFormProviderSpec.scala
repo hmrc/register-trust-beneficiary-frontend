@@ -21,21 +21,22 @@ import models.core.pages.Description
 import play.api.data.{Form, FormError}
 import wolfendale.scalacheck.regexp.RegexpGen
 
-class EmploymentRelatedBeneficiaryDescriptionFormProviderSpec extends StringFieldBehaviours with OptionalFieldBehaviours {
+class EmploymentRelatedBeneficiaryDescriptionFormProviderSpec
+    extends StringFieldBehaviours with OptionalFieldBehaviours {
 
-  val messageKeyPrefix = "employmentRelatedBeneficiary.description"
+  val messageKeyPrefix        = "employmentRelatedBeneficiary.description"
   val form: Form[Description] = new EmploymentRelatedBeneficiaryDescriptionFormProvider().withPrefix(messageKeyPrefix)
 
   val maxLength = 70
   val minLength = 1
 
-  val seventyOneChars: String = "a"*71
+  val seventyOneChars: String = "a" * 71
 
   ".description" must {
 
-    val fieldName = "description"
+    val fieldName   = "description"
     val requiredKey = s"$messageKeyPrefix.error.required"
-    val lengthKey = s"$messageKeyPrefix.error.length"
+    val lengthKey   = s"$messageKeyPrefix.error.length"
 
     behave like fieldThatBindsValidData(
       form,

@@ -16,7 +16,10 @@
 
 package base
 
-import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationDataRequiredActionImpl, RegistrationIdentifierAction}
+import controllers.actions.register.{
+  DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationDataRequiredActionImpl,
+  RegistrationIdentifierAction
+}
 import controllers.actions.{FakeDraftIdRetrievalActionProvider, FakeIdentifyForRegistration}
 import errors.TrustErrors
 import models.{ReadOnlyUserAnswers, Status, UserAnswers}
@@ -35,24 +38,25 @@ import uk.gov.hmrc.auth.core.AffinityGroup.Organisation
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, Enrolments}
 import uk.gov.hmrc.http.HeaderCarrier
 
-trait SpecBase extends PlaySpec
-  with GuiceOneAppPerSuite
-  with TryValues
-  with ScalaFutures
-  with IntegrationPatience
-  with Mocked
-  with FakeTrustsApp
-  with Matchers
-  with MockitoSugar
-  with OptionValues
-  with EitherValues {
+trait SpecBase
+    extends PlaySpec
+    with GuiceOneAppPerSuite
+    with TryValues
+    with ScalaFutures
+    with IntegrationPatience
+    with Mocked
+    with FakeTrustsApp
+    with Matchers
+    with MockitoSugar
+    with OptionValues
+    with EitherValues {
 
   final val ENGLISH = "en"
-  final val WELSH = "cy"
+  final val WELSH   = "cy"
 
-  lazy val draftId: String = "draftId"
+  lazy val draftId: String        = "draftId"
   lazy val userInternalId: String = "internalId"
-  lazy val fakeDraftId: String = draftId
+  lazy val fakeDraftId: String    = draftId
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
@@ -68,14 +72,15 @@ trait SpecBase extends PlaySpec
       mockRegistrationsRepository
     )
 
-  protected def applicationBuilder(userAnswers: Option[UserAnswers] = None,
-                                   affinityGroup: AffinityGroup = AffinityGroup.Organisation,
-                                   enrolments: Enrolments = Enrolments(Set.empty[Enrolment]),
-                                   navigator: Navigator = fakeNavigator,
-                                   mockGetResult: Either[TrustErrors, Option[UserAnswers]] = Right(None),
-                                   mockSetResult: Either[TrustErrors, Boolean] = Right(true),
-                                   mockGetSettlorsAnswersResult: Either[TrustErrors, Option[ReadOnlyUserAnswers]] = Right(None)
-                                  ): GuiceApplicationBuilder =
+  protected def applicationBuilder(
+    userAnswers: Option[UserAnswers] = None,
+    affinityGroup: AffinityGroup = AffinityGroup.Organisation,
+    enrolments: Enrolments = Enrolments(Set.empty[Enrolment]),
+    navigator: Navigator = fakeNavigator,
+    mockGetResult: Either[TrustErrors, Option[UserAnswers]] = Right(None),
+    mockSetResult: Either[TrustErrors, Boolean] = Right(true),
+    mockGetSettlorsAnswersResult: Either[TrustErrors, Option[ReadOnlyUserAnswers]] = Right(None)
+  ): GuiceApplicationBuilder =
     new GuiceApplicationBuilder()
       .overrides(
         bind[Navigator].toInstance(navigator),
@@ -84,9 +89,12 @@ trait SpecBase extends PlaySpec
           new FakeIdentifyForRegistration(affinityGroup, frontendAppConfig)(injectedParsers, trustsAuth, enrolments)
         ),
         bind[DraftIdRetrievalActionProvider].toInstance(fakeDraftIdAction(userAnswers)),
-        bind[RegistrationsRepository].toInstance(mockRegistrationsRepositoryBuilder(mockGetResult, mockSetResult, mockGetSettlorsAnswersResult)),
+        bind[RegistrationsRepository]
+          .toInstance(mockRegistrationsRepositoryBuilder(mockGetResult, mockSetResult, mockGetSettlorsAnswersResult)),
         bind[AffinityGroup].toInstance(Organisation)
-      ).configure(
+      )
+      .configure(
         "play.filters.disabled" -> List("play.filters.csrf.CSRFFilter", "play.filters.csp.CSPFilter")
       )
+
 }

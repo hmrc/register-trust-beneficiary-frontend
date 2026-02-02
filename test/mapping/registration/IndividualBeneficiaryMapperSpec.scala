@@ -29,12 +29,13 @@ import utils.Constants._
 
 import java.time.LocalDate
 
-class IndividualBeneficiaryMapperSpec extends SpecBase
-  with OptionValues with Generators {
+class IndividualBeneficiaryMapperSpec extends SpecBase with OptionValues with Generators {
 
-  private val individualBeneficiariesMapper: IndividualBeneficiaryMapper = injector.instanceOf[IndividualBeneficiaryMapper]
-  private val index0 = 0
-  private val index1 = 1
+  private val individualBeneficiariesMapper: IndividualBeneficiaryMapper =
+    injector.instanceOf[IndividualBeneficiaryMapper]
+
+  private val index0      = 0
+  private val index1      = 1
   private val dateOfBirth = LocalDate.of(2010, 10, 10)
 
   "IndividualBeneficiariesMapper" when {
@@ -57,18 +58,26 @@ class IndividualBeneficiaryMapperSpec extends SpecBase
 
           val userAnswers =
             emptyUserAnswers
-              .set(NamePage(index0), FullName("first name", None, "last name")).value
-              .set(DateOfBirthYesNoPage(index0), true).value
-              .set(DateOfBirthPage(index0), dateOfBirth).value
-              .set(IncomeYesNoPage(index0), false).value
-              .set(IncomePage(index0), 100).value
-              .set(NationalInsuranceYesNoPage(index0), true).value
-              .set(NationalInsuranceNumberPage(index0), "AB123456C").value
-              .set(VulnerableYesNoPage(index0), true).value
+              .set(NamePage(index0), FullName("first name", None, "last name"))
+              .value
+              .set(DateOfBirthYesNoPage(index0), true)
+              .value
+              .set(DateOfBirthPage(index0), dateOfBirth)
+              .value
+              .set(IncomeYesNoPage(index0), false)
+              .value
+              .set(IncomePage(index0), 100)
+              .value
+              .set(NationalInsuranceYesNoPage(index0), true)
+              .value
+              .set(NationalInsuranceNumberPage(index0), "AB123456C")
+              .value
+              .set(VulnerableYesNoPage(index0), true)
+              .value
 
           val individuals = individualBeneficiariesMapper.build(userAnswers)
 
-          individuals mustBe defined
+          individuals            mustBe defined
           individuals.value.head mustBe IndividualDetailsType(
             name = FullName("first name", None, "last name"),
             dateOfBirth = Some(dateOfBirth),
@@ -86,17 +95,24 @@ class IndividualBeneficiaryMapperSpec extends SpecBase
         "Role In Company is set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(NamePage(index0), FullName("first name", None, "last name")).value
-              .set(DateOfBirthYesNoPage(index0), true).value
-              .set(DateOfBirthPage(index0), dateOfBirth).value
-              .set(IncomeYesNoPage(index0), false).value
-              .set(IncomePage(index0), 100).value
-              .set(RoleInCompanyPage(index0), Director).value
-              .set(VulnerableYesNoPage(index0), true).value
+              .set(NamePage(index0), FullName("first name", None, "last name"))
+              .value
+              .set(DateOfBirthYesNoPage(index0), true)
+              .value
+              .set(DateOfBirthPage(index0), dateOfBirth)
+              .value
+              .set(IncomeYesNoPage(index0), false)
+              .value
+              .set(IncomePage(index0), 100)
+              .value
+              .set(RoleInCompanyPage(index0), Director)
+              .value
+              .set(VulnerableYesNoPage(index0), true)
+              .value
 
           val individuals = individualBeneficiariesMapper.build(userAnswers)
 
-          individuals mustBe defined
+          individuals            mustBe defined
           individuals.value.head mustBe IndividualDetailsType(
             name = FullName("first name", None, "last name"),
             dateOfBirth = Some(dateOfBirth),
@@ -114,20 +130,28 @@ class IndividualBeneficiaryMapperSpec extends SpecBase
         "UK Address is set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(NamePage(index0), FullName("first name", None, "last name")).value
-              .set(DateOfBirthYesNoPage(index0), true).value
-              .set(DateOfBirthPage(index0), dateOfBirth).value
-              .set(IncomeYesNoPage(index0), true).value
-              .set(NationalInsuranceYesNoPage(index0), false).value
-              .set(VulnerableYesNoPage(index0), false).value
-              .set(AddressYesNoPage(index0), true).value
-              .set(AddressUKYesNoPage(index0), true).value
-              .set(AddressUKPage(index0),
-                UKAddress("Line1", "Line2", None, Some("Newcastle"), "NE62RT")).value
+              .set(NamePage(index0), FullName("first name", None, "last name"))
+              .value
+              .set(DateOfBirthYesNoPage(index0), true)
+              .value
+              .set(DateOfBirthPage(index0), dateOfBirth)
+              .value
+              .set(IncomeYesNoPage(index0), true)
+              .value
+              .set(NationalInsuranceYesNoPage(index0), false)
+              .value
+              .set(VulnerableYesNoPage(index0), false)
+              .value
+              .set(AddressYesNoPage(index0), true)
+              .value
+              .set(AddressUKYesNoPage(index0), true)
+              .value
+              .set(AddressUKPage(index0), UKAddress("Line1", "Line2", None, Some("Newcastle"), "NE62RT"))
+              .value
 
           val individuals = individualBeneficiariesMapper.build(userAnswers)
 
-          individuals mustBe defined
+          individuals            mustBe defined
           individuals.value.head mustBe IndividualDetailsType(
             name = FullName("first name", None, "last name"),
             dateOfBirth = Some(dateOfBirth),
@@ -135,13 +159,15 @@ class IndividualBeneficiaryMapperSpec extends SpecBase
             beneficiaryType = None,
             beneficiaryDiscretion = Some(true),
             beneficiaryShareOfIncome = None,
-            identification = Some(IdentificationType(
-              nino = None,
-              None,
-              address = Some(
-                AddressType("Line1", "Line2", None, Some("Newcastle"), Some("NE62RT"), GB)
+            identification = Some(
+              IdentificationType(
+                nino = None,
+                None,
+                address = Some(
+                  AddressType("Line1", "Line2", None, Some("Newcastle"), Some("NE62RT"), GB)
+                )
               )
-            )),
+            ),
             countryOfResidence = None,
             nationality = None,
             legallyIncapable = None
@@ -151,16 +177,22 @@ class IndividualBeneficiaryMapperSpec extends SpecBase
         "Nino And Address are not set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(NamePage(index0), FullName("first name", None, "last name")).value
-              .set(DateOfBirthYesNoPage(index0), false).value
-              .set(IncomeYesNoPage(index0), true).value
-              .set(NationalInsuranceYesNoPage(index0), false).value
-              .set(AddressYesNoPage(index0), false).value
-              .set(VulnerableYesNoPage(index0), false).value
+              .set(NamePage(index0), FullName("first name", None, "last name"))
+              .value
+              .set(DateOfBirthYesNoPage(index0), false)
+              .value
+              .set(IncomeYesNoPage(index0), true)
+              .value
+              .set(NationalInsuranceYesNoPage(index0), false)
+              .value
+              .set(AddressYesNoPage(index0), false)
+              .value
+              .set(VulnerableYesNoPage(index0), false)
+              .value
 
           val individuals = individualBeneficiariesMapper.build(userAnswers)
 
-          individuals mustBe defined
+          individuals            mustBe defined
           individuals.value.head mustBe IndividualDetailsType(
             name = FullName("first name", None, "last name"),
             dateOfBirth = None,
@@ -178,18 +210,26 @@ class IndividualBeneficiaryMapperSpec extends SpecBase
         "Passport is set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(NamePage(index0), FullName("first name", None, "last name")).value
-              .set(DateOfBirthYesNoPage(index0), false).value
-              .set(IncomeYesNoPage(index0), true).value
-              .set(NationalInsuranceYesNoPage(index0), false).value
-              .set(AddressYesNoPage(index0), false).value
-              .set(VulnerableYesNoPage(index0), false).value
-              .set(PassportDetailsYesNoPage(index0), true).value
-              .set(PassportDetailsPage(index0), PassportOrIdCardDetails(GB, "012345678", LocalDate.of(2024, 5, 13))).value
+              .set(NamePage(index0), FullName("first name", None, "last name"))
+              .value
+              .set(DateOfBirthYesNoPage(index0), false)
+              .value
+              .set(IncomeYesNoPage(index0), true)
+              .value
+              .set(NationalInsuranceYesNoPage(index0), false)
+              .value
+              .set(AddressYesNoPage(index0), false)
+              .value
+              .set(VulnerableYesNoPage(index0), false)
+              .value
+              .set(PassportDetailsYesNoPage(index0), true)
+              .value
+              .set(PassportDetailsPage(index0), PassportOrIdCardDetails(GB, "012345678", LocalDate.of(2024, 5, 13)))
+              .value
 
           val individuals = individualBeneficiariesMapper.build(userAnswers)
 
-          individuals mustBe defined
+          individuals            mustBe defined
           individuals.value.head mustBe IndividualDetailsType(
             name = FullName("first name", None, "last name"),
             dateOfBirth = None,
@@ -197,11 +237,13 @@ class IndividualBeneficiaryMapperSpec extends SpecBase
             beneficiaryType = None,
             beneficiaryDiscretion = Some(true),
             beneficiaryShareOfIncome = None,
-            identification = Some(IdentificationType(
-              None,
-              Some(PassportType("012345678", LocalDate.of(2024, 5, 13), GB)),
-              None
-            )),
+            identification = Some(
+              IdentificationType(
+                None,
+                Some(PassportType("012345678", LocalDate.of(2024, 5, 13), GB)),
+                None
+              )
+            ),
             countryOfResidence = None,
             nationality = None,
             legallyIncapable = None
@@ -210,19 +252,28 @@ class IndividualBeneficiaryMapperSpec extends SpecBase
         "Id card is set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(NamePage(index0), FullName("first name", None, "last name")).value
-              .set(DateOfBirthYesNoPage(index0), false).value
-              .set(IncomeYesNoPage(index0), true).value
-              .set(NationalInsuranceYesNoPage(index0), false).value
-              .set(AddressYesNoPage(index0), false).value
-              .set(VulnerableYesNoPage(index0), false).value
-              .set(PassportDetailsYesNoPage(index0), false).value
-              .set(IDCardDetailsYesNoPage(index0), true).value
-              .set(IDCardDetailsPage(index0), PassportOrIdCardDetails(GB, "012345678", LocalDate.of(2024, 5, 13))).value
+              .set(NamePage(index0), FullName("first name", None, "last name"))
+              .value
+              .set(DateOfBirthYesNoPage(index0), false)
+              .value
+              .set(IncomeYesNoPage(index0), true)
+              .value
+              .set(NationalInsuranceYesNoPage(index0), false)
+              .value
+              .set(AddressYesNoPage(index0), false)
+              .value
+              .set(VulnerableYesNoPage(index0), false)
+              .value
+              .set(PassportDetailsYesNoPage(index0), false)
+              .value
+              .set(IDCardDetailsYesNoPage(index0), true)
+              .value
+              .set(IDCardDetailsPage(index0), PassportOrIdCardDetails(GB, "012345678", LocalDate.of(2024, 5, 13)))
+              .value
 
           val individuals = individualBeneficiariesMapper.build(userAnswers)
 
-          individuals mustBe defined
+          individuals            mustBe defined
           individuals.value.head mustBe IndividualDetailsType(
             name = FullName("first name", None, "last name"),
             dateOfBirth = None,
@@ -230,11 +281,13 @@ class IndividualBeneficiaryMapperSpec extends SpecBase
             beneficiaryType = None,
             beneficiaryDiscretion = Some(true),
             beneficiaryShareOfIncome = None,
-            identification = Some(IdentificationType(
-              None,
-              Some(PassportType("012345678", LocalDate.of(2024, 5, 13), GB)),
-              None
-            )),
+            identification = Some(
+              IdentificationType(
+                None,
+                Some(PassportType("012345678", LocalDate.of(2024, 5, 13), GB)),
+                None
+              )
+            ),
             countryOfResidence = None,
             nationality = None,
             legallyIncapable = None
@@ -245,31 +298,46 @@ class IndividualBeneficiaryMapperSpec extends SpecBase
       "must be able to create multiple IndividualDetailsType, first with Nino and second with UKAddress" in {
         val userAnswers =
           emptyUserAnswers
-            .set(NamePage(index0), FullName("first name", None, "last name")).value
-            .set(DateOfBirthYesNoPage(index0), true).value
-            .set(DateOfBirthPage(index0), dateOfBirth).value
-            .set(IncomeYesNoPage(index0), false).value
-            .set(IncomePage(index0), 100).value
-            .set(NationalInsuranceYesNoPage(index0), true).value
-            .set(NationalInsuranceNumberPage(index0), "AB123456C").value
-            .set(VulnerableYesNoPage(index0), true).value
-
-            .set(NamePage(index1), FullName("first name", None, "last name")).value
-            .set(DateOfBirthYesNoPage(index1), true).value
-            .set(DateOfBirthPage(index1), dateOfBirth).value
-            .set(IncomeYesNoPage(index1), false).value
-            .set(IncomePage(index1), 100).value
-            .set(NationalInsuranceYesNoPage(index1), false).value
-            .set(VulnerableYesNoPage(index1), false).value
-            .set(AddressYesNoPage(index1), true).value
-            .set(AddressUKYesNoPage(index1), true).value
-            .set(AddressUKPage(index1),
-              UKAddress("line1", "line2", None, None, "NE62RT")).value
-
+            .set(NamePage(index0), FullName("first name", None, "last name"))
+            .value
+            .set(DateOfBirthYesNoPage(index0), true)
+            .value
+            .set(DateOfBirthPage(index0), dateOfBirth)
+            .value
+            .set(IncomeYesNoPage(index0), false)
+            .value
+            .set(IncomePage(index0), 100)
+            .value
+            .set(NationalInsuranceYesNoPage(index0), true)
+            .value
+            .set(NationalInsuranceNumberPage(index0), "AB123456C")
+            .value
+            .set(VulnerableYesNoPage(index0), true)
+            .value
+            .set(NamePage(index1), FullName("first name", None, "last name"))
+            .value
+            .set(DateOfBirthYesNoPage(index1), true)
+            .value
+            .set(DateOfBirthPage(index1), dateOfBirth)
+            .value
+            .set(IncomeYesNoPage(index1), false)
+            .value
+            .set(IncomePage(index1), 100)
+            .value
+            .set(NationalInsuranceYesNoPage(index1), false)
+            .value
+            .set(VulnerableYesNoPage(index1), false)
+            .value
+            .set(AddressYesNoPage(index1), true)
+            .value
+            .set(AddressUKYesNoPage(index1), true)
+            .value
+            .set(AddressUKPage(index1), UKAddress("line1", "line2", None, None, "NE62RT"))
+            .value
 
         val individuals = individualBeneficiariesMapper.build(userAnswers)
 
-        individuals mustBe defined
+        individuals       mustBe defined
         individuals.value mustBe
           List(
             IndividualDetailsType(
@@ -280,15 +348,12 @@ class IndividualBeneficiaryMapperSpec extends SpecBase
               beneficiaryDiscretion = Some(false),
               beneficiaryShareOfIncome = Some("100"),
               identification = Some(
-                IdentificationType(
-                  nino = Some("AB123456C"),
-                  passport = None,
-                  address = None)
+                IdentificationType(nino = Some("AB123456C"), passport = None, address = None)
               ),
               countryOfResidence = None,
               nationality = None,
-              legallyIncapable = None),
-
+              legallyIncapable = None
+            ),
             IndividualDetailsType(
               name = FullName("first name", None, "last name"),
               dateOfBirth = Some(dateOfBirth),
@@ -302,11 +367,13 @@ class IndividualBeneficiaryMapperSpec extends SpecBase
                   passport = None,
                   address = Some(
                     AddressType("line1", "line2", None, None, Some("NE62RT"), GB)
-                  ))
+                  )
+                )
               ),
               countryOfResidence = None,
               nationality = None,
-              legallyIncapable = None)
+              legallyIncapable = None
+            )
           )
       }
 
@@ -318,23 +385,36 @@ class IndividualBeneficiaryMapperSpec extends SpecBase
 
         "with UK country of residence, UK country of nationality and Mental Capacity" in {
           val userAnswers = baseAnswers
-            .set(NamePage(index0), FullName("first name", None, "last name")).value
-            .set(DateOfBirthYesNoPage(index0), true).value
-            .set(DateOfBirthPage(index0), dateOfBirth).value
-            .set(IncomeYesNoPage(index0), false).value
-            .set(IncomePage(index0), 100).value
-            .set(NationalInsuranceYesNoPage(index0), true).value
-            .set(NationalInsuranceNumberPage(index0), "AB123456C").value
-            .set(VulnerableYesNoPage(index0), true).value
-            .set(CountryOfNationalityYesNoPage(index0), true).value
-            .set(CountryOfNationalityInTheUkYesNoPage(index0), true).value
-            .set(CountryOfResidenceYesNoPage(index0), true).value
-            .set(CountryOfResidenceInTheUkYesNoPage(index0), true).value
-            .set(MentalCapacityYesNoPage(index0), YesNoDontKnow.Yes).value
+            .set(NamePage(index0), FullName("first name", None, "last name"))
+            .value
+            .set(DateOfBirthYesNoPage(index0), true)
+            .value
+            .set(DateOfBirthPage(index0), dateOfBirth)
+            .value
+            .set(IncomeYesNoPage(index0), false)
+            .value
+            .set(IncomePage(index0), 100)
+            .value
+            .set(NationalInsuranceYesNoPage(index0), true)
+            .value
+            .set(NationalInsuranceNumberPage(index0), "AB123456C")
+            .value
+            .set(VulnerableYesNoPage(index0), true)
+            .value
+            .set(CountryOfNationalityYesNoPage(index0), true)
+            .value
+            .set(CountryOfNationalityInTheUkYesNoPage(index0), true)
+            .value
+            .set(CountryOfResidenceYesNoPage(index0), true)
+            .value
+            .set(CountryOfResidenceInTheUkYesNoPage(index0), true)
+            .value
+            .set(MentalCapacityYesNoPage(index0), YesNoDontKnow.Yes)
+            .value
 
           val individuals = individualBeneficiariesMapper.build(userAnswers)
 
-          individuals mustBe defined
+          individuals            mustBe defined
           individuals.value.head mustBe IndividualDetailsType(
             name = FullName("first name", None, "last name"),
             dateOfBirth = Some(dateOfBirth),
@@ -353,25 +433,40 @@ class IndividualBeneficiaryMapperSpec extends SpecBase
         "with Non UK country of residence, Non UK country of nationality and No Mental Capacity" in {
 
           val userAnswers = baseAnswers
-            .set(NamePage(index0), FullName("first name", None, "last name")).value
-            .set(DateOfBirthYesNoPage(index0), true).value
-            .set(DateOfBirthPage(index0), dateOfBirth).value
-            .set(IncomeYesNoPage(index0), false).value
-            .set(IncomePage(index0), 100).value
-            .set(NationalInsuranceYesNoPage(index0), true).value
-            .set(NationalInsuranceNumberPage(index0), "AB123456C").value
-            .set(VulnerableYesNoPage(index0), true).value
-            .set(CountryOfNationalityYesNoPage(index0), true).value
-            .set(CountryOfNationalityInTheUkYesNoPage(index0), false).value
-            .set(CountryOfNationalityPage(index0), ES).value
-            .set(CountryOfResidenceYesNoPage(index0), true).value
-            .set(CountryOfResidenceInTheUkYesNoPage(index0), false).value
-            .set(CountryOfResidencePage(index0), ES).value
-            .set(MentalCapacityYesNoPage(index0), YesNoDontKnow.No).value
+            .set(NamePage(index0), FullName("first name", None, "last name"))
+            .value
+            .set(DateOfBirthYesNoPage(index0), true)
+            .value
+            .set(DateOfBirthPage(index0), dateOfBirth)
+            .value
+            .set(IncomeYesNoPage(index0), false)
+            .value
+            .set(IncomePage(index0), 100)
+            .value
+            .set(NationalInsuranceYesNoPage(index0), true)
+            .value
+            .set(NationalInsuranceNumberPage(index0), "AB123456C")
+            .value
+            .set(VulnerableYesNoPage(index0), true)
+            .value
+            .set(CountryOfNationalityYesNoPage(index0), true)
+            .value
+            .set(CountryOfNationalityInTheUkYesNoPage(index0), false)
+            .value
+            .set(CountryOfNationalityPage(index0), ES)
+            .value
+            .set(CountryOfResidenceYesNoPage(index0), true)
+            .value
+            .set(CountryOfResidenceInTheUkYesNoPage(index0), false)
+            .value
+            .set(CountryOfResidencePage(index0), ES)
+            .value
+            .set(MentalCapacityYesNoPage(index0), YesNoDontKnow.No)
+            .value
 
           val individuals = individualBeneficiariesMapper.build(userAnswers)
 
-          individuals mustBe defined
+          individuals            mustBe defined
           individuals.value.head mustBe IndividualDetailsType(
             name = FullName("first name", None, "last name"),
             dateOfBirth = Some(dateOfBirth),
@@ -390,22 +485,34 @@ class IndividualBeneficiaryMapperSpec extends SpecBase
         "with Don't know Mental Capacity" in {
 
           val userAnswers = baseAnswers
-            .set(NamePage(index0), FullName("first name", None, "last name")).value
-            .set(IncomeYesNoPage(index0), true).value
-            .set(NationalInsuranceYesNoPage(index0), true).value
-            .set(NationalInsuranceNumberPage(index0), "AB123456C").value
-            .set(VulnerableYesNoPage(index0), true).value
-            .set(CountryOfNationalityYesNoPage(index0), true).value
-            .set(CountryOfNationalityInTheUkYesNoPage(index0), false).value
-            .set(CountryOfNationalityPage(index0), ES).value
-            .set(CountryOfResidenceYesNoPage(index0), true).value
-            .set(CountryOfResidenceInTheUkYesNoPage(index0), false).value
-            .set(CountryOfResidencePage(index0), ES).value
-            .set(MentalCapacityYesNoPage(index0), YesNoDontKnow.DontKnow).value
+            .set(NamePage(index0), FullName("first name", None, "last name"))
+            .value
+            .set(IncomeYesNoPage(index0), true)
+            .value
+            .set(NationalInsuranceYesNoPage(index0), true)
+            .value
+            .set(NationalInsuranceNumberPage(index0), "AB123456C")
+            .value
+            .set(VulnerableYesNoPage(index0), true)
+            .value
+            .set(CountryOfNationalityYesNoPage(index0), true)
+            .value
+            .set(CountryOfNationalityInTheUkYesNoPage(index0), false)
+            .value
+            .set(CountryOfNationalityPage(index0), ES)
+            .value
+            .set(CountryOfResidenceYesNoPage(index0), true)
+            .value
+            .set(CountryOfResidenceInTheUkYesNoPage(index0), false)
+            .value
+            .set(CountryOfResidencePage(index0), ES)
+            .value
+            .set(MentalCapacityYesNoPage(index0), YesNoDontKnow.DontKnow)
+            .value
 
           val individuals = individualBeneficiariesMapper.build(userAnswers)
 
-          individuals mustBe defined
+          individuals            mustBe defined
           individuals.value.head mustBe IndividualDetailsType(
             name = FullName("first name", None, "last name"),
             dateOfBirth = None,
@@ -427,18 +534,26 @@ class IndividualBeneficiaryMapperSpec extends SpecBase
 
         "with No Income or Vulnerable data answered" in {
           val userAnswers = baseAnswers
-            .set(NamePage(index0), FullName("first name", None, "last name")).value
-            .set(DateOfBirthYesNoPage(index0), true).value
-            .set(DateOfBirthPage(index0), dateOfBirth).value
-            .set(CountryOfNationalityYesNoPage(index0), true).value
-            .set(CountryOfNationalityInTheUkYesNoPage(index0), true).value
-            .set(CountryOfResidenceYesNoPage(index0), true).value
-            .set(CountryOfResidenceInTheUkYesNoPage(index0), true).value
-            .set(MentalCapacityYesNoPage(index0), YesNoDontKnow.Yes).value
+            .set(NamePage(index0), FullName("first name", None, "last name"))
+            .value
+            .set(DateOfBirthYesNoPage(index0), true)
+            .value
+            .set(DateOfBirthPage(index0), dateOfBirth)
+            .value
+            .set(CountryOfNationalityYesNoPage(index0), true)
+            .value
+            .set(CountryOfNationalityInTheUkYesNoPage(index0), true)
+            .value
+            .set(CountryOfResidenceYesNoPage(index0), true)
+            .value
+            .set(CountryOfResidenceInTheUkYesNoPage(index0), true)
+            .value
+            .set(MentalCapacityYesNoPage(index0), YesNoDontKnow.Yes)
+            .value
 
           val individuals = individualBeneficiariesMapper.build(userAnswers)
 
-          individuals mustBe defined
+          individuals            mustBe defined
           individuals.value.head mustBe IndividualDetailsType(
             name = FullName("first name", None, "last name"),
             dateOfBirth = Some(dateOfBirth),
@@ -456,4 +571,5 @@ class IndividualBeneficiaryMapperSpec extends SpecBase
       }
     }
   }
+
 }

@@ -33,11 +33,11 @@ import views.html.register.beneficiaries.companyoremploymentrelated.employmentRe
 
 class NumberOfBeneficiariesControllerSpec extends SpecBase {
 
-  private val index = 0
-  private val form: Form[HowManyBeneficiaries] = new NumberOfBeneficiariesFormProvider()()
-  private val numberOfBeneficiariesRoute: String = routes.NumberOfBeneficiariesController.onPageLoad(index, draftId).url
+  private val index                                       = 0
+  private val form: Form[HowManyBeneficiaries]            = new NumberOfBeneficiariesFormProvider()()
+  private val numberOfBeneficiariesRoute: String          = routes.NumberOfBeneficiariesController.onPageLoad(index, draftId).url
   private val numberOfBeneficiaries: HowManyBeneficiaries = HowManyBeneficiaries.Over201
-  private val onwardRoute = Call("GET", "/foo")
+  private val onwardRoute                                 = Call("GET", "/foo")
 
   "NumberOfBeneficiaries Controller" must {
 
@@ -84,8 +84,11 @@ class NumberOfBeneficiariesControllerSpec extends SpecBase {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[EmploymentRelatedBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+            bind[Navigator]
+              .qualifiedWith(classOf[EmploymentRelatedBeneficiary])
+              .toInstance(new FakeNavigator(onwardRoute))
+          )
+          .build()
 
       val request =
         FakeRequest(POST, numberOfBeneficiariesRoute)
@@ -105,8 +108,11 @@ class NumberOfBeneficiariesControllerSpec extends SpecBase {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers), mockSetResult = Left(ServerError()))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[EmploymentRelatedBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+            bind[Navigator]
+              .qualifiedWith(classOf[EmploymentRelatedBeneficiary])
+              .toInstance(new FakeNavigator(onwardRoute))
+          )
+          .build()
 
       val request =
         FakeRequest(POST, numberOfBeneficiariesRoute)
@@ -141,7 +147,7 @@ class NumberOfBeneficiariesControllerSpec extends SpecBase {
       contentAsString(result) mustEqual
         view(boundForm, index, draftId)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -175,4 +181,5 @@ class NumberOfBeneficiariesControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

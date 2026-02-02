@@ -29,71 +29,71 @@ class CompanyBeneficiaryNavigator extends Navigator {
   override def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call =
     routes(draftId)(page)(userAnswers)
 
-  private def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
+  private def routes(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] =
     simpleNavigation(draftId) orElse yesNoNavigation(draftId)
-  }
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case NamePage(index) => ua =>
-      if (ua.isTaxable) {
-        rts.DiscretionYesNoController.onPageLoad(index, draftId)
-      } else {
-        ntrts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
-      }
-    case IncomePage(index) => _ =>
-      ntrts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
-    case AddressUKPage(index) => _ =>
-      rts.CheckDetailsController.onPageLoad(index, draftId)
-    case AddressInternationalPage(index) => _ =>
-      rts.CheckDetailsController.onPageLoad(index, draftId)
-    case CountryOfResidencePage(index) => ua =>
-      navigateToAnswersOrAddressQuestions(draftId, index, ua.isTaxable)
+    case NamePage(index)                 =>
+      ua =>
+        if (ua.isTaxable) {
+          rts.DiscretionYesNoController.onPageLoad(index, draftId)
+        } else {
+          ntrts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
+        }
+    case IncomePage(index)               => _ => ntrts.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
+    case AddressUKPage(index)            => _ => rts.CheckDetailsController.onPageLoad(index, draftId)
+    case AddressInternationalPage(index) => _ => rts.CheckDetailsController.onPageLoad(index, draftId)
+    case CountryOfResidencePage(index)   => ua => navigateToAnswersOrAddressQuestions(draftId, index, ua.isTaxable)
   }
 
   private def yesNoNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case page @ IncomeYesNoPage(index) => ua =>
-      yesNoNav(
-        ua = ua,
-        fromPage = page,
-        yesCall = ntrts.CountryOfResidenceYesNoController.onPageLoad(index, draftId),
-        noCall = rts.ShareOfIncomeController.onPageLoad(index, draftId)
-      )
-    case page @ AddressYesNoPage(index) => ua =>
-      yesNoNav(
-        ua = ua,
-        fromPage = page,
-        yesCall = rts.AddressUkYesNoController.onPageLoad(index, draftId),
-        noCall = rts.CheckDetailsController.onPageLoad(index, draftId)
-      )
-    case page @ AddressUKYesNoPage(index) => ua =>
-      yesNoNav(
-        ua = ua,
-        fromPage = page,
-        yesCall = rts.UkAddressController.onPageLoad(index, draftId),
-        noCall = rts.NonUkAddressController.onPageLoad(index, draftId)
-      )
-    case page @ CountryOfResidenceYesNoPage(index) => ua =>
-      yesNoNav(
-        ua = ua,
-        fromPage = page,
-        yesCall = ntrts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId),
-        noCall = navigateToAnswersOrAddressQuestions(draftId, index, ua.isTaxable)
-      )
-    case page @ CountryOfResidenceInTheUkYesNoPage(index) => ua =>
-      yesNoNav(
-        ua = ua,
-        fromPage = page,
-        yesCall = navigateToAnswersOrAddressQuestions(draftId, index, ua.isTaxable),
-        noCall = ntrts.CountryOfResidenceController.onPageLoad(index, draftId)
-      )
+    case page @ IncomeYesNoPage(index)                    =>
+      ua =>
+        yesNoNav(
+          ua = ua,
+          fromPage = page,
+          yesCall = ntrts.CountryOfResidenceYesNoController.onPageLoad(index, draftId),
+          noCall = rts.ShareOfIncomeController.onPageLoad(index, draftId)
+        )
+    case page @ AddressYesNoPage(index)                   =>
+      ua =>
+        yesNoNav(
+          ua = ua,
+          fromPage = page,
+          yesCall = rts.AddressUkYesNoController.onPageLoad(index, draftId),
+          noCall = rts.CheckDetailsController.onPageLoad(index, draftId)
+        )
+    case page @ AddressUKYesNoPage(index)                 =>
+      ua =>
+        yesNoNav(
+          ua = ua,
+          fromPage = page,
+          yesCall = rts.UkAddressController.onPageLoad(index, draftId),
+          noCall = rts.NonUkAddressController.onPageLoad(index, draftId)
+        )
+    case page @ CountryOfResidenceYesNoPage(index)        =>
+      ua =>
+        yesNoNav(
+          ua = ua,
+          fromPage = page,
+          yesCall = ntrts.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId),
+          noCall = navigateToAnswersOrAddressQuestions(draftId, index, ua.isTaxable)
+        )
+    case page @ CountryOfResidenceInTheUkYesNoPage(index) =>
+      ua =>
+        yesNoNav(
+          ua = ua,
+          fromPage = page,
+          yesCall = navigateToAnswersOrAddressQuestions(draftId, index, ua.isTaxable),
+          noCall = ntrts.CountryOfResidenceController.onPageLoad(index, draftId)
+        )
   }
 
-  private def navigateToAnswersOrAddressQuestions(draftId: String, index: Int, isTaxable: Boolean): Call = {
+  private def navigateToAnswersOrAddressQuestions(draftId: String, index: Int, isTaxable: Boolean): Call =
     if (isTaxable) {
       rts.AddressYesNoController.onPageLoad(index, draftId)
     } else {
       rts.CheckDetailsController.onPageLoad(index, draftId)
     }
-  }
 
 }

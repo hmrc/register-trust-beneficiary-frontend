@@ -31,10 +31,10 @@ import views.html.register.beneficiaries.charityortrust.charity.AmountDiscretion
 
 class AmountDiscretionYesNoControllerSpec extends SpecBase {
 
-  private val formProvider = new YesNoFormProvider()
+  private val formProvider        = new YesNoFormProvider()
   private val form: Form[Boolean] = formProvider.withPrefix("charity.discretionYesNo")
-  private val index: Int = 0
-  private val charityName = "Test"
+  private val index: Int          = 0
+  private val charityName         = "Test"
 
   private lazy val amountDiscretionYesNo: String = routes.AmountDiscretionYesNoController.onPageLoad(index, draftId).url
 
@@ -43,7 +43,8 @@ class AmountDiscretionYesNoControllerSpec extends SpecBase {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(CharityNamePage(index), "Test").value
+        .set(CharityNamePage(index), "Test")
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -63,8 +64,11 @@ class AmountDiscretionYesNoControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(CharityNamePage(index), "Test").value
-        .set(AmountDiscretionYesNoPage(index), true).value
+      val userAnswers = emptyUserAnswers
+        .set(CharityNamePage(index), "Test")
+        .value
+        .set(AmountDiscretionYesNoPage(index), true)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -85,12 +89,14 @@ class AmountDiscretionYesNoControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(CharityNamePage(index), "Test").value
+        .set(CharityNamePage(index), "Test")
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
           bind[Navigator].qualifiedWith(classOf[CharityBeneficiary]).toInstance(new FakeNavigator)
-        ).build()
+        )
+        .build()
 
       val request =
         FakeRequest(POST, amountDiscretionYesNo)
@@ -108,7 +114,8 @@ class AmountDiscretionYesNoControllerSpec extends SpecBase {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(CharityNamePage(index), "Test").value
+        .set(CharityNamePage(index), "Test")
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -133,12 +140,14 @@ class AmountDiscretionYesNoControllerSpec extends SpecBase {
     "return an Internal Server Error when setting the user answers goes wrong" in {
 
       val userAnswers = emptyUserAnswers
-        .set(CharityNamePage(index), "Test").value
+        .set(CharityNamePage(index), "Test")
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
         .overrides(
           bind[Navigator].qualifiedWith(classOf[CharityBeneficiary]).toInstance(new FakeNavigator)
-        ).build()
+        )
+        .build()
 
       val request =
         FakeRequest(POST, amountDiscretionYesNo)
@@ -188,4 +197,5 @@ class AmountDiscretionYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

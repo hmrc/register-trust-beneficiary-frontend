@@ -30,7 +30,7 @@ import views.html.register.beneficiaries.charityortrust.CharityOrTrustView
 
 class CharityOrTrustControllerSpec extends SpecBase {
 
-  private val formProvider = new CharityOrTrustFormProvider()()
+  private val formProvider               = new CharityOrTrustFormProvider()()
   private val form: Form[CharityOrTrust] = formProvider
 
   private lazy val charityOrTrustRoute: String = routes.CharityOrTrustController.onPageLoad(draftId).url
@@ -96,7 +96,8 @@ class CharityOrTrustControllerSpec extends SpecBase {
 
     "return an Internal Server Error when setting the user answers goes wrong" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), mockSetResult = Left(ServerError())).build()
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers), mockSetResult = Left(ServerError())).build()
 
       val request =
         FakeRequest(POST, charityOrTrustRoute)
@@ -168,4 +169,5 @@ class CharityOrTrustControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

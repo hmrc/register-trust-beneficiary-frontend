@@ -32,12 +32,12 @@ import views.html.register.beneficiaries.other.UkAddressView
 
 class UkAddressControllerSpec extends SpecBase {
 
-  private val index = 0
-  private val form = new UKAddressFormProvider()()
+  private val index                  = 0
+  private val form                   = new UKAddressFormProvider()()
   private val ukAddressRoute: String = routes.UkAddressController.onPageLoad(index, draftId).url
-  private val description: String = "Other"
-  private val answer = UKAddress("Line 1", "Line 2", None, None, "NE11NE")
-  private val baseAnswers = emptyUserAnswers.set(DescriptionPage(index), description).value
+  private val description: String    = "Other"
+  private val answer                 = UKAddress("Line 1", "Line 2", None, None, "NE11NE")
+  private val baseAnswers            = emptyUserAnswers.set(DescriptionPage(index), description).value
 
   "UkAddress Controller" must {
 
@@ -87,7 +87,8 @@ class UkAddressControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[OtherBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, ukAddressRoute)
@@ -110,7 +111,8 @@ class UkAddressControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(emptyUserAnswers), mockSetResult = Left(ServerError()))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[OtherBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, ukAddressRoute)
@@ -145,7 +147,7 @@ class UkAddressControllerSpec extends SpecBase {
       contentAsString(result) mustEqual
         view(boundForm, description, index, draftId)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -179,4 +181,5 @@ class UkAddressControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

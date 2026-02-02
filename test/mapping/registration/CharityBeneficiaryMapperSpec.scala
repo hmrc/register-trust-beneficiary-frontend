@@ -21,15 +21,17 @@ import generators.Generators
 import models.core.pages.{InternationalAddress, UKAddress}
 import models.{AddressType, CharityType, IdentificationOrgType}
 import pages.register.beneficiaries.charityortrust.charity._
-import pages.register.beneficiaries.charityortrust.charity.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
+import pages.register.beneficiaries.charityortrust.charity.mld5.{
+  CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage
+}
 import utils.Constants._
 
 class CharityBeneficiaryMapperSpec extends SpecBase with Generators {
 
   val charityBeneficiaryMapper: CharityBeneficiaryMapper = injector.instanceOf[CharityBeneficiaryMapper]
 
-  private val name: String = "Charity Name"
-  private val ukAddress: UKAddress = UKAddress("Line 1", "Line 2", None, None, "POSTCODE")
+  private val name: String                               = "Charity Name"
+  private val ukAddress: UKAddress                       = UKAddress("Line 1", "Line 2", None, None, "POSTCODE")
   private val internationalAddress: InternationalAddress = InternationalAddress("Line 1", "Line 2", None, "COUNTRY")
 
   "Charity Beneficiary Mapper" when {
@@ -50,9 +52,12 @@ class CharityBeneficiaryMapperSpec extends SpecBase with Generators {
 
         "no address" in {
           val userAnswers = emptyUserAnswers
-            .set(CharityNamePage(index), name).value
-            .set(AmountDiscretionYesNoPage(index), true).value
-            .set(AddressYesNoPage(index), false).value
+            .set(CharityNamePage(index), name)
+            .value
+            .set(AmountDiscretionYesNoPage(index), true)
+            .value
+            .set(AddressYesNoPage(index), false)
+            .value
 
           charityBeneficiaryMapper.build(userAnswers).value.head mustBe CharityType(
             organisationName = name,
@@ -66,16 +71,22 @@ class CharityBeneficiaryMapperSpec extends SpecBase with Generators {
         "Country of residence is set to the UK" in {
           val userAnswers =
             emptyUserAnswers
-              .set(CharityNamePage(index), name).value
-              .set(AmountDiscretionYesNoPage(index), false).value
-              .set(HowMuchIncomePage(index),60).value
-              .set(CountryOfResidenceYesNoPage(index), true).value
-              .set(CountryOfResidenceInTheUkYesNoPage(index), true).value
-              .set(AddressYesNoPage(index), false).value
+              .set(CharityNamePage(index), name)
+              .value
+              .set(AmountDiscretionYesNoPage(index), false)
+              .value
+              .set(HowMuchIncomePage(index), 60)
+              .value
+              .set(CountryOfResidenceYesNoPage(index), true)
+              .value
+              .set(CountryOfResidenceInTheUkYesNoPage(index), true)
+              .value
+              .set(AddressYesNoPage(index), false)
+              .value
 
           val charities = charityBeneficiaryMapper.build(userAnswers)
 
-          charities mustBe defined
+          charities            mustBe defined
           charities.value.head mustBe CharityType(
             organisationName = "Charity Name",
             beneficiaryDiscretion = Some(false),
@@ -88,17 +99,24 @@ class CharityBeneficiaryMapperSpec extends SpecBase with Generators {
         "Country of residence is set to outside the UK" in {
           val userAnswers =
             emptyUserAnswers
-              .set(CharityNamePage(index), "Charity Name").value
-              .set(AmountDiscretionYesNoPage(index), false).value
-              .set(HowMuchIncomePage(index), 100).value
-              .set(CountryOfResidenceYesNoPage(index), true).value
-              .set(CountryOfResidenceInTheUkYesNoPage(index), false).value
-              .set(CountryOfResidencePage(index), "FR").value
-              .set(AddressYesNoPage(index), false).value
+              .set(CharityNamePage(index), "Charity Name")
+              .value
+              .set(AmountDiscretionYesNoPage(index), false)
+              .value
+              .set(HowMuchIncomePage(index), 100)
+              .value
+              .set(CountryOfResidenceYesNoPage(index), true)
+              .value
+              .set(CountryOfResidenceInTheUkYesNoPage(index), false)
+              .value
+              .set(CountryOfResidencePage(index), "FR")
+              .value
+              .set(AddressYesNoPage(index), false)
+              .value
 
           val charities = charityBeneficiaryMapper.build(userAnswers)
 
-          charities mustBe defined
+          charities            mustBe defined
           charities.value.head mustBe CharityType(
             organisationName = "Charity Name",
             beneficiaryDiscretion = Some(false),
@@ -108,48 +126,76 @@ class CharityBeneficiaryMapperSpec extends SpecBase with Generators {
           )
         }
 
-      "UK address" in {
-          val index = 0
+        "UK address" in {
+          val index       = 0
           val userAnswers = emptyUserAnswers
-            .set(CharityNamePage(index), name).value
-            .set(AmountDiscretionYesNoPage(index), true).value
-            .set(AddressYesNoPage(index), true).value
-            .set(AddressInTheUkYesNoPage(index), true).value
-            .set(CharityAddressUKPage(index), ukAddress).value
+            .set(CharityNamePage(index), name)
+            .value
+            .set(AmountDiscretionYesNoPage(index), true)
+            .value
+            .set(AddressYesNoPage(index), true)
+            .value
+            .set(AddressInTheUkYesNoPage(index), true)
+            .value
+            .set(CharityAddressUKPage(index), ukAddress)
+            .value
 
           charityBeneficiaryMapper.build(userAnswers).value.head mustBe CharityType(
             organisationName = name,
             beneficiaryDiscretion = Some(true),
             beneficiaryShareOfIncome = None,
-            identification = Some(IdentificationOrgType(
-              utr = None,
-              address = Some(
-                AddressType(ukAddress.line1, ukAddress.line2, ukAddress.line3, ukAddress.line4, Some(ukAddress.postcode), GB)
+            identification = Some(
+              IdentificationOrgType(
+                utr = None,
+                address = Some(
+                  AddressType(
+                    ukAddress.line1,
+                    ukAddress.line2,
+                    ukAddress.line3,
+                    ukAddress.line4,
+                    Some(ukAddress.postcode),
+                    GB
+                  )
+                )
               )
-            )),
+            ),
             countryOfResidence = None
-            )
+          )
         }
 
         "international address" in {
-          val index = 0
+          val index       = 0
           val userAnswers = emptyUserAnswers
-            .set(CharityNamePage(index), name).value
-            .set(AmountDiscretionYesNoPage(index), true).value
-            .set(AddressYesNoPage(index), true).value
-            .set(AddressInTheUkYesNoPage(index), false).value
-            .set(CharityInternationalAddressPage(index), internationalAddress).value
+            .set(CharityNamePage(index), name)
+            .value
+            .set(AmountDiscretionYesNoPage(index), true)
+            .value
+            .set(AddressYesNoPage(index), true)
+            .value
+            .set(AddressInTheUkYesNoPage(index), false)
+            .value
+            .set(CharityInternationalAddressPage(index), internationalAddress)
+            .value
 
           charityBeneficiaryMapper.build(userAnswers).value.head mustBe CharityType(
             organisationName = name,
             beneficiaryDiscretion = Some(true),
             beneficiaryShareOfIncome = None,
-            identification = Some(IdentificationOrgType(
-              utr = None,
-              address = Some(
-                AddressType(internationalAddress.line1, internationalAddress.line2, internationalAddress.line3, None, None, internationalAddress.country)
+            identification = Some(
+              IdentificationOrgType(
+                utr = None,
+                address = Some(
+                  AddressType(
+                    internationalAddress.line1,
+                    internationalAddress.line2,
+                    internationalAddress.line3,
+                    None,
+                    None,
+                    internationalAddress.country
+                  )
+                )
               )
-            )),
+            ),
             countryOfResidence = None
           )
         }
@@ -158,18 +204,23 @@ class CharityBeneficiaryMapperSpec extends SpecBase with Generators {
       "must be able to create multiple charity beneficiaries" in {
         val index0 = 0
         val index1 = 1
-        val name1 = "Name 1"
-        val name2 = "Name 2"
+        val name1  = "Name 1"
+        val name2  = "Name 2"
 
         val userAnswers =
           emptyUserAnswers
-            .set(CharityNamePage(index0), name1).value
-            .set(AmountDiscretionYesNoPage(index0), true).value
-            .set(AddressYesNoPage(index0), false).value
-
-            .set(CharityNamePage(index1), name2).value
-            .set(AmountDiscretionYesNoPage(index1), true).value
-            .set(AddressYesNoPage(index1), false).value
+            .set(CharityNamePage(index0), name1)
+            .value
+            .set(AmountDiscretionYesNoPage(index0), true)
+            .value
+            .set(AddressYesNoPage(index0), false)
+            .value
+            .set(CharityNamePage(index1), name2)
+            .value
+            .set(AmountDiscretionYesNoPage(index1), true)
+            .value
+            .set(AddressYesNoPage(index1), false)
+            .value
 
         charityBeneficiaryMapper.build(userAnswers).value mustBe List(
           CharityType(
@@ -190,4 +241,5 @@ class CharityBeneficiaryMapperSpec extends SpecBase with Generators {
       }
     }
   }
+
 }

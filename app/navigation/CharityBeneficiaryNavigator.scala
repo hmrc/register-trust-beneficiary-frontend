@@ -33,68 +33,77 @@ class CharityBeneficiaryNavigator extends Navigator {
     simpleNavigation(draftId) orElse yesNoNavigation(draftId)
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case CharityNamePage(index) => ua =>
-      if (isNonTaxable(ua)) {
-        CountryOfResidenceYesNoController.onPageLoad(index, draftId)
-      } else {
-        AmountDiscretionYesNoController.onPageLoad(index, draftId)
-      }
-    case HowMuchIncomePage(index) => _ => CountryOfResidenceYesNoController.onPageLoad(index, draftId)
-    case CharityAddressUKPage(index) => _ => CharityAnswersController.onPageLoad(index, draftId)
+    case CharityNamePage(index)                 =>
+      ua =>
+        if (isNonTaxable(ua)) {
+          CountryOfResidenceYesNoController.onPageLoad(index, draftId)
+        } else {
+          AmountDiscretionYesNoController.onPageLoad(index, draftId)
+        }
+    case HowMuchIncomePage(index)               => _ => CountryOfResidenceYesNoController.onPageLoad(index, draftId)
+    case CharityAddressUKPage(index)            => _ => CharityAnswersController.onPageLoad(index, draftId)
     case CharityInternationalAddressPage(index) => _ => CharityAnswersController.onPageLoad(index, draftId)
-    case CountryOfResidencePage(index) => ua =>
-      if (isNonTaxable(ua)) {
-        CharityAnswersController.onPageLoad(index, draftId)
-      } else {
-        AddressYesNoController.onPageLoad(index, draftId)
-      }
+    case CountryOfResidencePage(index)          =>
+      ua =>
+        if (isNonTaxable(ua)) {
+          CharityAnswersController.onPageLoad(index, draftId)
+        } else {
+          AddressYesNoController.onPageLoad(index, draftId)
+        }
   }
 
   private def yesNoNavigation(draftId: String): PartialFunction[Page, ReadableUserAnswers => Call] = {
-    case page @ AmountDiscretionYesNoPage(index) => ua =>
-      yesNoNav(
-        ua = ua,
-        fromPage = page,
-        yesCall = CountryOfResidenceYesNoController.onPageLoad(index, draftId),
-        noCall = HowMuchIncomeController.onPageLoad(index, draftId)
-      )
-    case page @ AddressYesNoPage(index) => ua =>
-      yesNoNav(
-        ua = ua,
-        fromPage = page,
-        yesCall = AddressInTheUkYesNoController.onPageLoad(index, draftId),
-        noCall = CharityAnswersController.onPageLoad(index, draftId)
-      )
-    case page @ AddressInTheUkYesNoPage(index) => ua =>
-      yesNoNav(
-        ua = ua,
-        fromPage = page,
-        yesCall = CharityAddressUKController.onPageLoad(index, draftId),
-        noCall = CharityInternationalAddressController.onPageLoad(index, draftId)
-      )
-    case page @ CountryOfResidenceYesNoPage(index) => ua =>
-      yesNoNav(
-        ua = ua,
-        fromPage = page,
-        yesCall = CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId),
-        noCall = navigateToAnswersOrAddressQuestions(draftId, index)(ua)
-      )
-    case page @ CountryOfResidenceInTheUkYesNoPage(index) => ua =>
-      yesNoNav(
-        ua = ua,
-        fromPage = page,
-        yesCall = navigateToAnswersOrAddressQuestions(draftId, index)(ua),
-        noCall = CountryOfResidenceController.onPageLoad(index, draftId)
-      )
+    case page @ AmountDiscretionYesNoPage(index)          =>
+      ua =>
+        yesNoNav(
+          ua = ua,
+          fromPage = page,
+          yesCall = CountryOfResidenceYesNoController.onPageLoad(index, draftId),
+          noCall = HowMuchIncomeController.onPageLoad(index, draftId)
+        )
+    case page @ AddressYesNoPage(index)                   =>
+      ua =>
+        yesNoNav(
+          ua = ua,
+          fromPage = page,
+          yesCall = AddressInTheUkYesNoController.onPageLoad(index, draftId),
+          noCall = CharityAnswersController.onPageLoad(index, draftId)
+        )
+    case page @ AddressInTheUkYesNoPage(index)            =>
+      ua =>
+        yesNoNav(
+          ua = ua,
+          fromPage = page,
+          yesCall = CharityAddressUKController.onPageLoad(index, draftId),
+          noCall = CharityInternationalAddressController.onPageLoad(index, draftId)
+        )
+    case page @ CountryOfResidenceYesNoPage(index)        =>
+      ua =>
+        yesNoNav(
+          ua = ua,
+          fromPage = page,
+          yesCall = CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId),
+          noCall = navigateToAnswersOrAddressQuestions(draftId, index)(ua)
+        )
+    case page @ CountryOfResidenceInTheUkYesNoPage(index) =>
+      ua =>
+        yesNoNav(
+          ua = ua,
+          fromPage = page,
+          yesCall = navigateToAnswersOrAddressQuestions(draftId, index)(ua),
+          noCall = CountryOfResidenceController.onPageLoad(index, draftId)
+        )
   }
 
-  private def navigateToAnswersOrAddressQuestions(draftId: String, index: Int): PartialFunction[ReadableUserAnswers, Call] = {
-    case ua =>
-      if (isNonTaxable(ua)) {
-        CharityAnswersController.onPageLoad(index, draftId)
-      } else {
-        AddressYesNoController.onPageLoad(index, draftId)
-      }
+  private def navigateToAnswersOrAddressQuestions(
+    draftId: String,
+    index: Int
+  ): PartialFunction[ReadableUserAnswers, Call] = { case ua =>
+    if (isNonTaxable(ua)) {
+      CharityAnswersController.onPageLoad(index, draftId)
+    } else {
+      AddressYesNoController.onPageLoad(index, draftId)
+    }
   }
 
 }

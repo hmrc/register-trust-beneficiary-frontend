@@ -38,15 +38,16 @@ import scala.concurrent.Future
 
 class CharityNameControllerSpec extends SpecBase {
 
-  private val formProvider = new StringFormProvider()
+  private val formProvider       = new StringFormProvider()
   private val form: Form[String] = formProvider.withPrefix("charity.name", 105)
-  private val name = "Test"
-  private val index: Int = 0
+  private val name               = "Test"
+  private val index: Int         = 0
 
   private lazy val charityNameRoute: String = routes.CharityNameController.onPageLoad(index, fakeDraftId).url
 
   private val userAnswers: UserAnswers = emptyUserAnswers
-    .set(CharityNamePage(index), name).value
+    .set(CharityNamePage(index), name)
+    .value
 
   "CharityName Controller" must {
 
@@ -89,12 +90,17 @@ class CharityNameControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       when(mockRegistrationsRepository.getSettlorsAnswers(any())(any()))
-        .thenReturn(EitherT[Future, TrustErrors, Option[ReadOnlyUserAnswers]](Future.successful(Right(Some(ReadOnlyUserAnswers(Json.obj()))))))
+        .thenReturn(
+          EitherT[Future, TrustErrors, Option[ReadOnlyUserAnswers]](
+            Future.successful(Right(Some(ReadOnlyUserAnswers(Json.obj()))))
+          )
+        )
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
           bind[Navigator].qualifiedWith(classOf[CharityBeneficiary]).toInstance(new FakeNavigator)
-        ).build()
+        )
+        .build()
 
       val request =
         FakeRequest(POST, charityNameRoute)
@@ -112,12 +118,17 @@ class CharityNameControllerSpec extends SpecBase {
     "return an Internal Server Error when setting the user answers goes wrong" in {
 
       when(mockRegistrationsRepository.getSettlorsAnswers(any())(any()))
-        .thenReturn(EitherT[Future, TrustErrors, Option[ReadOnlyUserAnswers]](Future.successful(Right(Some(ReadOnlyUserAnswers(Json.obj()))))))
+        .thenReturn(
+          EitherT[Future, TrustErrors, Option[ReadOnlyUserAnswers]](
+            Future.successful(Right(Some(ReadOnlyUserAnswers(Json.obj()))))
+          )
+        )
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), mockSetResult = Left(ServerError()))
         .overrides(
           bind[Navigator].qualifiedWith(classOf[CharityBeneficiary]).toInstance(new FakeNavigator)
-        ).build()
+        )
+        .build()
 
       val request =
         FakeRequest(POST, charityNameRoute)
@@ -154,7 +165,7 @@ class CharityNameControllerSpec extends SpecBase {
       contentAsString(result) mustEqual
         view(boundForm, fakeDraftId, index)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -188,4 +199,5 @@ class CharityNameControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

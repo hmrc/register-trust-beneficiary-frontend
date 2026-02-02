@@ -25,16 +25,20 @@ import views.html.{ErrorTemplate, PageNotFoundView}
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-
 @Singleton
-class ErrorHandler @Inject()(override val messagesApi: MessagesApi,
-                             view: ErrorTemplate,
-                             notFoundView: PageNotFoundView)(implicit val ec: ExecutionContext) extends FrontendErrorHandler {
+class ErrorHandler @Inject() (
+  override val messagesApi: MessagesApi,
+  view: ErrorTemplate,
+  notFoundView: PageNotFoundView
+)(implicit val ec: ExecutionContext)
+    extends FrontendErrorHandler {
 
-  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit request: RequestHeader): Future[Html] =
+  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit
+    request: RequestHeader
+  ): Future[Html] =
     Future.successful(view(pageTitle, heading, message))
 
-  override def notFoundTemplate(implicit request: RequestHeader): Future[Html] = {
+  override def notFoundTemplate(implicit request: RequestHeader): Future[Html] =
     Future.successful(notFoundView())
-  }
+
 }

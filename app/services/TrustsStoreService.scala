@@ -24,10 +24,12 @@ import utils.TrustEnvelope.TrustEnvelope
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class TrustsStoreService @Inject()(trustsStoreConnector: TrustsStoreConnector) {
+class TrustsStoreService @Inject() (trustsStoreConnector: TrustsStoreConnector) {
 
-  def updateTaskStatus(draftId: String, taskStatus: TaskStatus)
-                      (implicit hc: HeaderCarrier, ec: ExecutionContext): TrustEnvelope[Boolean] = {
+  def updateTaskStatus(draftId: String, taskStatus: TaskStatus)(implicit
+    hc: HeaderCarrier,
+    ec: ExecutionContext
+  ): TrustEnvelope[Boolean] =
     trustsStoreConnector.updateTaskStatus(draftId, taskStatus)
-  }
+
 }

@@ -32,10 +32,15 @@ class CharityOrTrustPageSpec extends PageBehaviours {
   implicit class UserAnswersSetters(userAnswers: UserAnswers) {
 
     def setWithStatus(status: Status): UserAnswers = userAnswers
-      .set(charity.CharityNamePage(0), string).value
-      .set(CharityBeneficiaryStatus(0), status).value
-      .set(trust.NamePage(0), string).value
-      .set(TrustBeneficiaryStatus(0), status).value
+      .set(charity.CharityNamePage(0), string)
+      .value
+      .set(CharityBeneficiaryStatus(0), status)
+      .value
+      .set(trust.NamePage(0), string)
+      .value
+      .set(TrustBeneficiaryStatus(0), status)
+      .value
+
   }
 
   "CharityOrTrustPage" must {
@@ -49,66 +54,58 @@ class CharityOrTrustPageSpec extends PageBehaviours {
     "implement cleanup" when {
 
       "charity selected" when {
-        "last of other beneficiary types are in progress" in {
-          forAll(arbitrary[UserAnswers]) {
-            initial =>
-              val answers = initial.setWithStatus(InProgress)
+        "last of other beneficiary types are in progress" in
+          forAll(arbitrary[UserAnswers]) { initial =>
+            val answers = initial.setWithStatus(InProgress)
 
-              val result = answers.set(CharityOrTrustPage, Charity).value
+            val result = answers.set(CharityOrTrustPage, Charity).value
 
-              result.get(CharityBeneficiaries).getOrElse(Nil).size mustBe 1
-              result.get(TrustBeneficiaries).getOrElse(Nil).size mustBe 0
+            result.get(CharityBeneficiaries).getOrElse(Nil).size mustBe 1
+            result.get(TrustBeneficiaries).getOrElse(Nil).size   mustBe 0
           }
-        }
       }
 
       "trust selected" when {
-        "last of other beneficiary types are in progress" in {
-          forAll(arbitrary[UserAnswers]) {
-            initial =>
-              val answers = initial.setWithStatus(InProgress)
+        "last of other beneficiary types are in progress" in
+          forAll(arbitrary[UserAnswers]) { initial =>
+            val answers = initial.setWithStatus(InProgress)
 
-              val result = answers.set(CharityOrTrustPage, Trust).value
+            val result = answers.set(CharityOrTrustPage, Trust).value
 
-              result.get(CharityBeneficiaries).getOrElse(Nil).size mustBe 0
-              result.get(TrustBeneficiaries).getOrElse(Nil).size mustBe 1
+            result.get(CharityBeneficiaries).getOrElse(Nil).size mustBe 0
+            result.get(TrustBeneficiaries).getOrElse(Nil).size   mustBe 1
           }
-        }
       }
     }
 
     "not implement cleanup" when {
 
-      def runTestsForType(beneficiaryType: CharityOrTrust): Unit = {
+      def runTestsForType(beneficiaryType: CharityOrTrust): Unit =
 
         s"$beneficiaryType selected" when {
 
-          "no other beneficiary types" in {
-            forAll(arbitrary[UserAnswers]) {
-              initial =>
-                val result = initial.set(CharityOrTrustPage, beneficiaryType).value
+          "no other beneficiary types" in
+            forAll(arbitrary[UserAnswers]) { initial =>
+              val result = initial.set(CharityOrTrustPage, beneficiaryType).value
 
-                result.get(CharityBeneficiaries).getOrElse(Nil).size mustBe 0
-                result.get(TrustBeneficiaries).getOrElse(Nil).size mustBe 0
+              result.get(CharityBeneficiaries).getOrElse(Nil).size mustBe 0
+              result.get(TrustBeneficiaries).getOrElse(Nil).size   mustBe 0
             }
-          }
 
-          "last of other beneficiary types is complete" in {
-            forAll(arbitrary[UserAnswers]) {
-              initial =>
-                val answers = initial.setWithStatus(Completed)
+          "last of other beneficiary types is complete" in
+            forAll(arbitrary[UserAnswers]) { initial =>
+              val answers = initial.setWithStatus(Completed)
 
-                val result = answers.set(CharityOrTrustPage, beneficiaryType).value
+              val result = answers.set(CharityOrTrustPage, beneficiaryType).value
 
-                result.get(CharityBeneficiaries).getOrElse(Nil).size mustBe 1
-                result.get(TrustBeneficiaries).getOrElse(Nil).size mustBe 1
+              result.get(CharityBeneficiaries).getOrElse(Nil).size mustBe 1
+              result.get(TrustBeneficiaries).getOrElse(Nil).size   mustBe 1
             }
-          }
         }
-      }
 
       runTestsForType(Charity)
       runTestsForType(Trust)
     }
   }
+
 }

@@ -25,21 +25,20 @@ class RemoveClassOfBeneficiaryQuerySpec extends PageBehaviours {
 
   "RemoveClassOfBeneficiaryQuery" must {
 
-    "remove class of beneficiary at index" in {
-      forAll(arbitrary[UserAnswers]) {
-        initial =>
+    "remove class of beneficiary at index" in
+      forAll(arbitrary[UserAnswers]) { initial =>
+        val answers: UserAnswers = initial
+          .set(ClassBeneficiaryDescriptionPage(0), "Future issue of grandchildren")
+          .value
+          .set(ClassBeneficiaryDescriptionPage(1), "Grandchildren of Sister")
+          .value
 
-          val answers: UserAnswers = initial
-            .set(ClassBeneficiaryDescriptionPage(0), "Future issue of grandchildren").value
-            .set(ClassBeneficiaryDescriptionPage(1), "Grandchildren of Sister").value
+        val result = answers.remove(RemoveClassOfBeneficiaryQuery(0)).value
 
-          val result = answers.remove(RemoveClassOfBeneficiaryQuery(0)).value
+        result.get(ClassBeneficiaryDescriptionPage(0)).value mustBe "Grandchildren of Sister"
 
-          result.get(ClassBeneficiaryDescriptionPage(0)).value mustBe "Grandchildren of Sister"
-
-          result.get(ClassBeneficiaryDescriptionPage(1)) mustNot be(defined)
+        result.get(ClassBeneficiaryDescriptionPage(1)) mustNot be(defined)
       }
-    }
 
   }
 

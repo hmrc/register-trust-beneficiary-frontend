@@ -22,7 +22,7 @@ import viewmodels.addAnother.ClassOfBeneficiaryViewModel
 
 case object ClassOfBeneficiaries extends QuestionPage[List[ClassOfBeneficiaryViewModel]] {
 
-    override def path: JsPath = JsPath \ Beneficiaries \ toString
+  override def path: JsPath = JsPath \ Beneficiaries \ toString
 
-    override def toString: String = "classOfBeneficiaries"
+  override def toString: String = "classOfBeneficiaries"
 }

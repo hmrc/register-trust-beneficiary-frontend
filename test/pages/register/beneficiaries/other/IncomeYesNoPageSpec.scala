@@ -33,12 +33,11 @@ class IncomeYesNoPageSpec extends PageBehaviours {
 
   "remove Income page when IncomeYesNoPage is set to yes/true" in {
     val index = 0
-    forAll(arbitrary[UserAnswers], arbitrary[String]) {
-      (initial, _) =>
-        val answers: UserAnswers = initial.set(ShareOfIncomePage(index), 55).value
+    forAll(arbitrary[UserAnswers], arbitrary[String]) { (initial, _) =>
+      val answers: UserAnswers = initial.set(ShareOfIncomePage(index), 55).value
 
-        val result = answers.set(IncomeDiscretionYesNoPage(index), true).value
-        result.get(ShareOfIncomePage(index)) mustNot be(defined)
+      val result = answers.set(IncomeDiscretionYesNoPage(index), true).value
+      result.get(ShareOfIncomePage(index)) mustNot be(defined)
     }
   }
 

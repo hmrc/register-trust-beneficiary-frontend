@@ -33,19 +33,21 @@ import views.html.register.beneficiaries.individualBeneficiary.mld5.CountryOfRes
 
 class CountryOfResidenceYesNoControllerSpec extends SpecBase {
 
-  private val formProvider = new YesNoFormProvider()
+  private val formProvider        = new YesNoFormProvider()
   private val form: Form[Boolean] = formProvider.withPrefix("individualBeneficiary.5mld.countryOfResidenceYesNo")
-  private val index: Int = 0
-  private val name: FullName = FullName("FirstName", None, "LastName")
+  private val index: Int          = 0
+  private val name: FullName      = FullName("FirstName", None, "LastName")
 
-  private lazy val countryOfResidenceYesNo: String = routes.CountryOfResidenceYesNoController.onPageLoad(index, draftId).url
+  private lazy val countryOfResidenceYesNo: String =
+    routes.CountryOfResidenceYesNoController.onPageLoad(index, draftId).url
 
   "CountryOfResidenceYesNo Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), name).value
+        .set(NamePage(index), name)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -65,9 +67,11 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index), name).value
-        .set(CountryOfResidenceYesNoPage(index), true).value
-
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(index), name)
+        .value
+        .set(CountryOfResidenceYesNoPage(index), true)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -88,12 +92,14 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), name).value
+        .set(NamePage(index), name)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
           bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
-        ).build()
+        )
+        .build()
 
       val request =
         FakeRequest(POST, countryOfResidenceYesNo)
@@ -111,12 +117,14 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase {
     "return an Internal Server Error when setting the user answers goes wrong" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), name).value
+        .set(NamePage(index), name)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
         .overrides(
           bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
-        ).build()
+        )
+        .build()
 
       val request =
         FakeRequest(POST, countryOfResidenceYesNo)
@@ -137,7 +145,8 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), name).value
+        .set(NamePage(index), name)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -191,5 +200,5 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
-}
 
+}

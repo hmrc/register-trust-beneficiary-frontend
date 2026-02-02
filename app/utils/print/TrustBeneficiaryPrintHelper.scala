@@ -25,26 +25,65 @@ import pages.register.beneficiaries.charityortrust.trust.mld5._
 import play.api.i18n.Messages
 import viewmodels.AnswerRow
 
-class TrustBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter) extends PrintHelper {
+class TrustBeneficiaryPrintHelper @Inject() (answerRowConverter: AnswerRowConverter) extends PrintHelper {
 
   override val beneficiaryType: String = "trustBeneficiary"
 
-  override def answers(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
-                      (implicit messages: Messages): Seq[AnswerRow] = {
+  override def answers(userAnswers: UserAnswers, name: String, index: Int, draftId: String)(implicit
+    messages: Messages
+  ): Seq[AnswerRow] = {
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
 
     Seq(
       bound.stringQuestion(NamePage(index), "trustBeneficiaryName", NameController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(DiscretionYesNoPage(index), "trustBeneficiaryDiscretionYesNo", DiscretionYesNoController.onPageLoad(index, draftId).url),
-      bound.percentageQuestion(ShareOfIncomePage(index), "trustBeneficiaryShareOfIncome", ShareOfIncomeController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(CountryOfResidenceYesNoPage(index), "trust.5mld.countryOfResidenceYesNo", CountryOfResidenceYesNoController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(CountryOfResidenceInTheUkYesNoPage(index), "trust.5mld.countryOfResidenceInTheUkYesNo", CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId).url),
-      bound.countryQuestion(CountryOfResidenceInTheUkYesNoPage(index), CountryOfResidencePage(index), "trust.5mld.countryOfResidence", CountryOfResidenceController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(AddressYesNoPage(index), "trustBeneficiaryAddressYesNo", AddressYesNoController.onPageLoad(index, draftId).url),
-      bound.yesNoQuestion(AddressUKYesNoPage(index), "trustBeneficiaryAddressUKYesNo", AddressUKYesNoController.onPageLoad(index, draftId).url),
-      bound.addressQuestion(AddressUKPage(index), "site.address.uk", AddressUKController.onPageLoad(index, draftId).url),
-      bound.addressQuestion(AddressInternationalPage(index), "site.address.international", AddressInternationalController.onPageLoad(index, draftId).url)
+      bound.yesNoQuestion(
+        DiscretionYesNoPage(index),
+        "trustBeneficiaryDiscretionYesNo",
+        DiscretionYesNoController.onPageLoad(index, draftId).url
+      ),
+      bound.percentageQuestion(
+        ShareOfIncomePage(index),
+        "trustBeneficiaryShareOfIncome",
+        ShareOfIncomeController.onPageLoad(index, draftId).url
+      ),
+      bound.yesNoQuestion(
+        CountryOfResidenceYesNoPage(index),
+        "trust.5mld.countryOfResidenceYesNo",
+        CountryOfResidenceYesNoController.onPageLoad(index, draftId).url
+      ),
+      bound.yesNoQuestion(
+        CountryOfResidenceInTheUkYesNoPage(index),
+        "trust.5mld.countryOfResidenceInTheUkYesNo",
+        CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId).url
+      ),
+      bound.countryQuestion(
+        CountryOfResidenceInTheUkYesNoPage(index),
+        CountryOfResidencePage(index),
+        "trust.5mld.countryOfResidence",
+        CountryOfResidenceController.onPageLoad(index, draftId).url
+      ),
+      bound.yesNoQuestion(
+        AddressYesNoPage(index),
+        "trustBeneficiaryAddressYesNo",
+        AddressYesNoController.onPageLoad(index, draftId).url
+      ),
+      bound.yesNoQuestion(
+        AddressUKYesNoPage(index),
+        "trustBeneficiaryAddressUKYesNo",
+        AddressUKYesNoController.onPageLoad(index, draftId).url
+      ),
+      bound.addressQuestion(
+        AddressUKPage(index),
+        "site.address.uk",
+        AddressUKController.onPageLoad(index, draftId).url
+      ),
+      bound.addressQuestion(
+        AddressInternationalPage(index),
+        "site.address.international",
+        AddressInternationalController.onPageLoad(index, draftId).url
+      )
     ).flatten
 
   }
+
 }

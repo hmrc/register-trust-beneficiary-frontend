@@ -24,11 +24,11 @@ import views.html.register.beneficiaries.companyoremploymentrelated.company.Shar
 
 class ShareOfIncomeViewSpec extends IntViewBehaviours {
 
-  private val index = 0
+  private val index    = 0
   val messageKeyPrefix = "companyBeneficiary.shareOfIncome"
-  val name: String = "Company"
+  val name: String     = "Company"
 
-  val form: Form[Int] = new IncomePercentageFormProvider().withPrefix(messageKeyPrefix)
+  val form: Form[Int]         = new IncomePercentageFormProvider().withPrefix(messageKeyPrefix)
   val view: ShareOfIncomeView = viewFor[ShareOfIncomeView](Some(emptyUserAnswers))
 
   "ShareOfIncome view" must {

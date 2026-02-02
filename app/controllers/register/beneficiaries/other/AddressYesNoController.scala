@@ -35,40 +35,37 @@ import views.html.register.beneficiaries.other.AddressYesNoView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddressYesNoController @Inject()(
-                                        val controllerComponents: MessagesControllerComponents,
-                                        standardActionSets: StandardActionSets,
-                                        formProvider: YesNoFormProvider,
-                                        view: AddressYesNoView,
-                                        repository: RegistrationsRepository,
-                                        @OtherBeneficiary navigator: Navigator,
-                                        descriptionAction: DescriptionRequiredAction,
-                                        technicalErrorView: TechnicalErrorView
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class AddressYesNoController @Inject() (
+  val controllerComponents: MessagesControllerComponents,
+  standardActionSets: StandardActionSets,
+  formProvider: YesNoFormProvider,
+  view: AddressYesNoView,
+  repository: RegistrationsRepository,
+  @OtherBeneficiary navigator: Navigator,
+  descriptionAction: DescriptionRequiredAction,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
-  private val className = getClass.getSimpleName
+  private val className           = getClass.getSimpleName
   private val form: Form[Boolean] = formProvider.withPrefix("otherBeneficiary.addressYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
-    standardActionSets.identifiedUserWithData(draftId).andThen(descriptionAction(index)) {
-      implicit request =>
+    standardActionSets.identifiedUserWithData(draftId).andThen(descriptionAction(index)) { implicit request =>
+      val preparedForm = request.userAnswers.get(AddressYesNoPage(index)) match {
+        case None        => form
+        case Some(value) => form.fill(value)
+      }
 
-        val preparedForm = request.userAnswers.get(AddressYesNoPage(index)) match {
-          case None => form
-          case Some(value) => form.fill(value)
-        }
-
-        Ok(view(preparedForm, request.description, index, draftId))
+      Ok(view(preparedForm, request.description, index, draftId))
     }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
-    standardActionSets.identifiedUserWithData(draftId).andThen(descriptionAction(index)).async {
-      implicit request =>
-
-        form.bindFromRequest().fold(
-          formWithErrors =>
-            Future.successful(BadRequest(view(formWithErrors, request.description, index, draftId))),
-
+    standardActionSets.identifiedUserWithData(draftId).andThen(descriptionAction(index)).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, request.description, index, draftId))),
           value => {
             val result = for {
               updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(AddressYesNoPage(index), value)))
@@ -77,11 +74,14 @@ class AddressYesNoController @Inject()(
 
             result.value.map {
               case Right(call) => call
-              case Left(_) =>
-                logger.warn(s"[$className][onSubmit][Session ID: ${request.request.sessionId}] Error while storing user answers")
+              case Left(_)     =>
+                logger.warn(
+                  s"[$className][onSubmit][Session ID: ${request.request.sessionId}] Error while storing user answers"
+                )
                 InternalServerError(technicalErrorView())
             }
           }
         )
     }
+
 }

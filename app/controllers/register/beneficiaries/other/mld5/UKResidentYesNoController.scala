@@ -36,53 +36,53 @@ import views.html.register.beneficiaries.other.mld5.UKResidentYesNoView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class UKResidentYesNoController @Inject()(
-                                           val controllerComponents: MessagesControllerComponents,
-                                           standardActionSets: StandardActionSets,
-                                           formProvider: YesNoFormProvider,
-                                           view: UKResidentYesNoView,
-                                           repository: RegistrationsRepository,
-                                           @OtherBeneficiary navigator: Navigator,
-                                           descriptionAction: DescriptionRequiredAction,
-                                           technicalErrorView: TechnicalErrorView
-                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class UKResidentYesNoController @Inject() (
+  val controllerComponents: MessagesControllerComponents,
+  standardActionSets: StandardActionSets,
+  formProvider: YesNoFormProvider,
+  view: UKResidentYesNoView,
+  repository: RegistrationsRepository,
+  @OtherBeneficiary navigator: Navigator,
+  descriptionAction: DescriptionRequiredAction,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
-  private val className = getClass.getSimpleName
+  private val className           = getClass.getSimpleName
   private val form: Form[Boolean] = formProvider.withPrefix("otherBeneficiary.ukResidentYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
-    standardActionSets.identifiedUserWithData(draftId).andThen(descriptionAction(index)) {
-      implicit request =>
+    standardActionSets.identifiedUserWithData(draftId).andThen(descriptionAction(index)) { implicit request =>
+      val preparedForm = request.userAnswers.get(UKResidentYesNoPage(index)) match {
+        case None        => form
+        case Some(value) => form.fill(value)
+      }
 
-        val preparedForm = request.userAnswers.get(UKResidentYesNoPage(index)) match {
-          case None => form
-          case Some(value) => form.fill(value)
-        }
-
-        Ok(view(preparedForm, index, draftId, request.description))
+      Ok(view(preparedForm, index, draftId, request.description))
     }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
-    standardActionSets.identifiedUserWithData(draftId).andThen(descriptionAction(index)).async {
-      implicit request =>
-
-        form.bindFromRequest().fold(
-          formWithErrors =>
-            Future.successful(BadRequest(view(formWithErrors, index, draftId, request.description))),
-
+    standardActionSets.identifiedUserWithData(draftId).andThen(descriptionAction(index)).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, index, draftId, request.description))),
           value => {
             val result = for {
               updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(UKResidentYesNoPage(index), value)))
-              _ <- repository.set(updatedAnswers)
+              _              <- repository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(UKResidentYesNoPage(index), draftId, updatedAnswers))
 
             result.value.map {
               case Right(call) => call
-              case Left(_) =>
-                logger.warn(s"[$className][onSubmit][Session ID: ${request.request.sessionId}] Error while storing user answers")
+              case Left(_)     =>
+                logger.warn(
+                  s"[$className][onSubmit][Session ID: ${request.request.sessionId}] Error while storing user answers"
+                )
                 InternalServerError(technicalErrorView())
             }
           }
         )
     }
+
 }

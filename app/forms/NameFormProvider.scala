@@ -26,9 +26,9 @@ import play.api.data.Forms._
 
 class NameFormProvider @Inject() extends Mappings {
 
-   def withPrefix(prefix: String): Form[FullName] =   Form(
+  def withPrefix(prefix: String): Form[FullName] = Form(
     mapping(
-      "firstName" -> text(s"$prefix.error.firstname.required")
+      "firstName"  -> text(s"$prefix.error.firstname.required")
         .verifying(
           firstError(
             maxLength(35, s"$prefix.error.firstname.length"),
@@ -36,15 +36,17 @@ class NameFormProvider @Inject() extends Mappings {
             regexp(Validation.nameRegex, s"$prefix.error.firstname.invalid")
           )
         ),
-      "middleName" -> optional(text()
-        .transform(trimWhitespace, identity[String])
-        .verifying(
-          firstError(
-            maxLength(35, s"$prefix.error.middlename.length"),
-            regexp(Validation.nameRegex, s"$prefix.error.middlename.invalid"))
-        )
+      "middleName" -> optional(
+        text()
+          .transform(trimWhitespace, identity[String])
+          .verifying(
+            firstError(
+              maxLength(35, s"$prefix.error.middlename.length"),
+              regexp(Validation.nameRegex, s"$prefix.error.middlename.invalid")
+            )
+          )
       ).transform(emptyToNone, identity[Option[String]]),
-      "lastName" -> text(s"$prefix.error.lastname.required")
+      "lastName"   -> text(s"$prefix.error.lastname.required")
         .verifying(
           firstError(
             maxLength(35, s"$prefix.error.lastname.length"),
@@ -53,5 +55,6 @@ class NameFormProvider @Inject() extends Mappings {
           )
         )
     )(FullName.apply)(FullName.unapply)
-   )
- }
+  )
+
+}

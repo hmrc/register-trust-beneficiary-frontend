@@ -19,7 +19,7 @@ package queries
 import play.api.libs.json.JsPath
 import sections.beneficiaries.{Beneficiaries, TrustBeneficiaries}
 
-final case class RemoveTrustBeneficiaryQuery(index : Int) extends Settable[Boolean] {
+final case class RemoveTrustBeneficiaryQuery(index: Int) extends Settable[Boolean] {
 
-    override def path: JsPath = JsPath \ Beneficiaries \ TrustBeneficiaries \ index
+  override def path: JsPath = JsPath \ Beneficiaries \ TrustBeneficiaries \ index
 }

@@ -37,25 +37,32 @@ class AddressYesNoPageSpec extends PageBehaviours {
 
   "remove relevant Data when AddressYesNoPage is set to false" in {
     val index = 0
-    forAll(arbitrary[UserAnswers], arbitrary[String]) {
-      (initial, str) =>
-        val answers: UserAnswers = initial.set(AddressUKYesNoPage(index), true).value
-          .set(AddressUKPage(index), UKAddress(str, str, Some(str), Some(str), str)).value
-          .set(AddressInternationalPage(index), InternationalAddress(str, str, Some(str), str)).value
-          .set(PassportDetailsYesNoPage(index), true).value
-          .set(IDCardDetailsYesNoPage(index), true).value
-          .set(PassportDetailsPage(index), PassportOrIdCardDetails("a", "b", LocalDate.now)).value
-          .set(IDCardDetailsPage(index), PassportOrIdCardDetails("c", "d", LocalDate.now)).value
+    forAll(arbitrary[UserAnswers], arbitrary[String]) { (initial, str) =>
+      val answers: UserAnswers = initial
+        .set(AddressUKYesNoPage(index), true)
+        .value
+        .set(AddressUKPage(index), UKAddress(str, str, Some(str), Some(str), str))
+        .value
+        .set(AddressInternationalPage(index), InternationalAddress(str, str, Some(str), str))
+        .value
+        .set(PassportDetailsYesNoPage(index), true)
+        .value
+        .set(IDCardDetailsYesNoPage(index), true)
+        .value
+        .set(PassportDetailsPage(index), PassportOrIdCardDetails("a", "b", LocalDate.now))
+        .value
+        .set(IDCardDetailsPage(index), PassportOrIdCardDetails("c", "d", LocalDate.now))
+        .value
 
-        val result = answers.set(AddressYesNoPage(index), false).value
+      val result = answers.set(AddressYesNoPage(index), false).value
 
-        result.get(AddressUKYesNoPage(index)) mustNot be(defined)
-        result.get(AddressUKPage(index)) mustNot be(defined)
-        result.get(AddressInternationalPage(index)) mustNot be(defined)
-        result.get(PassportDetailsYesNoPage(index)) mustNot be(defined)
-        result.get(IDCardDetailsYesNoPage(index)) mustNot be(defined)
-        result.get(PassportDetailsPage(index)) mustNot be(defined)
-        result.get(IDCardDetailsPage(index)) mustNot be(defined)
+      result.get(AddressUKYesNoPage(index)) mustNot be(defined)
+      result.get(AddressUKPage(index)) mustNot be(defined)
+      result.get(AddressInternationalPage(index)) mustNot be(defined)
+      result.get(PassportDetailsYesNoPage(index)) mustNot be(defined)
+      result.get(IDCardDetailsYesNoPage(index)) mustNot be(defined)
+      result.get(PassportDetailsPage(index)) mustNot be(defined)
+      result.get(IDCardDetailsPage(index)) mustNot be(defined)
     }
   }
 

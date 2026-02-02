@@ -29,29 +29,31 @@ import utils.TrustEnvelope.TrustEnvelope
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class TrustsStoreConnector @Inject()(http: HttpClientV2, config: FrontendAppConfig) extends ConnectorErrorResponseHandler {
+class TrustsStoreConnector @Inject() (http: HttpClientV2, config: FrontendAppConfig)
+    extends ConnectorErrorResponseHandler {
 
   override val className: String = getClass.getSimpleName
 
   private val baseUrl: String = s"${config.trustsStoreUrl}/trusts-store"
 
-  def updateTaskStatus(identifier: String, taskStatus: TaskStatus)
-                      (implicit hc: HeaderCarrier, ec: ExecutionContext): TrustEnvelope[Boolean] = {
+  def updateTaskStatus(identifier: String, taskStatus: TaskStatus)(implicit
+    hc: HeaderCarrier,
+    ec: ExecutionContext
+  ): TrustEnvelope[Boolean] =
     EitherT {
       http
         .post(url"$baseUrl/register/tasks/update-beneficiaries/$identifier")
         .withBody(Json.toJson(taskStatus))
         .execute[HttpResponse]
-        .map(response => {
+        .map(response =>
           response.status match {
-            case OK => Right(true)
+            case OK     => Right(true)
             case status => Left(handleError(status, "updateTaskStatus"))
           }
-        })
-        .recover {
-          case ex => Left(handleError(ex, "updateTaskStatus"))
+        )
+        .recover { case ex =>
+          Left(handleError(ex, "updateTaskStatus"))
         }
     }
-  }
-}
 
+}

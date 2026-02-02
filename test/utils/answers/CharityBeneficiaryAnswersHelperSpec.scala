@@ -27,13 +27,13 @@ import viewmodels.{AnswerRow, AnswerSection}
 
 class CharityBeneficiaryAnswersHelperSpec extends SpecBase {
 
-  private val index: Int = 0
-  private val name: String = "Name"
-  private val amount: Int = 50
-  private val ukAddress: UKAddress = UKAddress("Line 1", "Line 2", Some("Line 3"), Some("Line 4"), "AB11AB")
-  private val country: String = "FR"
+  private val index: Int                         = 0
+  private val name: String                       = "Name"
+  private val amount: Int                        = 50
+  private val ukAddress: UKAddress               = UKAddress("Line 1", "Line 2", Some("Line 3"), Some("Line 4"), "AB11AB")
+  private val country: String                    = "FR"
   private val nonUkAddress: InternationalAddress = InternationalAddress("Line 1", "Line 2", Some("Line 3"), country)
-  private val canEdit: Boolean = true
+  private val canEdit: Boolean                   = true
 
   private val helper: CharityBeneficiaryAnswersHelper = injector.instanceOf[CharityBeneficiaryAnswersHelper]
 
@@ -49,16 +49,26 @@ class CharityBeneficiaryAnswersHelperSpec extends SpecBase {
     "return a charity beneficiary answer section" in {
 
       val userAnswers = emptyUserAnswers
-        .set(CharityNamePage(index), name).value
-        .set(AmountDiscretionYesNoPage(index), false).value
-        .set(HowMuchIncomePage(index), amount).value
-        .set(CountryOfResidenceYesNoPage(index), true).value
-        .set(CountryOfResidenceInTheUkYesNoPage(index), false).value
-        .set(CountryOfResidencePage(index), country).value
-        .set(AddressYesNoPage(index), true).value
-        .set(AddressInTheUkYesNoPage(index), true).value
-        .set(CharityAddressUKPage(index), ukAddress).value
-        .set(CharityInternationalAddressPage(index), nonUkAddress).value
+        .set(CharityNamePage(index), name)
+        .value
+        .set(AmountDiscretionYesNoPage(index), false)
+        .value
+        .set(HowMuchIncomePage(index), amount)
+        .value
+        .set(CountryOfResidenceYesNoPage(index), true)
+        .value
+        .set(CountryOfResidenceInTheUkYesNoPage(index), false)
+        .value
+        .set(CountryOfResidencePage(index), country)
+        .value
+        .set(AddressYesNoPage(index), true)
+        .value
+        .set(AddressInTheUkYesNoPage(index), true)
+        .value
+        .set(CharityAddressUKPage(index), ukAddress)
+        .value
+        .set(CharityInternationalAddressPage(index), nonUkAddress)
+        .value
 
       val result = helper.beneficiaries(userAnswers).get
 
@@ -67,20 +77,81 @@ class CharityBeneficiaryAnswersHelperSpec extends SpecBase {
           AnswerSection(
             headingKey = Some("answerPage.section.charityBeneficiary.subheading"),
             rows = Seq(
-              AnswerRow("charity.name.checkYourAnswersLabel", Html(name), Some(CharityNameController.onPageLoad(index, fakeDraftId).url), name, canEdit),
-              AnswerRow("charity.discretionYesNo.checkYourAnswersLabel", Html("No"), Some(AmountDiscretionYesNoController.onPageLoad(index, fakeDraftId).url), name, canEdit),
-              AnswerRow("charity.shareOfIncome.checkYourAnswersLabel", Html("50%"), Some(HowMuchIncomeController.onPageLoad(index, fakeDraftId).url), name, canEdit),
-              AnswerRow("charity.5mld.countryOfResidenceYesNo.checkYourAnswersLabel", Html("Yes"), Some(CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url), name, canEdit),
-              AnswerRow("charity.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel", Html("No"), Some(CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), name, canEdit),
-              AnswerRow("charity.5mld.countryOfResidence.checkYourAnswersLabel", Html("France"), Some(CountryOfResidenceController.onPageLoad(index, fakeDraftId).url), name, canEdit),
-              AnswerRow("charity.addressYesNo.checkYourAnswersLabel", Html("Yes"), Some(AddressYesNoController.onPageLoad(index, fakeDraftId).url), name, canEdit),
-              AnswerRow("charity.addressInTheUkYesNo.checkYourAnswersLabel", Html("Yes"), Some(AddressInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), name, canEdit),
-              AnswerRow("charity.ukAddress.checkYourAnswersLabel", Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"), Some(CharityAddressUKController.onPageLoad(index, fakeDraftId).url), name, canEdit),
-              AnswerRow("charity.internationalAddress.checkYourAnswersLabel", Html("Line 1<br />Line 2<br />Line 3<br />France"), Some(CharityInternationalAddressController.onPageLoad(index, fakeDraftId).url), name, canEdit)
+              AnswerRow(
+                "charity.name.checkYourAnswersLabel",
+                Html(name),
+                Some(CharityNameController.onPageLoad(index, fakeDraftId).url),
+                name,
+                canEdit
+              ),
+              AnswerRow(
+                "charity.discretionYesNo.checkYourAnswersLabel",
+                Html("No"),
+                Some(AmountDiscretionYesNoController.onPageLoad(index, fakeDraftId).url),
+                name,
+                canEdit
+              ),
+              AnswerRow(
+                "charity.shareOfIncome.checkYourAnswersLabel",
+                Html("50%"),
+                Some(HowMuchIncomeController.onPageLoad(index, fakeDraftId).url),
+                name,
+                canEdit
+              ),
+              AnswerRow(
+                "charity.5mld.countryOfResidenceYesNo.checkYourAnswersLabel",
+                Html("Yes"),
+                Some(CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url),
+                name,
+                canEdit
+              ),
+              AnswerRow(
+                "charity.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel",
+                Html("No"),
+                Some(CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId).url),
+                name,
+                canEdit
+              ),
+              AnswerRow(
+                "charity.5mld.countryOfResidence.checkYourAnswersLabel",
+                Html("France"),
+                Some(CountryOfResidenceController.onPageLoad(index, fakeDraftId).url),
+                name,
+                canEdit
+              ),
+              AnswerRow(
+                "charity.addressYesNo.checkYourAnswersLabel",
+                Html("Yes"),
+                Some(AddressYesNoController.onPageLoad(index, fakeDraftId).url),
+                name,
+                canEdit
+              ),
+              AnswerRow(
+                "charity.addressInTheUkYesNo.checkYourAnswersLabel",
+                Html("Yes"),
+                Some(AddressInTheUkYesNoController.onPageLoad(index, fakeDraftId).url),
+                name,
+                canEdit
+              ),
+              AnswerRow(
+                "charity.ukAddress.checkYourAnswersLabel",
+                Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"),
+                Some(CharityAddressUKController.onPageLoad(index, fakeDraftId).url),
+                name,
+                canEdit
+              ),
+              AnswerRow(
+                "charity.internationalAddress.checkYourAnswersLabel",
+                Html("Line 1<br />Line 2<br />Line 3<br />France"),
+                Some(CharityInternationalAddressController.onPageLoad(index, fakeDraftId).url),
+                name,
+                canEdit
+              )
             ),
             headingArgs = Seq(index + 1)
           )
         )
     }
   }
+
 }

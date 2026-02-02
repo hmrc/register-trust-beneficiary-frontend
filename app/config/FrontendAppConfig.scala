@@ -27,22 +27,26 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import java.time.LocalDate
 
 @Singleton
-class FrontendAppConfig @Inject() (val configuration: Configuration, contactFrontendConfig: ContactFrontendConfig,
-                                   servicesConfig: ServicesConfig) {
+class FrontendAppConfig @Inject() (
+  val configuration: Configuration,
+  contactFrontendConfig: ContactFrontendConfig,
+  servicesConfig: ServicesConfig
+) {
 
   final val ENGLISH = "en"
-  final val WELSH = "cy"
+  final val WELSH   = "cy"
 
-  val repositoryKey: String = "beneficiaries"
+  val repositoryKey: String         = "beneficiaries"
   val repositoryKeySettlors: String = "settlors"
 
-  lazy val authUrl: String = servicesConfig.baseUrl("auth")
-  lazy val loginUrl: String = configuration.get[String]("urls.login")
+  lazy val authUrl: String          = servicesConfig.baseUrl("auth")
+  lazy val loginUrl: String         = configuration.get[String]("urls.login")
   lazy val loginContinueUrl: String = configuration.get[String]("urls.loginContinue")
-  lazy val logoutUrl: String = configuration.get[String]("urls.logout")
-  val appName: String = configuration.get[String]("appName")
+  lazy val logoutUrl: String        = configuration.get[String]("urls.logout")
+  val appName: String               = configuration.get[String]("appName")
 
-  val betaFeedbackUrl = s"${contactFrontendConfig.baseUrl.get}/contact/beta-feedback?service=${contactFrontendConfig.serviceId.get}"
+  val betaFeedbackUrl =
+    s"${contactFrontendConfig.baseUrl.get}/contact/beta-feedback?service=${contactFrontendConfig.serviceId.get}"
 
   lazy val logoutAudit: Boolean =
     configuration.get[Boolean]("microservice.services.features.auditing.logout")
@@ -51,17 +55,18 @@ class FrontendAppConfig @Inject() (val configuration: Configuration, contactFron
 
   lazy val trustsStoreUrl: String = servicesConfig.baseUrl("trusts-store")
 
-  lazy val registrationStartUrl: String = configuration.get[String]("urls.registrationStart")
-  lazy val registrationProgressUrlTemplate: String = configuration.get[String]("urls.registrationProgress")
+  lazy val registrationStartUrl: String                = configuration.get[String]("urls.registrationStart")
+  lazy val registrationProgressUrlTemplate: String     = configuration.get[String]("urls.registrationProgress")
   def registrationProgressUrl(draftId: String): String = registrationProgressUrlTemplate.replace(":draftId", draftId)
 
-  lazy val maintainATrustFrontendUrl : String = configuration.get[String]("urls.maintainATrust")
-  lazy val createAgentServicesAccountUrl : String = configuration.get[String]("urls.createAgentServicesAccount")
+  lazy val maintainATrustFrontendUrl: String     = configuration.get[String]("urls.maintainATrust")
+  lazy val createAgentServicesAccountUrl: String = configuration.get[String]("urls.createAgentServicesAccount")
 
   lazy val languageTranslationEnabled: Boolean =
     configuration.get[Boolean]("microservice.services.features.welsh-translation")
 
   private def getInt(path: String): Int = configuration.get[Int](path)
+
   private def getDate(entry: String): LocalDate =
     LocalDate.of(
       getInt(s"dates.$entry.year"),
@@ -69,14 +74,14 @@ class FrontendAppConfig @Inject() (val configuration: Configuration, contactFron
       getInt(s"dates.$entry.day")
     )
 
-  lazy val minDate: LocalDate = getDate("minimum")
+  lazy val minDate: LocalDate         = getDate("minimum")
   lazy val maxPassportDate: LocalDate = getDate("maximumPassport")
 
-  lazy val locationCanonicalList: String = configuration.get[String]("location.canonical.list.all")
+  lazy val locationCanonicalList: String   = configuration.get[String]("location.canonical.list.all")
   lazy val locationCanonicalListCY: String = configuration.get[String]("location.canonical.list.allCY")
 
   lazy val countdownLength: Int = configuration.get[Int]("timeout.countdown")
-  lazy val timeoutLength: Int = configuration.get[Int]("timeout.length")
+  lazy val timeoutLength: Int   = configuration.get[Int]("timeout.length")
 
   def languageMap: Map[String, Lang] = Map(
     "english" -> Lang(ENGLISH),
@@ -89,7 +94,7 @@ class FrontendAppConfig @Inject() (val configuration: Configuration, contactFron
   def helplineUrl(implicit messages: Messages): String = {
     val path = messages.lang.code match {
       case WELSH => "urls.welshHelpline"
-      case _ => "urls.trustsHelpline"
+      case _     => "urls.trustsHelpline"
     }
 
     configuration.get[String](path)

@@ -26,8 +26,10 @@ import utils.Session
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DraftIdDataRetrievalActionProviderImpl @Inject()(registrationsRepository: RegistrationsRepository, executionContext: ExecutionContext)
-  extends DraftIdRetrievalActionProvider {
+class DraftIdDataRetrievalActionProviderImpl @Inject() (
+  registrationsRepository: RegistrationsRepository,
+  executionContext: ExecutionContext
+) extends DraftIdRetrievalActionProvider {
 
   def apply(draftId: String): DraftIdDataRetrievalAction =
     new DraftIdDataRetrievalAction(draftId, registrationsRepository, executionContext)
@@ -36,25 +38,30 @@ class DraftIdDataRetrievalActionProviderImpl @Inject()(registrationsRepository: 
 
 trait DraftIdRetrievalActionProvider {
 
-  def apply(draftId : String) : DraftIdDataRetrievalAction
+  def apply(draftId: String): DraftIdDataRetrievalAction
 
 }
 
 class DraftIdDataRetrievalAction(
-                                  draftId : String,
-                                  registrationsRepository: RegistrationsRepository,
-                                  implicit protected val executionContext: ExecutionContext
-                                )
-  extends ActionTransformer[IdentifierRequest, OptionalRegistrationDataRequest] {
+  draftId: String,
+  registrationsRepository: RegistrationsRepository,
+  implicit protected val executionContext: ExecutionContext
+) extends ActionTransformer[IdentifierRequest, OptionalRegistrationDataRequest] {
 
   override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalRegistrationDataRequest[A]] = {
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
-    registrationsRepository.get(draftId).value.map {
-      eitherResult =>
-        val optionalUserAnswers = eitherResult.toOption.flatten
-        OptionalRegistrationDataRequest(request.request, request.identifier, Session.id(hc), optionalUserAnswers, request.affinityGroup,
-          request.enrolments, request.agentARN)
+    registrationsRepository.get(draftId).value.map { eitherResult =>
+      val optionalUserAnswers = eitherResult.toOption.flatten
+      OptionalRegistrationDataRequest(
+        request.request,
+        request.identifier,
+        Session.id(hc),
+        optionalUserAnswers,
+        request.affinityGroup,
+        request.enrolments,
+        request.agentARN
+      )
     }
   }
 

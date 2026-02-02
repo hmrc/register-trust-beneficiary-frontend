@@ -39,12 +39,13 @@ import scala.concurrent.Future
 
 class AddressInternationalControllerSpec extends SpecBase {
 
-  private val formProvider = new InternationalAddressFormProvider()
+  private val formProvider                     = new InternationalAddressFormProvider()
   private val form: Form[InternationalAddress] = formProvider()
-  private val index = 0
-  private val name = "Name"
+  private val index                            = 0
+  private val name                             = "Name"
 
-  private lazy val addressInternationalRoute: String = routes.AddressInternationalController.onPageLoad(index, fakeDraftId).url
+  private lazy val addressInternationalRoute: String =
+    routes.AddressInternationalController.onPageLoad(index, fakeDraftId).url
 
   "International Address Controller" must {
 
@@ -72,8 +73,11 @@ class AddressInternationalControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index), name).value
-        .set(AddressInternationalPage(index), InternationalAddress("line 1", "line 2", Some("line 3"), "country")).value
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(index), name)
+        .value
+        .set(AddressInternationalPage(index), InternationalAddress("line 1", "line 2", Some("line 3"), "country"))
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -93,21 +97,26 @@ class AddressInternationalControllerSpec extends SpecBase {
           countryOptions,
           index,
           fakeDraftId,
-          name)(request, messages).toString
+          name
+        )(request, messages).toString
 
       application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index), name).value
-        .set(AddressInternationalPage(index), InternationalAddress("line 1", "line 2", Some("line 3"), "country")).value
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(index), name)
+        .value
+        .set(AddressInternationalPage(index), InternationalAddress("line 1", "line 2", Some("line 3"), "country"))
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, addressInternationalRoute)
@@ -124,14 +133,18 @@ class AddressInternationalControllerSpec extends SpecBase {
 
     "return an Internal Server Error when setting the user answers goes wrong" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index), name).value
-        .set(AddressInternationalPage(index), InternationalAddress("line 1", "line 2", Some("line 3"), "country")).value
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(index), name)
+        .value
+        .set(AddressInternationalPage(index), InternationalAddress("line 1", "line 2", Some("line 3"), "country"))
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, addressInternationalRoute)
@@ -206,4 +219,5 @@ class AddressInternationalControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

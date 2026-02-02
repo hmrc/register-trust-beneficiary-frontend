@@ -25,8 +25,8 @@ import views.html.register.beneficiaries.charityortrust.trust.ShareOfIncomeView
 class ShareOfIncomeViewSpec extends IntViewBehaviours {
 
   val messageKeyPrefix = "trustBeneficiaryShareOfIncome"
-  val index = 0
-  val name = "First Last"
+  val index            = 0
+  val name             = "First Last"
 
   val form: Form[Int] = new IncomePercentageFormProvider().withPrefix(messageKeyPrefix)
 
@@ -45,4 +45,5 @@ class ShareOfIncomeViewSpec extends IntViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

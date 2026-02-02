@@ -21,14 +21,14 @@ import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.beneficiaries.{Beneficiaries, IndividualBeneficiaries}
 
-final case class IDCardDetailsPage(index : Int) extends QuestionPage[PassportOrIdCardDetails] {
+final case class IDCardDetailsPage(index: Int) extends QuestionPage[PassportOrIdCardDetails] {
 
-  override def path: JsPath = JsPath \  Beneficiaries \ IndividualBeneficiaries \ index \ toString
+  override def path: JsPath = JsPath \ Beneficiaries \ IndividualBeneficiaries \ index \ toString
 
   override def toString: String = "idCardDetails"
 }
 
 object IDCardDetailsPage {
-  val key = "idCardDetails"
+  val key         = "idCardDetails"
   val idNumberKey = "cardNumber"
 }

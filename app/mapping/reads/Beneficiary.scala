@@ -21,12 +21,13 @@ import models.core.pages.{InternationalAddress, UKAddress}
 import models.{AddressType, IdentificationOrgType}
 
 trait Beneficiary {
-  def buildValue[A, B](o1: Option[A], o2: Option[A])
-                      (build: A => Option[B]): Option[B] = (o1, o2) match {
+
+  def buildValue[A, B](o1: Option[A], o2: Option[A])(build: A => Option[B]): Option[B] = (o1, o2) match {
     case (Some(v), _) => build(v)
     case (_, Some(v)) => build(v)
-    case _ => None
+    case _            => None
   }
+
 }
 
 trait BeneficiaryWithAddress extends Beneficiary {
@@ -35,11 +36,14 @@ trait BeneficiaryWithAddress extends Beneficiary {
 
   def ukOrInternationalAddress: Option[AddressType] =
     buildValue(ukAddress, internationalAddress)(buildAddress)
+
 }
 
 trait OrgBeneficiaryWithAddress extends BeneficiaryWithAddress {
+
   def identification: Option[IdentificationOrgType] = ukOrInternationalAddress match {
     case address @ Some(_) => Some(IdentificationOrgType(utr = None, address = address))
-    case _ => None
+    case _                 => None
   }
+
 }

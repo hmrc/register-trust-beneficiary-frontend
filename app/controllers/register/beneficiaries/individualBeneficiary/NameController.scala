@@ -18,7 +18,9 @@ package controllers.register.beneficiaries.individualBeneficiary
 
 import cats.data.EitherT
 import config.annotations.IndividualBeneficiary
-import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
+import controllers.actions.register.{
+  DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction
+}
 import forms.NameFormProvider
 import navigation.Navigator
 import pages.register.beneficiaries.individual.NamePage
@@ -34,18 +36,19 @@ import views.html.register.beneficiaries.individualBeneficiary.NameView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class NameController @Inject()(
-                                override val messagesApi: MessagesApi,
-                                registrationsRepository: RegistrationsRepository,
-                                @IndividualBeneficiary navigator: Navigator,
-                                identify: RegistrationIdentifierAction,
-                                getData: DraftIdRetrievalActionProvider,
-                                requireData: RegistrationDataRequiredAction,
-                                formProvider: NameFormProvider,
-                                val controllerComponents: MessagesControllerComponents,
-                                view: NameView,
-                                technicalErrorView: TechnicalErrorView
-                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class NameController @Inject() (
+  override val messagesApi: MessagesApi,
+  registrationsRepository: RegistrationsRepository,
+  @IndividualBeneficiary navigator: Navigator,
+  identify: RegistrationIdentifierAction,
+  getData: DraftIdRetrievalActionProvider,
+  requireData: RegistrationDataRequiredAction,
+  formProvider: NameFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: NameView,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private val className = getClass.getSimpleName
 
@@ -53,38 +56,35 @@ class NameController @Inject()(
 
   private val form = formProvider.withPrefix("individualBeneficiaryName")
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(draftId) {
-    implicit request =>
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(draftId) { implicit request =>
+    val preparedForm = request.userAnswers.get(NamePage(index)) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(NamePage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, draftId, index))
+    Ok(view(preparedForm, draftId, index))
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(draftId).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index))),
-
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(draftId).async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId, index))),
         value => {
           val result = for {
-            updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(NamePage(index), value)))
-            _ <- registrationsRepository.set(updatedAnswers)
+            updatedAnswers  <- EitherT(Future.successful(request.userAnswers.set(NamePage(index), value)))
+            _               <- registrationsRepository.set(updatedAnswers)
             settlorsAnswers <- registrationsRepository.getSettlorsAnswers(draftId)
           } yield Redirect(navigator.nextPage(NamePage(index), draftId, settlorsAnswers getOrElse updatedAnswers))
 
           result.value.map {
             case Right(call) => call
-            case Left(_) =>
+            case Left(_)     =>
               logger.warn(s"[$className][onSubmit][Session ID: ${request.sessionId}] Error while storing user answers")
               InternalServerError(technicalErrorView())
           }
         }
       )
   }
+
 }

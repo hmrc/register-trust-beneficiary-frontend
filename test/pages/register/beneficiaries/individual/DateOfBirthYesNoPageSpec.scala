@@ -33,14 +33,12 @@ class DateOfBirthYesNoPageSpec extends PageBehaviours {
     beRemovable[Boolean](DateOfBirthYesNoPage(0))
   }
 
+  "remove IndividualBeneficiaryDateOfBirth when IndividualBeneficiaryDateOfBirthYesNoPage is set to false" in
+    forAll(arbitrary[UserAnswers]) { initial =>
+      val answers: UserAnswers = initial.set(DateOfBirthPage(0), LocalDate.now).value
+      val result               = answers.set(DateOfBirthYesNoPage(0), false).value
 
-  "remove IndividualBeneficiaryDateOfBirth when IndividualBeneficiaryDateOfBirthYesNoPage is set to false" in {
-    forAll(arbitrary[UserAnswers]) {
-      initial =>
-        val answers: UserAnswers = initial.set(DateOfBirthPage(0), LocalDate.now).value
-        val result = answers.set(DateOfBirthYesNoPage(0), false).value
-
-        result.get(DateOfBirthPage(0)) mustNot be(defined)
+      result.get(DateOfBirthPage(0)) mustNot be(defined)
     }
-  }
+
 }

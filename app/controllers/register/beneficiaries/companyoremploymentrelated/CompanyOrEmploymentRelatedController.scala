@@ -34,16 +34,17 @@ import views.html.register.beneficiaries.companyoremploymentrelated.CompanyOrEmp
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CompanyOrEmploymentRelatedController @Inject()(
-                                                      override val messagesApi: MessagesApi,
-                                                      standardActionSets: StandardActionSets,
-                                                      navigator: Navigator,
-                                                      val controllerComponents: MessagesControllerComponents,
-                                                      view: CompanyOrEmploymentRelatedView,
-                                                      formProvider: CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider,
-                                                      repository: RegistrationsRepository,
-                                                      technicalErrorView: TechnicalErrorView
-                                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class CompanyOrEmploymentRelatedController @Inject() (
+  override val messagesApi: MessagesApi,
+  standardActionSets: StandardActionSets,
+  navigator: Navigator,
+  val controllerComponents: MessagesControllerComponents,
+  view: CompanyOrEmploymentRelatedView,
+  formProvider: CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider,
+  repository: RegistrationsRepository,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private val className = getClass.getSimpleName
 
@@ -51,35 +52,36 @@ class CompanyOrEmploymentRelatedController @Inject()(
 
   def onPageLoad(draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId) {
     implicit request =>
-
       val preparedForm = request.userAnswers.get(CompanyOrEmploymentRelatedPage) match {
         case Some(value) => form.fill(value)
-        case None => form
+        case None        => form
       }
 
       Ok(view(preparedForm, draftId))
   }
 
-  def onSubmit(draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).async {
-    implicit request =>
+  def onSubmit(draftId: String): Action[AnyContent] =
+    standardActionSets.identifiedUserWithData(draftId).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, draftId))),
+          value => {
+            val result = for {
+              updatedAnswers <-
+                EitherT(Future.successful(request.userAnswers.set(CompanyOrEmploymentRelatedPage, value)))
+              _              <- repository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(CompanyOrEmploymentRelatedPage, draftId, updatedAnswers))
 
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, draftId))),
-
-        value => {
-          val result = for {
-            updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(CompanyOrEmploymentRelatedPage, value)))
-            _ <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CompanyOrEmploymentRelatedPage, draftId, updatedAnswers))
-
-          result.value.map {
-            case Right(call) => call
-            case Left(_) =>
-              logger.warn(s"[$className][onSubmit][Session ID: ${request.sessionId}] Error while storing user answers")
-              InternalServerError(technicalErrorView())
+            result.value.map {
+              case Right(call) => call
+              case Left(_)     =>
+                logger
+                  .warn(s"[$className][onSubmit][Session ID: ${request.sessionId}] Error while storing user answers")
+                InternalServerError(technicalErrorView())
+            }
           }
-        }
-      )
-  }
+        )
+    }
+
 }

@@ -28,15 +28,16 @@ import viewmodels.{AnswerRow, AnswerSection}
 
 class EmploymentRelatedBeneficiaryAnswersHelperSpec extends SpecBase {
 
-  private val index: Int = 0
-  private val name: String = "Name"
-  private val ukAddress: UKAddress = UKAddress("Line 1", "Line 2", Some("Line 3"), Some("Line 4"), "AB11AB")
-  private val country: String = "FR"
+  private val index: Int                         = 0
+  private val name: String                       = "Name"
+  private val ukAddress: UKAddress               = UKAddress("Line 1", "Line 2", Some("Line 3"), Some("Line 4"), "AB11AB")
+  private val country: String                    = "FR"
   private val nonUkAddress: InternationalAddress = InternationalAddress("Line 1", "Line 2", Some("Line 3"), country)
-  private val description: Description = Description("Description", None, None, None, None)
-  private val canEdit: Boolean = true
+  private val description: Description           = Description("Description", None, None, None, None)
+  private val canEdit: Boolean                   = true
 
-  private val helper: EmploymentRelatedBeneficiaryAnswersHelper = injector.instanceOf[EmploymentRelatedBeneficiaryAnswersHelper]
+  private val helper: EmploymentRelatedBeneficiaryAnswersHelper =
+    injector.instanceOf[EmploymentRelatedBeneficiaryAnswersHelper]
 
   "Employment-related Beneficiary answers helper" must {
 
@@ -50,16 +51,26 @@ class EmploymentRelatedBeneficiaryAnswersHelperSpec extends SpecBase {
     "return an employment-related beneficiary answer section" in {
 
       val userAnswers = emptyUserAnswers
-        .set(LargeBeneficiaryNamePage(index), name).value
-        .set(CountryOfResidenceYesNoPage(index), true).value
-        .set(CountryOfResidenceInTheUkYesNoPage(index), false).value
-        .set(CountryOfResidencePage(index), country).value
-        .set(LargeBeneficiaryAddressYesNoPage(index), true).value
-        .set(LargeBeneficiaryAddressUKYesNoPage(index), true).value
-        .set(LargeBeneficiaryAddressPage(index), ukAddress).value
-        .set(LargeBeneficiaryAddressInternationalPage(index), nonUkAddress).value
-        .set(LargeBeneficiaryDescriptionPage(index), description).value
-        .set(LargeBeneficiaryNumberOfBeneficiariesPage(index), HowManyBeneficiaries.Over201).value
+        .set(LargeBeneficiaryNamePage(index), name)
+        .value
+        .set(CountryOfResidenceYesNoPage(index), true)
+        .value
+        .set(CountryOfResidenceInTheUkYesNoPage(index), false)
+        .value
+        .set(CountryOfResidencePage(index), country)
+        .value
+        .set(LargeBeneficiaryAddressYesNoPage(index), true)
+        .value
+        .set(LargeBeneficiaryAddressUKYesNoPage(index), true)
+        .value
+        .set(LargeBeneficiaryAddressPage(index), ukAddress)
+        .value
+        .set(LargeBeneficiaryAddressInternationalPage(index), nonUkAddress)
+        .value
+        .set(LargeBeneficiaryDescriptionPage(index), description)
+        .value
+        .set(LargeBeneficiaryNumberOfBeneficiariesPage(index), HowManyBeneficiaries.Over201)
+        .value
 
       val result = helper.beneficiaries(userAnswers).get
 
@@ -68,20 +79,81 @@ class EmploymentRelatedBeneficiaryAnswersHelperSpec extends SpecBase {
           AnswerSection(
             headingKey = Some("answerPage.section.largeBeneficiary.subheading"),
             rows = Seq(
-              AnswerRow("employmentRelatedBeneficiary.name.checkYourAnswersLabel", Html(name), Some(NameController.onPageLoad(index, fakeDraftId).url), name, canEdit),
-              AnswerRow("employmentRelatedBeneficiary.5mld.countryOfResidenceYesNo.checkYourAnswersLabel", Html("Yes"), Some(CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url), name, canEdit),
-              AnswerRow("employmentRelatedBeneficiary.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel", Html("No"), Some(CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), name, canEdit),
-              AnswerRow("employmentRelatedBeneficiary.5mld.countryOfResidence.checkYourAnswersLabel", Html("France"), Some(CountryOfResidenceController.onPageLoad(index, fakeDraftId).url), name, canEdit),
-              AnswerRow("employmentRelatedBeneficiary.addressYesNo.checkYourAnswersLabel", Html("Yes"), Some(AddressYesNoController.onPageLoad(index, fakeDraftId).url), name, canEdit),
-              AnswerRow("employmentRelatedBeneficiary.addressUkYesNo.checkYourAnswersLabel", Html("Yes"), Some(AddressUkYesNoController.onPageLoad(index, fakeDraftId).url), name, canEdit),
-              AnswerRow("employmentRelatedBeneficiary.ukAddress.checkYourAnswersLabel", Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"), Some(UkAddressController.onPageLoad(index, fakeDraftId).url), name, canEdit),
-              AnswerRow("employmentRelatedBeneficiary.nonUkAddress.checkYourAnswersLabel", Html("Line 1<br />Line 2<br />Line 3<br />France"), Some(NonUkAddressController.onPageLoad(index, fakeDraftId).url), name, canEdit),
-              AnswerRow("employmentRelatedBeneficiary.description.checkYourAnswersLabel", Html("Description"), Some(DescriptionController.onPageLoad(index, fakeDraftId).url), "", canEdit),
-              AnswerRow("employmentRelatedBeneficiary.numberOfBeneficiaries.checkYourAnswersLabel", Html("201 to 500"), Some(NumberOfBeneficiariesController.onPageLoad(index, fakeDraftId).url), "", canEdit)
+              AnswerRow(
+                "employmentRelatedBeneficiary.name.checkYourAnswersLabel",
+                Html(name),
+                Some(NameController.onPageLoad(index, fakeDraftId).url),
+                name,
+                canEdit
+              ),
+              AnswerRow(
+                "employmentRelatedBeneficiary.5mld.countryOfResidenceYesNo.checkYourAnswersLabel",
+                Html("Yes"),
+                Some(CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url),
+                name,
+                canEdit
+              ),
+              AnswerRow(
+                "employmentRelatedBeneficiary.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel",
+                Html("No"),
+                Some(CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId).url),
+                name,
+                canEdit
+              ),
+              AnswerRow(
+                "employmentRelatedBeneficiary.5mld.countryOfResidence.checkYourAnswersLabel",
+                Html("France"),
+                Some(CountryOfResidenceController.onPageLoad(index, fakeDraftId).url),
+                name,
+                canEdit
+              ),
+              AnswerRow(
+                "employmentRelatedBeneficiary.addressYesNo.checkYourAnswersLabel",
+                Html("Yes"),
+                Some(AddressYesNoController.onPageLoad(index, fakeDraftId).url),
+                name,
+                canEdit
+              ),
+              AnswerRow(
+                "employmentRelatedBeneficiary.addressUkYesNo.checkYourAnswersLabel",
+                Html("Yes"),
+                Some(AddressUkYesNoController.onPageLoad(index, fakeDraftId).url),
+                name,
+                canEdit
+              ),
+              AnswerRow(
+                "employmentRelatedBeneficiary.ukAddress.checkYourAnswersLabel",
+                Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"),
+                Some(UkAddressController.onPageLoad(index, fakeDraftId).url),
+                name,
+                canEdit
+              ),
+              AnswerRow(
+                "employmentRelatedBeneficiary.nonUkAddress.checkYourAnswersLabel",
+                Html("Line 1<br />Line 2<br />Line 3<br />France"),
+                Some(NonUkAddressController.onPageLoad(index, fakeDraftId).url),
+                name,
+                canEdit
+              ),
+              AnswerRow(
+                "employmentRelatedBeneficiary.description.checkYourAnswersLabel",
+                Html("Description"),
+                Some(DescriptionController.onPageLoad(index, fakeDraftId).url),
+                "",
+                canEdit
+              ),
+              AnswerRow(
+                "employmentRelatedBeneficiary.numberOfBeneficiaries.checkYourAnswersLabel",
+                Html("201 to 500"),
+                Some(NumberOfBeneficiariesController.onPageLoad(index, fakeDraftId).url),
+                "",
+                canEdit
+              )
             ),
             headingArgs = Seq(index + 1)
           )
         )
     }
   }
+
 }
