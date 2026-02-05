@@ -35,43 +35,48 @@ class NationalInsuranceYesNoPageSpec extends PageBehaviours {
     beRemovable[Boolean](NationalInsuranceYesNoPage(0))
   }
 
-
   "remove NationalInsuranceNumberPage when NationalInsuranceYesNoPage is set to false" in {
     val index = 0
-    forAll(arbitrary[UserAnswers], arbitrary[String]) {
-      (initial, str) =>
-        val answers: UserAnswers = initial.set(NationalInsuranceNumberPage(index), str).value
-        val result = answers.set(NationalInsuranceYesNoPage(index), false).value
+    forAll(arbitrary[UserAnswers], arbitrary[String]) { (initial, str) =>
+      val answers: UserAnswers = initial.set(NationalInsuranceNumberPage(index), str).value
+      val result               = answers.set(NationalInsuranceYesNoPage(index), false).value
 
-        result.get(NationalInsuranceNumberPage(index)) mustNot be(defined)
+      result.get(NationalInsuranceNumberPage(index)) mustNot be(defined)
     }
   }
 
   "remove relevant Data when NationalInsuranceYesNoPage is set to true" in {
     val index = 0
-    forAll(arbitrary[UserAnswers], arbitrary[String]) {
-      (initial, str) =>
-        val answers: UserAnswers = initial.set(AddressYesNoPage(index), true).value
-          .set(AddressUKYesNoPage(index), true).value
-          .set(AddressUKPage(index), UKAddress(str, str, Some(str), Some(str), str)).value
-          .set(AddressInternationalPage(index), InternationalAddress(str, str, Some(str), str)).value
-          .set(PassportDetailsYesNoPage(index), true).value
-          .set(IDCardDetailsYesNoPage(index), true).value
-          .set(PassportDetailsPage(index), PassportOrIdCardDetails("a", "b", LocalDate.now)).value
-          .set(IDCardDetailsPage(index), PassportOrIdCardDetails("c", "d", LocalDate.now)).value
+    forAll(arbitrary[UserAnswers], arbitrary[String]) { (initial, str) =>
+      val answers: UserAnswers = initial
+        .set(AddressYesNoPage(index), true)
+        .value
+        .set(AddressUKYesNoPage(index), true)
+        .value
+        .set(AddressUKPage(index), UKAddress(str, str, Some(str), Some(str), str))
+        .value
+        .set(AddressInternationalPage(index), InternationalAddress(str, str, Some(str), str))
+        .value
+        .set(PassportDetailsYesNoPage(index), true)
+        .value
+        .set(IDCardDetailsYesNoPage(index), true)
+        .value
+        .set(PassportDetailsPage(index), PassportOrIdCardDetails("a", "b", LocalDate.now))
+        .value
+        .set(IDCardDetailsPage(index), PassportOrIdCardDetails("c", "d", LocalDate.now))
+        .value
 
-        val result = answers.set(NationalInsuranceYesNoPage(index), true).value
+      val result = answers.set(NationalInsuranceYesNoPage(index), true).value
 
-        result.get(AddressYesNoPage(index)) mustNot be(defined)
-        result.get(AddressUKYesNoPage(index)) mustNot be(defined)
-        result.get(AddressUKPage(index)) mustNot be(defined)
-        result.get(AddressInternationalPage(index)) mustNot be(defined)
-        result.get(PassportDetailsYesNoPage(index)) mustNot be(defined)
-        result.get(IDCardDetailsYesNoPage(index)) mustNot be(defined)
-        result.get(PassportDetailsPage(index)) mustNot be(defined)
-        result.get(IDCardDetailsPage(index)) mustNot be(defined)
+      result.get(AddressYesNoPage(index)) mustNot be(defined)
+      result.get(AddressUKYesNoPage(index)) mustNot be(defined)
+      result.get(AddressUKPage(index)) mustNot be(defined)
+      result.get(AddressInternationalPage(index)) mustNot be(defined)
+      result.get(PassportDetailsYesNoPage(index)) mustNot be(defined)
+      result.get(IDCardDetailsYesNoPage(index)) mustNot be(defined)
+      result.get(PassportDetailsPage(index)) mustNot be(defined)
+      result.get(IDCardDetailsPage(index)) mustNot be(defined)
     }
   }
-
 
 }

@@ -33,20 +33,22 @@ import views.html.register.beneficiaries.charityortrust.charity.CharityInternati
 
 class CharityInternationalAddressControllerSpec extends SpecBase {
 
-  private val formProvider = new InternationalAddressFormProvider()
+  private val formProvider                     = new InternationalAddressFormProvider()
   private val form: Form[InternationalAddress] = formProvider()
-  private val index: Int = 0
+  private val index: Int                       = 0
 
   private val charityName = "Test"
 
-  private lazy val charityInternationalAddressRoute: String = routes.CharityInternationalAddressController.onPageLoad(index, fakeDraftId).url
+  private lazy val charityInternationalAddressRoute: String =
+    routes.CharityInternationalAddressController.onPageLoad(index, fakeDraftId).url
 
   "CharityInternationalAddress Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(CharityNamePage(index), "Test").value
+        .set(CharityNamePage(index), "Test")
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -69,8 +71,11 @@ class CharityInternationalAddressControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
       val previousAnswer = InternationalAddress("line 1", "line 2", Some("line 3"), "country")
 
-      val userAnswers = emptyUserAnswers.set(CharityNamePage(index), "Test").value
-        .set(CharityInternationalAddressPage(index),  previousAnswer).value
+      val userAnswers = emptyUserAnswers
+        .set(CharityNamePage(index), "Test")
+        .value
+        .set(CharityInternationalAddressPage(index), previousAnswer)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -85,7 +90,10 @@ class CharityInternationalAddressControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(previousAnswer), countryOption.options(), fakeDraftId, index, charityName)(request, messages).toString
+        view(form.fill(previousAnswer), countryOption.options(), fakeDraftId, index, charityName)(
+          request,
+          messages
+        ).toString
 
       application.stop()
     }
@@ -93,17 +101,19 @@ class CharityInternationalAddressControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(CharityNamePage(index), "Test").value
+        .set(CharityNamePage(index), "Test")
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[CharityBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, charityInternationalAddressRoute)
-          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"),("country", "Spain"))
+          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"), ("country", "Spain"))
 
       val result = route(application, request).value
 
@@ -117,17 +127,19 @@ class CharityInternationalAddressControllerSpec extends SpecBase {
     "return an Internal Server Error when setting the user answers goes wrong" in {
 
       val userAnswers = emptyUserAnswers
-        .set(CharityNamePage(index), "Test").value
+        .set(CharityNamePage(index), "Test")
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[CharityBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, charityInternationalAddressRoute)
-          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"),("country", "Spain"))
+          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"), ("country", "Spain"))
 
       val result = route(application, request).value
 
@@ -144,7 +156,8 @@ class CharityInternationalAddressControllerSpec extends SpecBase {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(CharityNamePage(index), "Test").value
+        .set(CharityNamePage(index), "Test")
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -188,7 +201,7 @@ class CharityInternationalAddressControllerSpec extends SpecBase {
 
       val request =
         FakeRequest(POST, charityInternationalAddressRoute)
-          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"),("country", "Italy"))
+          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"), ("country", "Italy"))
 
       val result = route(application, request).value
 
@@ -200,4 +213,5 @@ class CharityInternationalAddressControllerSpec extends SpecBase {
     }
 
   }
+
 }

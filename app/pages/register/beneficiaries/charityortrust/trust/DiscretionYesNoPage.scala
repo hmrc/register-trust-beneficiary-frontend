@@ -28,12 +28,12 @@ final case class DiscretionYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
   override def toString: String = "discretionYesNo"
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Either[TrustErrors, UserAnswers] = {
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Either[TrustErrors, UserAnswers] =
     value match {
       case Some(true) =>
         userAnswers.remove(ShareOfIncomePage(index))
-      case _ =>
+      case _          =>
         super.cleanup(value, userAnswers)
     }
-  }
+
 }

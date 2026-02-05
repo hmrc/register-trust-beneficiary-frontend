@@ -32,9 +32,9 @@ import views.html.register.beneficiaries.charityortrust.trust.AddressUKView
 
 class AddressUKControllerSpec extends SpecBase {
 
-  private val formProvider = new UKAddressFormProvider()
+  private val formProvider          = new UKAddressFormProvider()
   private val form: Form[UKAddress] = formProvider()
-  private val index: Int = 0
+  private val index: Int            = 0
 
   private val name = "Name"
 
@@ -65,8 +65,10 @@ class AddressUKControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(AddressUKPage(index),  UKAddress("line 1", "line 2", Some("line 3"), Some("line 4"),"line 5")).value
-        .set(NamePage(index), name).value
+        .set(AddressUKPage(index), UKAddress("line 1", "line 2", Some("line 3"), Some("line 4"), "line 5"))
+        .value
+        .set(NamePage(index), name)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -79,7 +81,12 @@ class AddressUKControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(UKAddress("line 1","line 2", Some("line 3"), Some("line 4"),"line 5")), fakeDraftId, name, index)(request, messages).toString
+        view(
+          form.fill(UKAddress("line 1", "line 2", Some("line 3"), Some("line 4"), "line 5")),
+          fakeDraftId,
+          name,
+          index
+        )(request, messages).toString
 
       application.stop()
     }
@@ -92,11 +99,12 @@ class AddressUKControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, addressUKRoute)
-          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"),("postcode", "NE1 1ZZ"))
+          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"), ("postcode", "NE1 1ZZ"))
 
       val result = route(application, request).value
 
@@ -115,11 +123,12 @@ class AddressUKControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, addressUKRoute)
-          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"),("postcode", "NE1 1ZZ"))
+          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"), ("postcode", "NE1 1ZZ"))
 
       val result = route(application, request).value
 
@@ -177,7 +186,7 @@ class AddressUKControllerSpec extends SpecBase {
 
       val request =
         FakeRequest(POST, addressUKRoute)
-          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"),("postcode", "NE1 1ZZ"))
+          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"), ("postcode", "NE1 1ZZ"))
 
       val result = route(application, request).value
 
@@ -188,4 +197,5 @@ class AddressUKControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

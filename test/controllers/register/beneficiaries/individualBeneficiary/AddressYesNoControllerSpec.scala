@@ -32,12 +32,13 @@ import views.html.register.beneficiaries.individualBeneficiary.AddressYesNoView
 
 class AddressYesNoControllerSpec extends SpecBase {
 
-  private val formProvider = new YesNoFormProvider()
+  private val formProvider        = new YesNoFormProvider()
   private val form: Form[Boolean] = formProvider.withPrefix("individualBeneficiaryAddressYesNo")
-  private val index: Int = 0
-  private val name: FullName = FullName("first name", None, "Last name")
+  private val index: Int          = 0
+  private val name: FullName      = FullName("first name", None, "Last name")
 
-  private lazy val individualBeneficiaryAddressYesNoRoute: String = routes.AddressYesNoController.onPageLoad(index, fakeDraftId).url
+  private lazy val individualBeneficiaryAddressYesNoRoute: String =
+    routes.AddressYesNoController.onPageLoad(index, fakeDraftId).url
 
   "IndividualBeneficiaryAddressYesNo Controller" must {
 
@@ -64,8 +65,10 @@ class AddressYesNoControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(AddressYesNoPage(index), true).value
-        .set(NamePage(index),name).value
+        .set(AddressYesNoPage(index), true)
+        .value
+        .set(NamePage(index), name)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -86,13 +89,15 @@ class AddressYesNoControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), name).value
+        .set(NamePage(index), name)
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, individualBeneficiaryAddressYesNoRoute)
@@ -110,13 +115,15 @@ class AddressYesNoControllerSpec extends SpecBase {
     "return an Internal Server Error when setting the user answers goes wrong" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), name).value
+        .set(NamePage(index), name)
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, individualBeneficiaryAddressYesNoRoute)
@@ -190,4 +197,5 @@ class AddressYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

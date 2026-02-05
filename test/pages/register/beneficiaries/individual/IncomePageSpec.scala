@@ -18,7 +18,6 @@ package pages.register.beneficiaries.individual
 
 import pages.behaviours.PageBehaviours
 
-
 class IncomePageSpec extends PageBehaviours {
 
   "IndividualBeneficiaryIncomePage" must {
@@ -29,4 +28,5 @@ class IncomePageSpec extends PageBehaviours {
 
     beRemovable[Int](IncomePage(0))
   }
+
 }

@@ -24,11 +24,11 @@ import views.html.register.beneficiaries.other.DescriptionView
 
 class DescriptionViewSpec extends StringViewBehaviours {
 
-  private val index = 0
+  private val index            = 0
   private val messageKeyPrefix = "otherBeneficiary.description"
 
   override val form: Form[String] = new DescriptionFormProvider().withPrefix(messageKeyPrefix, 70)
-  private val view = viewFor[DescriptionView](Some(emptyUserAnswers))
+  private val view                = viewFor[DescriptionView](Some(emptyUserAnswers))
 
   "Description view" must {
 

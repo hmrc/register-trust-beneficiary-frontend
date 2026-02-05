@@ -26,8 +26,11 @@ import viewmodels.{AddRow, AddToRows}
 
 class AddABeneficiaryViewHelperSpec extends SpecBase {
 
-  private def changeInProgressCharityBeneficiaryRoute(index: Int): String = charityRts.CharityNameController.onPageLoad(index, draftId).url
-  private def changeCompleteCharityBeneficiaryRoute(index: Int): String = charityRts.CharityAnswersController.onPageLoad(index, draftId).url
+  private def changeInProgressCharityBeneficiaryRoute(index: Int): String =
+    charityRts.CharityNameController.onPageLoad(index, draftId).url
+
+  private def changeCompleteCharityBeneficiaryRoute(index: Int): String =
+    charityRts.CharityAnswersController.onPageLoad(index, draftId).url
 
   "Add a beneficiary view helper" when {
 
@@ -35,8 +38,8 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
 
     "charity beneficiary" must {
 
-      val name: String = "Name"
-      val label: String = "Named charity"
+      val name: String    = "Name"
+      val label: String   = "Named charity"
       val default: String = "No name added"
 
       "render a complete charity beneficiary" in {
@@ -44,10 +47,14 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
         val index: Int = 0
 
         val userAnswers = emptyUserAnswers
-          .set(CharityNamePage(index), name).value
-          .set(AmountDiscretionYesNoPage(index), true).value
-          .set(AddressYesNoPage(index), false).value
-          .set(CharityBeneficiaryStatus(index), Completed).value
+          .set(CharityNamePage(index), name)
+          .value
+          .set(AmountDiscretionYesNoPage(index), true)
+          .value
+          .set(AddressYesNoPage(index), false)
+          .value
+          .set(CharityBeneficiaryStatus(index), Completed)
+          .value
 
         helper(userAnswers).rows mustEqual AddToRows(
           inProgress = Nil,
@@ -69,8 +76,10 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
           val index: Int = 0
 
           val userAnswers = emptyUserAnswers
-            .set(CharityNamePage(index), name).value
-            .set(CharityBeneficiaryStatus(index), InProgress).value
+            .set(CharityNamePage(index), name)
+            .value
+            .set(CharityBeneficiaryStatus(index), InProgress)
+            .value
 
           helper(userAnswers).rows mustEqual AddToRows(
             inProgress = List(
@@ -90,7 +99,8 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
           val index: Int = 0
 
           val userAnswers = emptyUserAnswers
-            .set(CharityBeneficiaryStatus(index), InProgress).value
+            .set(CharityBeneficiaryStatus(index), InProgress)
+            .value
 
           helper(userAnswers).rows mustEqual AddToRows(
             inProgress = List(
@@ -113,20 +123,28 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
         val name3 = "Name 3"
 
         val userAnswers = emptyUserAnswers
-          .set(CharityNamePage(0), name1).value
-          .set(AmountDiscretionYesNoPage(0), true).value
-          .set(AddressYesNoPage(0), false).value
-          .set(CharityBeneficiaryStatus(0), Completed).value
-
-          .set(CharityNamePage(1), name2).value
-          .set(AmountDiscretionYesNoPage(1), true).value
-          .set(AddressYesNoPage(1), false).value
-          .set(CharityBeneficiaryStatus(1), Completed).value
-
-          .set(CharityNamePage(2), name3).value
-          .set(CharityBeneficiaryStatus(2), InProgress).value
-
-          .set(CharityBeneficiaryStatus(3), InProgress).value
+          .set(CharityNamePage(0), name1)
+          .value
+          .set(AmountDiscretionYesNoPage(0), true)
+          .value
+          .set(AddressYesNoPage(0), false)
+          .value
+          .set(CharityBeneficiaryStatus(0), Completed)
+          .value
+          .set(CharityNamePage(1), name2)
+          .value
+          .set(AmountDiscretionYesNoPage(1), true)
+          .value
+          .set(AddressYesNoPage(1), false)
+          .value
+          .set(CharityBeneficiaryStatus(1), Completed)
+          .value
+          .set(CharityNamePage(2), name3)
+          .value
+          .set(CharityBeneficiaryStatus(2), InProgress)
+          .value
+          .set(CharityBeneficiaryStatus(3), InProgress)
+          .value
 
         helper(userAnswers).rows mustEqual AddToRows(
           inProgress = List(

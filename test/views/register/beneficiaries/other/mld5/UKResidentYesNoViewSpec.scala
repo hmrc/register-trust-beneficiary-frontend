@@ -24,9 +24,9 @@ import views.html.register.beneficiaries.other.mld5.UKResidentYesNoView
 
 class UKResidentYesNoViewSpec extends YesNoViewBehaviours {
 
-  private val index = 0
+  private val index            = 0
   private val messageKeyPrefix = "otherBeneficiary.ukResidentYesNo"
-  private val description = "Other"
+  private val description      = "Other"
 
   override val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
@@ -45,4 +45,5 @@ class UKResidentYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

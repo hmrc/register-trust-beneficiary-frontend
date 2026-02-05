@@ -24,9 +24,9 @@ import views.html.register.beneficiaries.other.AddressYesNoView
 
 class AddressYesNoViewSpec extends YesNoViewBehaviours {
 
-  private val index = 0
+  private val index            = 0
   private val messageKeyPrefix = "otherBeneficiary.addressYesNo"
-  private val description = "Other"
+  private val description      = "Other"
 
   override val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
@@ -45,4 +45,5 @@ class AddressYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

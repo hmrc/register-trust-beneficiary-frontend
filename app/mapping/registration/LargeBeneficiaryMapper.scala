@@ -40,14 +40,13 @@ class LargeBeneficiaryMapper extends Mapper[LargeType, LargeBeneficiary] {
     countryOfResidence = beneficiary.countryOfResidence
   )
 
-  private def convertNumberOfBeneficiaries(numberOfBeneficiaries: HowManyBeneficiaries): String = {
+  private def convertNumberOfBeneficiaries(numberOfBeneficiaries: HowManyBeneficiaries): String =
     numberOfBeneficiaries match {
-      case HowManyBeneficiaries.Over1 => "1"
-      case HowManyBeneficiaries.Over101 => "101"
-      case HowManyBeneficiaries.Over201 => "201"
-      case HowManyBeneficiaries.Over501 => "501"
+      case HowManyBeneficiaries.Over1    => "1"
+      case HowManyBeneficiaries.Over101  => "101"
+      case HowManyBeneficiaries.Over201  => "201"
+      case HowManyBeneficiaries.Over501  => "501"
       case HowManyBeneficiaries.Over1001 => "1001"
     }
-  }
 
 }

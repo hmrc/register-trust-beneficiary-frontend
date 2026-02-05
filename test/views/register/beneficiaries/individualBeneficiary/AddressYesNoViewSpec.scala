@@ -26,17 +26,18 @@ import views.html.register.beneficiaries.individualBeneficiary.AddressYesNoView
 
 class AddressYesNoViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "individualBeneficiaryAddressYesNo"
-  val index = 0
+  val messageKeyPrefix   = "individualBeneficiaryAddressYesNo"
+  val index              = 0
   val fullName: FullName = FullName("First", None, "Last")
-  val name: String = fullName.toString
+  val name: String       = fullName.toString
 
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
   "IndividualBeneficiaryAddressYesNo view" must {
 
     val userAnswers = emptyUserAnswers
-      .set(NamePage(index), fullName).value
+      .set(NamePage(index), fullName)
+      .value
 
     val view = viewFor[AddressYesNoView](Some(userAnswers))
 
@@ -47,8 +48,9 @@ class AddressYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix,  None, Seq(fullName.toString))
+    behave like yesNoPage(form, applyView, messageKeyPrefix, None, Seq(fullName.toString))
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

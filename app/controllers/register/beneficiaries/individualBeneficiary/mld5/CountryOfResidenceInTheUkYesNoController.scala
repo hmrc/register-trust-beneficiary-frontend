@@ -35,54 +35,56 @@ import views.html.register.beneficiaries.individualBeneficiary.mld5.CountryOfRes
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CountryOfResidenceInTheUkYesNoController @Inject()(
-                                                          val controllerComponents: MessagesControllerComponents,
-                                                          @IndividualBeneficiary navigator: Navigator,
-                                                          standardActionSets: StandardActionSets,
-                                                          formProvider: YesNoFormProvider,
-                                                          view: CountryOfResidenceInTheUkYesNoView,
-                                                          repository: RegistrationsRepository,
-                                                          nameAction: NameRequiredAction,
-                                                          technicalErrorView: TechnicalErrorView
-                                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class CountryOfResidenceInTheUkYesNoController @Inject() (
+  val controllerComponents: MessagesControllerComponents,
+  @IndividualBeneficiary navigator: Navigator,
+  standardActionSets: StandardActionSets,
+  formProvider: YesNoFormProvider,
+  view: CountryOfResidenceInTheUkYesNoView,
+  repository: RegistrationsRepository,
+  nameAction: NameRequiredAction,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private val className = getClass.getSimpleName
 
   private val form: Form[Boolean] = formProvider.withPrefix("individualBeneficiary.5mld.countryOfResidenceInTheUkYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
-    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
-      implicit request =>
+    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) { implicit request =>
+      val preparedForm = request.userAnswers.get(CountryOfResidenceInTheUkYesNoPage(index)) match {
+        case None        => form
+        case Some(value) => form.fill(value)
+      }
 
-        val preparedForm = request.userAnswers.get(CountryOfResidenceInTheUkYesNoPage(index)) match {
-          case None => form
-          case Some(value) => form.fill(value)
-        }
-
-        Ok(view(preparedForm,  draftId , index, request.beneficiaryName))
+      Ok(view(preparedForm, draftId, index, request.beneficiaryName))
     }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
-    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
-      implicit request =>
-
-        form.bindFromRequest().fold(
+    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
           formWithErrors =>
-            Future.successful(BadRequest(view(formWithErrors, draftId , index, request.beneficiaryName))),
-
+            Future.successful(BadRequest(view(formWithErrors, draftId, index, request.beneficiaryName))),
           value => {
             val result = for {
-              updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(CountryOfResidenceInTheUkYesNoPage(index), value)))
-              _ <- repository.set(updatedAnswers)
+              updatedAnswers <-
+                EitherT(Future.successful(request.userAnswers.set(CountryOfResidenceInTheUkYesNoPage(index), value)))
+              _              <- repository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId, updatedAnswers))
 
             result.value.map {
               case Right(call) => call
-              case Left(_) =>
-                logger.warn(s"[$className][onSubmit][Session ID: ${request.request.sessionId}] Error while storing user answers")
+              case Left(_)     =>
+                logger.warn(
+                  s"[$className][onSubmit][Session ID: ${request.request.sessionId}] Error while storing user answers"
+                )
                 InternalServerError(technicalErrorView())
             }
           }
         )
     }
+
 }

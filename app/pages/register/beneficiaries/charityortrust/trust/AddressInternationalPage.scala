@@ -23,7 +23,7 @@ import sections.beneficiaries.{Beneficiaries, TrustBeneficiaries}
 
 final case class AddressInternationalPage(index: Int) extends QuestionPage[InternationalAddress] {
 
-  override def path: JsPath = JsPath \  Beneficiaries \ TrustBeneficiaries \ index \ toString
+  override def path: JsPath = JsPath \ Beneficiaries \ TrustBeneficiaries \ index \ toString
 
   override def toString: String = "internationalAddress"
 }

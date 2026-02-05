@@ -29,8 +29,12 @@ import views.html.register.beneficiaries.companyoremploymentrelated.CompanyOrEmp
 
 class CompanyOrEmploymentRelatedControllerSpec extends SpecBase {
 
-  private val form: Form[CompanyOrEmploymentRelatedToAdd] = new CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider()()
-  private lazy val companyOrEmploymentRelatedRoute: String = routes.CompanyOrEmploymentRelatedController.onPageLoad(draftId).url
+  private val form: Form[CompanyOrEmploymentRelatedToAdd] =
+    new CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider()()
+
+  private lazy val companyOrEmploymentRelatedRoute: String =
+    routes.CompanyOrEmploymentRelatedController.onPageLoad(draftId).url
+
   private val validAnswer = CompanyOrEmploymentRelatedToAdd.Company
 
   "CompanyOrEmploymentRelatedController Controller" must {
@@ -116,7 +120,7 @@ class CompanyOrEmploymentRelatedControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(POST, companyOrEmploymentRelatedRoute).withFormUrlEncodedBody(("value" -> ""))
+      val request = FakeRequest(POST, companyOrEmploymentRelatedRoute).withFormUrlEncodedBody("value" -> "")
 
       val boundForm = form.bind(Map("value" -> ""))
 
@@ -162,4 +166,5 @@ class CompanyOrEmploymentRelatedControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

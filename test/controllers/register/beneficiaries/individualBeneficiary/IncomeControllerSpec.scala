@@ -32,11 +32,11 @@ import views.html.register.beneficiaries.individualBeneficiary.IncomeView
 
 class IncomeControllerSpec extends SpecBase {
 
-  private val formProvider = new IncomePercentageFormProvider()
+  private val formProvider    = new IncomePercentageFormProvider()
   private val form: Form[Int] = formProvider.withPrefix("individualBeneficiaryIncome")
-  private val index: Int = 0
+  private val index: Int      = 0
 
-  private val name: FullName = FullName("first name", None, "Last name")
+  private val name: FullName   = FullName("first name", None, "Last name")
   private val validAnswer: Int = 60
 
   private lazy val individualBeneficiaryIncomeRoute: String = routes.IncomeController.onPageLoad(index, fakeDraftId).url
@@ -46,7 +46,8 @@ class IncomeControllerSpec extends SpecBase {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(0), name).value
+        .set(NamePage(0), name)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -67,8 +68,10 @@ class IncomeControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(IncomePage(index), validAnswer).value
-        .set(NamePage(index),name).value
+        .set(IncomePage(index), validAnswer)
+        .value
+        .set(NamePage(index), name)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -89,13 +92,15 @@ class IncomeControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(0), name).value
+        .set(NamePage(0), name)
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, individualBeneficiaryIncomeRoute)
@@ -112,13 +117,15 @@ class IncomeControllerSpec extends SpecBase {
     "return an Internal Server Error when setting the user answers goes wrong" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(0), name).value
+        .set(NamePage(0), name)
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, individualBeneficiaryIncomeRoute)
@@ -139,7 +146,8 @@ class IncomeControllerSpec extends SpecBase {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(0), name).value
+        .set(NamePage(0), name)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -193,4 +201,5 @@ class IncomeControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

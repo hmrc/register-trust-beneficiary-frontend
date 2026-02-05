@@ -40,8 +40,9 @@ case object CharityOrTrustPage extends QuestionPage[CharityOrTrust] with TypeOfB
 
     value match {
       case Some(Charity) => cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == CharityBeneficiaries.path))
-      case Some(Trust) => cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == TrustBeneficiaries.path))
-      case _ => super.cleanup(value, userAnswers)
+      case Some(Trust)   => cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == TrustBeneficiaries.path))
+      case _             => super.cleanup(value, userAnswers)
     }
   }
+
 }

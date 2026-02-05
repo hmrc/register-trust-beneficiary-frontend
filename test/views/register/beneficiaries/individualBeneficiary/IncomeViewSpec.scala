@@ -25,10 +25,10 @@ import views.html.register.beneficiaries.individualBeneficiary.IncomeView
 
 class IncomeViewSpec extends IntViewBehaviours {
 
-  val messageKeyPrefix = "individualBeneficiaryIncome"
-  val index = 0
+  val messageKeyPrefix   = "individualBeneficiaryIncome"
+  val index              = 0
   val fullName: FullName = FullName("First", None, "Last")
-  val name: String = fullName.toString
+  val name: String       = fullName.toString
 
   val form: Form[Int] = new IncomePercentageFormProvider().withPrefix(messageKeyPrefix)
 
@@ -47,4 +47,5 @@ class IncomeViewSpec extends IntViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

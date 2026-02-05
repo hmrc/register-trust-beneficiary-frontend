@@ -24,11 +24,10 @@ trait Navigator {
 
   def nextPage(page: Page, draftId: String, userAnswers: ReadableUserAnswers): Call
 
-  def yesNoNav(ua: ReadableUserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call = {
+  def yesNoNav(ua: ReadableUserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call =
     ua.get(fromPage)
       .map(if (_) yesCall else noCall)
       .getOrElse(controllers.routes.SessionExpiredController.onPageLoad)
-  }
 
   def isNonTaxable(ua: ReadableUserAnswers): Boolean = !ua.isTaxable
 

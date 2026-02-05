@@ -19,7 +19,7 @@ package pages.register.beneficiaries.individual
 import models.core.pages.FullName
 import pages.behaviours.PageBehaviours
 
-class NamePageSpec extends PageBehaviours  {
+class NamePageSpec extends PageBehaviours {
 
   "IndividualBeneficiaryNamePage" must {
 
@@ -29,4 +29,5 @@ class NamePageSpec extends PageBehaviours  {
 
     beRemovable[FullName](NamePage(0))
   }
+
 }

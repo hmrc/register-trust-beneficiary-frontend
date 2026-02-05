@@ -19,12 +19,14 @@ package mapping.reads
 import models.core.pages.{InternationalAddress, UKAddress}
 import play.api.libs.json.{Format, Json}
 
-final case class OtherBeneficiary(description: String,
-                                  ukAddress: Option[UKAddress],
-                                  internationalAddress: Option[InternationalAddress],
-                                  shareOfIncome: Option[Int],
-                                  incomeDiscretionYesNo: Option[Boolean],
-                                  countryOfResidence: Option[String]) extends BeneficiaryWithAddress
+final case class OtherBeneficiary(
+  description: String,
+  ukAddress: Option[UKAddress],
+  internationalAddress: Option[InternationalAddress],
+  shareOfIncome: Option[Int],
+  incomeDiscretionYesNo: Option[Boolean],
+  countryOfResidence: Option[String]
+) extends BeneficiaryWithAddress
 
 object OtherBeneficiary {
   implicit val classFormat: Format[OtherBeneficiary] = Json.format[OtherBeneficiary]

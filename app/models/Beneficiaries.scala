@@ -21,18 +21,20 @@ import utils.Constants.MAX
 import viewmodels.RadioOption
 import viewmodels.addAnother._
 
-case class Beneficiaries(individuals: List[IndividualBeneficiaryViewModel] = Nil,
-                         unidentified: List[ClassOfBeneficiaryViewModel] = Nil,
-                         charities: List[CharityBeneficiaryViewModel] = Nil,
-                         trusts: List[TrustBeneficiaryViewModel] = Nil,
-                         companies: List[CompanyBeneficiaryViewModel] = Nil,
-                         large: List[EmploymentRelatedBeneficiaryViewModel] = Nil,
-                         other: List[OtherBeneficiaryViewModel] = Nil) {
+case class Beneficiaries(
+  individuals: List[IndividualBeneficiaryViewModel] = Nil,
+  unidentified: List[ClassOfBeneficiaryViewModel] = Nil,
+  charities: List[CharityBeneficiaryViewModel] = Nil,
+  trusts: List[TrustBeneficiaryViewModel] = Nil,
+  companies: List[CompanyBeneficiaryViewModel] = Nil,
+  large: List[EmploymentRelatedBeneficiaryViewModel] = Nil,
+  other: List[OtherBeneficiaryViewModel] = Nil
+) {
 
-  type BeneficiaryOption = (Int, WhatTypeOfBeneficiary)
+  type BeneficiaryOption  = (Int, WhatTypeOfBeneficiary)
   type BeneficiaryOptions = List[BeneficiaryOption]
 
-  private val options: BeneficiaryOptions = {
+  private val options: BeneficiaryOptions =
     (individuals.size, WhatTypeOfBeneficiary.Individual) ::
       (unidentified.size, WhatTypeOfBeneficiary.ClassOfBeneficiary) ::
       (charities.size, WhatTypeOfBeneficiary.Charity) ::
@@ -41,7 +43,6 @@ case class Beneficiaries(individuals: List[IndividualBeneficiaryViewModel] = Nil
       (large.size, WhatTypeOfBeneficiary.Employment) ::
       (other.size, WhatTypeOfBeneficiary.Other) ::
       Nil
-  }
 
   val nonMaxedOutOptions: List[RadioOption] = {
 
@@ -54,32 +55,31 @@ case class Beneficiaries(individuals: List[IndividualBeneficiaryViewModel] = Nil
       */
     def combineOptions(uncombinedOptions: BeneficiaryOptions): BeneficiaryOptions = {
       @scala.annotation.tailrec
-      def recurse(uncombinedOptions: BeneficiaryOptions, combinedOptions: BeneficiaryOptions): BeneficiaryOptions = {
+      def recurse(uncombinedOptions: BeneficiaryOptions, combinedOptions: BeneficiaryOptions): BeneficiaryOptions =
         uncombinedOptions match {
           case Nil => combinedOptions
-          case List(head, next, _*) if head._2 == WhatTypeOfBeneficiary.Charity && next._2 == WhatTypeOfBeneficiary.Trust =>
+          case List(head, next, _*)
+              if head._2 == WhatTypeOfBeneficiary.Charity && next._2 == WhatTypeOfBeneficiary.Trust =>
             val combinedOption: BeneficiaryOption = (head._1 + next._1, WhatTypeOfBeneficiary.CharityOrTrust)
             recurse(uncombinedOptions.tail.tail, combinedOptions :+ combinedOption)
-          case List(head, next, _*) if head._2 == WhatTypeOfBeneficiary.Company && next._2 == WhatTypeOfBeneficiary.Employment =>
+          case List(head, next, _*)
+              if head._2 == WhatTypeOfBeneficiary.Company && next._2 == WhatTypeOfBeneficiary.Employment =>
             val combinedOption: BeneficiaryOption = (head._1 + next._1, WhatTypeOfBeneficiary.CompanyOrEmployment)
             recurse(uncombinedOptions.tail.tail, combinedOptions :+ combinedOption)
-          case _ =>
+          case _   =>
             recurse(uncombinedOptions.tail, combinedOptions :+ uncombinedOptions.head)
         }
-      }
       recurse(uncombinedOptions, Nil)
     }
 
-    combineOptions(options.filter(x => x._1 < MAX)).map {
-      x => RadioOption(WhatTypeOfBeneficiary.prefix, x._2.toString)
+    combineOptions(options.filter(x => x._1 < MAX)).map { x =>
+      RadioOption(WhatTypeOfBeneficiary.prefix, x._2.toString)
     }
   }
 
-  val maxedOutOptions: List[RadioOption] = {
-
-    options.filter(x => x._1 >= MAX).map {
-      x => RadioOption(WhatTypeOfBeneficiary.prefix, x._2.toString)
+  val maxedOutOptions: List[RadioOption] =
+    options.filter(x => x._1 >= MAX).map { x =>
+      RadioOption(WhatTypeOfBeneficiary.prefix, x._2.toString)
     }
-  }
 
 }

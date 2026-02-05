@@ -26,8 +26,7 @@ class IndividualBeneficiarySpec extends SpecBase {
   "IndividualBeneficiary reads" must {
 
     "parse the old mental capacity question" in {
-      val json = Json.parse(
-        """
+      val json = Json.parse("""
           |{
           | "name": {
           |   "firstName": "John",
@@ -56,8 +55,7 @@ class IndividualBeneficiarySpec extends SpecBase {
     }
 
     "parse the new mental capacity question" in {
-      val json = Json.parse(
-        """
+      val json = Json.parse("""
           |{
           | "name": {
           |   "firstName": "John",

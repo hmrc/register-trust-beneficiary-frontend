@@ -34,23 +34,25 @@ class RegistrationIdentifierActionSpec extends SpecBase {
   type RetrievalType = Option[String] ~ Option[AffinityGroup] ~ Enrolments
 
   val mockAuthConnector: AuthConnector = mock[AuthConnector]
-  val appConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
-  lazy override val trustsAuth = new TrustsAuthorisedFunctions(mockAuthConnector, appConfig)
+  val appConfig: FrontendAppConfig     = injector.instanceOf[FrontendAppConfig]
+  override lazy val trustsAuth         = new TrustsAuthorisedFunctions(mockAuthConnector, appConfig)
 
   private def authRetrievals(affinityGroup: AffinityGroup, enrolment: Enrolments) =
     Future.successful(new ~(new ~(Some("id"), Some(affinityGroup)), enrolment))
 
-  private val agentEnrolment = Enrolments(Set(Enrolment("HMRC-AS-AGENT", List(EnrolmentIdentifier("AgentReferenceNumber", "SomeVal")), "Activated", None)))
-
+  private val agentEnrolment = Enrolments(
+    Set(Enrolment("HMRC-AS-AGENT", List(EnrolmentIdentifier("AgentReferenceNumber", "SomeVal")), "Activated", None))
+  )
 
   "invoking the IdentifyForRegistrations action builder" when {
     "passing a non authenticated request" must {
       "redirect to the login page" in {
 
-        val identify: RegistrationIdentifierAction = new RegistrationIdentifierAction(injectedParsers, trustsAuth, appConfig)
-        val application = applicationBuilder(userAnswers = None).build()
+        val identify: RegistrationIdentifierAction =
+          new RegistrationIdentifierAction(injectedParsers, trustsAuth, appConfig)
+        val application                            = applicationBuilder(userAnswers = None).build()
 
-        def fakeAction: Action[AnyContent] = identify { _ => Results.Ok }
+        def fakeAction: Action[AnyContent] = identify(_ => Results.Ok)
 
         when(mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any()))
           .thenReturn(Future failed BearerTokenExpired())
@@ -66,9 +68,10 @@ class RegistrationIdentifierActionSpec extends SpecBase {
     "passing an identifier request" must {
       "execute the body of the action" in {
 
-        val identify: RegistrationIdentifierAction = new RegistrationIdentifierAction(injectedParsers, trustsAuth, appConfig)
+        val identify: RegistrationIdentifierAction =
+          new RegistrationIdentifierAction(injectedParsers, trustsAuth, appConfig)
 
-        val fakeAction: Action[AnyContent] = identify { _ => Results.Ok }
+        val fakeAction: Action[AnyContent] = identify(_ => Results.Ok)
 
         val application = applicationBuilder(userAnswers = None).build()
 
@@ -85,5 +88,5 @@ class RegistrationIdentifierActionSpec extends SpecBase {
       }
     }
   }
-}
 
+}

@@ -35,53 +35,53 @@ import views.html.register.beneficiaries.other.AddressUkYesNoView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddressUkYesNoController @Inject()(
-                                          val controllerComponents: MessagesControllerComponents,
-                                          standardActionSets: StandardActionSets,
-                                          formProvider: YesNoFormProvider,
-                                          view: AddressUkYesNoView,
-                                          repository: RegistrationsRepository,
-                                          @OtherBeneficiary navigator: Navigator,
-                                          descriptionAction: DescriptionRequiredAction,
-                                          technicalErrorView: TechnicalErrorView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class AddressUkYesNoController @Inject() (
+  val controllerComponents: MessagesControllerComponents,
+  standardActionSets: StandardActionSets,
+  formProvider: YesNoFormProvider,
+  view: AddressUkYesNoView,
+  repository: RegistrationsRepository,
+  @OtherBeneficiary navigator: Navigator,
+  descriptionAction: DescriptionRequiredAction,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
-  private val className = getClass.getSimpleName
+  private val className           = getClass.getSimpleName
   private val form: Form[Boolean] = formProvider.withPrefix("otherBeneficiary.addressUkYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
-    standardActionSets.identifiedUserWithData(draftId).andThen(descriptionAction(index)) {
-    implicit request =>
-
+    standardActionSets.identifiedUserWithData(draftId).andThen(descriptionAction(index)) { implicit request =>
       val preparedForm = request.userAnswers.get(AddressUKYesNoPage(index)) match {
-        case None => form
+        case None        => form
         case Some(value) => form.fill(value)
       }
 
       Ok(view(preparedForm, request.description, index, draftId))
-  }
+    }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
-    standardActionSets.identifiedUserWithData(draftId).andThen(descriptionAction(index)).async {
-    implicit request =>
+    standardActionSets.identifiedUserWithData(draftId).andThen(descriptionAction(index)).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, request.description, index, draftId))),
+          value => {
+            val result = for {
+              updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(AddressUKYesNoPage(index), value)))
+              _              <- repository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(AddressUKYesNoPage(index), draftId, updatedAnswers))
 
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, request.description, index, draftId))),
-
-        value => {
-          val result = for {
-            updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(AddressUKYesNoPage(index), value)))
-            _ <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddressUKYesNoPage(index), draftId, updatedAnswers))
-
-          result.value.map {
-            case Right(call) => call
-            case Left(_) =>
-              logger.warn(s"[$className][onSubmit][Session ID: ${request.request.sessionId}] Error while storing user answers")
-              InternalServerError(technicalErrorView())
+            result.value.map {
+              case Right(call) => call
+              case Left(_)     =>
+                logger.warn(
+                  s"[$className][onSubmit][Session ID: ${request.request.sessionId}] Error while storing user answers"
+                )
+                InternalServerError(technicalErrorView())
+            }
           }
-        }
-      )
-  }
+        )
+    }
+
 }

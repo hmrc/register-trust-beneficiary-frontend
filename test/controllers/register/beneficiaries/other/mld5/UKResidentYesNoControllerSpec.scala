@@ -31,10 +31,10 @@ import views.html.register.beneficiaries.other.mld5.UKResidentYesNoView
 
 class UKResidentYesNoControllerSpec extends SpecBase {
 
-  private val index = 0
-  private val form = new YesNoFormProvider().withPrefix("otherBeneficiary.ukResidentYesNo")
+  private val index               = 0
+  private val form                = new YesNoFormProvider().withPrefix("otherBeneficiary.ukResidentYesNo")
   private val addressUkYesNoRoute = routes.UKResidentYesNoController.onPageLoad(index, draftId).url
-  private val description = "Other"
+  private val description         = "Other"
 
   private val baseAnswers = emptyUserAnswers.set(DescriptionPage(index), description).value
 
@@ -84,7 +84,8 @@ class UKResidentYesNoControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[OtherBeneficiary]).toInstance(new FakeNavigator())
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, addressUkYesNoRoute)
@@ -105,7 +106,8 @@ class UKResidentYesNoControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(emptyUserAnswers), mockSetResult = Left(ServerError()))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[OtherBeneficiary]).toInstance(new FakeNavigator())
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, addressUkYesNoRoute)
@@ -140,7 +142,7 @@ class UKResidentYesNoControllerSpec extends SpecBase {
       contentAsString(result) mustEqual
         view(boundForm, index, draftId, description)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -174,4 +176,5 @@ class UKResidentYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

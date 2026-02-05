@@ -29,20 +29,17 @@ import utils.countryOptions.CountryOptions
 import java.time.{LocalDate => JavaDate}
 import javax.inject.Inject
 
-class CheckAnswersFormatters @Inject()(languageUtils: LanguageUtils,
-                                       countryOptions: CountryOptions) {
+class CheckAnswersFormatters @Inject() (languageUtils: LanguageUtils, countryOptions: CountryOptions) {
 
-  def formatDate(date: JavaDate)(implicit messages: Messages): Html = {
+  def formatDate(date: JavaDate)(implicit messages: Messages): Html =
     escape(languageUtils.Dates.formatDate(date))
-  }
 
-  def yesOrNo(answer: Boolean)(implicit messages: Messages): Html = {
+  def yesOrNo(answer: Boolean)(implicit messages: Messages): Html =
     if (answer) {
       escape(messages("site.yes"))
     } else {
       escape(messages("site.no"))
     }
-  }
 
   def formatNino(nino: String): Html = escape(Nino(nino).formatted)
 
@@ -53,9 +50,8 @@ class CheckAnswersFormatters @Inject()(languageUtils: LanguageUtils,
 
   def percentage(value: String): Html = escape(s"$value%")
 
-  def formatEnum[T](key: String, answer: T)(implicit messages: Messages): Html = {
+  def formatEnum[T](key: String, answer: T)(implicit messages: Messages): Html =
     escape(messages(s"$key.$answer"))
-  }
 
   def ukAddress(address: UKAddress): Html = {
     val lines =
@@ -82,12 +78,11 @@ class CheckAnswersFormatters @Inject()(languageUtils: LanguageUtils,
     Html(lines.mkString("<br />"))
   }
 
-  def addressFormatter(address: Address)(implicit messages: Messages): Html = {
+  def addressFormatter(address: Address)(implicit messages: Messages): Html =
     address match {
-      case a:UKAddress => ukAddress(a)
-      case a:InternationalAddress => internationalAddress(a)
+      case a: UKAddress            => ukAddress(a)
+      case a: InternationalAddress => internationalAddress(a)
     }
-  }
 
   def passportOrIDCard(passportOrIdCard: PassportOrIdCardDetails)(implicit messages: Messages): Html = {
     val lines =
@@ -113,15 +108,13 @@ class CheckAnswersFormatters @Inject()(languageUtils: LanguageUtils,
     Html(lines.mkString("<br />"))
   }
 
-  def formatNumberOfBeneficiaries(answer: HowManyBeneficiaries)(implicit messages: Messages): Html = {
+  def formatNumberOfBeneficiaries(answer: HowManyBeneficiaries)(implicit messages: Messages): Html =
     formatEnum("numberOfBeneficiaries", answer)
-  }
 
-  def formatRoleInCompany(answer: RoleInCompany)(implicit messages: Messages): Html = {
+  def formatRoleInCompany(answer: RoleInCompany)(implicit messages: Messages): Html =
     answer match {
       case NA => escape(messages("individualBeneficiary.roleInCompany.checkYourAnswersLabel.na"))
-      case _ => formatEnum("individualBeneficiary.roleInCompany", answer)
+      case _  => formatEnum("individualBeneficiary.roleInCompany", answer)
     }
-  }
 
 }

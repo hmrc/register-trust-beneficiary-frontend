@@ -27,20 +27,25 @@ import queries.Gettable
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class IndexActionFilter[T](index : Int, entity : Gettable[List[T]], errorHandler : ErrorHandler)
-                          (implicit val reads : Reads[T], val executionContext: ExecutionContext)
-  extends ActionFilter[RegistrationDataRequest] with Logging {
+class IndexActionFilter[T](index: Int, entity: Gettable[List[T]], errorHandler: ErrorHandler)(implicit
+  val reads: Reads[T],
+  val executionContext: ExecutionContext
+) extends ActionFilter[RegistrationDataRequest] with Logging {
 
   override protected def filter[A](request: RegistrationDataRequest[A]): Future[Option[Result]] = {
 
     lazy val entities = request.userAnswers.get(entity).getOrElse(List.empty)
 
-    logger.info(s"[IndexActionFilter][filter][Session ID: ${request.sessionId}] Validating index on ${entity.path} for entities ${entities.size}")
+    logger.info(
+      s"[IndexActionFilter][filter][Session ID: ${request.sessionId}] Validating index on ${entity.path} for entities ${entities.size}"
+    )
 
     if (index >= 0 && index <= entities.size) {
       Future.successful(None)
     } else {
-      logger.info(s"[IndexActionFilter][filter][Session ID: ${request.sessionId}] Out of bounds index for entity ${entity.path} index $index")
+      logger.info(
+        s"[IndexActionFilter][filter][Session ID: ${request.sessionId}] Out of bounds index for entity ${entity.path} index $index"
+      )
       errorHandler.onClientError(request, Status.NOT_FOUND).map(Some(_))
     }
 
@@ -48,11 +53,9 @@ class IndexActionFilter[T](index : Int, entity : Gettable[List[T]], errorHandler
 
 }
 
-class IndexActionFilterProvider @Inject()(executionContext: ExecutionContext,
-                                          errorHandler: ErrorHandler)
-{
+class IndexActionFilterProvider @Inject() (executionContext: ExecutionContext, errorHandler: ErrorHandler) {
 
-  def apply[T](index: Int, entity : Gettable[List[T]])(implicit reads: Reads[T]) =
+  def apply[T](index: Int, entity: Gettable[List[T]])(implicit reads: Reads[T]) =
     new IndexActionFilter[T](index, entity, errorHandler)(reads, executionContext)
 
 }

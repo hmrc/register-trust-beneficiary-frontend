@@ -35,19 +35,21 @@ import views.html.{PageNotFoundView, TechnicalErrorView}
 
 class CountryOfResidenceYesNoControllerSpec extends SpecBase {
 
-  private val formProvider = new YesNoFormProvider()
+  private val formProvider        = new YesNoFormProvider()
   private val form: Form[Boolean] = formProvider.withPrefix("companyBeneficiary.5mld.countryOfResidenceYesNo")
-  private val index: Int = 0
-  private val trustName = "Test"
+  private val index: Int          = 0
+  private val trustName           = "Test"
 
-  private lazy val countryOfResidenceYesNo: String = routes.CountryOfResidenceYesNoController.onPageLoad(index, draftId).url
+  private lazy val countryOfResidenceYesNo: String =
+    routes.CountryOfResidenceYesNoController.onPageLoad(index, draftId).url
 
   "CountryOfResidenceYesNo Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), trustName).value
+        .set(NamePage(index), trustName)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -67,9 +69,11 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(NamePage(index), trustName).value
-        .set(CountryOfResidenceYesNoPage(index), true).value
-
+      val userAnswers = emptyUserAnswers
+        .set(NamePage(index), trustName)
+        .value
+        .set(CountryOfResidenceYesNoPage(index), true)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -90,12 +94,14 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), trustName).value
+        .set(NamePage(index), trustName)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
           bind[Navigator].qualifiedWith(classOf[CompanyBeneficiary]).toInstance(new FakeNavigator)
-        ).build()
+        )
+        .build()
 
       val request =
         FakeRequest(POST, countryOfResidenceYesNo)
@@ -113,12 +119,14 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase {
     "return an Internal Server Error when setting the user answers goes wrong" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), trustName).value
+        .set(NamePage(index), trustName)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
         .overrides(
           bind[Navigator].qualifiedWith(classOf[CompanyBeneficiary]).toInstance(new FakeNavigator)
-        ).build()
+        )
+        .build()
 
       val request =
         FakeRequest(POST, countryOfResidenceYesNo)
@@ -139,7 +147,8 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), trustName).value
+        .set(NamePage(index), trustName)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -196,7 +205,7 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase {
     "redirect to PageNotFoundView given no user answers are found for NamePage" in {
       val pageNotFoundView = app.injector.instanceOf[PageNotFoundView]
 
-      val fakeRequest = FakeRequest(GET, countryOfResidenceYesNo)
+      val fakeRequest             = FakeRequest(GET, countryOfResidenceYesNo)
       val registrationDataRequest =
         RegistrationDataRequest(
           fakeRequest,
@@ -207,9 +216,9 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase {
           Enrolments(Set.empty[Enrolment])
         )
 
-      val controller = app.injector.instanceOf[CountryOfResidenceYesNoController]
+      val controller             = app.injector.instanceOf[CountryOfResidenceYesNoController]
       val beneficiaryNameRequest = BeneficiaryNameRequest(registrationDataRequest, "beneficiaryName")
-      val index = 0
+      val index                  = 0
 
       val result = controller.handlePageLoad(index, "draftId")(beneficiaryNameRequest)
 
@@ -218,5 +227,5 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase {
     }
 
   }
-}
 
+}

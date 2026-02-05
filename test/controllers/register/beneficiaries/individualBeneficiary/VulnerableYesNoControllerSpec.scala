@@ -32,13 +32,14 @@ import views.html.register.beneficiaries.individualBeneficiary.VulnerableYesNoVi
 
 class VulnerableYesNoControllerSpec extends SpecBase {
 
-  private val formProvider = new YesNoFormProvider()
+  private val formProvider        = new YesNoFormProvider()
   private val form: Form[Boolean] = formProvider.withPrefix("individualBeneficiaryVulnerableYesNo")
-  private val index: Int = 0
+  private val index: Int          = 0
 
   private val name: FullName = FullName("first name", None, "Last name")
 
-  private lazy val individualBeneficiaryVulnerableYesNoRoute: String = routes.VulnerableYesNoController.onPageLoad(index, fakeDraftId).url
+  private lazy val individualBeneficiaryVulnerableYesNoRoute: String =
+    routes.VulnerableYesNoController.onPageLoad(index, fakeDraftId).url
 
   "IndividualBeneficiaryVulnerableYesNo Controller" must {
 
@@ -65,8 +66,10 @@ class VulnerableYesNoControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(VulnerableYesNoPage(index), true).value
-        .set(NamePage(index),name).value
+        .set(VulnerableYesNoPage(index), true)
+        .value
+        .set(NamePage(index), name)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -87,13 +90,15 @@ class VulnerableYesNoControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), name).value
+        .set(NamePage(index), name)
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, individualBeneficiaryVulnerableYesNoRoute)
@@ -116,7 +121,8 @@ class VulnerableYesNoControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, individualBeneficiaryVulnerableYesNoRoute)
@@ -190,4 +196,5 @@ class VulnerableYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

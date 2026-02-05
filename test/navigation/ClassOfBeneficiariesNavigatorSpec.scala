@@ -28,9 +28,10 @@ class ClassOfBeneficiariesNavigatorSpec extends SpecBase with ScalaCheckProperty
 
   "Class of beneficiaries navigator" must {
 
-    "Description page -> Add-to page" in {
-      navigator.nextPage(ClassBeneficiaryDescriptionPage(index), fakeDraftId, emptyUserAnswers)
+    "Description page -> Add-to page" in
+      navigator
+        .nextPage(ClassBeneficiaryDescriptionPage(index), fakeDraftId, emptyUserAnswers)
         .mustBe(controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId))
-    }
   }
+
 }

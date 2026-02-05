@@ -32,14 +32,13 @@ class AddressUKPageSpec extends PageBehaviours {
     beRemovable[UKAddress](AddressUKPage(0))
   }
 
-  "remove IndividualBeneficiaryAddressUK when IndividualBeneficiaryAddressUKYesNoPage is set to false" in {
-    forAll(arbitrary[UserAnswers]) {
-      initial =>
-        val answers: UserAnswers = initial.set(AddressUKPage(0), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB")).value
-        val result = answers.set(AddressYesNoPage(0), false).value
+  "remove IndividualBeneficiaryAddressUK when IndividualBeneficiaryAddressUKYesNoPage is set to false" in
+    forAll(arbitrary[UserAnswers]) { initial =>
+      val answers: UserAnswers =
+        initial.set(AddressUKPage(0), UKAddress("line1", "line2", Some("line3"), Some("line4"), "AB1 1AB")).value
+      val result               = answers.set(AddressYesNoPage(0), false).value
 
-        result.get(AddressUKPage(0)) mustNot be(defined)
+      result.get(AddressUKPage(0)) mustNot be(defined)
     }
-  }
 
 }

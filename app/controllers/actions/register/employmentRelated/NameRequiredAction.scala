@@ -26,24 +26,22 @@ import play.api.mvc.ActionTransformer
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class NameRequiredActionAction(index: Int)(implicit val executionContext: ExecutionContext, val messagesApi: MessagesApi)
-  extends ActionTransformer[RegistrationDataRequest, BeneficiaryNameRequest] with I18nSupport {
+class NameRequiredActionAction(index: Int)(implicit
+  val executionContext: ExecutionContext,
+  val messagesApi: MessagesApi
+) extends ActionTransformer[RegistrationDataRequest, BeneficiaryNameRequest] with I18nSupport {
 
-  override protected def transform[A](request: RegistrationDataRequest[A]): Future[BeneficiaryNameRequest[A]] = {
-    Future.successful(actions.BeneficiaryNameRequest[A](request,
-      getName(request)
-    ))
-  }
+  override protected def transform[A](request: RegistrationDataRequest[A]): Future[BeneficiaryNameRequest[A]] =
+    Future.successful(actions.BeneficiaryNameRequest[A](request, getName(request)))
 
-  private def getName[A](request: RegistrationDataRequest[A]): String = {
+  private def getName[A](request: RegistrationDataRequest[A]): String =
     request.userAnswers.get(LargeBeneficiaryNamePage(index)) match {
       case Some(name) => name
-      case _ => request.messages(messagesApi)("employmentRelatedBeneficiary.name.default")
+      case _          => request.messages(messagesApi)("employmentRelatedBeneficiary.name.default")
     }
-  }
+
 }
 
-class NameRequiredAction @Inject()()
-                                  (implicit val executionContext: ExecutionContext, val messagesApi: MessagesApi) {
+class NameRequiredAction @Inject() ()(implicit val executionContext: ExecutionContext, val messagesApi: MessagesApi) {
   def apply(index: Int): NameRequiredActionAction = new NameRequiredActionAction(index)
 }

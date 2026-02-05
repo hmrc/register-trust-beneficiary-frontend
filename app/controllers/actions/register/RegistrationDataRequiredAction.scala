@@ -23,17 +23,32 @@ import play.api.mvc.{ActionRefiner, Result}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class RegistrationDataRequiredActionImpl @Inject()(implicit val executionContext: ExecutionContext) extends RegistrationDataRequiredAction {
+class RegistrationDataRequiredActionImpl @Inject() (implicit val executionContext: ExecutionContext)
+    extends RegistrationDataRequiredAction {
 
-  override protected def refine[A](request: OptionalRegistrationDataRequest[A]): Future[Either[Result, RegistrationDataRequest[A]]] = {
+  override protected def refine[A](
+    request: OptionalRegistrationDataRequest[A]
+  ): Future[Either[Result, RegistrationDataRequest[A]]] =
 
     request.userAnswers match {
-      case None =>
+      case None       =>
         Future.successful(Left(Redirect(controllers.routes.SessionExpiredController.onPageLoad)))
       case Some(data) =>
-        Future.successful(Right(RegistrationDataRequest(request.request, request.internalId, request.sessionId, data, request.affinityGroup, request.enrolments, request.agentARN)))
+        Future.successful(
+          Right(
+            RegistrationDataRequest(
+              request.request,
+              request.internalId,
+              request.sessionId,
+              data,
+              request.affinityGroup,
+              request.enrolments,
+              request.agentARN
+            )
+          )
+        )
     }
-  }
+
 }
 
 trait RegistrationDataRequiredAction extends ActionRefiner[OptionalRegistrationDataRequest, RegistrationDataRequest]

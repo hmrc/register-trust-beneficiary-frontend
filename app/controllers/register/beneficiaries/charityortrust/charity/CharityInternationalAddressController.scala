@@ -37,58 +37,60 @@ import views.html.register.beneficiaries.charityortrust.charity.CharityInternati
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CharityInternationalAddressController @Inject()(
-                                                       val controllerComponents: MessagesControllerComponents,
-                                                       repository: RegistrationsRepository,
-                                                       @CharityBeneficiary navigator: Navigator,
-                                                       standardActionSets: StandardActionSets,
-                                                       nameAction: NameRequiredAction,
-                                                       formProvider: InternationalAddressFormProvider,
-                                                       view: CharityInternationalAddressView,
-                                                       val countryOptions: CountryOptionsNonUK,
-                                                       technicalErrorView: TechnicalErrorView
-                                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class CharityInternationalAddressController @Inject() (
+  val controllerComponents: MessagesControllerComponents,
+  repository: RegistrationsRepository,
+  @CharityBeneficiary navigator: Navigator,
+  standardActionSets: StandardActionSets,
+  nameAction: NameRequiredAction,
+  formProvider: InternationalAddressFormProvider,
+  view: CharityInternationalAddressView,
+  val countryOptions: CountryOptionsNonUK,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
-  private val className = getClass.getSimpleName
+  private val className                        = getClass.getSimpleName
   private val form: Form[InternationalAddress] = formProvider()
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
-    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
-    implicit request =>
-
+    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) { implicit request =>
       val charityName = request.userAnswers.get(CharityNamePage(index)).get
 
       val preparedForm = request.userAnswers.get(CharityInternationalAddressPage(index)) match {
-        case None => form
+        case None        => form
         case Some(value) => form.fill(value)
       }
 
       Ok(view(preparedForm, countryOptions.options(), draftId, index, charityName))
-  }
+    }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
-    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
-    implicit request =>
-
+    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async { implicit request =>
       val charityName = request.userAnswers.get(CharityNamePage(index)).get
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options(), draftId, index, charityName))),
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) =>
+            Future.successful(BadRequest(view(formWithErrors, countryOptions.options(), draftId, index, charityName))),
+          value => {
+            val result = for {
+              updatedAnswers <-
+                EitherT(Future.successful(request.userAnswers.set(CharityInternationalAddressPage(index), value)))
+              _              <- repository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(CharityInternationalAddressPage(index), draftId, updatedAnswers))
 
-        value => {
-          val result = for {
-            updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(CharityInternationalAddressPage(index), value)))
-            _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CharityInternationalAddressPage(index), draftId, updatedAnswers))
-
-          result.value.map {
-            case Right(call) => call
-            case Left(_) =>
-              logger.warn(s"[$className][onSubmit][Session ID: ${request.request.sessionId}] Error while storing user answers")
-              InternalServerError(technicalErrorView())
+            result.value.map {
+              case Right(call) => call
+              case Left(_)     =>
+                logger.warn(
+                  s"[$className][onSubmit][Session ID: ${request.request.sessionId}] Error while storing user answers"
+                )
+                InternalServerError(technicalErrorView())
+            }
           }
-        }
-      )
-  }
+        )
+    }
+
 }

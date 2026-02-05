@@ -36,42 +36,43 @@ import views.html.register.beneficiaries.charityortrust.trust.AnswersView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AnswersController @Inject()(
-                                   override val messagesApi: MessagesApi,
-                                   registrationsRepository: RegistrationsRepository,
-                                   navigator: Navigator,
-                                   standardActionSets: StandardActionSets,
-                                   nameAction: NameRequiredAction,
-                                   val controllerComponents: MessagesControllerComponents,
-                                   view: AnswersView,
-                                   printHelper: TrustBeneficiaryPrintHelper,
-                                   technicalErrorView: TechnicalErrorView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class AnswersController @Inject() (
+  override val messagesApi: MessagesApi,
+  registrationsRepository: RegistrationsRepository,
+  navigator: Navigator,
+  standardActionSets: StandardActionSets,
+  nameAction: NameRequiredAction,
+  val controllerComponents: MessagesControllerComponents,
+  view: AnswersView,
+  printHelper: TrustBeneficiaryPrintHelper,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private val className = getClass.getSimpleName
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) {
-    implicit request =>
-
-      val section: AnswerSection = printHelper.checkDetailsSection(request.userAnswers, request.beneficiaryName, index, draftId)
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
+    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)) { implicit request =>
+      val section: AnswerSection =
+        printHelper.checkDetailsSection(request.userAnswers, request.beneficiaryName, index, draftId)
       Ok(view(Seq(section), index, draftId))
-  }
+    }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).async {
-    implicit request =>
-
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] =
+    standardActionSets.identifiedUserWithData(draftId).async { implicit request =>
       val answers = request.userAnswers.set(TrustBeneficiaryStatus(index), Completed)
 
       val result = for {
         updatedAnswers <- EitherT(Future.successful(answers))
-        _ <- registrationsRepository.set(updatedAnswers)
+        _              <- registrationsRepository.set(updatedAnswers)
       } yield Redirect(navigator.nextPage(AnswersPage, draftId, request.userAnswers))
 
       result.value.map {
         case Right(call) => call
-        case Left(_) =>
+        case Left(_)     =>
           logger.warn(s"[$className][onSubmit][Session ID: ${request.sessionId}] Error while storing user answers")
           InternalServerError(technicalErrorView())
       }
-  }
+    }
+
 }

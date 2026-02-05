@@ -33,12 +33,12 @@ import views.html.register.beneficiaries.companyoremploymentrelated.company.Shar
 
 class ShareOfIncomeControllerSpec extends SpecBase {
 
-  private val index = 0
-  private val form: Form[Int] = new IncomePercentageFormProvider().withPrefix("companyBeneficiary.shareOfIncome")
+  private val index                           = 0
+  private val form: Form[Int]                 = new IncomePercentageFormProvider().withPrefix("companyBeneficiary.shareOfIncome")
   private lazy val shareOfIncomeRoute: String = routes.ShareOfIncomeController.onPageLoad(index, draftId).url
-  private val name: String = "Company"
-  private val onwardRoute = Call("GET", "/foo")
-  private val answer = 50
+  private val name: String                    = "Company"
+  private val onwardRoute                     = Call("GET", "/foo")
+  private val answer                          = 50
 
   private val baseAnswers: UserAnswers = emptyUserAnswers.set(NamePage(index), name).value
 
@@ -88,7 +88,8 @@ class ShareOfIncomeControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[CompanyBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, shareOfIncomeRoute)
@@ -109,7 +110,8 @@ class ShareOfIncomeControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(emptyUserAnswers), mockSetResult = Left(ServerError()))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[CompanyBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, shareOfIncomeRoute)
@@ -144,7 +146,7 @@ class ShareOfIncomeControllerSpec extends SpecBase {
       contentAsString(result) mustEqual
         view(boundForm, name, index, draftId)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -178,4 +180,5 @@ class ShareOfIncomeControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

@@ -37,8 +37,8 @@ class IndividualBeneficiaryMapper extends Mapper[IndividualDetailsType, Individu
     countryOfResidence = beneficiary.countryOfResidence,
     nationality = beneficiary.countryOfNationality,
     legallyIncapable = beneficiary.mentalCapacityYesNo.flatMap {
-      case Yes => Some(false)
-      case No => Some(true)
+      case Yes      => Some(false)
+      case No       => Some(true)
       case DontKnow => None
     }
   )

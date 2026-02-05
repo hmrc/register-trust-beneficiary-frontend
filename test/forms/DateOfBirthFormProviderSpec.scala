@@ -24,7 +24,7 @@ import java.time.{LocalDate, ZoneOffset}
 
 class DateOfBirthFormProviderSpec extends DateBehaviours with FakeTrustsApp {
 
-  val messagePrefix = "dateOfBirth"
+  val messagePrefix         = "dateOfBirth"
   val form: Form[LocalDate] = new DateOfBirthFormProvider(frontendAppConfig).withPrefix(messagePrefix)
 
   private val min = frontendAppConfig.minDate
@@ -41,15 +41,20 @@ class DateOfBirthFormProviderSpec extends DateBehaviours with FakeTrustsApp {
 
     behave like mandatoryDateField(form, "value", s"$messagePrefix.error.required.all")
 
-    behave like dateFieldWithMax(form, "value",
+    behave like dateFieldWithMax(
+      form,
+      "value",
       max = max,
       FormError("value", s"$messagePrefix.error.future", List("day", "month", "year"))
     )
 
-    behave like dateFieldWithMin(form, "value",
+    behave like dateFieldWithMin(
+      form,
+      "value",
       min = min,
       FormError("value", s"$messagePrefix.error.past", List("day", "month", "year"))
     )
 
   }
+
 }

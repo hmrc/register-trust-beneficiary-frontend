@@ -28,4 +28,5 @@ class HowMuchIncomePageSpec extends PageBehaviours {
 
     beRemovable[Int](HowMuchIncomePage(0))
   }
+
 }

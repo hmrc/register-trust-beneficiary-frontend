@@ -28,11 +28,11 @@ final case class AddressUKYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
   override def toString: String = "addressUKYesNo"
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Either[TrustErrors, UserAnswers] = {
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Either[TrustErrors, UserAnswers] =
     value match {
-      case Some(true) => userAnswers.remove(AddressInternationalPage(index))
+      case Some(true)  => userAnswers.remove(AddressInternationalPage(index))
       case Some(false) => userAnswers.remove(AddressUKPage(index))
-      case _ => super.cleanup(value, userAnswers)
+      case _           => super.cleanup(value, userAnswers)
     }
-  }
+
 }

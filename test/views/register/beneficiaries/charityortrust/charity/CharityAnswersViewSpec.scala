@@ -33,4 +33,5 @@ class CharityAnswersViewSpec extends ViewBehaviours {
 
     behave like pageWithBackLink(applyView)
   }
+
 }

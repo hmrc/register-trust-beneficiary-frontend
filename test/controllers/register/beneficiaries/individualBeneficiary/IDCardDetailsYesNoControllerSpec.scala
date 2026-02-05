@@ -33,13 +33,14 @@ import views.html.register.beneficiaries.individualBeneficiary.IDCardDetailsYesN
 
 class IDCardDetailsYesNoControllerSpec extends SpecBase {
 
-  private val formProvider = new YesNoFormProvider()
+  private val formProvider        = new YesNoFormProvider()
   private val form: Form[Boolean] = formProvider.withPrefix("individualBeneficiaryIDCardDetailsYesNo")
-  private val index: Int = 0
+  private val index: Int          = 0
 
   private val fullName: FullName = FullName("first name", None, "Last name")
 
-  private lazy val idCardDetailsYesNoControllerRoute: String = routes.IDCardDetailsYesNoController.onPageLoad(index, fakeDraftId).url
+  private lazy val idCardDetailsYesNoControllerRoute: String =
+    routes.IDCardDetailsYesNoController.onPageLoad(index, fakeDraftId).url
 
   "IDCardDetailsYesNo Controller" must {
 
@@ -66,8 +67,10 @@ class IDCardDetailsYesNoControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), fullName).value
-        .set(IDCardDetailsYesNoPage(index), true).value
+        .set(NamePage(index), fullName)
+        .value
+        .set(IDCardDetailsYesNoPage(index), true)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -93,7 +96,8 @@ class IDCardDetailsYesNoControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, idCardDetailsYesNoControllerRoute)
@@ -116,7 +120,8 @@ class IDCardDetailsYesNoControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, idCardDetailsYesNoControllerRoute)
@@ -178,7 +183,7 @@ class IDCardDetailsYesNoControllerSpec extends SpecBase {
 
       val request =
         FakeRequest(POST, idCardDetailsYesNoControllerRoute)
-          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"),("country", "Italy"))
+          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"), ("country", "Italy"))
 
       val result = route(application, request).value
 
@@ -189,4 +194,5 @@ class IDCardDetailsYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

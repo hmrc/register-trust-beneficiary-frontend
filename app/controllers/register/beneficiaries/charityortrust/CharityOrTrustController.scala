@@ -17,7 +17,9 @@
 package controllers.register.beneficiaries.charityortrust
 
 import cats.data.EitherT
-import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
+import controllers.actions.register.{
+  DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction
+}
 import forms.CharityOrTrustFormProvider
 import models.registration.pages.CharityOrTrust
 import models.requests.RegistrationDataRequest
@@ -35,58 +37,57 @@ import views.html.register.beneficiaries.charityortrust.CharityOrTrustView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CharityOrTrustController @Inject()(
-                                          override val messagesApi: MessagesApi,
-                                          registrationsRepository: RegistrationsRepository,
-                                          navigator: Navigator,
-                                          identify: RegistrationIdentifierAction,
-                                          getData: DraftIdRetrievalActionProvider,
-                                          requireData: RegistrationDataRequiredAction,
-                                          formProvider: CharityOrTrustFormProvider,
-                                          val controllerComponents: MessagesControllerComponents,
-                                          view: CharityOrTrustView,
-                                          technicalErrorView: TechnicalErrorView
-                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class CharityOrTrustController @Inject() (
+  override val messagesApi: MessagesApi,
+  registrationsRepository: RegistrationsRepository,
+  navigator: Navigator,
+  identify: RegistrationIdentifierAction,
+  getData: DraftIdRetrievalActionProvider,
+  requireData: RegistrationDataRequiredAction,
+  formProvider: CharityOrTrustFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: CharityOrTrustView,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private val className = getClass.getSimpleName
 
   private val form: Form[CharityOrTrust] = formProvider()
 
   private def actions(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
-    identify andThen
+    identify           andThen
       getData(draftId) andThen
       requireData
 
-  def onPageLoad(draftId: String): Action[AnyContent] = actions(draftId) {
-    implicit request =>
+  def onPageLoad(draftId: String): Action[AnyContent] = actions(draftId) { implicit request =>
+    val preparedForm = request.userAnswers.get(CharityOrTrustPage) match {
+      case Some(value) => form.fill(value)
+      case None        => form
+    }
 
-      val preparedForm = request.userAnswers.get(CharityOrTrustPage) match {
-        case Some(value) => form.fill(value)
-        case None => form
-      }
-
-      Ok(view(preparedForm, draftId))
+    Ok(view(preparedForm, draftId))
   }
 
-  def onSubmit(draftId: String): Action[AnyContent] = actions(draftId).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, draftId))),
+  def onSubmit(draftId: String): Action[AnyContent] = actions(draftId).async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        formWithErrors => Future.successful(BadRequest(view(formWithErrors, draftId))),
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(CharityOrTrustPage, value)))
-            _ <- registrationsRepository.set(updatedAnswers)
+            _              <- registrationsRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(CharityOrTrustPage, draftId, updatedAnswers))
 
           result.value.map {
             case Right(call) => call
-            case Left(_) =>
+            case Left(_)     =>
               logger.warn(s"[$className][onSubmit][Session ID: ${request.sessionId}] Error while storing user answers.")
               InternalServerError(technicalErrorView())
           }
         }
       )
   }
+
 }

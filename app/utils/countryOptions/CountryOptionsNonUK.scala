@@ -25,11 +25,12 @@ import utils.InputOption
 import utils.Constants.GB
 
 @Singleton
-class CountryOptionsNonUK @Inject()(
-                                        environment: Environment,
-                                        config: FrontendAppConfig
-                                      ) extends CountryOptions(environment, config) {
-  override def options()(implicit messages: Messages): Seq[InputOption] = {
+class CountryOptionsNonUK @Inject() (
+  environment: Environment,
+  config: FrontendAppConfig
+) extends CountryOptions(environment, config) {
+
+  override def options()(implicit messages: Messages): Seq[InputOption] =
     CountryOptions.getCountries(environment, getFileName()).filterNot(x => x.value == GB)
-  }
+
 }

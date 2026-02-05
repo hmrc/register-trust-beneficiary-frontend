@@ -19,7 +19,9 @@ package controllers.register.beneficiaries.individualBeneficiary
 import cats.data.EitherT
 import config.annotations.IndividualBeneficiary
 import controllers.actions._
-import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
+import controllers.actions.register.{
+  DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction
+}
 import models.Status.Completed
 import models.requests.RegistrationDataRequest
 import navigation.Navigator
@@ -39,52 +41,50 @@ import views.html.register.beneficiaries.individualBeneficiary.AnswersView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AnswersController @Inject()(
-                                   override val messagesApi: MessagesApi,
-                                   registrationsRepository: RegistrationsRepository,
-                                   identify: RegistrationIdentifierAction,
-                                   @IndividualBeneficiary navigator: Navigator,
-                                   getData: DraftIdRetrievalActionProvider,
-                                   requireData: RegistrationDataRequiredAction,
-                                   val controllerComponents: MessagesControllerComponents,
-                                   requiredAnswer: RequiredAnswerActionProvider,
-                                   view: AnswersView,
-                                   printHelper: IndividualBeneficiaryPrintHelper,
-                                   technicalErrorView: TechnicalErrorView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class AnswersController @Inject() (
+  override val messagesApi: MessagesApi,
+  registrationsRepository: RegistrationsRepository,
+  identify: RegistrationIdentifierAction,
+  @IndividualBeneficiary navigator: Navigator,
+  getData: DraftIdRetrievalActionProvider,
+  requireData: RegistrationDataRequiredAction,
+  val controllerComponents: MessagesControllerComponents,
+  requiredAnswer: RequiredAnswerActionProvider,
+  view: AnswersView,
+  printHelper: IndividualBeneficiaryPrintHelper,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private val className = getClass.getSimpleName
 
   private def actions(index: Int, draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
-    identify andThen
+    identify           andThen
       getData(draftId) andThen
-      requireData andThen
+      requireData      andThen
       requiredAnswer(RequiredAnswer(NamePage(index), routes.NameController.onPageLoad(index, draftId)))
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
-    implicit request =>
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) { implicit request =>
+    val name = request.userAnswers.get(NamePage(index)).get
 
-      val name = request.userAnswers.get(NamePage(index)).get
-
-      val section: AnswerSection = printHelper.checkDetailsSection(request.userAnswers, name.toString, index, draftId)
-      Ok(view(Seq(section), index, draftId))
+    val section: AnswerSection = printHelper.checkDetailsSection(request.userAnswers, name.toString, index, draftId)
+    Ok(view(Seq(section), index, draftId))
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
-    implicit request =>
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async { implicit request =>
+    val answers = request.userAnswers.set(IndividualBeneficiaryStatus(index), Completed)
 
-      val answers = request.userAnswers.set(IndividualBeneficiaryStatus(index), Completed)
+    val result = for {
+      updatedAnswers <- EitherT(Future.successful(answers))
+      _              <- registrationsRepository.set(updatedAnswers)
+    } yield Redirect(navigator.nextPage(AnswersPage, draftId, request.userAnswers))
 
-      val result = for {
-        updatedAnswers <- EitherT(Future.successful(answers))
-        _ <- registrationsRepository.set(updatedAnswers)
-      } yield Redirect(navigator.nextPage(AnswersPage, draftId, request.userAnswers))
-
-      result.value.map {
-        case Right(call) => call
-        case Left(_) =>
-          logger.warn(s"[$className][onSubmit][Session ID: ${request.sessionId}] Error while storing user answers")
-          InternalServerError(technicalErrorView())
-      }
+    result.value.map {
+      case Right(call) => call
+      case Left(_)     =>
+        logger.warn(s"[$className][onSubmit][Session ID: ${request.sessionId}] Error while storing user answers")
+        InternalServerError(technicalErrorView())
+    }
   }
+
 }

@@ -25,10 +25,12 @@ class InfoViewSpec extends ViewBehaviours {
 
     "a non-taxable trust" must {
 
-      val view = viewFor[InfoView](Some(emptyUserAnswers))
+      val view      = viewFor[InfoView](Some(emptyUserAnswers))
       val applyView = view.apply(fakeDraftId, isTaxable = false)(fakeRequest, messages)
 
-      behave like normalPageTitleWithSectionSubheading(applyView, "beneficiaryInfo.5mld",
+      behave like normalPageTitleWithSectionSubheading(
+        applyView,
+        "beneficiaryInfo.5mld",
         "subheading1",
         "paragraph11",
         "bulletpoint11",
@@ -74,10 +76,12 @@ class InfoViewSpec extends ViewBehaviours {
 
     "a taxable trust" must {
 
-      val view = viewFor[InfoView](Some(emptyUserAnswers))
+      val view      = viewFor[InfoView](Some(emptyUserAnswers))
       val applyView = view.apply(fakeDraftId, isTaxable = true)(fakeRequest, messages)
 
-      behave like normalPageTitleWithSectionSubheading(applyView, "beneficiaryInfo.5mld",
+      behave like normalPageTitleWithSectionSubheading(
+        applyView,
+        "beneficiaryInfo.5mld",
         "caption",
         "subheading1",
         "paragraph11",
@@ -133,4 +137,5 @@ class InfoViewSpec extends ViewBehaviours {
     }
 
   }
+
 }

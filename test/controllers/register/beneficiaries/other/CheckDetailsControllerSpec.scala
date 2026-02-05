@@ -42,8 +42,10 @@ class CheckDetailsControllerSpec extends SpecBase {
   private lazy val checkDetailsRoute = routes.CheckDetailsController.onPageLoad(index, fakeDraftId).url
 
   override def emptyUserAnswers: UserAnswers = super.emptyUserAnswers
-    .set(WhatTypeOfBeneficiaryPage, Other).value
-    .set(DescriptionPage(index), "Description").value
+    .set(WhatTypeOfBeneficiaryPage, Other)
+    .value
+    .set(DescriptionPage(index), "Description")
+    .value
 
   "CheckDetailsController" must {
 
@@ -113,4 +115,5 @@ class CheckDetailsControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

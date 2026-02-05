@@ -32,16 +32,17 @@ class DiscretionYesNoPageSpec extends PageBehaviours {
 
     "implement cleanup logic when decision changed" when {
 
-      "YES selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            val result: UserAnswers = userAnswers
-              .set(ShareOfIncomePage(0), 100).value
-              .set(DiscretionYesNoPage(0), true).value
+      "YES selected" in
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val result: UserAnswers = userAnswers
+            .set(ShareOfIncomePage(0), 100)
+            .value
+            .set(DiscretionYesNoPage(0), true)
+            .value
 
-            result.get(ShareOfIncomePage(0)) mustNot be(defined)
+          result.get(ShareOfIncomePage(0)) mustNot be(defined)
         }
-      }
     }
   }
+
 }

@@ -27,13 +27,14 @@ import views.html.register.beneficiaries.WhatTypeOfBeneficiaryView
 class WhatTypeOfBeneficiaryViewSpec extends ViewBehaviours {
 
   val messageKeyPrefixFirst = "whatTypeOfBeneficiary.first"
-  val messageKeyPrefixNext = "whatTypeOfBeneficiary.next"
+  val messageKeyPrefixNext  = "whatTypeOfBeneficiary.next"
 
   val form = new WhatTypeOfBeneficiaryFormProvider()()
 
   val view: WhatTypeOfBeneficiaryView = viewFor[WhatTypeOfBeneficiaryView](Some(emptyUserAnswers))
 
   val roPrefix: String = "whatTypeOfBeneficiary"
+
   val defaultOptions: List[RadioOption] = List(
     RadioOption(roPrefix, WhatTypeOfBeneficiary.Individual.toString),
     RadioOption(roPrefix, WhatTypeOfBeneficiary.ClassOfBeneficiary.toString),
@@ -42,7 +43,7 @@ class WhatTypeOfBeneficiaryViewSpec extends ViewBehaviours {
     RadioOption(roPrefix, WhatTypeOfBeneficiary.Other.toString)
   )
 
-  def applyView(form: Form[_], isAdded :Boolean): HtmlFormat.Appendable =
+  def applyView(form: Form[_], isAdded: Boolean): HtmlFormat.Appendable =
     view.apply(form, fakeDraftId, isAdded, defaultOptions)(fakeRequest, messages)
 
   "WhatTypeOfBeneficiaryView" must {
@@ -66,13 +67,12 @@ class WhatTypeOfBeneficiaryViewSpec extends ViewBehaviours {
 
         val doc = asDocument(applyView(form, isAdded = false))
 
-        for (option <- defaultOptions) {
+        for (option <- defaultOptions)
           assertContainsRadioButton(doc, option.id, "value", option.value, isChecked = false)
-        }
       }
     }
 
-    for (option <- defaultOptions) {
+    for (option <- defaultOptions)
 
       s"rendered with a value of '${option.value}'" must {
 
@@ -82,11 +82,10 @@ class WhatTypeOfBeneficiaryViewSpec extends ViewBehaviours {
 
           assertContainsRadioButton(doc, option.id, "value", option.value, isChecked = true)
 
-          for (unselectedOption <- defaultOptions.filterNot(o => o == option)) {
+          for (unselectedOption <- defaultOptions.filterNot(o => o == option))
             assertContainsRadioButton(doc, unselectedOption.id, "value", unselectedOption.value, isChecked = false)
-          }
         }
       }
-    }
   }
+
 }

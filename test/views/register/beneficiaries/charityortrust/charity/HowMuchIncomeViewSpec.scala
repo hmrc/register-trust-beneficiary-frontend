@@ -27,8 +27,8 @@ class HowMuchIncomeViewSpec extends IntViewBehaviours {
   val prefix = "charity.shareOfIncome"
 
   val form: Form[Int] = new IncomePercentageFormProvider().withPrefix(prefix)
-  val charityName = "Test"
-  val index = 0
+  val charityName     = "Test"
+  val index           = 0
 
   "HowMuchIncome view" must {
 
@@ -46,4 +46,5 @@ class HowMuchIncomeViewSpec extends IntViewBehaviours {
     behave like pageWithASubmitButton(applyView(form))
 
   }
+
 }

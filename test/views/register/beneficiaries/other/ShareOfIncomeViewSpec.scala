@@ -24,9 +24,9 @@ import views.html.register.beneficiaries.other.ShareOfIncomeView
 
 class ShareOfIncomeViewSpec extends IntViewBehaviours {
 
-  private val index = 0
+  private val index            = 0
   private val messageKeyPrefix = "otherBeneficiary.shareOfIncome"
-  private val description = "Other"
+  private val description      = "Other"
 
   override val form: Form[Int] = new IncomePercentageFormProvider().withPrefix(messageKeyPrefix)
 

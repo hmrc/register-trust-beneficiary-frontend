@@ -43,4 +43,5 @@ class AddABeneficiaryYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

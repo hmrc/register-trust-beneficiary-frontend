@@ -23,14 +23,13 @@ import utils.Constants.GB
 
 object IdentificationMapper {
 
-  def buildAddress(address: Address): Option[AddressType] = {
+  def buildAddress(address: Address): Option[AddressType] =
     address match {
-      case a: UKAddress => Some(buildUkAddress(a))
+      case a: UKAddress            => Some(buildUkAddress(a))
       case a: InternationalAddress => Some(buildInternationalAddress(a))
     }
-  }
 
-  private def buildUkAddress(address: UKAddress): AddressType = {
+  private def buildUkAddress(address: UKAddress): AddressType =
     AddressType(
       line1 = address.line1,
       line2 = address.line2,
@@ -39,9 +38,8 @@ object IdentificationMapper {
       postCode = Some(address.postcode),
       country = GB
     )
-  }
 
-  private def buildInternationalAddress(address: InternationalAddress): AddressType = {
+  private def buildInternationalAddress(address: InternationalAddress): AddressType =
     AddressType(
       line1 = address.line1,
       line2 = address.line2,
@@ -50,7 +48,6 @@ object IdentificationMapper {
       postCode = None,
       country = address.country
     )
-  }
 
   def buildPassport(details: PassportOrIdCardDetails): Option[PassportType] =
     Some(PassportType(details.cardNumber, details.expiryDate, details.country))

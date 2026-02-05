@@ -19,13 +19,14 @@ package mapping.reads
 import models.core.pages.{InternationalAddress, UKAddress}
 import play.api.libs.json.{Format, Json}
 
-
-final case class TrustBeneficiary(name: String,
-                                  discretionYesNo: Option[Boolean],
-                                  shareOfIncome: Option[Int],
-                                  countryOfResidence: Option[String],
-                                  ukAddress: Option[UKAddress],
-                                  internationalAddress: Option[InternationalAddress]) extends OrgBeneficiaryWithAddress
+final case class TrustBeneficiary(
+  name: String,
+  discretionYesNo: Option[Boolean],
+  shareOfIncome: Option[Int],
+  countryOfResidence: Option[String],
+  ukAddress: Option[UKAddress],
+  internationalAddress: Option[InternationalAddress]
+) extends OrgBeneficiaryWithAddress
 
 object TrustBeneficiary {
   implicit val format: Format[TrustBeneficiary] = Json.format[TrustBeneficiary]

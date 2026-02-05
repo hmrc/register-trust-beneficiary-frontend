@@ -42,13 +42,18 @@ class IDCardDetailsControllerSpec extends SpecBase {
   private val mockFrontendAppConfig = mock[FrontendAppConfig]
 
   private val formProvider = new PassportOrIdCardFormProvider(mockFrontendAppConfig)
-  private val index: Int = 0
-  private val form: Form[PassportOrIdCardDetails] = formProvider("individualBeneficiaryIDCardDetails", emptyUserAnswers, index)
+  private val index: Int   = 0
+
+  private val form: Form[PassportOrIdCardDetails] =
+    formProvider("individualBeneficiaryIDCardDetails", emptyUserAnswers, index)
 
   private val fullName: FullName = FullName("first name", None, "Last name")
-  private val validData: PassportOrIdCardDetails = PassportOrIdCardDetails("country", "card number", LocalDate.of(2020, 1, 1))
 
-  private lazy val idCardDetailsControllerRoute: String = routes.IDCardDetailsController.onPageLoad(index, fakeDraftId).url
+  private val validData: PassportOrIdCardDetails =
+    PassportOrIdCardDetails("country", "card number", LocalDate.of(2020, 1, 1))
+
+  private lazy val idCardDetailsControllerRoute: String =
+    routes.IDCardDetailsController.onPageLoad(index, fakeDraftId).url
 
   "IDCardDetails Controller" must {
 
@@ -77,8 +82,10 @@ class IDCardDetailsControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), fullName).value
-        .set(IDCardDetailsPage(index), validData).value
+        .set(NamePage(index), fullName)
+        .value
+        .set(IDCardDetailsPage(index), validData)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -106,16 +113,17 @@ class IDCardDetailsControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, idCardDetailsControllerRoute)
           .withFormUrlEncodedBody(
-            "country" -> "country",
-            "number" -> "123456",
-            "expiryDate.day" -> "01",
+            "country"          -> "country",
+            "number"           -> "123456",
+            "expiryDate.day"   -> "01",
             "expiryDate.month" -> "01",
-            "expiryDate.year" -> "2020"
+            "expiryDate.year"  -> "2020"
           )
 
       val result = route(application, request).value
@@ -134,16 +142,17 @@ class IDCardDetailsControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = Left(ServerError()))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, idCardDetailsControllerRoute)
           .withFormUrlEncodedBody(
-            "country" -> "country",
-            "number" -> "123456",
-            "expiryDate.day" -> "01",
+            "country"          -> "country",
+            "number"           -> "123456",
+            "expiryDate.day"   -> "01",
             "expiryDate.month" -> "01",
-            "expiryDate.year" -> "2020"
+            "expiryDate.year"  -> "2020"
           )
 
       val result = route(application, request).value
@@ -215,4 +224,5 @@ class IDCardDetailsControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

@@ -22,7 +22,7 @@ import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.beneficiaries.{Beneficiaries, CharityBeneficiaries}
 
-final case class AmountDiscretionYesNoPage(index : Int) extends QuestionPage[Boolean] {
+final case class AmountDiscretionYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
   override def path: JsPath = JsPath \ Beneficiaries \ CharityBeneficiaries \ index \ toString
 
@@ -31,6 +31,7 @@ final case class AmountDiscretionYesNoPage(index : Int) extends QuestionPage[Boo
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Either[TrustErrors, UserAnswers] =
     value match {
       case Some(true) => userAnswers.remove(HowMuchIncomePage(index))
-      case _ => super.cleanup(value, userAnswers)
+      case _          => super.cleanup(value, userAnswers)
     }
+
 }

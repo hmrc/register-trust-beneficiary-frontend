@@ -57,4 +57,5 @@ class SessionExpiredControllerSpec extends SpecBase {
         s"${frontendAppConfig.loginUrl}?continue=http%3A%2F%2Flocalhost%3A9781%2Ftrusts-registration&origin=register-trust-beneficiary-frontend"
     }
   }
+
 }

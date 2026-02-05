@@ -31,32 +31,37 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
 
-class SubmissionDraftConnector @Inject()(http: HttpClientV2, config: FrontendAppConfig) extends ConnectorErrorResponseHandler {
+class SubmissionDraftConnector @Inject() (http: HttpClientV2, config: FrontendAppConfig)
+    extends ConnectorErrorResponseHandler {
 
   override val className: String = getClass.getName
 
   private val submissionsBaseUrl = s"${config.trustsUrl}/trusts/register/submission-drafts"
 
-  def setDraftSectionSet(draftId: String, section: String, data: RegistrationSubmission.DataSet)
-                        (implicit hc: HeaderCarrier, ec: ExecutionContext): TrustEnvelope[Boolean] = {
+  def setDraftSectionSet(draftId: String, section: String, data: RegistrationSubmission.DataSet)(implicit
+    hc: HeaderCarrier,
+    ec: ExecutionContext
+  ): TrustEnvelope[Boolean] =
     EitherT {
       http
         .post(url"$submissionsBaseUrl/$draftId/set/$section")
         .withBody(Json.toJson(data))
         .execute[HttpResponse]
-        .map(response => {
+        .map(response =>
           response.status match {
-            case OK => Right(true)
+            case OK     => Right(true)
             case status => Left(handleError(status, "setDraftSectionSet"))
           }
-        })
-        .recover {
-          case ex => Left(handleError(ex, "setDraftSectionSet"))
+        )
+        .recover { case ex =>
+          Left(handleError(ex, "setDraftSectionSet"))
         }
     }
-  }
 
-  def getDraftSection(draftId: String, section: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): TrustEnvelope[SubmissionDraftResponse] = {
+  def getDraftSection(draftId: String, section: String)(implicit
+    hc: HeaderCarrier,
+    ec: ExecutionContext
+  ): TrustEnvelope[SubmissionDraftResponse] =
     EitherT {
       http
         .get(url"$submissionsBaseUrl/$draftId/$section")
@@ -66,30 +71,33 @@ class SubmissionDraftConnector @Inject()(http: HttpClientV2, config: FrontendApp
             case OK =>
               Try(response.json.as[SubmissionDraftResponse]) match {
                 case Success(submissionDraftResponse) => Right(submissionDraftResponse)
-                case Failure(e) =>
-                  logger.error(s"[$className][getDraftSection] Error parsing JSON, status: ${response.status}, " +
-                    s"and body: ${response.body}, exception: ${e.getMessage}")
+                case Failure(e)                       =>
+                  logger.error(
+                    s"[$className][getDraftSection] Error parsing JSON, status: ${response.status}, " +
+                      s"and body: ${response.body}, exception: ${e.getMessage}"
+                  )
 
                   Left(ServerError())
               }
-            case _ =>
-              logger.error(s"[$className][getDraftSection] Error with status: ${response.status}, and body: ${response.body}")
+            case _  =>
+              logger.error(
+                s"[$className][getDraftSection] Error with status: ${response.status}, and body: ${response.body}"
+              )
               Left(ServerError())
           }
         )
     }
-  }
 
-  def getIsTrustTaxable(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): TrustEnvelope[Boolean] = {
+  def getIsTrustTaxable(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): TrustEnvelope[Boolean] =
 
     EitherT[Future, TrustErrors, Boolean] {
       http
         .get(url"$submissionsBaseUrl/$draftId/is-trust-taxable")
         .execute[Boolean]
         .map(Right(_))
-        .recover {
-          case _ => Right(true)
+        .recover { case _ =>
+          Right(true)
         }
     }
-  }
+
 }

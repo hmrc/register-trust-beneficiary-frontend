@@ -32,19 +32,18 @@ class RegistrationProgressSpec extends SpecBase {
 
     "render no tag" when {
 
-        "there is no beneficiaries in user answers" in {
-          val registrationProgress = injector.instanceOf[RegistrationProgress]
+      "there is no beneficiaries in user answers" in {
+        val registrationProgress = injector.instanceOf[RegistrationProgress]
 
-          val userAnswers = emptyUserAnswers
+        val userAnswers = emptyUserAnswers
 
-          registrationProgress.beneficiariesStatus(userAnswers) mustBe None
-        }
+        registrationProgress.beneficiariesStatus(userAnswers) mustBe None
+      }
 
-        "individual beneficiaries list is empty" in {
-          val registrationProgress = injector.instanceOf[RegistrationProgress]
+      "individual beneficiaries list is empty" in {
+        val registrationProgress = injector.instanceOf[RegistrationProgress]
 
-          val json = Json.parse(
-            """
+        val json = Json.parse("""
               |{
               |"beneficiaries" : {
               |            "whatTypeOfBeneficiary" : "Individual",
@@ -54,16 +53,15 @@ class RegistrationProgressSpec extends SpecBase {
               |}
               |""".stripMargin)
 
-          val userAnswers = UserAnswers(draftId = fakeDraftId, data = json.as[JsObject], internalAuthId = "id")
+        val userAnswers = UserAnswers(draftId = fakeDraftId, data = json.as[JsObject], internalAuthId = "id")
 
-          registrationProgress.beneficiariesStatus(userAnswers) mustBe None
-        }
+        registrationProgress.beneficiariesStatus(userAnswers) mustBe None
+      }
 
-        "class of beneficiaries list is empty" in {
-          val registrationProgress = injector.instanceOf[RegistrationProgress]
+      "class of beneficiaries list is empty" in {
+        val registrationProgress = injector.instanceOf[RegistrationProgress]
 
-          val json = Json.parse(
-            """
+        val json = Json.parse("""
               |{
               |"beneficiaries" : {
               |            "whatTypeOfBeneficiary" : "Individual",
@@ -73,12 +71,12 @@ class RegistrationProgressSpec extends SpecBase {
               |}
               |""".stripMargin)
 
-          val userAnswers = UserAnswers(draftId = fakeDraftId, data = json.as[JsObject], internalAuthId = "id")
+        val userAnswers = UserAnswers(draftId = fakeDraftId, data = json.as[JsObject], internalAuthId = "id")
 
-          registrationProgress.beneficiariesStatus(userAnswers) mustBe None
-        }
-
+        registrationProgress.beneficiariesStatus(userAnswers) mustBe None
       }
+
+    }
 
     "render in-progress tag" when {
 
@@ -86,7 +84,8 @@ class RegistrationProgressSpec extends SpecBase {
         val registrationProgress = injector.instanceOf[RegistrationProgress]
 
         val userAnswers = emptyUserAnswers
-          .set(NamePage(0), FullName("First", None, "Last")).value
+          .set(NamePage(0), FullName("First", None, "Last"))
+          .value
 
         registrationProgress.beneficiariesStatus(userAnswers).value mustBe Status.InProgress
       }
@@ -96,9 +95,12 @@ class RegistrationProgressSpec extends SpecBase {
         val registrationProgress = injector.instanceOf[RegistrationProgress]
 
         val userAnswers = emptyUserAnswers
-          .set(ClassBeneficiaryDescriptionPage(0), "Description").value
-          .set(ClassBeneficiaryStatus(0), Status.Completed).value
-          .set(NamePage(0), FullName("First", None, "Last")).value
+          .set(ClassBeneficiaryDescriptionPage(0), "Description")
+          .value
+          .set(ClassBeneficiaryStatus(0), Status.Completed)
+          .value
+          .set(NamePage(0), FullName("First", None, "Last"))
+          .value
 
         registrationProgress.beneficiariesStatus(userAnswers).value mustBe Status.InProgress
       }
@@ -108,11 +110,16 @@ class RegistrationProgressSpec extends SpecBase {
         val registrationProgress = injector.instanceOf[RegistrationProgress]
 
         val userAnswers = emptyUserAnswers
-          .set(ClassBeneficiaryDescriptionPage(0), "Description").value
-          .set(ClassBeneficiaryStatus(0), Status.Completed).value
-          .set(NamePage(0), FullName("First", None, "Last")).value
-          .set(IndividualBeneficiaryStatus(0), Status.Completed).value
-          .set(AddABeneficiaryPage, AddABeneficiary.YesLater).value
+          .set(ClassBeneficiaryDescriptionPage(0), "Description")
+          .value
+          .set(ClassBeneficiaryStatus(0), Status.Completed)
+          .value
+          .set(NamePage(0), FullName("First", None, "Last"))
+          .value
+          .set(IndividualBeneficiaryStatus(0), Status.Completed)
+          .value
+          .set(AddABeneficiaryPage, AddABeneficiary.YesLater)
+          .value
 
         registrationProgress.beneficiariesStatus(userAnswers).value mustBe Status.InProgress
       }
@@ -125,9 +132,12 @@ class RegistrationProgressSpec extends SpecBase {
         val registrationProgress = injector.instanceOf[RegistrationProgress]
 
         val userAnswers = emptyUserAnswers
-          .set(NamePage(0), FullName("First", None, "Last")).value
-          .set(IndividualBeneficiaryStatus(0), Status.Completed).value
-          .set(AddABeneficiaryPage, AddABeneficiary.NoComplete).value
+          .set(NamePage(0), FullName("First", None, "Last"))
+          .value
+          .set(IndividualBeneficiaryStatus(0), Status.Completed)
+          .value
+          .set(AddABeneficiaryPage, AddABeneficiary.NoComplete)
+          .value
 
         registrationProgress.beneficiariesStatus(userAnswers).value mustBe Status.Completed
       }
@@ -136,11 +146,16 @@ class RegistrationProgressSpec extends SpecBase {
         val registrationProgress = injector.instanceOf[RegistrationProgress]
 
         val userAnswers = emptyUserAnswers
-          .set(ClassBeneficiaryDescriptionPage(0), "Description").value
-          .set(ClassBeneficiaryStatus(0), Status.Completed).value
-          .set(NamePage(0), FullName("First", None, "Last")).value
-          .set(IndividualBeneficiaryStatus(0), Status.Completed).value
-          .set(AddABeneficiaryPage, AddABeneficiary.NoComplete).value
+          .set(ClassBeneficiaryDescriptionPage(0), "Description")
+          .value
+          .set(ClassBeneficiaryStatus(0), Status.Completed)
+          .value
+          .set(NamePage(0), FullName("First", None, "Last"))
+          .value
+          .set(IndividualBeneficiaryStatus(0), Status.Completed)
+          .value
+          .set(AddABeneficiaryPage, AddABeneficiary.NoComplete)
+          .value
 
         registrationProgress.beneficiariesStatus(userAnswers).value mustBe Status.Completed
       }
@@ -148,4 +163,5 @@ class RegistrationProgressSpec extends SpecBase {
     }
 
   }
+
 }

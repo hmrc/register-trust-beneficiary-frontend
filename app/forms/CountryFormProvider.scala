@@ -30,6 +30,8 @@ class CountryFormProvider @Inject() extends Mappings {
             maxLength(100, s"$prefix.error.length"),
             regexp(Validation.countryRegex, s"$prefix.error.invalidCharacters"),
             nonEmptyString("value", s"$prefix.error.required")
-          ))
+          )
         )
+    )
+
 }

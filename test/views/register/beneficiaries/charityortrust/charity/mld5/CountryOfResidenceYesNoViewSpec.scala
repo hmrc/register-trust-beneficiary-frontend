@@ -24,8 +24,8 @@ import views.html.register.beneficiaries.charityortrust.charity.mld5.CountryOfRe
 
 class CountryOfResidenceYesNoViewSpec extends YesNoViewBehaviours {
 
-  val prefix = "charity.5mld.countryOfResidenceYesNo"
-  val index = 0
+  val prefix      = "charity.5mld.countryOfResidenceYesNo"
+  val index       = 0
   val charityName = "Test"
 
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(prefix)
@@ -45,4 +45,5 @@ class CountryOfResidenceYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

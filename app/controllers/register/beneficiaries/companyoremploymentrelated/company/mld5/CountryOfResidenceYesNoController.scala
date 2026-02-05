@@ -37,67 +37,70 @@ import views.html.register.beneficiaries.companyoremploymentrelated.company.mld5
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CountryOfResidenceYesNoController @Inject()(
-                                                   val controllerComponents: MessagesControllerComponents,
-                                                   repository: RegistrationsRepository,
-                                                   @CompanyBeneficiary navigator: Navigator,
-                                                   standardActionSets: StandardActionSets,
-                                                   nameAction: NameRequiredAction,
-                                                   formProvider: YesNoFormProvider,
-                                                   view: CountryOfResidenceYesNoView,
-                                                   technicalErrorView: TechnicalErrorView,
-                                                   errorHandler: ErrorHandler
-                                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class CountryOfResidenceYesNoController @Inject() (
+  val controllerComponents: MessagesControllerComponents,
+  repository: RegistrationsRepository,
+  @CompanyBeneficiary navigator: Navigator,
+  standardActionSets: StandardActionSets,
+  nameAction: NameRequiredAction,
+  formProvider: YesNoFormProvider,
+  view: CountryOfResidenceYesNoView,
+  technicalErrorView: TechnicalErrorView,
+  errorHandler: ErrorHandler
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
-  private val className = getClass.getSimpleName
+  private val className           = getClass.getSimpleName
   private val form: Form[Boolean] = formProvider.withPrefix("companyBeneficiary.5mld.countryOfResidenceYesNo")
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
-    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
-      implicit request =>
-        handlePageLoad(index, draftId)
+    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async { implicit request =>
+      handlePageLoad(index, draftId)
     }
 
-  def handlePageLoad(index: Int, draftId: String)(implicit request: BeneficiaryNameRequest[_]): Future[Result] = {
+  def handlePageLoad(index: Int, draftId: String)(implicit request: BeneficiaryNameRequest[_]): Future[Result] =
     request.userAnswers.get(NamePage(index)) match {
       case Some(trustName) =>
         val preparedForm = request.userAnswers.get(CountryOfResidenceYesNoPage(index)) match {
-          case None =>
+          case None        =>
             form
           case Some(value) =>
             form.fill(value)
         }
 
         Future.successful(Ok(view(preparedForm, draftId, index, trustName)))
-      case None =>
-        logger.warn(s"[$className][handlePageLoad][Session ID: ${request.request.sessionId}] Error while getting trust name")
+      case None            =>
+        logger.warn(
+          s"[$className][handlePageLoad][Session ID: ${request.request.sessionId}] Error while getting trust name"
+        )
         errorHandler.notFoundTemplate.map(NotFound(_))
     }
-  }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
-    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async {
-      implicit request =>
+    standardActionSets.identifiedUserWithData(draftId).andThen(nameAction(index)).async { implicit request =>
+      val trustName = request.userAnswers.get(NamePage(index)).get
 
-        val trustName = request.userAnswers.get(NamePage(index)).get
-
-        form.bindFromRequest().fold(
-          formWithErrors =>
-            Future.successful(BadRequest(view(formWithErrors, draftId, index, trustName))),
-
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, draftId, index, trustName))),
           value => {
             val result = for {
-              updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(CountryOfResidenceYesNoPage(index), value)))
-              _ <- repository.set(updatedAnswers)
+              updatedAnswers <-
+                EitherT(Future.successful(request.userAnswers.set(CountryOfResidenceYesNoPage(index), value)))
+              _              <- repository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId, updatedAnswers))
 
             result.value.map {
               case Right(call) => call
-              case Left(_) =>
-                logger.warn(s"[$className][onSubmit][Session ID: ${request.request.sessionId}] Error while storing user answers")
+              case Left(_)     =>
+                logger.warn(
+                  s"[$className][onSubmit][Session ID: ${request.request.sessionId}] Error while storing user answers"
+                )
                 InternalServerError(technicalErrorView())
             }
           }
         )
     }
+
 }

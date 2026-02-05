@@ -26,17 +26,18 @@ import views.html.register.beneficiaries.individualBeneficiary.IncomeYesNoView
 
 class IncomeYesNoViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "individualBeneficiaryIncomeYesNo"
-  val index = 0
+  val messageKeyPrefix   = "individualBeneficiaryIncomeYesNo"
+  val index              = 0
   val fullName: FullName = FullName("First", None, "Last")
-  val name: String = fullName.toString
+  val name: String       = fullName.toString
 
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
   "IndividualBeneficiaryIncomeYesNo view" must {
 
     val userAnswers = emptyUserAnswers
-      .set(NamePage(index), fullName).value
+      .set(NamePage(index), fullName)
+      .value
 
     val view = viewFor[IncomeYesNoView](Some(userAnswers))
 
@@ -57,4 +58,5 @@ class IncomeYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

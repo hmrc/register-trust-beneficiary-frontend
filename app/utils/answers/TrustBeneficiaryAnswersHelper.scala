@@ -23,8 +23,8 @@ import viewmodels.addAnother.TrustBeneficiaryViewModel
 
 import javax.inject.Inject
 
-class TrustBeneficiaryAnswersHelper @Inject()(printHelper: TrustBeneficiaryPrintHelper)
-  extends AnswersHelper[TrustBeneficiaryViewModel](printHelper) {
+class TrustBeneficiaryAnswersHelper @Inject() (printHelper: TrustBeneficiaryPrintHelper)
+    extends AnswersHelper[TrustBeneficiaryViewModel](printHelper) {
 
   override val beneficiaryType: QuestionPage[List[TrustBeneficiaryViewModel]] = TrustBeneficiaries
 }

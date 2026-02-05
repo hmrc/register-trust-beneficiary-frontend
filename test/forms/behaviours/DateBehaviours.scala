@@ -25,95 +25,80 @@ import java.time.format.DateTimeFormatter
 
 trait DateBehaviours extends FieldBehaviours {
 
-  def dateField(form: Form[_], key: String, validData: Gen[LocalDate]): Unit = {
+  def dateField(form: Form[_], key: String, validData: Gen[LocalDate]): Unit =
 
-    "bind valid data" in {
+    "bind valid data" in
+      forAll(validData -> "valid date") { date =>
+        val data = Map(
+          s"$key.day"   -> date.getDayOfMonth.toString,
+          s"$key.month" -> date.getMonthValue.toString,
+          s"$key.year"  -> date.getYear.toString
+        )
 
-      forAll(validData -> "valid date") {
-        date =>
+        val result = form.bind(data)
 
-          val data = Map(
-            s"$key.day"   -> date.getDayOfMonth.toString,
-            s"$key.month" -> date.getMonthValue.toString,
-            s"$key.year"  -> date.getYear.toString
-          )
-
-          val result = form.bind(data)
-
-          result.value.value shouldEqual date
+        result.value.value shouldEqual date
       }
-    }
-  }
 
-  def dateFieldForPassportOrIdForm(form: Form[PassportOrIdCardDetails],
-                                   key: String, validData: Gen[LocalDate],
-                                   requiredBindings: Map[String,String] = Map.empty): Unit = {
+  def dateFieldForPassportOrIdForm(
+    form: Form[PassportOrIdCardDetails],
+    key: String,
+    validData: Gen[LocalDate],
+    requiredBindings: Map[String, String] = Map.empty
+  ): Unit =
 
-    "bind valid data" in {
+    "bind valid data" in
+      forAll(validData -> "valid date") { date =>
+        val data = requiredBindings ++ Map(
+          s"$key.day"   -> date.getDayOfMonth.toString,
+          s"$key.month" -> date.getMonthValue.toString,
+          s"$key.year"  -> date.getYear.toString
+        )
 
-      forAll(validData -> "valid date") {
-        date =>
+        val result = form.bind(data)
 
-          val data = requiredBindings ++ Map(
-            s"$key.day"   -> date.getDayOfMonth.toString,
-            s"$key.month" -> date.getMonthValue.toString,
-            s"$key.year"  -> date.getYear.toString
-          )
-
-          val result = form.bind(data)
-
-          result.value.value.expiryDate shouldEqual date
+        result.value.value.expiryDate shouldEqual date
       }
-    }
-  }
 
-
-  def dateFieldWithMax(form: Form[_], key: String, max: LocalDate, formError: FormError): Unit = {
+  def dateFieldWithMax(form: Form[_], key: String, max: LocalDate, formError: FormError): Unit =
 
     s"fail to bind a date greater than ${max.format(DateTimeFormatter.ISO_LOCAL_DATE)}" in {
 
       val generator = datesBetween(max.plusDays(1), max.plusYears(10))
 
-      forAll(generator -> "invalid dates") {
-        date =>
+      forAll(generator -> "invalid dates") { date =>
+        val data = Map(
+          s"$key.day"   -> date.getDayOfMonth.toString,
+          s"$key.month" -> date.getMonthValue.toString,
+          s"$key.year"  -> date.getYear.toString
+        )
 
-          val data = Map(
-            s"$key.day"   -> date.getDayOfMonth.toString,
-            s"$key.month" -> date.getMonthValue.toString,
-            s"$key.year"  -> date.getYear.toString
-          )
+        val result = form.bind(data).apply(key)
 
-          val result = form.bind(data).apply(key)
-
-          result.errors shouldEqual Seq(formError)
+        result.errors shouldEqual Seq(formError)
       }
     }
-  }
 
-  def dateFieldWithMin(form: Form[_], key: String, min: LocalDate, formError: FormError): Unit = {
+  def dateFieldWithMin(form: Form[_], key: String, min: LocalDate, formError: FormError): Unit =
 
     s"fail to bind a date greater than ${min.format(DateTimeFormatter.ISO_LOCAL_DATE)}" in {
 
       val generator = datesBetween(min.minusYears(10), min.minusDays(1))
 
-      forAll(generator -> "invalid dates") {
-        date =>
+      forAll(generator -> "invalid dates") { date =>
+        val data = Map(
+          s"$key.day"   -> date.getDayOfMonth.toString,
+          s"$key.month" -> date.getMonthValue.toString,
+          s"$key.year"  -> date.getYear.toString
+        )
 
-          val data = Map(
-            s"$key.day"   -> date.getDayOfMonth.toString,
-            s"$key.month" -> date.getMonthValue.toString,
-            s"$key.year"  -> date.getYear.toString
-          )
+        val result = form.bind(data).apply(key)
 
-          val result = form.bind(data).apply(key)
-
-          result.errors shouldEqual Seq(formError)
+        result.errors shouldEqual Seq(formError)
       }
     }
-  }
 
-
-  def mandatoryDateField(form: Form[_], key: String, requiredAllKey: String): Unit = {
+  def mandatoryDateField(form: Form[_], key: String, requiredAllKey: String): Unit =
 
     "fail to bind an empty date" in {
 
@@ -121,5 +106,5 @@ trait DateBehaviours extends FieldBehaviours {
 
       result.errors should contain only FormError(key, requiredAllKey, List("day", "month", "year"))
     }
-  }
+
 }

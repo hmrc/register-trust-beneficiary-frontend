@@ -35,15 +35,16 @@ import views.html.register.beneficiaries.companyoremploymentrelated.employmentRe
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DescriptionController @Inject()(
-                                       val controllerComponents: MessagesControllerComponents,
-                                       standardActionSets: StandardActionSets,
-                                       formProvider: EmploymentRelatedBeneficiaryDescriptionFormProvider,
-                                       view: DescriptionView,
-                                       repository: RegistrationsRepository,
-                                       @EmploymentRelatedBeneficiary navigator: Navigator,
-                                       technicalErrorView: TechnicalErrorView
-                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class DescriptionController @Inject() (
+  val controllerComponents: MessagesControllerComponents,
+  standardActionSets: StandardActionSets,
+  formProvider: EmploymentRelatedBeneficiaryDescriptionFormProvider,
+  view: DescriptionView,
+  repository: RegistrationsRepository,
+  @EmploymentRelatedBeneficiary navigator: Navigator,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private val className = getClass.getSimpleName
 
@@ -51,9 +52,8 @@ class DescriptionController @Inject()(
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId) {
     implicit request =>
-
       val preparedForm = request.userAnswers.get(LargeBeneficiaryDescriptionPage(index)) match {
-        case None => form
+        case None        => form
         case Some(value) => form.fill(value)
       }
 
@@ -61,26 +61,28 @@ class DescriptionController @Inject()(
 
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).async {
-    implicit request =>
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] =
+    standardActionSets.identifiedUserWithData(draftId).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, index, draftId))),
+          value => {
+            val result = for {
+              updatedAnswers <-
+                EitherT(Future.successful(request.userAnswers.set(LargeBeneficiaryDescriptionPage(index), value)))
+              _              <- repository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(LargeBeneficiaryDescriptionPage(index), draftId, updatedAnswers))
 
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, index, draftId))),
-
-        value => {
-          val result = for {
-            updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(LargeBeneficiaryDescriptionPage(index), value)))
-            _ <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(LargeBeneficiaryDescriptionPage(index), draftId, updatedAnswers))
-
-          result.value.map {
-            case Right(call) => call
-            case Left(_) =>
-              logger.warn(s"[$className][onSubmit][Session ID: ${request.sessionId}] Error while storing user answers")
-              InternalServerError(technicalErrorView())
+            result.value.map {
+              case Right(call) => call
+              case Left(_)     =>
+                logger
+                  .warn(s"[$className][onSubmit][Session ID: ${request.sessionId}] Error while storing user answers")
+                InternalServerError(technicalErrorView())
+            }
           }
-        }
-      )
-  }
+        )
+    }
+
 }

@@ -28,8 +28,8 @@ class DescriptionViewSpec extends QuestionViewBehaviours[Description] {
   val messageKeyPrefix = "employmentRelatedBeneficiary.description"
 
   val form: Form[Description] = new EmploymentRelatedBeneficiaryDescriptionFormProvider().withPrefix(messageKeyPrefix)
-  val view: DescriptionView = viewFor[DescriptionView](Some(emptyUserAnswers))
-  val index = 0
+  val view: DescriptionView   = viewFor[DescriptionView](Some(emptyUserAnswers))
+  val index                   = 0
 
   "Description view" must {
 
@@ -46,7 +46,13 @@ class DescriptionViewSpec extends QuestionViewBehaviours[Description] {
       form,
       applyView,
       messageKeyPrefix,
-      Seq(("description",None), ("description1",None), ("description2",None), ("description3",None), ("description4",None))
+      Seq(
+        ("description", None),
+        ("description1", None),
+        ("description2", None),
+        ("description3", None),
+        ("description4", None)
+      )
     )
 
     behave like pageWithASubmitButton(applyView(form))

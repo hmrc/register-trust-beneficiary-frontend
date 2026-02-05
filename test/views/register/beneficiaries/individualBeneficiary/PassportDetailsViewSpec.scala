@@ -30,9 +30,9 @@ import views.html.register.beneficiaries.individualBeneficiary.PassportDetailsVi
 class PassportDetailsViewSpec extends QuestionViewBehaviours[PassportOrIdCardDetails] {
 
   private val messageKeyPrefix = "individualBeneficiaryPassportDetails"
-  private val index = 0
-  private val name = FullName("First", Some("Middle"), "Last")
-  private val userAnswers = UserAnswers(draftId = "", internalAuthId = "")
+  private val index            = 0
+  private val name             = FullName("First", Some("Middle"), "Last")
+  private val userAnswers      = UserAnswers(draftId = "", internalAuthId = "")
 
   override val form = new PassportOrIdCardFormProvider(frontendAppConfig)(messageKeyPrefix, userAnswers, index)
 
@@ -45,7 +45,7 @@ class PassportDetailsViewSpec extends QuestionViewBehaviours[PassportOrIdCardDet
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, countryOptions, fakeDraftId, index, name)(fakeRequest, messages)
 
-    val applyViewF = (form : Form[_]) => applyView(form)
+    val applyViewF = (form: Form[_]) => applyView(form)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString)
 
@@ -62,4 +62,5 @@ class PassportDetailsViewSpec extends QuestionViewBehaviours[PassportOrIdCardDet
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

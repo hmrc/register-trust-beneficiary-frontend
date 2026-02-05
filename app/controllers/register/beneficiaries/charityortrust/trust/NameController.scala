@@ -34,53 +34,54 @@ import views.html.register.beneficiaries.charityortrust.trust.NameView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class NameController @Inject()(
-                                override val messagesApi: MessagesApi,
-                                registrationsRepository: RegistrationsRepository,
-                                override val controllerComponents: MessagesControllerComponents,
-                                @TrustBeneficiary navigator: Navigator,
-                                formProvider: StringFormProvider,
-                                standardActionSets: StandardActionSets,
-                                view: NameView,
-                                technicalErrorView: TechnicalErrorView
-                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class NameController @Inject() (
+  override val messagesApi: MessagesApi,
+  registrationsRepository: RegistrationsRepository,
+  override val controllerComponents: MessagesControllerComponents,
+  @TrustBeneficiary navigator: Navigator,
+  formProvider: StringFormProvider,
+  standardActionSets: StandardActionSets,
+  view: NameView,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
-  private val className = getClass.getSimpleName
+  private val className          = getClass.getSimpleName
   private val maximumLength: Int = 105
 
   private val form: Form[String] = formProvider.withPrefix("trustBeneficiaryName", maximumLength)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId) {
     implicit request =>
-
       val preparedForm = request.userAnswers.get(NamePage(index)) match {
-        case None => form
+        case None        => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm,  draftId, index))
+      Ok(view(preparedForm, draftId, index))
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = standardActionSets.identifiedUserWithData(draftId).async {
-    implicit request =>
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] =
+    standardActionSets.identifiedUserWithData(draftId).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, draftId, index))),
+          value => {
+            val result = for {
+              updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(NamePage(index), value)))
+              _              <- registrationsRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(NamePage(index), draftId, updatedAnswers))
 
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index))),
-
-        value => {
-          val result = for {
-            updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(NamePage(index), value)))
-            _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(NamePage(index), draftId, updatedAnswers))
-
-          result.value.map {
-            case Right(call) => call
-            case Left(_) =>
-              logger.warn(s"[$className][onSubmit][Session ID: ${request.sessionId}] Error while storing user answers")
-              InternalServerError(technicalErrorView())
+            result.value.map {
+              case Right(call) => call
+              case Left(_)     =>
+                logger
+                  .warn(s"[$className][onSubmit][Session ID: ${request.sessionId}] Error while storing user answers")
+                InternalServerError(technicalErrorView())
+            }
           }
-        }
-      )
-  }
+        )
+    }
+
 }

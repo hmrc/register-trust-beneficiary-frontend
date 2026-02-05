@@ -32,7 +32,7 @@ class RemoveTrustBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
   private val messagesPrefix = "removeTrustBeneficiaryYesNo"
 
-  private val formProvider = new RemoveIndexFormProvider()
+  private val formProvider        = new RemoveIndexFormProvider()
   private val form: Form[Boolean] = formProvider(messagesPrefix)
 
   private lazy val formRoute: Call = routes.RemoveTrustBeneficiaryController.onSubmit(0, fakeDraftId)
@@ -80,7 +80,10 @@ class RemoveTrustBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(messagesPrefix, form, index, fakeDraftId, "Trust Ltd", formRoute)(request, messages).toString
+        contentAsString(result) mustEqual view(messagesPrefix, form, index, fakeDraftId, "Trust Ltd", formRoute)(
+          request,
+          messages
+        ).toString
 
         application.stop()
       }
@@ -91,8 +94,7 @@ class RemoveTrustBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
       val userAnswers = emptyUserAnswers.set(NamePage(0), "Trust Ltd").value
 
-      forAll(arbitrary[Boolean]) {
-        value =>
+      forAll(arbitrary[Boolean]) { value =>
         val application =
           applicationBuilder(userAnswers = Some(userAnswers))
             .build()
@@ -105,7 +107,9 @@ class RemoveTrustBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(fakeDraftId).url
+        redirectLocation(result).value mustEqual controllers.register.beneficiaries.routes.AddABeneficiaryController
+          .onPageLoad(fakeDraftId)
+          .url
 
         application.stop()
       }
@@ -192,4 +196,5 @@ class RemoveTrustBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
       application.stop()
     }
   }
+
 }

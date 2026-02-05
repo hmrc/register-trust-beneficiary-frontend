@@ -26,7 +26,7 @@ import views.html.register.beneficiaries.charityortrust.charity.CharityInternati
 
 class CharityInternationalAddressViewSpec extends InternationalAddressViewBehaviours {
 
-  val prefix = "charity.internationalAddress"
+  val prefix      = "charity.internationalAddress"
   val charityName = "Test"
 
   val index: Int = 0
@@ -49,4 +49,5 @@ class CharityInternationalAddressViewSpec extends InternationalAddressViewBehavi
     behave like pageWithASubmitButton(applyView(form))
 
   }
+
 }

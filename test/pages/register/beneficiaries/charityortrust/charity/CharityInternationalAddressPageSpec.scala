@@ -29,4 +29,5 @@ class CharityInternationalAddressPageSpec extends PageBehaviours {
 
     beRemovable[InternationalAddress](CharityInternationalAddressPage(0))
   }
+
 }

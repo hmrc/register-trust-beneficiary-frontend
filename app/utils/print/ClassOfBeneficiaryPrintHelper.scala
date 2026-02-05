@@ -23,17 +23,23 @@ import pages.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDescrip
 import play.api.i18n.Messages
 import viewmodels.AnswerRow
 
-class ClassOfBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter) extends PrintHelper {
+class ClassOfBeneficiaryPrintHelper @Inject() (answerRowConverter: AnswerRowConverter) extends PrintHelper {
 
   override val beneficiaryType: String = "classOfBeneficiary"
 
-  override def answers(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
-                      (implicit messages: Messages): Seq[AnswerRow] = {
+  override def answers(userAnswers: UserAnswers, name: String, index: Int, draftId: String)(implicit
+    messages: Messages
+  ): Seq[AnswerRow] = {
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
 
     Seq(
-      bound.stringQuestion(ClassBeneficiaryDescriptionPage(index), "classBeneficiaryDescription", ClassBeneficiaryDescriptionController.onPageLoad(index, draftId).url)
+      bound.stringQuestion(
+        ClassBeneficiaryDescriptionPage(index),
+        "classBeneficiaryDescription",
+        ClassBeneficiaryDescriptionController.onPageLoad(index, draftId).url
+      )
     ).flatten
 
   }
+
 }

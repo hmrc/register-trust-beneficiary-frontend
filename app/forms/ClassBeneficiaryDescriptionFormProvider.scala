@@ -24,15 +24,15 @@ class ClassBeneficiaryDescriptionFormProvider @Inject() extends Mappings {
   val maxLengthClassOfBeneficiary = 56
 
   def apply(): Form[String] =
-  Form(
-    "value" -> text("classBeneficiaryDescription.error.required")
-      .verifying(
-        firstError(
-          isNotEmpty("value", "classBeneficiaryDescription.error.required"),
-          maxLength(maxLengthClassOfBeneficiary, "classBeneficiaryDescription.error.length"),
-          regexp(Validation.descriptionRegex, "classBeneficiaryDescription.error.invalid")
-        ))
-  )
-
+    Form(
+      "value" -> text("classBeneficiaryDescription.error.required")
+        .verifying(
+          firstError(
+            isNotEmpty("value", "classBeneficiaryDescription.error.required"),
+            maxLength(maxLengthClassOfBeneficiary, "classBeneficiaryDescription.error.length"),
+            regexp(Validation.descriptionRegex, "classBeneficiaryDescription.error.invalid")
+          )
+        )
+    )
 
 }

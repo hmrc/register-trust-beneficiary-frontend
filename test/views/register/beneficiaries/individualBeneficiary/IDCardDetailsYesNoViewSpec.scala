@@ -26,8 +26,8 @@ import views.html.register.beneficiaries.individualBeneficiary.IDCardDetailsYesN
 class IDCardDetailsYesNoViewSpec extends YesNoViewBehaviours {
 
   private val messageKeyPrefix = "individualBeneficiaryIDCardDetailsYesNo"
-  private val index = 0
-  private val name = FullName("First", Some("middle"), "Last")
+  private val index            = 0
+  private val name             = FullName("First", Some("middle"), "Last")
 
   override val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
@@ -46,4 +46,5 @@ class IDCardDetailsYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

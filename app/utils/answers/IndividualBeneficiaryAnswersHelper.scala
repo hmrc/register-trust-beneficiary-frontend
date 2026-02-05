@@ -23,8 +23,8 @@ import viewmodels.addAnother.IndividualBeneficiaryViewModel
 
 import javax.inject.Inject
 
-class IndividualBeneficiaryAnswersHelper @Inject()(printHelper: IndividualBeneficiaryPrintHelper)
-  extends AnswersHelper[IndividualBeneficiaryViewModel](printHelper) {
+class IndividualBeneficiaryAnswersHelper @Inject() (printHelper: IndividualBeneficiaryPrintHelper)
+    extends AnswersHelper[IndividualBeneficiaryViewModel](printHelper) {
 
   override val beneficiaryType: QuestionPage[List[IndividualBeneficiaryViewModel]] = IndividualBeneficiaries
 }

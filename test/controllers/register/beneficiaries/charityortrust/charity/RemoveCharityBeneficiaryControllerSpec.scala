@@ -32,9 +32,9 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
 
   private val messagesPrefix = "removeCharityBeneficiaryYesNo"
 
-  private val formProvider = new RemoveIndexFormProvider()
+  private val formProvider        = new RemoveIndexFormProvider()
   private val form: Form[Boolean] = formProvider(messagesPrefix)
-  private val index = 0
+  private val index               = 0
 
   private lazy val formRoute: Call = routes.RemoveCharityBeneficiaryController.onSubmit(0, fakeDraftId)
 
@@ -56,7 +56,10 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(messagesPrefix, form, index, fakeDraftId, "the charity beneficiary", formRoute)(request, messages).toString
+          view(messagesPrefix, form, index, fakeDraftId, "the charity beneficiary", formRoute)(
+            request,
+            messages
+          ).toString
 
         application.stop()
       }
@@ -78,7 +81,10 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(messagesPrefix, form, index, fakeDraftId, "Charity Ltd", formRoute)(request, messages).toString
+        contentAsString(result) mustEqual view(messagesPrefix, form, index, fakeDraftId, "Charity Ltd", formRoute)(
+          request,
+          messages
+        ).toString
 
         application.stop()
       }
@@ -88,23 +94,24 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
 
       val userAnswers = emptyUserAnswers.set(CharityNamePage(0), "Charity Ltd").value
 
-      forAll(arbitrary[Boolean]) {
-        value =>
-          val application =
-            applicationBuilder(userAnswers = Some(userAnswers))
-              .build()
+      forAll(arbitrary[Boolean]) { value =>
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswers))
+            .build()
 
-          val request =
-            FakeRequest(POST, routes.RemoveCharityBeneficiaryController.onSubmit(index, fakeDraftId).url)
-              .withFormUrlEncodedBody(("value", value.toString))
+        val request =
+          FakeRequest(POST, routes.RemoveCharityBeneficiaryController.onSubmit(index, fakeDraftId).url)
+            .withFormUrlEncodedBody(("value", value.toString))
 
-          val result = route(application, request).value
+        val result = route(application, request).value
 
-          status(result) mustEqual SEE_OTHER
+        status(result) mustEqual SEE_OTHER
 
-          redirectLocation(result).value mustEqual controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(fakeDraftId).url
+        redirectLocation(result).value mustEqual controllers.register.beneficiaries.routes.AddABeneficiaryController
+          .onPageLoad(fakeDraftId)
+          .url
 
-          application.stop()
+        application.stop()
       }
     }
 
@@ -188,4 +195,5 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
       application.stop()
     }
   }
+
 }

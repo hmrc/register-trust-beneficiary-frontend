@@ -23,7 +23,7 @@ import pages.behaviours.PageBehaviours
 
 class AddressInTheUkYesNoPageSpec extends PageBehaviours {
 
-  private val ukAddress: UKAddress = UKAddress("Line 1", "Line 2", None, None, "POSTCODE")
+  private val ukAddress: UKAddress                       = UKAddress("Line 1", "Line 2", None, None, "POSTCODE")
   private val internationalAddress: InternationalAddress = InternationalAddress("Line 1", "Line 2", None, "COUNTRY")
 
   "CharityOrTrustPage" must {
@@ -36,52 +36,53 @@ class AddressInTheUkYesNoPageSpec extends PageBehaviours {
 
     "implement cleanup logic when decision changed" when {
 
-      "YES selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            val result: UserAnswers = userAnswers
-              .set(CharityInternationalAddressPage(0), internationalAddress).value
-              .set(AddressInTheUkYesNoPage(0), true).value
+      "YES selected" in
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val result: UserAnswers = userAnswers
+            .set(CharityInternationalAddressPage(0), internationalAddress)
+            .value
+            .set(AddressInTheUkYesNoPage(0), true)
+            .value
 
-            result.get(CharityInternationalAddressPage(0)) mustNot be(defined)
+          result.get(CharityInternationalAddressPage(0)) mustNot be(defined)
         }
-      }
 
-      "NO selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            val result: UserAnswers = userAnswers
-              .set(CharityAddressUKPage(0), ukAddress).value
-              .set(AddressInTheUkYesNoPage(0), false).value
+      "NO selected" in
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val result: UserAnswers = userAnswers
+            .set(CharityAddressUKPage(0), ukAddress)
+            .value
+            .set(AddressInTheUkYesNoPage(0), false)
+            .value
 
-            result.get(CharityAddressUKPage(0)) mustNot be(defined)
+          result.get(CharityAddressUKPage(0)) mustNot be(defined)
         }
-      }
     }
 
     "not implement cleanup logic when decision unchanged" when {
 
-      "YES selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            val result: UserAnswers = userAnswers
-              .set(CharityAddressUKPage(0), ukAddress).value
-              .set(AddressInTheUkYesNoPage(0), true).value
+      "YES selected" in
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val result: UserAnswers = userAnswers
+            .set(CharityAddressUKPage(0), ukAddress)
+            .value
+            .set(AddressInTheUkYesNoPage(0), true)
+            .value
 
-            result.get(CharityAddressUKPage(0)).get mustBe ukAddress
+          result.get(CharityAddressUKPage(0)).get mustBe ukAddress
         }
-      }
 
-      "NO selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            val result: UserAnswers = userAnswers
-              .set(CharityInternationalAddressPage(0), internationalAddress).value
-              .set(AddressInTheUkYesNoPage(0), false).value
+      "NO selected" in
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val result: UserAnswers = userAnswers
+            .set(CharityInternationalAddressPage(0), internationalAddress)
+            .value
+            .set(AddressInTheUkYesNoPage(0), false)
+            .value
 
-            result.get(CharityInternationalAddressPage(0)).get mustBe internationalAddress
+          result.get(CharityInternationalAddressPage(0)).get mustBe internationalAddress
         }
-      }
     }
   }
+
 }

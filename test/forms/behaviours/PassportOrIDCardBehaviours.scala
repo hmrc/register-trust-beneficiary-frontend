@@ -24,48 +24,41 @@ import play.api.data.{Form, FormError}
 
 import java.time.LocalDate
 
-trait PassportOrIDCardBehaviours extends FormSpec
-  with ScalaCheckPropertyChecks with Generators with FieldBehaviours with OptionalFieldBehaviours {
+trait PassportOrIDCardBehaviours
+    extends FormSpec with ScalaCheckPropertyChecks with Generators with FieldBehaviours with OptionalFieldBehaviours {
 
-  def passportOrIDCardDateField(form: Form[PassportOrIdCardDetails], key: String): Unit = {
+  def passportOrIDCardDateField(form: Form[PassportOrIdCardDetails], key: String): Unit =
 
     "bind a valid date" in {
 
       val generator = datesBetween(LocalDate.of(1500, 1, 1), LocalDate.of(2099, 12, 31))
 
-      forAll(generator -> "valid dates") {
-        date =>
+      forAll(generator -> "valid dates") { date =>
+        val data = Map(
+          s"$key.day"   -> date.getDayOfMonth.toString,
+          s"$key.month" -> date.getMonthValue.toString,
+          s"$key.year"  -> date.getYear.toString
+        )
 
-          val data = Map(
-            s"$key.day"   -> date.getDayOfMonth.toString,
-            s"$key.month" -> date.getMonthValue.toString,
-            s"$key.year"  -> date.getYear.toString
-          )
+        val result = form.bind(data).apply("expiryDate")
 
-          val result = form.bind(data).apply("expiryDate")
-
-          result.errors shouldBe empty
+        result.errors shouldBe empty
       }
     }
-  }
 
-  def passportOrIdCardNumberField(form: Form[_],
-                          fieldName: String,
-                          invalidError: FormError): Unit = {
+  def passportOrIdCardNumberField(form: Form[_], fieldName: String, invalidError: FormError): Unit =
 
     s"not bind strings which do not match valid passport or id card number format " in {
       val generator = stringsWithMaxLength(30)
-      forAll(generator) {
-        string =>
-          whenever(!string.matches(Validation.passportOrIdCardNumberRegEx)) {
-            val result = form.bind(Map(fieldName -> string)).apply(fieldName)
-            result.errors shouldEqual Seq(invalidError)
-          }
+      forAll(generator) { string =>
+        whenever(!string.matches(Validation.passportOrIdCardNumberRegEx)) {
+          val result = form.bind(Map(fieldName -> string)).apply(fieldName)
+          result.errors shouldEqual Seq(invalidError)
+        }
       }
     }
-  }
 
-  def mandatoryPassportOrIdDateField(form: Form[PassportOrIdCardDetails], key: String, requiredAllKey: String): Unit = {
+  def mandatoryPassportOrIdDateField(form: Form[PassportOrIdCardDetails], key: String, requiredAllKey: String): Unit =
 
     "fail to bind an empty date" in {
 
@@ -73,10 +66,8 @@ trait PassportOrIDCardBehaviours extends FormSpec
 
       result.errors should contain(FormError(key, requiredAllKey, List("day", "month", "year")))
     }
-  }
 
-
-  def passportOrIDCardInvalidDateField(form: Form[PassportOrIdCardDetails], key: String, requiredAllKey: String): Unit = {
+  def passportOrIDCardInvalidDateField(form: Form[PassportOrIdCardDetails], key: String, requiredAllKey: String): Unit =
 
     "not bind an invalid date" in {
 
@@ -90,7 +81,5 @@ trait PassportOrIDCardBehaviours extends FormSpec
 
       result.errors should contain(FormError(key, requiredAllKey, List("day", "month", "year")))
     }
-  }
-
 
 }

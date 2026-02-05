@@ -26,17 +26,17 @@ import viewmodels.addAnother._
 class BeneficiariesSpec extends SpecBase {
 
   val fullName: FullName = FullName("Full", None, "Name")
-  val name: String = "Name"
+  val name: String       = "Name"
 
   val max: Int = 25
 
-  val individual: IndividualBeneficiaryViewModel = IndividualBeneficiaryViewModel(Some(fullName.toString), Completed)
-  val unidentified: ClassOfBeneficiaryViewModel = ClassOfBeneficiaryViewModel(Some(name), Completed)
-  val charity: CharityBeneficiaryViewModel = CharityBeneficiaryViewModel(Some(name), Completed)
-  val trust: TrustBeneficiaryViewModel = TrustBeneficiaryViewModel(Some(name), Completed)
-  val company: CompanyBeneficiaryViewModel = CompanyBeneficiaryViewModel(Some(name), Completed)
+  val individual: IndividualBeneficiaryViewModel   = IndividualBeneficiaryViewModel(Some(fullName.toString), Completed)
+  val unidentified: ClassOfBeneficiaryViewModel    = ClassOfBeneficiaryViewModel(Some(name), Completed)
+  val charity: CharityBeneficiaryViewModel         = CharityBeneficiaryViewModel(Some(name), Completed)
+  val trust: TrustBeneficiaryViewModel             = TrustBeneficiaryViewModel(Some(name), Completed)
+  val company: CompanyBeneficiaryViewModel         = CompanyBeneficiaryViewModel(Some(name), Completed)
   val large: EmploymentRelatedBeneficiaryViewModel = EmploymentRelatedBeneficiaryViewModel(Some(name), Completed)
-  val other: OtherBeneficiaryViewModel = OtherBeneficiaryViewModel(Some(name), Completed)
+  val other: OtherBeneficiaryViewModel             = OtherBeneficiaryViewModel(Some(name), Completed)
 
   val prefix: String = WhatTypeOfBeneficiary.prefix
 
@@ -182,4 +182,5 @@ class BeneficiariesSpec extends SpecBase {
       }
     }
   }
+
 }

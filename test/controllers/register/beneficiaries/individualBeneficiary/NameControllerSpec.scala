@@ -39,15 +39,16 @@ import scala.concurrent.Future
 
 class NameControllerSpec extends SpecBase {
 
-  private val formProvider = new NameFormProvider()
+  private val formProvider         = new NameFormProvider()
   private val form: Form[FullName] = formProvider.withPrefix("individualBeneficiaryName")
-  private val name: FullName = FullName("first name", Some("middle name"), "last name")
-  private val index: Int = 0
+  private val name: FullName       = FullName("first name", Some("middle name"), "last name")
+  private val index: Int           = 0
 
   private lazy val individualBeneficiaryNameRoute: String = routes.NameController.onPageLoad(index, fakeDraftId).url
 
   private val userAnswers: UserAnswers = emptyUserAnswers
-    .set(NamePage(index), name).value
+    .set(NamePage(index), name)
+    .value
 
   "IndividualBeneficiaryName Controller" must {
 
@@ -91,12 +92,17 @@ class NameControllerSpec extends SpecBase {
       "using main answers" in {
 
         when(mockRegistrationsRepository.getSettlorsAnswers(any())(any()))
-          .thenReturn(EitherT[Future, TrustErrors, Option[ReadOnlyUserAnswers]](Future.successful(Right(Some(ReadOnlyUserAnswers(Json.obj()))))))
+          .thenReturn(
+            EitherT[Future, TrustErrors, Option[ReadOnlyUserAnswers]](
+              Future.successful(Right(Some(ReadOnlyUserAnswers(Json.obj()))))
+            )
+          )
 
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
         val request =
           FakeRequest(POST, individualBeneficiaryNameRoute)
@@ -118,7 +124,8 @@ class NameControllerSpec extends SpecBase {
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
         val request =
           FakeRequest(POST, individualBeneficiaryNameRoute)
@@ -138,12 +145,17 @@ class NameControllerSpec extends SpecBase {
       "using main answers" in {
 
         when(mockRegistrationsRepository.getSettlorsAnswers(any())(any()))
-          .thenReturn(EitherT[Future, TrustErrors, Option[ReadOnlyUserAnswers]](Future.successful(Right(Some(ReadOnlyUserAnswers(Json.obj()))))))
+          .thenReturn(
+            EitherT[Future, TrustErrors, Option[ReadOnlyUserAnswers]](
+              Future.successful(Right(Some(ReadOnlyUserAnswers(Json.obj()))))
+            )
+          )
 
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), mockSetResult = Left(ServerError()))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
         val request =
           FakeRequest(POST, individualBeneficiaryNameRoute)
@@ -168,7 +180,8 @@ class NameControllerSpec extends SpecBase {
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), mockSetResult = Left(ServerError()))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
         val request =
           FakeRequest(POST, individualBeneficiaryNameRoute)
@@ -240,4 +253,5 @@ class NameControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

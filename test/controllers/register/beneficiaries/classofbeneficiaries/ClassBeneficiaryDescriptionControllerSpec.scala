@@ -39,14 +39,16 @@ import views.html.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDe
 
 class ClassBeneficiaryDescriptionControllerSpec extends SpecBase {
 
-  private val formProvider = new ClassBeneficiaryDescriptionFormProvider()
+  private val formProvider       = new ClassBeneficiaryDescriptionFormProvider()
   private val form: Form[String] = formProvider()
-  private val index = 0
+  private val index              = 0
 
-  private lazy val classBeneficiaryDescriptionRoute: String = routes.ClassBeneficiaryDescriptionController.onPageLoad(index, fakeDraftId).url
+  private lazy val classBeneficiaryDescriptionRoute: String =
+    routes.ClassBeneficiaryDescriptionController.onPageLoad(index, fakeDraftId).url
 
   override def emptyUserAnswers: UserAnswers = super.emptyUserAnswers
-    .set(WhatTypeOfBeneficiaryPage, ClassOfBeneficiary).value
+    .set(WhatTypeOfBeneficiaryPage, ClassOfBeneficiary)
+    .value
 
   "ClassBeneficiaryDescription Controller" must {
 
@@ -94,7 +96,8 @@ class ClassBeneficiaryDescriptionControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[ClassOfBeneficiaries]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, classBeneficiaryDescriptionRoute)
@@ -118,7 +121,8 @@ class ClassBeneficiaryDescriptionControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(emptyUserAnswers), mockSetResult = Left(ServerError()))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[ClassOfBeneficiaries]).toInstance(new FakeNavigator)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, classBeneficiaryDescriptionRoute)
@@ -190,4 +194,5 @@ class ClassBeneficiaryDescriptionControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

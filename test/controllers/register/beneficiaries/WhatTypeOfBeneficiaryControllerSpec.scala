@@ -31,9 +31,10 @@ import views.html.register.beneficiaries.WhatTypeOfBeneficiaryView
 
 class WhatTypeOfBeneficiaryControllerSpec extends SpecBase {
 
-  private lazy val whatTypeOfBeneficiaryRoute: String = routes.WhatTypeOfBeneficiaryController.onPageLoad(fakeDraftId).url
+  private lazy val whatTypeOfBeneficiaryRoute: String =
+    routes.WhatTypeOfBeneficiaryController.onPageLoad(fakeDraftId).url
 
-  private val formProvider = new WhatTypeOfBeneficiaryFormProvider()
+  private val formProvider                      = new WhatTypeOfBeneficiaryFormProvider()
   private val form: Form[WhatTypeOfBeneficiary] = formProvider()
 
   private val roPrefix: String = "whatTypeOfBeneficiary"
@@ -69,7 +70,7 @@ class WhatTypeOfBeneficiaryControllerSpec extends SpecBase {
     }
 
     "return OK and the correct view for a GET when beneficiaries are already added." in {
-     val userAnswer =  emptyUserAnswers.set(ClassBeneficiaryDescriptionPage(0), "description").value
+      val userAnswer = emptyUserAnswers.set(ClassBeneficiaryDescriptionPage(0), "description").value
 
       val application = applicationBuilder(userAnswers = Some(userAnswer)).build()
 
@@ -199,4 +200,5 @@ class WhatTypeOfBeneficiaryControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

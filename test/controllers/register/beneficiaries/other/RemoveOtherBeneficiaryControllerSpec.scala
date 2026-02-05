@@ -32,11 +32,11 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
   private val messagesPrefix = "removeOtherBeneficiaryYesNo"
 
-  private val formProvider = new RemoveIndexFormProvider()
+  private val formProvider        = new RemoveIndexFormProvider()
   private val form: Form[Boolean] = formProvider(messagesPrefix)
-  private val index = 0
+  private val index               = 0
 
-  private lazy val getRoute: Call = routes.RemoveOtherBeneficiaryController.onPageLoad(index, fakeDraftId)
+  private lazy val getRoute: Call  = routes.RemoveOtherBeneficiaryController.onPageLoad(index, fakeDraftId)
   private lazy val formRoute: Call = routes.RemoveOtherBeneficiaryController.onSubmit(index, fakeDraftId)
 
   "RemoveOtherBeneficiary Controller" when {
@@ -81,7 +81,14 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(messagesPrefix, form, index, fakeDraftId, "other beneficiary", formRoute)(request, messages).toString
+        contentAsString(result) mustEqual view(
+          messagesPrefix,
+          form,
+          index,
+          fakeDraftId,
+          "other beneficiary",
+          formRoute
+        )(request, messages).toString
 
         application.stop()
       }
@@ -92,23 +99,24 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
       val userAnswers = emptyUserAnswers.set(DescriptionPage(index), "other beneficiary").value
 
-      forAll(arbitrary[Boolean]) {
-        value =>
-          val application =
-            applicationBuilder(userAnswers = Some(userAnswers))
-              .build()
+      forAll(arbitrary[Boolean]) { value =>
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswers))
+            .build()
 
-          val request =
-            FakeRequest(POST, formRoute.url)
-              .withFormUrlEncodedBody(("value", value.toString))
+        val request =
+          FakeRequest(POST, formRoute.url)
+            .withFormUrlEncodedBody(("value", value.toString))
 
-          val result = route(application, request).value
+        val result = route(application, request).value
 
-          status(result) mustEqual SEE_OTHER
+        status(result) mustEqual SEE_OTHER
 
-          redirectLocation(result).value mustEqual controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(fakeDraftId).url
+        redirectLocation(result).value mustEqual controllers.register.beneficiaries.routes.AddABeneficiaryController
+          .onPageLoad(fakeDraftId)
+          .url
 
-          application.stop()
+        application.stop()
       }
 
     }
@@ -193,4 +201,5 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
       application.stop()
     }
   }
+
 }

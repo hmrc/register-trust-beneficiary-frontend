@@ -18,7 +18,9 @@ package controllers.register.beneficiaries.companyoremploymentrelated.employment
 
 import controllers.RemoveIndexController
 import controllers.actions._
-import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
+import controllers.actions.register.{
+  DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction
+}
 import forms.RemoveIndexFormProvider
 import models.requests.RegistrationDataRequest
 import pages.QuestionPage
@@ -32,18 +34,19 @@ import javax.inject.Inject
 
 import scala.concurrent.ExecutionContext
 
-class RemoveEmploymentRelatedBeneficiaryController @Inject()(
-                                                              override val messagesApi: MessagesApi,
-                                                              override val registrationsRepository: RegistrationsRepository,
-                                                              identify: RegistrationIdentifierAction,
-                                                              getData: DraftIdRetrievalActionProvider,
-                                                              requireData: RegistrationDataRequiredAction,
-                                                              val formProvider: RemoveIndexFormProvider,
-                                                              val controllerComponents: MessagesControllerComponents,
-                                                              val removeView: RemoveIndexView,
-                                                              require: RequiredAnswerActionProvider,
-                                                              val technicalErrorView: TechnicalErrorView
-                                                            )(implicit executionContext: ExecutionContext) extends RemoveIndexController {
+class RemoveEmploymentRelatedBeneficiaryController @Inject() (
+  override val messagesApi: MessagesApi,
+  override val registrationsRepository: RegistrationsRepository,
+  identify: RegistrationIdentifierAction,
+  getData: DraftIdRetrievalActionProvider,
+  requireData: RegistrationDataRequiredAction,
+  val formProvider: RemoveIndexFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  val removeView: RemoveIndexView,
+  require: RequiredAnswerActionProvider,
+  val technicalErrorView: TechnicalErrorView
+)(implicit executionContext: ExecutionContext)
+    extends RemoveIndexController {
 
   val ec: ExecutionContext = executionContext
 

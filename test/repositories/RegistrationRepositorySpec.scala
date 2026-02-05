@@ -34,9 +34,8 @@ class RegistrationRepositorySpec extends SpecBase {
 
   private val unusedSubmissionSetFactory = mock[SubmissionSetFactory]
 
-  private def createRepository(connector: SubmissionDraftConnector, submissionSetFactory: SubmissionSetFactory) = {
+  private def createRepository(connector: SubmissionDraftConnector, submissionSetFactory: SubmissionSetFactory) =
     new DefaultRegistrationsRepository(connector, frontendAppConfig, submissionSetFactory)
-  }
 
   "RegistrationRepository" when {
     "getting user answers" must {
@@ -66,8 +65,7 @@ class RegistrationRepositorySpec extends SpecBase {
 
         val draftId = "DraftId"
 
-        val dummyData = Json.parse(
-          """
+        val dummyData = Json.parse("""
             |{
             | "data" : {
             |   "someField": "someValue"
@@ -86,7 +84,7 @@ class RegistrationRepositorySpec extends SpecBase {
 
         val result = Await.result(repository.getSettlorsAnswers(draftId).value, Duration.Inf)
 
-        val expectedAnswers = Json.obj("someField" -> "someValue")
+        val expectedAnswers     = Json.obj("someField" -> "someValue")
         val expectedUserAnswers = ReadOnlyUserAnswers(expectedAnswers)
 
         result.value mustBe Some(expectedUserAnswers)
@@ -122,8 +120,12 @@ class RegistrationRepositorySpec extends SpecBase {
         val result = Await.result(repository.set(userAnswers).value, Duration.Inf)
 
         result.value mustBe true
-        verify(mockConnector).setDraftSectionSet(draftId, frontendAppConfig.repositoryKey, submissionSet)(hc, executionContext)
+        verify(mockConnector).setDraftSectionSet(draftId, frontendAppConfig.repositoryKey, submissionSet)(
+          hc,
+          executionContext
+        )
       }
     }
   }
+
 }

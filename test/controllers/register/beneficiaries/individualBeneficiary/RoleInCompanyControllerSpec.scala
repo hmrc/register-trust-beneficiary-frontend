@@ -36,18 +36,19 @@ import views.html.register.beneficiaries.individualBeneficiary.RoleInCompanyView
 
 class RoleInCompanyControllerSpec extends SpecBase {
 
-  private val formProvider = new RoleInCompanyFormProvider()
+  private val formProvider              = new RoleInCompanyFormProvider()
   private val form: Form[RoleInCompany] = formProvider()
-  private val name: FullName = FullName("FirstName", None, "LastName")
-  private val index = 0
+  private val name: FullName            = FullName("FirstName", None, "LastName")
+  private val index                     = 0
 
   private val userAnswers: UserAnswers = emptyUserAnswers.set(NamePage(index), name).value
 
   private def application(repositorySetResult: Either[TrustErrors, Boolean] = Right(true)): Application =
     applicationBuilder(userAnswers = Some(userAnswers), mockSetResult = repositorySetResult)
-    .overrides(
-      bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
-    ).build()
+      .overrides(
+        bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator)
+      )
+      .build()
 
   private lazy val roleInCompanyControllerRoute: String = routes.RoleInCompanyController.onPageLoad(index, draftId).url
 
@@ -72,8 +73,10 @@ class RoleInCompanyControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(NamePage(index), name).value
-        .set(RoleInCompanyPage(index), Director).value
+        .set(NamePage(index), name)
+        .value
+        .set(RoleInCompanyPage(index), Director)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -176,4 +179,5 @@ class RoleInCompanyControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

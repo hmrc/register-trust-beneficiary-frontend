@@ -23,8 +23,8 @@ import viewmodels.addAnother.CompanyBeneficiaryViewModel
 
 import javax.inject.Inject
 
-class CompanyBeneficiaryAnswersHelper @Inject()(printHelper: CompanyBeneficiaryPrintHelper)
-  extends AnswersHelper[CompanyBeneficiaryViewModel](printHelper) {
+class CompanyBeneficiaryAnswersHelper @Inject() (printHelper: CompanyBeneficiaryPrintHelper)
+    extends AnswersHelper[CompanyBeneficiaryViewModel](printHelper) {
 
   override val beneficiaryType: QuestionPage[List[CompanyBeneficiaryViewModel]] = CompanyBeneficiaries
 }

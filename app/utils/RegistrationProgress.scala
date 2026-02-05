@@ -26,7 +26,7 @@ import viewmodels.addAnother._
 
 class RegistrationProgress {
 
-  def beneficiariesStatus(userAnswers: ReadableUserAnswers): Option[Status] = {
+  def beneficiariesStatus(userAnswers: ReadableUserAnswers): Option[Status] =
 
     if (!userAnswers.isAnyBeneficiaryAdded) {
       None
@@ -45,7 +45,7 @@ class RegistrationProgress {
       )
 
       statusList match {
-        case Nil => None
+        case Nil  => None
         case list =>
 
           val complete = list.forall(isComplete => isComplete(userAnswers))
@@ -57,26 +57,27 @@ class RegistrationProgress {
           })
       }
     }
-  }
 
   sealed trait IsComplete {
     def apply(userAnswers: ReadableUserAnswers): Boolean
   }
 
-  sealed class ListIsComplete[T <: ViewModel](section: QuestionPage[List[T]])
-                                             (implicit reads: Reads[T]) extends IsComplete {
+  sealed class ListIsComplete[T <: ViewModel](section: QuestionPage[List[T]])(implicit reads: Reads[T])
+      extends IsComplete {
 
-    override def apply(userAnswers: ReadableUserAnswers): Boolean = {
+    override def apply(userAnswers: ReadableUserAnswers): Boolean =
       userAnswers.get(section) match {
         case Some(beneficiaries) => !beneficiaries.exists(_.status == Status.InProgress)
-        case _ => true
+        case _                   => true
       }
-    }
+
   }
 
   private object AddingBeneficiariesIsComplete extends IsComplete {
+
     override def apply(userAnswers: ReadableUserAnswers): Boolean =
       userAnswers.get(AddABeneficiaryPage).contains(AddABeneficiary.NoComplete)
+
   }
 
   private object IndividualBeneficiariesAreComplete extends ListIsComplete(IndividualBeneficiaries)

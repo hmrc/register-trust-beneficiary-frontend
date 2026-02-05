@@ -23,11 +23,12 @@ import models.registration.pages.HowManyBeneficiaries
 import models.{AddressType, IdentificationOrgType, LargeType}
 import org.scalatest.OptionValues
 import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated._
-import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
+import pages.register.beneficiaries.companyoremploymentrelated.employmentRelated.mld5.{
+  CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage
+}
 import utils.Constants._
 
-class LargeBeneficiaryMapperSpec extends SpecBase
-  with OptionValues with Generators {
+class LargeBeneficiaryMapperSpec extends SpecBase with OptionValues with Generators {
 
   private val mapper = injector.instanceOf[LargeBeneficiaryMapper]
   private val index0 = 0
@@ -52,16 +53,22 @@ class LargeBeneficiaryMapperSpec extends SpecBase
         "UK country of residence set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(LargeBeneficiaryNamePage(index0), "Employment Related Name").value
-              .set(CountryOfResidenceYesNoPage(index0), true).value
-              .set(CountryOfResidenceInTheUkYesNoPage(index0), true).value
-              .set(LargeBeneficiaryAddressYesNoPage(index0), false).value
-              .set(LargeBeneficiaryDescriptionPage(index0), Description("Description", None, None, None, None)).value
-              .set(LargeBeneficiaryNumberOfBeneficiariesPage(index0), HowManyBeneficiaries.Over1).value
+              .set(LargeBeneficiaryNamePage(index0), "Employment Related Name")
+              .value
+              .set(CountryOfResidenceYesNoPage(index0), true)
+              .value
+              .set(CountryOfResidenceInTheUkYesNoPage(index0), true)
+              .value
+              .set(LargeBeneficiaryAddressYesNoPage(index0), false)
+              .value
+              .set(LargeBeneficiaryDescriptionPage(index0), Description("Description", None, None, None, None))
+              .value
+              .set(LargeBeneficiaryNumberOfBeneficiariesPage(index0), HowManyBeneficiaries.Over1)
+              .value
 
           val large = mapper.build(userAnswers)
 
-          large mustBe defined
+          large            mustBe defined
           large.value.head mustBe LargeType(
             organisationName = "Employment Related Name",
             description = "Description",
@@ -80,17 +87,24 @@ class LargeBeneficiaryMapperSpec extends SpecBase
         "Non UK country of residence set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(LargeBeneficiaryNamePage(index0), "Employment Related Name").value
-              .set(CountryOfResidenceYesNoPage(index0), true).value
-              .set(CountryOfResidenceInTheUkYesNoPage(index0), false).value
-              .set(CountryOfResidencePage(index0), "FR").value
-              .set(LargeBeneficiaryAddressYesNoPage(index0), false).value
-              .set(LargeBeneficiaryDescriptionPage(index0), Description("Description", None, None, None, None)).value
-              .set(LargeBeneficiaryNumberOfBeneficiariesPage(index0), HowManyBeneficiaries.Over1).value
+              .set(LargeBeneficiaryNamePage(index0), "Employment Related Name")
+              .value
+              .set(CountryOfResidenceYesNoPage(index0), true)
+              .value
+              .set(CountryOfResidenceInTheUkYesNoPage(index0), false)
+              .value
+              .set(CountryOfResidencePage(index0), "FR")
+              .value
+              .set(LargeBeneficiaryAddressYesNoPage(index0), false)
+              .value
+              .set(LargeBeneficiaryDescriptionPage(index0), Description("Description", None, None, None, None))
+              .value
+              .set(LargeBeneficiaryNumberOfBeneficiariesPage(index0), HowManyBeneficiaries.Over1)
+              .value
 
           val large = mapper.build(userAnswers)
 
-          large mustBe defined
+          large            mustBe defined
           large.value.head mustBe LargeType(
             organisationName = "Employment Related Name",
             description = "Description",
@@ -109,14 +123,18 @@ class LargeBeneficiaryMapperSpec extends SpecBase
         "No address is set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(LargeBeneficiaryNamePage(index0), "Employment Related Name").value
-              .set(LargeBeneficiaryAddressYesNoPage(index0), false).value
-              .set(LargeBeneficiaryDescriptionPage(index0), Description("Description", None, None, None, None)).value
-              .set(LargeBeneficiaryNumberOfBeneficiariesPage(index0), HowManyBeneficiaries.Over1).value
+              .set(LargeBeneficiaryNamePage(index0), "Employment Related Name")
+              .value
+              .set(LargeBeneficiaryAddressYesNoPage(index0), false)
+              .value
+              .set(LargeBeneficiaryDescriptionPage(index0), Description("Description", None, None, None, None))
+              .value
+              .set(LargeBeneficiaryNumberOfBeneficiariesPage(index0), HowManyBeneficiaries.Over1)
+              .value
 
           val large = mapper.build(userAnswers)
 
-          large mustBe defined
+          large            mustBe defined
           large.value.head mustBe LargeType(
             organisationName = "Employment Related Name",
             description = "Description",
@@ -132,21 +150,28 @@ class LargeBeneficiaryMapperSpec extends SpecBase
           )
         }
 
-
         "UK Address is set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(LargeBeneficiaryNamePage(index0), "Employment Related Name").value
-              .set(LargeBeneficiaryAddressYesNoPage(index0), true).value
-              .set(LargeBeneficiaryAddressUKYesNoPage(index0), true).value
-              .set(LargeBeneficiaryAddressPage(index0),
-                UKAddress("Line1", "Line2", Some("Line3"), Some("Newcastle"), "NE62RT")).value
-              .set(LargeBeneficiaryDescriptionPage(index0), Description("Description", None, None, None, None)).value
-              .set(LargeBeneficiaryNumberOfBeneficiariesPage(index0), HowManyBeneficiaries.Over1).value
+              .set(LargeBeneficiaryNamePage(index0), "Employment Related Name")
+              .value
+              .set(LargeBeneficiaryAddressYesNoPage(index0), true)
+              .value
+              .set(LargeBeneficiaryAddressUKYesNoPage(index0), true)
+              .value
+              .set(
+                LargeBeneficiaryAddressPage(index0),
+                UKAddress("Line1", "Line2", Some("Line3"), Some("Newcastle"), "NE62RT")
+              )
+              .value
+              .set(LargeBeneficiaryDescriptionPage(index0), Description("Description", None, None, None, None))
+              .value
+              .set(LargeBeneficiaryNumberOfBeneficiariesPage(index0), HowManyBeneficiaries.Over1)
+              .value
 
           val large = mapper.build(userAnswers)
 
-          large mustBe defined
+          large            mustBe defined
           large.value.head mustBe LargeType(
             organisationName = "Employment Related Name",
             description = "Description",
@@ -155,12 +180,14 @@ class LargeBeneficiaryMapperSpec extends SpecBase
             description3 = None,
             description4 = None,
             numberOfBeneficiary = "1",
-            identification = Some(IdentificationOrgType(
-              None,
-              address = Some(
-                AddressType("Line1", "Line2", Some("Line3"), Some("Newcastle"), Some("NE62RT"), GB)
+            identification = Some(
+              IdentificationOrgType(
+                None,
+                address = Some(
+                  AddressType("Line1", "Line2", Some("Line3"), Some("Newcastle"), Some("NE62RT"), GB)
+                )
               )
-            )),
+            ),
             beneficiaryDiscretion = None,
             beneficiaryShareOfIncome = None,
             countryOfResidence = None
@@ -170,17 +197,25 @@ class LargeBeneficiaryMapperSpec extends SpecBase
         "International Address is set" in {
           val userAnswers =
             emptyUserAnswers
-              .set(LargeBeneficiaryNamePage(index0), "Employment Related Name").value
-              .set(LargeBeneficiaryAddressYesNoPage(index0), true).value
-              .set(LargeBeneficiaryAddressUKYesNoPage(index0), false).value
-              .set(LargeBeneficiaryAddressInternationalPage(index0),
-                InternationalAddress("Line1", "Line2", Some("Line3"), "US")).value
-              .set(LargeBeneficiaryDescriptionPage(index0), Description("Description", None, None, None, None)).value
-              .set(LargeBeneficiaryNumberOfBeneficiariesPage(index0), HowManyBeneficiaries.Over201).value
+              .set(LargeBeneficiaryNamePage(index0), "Employment Related Name")
+              .value
+              .set(LargeBeneficiaryAddressYesNoPage(index0), true)
+              .value
+              .set(LargeBeneficiaryAddressUKYesNoPage(index0), false)
+              .value
+              .set(
+                LargeBeneficiaryAddressInternationalPage(index0),
+                InternationalAddress("Line1", "Line2", Some("Line3"), "US")
+              )
+              .value
+              .set(LargeBeneficiaryDescriptionPage(index0), Description("Description", None, None, None, None))
+              .value
+              .set(LargeBeneficiaryNumberOfBeneficiariesPage(index0), HowManyBeneficiaries.Over201)
+              .value
 
           val large = mapper.build(userAnswers)
 
-          large mustBe defined
+          large            mustBe defined
           large.value.head mustBe LargeType(
             organisationName = "Employment Related Name",
             description = "Description",
@@ -189,12 +224,14 @@ class LargeBeneficiaryMapperSpec extends SpecBase
             description3 = None,
             description4 = None,
             numberOfBeneficiary = "201",
-            identification = Some(IdentificationOrgType(
-              None,
-              address = Some(
-                AddressType("Line1", "Line2", Some("Line3"), None, None, "US")
+            identification = Some(
+              IdentificationOrgType(
+                None,
+                address = Some(
+                  AddressType("Line1", "Line2", Some("Line3"), None, None, "US")
+                )
               )
-            )),
+            ),
             beneficiaryDiscretion = None,
             beneficiaryShareOfIncome = None,
             countryOfResidence = None
@@ -206,23 +243,33 @@ class LargeBeneficiaryMapperSpec extends SpecBase
       "must be able to create multiple Large beneficiaries" in {
         val userAnswers =
           emptyUserAnswers
-            .set(LargeBeneficiaryNamePage(index0), "Employment Related Name 1").value
-            .set(LargeBeneficiaryAddressYesNoPage(index0), false).value
-            .set(LargeBeneficiaryDescriptionPage(index0), Description("Description", None, None, None, None)).value
-            .set(LargeBeneficiaryNumberOfBeneficiariesPage(index0), HowManyBeneficiaries.Over1).value
-
-            .set(LargeBeneficiaryNamePage(index1), "Employment Related Name 2").value
-            .set(LargeBeneficiaryAddressYesNoPage(index1), true).value
-            .set(LargeBeneficiaryAddressUKYesNoPage(index1), true).value
-            .set(LargeBeneficiaryAddressPage(index1),
-              UKAddress("Line1", "Line2", Some("Line3"), Some("Newcastle"), "NE62RT")).value
-            .set(LargeBeneficiaryDescriptionPage(index1), Description("Description", None, None, None, None)).value
-            .set(LargeBeneficiaryNumberOfBeneficiariesPage(index1), HowManyBeneficiaries.Over501).value
-
+            .set(LargeBeneficiaryNamePage(index0), "Employment Related Name 1")
+            .value
+            .set(LargeBeneficiaryAddressYesNoPage(index0), false)
+            .value
+            .set(LargeBeneficiaryDescriptionPage(index0), Description("Description", None, None, None, None))
+            .value
+            .set(LargeBeneficiaryNumberOfBeneficiariesPage(index0), HowManyBeneficiaries.Over1)
+            .value
+            .set(LargeBeneficiaryNamePage(index1), "Employment Related Name 2")
+            .value
+            .set(LargeBeneficiaryAddressYesNoPage(index1), true)
+            .value
+            .set(LargeBeneficiaryAddressUKYesNoPage(index1), true)
+            .value
+            .set(
+              LargeBeneficiaryAddressPage(index1),
+              UKAddress("Line1", "Line2", Some("Line3"), Some("Newcastle"), "NE62RT")
+            )
+            .value
+            .set(LargeBeneficiaryDescriptionPage(index1), Description("Description", None, None, None, None))
+            .value
+            .set(LargeBeneficiaryNumberOfBeneficiariesPage(index1), HowManyBeneficiaries.Over501)
+            .value
 
         val large = mapper.build(userAnswers)
 
-        large mustBe defined
+        large       mustBe defined
         large.value mustBe
           List(
             LargeType(
@@ -238,7 +285,6 @@ class LargeBeneficiaryMapperSpec extends SpecBase
               beneficiaryShareOfIncome = None,
               countryOfResidence = None
             ),
-
             LargeType(
               organisationName = "Employment Related Name 2",
               description = "Description",
@@ -247,12 +293,14 @@ class LargeBeneficiaryMapperSpec extends SpecBase
               description3 = None,
               description4 = None,
               numberOfBeneficiary = "501",
-              identification = Some(IdentificationOrgType(
-                None,
-                address = Some(
-                  AddressType("Line1", "Line2", Some("Line3"), Some("Newcastle"), Some("NE62RT"), GB)
+              identification = Some(
+                IdentificationOrgType(
+                  None,
+                  address = Some(
+                    AddressType("Line1", "Line2", Some("Line3"), Some("Newcastle"), Some("NE62RT"), GB)
+                  )
                 )
-              )),
+              ),
               beneficiaryDiscretion = None,
               beneficiaryShareOfIncome = None,
               countryOfResidence = None
@@ -263,12 +311,13 @@ class LargeBeneficiaryMapperSpec extends SpecBase
       "must not be able to create LargeBeneficaryType when incomplete data " in {
         val userAnswers =
           emptyUserAnswers
-            .set(LargeBeneficiaryNamePage(index0), "Employment Related Name").value
+            .set(LargeBeneficiaryNamePage(index0), "Employment Related Name")
+            .value
 
         mapper.build(userAnswers) mustNot be(defined)
       }
 
     }
   }
-}
 
+}

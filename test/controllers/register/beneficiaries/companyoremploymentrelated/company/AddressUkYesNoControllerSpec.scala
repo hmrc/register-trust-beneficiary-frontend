@@ -32,11 +32,11 @@ import views.html.register.beneficiaries.companyoremploymentrelated.company.Addr
 
 class AddressUkYesNoControllerSpec extends SpecBase {
 
-  private val index = 0
-  private val form: Form[Boolean] = new YesNoFormProvider().withPrefix("companyBeneficiary.addressUkYesNo")
+  private val index                       = 0
+  private val form: Form[Boolean]         = new YesNoFormProvider().withPrefix("companyBeneficiary.addressUkYesNo")
   private val addressUkYesNoRoute: String = routes.AddressUkYesNoController.onPageLoad(index, draftId).url
-  private val name: String = "Company"
-  private val onwardRoute = Call("GET", "/foo")
+  private val name: String                = "Company"
+  private val onwardRoute                 = Call("GET", "/foo")
 
   private val baseAnswers = emptyUserAnswers.set(NamePage(index), name).value
 
@@ -86,7 +86,8 @@ class AddressUkYesNoControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[CompanyBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, addressUkYesNoRoute)
@@ -107,7 +108,8 @@ class AddressUkYesNoControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(emptyUserAnswers), mockSetResult = Left(ServerError()))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[CompanyBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, addressUkYesNoRoute)
@@ -142,7 +144,7 @@ class AddressUkYesNoControllerSpec extends SpecBase {
       contentAsString(result) mustEqual
         view(boundForm, name, index, draftId)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -176,4 +178,5 @@ class AddressUkYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

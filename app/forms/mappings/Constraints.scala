@@ -19,7 +19,7 @@ package forms.mappings
 import java.time.LocalDate
 import forms.Validation
 import models.UserAnswers
-import pages.register.beneficiaries.individual.{NationalInsuranceNumberPage, PassportDetailsPage, IDCardDetailsPage}
+import pages.register.beneficiaries.individual.{IDCardDetailsPage, NationalInsuranceNumberPage, PassportDetailsPage}
 import play.api.data.validation.{Constraint, Invalid, Valid}
 import play.api.libs.json.{JsArray, JsString, JsSuccess}
 import sections.beneficiaries.IndividualBeneficiaries
@@ -30,58 +30,51 @@ import scala.util.matching.Regex
 trait Constraints {
 
   protected def firstError[A](constraints: Constraint[A]*): Constraint[A] =
-    Constraint {
-      input =>
-        constraints
-          .map(_.apply(input))
-          .find(_ != Valid)
-          .getOrElse(Valid)
+    Constraint { input =>
+      constraints
+        .map(_.apply(input))
+        .find(_ != Valid)
+        .getOrElse(Valid)
     }
 
   protected def minimumValue[A](minimum: A, errorKey: String)(implicit ev: Ordering[A]): Constraint[A] =
-    Constraint {
-      input =>
+    Constraint { input =>
+      import ev._
 
-        import ev._
-
-        if (input >= minimum) {
-          Valid
-        } else {
-          Invalid(errorKey, minimum)
-        }
+      if (input >= minimum) {
+        Valid
+      } else {
+        Invalid(errorKey, minimum)
+      }
     }
 
   protected def maximumValue[A](maximum: A, errorKey: String)(implicit ev: Ordering[A]): Constraint[A] =
-    Constraint {
-      input =>
+    Constraint { input =>
+      import ev._
 
-        import ev._
-
-        if (input <= maximum) {
-          Valid
-        } else {
-          Invalid(errorKey, maximum)
-        }
+      if (input <= maximum) {
+        Valid
+      } else {
+        Invalid(errorKey, maximum)
+      }
     }
 
   protected def inRange[A](minimum: A, maximum: A, errorKey: String)(implicit ev: Ordering[A]): Constraint[A] =
-    Constraint {
-      input =>
+    Constraint { input =>
+      import ev._
 
-        import ev._
-
-        if (input >= minimum && input <= maximum) {
-          Valid
-        } else {
-          Invalid(errorKey, minimum, maximum)
-        }
+      if (input >= minimum && input <= maximum) {
+        Valid
+      } else {
+        Invalid(errorKey, minimum, maximum)
+      }
     }
 
   protected def regexp(regex: String, errorKey: String): Constraint[String] =
     Constraint {
       case str if str.matches(regex) =>
         Valid
-      case _ =>
+      case _                         =>
         Invalid(errorKey, regex)
     }
 
@@ -89,7 +82,7 @@ trait Constraints {
     Constraint {
       case str if str.length <= maximum =>
         Valid
-      case _ =>
+      case _                            =>
         Invalid(errorKey, maximum)
     }
 
@@ -97,7 +90,7 @@ trait Constraints {
     Constraint {
       case str if str.length >= minimum =>
         Valid
-      case _ =>
+      case _                            =>
         Invalid(errorKey, minimum)
     }
 
@@ -105,93 +98,90 @@ trait Constraints {
     Constraint {
       case str if str.trim.nonEmpty =>
         Valid
-      case _ =>
+      case _                        =>
         Invalid(errorKey, value)
     }
 
   protected def isNinoValid(value: String, errorKey: String): Constraint[String] =
     Constraint {
-      case str if Nino.isValid(str)=>
+      case str if Nino.isValid(str) =>
         Valid
-      case _ =>
+      case _                        =>
         Invalid(errorKey, value)
     }
 
   protected def isNinoDuplicated(userAnswers: UserAnswers, index: Int, errorKey: String): Constraint[String] =
-    Constraint {
-      nino =>
-        userAnswers.data.transform(IndividualBeneficiaries.path.json.pick[JsArray]) match {
-          case JsSuccess(beneficiaries, _) =>
+    Constraint { nino =>
+      userAnswers.data.transform(IndividualBeneficiaries.path.json.pick[JsArray]) match {
+        case JsSuccess(beneficiaries, _) =>
 
-            val uniqueNino = beneficiaries.value.zipWithIndex.forall( beneficiary =>
-              !((beneficiary._1 \\ NationalInsuranceNumberPage.key).contains(JsString(nino)) && beneficiary._2 != index)
-            )
+          val uniqueNino = beneficiaries.value.zipWithIndex.forall(beneficiary =>
+            !((beneficiary._1 \\ NationalInsuranceNumberPage.key).contains(JsString(nino)) && beneficiary._2 != index)
+          )
 
-            if (uniqueNino) {
-              Valid
-            } else {
-              Invalid(errorKey)
-            }
-          case _ =>
+          if (uniqueNino) {
             Valid
-        }
+          } else {
+            Invalid(errorKey)
+          }
+        case _ =>
+          Valid
+      }
     }
 
   protected def uniqueNino(errorKey: String, existingSettlorNinos: Seq[String]): Constraint[String] =
-    Constraint {
-      nino =>
-        if (existingSettlorNinos.contains(nino)) {
-          Invalid(errorKey)
-        } else {
-          Valid
-        }
+    Constraint { nino =>
+      if (existingSettlorNinos.contains(nino)) {
+        Invalid(errorKey)
+      } else {
+        Valid
+      }
     }
 
   protected def isPassportNumberDuplicated(userAnswers: UserAnswers, index: Int, errorKey: String): Constraint[String] =
-    Constraint {
-      passportNumber =>
-        userAnswers.data.transform(IndividualBeneficiaries.path.json.pick[JsArray]) match {
-          case JsSuccess(beneficiaries, _) =>
-            val uniquePassportNumber = beneficiaries.value.zipWithIndex.forall { beneficiary =>
-              !((beneficiary._1 \ PassportDetailsPage.key \ PassportDetailsPage.passportNumberKey).toOption.fold(false)(_.as[String] == (passportNumber)) && beneficiary._2 != index)
-            }
+    Constraint { passportNumber =>
+      userAnswers.data.transform(IndividualBeneficiaries.path.json.pick[JsArray]) match {
+        case JsSuccess(beneficiaries, _) =>
+          val uniquePassportNumber = beneficiaries.value.zipWithIndex.forall { beneficiary =>
+            !((beneficiary._1 \ PassportDetailsPage.key \ PassportDetailsPage.passportNumberKey).toOption
+              .fold(false)(_.as[String] == passportNumber) && beneficiary._2 != index)
+          }
 
-            if (uniquePassportNumber) {
-              Valid
-            } else {
-              Invalid(errorKey)
-            }
-          case _ =>
+          if (uniquePassportNumber) {
             Valid
-        }
+          } else {
+            Invalid(errorKey)
+          }
+        case _                           =>
+          Valid
+      }
     }
 
   protected def isIDNumberDuplicated(userAnswers: UserAnswers, index: Int, errorKey: String): Constraint[String] =
-    Constraint {
-      idNumber =>
-        userAnswers.data.transform(IndividualBeneficiaries.path.json.pick[JsArray]) match {
-          case JsSuccess(beneficiaries, _) =>
+    Constraint { idNumber =>
+      userAnswers.data.transform(IndividualBeneficiaries.path.json.pick[JsArray]) match {
+        case JsSuccess(beneficiaries, _) =>
 
-            val uniqueIDNumber = beneficiaries.value.zipWithIndex.forall { beneficiary =>
-                !((beneficiary._1 \ IDCardDetailsPage.key \ IDCardDetailsPage.idNumberKey).toOption.fold(false)(_.as[String].equals(idNumber)) && beneficiary._2 != index)
-            }
+          val uniqueIDNumber = beneficiaries.value.zipWithIndex.forall { beneficiary =>
+            !((beneficiary._1 \ IDCardDetailsPage.key \ IDCardDetailsPage.idNumberKey).toOption
+              .fold(false)(_.as[String].equals(idNumber)) && beneficiary._2 != index)
+          }
 
-            if (uniqueIDNumber) {
-              Valid
-            } else {
-              Invalid(errorKey)
-            }
-          case _ =>
+          if (uniqueIDNumber) {
             Valid
-        }
+          } else {
+            Invalid(errorKey)
+          }
+        case _ =>
+          Valid
+      }
     }
-
 
   protected def maxDate(maximum: LocalDate, errorKey: String, args: Any*): Constraint[LocalDate] =
     Constraint {
       case date if date.isAfter(maximum) =>
         Invalid(errorKey, args: _*)
-      case _ =>
+      case _                             =>
         Valid
     }
 
@@ -199,17 +189,17 @@ trait Constraints {
     Constraint {
       case date if date.isBefore(minimum) =>
         Invalid(errorKey, args: _*)
-      case _ =>
+      case _                              =>
         Valid
     }
 
-  protected def wholeNumber(errorKey: String) : Constraint[String] = {
+  protected def wholeNumber(errorKey: String): Constraint[String] = {
 
     val regex: Regex = Validation.decimalCheck.r
 
     Constraint {
       case regex(_*) => Valid
-      case _ =>  Invalid(errorKey)
+      case _         => Invalid(errorKey)
     }
   }
 
@@ -217,7 +207,7 @@ trait Constraints {
     Constraint {
       case str if str.trim.nonEmpty =>
         Valid
-      case _ =>
+      case _                        =>
         Invalid(errorKey, value)
     }
 

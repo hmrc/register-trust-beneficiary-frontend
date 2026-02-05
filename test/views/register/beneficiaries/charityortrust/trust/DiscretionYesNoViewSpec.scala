@@ -26,15 +26,16 @@ import views.html.register.beneficiaries.charityortrust.trust.DiscretionYesNoVie
 class DiscretionYesNoViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "trustBeneficiaryDiscretionYesNo"
-  val index = 0
-  val name = "First Last"
+  val index            = 0
+  val name             = "First Last"
 
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
   "trustBeneficiaryDiscretionYesNo view" must {
 
     val userAnswers = emptyUserAnswers
-      .set(NamePage(index), name).value
+      .set(NamePage(index), name)
+      .value
 
     val view = viewFor[DiscretionYesNoView](Some(userAnswers))
 
@@ -55,4 +56,5 @@ class DiscretionYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

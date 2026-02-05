@@ -37,32 +37,36 @@ class PassportDetailsYesNoPageSpec extends PageBehaviours {
 
       val page = PassportDetailsYesNoPage(0)
 
-      "set to true" in {
-        forAll(arbitrary[UserAnswers]) {
-          initial =>
-            val answers: UserAnswers = initial.set(page, false).value
-              .set(IDCardDetailsYesNoPage(0), true).value
-              .set(IDCardDetailsPage(0), PassportOrIdCardDetails("France", "98765546", LocalDate.now())).value
+      "set to true" in
+        forAll(arbitrary[UserAnswers]) { initial =>
+          val answers: UserAnswers = initial
+            .set(page, false)
+            .value
+            .set(IDCardDetailsYesNoPage(0), true)
+            .value
+            .set(IDCardDetailsPage(0), PassportOrIdCardDetails("France", "98765546", LocalDate.now()))
+            .value
 
-            val result = answers.set(page, true).value
+          val result = answers.set(page, true).value
 
-            result.get(IDCardDetailsYesNoPage(0)) must not be defined
-            result.get(IDCardDetailsPage(0)) must not be defined
+          result.get(IDCardDetailsYesNoPage(0)) must not be defined
+          result.get(IDCardDetailsPage(0))      must not be defined
         }
-      }
 
-      "set to false" in {
-        forAll(arbitrary[UserAnswers]) {
-          initial =>
-            val answers: UserAnswers = initial.set(page, true).value
-              .set(PassportDetailsPage(0), PassportOrIdCardDetails("France", "234323", LocalDate.now())).value
+      "set to false" in
+        forAll(arbitrary[UserAnswers]) { initial =>
+          val answers: UserAnswers = initial
+            .set(page, true)
+            .value
+            .set(PassportDetailsPage(0), PassportOrIdCardDetails("France", "234323", LocalDate.now()))
+            .value
 
-            val result = answers.set(page, false).value
+          val result = answers.set(page, false).value
 
-            result.get(PassportDetailsPage(0)) must not be defined
+          result.get(PassportDetailsPage(0)) must not be defined
         }
-      }
 
     }
   }
+
 }

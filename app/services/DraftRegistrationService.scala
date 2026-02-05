@@ -27,17 +27,28 @@ import utils.TrustEnvelope.TrustEnvelope
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class DraftRegistrationService @Inject()(config: FrontendAppConfig,
-                                         submissionDraftConnector: SubmissionDraftConnector)
-                                        (implicit ec: ExecutionContext) extends Logging {
-
+class DraftRegistrationService @Inject() (
+  config: FrontendAppConfig,
+  submissionDraftConnector: SubmissionDraftConnector
+)(implicit ec: ExecutionContext)
+    extends Logging {
 
   def retrieveSettlorNinos(draftId: String)(implicit hc: HeaderCarrier): TrustEnvelope[String] = EitherT {
     submissionDraftConnector.getDraftSection(draftId, config.repositoryKeySettlors).value.map {
-      case Left(value) => Left(value)
-      case Right(response) => Right(
-          response.data.\("data").\("settlors").\("deceased").asOpt[JsObject].getOrElse(JsObject.empty).\("nationalInsuranceNumber").asOpt[String].getOrElse("")
-      )
+      case Left(value)     => Left(value)
+      case Right(response) =>
+        Right(
+          response.data
+            .\("data")
+            .\("settlors")
+            .\("deceased")
+            .asOpt[JsObject]
+            .getOrElse(JsObject.empty)
+            .\("nationalInsuranceNumber")
+            .asOpt[String]
+            .getOrElse("")
+        )
     }
   }
+
 }

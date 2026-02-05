@@ -18,7 +18,9 @@ package controllers.register.beneficiaries.individualBeneficiary
 
 import controllers.RemoveIndexController
 import controllers.actions._
-import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
+import controllers.actions.register.{
+  DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction
+}
 import forms.RemoveIndexFormProvider
 import models.core.pages.FullName
 import models.requests.RegistrationDataRequest
@@ -33,29 +35,30 @@ import javax.inject.Inject
 
 import scala.concurrent.ExecutionContext
 
-class RemoveIndividualBeneficiaryController @Inject()(
-                                                       override val messagesApi: MessagesApi,
-                                                       override val registrationsRepository: RegistrationsRepository,
-                                                       identify: RegistrationIdentifierAction,
-                                                       getData: DraftIdRetrievalActionProvider,
-                                                       requireData: RegistrationDataRequiredAction,
-                                                       val formProvider: RemoveIndexFormProvider,
-                                                       val controllerComponents: MessagesControllerComponents,
-                                                       val removeView: RemoveIndexView,
-                                                       require: RequiredAnswerActionProvider,
-                                                       val technicalErrorView: TechnicalErrorView
-                                                     )(implicit executionContext: ExecutionContext) extends RemoveIndexController {
+class RemoveIndividualBeneficiaryController @Inject() (
+  override val messagesApi: MessagesApi,
+  override val registrationsRepository: RegistrationsRepository,
+  identify: RegistrationIdentifierAction,
+  getData: DraftIdRetrievalActionProvider,
+  requireData: RegistrationDataRequiredAction,
+  val formProvider: RemoveIndexFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  val removeView: RemoveIndexView,
+  require: RequiredAnswerActionProvider,
+  val technicalErrorView: TechnicalErrorView
+)(implicit executionContext: ExecutionContext)
+    extends RemoveIndexController {
 
   val ec: ExecutionContext = executionContext
 
-  override val messagesPrefix : String = "removeIndividualBeneficiaryYesNo"
+  override val messagesPrefix: String = "removeIndividualBeneficiaryYesNo"
 
   override def page(index: Int): QuestionPage[FullName] = NamePage(index)
 
-  override def actions(draftId : String, index: Int): ActionBuilder[RegistrationDataRequest, AnyContent] =
+  override def actions(draftId: String, index: Int): ActionBuilder[RegistrationDataRequest, AnyContent] =
     identify andThen getData(draftId) andThen requireData
 
-  override def redirect(draftId : String) : Call =
+  override def redirect(draftId: String): Call =
     controllers.register.beneficiaries.routes.AddABeneficiaryController.onPageLoad(draftId)
 
   override def formRoute(draftId: String, index: Int): Call =
@@ -63,7 +66,7 @@ class RemoveIndividualBeneficiaryController @Inject()(
 
   override def removeQuery(index: Int): Settable[_] = RemoveIndividualBeneficiaryQuery(index)
 
-  override def content(index: Int)(implicit request: RegistrationDataRequest[AnyContent]) : String =
+  override def content(index: Int)(implicit request: RegistrationDataRequest[AnyContent]): String =
     request.userAnswers.get(page(index)).map(_.toString).getOrElse(Messages(s"$messagesPrefix.default"))
 
 }

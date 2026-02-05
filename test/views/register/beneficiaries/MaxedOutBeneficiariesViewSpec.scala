@@ -49,7 +49,10 @@ class MaxedOutBeneficiariesViewSpec extends OptionsViewBehaviours with TabularDa
         val doc = asDocument(view)
 
         assertContainsText(doc, "You cannot enter another beneficiary as you have entered a maximum of 175.")
-        assertContainsText(doc, "Check the beneficiaries you have added. If you have further beneficiaries to add, write to HMRC with their details.")
+        assertContainsText(
+          doc,
+          "Check the beneficiaries you have added. If you have further beneficiaries to add, write to HMRC with their details."
+        )
       }
     }
   }

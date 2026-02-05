@@ -24,9 +24,9 @@ import viewmodels.{AnswerRow, AnswerSection}
 
 class ClassOfBeneficiaryAnswersHelperSpec extends SpecBase {
 
-  private val index: Int = 0
+  private val index: Int          = 0
   private val description: String = "Description"
-  private val canEdit: Boolean = true
+  private val canEdit: Boolean    = true
 
   private val helper: ClassOfBeneficiaryAnswersHelper = injector.instanceOf[ClassOfBeneficiaryAnswersHelper]
 
@@ -42,7 +42,8 @@ class ClassOfBeneficiaryAnswersHelperSpec extends SpecBase {
     "return a class of beneficiary answer section" in {
 
       val userAnswers = emptyUserAnswers
-        .set(ClassBeneficiaryDescriptionPage(index), description).value
+        .set(ClassBeneficiaryDescriptionPage(index), description)
+        .value
 
       val result = helper.beneficiaries(userAnswers).get
 
@@ -51,11 +52,18 @@ class ClassOfBeneficiaryAnswersHelperSpec extends SpecBase {
           AnswerSection(
             headingKey = Some("answerPage.section.classOfBeneficiary.subheading"),
             rows = Seq(
-              AnswerRow("classBeneficiaryDescription.checkYourAnswersLabel", Html(description), Some(ClassBeneficiaryDescriptionController.onPageLoad(index, fakeDraftId).url), description, canEdit)
+              AnswerRow(
+                "classBeneficiaryDescription.checkYourAnswersLabel",
+                Html(description),
+                Some(ClassBeneficiaryDescriptionController.onPageLoad(index, fakeDraftId).url),
+                description,
+                canEdit
+              )
             ),
             headingArgs = Seq(index + 1)
           )
         )
     }
   }
+
 }

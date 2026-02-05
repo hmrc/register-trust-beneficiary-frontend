@@ -25,4 +25,3 @@ object TrustEnvelope {
   type TrustEnvelope[T] = EitherT[Future, TrustErrors, T]
 
 }
-

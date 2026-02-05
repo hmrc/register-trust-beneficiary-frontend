@@ -16,7 +16,9 @@
 
 package controllers.register.beneficiaries
 
-import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
+import controllers.actions.register.{
+  DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction
+}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -24,23 +26,23 @@ import views.html.register.beneficiaries._
 
 import javax.inject.Inject
 
-class InfoController @Inject()(
-                                override val messagesApi: MessagesApi,
-                                identify: RegistrationIdentifierAction,
-                                getData: DraftIdRetrievalActionProvider,
-                                requireData: RegistrationDataRequiredAction,
-                                val controllerComponents: MessagesControllerComponents,
-                                view: InfoView
-                              ) extends FrontendBaseController with I18nSupport {
+class InfoController @Inject() (
+  override val messagesApi: MessagesApi,
+  identify: RegistrationIdentifierAction,
+  getData: DraftIdRetrievalActionProvider,
+  requireData: RegistrationDataRequiredAction,
+  val controllerComponents: MessagesControllerComponents,
+  view: InfoView
+) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(draftId: String): Action[AnyContent] = (identify andThen getData(draftId) andThen requireData) {
     implicit request =>
       val ua = request.userAnswers
-        Ok(view(draftId, ua.isTaxable))
+      Ok(view(draftId, ua.isTaxable))
   }
 
-  def onSubmit(draftId: String): Action[AnyContent] = (identify andThen getData(draftId) andThen requireData) {
-    _ =>
-      Redirect(routes.WhatTypeOfBeneficiaryController.onPageLoad(draftId))
+  def onSubmit(draftId: String): Action[AnyContent] = (identify andThen getData(draftId) andThen requireData) { _ =>
+    Redirect(routes.WhatTypeOfBeneficiaryController.onPageLoad(draftId))
   }
+
 }

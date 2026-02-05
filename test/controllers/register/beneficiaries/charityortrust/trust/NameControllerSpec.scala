@@ -31,10 +31,10 @@ import views.html.register.beneficiaries.charityortrust.trust.NameView
 
 class NameControllerSpec extends SpecBase {
 
-  private val formProvider = new StringFormProvider()
+  private val formProvider       = new StringFormProvider()
   private val form: Form[String] = formProvider.withPrefix("trustBeneficiaryName", 105)
-  private val name = "Name"
-  private val index: Int = 0
+  private val name               = "Name"
+  private val index: Int         = 0
 
   private lazy val trustBeneficiaryNameRoute: String = routes.NameController.onPageLoad(index, fakeDraftId).url
 
@@ -61,7 +61,8 @@ class NameControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val answers = emptyUserAnswers
-        .set(NamePage(index), name).value
+        .set(NamePage(index), name)
+        .value
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 
@@ -84,19 +85,20 @@ class NameControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
           bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(new FakeNavigator)
-        ).build()
+        )
+        .build()
 
-        val request =
-          FakeRequest(POST, trustBeneficiaryNameRoute)
-            .withFormUrlEncodedBody(("value", "name"))
+      val request =
+        FakeRequest(POST, trustBeneficiaryNameRoute)
+          .withFormUrlEncodedBody(("value", "name"))
 
-        val result = route(application, request).value
+      val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
+      status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+      redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
-        application.stop()
+      application.stop()
     }
 
     "return an Internal Server Error when setting the user answers goes wrong" in {
@@ -104,22 +106,23 @@ class NameControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), mockSetResult = Left(ServerError()))
         .overrides(
           bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(new FakeNavigator)
-        ).build()
+        )
+        .build()
 
-        val request =
-          FakeRequest(POST, trustBeneficiaryNameRoute)
-            .withFormUrlEncodedBody(("value", "name"))
+      val request =
+        FakeRequest(POST, trustBeneficiaryNameRoute)
+          .withFormUrlEncodedBody(("value", "name"))
 
-        val result = route(application, request).value
+      val result = route(application, request).value
 
-        status(result) mustEqual INTERNAL_SERVER_ERROR
+      status(result) mustEqual INTERNAL_SERVER_ERROR
 
       val errorPage = app.injector.instanceOf[TechnicalErrorView]
 
       contentType(result) mustBe Some("text/html")
       contentAsString(result) mustEqual errorPage()(request, messages).toString
 
-        application.stop()
+      application.stop()
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
@@ -175,4 +178,5 @@ class NameControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

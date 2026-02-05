@@ -24,31 +24,33 @@ import pages.register.beneficiaries.individual.{AddressUKPage, AddressUKYesNoPag
 
 class RemoveIndividualBeneficiaryQuerySpec extends PageBehaviours {
 
-  val index : Int = 0
+  val index: Int = 0
 
   "RemoveIndividualBeneficiaryQuery" must {
 
-    "remove individual beneficiary at index" in {
-      forAll(arbitrary[UserAnswers]) {
-        initial =>
+    "remove individual beneficiary at index" in
+      forAll(arbitrary[UserAnswers]) { initial =>
+        val answers: UserAnswers = initial
+          .set(NamePage(0), FullName("First", None, "Last"))
+          .value
+          .set(AddressYesNoPage(0), true)
+          .value
+          .set(AddressUKYesNoPage(0), true)
+          .value
+          .set(AddressUKPage(0), UKAddress("1", "2", Some("3"), Some("4"), "5"))
+          .value
+          .set(NamePage(1), FullName("Second", None, "Last"))
+          .value
 
-          val answers: UserAnswers = initial
-            .set(NamePage(0), FullName("First", None, "Last")).value
-            .set(AddressYesNoPage(0), true).value
-            .set(AddressUKYesNoPage(0), true).value
-            .set(AddressUKPage(0), UKAddress("1", "2", Some("3"), Some("4"), "5")).value
-            .set(NamePage(1), FullName("Second", None, "Last")).value
+        val result = answers.remove(RemoveIndividualBeneficiaryQuery(index)).value
 
-          val result = answers.remove(RemoveIndividualBeneficiaryQuery(index)).value
+        result.get(NamePage(0)).value mustBe FullName("Second", None, "Last")
+        result.get(AddressYesNoPage(0)) mustNot be(defined)
+        result.get(AddressUKYesNoPage(0)) mustNot be(defined)
+        result.get(AddressUKPage(0)) mustNot be(defined)
 
-          result.get(NamePage(0)).value mustBe FullName("Second", None, "Last")
-          result.get(AddressYesNoPage(0)) mustNot be(defined)
-          result.get(AddressUKYesNoPage(0)) mustNot be(defined)
-          result.get(AddressUKPage(0)) mustNot be(defined)
-
-          result.get(NamePage(1)) mustNot be(defined)
+        result.get(NamePage(1)) mustNot be(defined)
       }
-    }
 
   }
 

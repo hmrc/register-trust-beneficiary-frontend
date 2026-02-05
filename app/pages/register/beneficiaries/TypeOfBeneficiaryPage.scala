@@ -27,18 +27,20 @@ trait TypeOfBeneficiaryPage {
 
     def status(beneficiary: JsValue) = beneficiary.transform((__ \ "status").json.pick) match {
       case JsSuccess(value, _) => value.as[Status]
-      case _ => InProgress
+      case _                   => InProgress
     }
 
-    paths.foldLeft[Either[TrustErrors, UserAnswers]](Right(userAnswers))((acc, path) => {
+    paths.foldLeft[Either[TrustErrors, UserAnswers]](Right(userAnswers))((acc, path) =>
       acc match {
-        case Right(value) => value.getAtPath[JsArray](path).getOrElse(JsArray()) match {
-          case x if x.value.nonEmpty && status(x.value.last) == InProgress => value.deleteAtPath(path \ (x.value.size - 1))
-          case _ => Right(value)
-        }
-        case _ => acc
+        case Right(value) =>
+          value.getAtPath[JsArray](path).getOrElse(JsArray()) match {
+            case x if x.value.nonEmpty && status(x.value.last) == InProgress =>
+              value.deleteAtPath(path \ (x.value.size - 1))
+            case _                                                           => Right(value)
+          }
+        case _            => acc
       }
-    })
+    )
   }
 
 }

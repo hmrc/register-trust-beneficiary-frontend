@@ -32,44 +32,49 @@ import views.html.TechnicalErrorView
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class IndexController @Inject()(
-                                 val controllerComponents: MessagesControllerComponents,
-                                 repository: RegistrationsRepository,
-                                 identify: RegistrationIdentifierAction,
-                                 submissionDraftConnector: SubmissionDraftConnector,
-                                 trustStoreService: TrustsStoreService,
-                                 technicalErrorView: TechnicalErrorView
-                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class IndexController @Inject() (
+  val controllerComponents: MessagesControllerComponents,
+  repository: RegistrationsRepository,
+  identify: RegistrationIdentifierAction,
+  submissionDraftConnector: SubmissionDraftConnector,
+  trustStoreService: TrustsStoreService,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private val className = getClass.getSimpleName
 
   def onPageLoad(draftId: String): Action[AnyContent] = identify.async { implicit request =>
-
     val result = for {
-        isTaxable <- submissionDraftConnector.getIsTrustTaxable(draftId)
-        optUserAnswers <- repository.get(draftId)
-        userAnswers = extractUserAnswers(optUserAnswers, draftId, request.identifier, isTaxable)
-        _ <- repository.set(userAnswers)
-        _ <- trustStoreService.updateTaskStatus(draftId, TaskStatus.InProgress)
-      } yield {
-        if (userAnswers.isAnyBeneficiaryAdded) {
-          Redirect(AddABeneficiaryController.onPageLoad(draftId))
-        } else {
-          Redirect(InfoController.onPageLoad(draftId))
-        }
+      isTaxable      <- submissionDraftConnector.getIsTrustTaxable(draftId)
+      optUserAnswers <- repository.get(draftId)
+      userAnswers     = extractUserAnswers(optUserAnswers, draftId, request.identifier, isTaxable)
+      _              <- repository.set(userAnswers)
+      _              <- trustStoreService.updateTaskStatus(draftId, TaskStatus.InProgress)
+    } yield
+      if (userAnswers.isAnyBeneficiaryAdded) {
+        Redirect(AddABeneficiaryController.onPageLoad(draftId))
+      } else {
+        Redirect(InfoController.onPageLoad(draftId))
       }
 
     result.value.map {
       case Right(call) => call
-      case Left(_) =>
+      case Left(_)     =>
         logger.warn(s"[$className][onSubmit] Error while storing user answers")
         InternalServerError(technicalErrorView())
     }
   }
 
-  private def extractUserAnswers(optUserAnswers: Option[UserAnswers],draftId: String, identifier: String, isTaxable: Boolean): UserAnswers =
+  private def extractUserAnswers(
+    optUserAnswers: Option[UserAnswers],
+    draftId: String,
+    identifier: String,
+    isTaxable: Boolean
+  ): UserAnswers =
     optUserAnswers match {
       case Some(userAnswers) => userAnswers.copy(isTaxable = isTaxable)
-      case _ => UserAnswers(draftId, Json.obj(), identifier, isTaxable)
+      case _                 => UserAnswers(draftId, Json.obj(), identifier, isTaxable)
     }
+
 }

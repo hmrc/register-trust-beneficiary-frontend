@@ -35,15 +35,15 @@ class IDCardDetailsYesNoPageSpec extends PageBehaviours {
 
     "remove IDCardDetailsPage when IDCardDetailsYesNoPage is set to false" in {
       val index = 0
-      forAll(arbitrary[UserAnswers]) {
-        initial =>
-          val answers: UserAnswers =
+      forAll(arbitrary[UserAnswers]) { initial =>
+        val answers: UserAnswers =
           initial.set(IDCardDetailsPage(index), PassportOrIdCardDetails("c", "d", LocalDate.now)).value
 
-          val result = answers.set(IDCardDetailsYesNoPage(index), false).value
+        val result = answers.set(IDCardDetailsYesNoPage(index), false).value
 
-          result.get(IDCardDetailsPage(index)) mustNot be(defined)
+        result.get(IDCardDetailsPage(index)) mustNot be(defined)
       }
     }
   }
+
 }

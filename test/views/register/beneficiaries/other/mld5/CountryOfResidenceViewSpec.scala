@@ -26,8 +26,8 @@ import views.html.register.beneficiaries.other.mld5.CountryOfResidenceView
 
 class CountryOfResidenceViewSpec extends SelectCountryViewBehaviours {
 
-  val prefix = "otherBeneficiary.countryOfResidence"
-  val index = 0
+  val prefix      = "otherBeneficiary.countryOfResidence"
+  val index       = 0
   val charityName = "Test"
 
   val form: Form[String] = new CountryFormProvider().withPrefix(prefix)
@@ -49,4 +49,5 @@ class CountryOfResidenceViewSpec extends SelectCountryViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

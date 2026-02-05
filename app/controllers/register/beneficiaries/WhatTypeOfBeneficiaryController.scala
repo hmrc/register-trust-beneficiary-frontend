@@ -17,7 +17,9 @@
 package controllers.register.beneficiaries
 
 import cats.data.EitherT
-import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
+import controllers.actions.register.{
+  DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction
+}
 import forms.WhatTypeOfBeneficiaryFormProvider
 import models.requests.RegistrationDataRequest
 import navigation.Navigator
@@ -34,53 +36,58 @@ import views.html.register.beneficiaries.WhatTypeOfBeneficiaryView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class WhatTypeOfBeneficiaryController @Inject()(
-                                                 override val messagesApi: MessagesApi,
-                                                 registrationsRepository: RegistrationsRepository,
-                                                 navigator: Navigator,
-                                                 identify: RegistrationIdentifierAction,
-                                                 getData: DraftIdRetrievalActionProvider,
-                                                 requireData: RegistrationDataRequiredAction,
-                                                 formProvider: WhatTypeOfBeneficiaryFormProvider,
-                                                 val controllerComponents: MessagesControllerComponents,
-                                                 view: WhatTypeOfBeneficiaryView,
-                                                 technicalErrorView: TechnicalErrorView
-                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class WhatTypeOfBeneficiaryController @Inject() (
+  override val messagesApi: MessagesApi,
+  registrationsRepository: RegistrationsRepository,
+  navigator: Navigator,
+  identify: RegistrationIdentifierAction,
+  getData: DraftIdRetrievalActionProvider,
+  requireData: RegistrationDataRequiredAction,
+  formProvider: WhatTypeOfBeneficiaryFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: WhatTypeOfBeneficiaryView,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private val className = getClass.getSimpleName
 
-  private def actions(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] = identify andThen getData(draftId) andThen requireData
+  private def actions(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
+    identify andThen getData(draftId) andThen requireData
 
   private val form = formProvider()
 
-  def onPageLoad(draftId: String): Action[AnyContent] = actions(draftId) {
-    implicit request =>
+  def onPageLoad(draftId: String): Action[AnyContent] = actions(draftId) { implicit request =>
+    val preparedForm = request.userAnswers.get(WhatTypeOfBeneficiaryPage) match {
+      case Some(value) => form.fill(value)
+      case None        => form
+    }
 
-      val preparedForm = request.userAnswers.get(WhatTypeOfBeneficiaryPage) match {
-        case Some(value) => form.fill(value)
-        case None => form
-      }
-
-      Ok(view(
+    Ok(
+      view(
         form = preparedForm,
         draftId = draftId,
         beneficiaryAdded = request.userAnswers.isAnyBeneficiaryAdded,
         options = request.userAnswers.beneficiaries.nonMaxedOutOptions
-      ))
+      )
+    )
   }
 
-  def onSubmit(draftId: String): Action[AnyContent] = actions(draftId).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
+  def onSubmit(draftId: String): Action[AnyContent] = actions(draftId).async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(
-            form = formWithErrors,
-            draftId = draftId,
-            beneficiaryAdded = request.userAnswers.isAnyBeneficiaryAdded,
-            options = request.userAnswers.beneficiaries.nonMaxedOutOptions
-          ))),
-
+          Future.successful(
+            BadRequest(
+              view(
+                form = formWithErrors,
+                draftId = draftId,
+                beneficiaryAdded = request.userAnswers.isAnyBeneficiaryAdded,
+                options = request.userAnswers.beneficiaries.nonMaxedOutOptions
+              )
+            )
+          ),
         value => {
           val result = for {
             updatedAnswers <- EitherT(Future.successful(request.userAnswers.set(WhatTypeOfBeneficiaryPage, value)))
@@ -89,7 +96,7 @@ class WhatTypeOfBeneficiaryController @Inject()(
 
           result.value.map {
             case Right(call) => call
-            case Left(_) =>
+            case Left(_)     =>
               logger.warn(s"[$className][onSubmit][Session ID: ${request.sessionId}] Error while storing user answers")
               InternalServerError(technicalErrorView())
           }

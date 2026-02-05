@@ -32,11 +32,11 @@ import views.html.register.beneficiaries.companyoremploymentrelated.employmentRe
 
 class NameControllerSpec extends SpecBase {
 
-  private val index = 0
+  private val index              = 0
   private val form: Form[String] = new StringFormProvider().withPrefix("employmentRelatedBeneficiary.name", 105)
-  private val nameRoute: String = routes.NameController.onPageLoad(index, draftId).url
-  private val name: String = "EmploymentRelated"
-  private val onwardRoute = Call("GET", "/foo")
+  private val nameRoute: String  = routes.NameController.onPageLoad(index, draftId).url
+  private val name: String       = "EmploymentRelated"
+  private val onwardRoute        = Call("GET", "/foo")
 
   "Name Controller" must {
 
@@ -83,8 +83,11 @@ class NameControllerSpec extends SpecBase {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[EmploymentRelatedBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+            bind[Navigator]
+              .qualifiedWith(classOf[EmploymentRelatedBeneficiary])
+              .toInstance(new FakeNavigator(onwardRoute))
+          )
+          .build()
 
       val request =
         FakeRequest(POST, nameRoute)
@@ -104,8 +107,11 @@ class NameControllerSpec extends SpecBase {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers), mockSetResult = Left(ServerError()))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[EmploymentRelatedBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+            bind[Navigator]
+              .qualifiedWith(classOf[EmploymentRelatedBeneficiary])
+              .toInstance(new FakeNavigator(onwardRoute))
+          )
+          .build()
 
       val request =
         FakeRequest(POST, nameRoute)
@@ -140,7 +146,7 @@ class NameControllerSpec extends SpecBase {
       contentAsString(result) mustEqual
         view(boundForm, index, draftId)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -174,4 +180,5 @@ class NameControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

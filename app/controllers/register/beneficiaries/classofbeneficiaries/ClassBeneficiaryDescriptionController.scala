@@ -18,7 +18,9 @@ package controllers.register.beneficiaries.classofbeneficiaries
 
 import cats.data.EitherT
 import config.annotations.ClassOfBeneficiaries
-import controllers.actions.register.{DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
+import controllers.actions.register.{
+  DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction
+}
 import forms.ClassBeneficiaryDescriptionFormProvider
 import models.Status.Completed
 import models.requests.RegistrationDataRequest
@@ -37,59 +39,61 @@ import views.html.register.beneficiaries.classofbeneficiaries.ClassBeneficiaryDe
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ClassBeneficiaryDescriptionController @Inject()(
-                                                       override val messagesApi: MessagesApi,
-                                                       registrationsRepository: RegistrationsRepository,
-                                                       @ClassOfBeneficiaries navigator: Navigator,
-                                                       identify: RegistrationIdentifierAction,
-                                                       getData: DraftIdRetrievalActionProvider,
-                                                       requireData: RegistrationDataRequiredAction,
-                                                       formProvider: ClassBeneficiaryDescriptionFormProvider,
-                                                       val controllerComponents: MessagesControllerComponents,
-                                                       view: ClassBeneficiaryDescriptionView,
-                                                       technicalErrorView: TechnicalErrorView
-                                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class ClassBeneficiaryDescriptionController @Inject() (
+  override val messagesApi: MessagesApi,
+  registrationsRepository: RegistrationsRepository,
+  @ClassOfBeneficiaries navigator: Navigator,
+  identify: RegistrationIdentifierAction,
+  getData: DraftIdRetrievalActionProvider,
+  requireData: RegistrationDataRequiredAction,
+  formProvider: ClassBeneficiaryDescriptionFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: ClassBeneficiaryDescriptionView,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
   private val className = getClass.getSimpleName
 
-  private def actions(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] = identify andThen getData(draftId) andThen requireData
+  private def actions(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
+    identify andThen getData(draftId) andThen requireData
 
   private val form = formProvider()
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(draftId) {
-    implicit request =>
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(draftId) { implicit request =>
+    val preparedForm = request.userAnswers.get(ClassBeneficiaryDescriptionPage(index)) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(ClassBeneficiaryDescriptionPage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, draftId, index))
+    Ok(view(preparedForm, draftId, index))
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = (identify andThen getData(draftId) andThen requireData).async {
-    implicit request =>
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] =
+    (identify andThen getData(draftId) andThen requireData).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId, index))),
+          value => {
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index))),
+            val answers = request.userAnswers
+              .set(ClassBeneficiaryDescriptionPage(index), value)
+              .flatMap(_.set(ClassBeneficiaryStatus(index), Completed))
 
-        value => {
+            val result = for {
+              updatedAnswers <- EitherT(Future.successful(answers))
+              _              <- registrationsRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(ClassBeneficiaryDescriptionPage(index), draftId, updatedAnswers))
 
-          val answers = request.userAnswers.set(ClassBeneficiaryDescriptionPage(index), value)
-            .flatMap(_.set(ClassBeneficiaryStatus(index), Completed))
-
-          val result = for {
-            updatedAnswers <- EitherT(Future.successful(answers))
-            _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ClassBeneficiaryDescriptionPage(index), draftId, updatedAnswers))
-
-          result.value.map {
-            case Right(call) => call
-            case Left(_) =>
-              logger.warn(s"[$className][onSubmit][Session ID: ${request.sessionId}] Error while storing user answers")
-              InternalServerError(technicalErrorView())
+            result.value.map {
+              case Right(call) => call
+              case Left(_)     =>
+                logger
+                  .warn(s"[$className][onSubmit][Session ID: ${request.sessionId}] Error while storing user answers")
+                InternalServerError(technicalErrorView())
+            }
           }
-        }
-      )
-  }
+        )
+    }
+
 }

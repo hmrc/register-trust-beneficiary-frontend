@@ -27,13 +27,12 @@ trait Mapper[A, B <: Beneficiary] {
     override def path: JsPath = jsPath
   }
 
-  def build(userAnswers: UserAnswers)(implicit rds: Reads[B]): Option[List[A]] = {
+  def build(userAnswers: UserAnswers)(implicit rds: Reads[B]): Option[List[A]] =
 
     userAnswers.get(Beneficiaries).getOrElse(List.empty) match {
-      case Nil => None
+      case Nil  => None
       case list => Some(list.map(beneficiaryType))
     }
-  }
 
   def jsPath: JsPath
 

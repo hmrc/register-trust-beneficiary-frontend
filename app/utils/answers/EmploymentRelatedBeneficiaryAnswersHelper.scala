@@ -23,8 +23,8 @@ import viewmodels.addAnother.EmploymentRelatedBeneficiaryViewModel
 
 import javax.inject.Inject
 
-class EmploymentRelatedBeneficiaryAnswersHelper @Inject()(printHelper: EmploymentRelatedBeneficiaryPrintHelper)
-  extends AnswersHelper[EmploymentRelatedBeneficiaryViewModel](printHelper) {
+class EmploymentRelatedBeneficiaryAnswersHelper @Inject() (printHelper: EmploymentRelatedBeneficiaryPrintHelper)
+    extends AnswersHelper[EmploymentRelatedBeneficiaryViewModel](printHelper) {
 
   override val beneficiaryType: QuestionPage[List[EmploymentRelatedBeneficiaryViewModel]] = LargeBeneficiaries
 }

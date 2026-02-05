@@ -21,7 +21,7 @@ import models.UnidentifiedType
 import play.api.libs.json.JsPath
 import sections.beneficiaries.ClassOfBeneficiaries
 
-class ClassOfBeneficiariesMapper extends Mapper[UnidentifiedType, ClassOfBeneficiary]{
+class ClassOfBeneficiariesMapper extends Mapper[UnidentifiedType, ClassOfBeneficiary] {
 
   override def jsPath: JsPath = ClassOfBeneficiaries.path
 

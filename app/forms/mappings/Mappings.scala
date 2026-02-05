@@ -30,34 +30,45 @@ trait Mappings extends Formatters with Constraints {
   protected def text(errorKey: String = "error.required"): FieldMapping[String] =
     of(stringFormatter(errorKey))
 
-  protected def postcode(requiredKey : String = "error.required",
-                         invalidKey : String = "error.postcodeInvalid") : FieldMapping[String] =
+  protected def postcode(
+    requiredKey: String = "error.required",
+    invalidKey: String = "error.postcodeInvalid"
+  ): FieldMapping[String] =
     of(postcodeFormatter(requiredKey, invalidKey))
 
-  protected def boolean(requiredKey: String = "error.required",
-                        invalidKey: String = "error.boolean"): FieldMapping[Boolean] =
+  protected def boolean(
+    requiredKey: String = "error.required",
+    invalidKey: String = "error.boolean"
+  ): FieldMapping[Boolean] =
     of(booleanFormatter(requiredKey, invalidKey))
 
-  protected def enumerable[A](requiredKey: String = "error.required",
-                              invalidKey: String = "error.invalid")(implicit ev: Enumerable[A]): FieldMapping[A] =
+  protected def enumerable[A](requiredKey: String = "error.required", invalidKey: String = "error.invalid")(implicit
+    ev: Enumerable[A]
+  ): FieldMapping[A] =
     of(enumerableFormatter[A](requiredKey, invalidKey))
 
-  protected def currency(requiredKey : String = "error.required",
-                         invalidKey : String = "error.invalid") : FieldMapping[String] =
+  protected def currency(
+    requiredKey: String = "error.required",
+    invalidKey: String = "error.invalid"
+  ): FieldMapping[String] =
     of(currencyFormatter(requiredKey, invalidKey))
 
   protected def localDate(
-                           invalidKey: String,
-                           allRequiredKey: String,
-                           twoRequiredKey: String,
-                           requiredKey: String): FieldMapping[LocalDate] =
+    invalidKey: String,
+    allRequiredKey: String,
+    twoRequiredKey: String,
+    requiredKey: String
+  ): FieldMapping[LocalDate] =
     of(new LocalDateFormatter(invalidKey, allRequiredKey, twoRequiredKey, requiredKey))
 
   protected def incomePercentage(prefix: String): FieldMapping[Int] =
-    of(percentageFormatter(
-      s"$prefix.error.required",
-      s"$prefix.error.integer",
-      s"$prefix.error.non_numeric",
-      s"$prefix.error.less_than_100"
-    ))
+    of(
+      percentageFormatter(
+        s"$prefix.error.required",
+        s"$prefix.error.integer",
+        s"$prefix.error.non_numeric",
+        s"$prefix.error.less_than_100"
+      )
+    )
+
 }

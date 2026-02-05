@@ -32,7 +32,10 @@ case object WhatTypeOfBeneficiaryPage extends QuestionPage[WhatTypeOfBeneficiary
 
   override def toString: String = "whatTypeOfBeneficiary"
 
-  override def cleanup(value: Option[WhatTypeOfBeneficiary], userAnswers: UserAnswers): Either[TrustErrors, UserAnswers] = {
+  override def cleanup(
+    value: Option[WhatTypeOfBeneficiary],
+    userAnswers: UserAnswers
+  ): Either[TrustErrors, UserAnswers] = {
 
     def paths: Seq[JsPath] = Seq(
       IndividualBeneficiaries.path,
@@ -45,32 +48,46 @@ case object WhatTypeOfBeneficiaryPage extends QuestionPage[WhatTypeOfBeneficiary
     )
 
     implicit class RemoveSubTypes(userAnswers: Either[TrustErrors, UserAnswers]) {
-      def removeAllSubTypes(): Either[TrustErrors, UserAnswers] = userAnswers.removeCharityOrTrustSubType().removeCompanyOrEmploymentSubType()
-      def removeCharityOrTrustSubType(): Either[TrustErrors, UserAnswers] = userAnswers.flatMap(_.remove(CharityOrTrustPage))
-      def removeCompanyOrEmploymentSubType(): Either[TrustErrors, UserAnswers] = userAnswers.flatMap(_.remove(CompanyOrEmploymentRelatedPage))
+      def removeAllSubTypes(): Either[TrustErrors, UserAnswers]                =
+        userAnswers.removeCharityOrTrustSubType().removeCompanyOrEmploymentSubType()
+      def removeCharityOrTrustSubType(): Either[TrustErrors, UserAnswers]      =
+        userAnswers.flatMap(_.remove(CharityOrTrustPage))
+      def removeCompanyOrEmploymentSubType(): Either[TrustErrors, UserAnswers] =
+        userAnswers.flatMap(_.remove(CompanyOrEmploymentRelatedPage))
     }
 
     value match {
-      case Some(Individual) =>
+      case Some(Individual)          =>
         cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == IndividualBeneficiaries.path)).removeAllSubTypes()
-      case Some(ClassOfBeneficiary) =>
+      case Some(ClassOfBeneficiary)  =>
         cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == ClassOfBeneficiaries.path)).removeAllSubTypes()
-      case Some(CharityOrTrust) =>
-        cleanupLastIfInProgress(userAnswers, paths.filterNot(x => x == CharityBeneficiaries.path || x == TrustBeneficiaries.path)).removeCompanyOrEmploymentSubType()
-      case Some(Charity) =>
-        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == CharityBeneficiaries.path)).removeCompanyOrEmploymentSubType()
-      case Some(Trust) =>
-        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == TrustBeneficiaries.path)).removeCompanyOrEmploymentSubType()
+      case Some(CharityOrTrust)      =>
+        cleanupLastIfInProgress(
+          userAnswers,
+          paths.filterNot(x => x == CharityBeneficiaries.path || x == TrustBeneficiaries.path)
+        ).removeCompanyOrEmploymentSubType()
+      case Some(Charity)             =>
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == CharityBeneficiaries.path))
+          .removeCompanyOrEmploymentSubType()
+      case Some(Trust)               =>
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == TrustBeneficiaries.path))
+          .removeCompanyOrEmploymentSubType()
       case Some(CompanyOrEmployment) =>
-        cleanupLastIfInProgress(userAnswers, paths.filterNot(x => x == CompanyBeneficiaries.path || x == LargeBeneficiaries.path)).removeCharityOrTrustSubType()
-      case Some(Company) =>
-        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == CompanyBeneficiaries.path)).removeCharityOrTrustSubType()
-      case Some(Employment) =>
-        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == LargeBeneficiaries.path)).removeCharityOrTrustSubType()
-      case Some(Other) =>
+        cleanupLastIfInProgress(
+          userAnswers,
+          paths.filterNot(x => x == CompanyBeneficiaries.path || x == LargeBeneficiaries.path)
+        ).removeCharityOrTrustSubType()
+      case Some(Company)             =>
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == CompanyBeneficiaries.path))
+          .removeCharityOrTrustSubType()
+      case Some(Employment)          =>
+        cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == LargeBeneficiaries.path))
+          .removeCharityOrTrustSubType()
+      case Some(Other)               =>
         cleanupLastIfInProgress(userAnswers, paths.filterNot(_ == OtherBeneficiaries.path)).removeAllSubTypes()
-      case _ =>
+      case _                         =>
         super.cleanup(value, userAnswers)
     }
   }
+
 }

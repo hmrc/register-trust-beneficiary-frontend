@@ -26,17 +26,18 @@ import views.html.register.beneficiaries.individualBeneficiary.VulnerableYesNoVi
 
 class VulnerableYesNoViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "individualBeneficiaryVulnerableYesNo"
-  val index = 0
+  val messageKeyPrefix   = "individualBeneficiaryVulnerableYesNo"
+  val index              = 0
   val fullName: FullName = FullName("First", None, "Last")
-  val name: String = fullName.toString
+  val name: String       = fullName.toString
 
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
   "IndividualBeneficiaryVulnerableYesNo view" must {
 
     val userAnswers = emptyUserAnswers
-      .set(NamePage(index), fullName).value
+      .set(NamePage(index), fullName)
+      .value
 
     val view = viewFor[VulnerableYesNoView](Some(userAnswers))
 
@@ -52,4 +53,5 @@ class VulnerableYesNoViewSpec extends YesNoViewBehaviours {
     behave like pageWithASubmitButton(applyView(form))
 
   }
+
 }

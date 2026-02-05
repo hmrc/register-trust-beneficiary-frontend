@@ -24,20 +24,20 @@ import wolfendale.scalacheck.regexp.RegexpGen
 
 import java.time.LocalDate
 
-class PassportOrIdCardFormProviderSpec extends
-  StringFieldBehaviours with PassportOrIDCardBehaviours with DateBehaviours with FakeTrustsApp {
+class PassportOrIdCardFormProviderSpec
+    extends StringFieldBehaviours with PassportOrIDCardBehaviours with DateBehaviours with FakeTrustsApp {
 
-  val prefix = "passport"
-  val index = 0
+  val prefix      = "passport"
+  val index       = 0
   val userAnswers = UserAnswers(draftId = "", internalAuthId = "")
-  val form = new PassportOrIdCardFormProvider(frontendAppConfig)(prefix, userAnswers, index)
+  val form        = new PassportOrIdCardFormProvider(frontendAppConfig)(prefix, userAnswers, index)
 
   ".country" must {
 
-    val fieldName = "country"
+    val fieldName   = "country"
     val requiredKey = s"$prefix.country.error.required"
-    val lengthKey = s"$prefix.country.error.length"
-    val maxLength = 100
+    val lengthKey   = s"$prefix.country.error.length"
+    val maxLength   = 100
 
     behave like fieldThatBindsValidData(
       form,
@@ -67,11 +67,11 @@ class PassportOrIdCardFormProviderSpec extends
 
   ".number" must {
 
-    val fieldName = "number"
-    val requiredKey = s"$prefix.number.error.required"
+    val fieldName        = "number"
+    val requiredKey      = s"$prefix.number.error.required"
     val invalidLengthKey = s"$prefix.number.error.length"
-    val invalidKey = s"$prefix.number.error.invalid"
-    val maxLength = 30
+    val invalidKey       = s"$prefix.number.error.invalid"
+    val maxLength        = 30
 
     behave like fieldWithMaxLength(
       form,
@@ -113,8 +113,8 @@ class PassportOrIdCardFormProviderSpec extends
     val max = LocalDate.of(2100, 1, 1)
 
     val requiredBindings = Map("country" -> "country", "number" -> "1234567")
-    val requiredAllKey = s"$prefix.expiryDate.error.required.all"
-    val invalidKey = s"$prefix.expiryDate.error.invalid"
+    val requiredAllKey   = s"$prefix.expiryDate.error.required.all"
+    val invalidKey       = s"$prefix.expiryDate.error.invalid"
 
     val validData = datesBetween(
       min = min,
@@ -125,12 +125,16 @@ class PassportOrIdCardFormProviderSpec extends
 
     behave like mandatoryDateField(form, key, requiredAllKey)
 
-    behave like dateFieldWithMax(form, key,
+    behave like dateFieldWithMax(
+      form,
+      key,
       max = max,
       FormError(key, s"$prefix.expiryDate.error.future", List("day", "month", "year"))
     )
 
-    behave like dateFieldWithMin(form, key,
+    behave like dateFieldWithMin(
+      form,
+      key,
       min = min,
       FormError(key, s"$prefix.expiryDate.error.past", List("day", "month", "year"))
     )
@@ -139,4 +143,5 @@ class PassportOrIdCardFormProviderSpec extends
 
     behave like passportOrIDCardInvalidDateField(form, key, invalidKey)
   }
+
 }

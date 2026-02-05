@@ -27,4 +27,5 @@ class WhatTypeOfBeneficiaryFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[WhatTypeOfBeneficiary]("whatTypeOfBeneficiary.error.required")
     )
+
 }
