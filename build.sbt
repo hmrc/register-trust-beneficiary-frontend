@@ -2,19 +2,19 @@ import play.sbt.routes.RoutesKeys
 import sbt.Def
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
-lazy val microservice = (project in file("."))
+ThisBuild / majorVersion := 0
+ThisBuild / scalaVersion := "2.13.18"
+
+lazy val microservice = Project("register-trust-beneficiary-frontend", file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin) // Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(inConfig(Test)(testSettings) *)
-  .settings(majorVersion := 0)
   .settings(
-    scalaVersion := "2.13.18",
     scalacOptions += "-Wconf:src=routes/.*:s",
     scalacOptions += "-Wconf:cat=unused-imports&src=html/.*:s"
   )
   .settings(CodeCoverageSettings())
   .settings(
-    name := "register-trust-beneficiary-frontend",
     RoutesKeys.routesImport += "models._",
     TwirlKeys.templateImports ++= Seq(
       "play.twirl.api.HtmlFormat",
