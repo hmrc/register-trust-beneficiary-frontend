@@ -45,12 +45,24 @@ class FrontendAppConfigSpec extends SpecBase {
           ) mustBe "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/welsh-language-helplines"
         }
       }
+    }
 
-      "expose login, continue, logout URLs and logoutAudit" in {
-        config.loginUrl         mustBe "http://localhost:9949/auth-login-stub/gg-sign-in"
-        config.loginContinueUrl mustBe "http://localhost:9781/trusts-registration"
-        config.logoutUrl        mustBe "/gg/sign-out"
-        config.logoutAudit      mustBe false
+    "expose login, continue, logout URLs and logoutAudit" in {
+      config.loginUrl         mustBe "http://localhost:9949/auth-login-stub/gg-sign-in"
+      config.loginContinueUrl mustBe "http://localhost:9781/trusts-registration"
+      config.logoutUrl        mustBe "/gg/sign-out"
+      config.logoutAudit      mustBe false
+    }
+
+    ".feedbackUrl" must {
+      "return the expected feedbackFrontendUrl with useServiceNavigation parameter" in {
+        config.feedbackFrontendUrl mustBe "http://localhost:9514/feedback/trusts?useServiceNavigation"
+      }
+    }
+
+    ".timeOutUrl" must {
+      "return the expected timeOut URL" in {
+        config.timeOutUrl mustBe "http://localhost:8837/trusts-registration/beneficiaries/this-service-has-been-reset"
       }
     }
   }
