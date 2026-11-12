@@ -37,7 +37,7 @@ class FrontendAppConfig @Inject() (
 
   lazy val loginUrl: String         = configuration.get[String]("urls.login")
   lazy val loginContinueUrl: String = configuration.get[String]("urls.loginContinue")
-  lazy val logoutUrl: String        = s"${configuration.get[String]("urls.logout")}"
+  lazy val logoutUrl: String        = configuration.get[String]("urls.logout")
   val appName: String               = configuration.get[String]("appName")
 
   lazy val logoutAudit: Boolean =
