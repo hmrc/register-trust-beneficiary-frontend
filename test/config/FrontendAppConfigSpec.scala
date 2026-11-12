@@ -49,7 +49,7 @@ class FrontendAppConfigSpec extends SpecBase {
       "expose login, continue, logout URLs and logoutAudit" in {
         config.loginUrl         mustBe "http://localhost:9949/auth-login-stub/gg-sign-in"
         config.loginContinueUrl mustBe "http://localhost:9781/trusts-registration"
-        config.logoutUrl        mustBe "http://localhost:9514/feedback/trusts?useServiceNavigation"
+        config.logoutUrl        mustBe "/gg/sign-out"
         config.logoutAudit      mustBe false
       }
     }
