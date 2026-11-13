@@ -37,7 +37,7 @@ class FrontendAppConfig @Inject() (
 
   lazy val loginUrl: String         = configuration.get[String]("urls.login")
   lazy val loginContinueUrl: String = configuration.get[String]("urls.loginContinue")
-  lazy val logoutUrl: String        = s"${configuration.get[String]("urls.logout")}?useServiceNavigation"
+  lazy val logoutUrl: String        = configuration.get[String]("urls.logout")
   val appName: String               = configuration.get[String]("appName")
 
   lazy val logoutAudit: Boolean =
@@ -86,4 +86,10 @@ class FrontendAppConfig @Inject() (
   }
 
   def registerTrustAsTrusteeUrl: String = configuration.get[String]("urls.registerTrustAsTrustee")
+
+  lazy val basGatewayBaseUrl: String       = servicesConfig.getString("bas-gateway.host")
+  lazy val feedbackFrontendUrl: String     = s"${servicesConfig.getString("feedback-frontend.url")}?useServiceNavigation"
+  lazy val timeOutUrl: String              = servicesConfig.getString("urls.timeOut")
+  lazy val logoutWithBasGatewayUrl: String = s"$basGatewayBaseUrl$logoutUrl"
+
 }
