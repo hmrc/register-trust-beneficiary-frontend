@@ -45,7 +45,7 @@ class SessionTimeoutControllerSpec extends SpecBase {
       }
     }
 
-    "redirect to session expired page new session " when {
+    "redirect to bas gateway sign-out with the session expired page as continue URL " when {
       "the timeout method is" in {
         val continueUrl = URLEncoder.encode(s"${frontendAppConfig.timeOutUrl}", "UTF-8")
         val expectedUrl = s"${frontendAppConfig.logoutWithBasGatewayUrl}?continue=$continueUrl"

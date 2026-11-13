@@ -24,7 +24,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 
-import java.net.URLEncoder
+import java.net.{URLDecoder, URLEncoder}
 
 class LogoutControllerSpec extends SpecBase {
 
@@ -46,11 +46,10 @@ class LogoutControllerSpec extends SpecBase {
 
     status(result) mustEqual SEE_OTHER
 
-    val value = redirectLocation(result).value
-
-    value mustBe expectedUrl
-
-    value must include("useServiceNavigation")
+    URLDecoder.decode(
+      redirectLocation(result).value,
+      "UTF-8"
+    ) mustBe "http://localhost:9553/gg/sign-out?continue=http://localhost:9514/feedback/trusts?useServiceNavigation"
 
     verify(mockAuditConnector, never())
       .sendExplicitAudit(eqTo("trusts"), any[Map[String, String]])(any(), any())
